@@ -1,0 +1,1 @@
+../../../MMX/Source/Devices/MMXDeviceProfile_Private.h

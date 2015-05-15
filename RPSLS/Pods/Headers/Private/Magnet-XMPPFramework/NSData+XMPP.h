@@ -1,0 +1,1 @@
+../../../Magnet-XMPPFramework/Categories/NSData+XMPP.h

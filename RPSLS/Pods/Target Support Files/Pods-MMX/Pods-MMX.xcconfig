@@ -1,0 +1,2 @@
+PODS_MMX_HEADER_SEARCH_PATHS = $(SDKROOT)/usr/include/libxml2
+PODS_MMX_OTHER_LDFLAGS = -ObjC -framework "Foundation" -framework "UIKit"

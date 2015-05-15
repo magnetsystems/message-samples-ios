@@ -1,0 +1,1 @@
+../../../Magnet-XMPPFramework/Utilities/XMPPSRVResolver.h

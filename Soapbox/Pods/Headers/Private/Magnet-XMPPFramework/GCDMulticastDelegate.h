@@ -1,0 +1,1 @@
+../../../Magnet-XMPPFramework/Utilities/GCDMulticastDelegate.h

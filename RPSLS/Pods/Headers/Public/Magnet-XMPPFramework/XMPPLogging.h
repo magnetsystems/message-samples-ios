@@ -1,0 +1,1 @@
+../../../Magnet-XMPPFramework/Core/XMPPLogging.h

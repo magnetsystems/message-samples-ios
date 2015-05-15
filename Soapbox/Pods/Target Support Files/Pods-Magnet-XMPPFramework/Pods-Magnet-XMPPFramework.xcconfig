@@ -1,0 +1,3 @@
+PODS_MAGNET_XMPPFRAMEWORK_HEADER_SEARCH_PATHS = $(SDKROOT)/usr/include/libxml2 $(SDKROOT)/usr/include/libresolv $(SDKROOT)/usr/include/libiconv
+PODS_MAGNET_XMPPFRAMEWORK_LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/Magnet-XMPPFramework/Vendor/libidn" "$(PODS_ROOT)/Magnet-XMPPFramework/Vendor/libidn"
+PODS_MAGNET_XMPPFRAMEWORK_OTHER_LDFLAGS = -l"iconv" -l"idn" -l"resolv" -l"xml2" -framework "CoreData"
