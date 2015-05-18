@@ -44,7 +44,7 @@
 	 *	The Configurations.plist file can contain multiple profiles.
 	 *	Setting the configuration property of our MMXClient.
 	 */
-	MMXConfiguration * config = [MMXConfiguration configurationWithName:@"evance"];
+	MMXConfiguration * config = [MMXConfiguration configurationWithName:@"default"];
 	[MMXClient sharedClient].configuration = config;
 	
 	/**

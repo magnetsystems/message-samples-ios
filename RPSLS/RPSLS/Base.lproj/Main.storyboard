@@ -214,7 +214,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="soapbox_splash_image" translatesAutoresizingMaskIntoConstraints="NO" id="HLF-4h-kRa">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HLF-4h-kRa">
                                 <rect key="frame" x="228" y="45" width="144" height="192"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -316,7 +316,4 @@
             <point key="canvasLocation" x="835" y="316"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="soapbox_splash_image" width="829" height="1120"/>
-    </resources>
 </document>
