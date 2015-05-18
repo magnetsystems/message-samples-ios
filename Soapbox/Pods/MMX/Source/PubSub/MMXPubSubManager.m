@@ -908,15 +908,6 @@
 	MMXAssert(!(message.messageContent == nil && message.metaData == nil),@"MMXPubSubManager publishPubSubMessage: messageContent && metaData cannot both be nil");
 
 	[[MMXLogger sharedLogger] verbose:@"MMXPubSubManager publishPubSubMessage. MMXPubSubMessage = %@", message];
-	if ([MMXMessageUtils sizeOfMessageContent:message.messageContent metaData:message.metaData] > kMaxMessageSize) {
-		if (failure) {
-			dispatch_async(self.callbackQueue, ^{
-				failure([MMXClient errorWithTitle:@"Message too large" message:@"Message content and metaData exceed the max size of 200KB" code:401]);
-			});
-		}
-		return;
-	}
-	
 	if (![MMXMessageUtils isValidMetaData:message.metaData]) {
 		if (failure) {
 			dispatch_async(self.callbackQueue, ^{
@@ -926,10 +917,21 @@
 		
 		return;
 	}
+	
+	if ([MMXMessageUtils sizeOfMessageContent:message.messageContent metaData:message.metaData] > kMaxMessageSize) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([MMXClient errorWithTitle:@"Message too large" message:@"Message content and metaData exceed the max size of 200KB" code:401]);
+			});
+		}
+		return;
+	}
+
 	if (message.messageID == nil) {
 		message.messageID = [self.delegate generateMessageID];
 	}
-    if (![self hasActiveConnection]) {
+	
+	if (![self hasActiveConnection]) {
         if (failure) {
             NSString * errorMessage = @"Your message was queued and will be sent the next time you log in.";
             if (![self hasNecessaryConfigurationAndCredentialToSend]) {

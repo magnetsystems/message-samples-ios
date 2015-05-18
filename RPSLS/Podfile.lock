@@ -46,7 +46,7 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.4.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (0.5.9):
+  - MMX (1.0.1):
     - Magnet-XMPPFramework (~> 3.6.6)
     - Mantle (~> 1.4)
     - MDMCoreData (~> 1.4.0)
@@ -60,6 +60,6 @@ SPEC CHECKSUMS:
   Magnet-XMPPFramework: a2ee03b2bbfb04f87fc648290fef613b1f2fd6a4
   Mantle: 60acd0cd363e27d945bda0a6b8e90577112d28f3
   MDMCoreData: 6f73dc8e16b43928e65ed118453d568cd40b33cd
-  MMX: 9fe2eb2e9ec46d1f345ae09d1d8222d0e3e3bbae
+  MMX: 815be4579f937ed7d492db74c1d098a37c9ac5ae
 
 COCOAPODS: 0.37.1

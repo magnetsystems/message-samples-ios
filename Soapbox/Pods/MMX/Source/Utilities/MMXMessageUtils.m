@@ -26,8 +26,7 @@
 
 + (NSUInteger)sizeOfMessageContent:(NSString *)content metaData:(NSDictionary *)metaData {
 	NSUInteger contentBytes = [content ?: @"" lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-	NSData * data = [NSPropertyListSerialization dataFromPropertyList:metaData ?: @{}
-															   format:NSPropertyListBinaryFormat_v1_0 errorDescription:NULL];
+	NSData * data = [NSKeyedArchiver archivedDataWithRootObject:metaData ?: @{}];
 	NSUInteger metaDataBytes = [data length];
 	NSUInteger totalBytes = contentBytes + metaDataBytes;
 	return totalBytes;
