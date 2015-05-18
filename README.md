@@ -13,10 +13,17 @@ We created a Rock Paper Scissors Lizard Spock game as popularized by the show â€
 
 ### Build Instructions
 
+You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+
 ### How it works (Technical Highlights)
 
-Describe features used, general api usage
-FILL ME WITH DEVELOPERY TECHNICAL GIBBERISH ASAP! SYNERGIZE! WONDER TWIN POWERS ACTIVATE!
+RPSLS leverages the topic features of Magnet Message to keep an updated list of "available" real opponents. When the user starts the app, the code publishes to a pre-defined availability topic to say "Hey, I want to play." Upon closing the app, the code publishes to this same topic and says "I'm leaving".
+
+When the user wants to discover opponents, the app requests the most recent posts to the availbility topic to find which users have published their availability and presents this to the user. The user can then choose which available players to invite to play and upon accepting the invitation, they both make a choice. RPSLS determines the outcome and notifies each user whether they are the VAPORIZER or the VAPORIZEE. The invitations, acceptance, and other interactive portions of the game are performed using the in-app messaging functionality of Magnet Message.
+
+All of this functionality is accomplished through the metadata of each message payload, in which the app specifies various message types and fields which pertain to each type. This can also be accomplished by using the actual message payload and JSON marshalled objects. The payload can be ANYTHING or any protocol you desire.
+
+Game on!
 
 
 <hr>
@@ -28,13 +35,13 @@ We needed an app to address one of the the most important issues in our office â
 
 ### Build Instructions
 
-
+You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
 
 ### How it works (Technical Highlights)
 
-Describe features used, general api usage
+SoapBox leverages the Magnet Message topic functionality to provide a channel for employees/friends to communicate effectively by publishing/subscribing/receiving simple text messages against a pre-configured set of topics or topics they choose to create.
 
-FILL ME WITH DEVELOPERY TECHNICAL GIBBERISH ASAP! SYNERGIZE! WONDER TWIN POWERS ACTIVATE!
+Feature highlights: -- quick account provisioning -- retrieve all topics using topic search -- retrieve topics subscribed by the user -- retrieve topic summaries (used to show the number of postings in a certain timeframe which is, in the case of SoapBox, the last 24 hours) -- retrieve the last 25 items for a topic -- create topics -- subscribe and unsubscribe from topics -- adding tags for topics (tags can be used as search criteria)
 
 
 
