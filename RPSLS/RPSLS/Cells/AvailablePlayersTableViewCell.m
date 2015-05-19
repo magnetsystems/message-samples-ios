@@ -22,9 +22,9 @@
 @interface AvailablePlayersTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UILabel *playerNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *winsLabel;
-@property (weak, nonatomic) IBOutlet UILabel *lossesLabel;
-@property (weak, nonatomic) IBOutlet UILabel *tiesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *statsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *sentLabel;
+
 @property (nonatomic, strong, readwrite) RPSLSUser * user;
 
 @end
@@ -35,26 +35,29 @@
     // Initialization code
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+- (void)showSent {
+	self.sentLabel.alpha = 1.0;
+	[UIView animateWithDuration:1.2f
+						  delay:0
+						options:UIViewAnimationOptionCurveEaseIn
+					 animations:^{
+						 self.sentLabel.alpha = 0.0;
+					 }
+					 completion:^(BOOL finished) {
+					 }];
 }
 
 - (void)setUserForCell:(RPSLSUser *)user {
 	self.user = user;
 	self.playerNameLabel.text = self.user.username;
-	self.winsLabel.text = [NSString stringWithFormat:@"W=%lu",(unsigned long)self.user.stats.wins];
-	self.lossesLabel.text = [NSString stringWithFormat:@"L=%lu",(unsigned long)self.user.stats.losses];
-	self.tiesLabel.text = [NSString stringWithFormat:@"T=%lu",(unsigned long)self.user.stats.ties];
+	
+	self.statsLabel.text = [NSString stringWithFormat:@"W=%lu L=%lu T=%lu",(unsigned long)self.user.stats.wins,(unsigned long)self.user.stats.losses,(unsigned long)self.user.stats.ties];
 }
 
 - (void)prepareForReuse {
 	self.user = nil;
 	self.playerNameLabel.text = @"";
-	self.winsLabel.text = @"";
-	self.lossesLabel.text = @"";
-	self.tiesLabel.text = @"";
+	self.statsLabel.text = @"";
 }
 
 @end

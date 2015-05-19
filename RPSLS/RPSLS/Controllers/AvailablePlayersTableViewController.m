@@ -415,6 +415,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	RPSLSUser * user = self.availablePlayersList[indexPath.row];
+	AvailablePlayersTableViewCell *cell = (AvailablePlayersTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+	[cell showSent];
+	[cell setSelected:NO];
 	[self sendInviteTo:user.username];
 }
 

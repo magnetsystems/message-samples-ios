@@ -23,5 +23,6 @@
 @property (nonatomic, readonly) RPSLSUser * user;
 
 - (void)setUserForCell:(RPSLSUser *)user;
+- (void)showSent;
 
 @end
