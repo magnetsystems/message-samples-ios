@@ -43,16 +43,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	self.connectedLabel.text = [NSString stringWithFormat:@"Connecting as %@",[RPSLSUser me].username];
-	self.winsLabel.text = [NSString stringWithFormat:@"Wins: %lu",(unsigned long)[RPSLSUser me].stats.wins];
-	self.lossesLabel.text = [NSString stringWithFormat:@"Losses: %lu",(unsigned long)[RPSLSUser me].stats.losses];
-	self.tiesLabel.text = [NSString stringWithFormat:@"Ties: %lu",(unsigned long)[RPSLSUser me].stats.ties];
-	
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	self.inGame = NO;
+	self.connectedLabel.text = [NSString stringWithFormat:@"Connecting as %@",[RPSLSUser me].username];
+	self.winsLabel.text = [NSString stringWithFormat:@"Wins: %lu",(unsigned long)[RPSLSUser me].stats.wins];
+	self.lossesLabel.text = [NSString stringWithFormat:@"Losses: %lu",(unsigned long)[RPSLSUser me].stats.losses];
+	self.tiesLabel.text = [NSString stringWithFormat:@"Ties: %lu",(unsigned long)[RPSLSUser me].stats.ties];
 
 	/**
 	 *  MagnetNote: MMXClientDelegate
