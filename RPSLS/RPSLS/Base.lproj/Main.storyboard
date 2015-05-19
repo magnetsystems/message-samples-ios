@@ -204,13 +204,13 @@
                                     <constraint firstAttribute="width" constant="144" id="kcv-sM-rqV"/>
                                 </constraints>
                             </imageView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2oP-Br-cyE">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="22" translatesAutoresizingMaskIntoConstraints="NO" id="2oP-Br-cyE">
                                 <rect key="frame" x="16" y="245" width="568" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="568" id="Fiy-rw-mxO"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="310" id="HfW-YH-obX"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -218,14 +218,15 @@
                                     </mask>
                                 </variation>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2rT-m0-oiR">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="22" translatesAutoresizingMaskIntoConstraints="NO" id="2rT-m0-oiR">
                                 <rect key="frame" x="16" y="283" width="568" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fKs-b8-JKM">
-                                <rect key="frame" x="16" y="321" width="568" height="34"/>
+                                <rect key="frame" x="16" y="321" width="568" height="39"/>
                                 <color key="backgroundColor" red="0.99215686270000003" green="0.6705882353" blue="0.30980392159999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Sign In">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -239,8 +240,8 @@
                                 <color key="color" red="0.99215686270000003" green="0.6705882353" blue="0.30980392159999998" alpha="1" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If you do not have an account you will be registered on first log in." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YE2-Ex-cFl">
-                                <rect key="frame" x="16" y="363" width="568" height="17"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="14"/>
+                                <rect key="frame" x="16" y="368" width="568" height="19"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="0.59860321969999997" green="0.59860321969999997" blue="0.59860321969999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -253,6 +254,7 @@
                             <constraint firstAttribute="centerX" secondItem="HLF-4h-kRa" secondAttribute="centerX" id="IBW-Cb-u9e"/>
                             <constraint firstItem="2rT-m0-oiR" firstAttribute="top" secondItem="2oP-Br-cyE" secondAttribute="bottom" constant="8" symbolic="YES" id="Ln7-EA-IA9"/>
                             <constraint firstItem="2rT-m0-oiR" firstAttribute="trailing" secondItem="fKs-b8-JKM" secondAttribute="trailing" id="Lp4-yw-YGf"/>
+                            <constraint firstItem="YE2-Ex-cFl" firstAttribute="top" secondItem="fKs-b8-JKM" secondAttribute="bottom" constant="8" id="Suk-bk-HgJ"/>
                             <constraint firstItem="fKs-b8-JKM" firstAttribute="top" secondItem="2rT-m0-oiR" secondAttribute="bottom" constant="8" symbolic="YES" id="Z50-zW-3Fo"/>
                             <constraint firstItem="2oP-Br-cyE" firstAttribute="centerX" secondItem="HLF-4h-kRa" secondAttribute="centerX" id="ZFD-AZ-3aJ"/>
                             <constraint firstItem="2rT-m0-oiR" firstAttribute="leading" secondItem="fKs-b8-JKM" secondAttribute="leading" id="cM9-q3-skA"/>
@@ -265,6 +267,11 @@
                             <constraint firstItem="fKs-b8-JKM" firstAttribute="top" secondItem="Sxj-S7-xb3" secondAttribute="bottom" constant="26" id="wST-aG-aC1"/>
                             <constraint firstItem="HLF-4h-kRa" firstAttribute="top" secondItem="Zt3-Tl-UPY" secondAttribute="bottom" constant="25" id="z8l-2Q-0o4"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="un3-xU-FZG"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="gKF-Po-Bbw"/>
                     <connections>
