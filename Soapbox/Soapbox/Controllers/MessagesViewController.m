@@ -51,6 +51,8 @@
 		return;
 	}
 	
+	self.textInputbar.autoHideRightButton = NO;
+	
 	/**
 	 *  MagnetNote: MMXTopic topicName
 	 *
