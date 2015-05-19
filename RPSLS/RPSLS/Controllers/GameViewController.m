@@ -405,24 +405,31 @@
 
 - (void)endGame {
 	RPSLSResult result = [RPSLSEngine myResult:self.myChoice them:self.opponentChoice];
+	NSString * imageName;
 	switch (result) {
-		case RPSLSResultWin:
+		case RPSLSResultWin: {
 			[RPSLSUserStats incrementMyWins];
+			imageName = [NSString stringWithFormat:@"%@_vs_%@",[RPSLSEngine valueToString:self.myChoice].lowercaseString,[RPSLSEngine valueToString:self.opponentChoice].lowercaseString];
 			[self showOverlayWithTitle:[self stringFromResult:result myChoice:self.myChoice opponentChoice:self.opponentChoice]
-							 imageName:[NSString stringWithFormat:@"%@_vs_%@",[RPSLSEngine valueToString:self.myChoice].lowercaseString,[RPSLSEngine valueToString:self.opponentChoice].lowercaseString]
+							 imageName:imageName
 							showButton:YES];
 			break;
-		case RPSLSResultLoss:
+		}
+		case RPSLSResultLoss: {
 			[RPSLSUserStats incrementMyLosses];
+			imageName = [NSString stringWithFormat:@"%@_vs_%@",[RPSLSEngine valueToString:self.opponentChoice].lowercaseString,[RPSLSEngine valueToString:self.myChoice].lowercaseString];
 			[self showOverlayWithTitle:[self stringFromResult:result myChoice:self.myChoice opponentChoice:self.opponentChoice]
-							 imageName:[NSString stringWithFormat:@"%@_vs_%@",[RPSLSEngine valueToString:self.opponentChoice].lowercaseString,[RPSLSEngine valueToString:self.myChoice].lowercaseString]
+							 imageName:imageName
 							showButton:YES];
 			break;
-		case RPSLSResultTie:
+		}
+		case RPSLSResultTie: {
+			imageName = [RPSLSEngine valueToString:self.myChoice].lowercaseString;
 			[self showOverlayWithTitle:[self stringFromResult:result myChoice:self.myChoice opponentChoice:self.opponentChoice]
-							 imageName:[RPSLSEngine valueToString:self.myChoice].lowercaseString
+							 imageName:imageName
 							showButton:YES];
 			break;
+		}
 		default:
 			break;
 	}
@@ -448,14 +455,16 @@
 	waitingView.layer.borderColor = [UIColor grayColor].CGColor;
 	
 	UILabel *choiceLabel = [[UILabel alloc]initWithFrame:CGRectMake(width * 0.05, width * 0.05, width * 0.9, height * 0.1)];
+	choiceLabel.adjustsFontSizeToFitWidth = YES;
 	choiceLabel.textAlignment = NSTextAlignmentCenter;
 	choiceLabel.text = title;
 	[waitingView addSubview:choiceLabel];
 	
 	UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(width * 0.15, width * 0.2, width * 0.7, width * 0.7)];
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
-	imageView.image = [UIImage imageNamed:imageName];
-	imageView.layer.cornerRadius = width * 0.35;;
+	UIImage * image = [UIImage imageNamed:imageName];
+	imageView.image = image;
+	imageView.layer.cornerRadius = width * 0.35;
 	imageView.layer.borderWidth = 1.0;
 	imageView.layer.borderColor = [UIColor grayColor].CGColor;
 	imageView.clipsToBounds = YES;
