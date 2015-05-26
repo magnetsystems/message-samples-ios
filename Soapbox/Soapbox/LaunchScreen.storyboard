@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="iVQ-eW-e7d">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="3Sc-J0-9Bh">
+            <objects>
+                <viewController id="iVQ-eW-e7d" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BIt-Xh-ARc"/>
+                        <viewControllerLayoutGuide type="bottom" id="FTi-Ge-bTa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LnT-6S-FPZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="soapbox_splash_image" translatesAutoresizingMaskIntoConstraints="NO" id="ITc-MX-NYH">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ITc-MX-NYH" firstAttribute="leading" secondItem="LnT-6S-FPZ" secondAttribute="leadingMargin" constant="-16" id="Puy-uX-rll"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ITc-MX-NYH" secondAttribute="trailing" constant="-16" id="dbh-Ep-aHW"/>
+                            <constraint firstItem="ITc-MX-NYH" firstAttribute="leading" secondItem="LnT-6S-FPZ" secondAttribute="leadingMargin" constant="-16" id="dhn-y3-Jl9"/>
+                            <constraint firstItem="ITc-MX-NYH" firstAttribute="top" secondItem="LnT-6S-FPZ" secondAttribute="topMargin" id="doh-Pq-TaB"/>
+                            <constraint firstItem="FTi-Ge-bTa" firstAttribute="top" secondItem="ITc-MX-NYH" secondAttribute="bottom" id="vlL-k3-JCL"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ubl-FC-wEI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="192" y="199"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="soapbox_splash_image" width="829" height="1120"/>
+    </resources>
+</document>
