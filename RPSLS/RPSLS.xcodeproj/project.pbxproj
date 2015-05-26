@@ -23,8 +23,8 @@
 		0E7AE7D71AE16AFD0083A47A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E7AE7D61AE16AFD0083A47A /* AppDelegate.m */; };
 		0E7AE7DD1AE16AFD0083A47A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E7AE7DB1AE16AFD0083A47A /* Main.storyboard */; };
 		0E7AE7DF1AE16AFD0083A47A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E7AE7DE1AE16AFD0083A47A /* Images.xcassets */; };
-		0E7AE7E21AE16AFD0083A47A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E7AE7E01AE16AFD0083A47A /* LaunchScreen.xib */; };
 		0E7AE7EE1AE16AFD0083A47A /* RPSLSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E7AE7ED1AE16AFD0083A47A /* RPSLSTests.m */; };
+		0E9A44361B15206400EC2859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A44351B15206400EC2859 /* LaunchScreen.storyboard */; };
 		BD8AAD43633225AC0980C00C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FC0CF76613AE210C93702B0 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -71,10 +71,10 @@
 		0E7AE7D61AE16AFD0083A47A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0E7AE7DC1AE16AFD0083A47A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0E7AE7DE1AE16AFD0083A47A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		0E7AE7E11AE16AFD0083A47A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		0E7AE7E71AE16AFD0083A47A /* RPSLSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RPSLSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E7AE7EC1AE16AFD0083A47A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0E7AE7ED1AE16AFD0083A47A /* RPSLSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RPSLSTests.m; sourceTree = "<group>"; };
+		0E9A44351B15206400EC2859 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2FC0CF76613AE210C93702B0 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C98BB9CC0F11C9B09999F64 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		B55DA8AAAAB09F4F5E965943 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -182,8 +182,8 @@
 				0E44EF2E1B0556F40037A742 /* GameLogic */,
 				0E44EF3A1B0556F40037A742 /* Utils */,
 				0E7AE7DB1AE16AFD0083A47A /* Main.storyboard */,
+				0E9A44351B15206400EC2859 /* LaunchScreen.storyboard */,
 				0E7AE7DE1AE16AFD0083A47A /* Images.xcassets */,
-				0E7AE7E01AE16AFD0083A47A /* LaunchScreen.xib */,
 				0E7AE7D11AE16AFD0083A47A /* Supporting Files */,
 			);
 			path = RPSLS;
@@ -314,8 +314,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E9A44361B15206400EC2859 /* LaunchScreen.storyboard in Resources */,
 				0E7AE7DD1AE16AFD0083A47A /* Main.storyboard in Resources */,
-				0E7AE7E21AE16AFD0083A47A /* LaunchScreen.xib in Resources */,
 				0E7AE7DF1AE16AFD0083A47A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,14 +411,6 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		0E7AE7E01AE16AFD0083A47A /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0E7AE7E11AE16AFD0083A47A /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -458,7 +450,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -495,7 +487,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
