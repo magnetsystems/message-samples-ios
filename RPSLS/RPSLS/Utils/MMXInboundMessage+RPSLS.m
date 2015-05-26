@@ -23,7 +23,7 @@
 - (BOOL)isTimelyMessage {
 	if (self.metaData != nil && self.metaData[kMessageKey_Timestamp] != nil) {
 		NSString * stamp = self.metaData[kMessageKey_Timestamp];
-		long stampValue = [stamp longLongValue];
+		long long stampValue = [stamp longLongValue];
 		int secondsSinceSent = [[NSDate date] timeIntervalSince1970] - (stampValue / 1000);
 		if (secondsSinceSent <= 60) {
 			return YES;
