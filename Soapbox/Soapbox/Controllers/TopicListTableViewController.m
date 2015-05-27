@@ -94,7 +94,7 @@
 		/**
 		 *  MagnetNote: MMXPubSubManager subscribeToTopic:device:success:failure:
 		 *
-		 *  Subscribing to a MMXTopic
+		 *  Subscribe the current user to the newly created topic.
 		 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
 		 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
 		 *	I am passing nil to success because there is not any business logic I need to execute upon success.

@@ -134,7 +134,7 @@
 		 *  MagnetNote: MMXClient connectWithCredentials
 		 *
 		 *  Calling connectWithCredentials will try to create a new session using the NSURLCredential object we set on our MMXConfiguration.
-		 *	Since shouldAutoCreateUser is set as YES it create a new user with the provided credentials if the user does not already exist.
+		 *	Since shouldAutoCreateUser is set as YES it creates a new user with the provided credentials if the user does not already exist.
 		 */
 		[[MMXClient sharedClient] connectWithCredentials];
 	} else {

@@ -56,7 +56,7 @@
 	/**
 	 *  MagnetNote: MMXTopic topicName
 	 *
-	 *  Etracting the MMXTopic topicName property and setting it as the title of the view.
+	 *  Extracting the MMXTopic topicName property and setting it as the title of the view.
 	 */
 	self.title = self.topic.topicName;
 	self.messageList = @[];
