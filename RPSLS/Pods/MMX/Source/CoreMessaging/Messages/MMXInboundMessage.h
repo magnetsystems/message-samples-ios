@@ -20,6 +20,10 @@
 @class MMXUserID;
 @class MMXEndpoint;
 
+/**
+ *  The MMXInboundMessage represents an incoming message. 
+ *	It contains the data provided by the sender, a timestamp for when it was sent, a unique ID and the necessary information to reply to the sender.
+ */
 @interface MMXInboundMessage : NSObject
 
 /**
@@ -44,6 +48,7 @@
 
 /**
  *  The specific MMXEndpoint the message was sent from.
+ *	If the endpoint is unknown this property will be nil.
  */
 @property(nonatomic, copy, readonly) MMXEndpoint *senderEndpoint;
 

@@ -19,10 +19,14 @@
 #import <Foundation/Foundation.h>
 #import "MMXAddressable.h"
 
+/**
+ *  The MMXOutboundMessage represents an outbound message.
+ *	It contains the data provided you provide, a unique ID and the necessary information to address the message.
+ */
 @interface MMXOutboundMessage : NSObject
 
 /**
- *  NSArray of MMXAddressable objects to whom you want to send the message.
+ *  MMXAddressable object to whom you want to send the message.
  */
 @property (nonatomic, readonly) id<MMXAddressable> recipient;
 

@@ -17,6 +17,11 @@
 
 #import <Foundation/Foundation.h>
 @class MMXDeviceProfile;
+
+/**
+ *  MMXDeviceManager is the primary class interacting with devices.
+ *	It has many methods for getting and updating the current device's information.
+ */
 @interface MMXDeviceManager : NSObject
 
 /**
@@ -56,9 +61,9 @@
 /**
  *  Method used to set the current device's phone number
  *
- *  @param name    - The new name you want to set for the device
- *  @param success - Block with BOOL. Value should be YES.
- *  @param failure - Block with an NSError with details about the call failure.
+ *  @param phoneNumber - The new phone number you want to set for the device
+ *  @param success     - Block with BOOL. Value should be YES.
+ *  @param failure     - Block with an NSError with details about the call failure.
  */
 - (void)setCurrentDevicePhoneNumber:(NSString *)phoneNumber
 							success:(void (^)(BOOL success))success
