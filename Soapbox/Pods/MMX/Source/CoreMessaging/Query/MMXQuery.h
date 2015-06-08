@@ -22,6 +22,10 @@ typedef NS_ENUM(NSInteger, MMXCompoundPredicateType){
 	MMXOrPredicateType
 };
 
+/**
+ *  MMXQuery is the foundation class for querying objects. After creating a MMXQuery object you can add specific filters to narrow the query.
+ *	There are a number of convenience methods for quickly creating commonly used queries and filters.
+ */
 @interface MMXQuery : NSObject
 
 /**

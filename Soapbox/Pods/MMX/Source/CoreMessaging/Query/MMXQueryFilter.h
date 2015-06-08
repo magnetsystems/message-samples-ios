@@ -37,6 +37,10 @@ typedef NS_ENUM(NSInteger, MMXPredicateOperatorType){
 	MMXEndsWithPredicateOperatorType
 };
 
+/**
+ *	MMXQueryFilter is the base class for a query filter. It should not be used directly.
+ *	MMXQueryFiltershould be used via one of the MMXQueryFilter subclasses(MMXTopicQueryFilter,MMXUserQueryFilter).
+ */
 @interface MMXQueryFilter : NSObject
 
 /**

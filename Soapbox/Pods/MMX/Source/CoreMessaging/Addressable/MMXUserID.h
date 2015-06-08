@@ -18,6 +18,9 @@
 #import <Foundation/Foundation.h>
 #import "MMXAddressable.h"
 
+/**
+ *  The MMXUserID class is the primary way to identify a user, as well as a means to address a message to that user.
+ */
 @interface MMXUserID : NSObject <MMXAddressable>
 
 /**

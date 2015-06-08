@@ -21,6 +21,12 @@
 @class MMXQuery;
 @class MMXUserID;
 
+
+/**
+ *  MMXAccountManager is the primary class interacting with users.
+ *	It has many methods for getting and updating the current user's information.
+ *	It also contains a method for discovering/querying for other users.
+ */
 @interface MMXAccountManager : NSObject
 
 /**
@@ -29,16 +35,16 @@
 @property (nonatomic, assign) dispatch_queue_t callbackQueue;
 
 /**
- *  Method to get the current user object
+ *  Method to get the MMXUserProfile for the current user.
  *
  *  @param success - Block with MMXUserProfile object of the current user.
  *  @param failure - Block with an NSError with details about the call failure.
  */
-- (void)currentUserProfileWithSuccess:(void (^)(MMXUserProfile * user))success
-							  failure:(void (^)(NSError * error))failure;
+- (void)userProfileWithSuccess:(void (^)(MMXUserProfile * user))success
+					   failure:(void (^)(NSError * error))failure;
 
 /**
- *  Method for getting the list of endpoints for a user.
+ *  Method for getting the list of MMXEndpoint objects for a user.
  *
  *  @param user    - MMXUserID object for the user you want endpoints for.
  *  @param success - An NSArray of MMXEndpoint objects.
@@ -49,7 +55,7 @@
 				 failure:(void (^)(NSError * error))failure;
 
 /**
- *  Method to update the email for a user.
+ *  Method to update the email for the current user.
  *
  *  @param email   - The new email you want to set for the current user.
  *  @param success - Block with BOOL. Value should be YES.
@@ -60,7 +66,7 @@
 			failure:(void (^)(NSError *))failure;
 
 /**
- *  Method to update the displayName for a user.
+ *  Method to update the displayName for the current user.
  *
  *  @param displayName  - The new displayName you want to set for the current user.
  *  @param success		- Block with BOOL. Value should be YES.
@@ -73,13 +79,13 @@
 /**
  *  Change the current user's password.
  *
- *  @param password	- The new password you want to set for the user.
+ *  @param password	- The new password you want to set for the current user.
  *  @param success	- Block with BOOL. Value should be YES.
  *  @param failure	- Block with an NSError with details about the call failure.
  */
-- (void)updatePasswordForCurrentUser:(NSString *)password
-							 success:(void (^)(BOOL))success
-							 failure:(void (^)(NSError *))failure;
+- (void)updatePassword:(NSString *)password
+			   success:(void (^)(BOOL))success
+			   failure:(void (^)(NSError *))failure;
 
 /**
  *  Method to query for a list of users that fit a particular query criteria.
@@ -95,11 +101,11 @@
 /**
  *  Method to get the list of tags associated with the current user.
  *
- *  @param success - A block with a NSArray of tags(NSStrings) and an NSDate for the last time the tags were modified.
+ *  @param success - A block with a NSArray of tags(NSStrings).
  *  @param failure - Block with an NSError with details about the call failure.
  */
-- (void)tagsForCurrentUserWithSuccess:(void (^)(NSDate * lastModified, NSArray * tags))success
-                              failure:(void (^)(NSError * error))failure;
+- (void)tagsWithSuccess:(void (^)(NSArray * tags))success
+				failure:(void (^)(NSError * error))failure;
 
 /**
  *  Method to add tags to the current user.
@@ -108,9 +114,9 @@
  *  @param success - Block with BOOL. Value should be YES.
  *  @param failure - Block with an NSError with details about the call failure.
  */
-- (void)addTagsForCurrentUser:(NSArray *)tags
-					  success:(void (^)(BOOL success))success
-					  failure:(void (^)(NSError * error))failure;
+- (void)addTags:(NSArray *)tags
+		success:(void (^)(BOOL success))success
+		failure:(void (^)(NSError * error))failure;
 
 /**
  *  Set tags for the current user. This will overwrite ALL existing tags for the user.
@@ -120,9 +126,9 @@
  *  @param success - Block with BOOL. Value should be YES.
  *  @param failure - Block with an NSError with details about the call failure.
  */
-- (void)setTagsForCurrentUser:(NSArray *)tags
-					  success:(void (^)(BOOL success))success
-					  failure:(void (^)(NSError * error))failure;
+- (void)setTags:(NSArray *)tags
+		success:(void (^)(BOOL success))success
+		failure:(void (^)(NSError * error))failure;
 
 /**
  *  Remove tags for the current user.
@@ -131,9 +137,9 @@
  *  @param success - Block with BOOL. Value should be YES.
  *  @param failure - Block with an NSError with details about the call failure.
  */
-- (void)removeTagsForCurrentUser:(NSArray *)tags
-						 success:(void (^)(BOOL success))success
-						 failure:(void (^)(NSError * error))failure;
+- (void)removeTags:(NSArray *)tags
+		   success:(void (^)(BOOL success))success
+		   failure:(void (^)(NSError * error))failure;
 
 
 @end

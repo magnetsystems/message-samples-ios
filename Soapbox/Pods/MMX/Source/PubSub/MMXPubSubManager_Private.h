@@ -50,21 +50,9 @@ typedef NS_ENUM(NSInteger, MMXTopicType){
 - (instancetype)initWithDelegate:(id<MMXPubSubManagerDelegate>)delegate;
 
 - (void)retractItemsFromTopic:(MMXTopic *)topic
-                        owner:(MMXUserProfile *)user
                       itemIDs:(NSArray *)itemIDs
                       success:(void (^)(BOOL success))success
                       failure:(void (^)(NSError * error))failure;
-
-/**
- *  Method to publish the current GeoLocation of the user.
- *
- *  @param location - CLLocation object for the current location.
- *  @param success  - Block with BOOL and a NSString with the message ID for the message you posted. The BOOL value should be YES.
- *  @param failure  - Block with an NSError with details about the call failure.
- */
-- (void)updateGeoLocation:(CLLocation *)location
-				  success:(void (^)(BOOL success))success
-				  failure:(void (^)(NSError * error))failure;
 
 
 @end

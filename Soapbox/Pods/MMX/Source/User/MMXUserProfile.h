@@ -18,11 +18,14 @@
 #import <Foundation/Foundation.h>
 @class MMXUserID;
 
+/**
+ *  MMXUserProfile is used to hold additional information about a user.
+ */
 @interface MMXUserProfile : NSObject <NSCoding>
 
 /**
- *  The username for the user.
- *  The valid character set is alphanumeric plus period, dash and underscore. .-_
+ *  The MMXUserID for the user.
+ *  MMXUserID is one way to address a message to a user.
  */
 @property  (nonatomic, readonly) MMXUserID *userID;
 
