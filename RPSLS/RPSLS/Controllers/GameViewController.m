@@ -464,7 +464,7 @@
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	UIImage * image = [UIImage imageNamed:imageName];
 	imageView.image = image;
-	imageView.layer.cornerRadius = width * 0.35;
+//	imageView.layer.cornerRadius = width * 0.35;
 	imageView.layer.borderWidth = 1.0;
 	imageView.layer.borderColor = [UIColor grayColor].CGColor;
 	imageView.clipsToBounds = YES;

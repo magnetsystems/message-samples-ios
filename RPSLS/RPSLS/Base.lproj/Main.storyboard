@@ -62,7 +62,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="ZMg-Cr-9jZ" firstAttribute="trailing" secondItem="1lg-VT-910" secondAttribute="trailingMargin" id="1T6-sL-b5o"/>
                             <constraint firstItem="9xc-Sn-3Nd" firstAttribute="top" secondItem="hBj-sa-Txx" secondAttribute="bottom" constant="8" id="1dN-hs-kXG"/>
@@ -177,7 +177,7 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="0.93574416035353536" green="0.93574416035353536" blue="0.93574416035353536" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.035294117647058823" green="0.25098039215686274" blue="0.20784313725490194" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
