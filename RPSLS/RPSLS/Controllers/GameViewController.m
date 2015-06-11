@@ -424,9 +424,9 @@
 			break;
 		}
 		case RPSLSResultTie: {
-			imageName = [RPSLSEngine valueToString:self.myChoice].lowercaseString;
+			[RPSLSUserStats incrementMyTies];
 			[self showOverlayWithTitle:[self stringFromResult:result myChoice:self.myChoice opponentChoice:self.opponentChoice]
-							 imageName:imageName
+							 imageName:@"draw"
 							showButton:YES];
 			break;
 		}
