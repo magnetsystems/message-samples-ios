@@ -205,7 +205,7 @@
 //        protectionError;
 //    }
 
-    NSLog(@"Setting up store at %@", storeUrl);
+    [[MMXLogger sharedLogger] verbose:@"Setting up store at %@", storeUrl];
 
     self.persistenceController = [[MDMPersistenceController alloc] initWithStoreURL:storeUrl modelURL:modelUrl];
 }

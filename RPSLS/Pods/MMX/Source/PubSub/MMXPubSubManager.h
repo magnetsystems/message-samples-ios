@@ -26,6 +26,11 @@
 @class MMXPubSubFetchRequest;
 @class CLLocation;
 
+/**
+ *  MMXPubSubManager is the primary class interacting with MMXTopic and MMXPubSubMessage.
+ *	It has many methods for getting topics, messages, subscription, etc.
+ *	It also contains methods for discovering/querying for topics.
+ */
 @interface MMXPubSubManager : NSObject
 
 #pragma mark - Topics
@@ -62,7 +67,7 @@
 /**
  *  Query for topics
  *
- *  @param topicQuery - MMXTopicQuery object with the properties set that you wish to query on.
+ *  @param topicQuery - MMXQuery object with the properties set that you wish to query on.
  *  @param success    - Block with an int for the total number of topics that fit your criteria(not the number returned) and a NSArray of MMXTopics.
  *  @param failure    - Block with an NSError with details about the call failure.
  */
@@ -108,6 +113,19 @@
 - (void)fetchItems:(MMXPubSubFetchRequest *)request
            success:(void (^)(NSArray * messages))success
            failure:(void (^)(NSError * error))failure;
+
+/**
+ *  Fetch published items from a topic with specific message IDs.
+ *
+ *  @param topic		- MMXTopic object for the topic you want to subscribe to.
+ *  @param messageIDs	- An Array of message IDs of the posts you are intereted in fetching.
+ *  @param success		- Block with a NSArray of MMXPubSubMessages
+ *  @param failure		- Block with an NSError with details about the call failure.
+ */
+- (void)fetchItemsFromTopic:(MMXTopic *)topic
+			  forMessageIDs:(NSArray *)messageIDs
+					success:(void (^)(NSArray * messages))success
+					failure:(void (^)(NSError * error))failure;
 
 /**
  *  Method to request the most recent post for all topics the user is subscribed to.
@@ -225,7 +243,7 @@
 		failure:(void (^)(NSError * error))failure;
 
 /**
- *  ERemove tags from a specific topic.
+ *  Remove tags from a specific topic.
  *
  *  @param tags    - NSArray of tags(NSStrings).
  *  @param topic   - MMXTopic object for the topic you want to remove the tags from. Cannot be nil.
@@ -236,5 +254,19 @@
 			 topic:(MMXTopic *)topic
 		   success:(void (^)(BOOL success))success
 		   failure:(void (^)(NSError * error))failure;
+
+#pragma mark - Update GeoLocation
+
+/**
+ *  Method to publish the current GeoLocation of the user.
+ *
+ *  @param location - CLLocation object for the current location.
+ *  @param success  - Block with BOOL and a NSString with the message ID for the message you posted. The BOOL value should be YES.
+ *  @param failure  - Block with an NSError with details about the call failure.
+ */
+- (void)updateGeoLocation:(CLLocation *)location
+				  success:(void (^)(BOOL success))success
+				  failure:(void (^)(NSError * error))failure;
+
 
 @end

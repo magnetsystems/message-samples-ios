@@ -17,7 +17,9 @@
 
 #import <Foundation/Foundation.h>
 
-
+/**
+ *  MMXConfiguration is a class used to contain configuration setting in order to set up your connection to the messaging server.
+ */
 @interface MMXConfiguration : NSObject <NSCopying>
 
 /**
@@ -42,7 +44,9 @@
 @property(nonatomic, strong) NSURL *baseURL;
 
 /**
- * Example: 
+ *	An identifier representing the network gateway or 'primary' server to which mobile clients connect.
+ *	By default the value is "mmx".
+ *	This value needs to match the Domain value found on the settings page of your Magnet Message Web Interface
  */
 @property(nonatomic, strong) NSString *domain;
 
@@ -60,7 +64,9 @@
 @property (nonatomic, strong) NSURLCredential *credential;
 
 /**
- Whether or not to force TLS. Defaults to `NO`.
+ *	Whether or not to force TLS. Defaults to `NO`.
+ *	If set to YES the client will only connect via a secure connection.
+ *	If the server does not support a secure connection the connection will fail.
  */
 @property (nonatomic, assign) BOOL shouldForceTLS;
 

@@ -18,6 +18,9 @@
 #import <Foundation/Foundation.h>
 @class MMXTopic;
 
+/**
+ *  MMXPubSubFetchRequest is used to specify parameters when trying to fetch previously posted messages from PubSub.
+ */
 @interface MMXPubSubFetchRequest : NSObject
 
 /**

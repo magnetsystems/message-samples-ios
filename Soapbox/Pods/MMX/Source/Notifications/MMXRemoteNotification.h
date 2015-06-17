@@ -21,26 +21,28 @@
 @interface MMXRemoteNotification : NSObject
 
 /**
- Returns YES if the remote notification is sent by MMX.
-
- @param userInfo The remote notification.
-
+ *	Method to identify if the notification was sent from the Magnet Message Server.
+ *
+ *  @param userInfo - The remote notification.
+ *
+ *  @return YES if the remote notification is sent by MMX.
  */
 + (BOOL)isMMXRemoteNotification:(NSDictionary *)userInfo;
 
 /**
- Returns YES if the remote notification is for a wake-up.
-
- @param userInfo The remote notification.
-
+ *	Method to identify if the purpose of the notification is to initiate a wakeup of the application.
+ *
+ *	@param userInfo - The remote notification.
+ *
+ *  @return YES if the remote notification is sent by MMX.
  */
 + (BOOL)isWakeupRemoteNotification:(NSDictionary *)userInfo;
 
 /**
- Acknowledges a MMX remote notification.
-
- @param userInfo The remote notification.
-
+ *  Method to acknowledge that the app received a MMX remote notification.
+ *
+ *  @param userInfo    - The remote notification.
+ *  @param completion  - Block with BOOL. Value should be YES.
  */
 + (void)acknowledgeRemoteNotification:(NSDictionary *)userInfo completion:(void (^)(BOOL success))completion;
 

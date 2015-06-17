@@ -19,6 +19,9 @@
 #import <Mantle/Mantle.h>
 @class MMXEndpoint;
 
+/**
+ *  MMXDeviceProfile is the container for detailed information about a user's device(Assuming the infomation was previously given)
+ */
 @interface MMXDeviceProfile : MTLModel
 
 /**

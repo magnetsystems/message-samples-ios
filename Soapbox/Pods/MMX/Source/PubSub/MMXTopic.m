@@ -54,6 +54,12 @@
 	if (topicDict[@"userId"] && [topicDict[@"userId"] isKindOfClass:[NSNull class]]) {
 		topic.nameSpace = topicDict[@"userId"];
 	}
+	if (topicDict[@"creator"] && [topicDict[@"creator"] isKindOfClass:[NSNull class]]) {
+		NSString * username = [MMXUserID stripUsername:topicDict[@"creator"]];
+		if ([MMXUtils objectIsValidString:username]) {
+			topic.topicCreator = [MMXUserID userIDWithUsername:username];
+		}
+	}
     topic.isCollection = [topicDict[@"isCollection"] boolValue];
     topic.topicDescription = topicDict[@"description"];
     return topic;
@@ -161,7 +167,7 @@
 		}
 		return NO;
 	}
-	if (![MMXUtils validateAgainstDefaultCharacterSet:self.topicName]) {
+	if (![MMXUtils validateAgainstDefaultCharacterSet:self.topicName allowSpaces:NO]) {
 		if (error != NULL) {
 			*error = [MMXUtils mmxErrorWithTitle:@"Invalid Topic Name" message:@"The topic name contains invalid characters." code:500];
 		}
@@ -193,9 +199,9 @@
 		return YES;
 	if (topic == nil)
 		return NO;
-	if (self.topicName != topic.topicName && ![self.topicName isEqualToString:topic.topicName])
+	if (self.topicName != topic.topicName && ![self.topicName.lowercaseString isEqualToString:topic.topicName.lowercaseString])
 		return NO;
-	if (self.nameSpace != topic.nameSpace && ![self.nameSpace isEqualToString:topic.nameSpace])
+	if (self.nameSpace != topic.nameSpace && ![self.nameSpace.lowercaseString isEqualToString:topic.nameSpace.lowercaseString])
 		return NO;
 	return YES;
 }

@@ -16,11 +16,23 @@
  */
 
 #pragma mark - MMXAddressable Protocol
+/**
+ *  A protocol used internally for properly addressing messages.
+ *	You should NOT create your own objects that implement this protocol.
+ */
 @protocol MMXAddressable <NSObject>
 
 @required
 
+/**
+ *  Primary means of addressing a message
+ */
 @property (nonatomic, readonly) NSString *address;
+
+/**
+ *  Secondary means of addressing a message.
+ *	Used primarily for addressing a message to a specific device.
+ */
 @property (nonatomic, readonly) NSString *subAddress;
 
 @end

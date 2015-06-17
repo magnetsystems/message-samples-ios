@@ -33,11 +33,13 @@
                                 commandStringValue:(NSString *)command
                                              error:(NSError**)error;
 
-+ (NSXMLElement *)contentToXML:(NSString *)content type:(NSString *)type;
++ (NSXMLElement *)contentToXML:(NSString *)content
+						  type:(NSString *)type;
 
 + (NSXMLElement *)metaDataToXML:(NSDictionary *)metaData;
 
-+ (NSXMLNode *)buildAttributeNodeWith:(NSString *)name attributeValue:(NSString *)attributeValue;
++ (NSXMLNode *)buildAttributeNodeWith:(NSString *)name
+					   attributeValue:(NSString *)attributeValue;
 
 + (NSDateFormatter *)dateFormatter8601;
 
@@ -51,13 +53,16 @@
 
 + (BOOL)objectIsValidString:(id)obj;
 
-+ (BOOL)validateAgainstDefaultCharacterSet:(NSString *)string;
++ (BOOL)validateAgainstDefaultCharacterSet:(NSString *)string
+							   allowSpaces:(BOOL)allowSpaces;
 
 + (BOOL)validateTag:(NSString *)tag;
 
 + (NSString *)generateUUID;
 
-+ (NSError *)mmxErrorWithTitle:(NSString *)title message:(NSString *)message code:(int)code;
++ (NSError *)mmxErrorWithTitle:(NSString *)title
+					   message:(NSString *)message
+						  code:(int)code;
 
 @end
 

@@ -76,7 +76,7 @@
         }
         return;
     }
-    if (user.userID.username.length > 40 || user.userID.username.length < 5 || password.length > 40 || password.length < 5) {
+    if (user.userID.username.length > kMaxUsernameLength || user.userID.username.length < kMinUsernameLength || password.length > kMaxPasswordLength || password.length < kMinPasswordLength) {
         NSError * error = [MMXClient errorWithTitle:@"Invalid Character Count" message:@"There is an invalid length of characters used in the login information provided." code:400];
         if (failure) {
 			dispatch_async(self.callbackQueue, ^{
@@ -192,7 +192,7 @@
 
 #pragma mark - Current User
 
-- (void)currentUserProfileWithSuccess:(void (^)(MMXUserProfile *))success
+- (void)userProfileWithSuccess:(void (^)(MMXUserProfile *))success
 							  failure:(void (^)(NSError *))failure {
 	NSError *error;
 	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:@{}
@@ -474,7 +474,7 @@
 
 #pragma mark - Users Tags
 
-- (void)tagsForCurrentUserWithSuccess:(void (^)(NSDate * lastModified, NSArray * tags))success
+- (void)tagsWithSuccess:(void (^)(NSArray * tags))success
                               failure:(void (^)(NSError * error))failure {
     NSError *creationError;
     NSXMLElement *mmxElement = [[NSXMLElement alloc] initWithName:MXmmxElement xmlns:MXnsUser];
@@ -494,7 +494,6 @@
                 NSXMLElement* mmxElement =  [iq elementForName:MXmmxElement xmlns:MXnsUser];
                 if (mmxElement && success) {
 					NSArray * tagArray;
-					NSDate * lastModified;
                     NSString* jsonContent =  [[mmxElement childAtIndex:0] XMLString];
                     NSError* error;
                     NSData* jsonData = [jsonContent dataUsingEncoding:NSUTF8StringEncoding];
@@ -509,15 +508,9 @@
 						} else {
 							tagArray = @[];
 						}
-						if (jsonDictionary[@"lastModTime"] && jsonDictionary[@"lastModTime"] != [NSNull null]) {
-							NSString * dateString = jsonDictionary[@"lastModTime"];
-							lastModified = [MMXUtils dateFromiso8601Format:dateString];
-						} else {
-							lastModified = nil;
-						}
 					}
 					dispatch_async(self.callbackQueue, ^{
-						success(lastModified,tagArray);
+						success(tagArray);
 					});
                 }
                 NSString* iqId = [iq elementID];
@@ -533,19 +526,19 @@
     }
 }
 
-- (void)addTagsForCurrentUser:(NSArray *)tags
+- (void)addTags:(NSArray *)tags
 					  success:(void (^)(BOOL))success
 					  failure:(void (^)(NSError *))failure {
 	[self updateTagsForCurrentUser:tags updateType:@"add" success:success failure:failure];
 }
 
-- (void)setTagsForCurrentUser:(NSArray *)tags
+- (void)setTags:(NSArray *)tags
 					  success:(void (^)(BOOL))success
 					  failure:(void (^)(NSError *))failure {
 	[self updateTagsForCurrentUser:tags updateType:@"set" success:success failure:failure];
 }
 
-- (void)removeTagsForCurrentUser:(NSArray *)tags
+- (void)removeTags:(NSArray *)tags
 						success:(void (^)(BOOL))success
 						failure:(void (^)(NSError *))failure {
 	[self updateTagsForCurrentUser:tags updateType:@"remove" success:success failure:failure];
@@ -616,7 +609,7 @@
     }
 }
 
-- (void)updatePasswordForCurrentUser:(NSString *)password
+- (void)updatePassword:(NSString *)password
 							success:(void (^)(BOOL))success
 							failure:(void (^)(NSError *))failure {
 	if (password.length > kMaxPasswordLength || password.length < kMinPasswordLength) {

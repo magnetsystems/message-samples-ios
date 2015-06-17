@@ -17,6 +17,10 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ *  The MMXMessageOptions class represents the different options that can be set when sending a message. 
+ *	While currently very limited, over time this class will include more options.
+ */
 @interface MMXMessageOptions : NSObject <NSCoding>
 
 /**

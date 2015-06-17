@@ -19,6 +19,10 @@
 #import "MMXAddressable.h"
 @class MMXUserID;
 
+/**
+ *  The MMXEndpoint is a representation of a specific device for a user. 
+ *	It is possible that a user could have multiple devices associated with them. The endpoint can be used to address a message to a device.
+ */
 @interface MMXEndpoint : NSObject <MMXAddressable>
 
 /**

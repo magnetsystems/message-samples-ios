@@ -153,8 +153,9 @@
 	return YES;
 }
 
-+ (BOOL)validateAgainstDefaultCharacterSet:(NSString *)string {
-	NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-."];
++ (BOOL)validateAgainstDefaultCharacterSet:(NSString *)string allowSpaces:(BOOL)allowSpaces {
+	NSString * validCharacters = [NSString stringWithFormat:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-.%@",allowSpaces ? @" " : @""];
+	NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validCharacters];
 	NSCharacterSet *invalidSet = [allowedSet invertedSet];
 	NSRange r = [string rangeOfCharacterFromSet:invalidSet];
 	if (r.location != NSNotFound) {
@@ -167,7 +168,7 @@
 	if (tag == nil) {
 		return NO;
 	}
-	return ([self validateAgainstDefaultCharacterSet:tag] && tag.length > 0 && tag.length < 26);
+	return ([self validateAgainstDefaultCharacterSet:tag allowSpaces:NO] && tag.length > 0 && tag.length < 26);
 }
 
 + (NSString *)generateUUID {

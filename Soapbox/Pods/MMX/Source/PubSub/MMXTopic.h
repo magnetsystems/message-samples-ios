@@ -16,6 +16,7 @@
  */
 
 #import <Foundation/Foundation.h>
+@class MMXUserID;
 
 @interface MMXTopic : NSObject <NSCoding>
 
@@ -35,6 +36,14 @@ typedef NS_ENUM(NSInteger, MMXPublishPermissionsLevel){
  *  Discription of the topic and what should be published to the topic.
  */
 @property (nonatomic, copy)   NSString * topicDescription;
+
+/**
+ *  The MMXUserID of the creator of the topic.
+ *	This infomation is only available when obtaining the MMXTopic object from an API request.
+ *	The creator will not be known if using one of the initializers.
+ *	If the creator information is not available the property will be nil.
+ */
+@property (nonatomic, copy)   MMXUserID * topicCreator;
 
 /**
  *  Used to set limit on the number of published items to be persisted for the topic.

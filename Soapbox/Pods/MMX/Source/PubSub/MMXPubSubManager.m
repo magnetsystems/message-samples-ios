@@ -656,7 +656,6 @@
 }
 
 - (void)retractItemsFromTopic:(MMXTopic *)topic
-                        owner:(MMXUserID *)user
                       itemIDs:(NSArray *)itemIDs
                       success:(void (^)(BOOL success))success
                       failure:(void (^)(NSError * error))failure {
@@ -672,7 +671,7 @@
     
     NSError * parsingError;
     NSMutableDictionary * topicDictionary = @{@"topicName":topic.topicName,
-                                              @"userID":(user && user.username) ? user.username : [NSNull null]
+                                              @"userID":(topic.topicCreator && topic.topicCreator.username) ? topic.topicCreator.username : [NSNull null]
                                               }.mutableCopy;
     BOOL all = YES;
     if (itemIDs && itemIDs.count) {
@@ -948,9 +947,10 @@
         }
         return;
     }
+	NSString *itemID = [self.delegate generateMessageID];
     XMPPIQ *publishIQ = [message pubsubIQForAppID:self.delegate.configuration.appID
 									   currentJID:[self.delegate currentJID]
-										   itemID:[self.delegate generateMessageID]];
+										   itemID:itemID];
     [self.delegate sendIQ:publishIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
         XMPPIQ * iq = (XMPPIQ *)obj;
         if (iq) {
@@ -963,7 +963,7 @@
             } else {
                 if (success) {
 					dispatch_async(self.callbackQueue, ^{
-						success(YES, message.messageID);
+						success(YES, itemID);
 					});
                 }
             }
@@ -1024,6 +1024,86 @@
 		}
     }];
 }
+
+#pragma mark - Fetch Items with IDs
+
+- (XMPPIQ *)fetchItemsFromTopicIQ:(NSDictionary *)dict error:(NSError**)error {
+	NSError * parsingError;
+	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:dict xmlns:MXnsPubSub commandStringValue:@"getItems" error:&parsingError];
+	if (parsingError) {
+		*error = parsingError;
+		return nil;
+	} else {
+		XMPPIQ *topicIQ = [[XMPPIQ alloc] initWithType:@"get" child:mmxElement];
+		[topicIQ addAttributeWithName:@"from" stringValue: [[self.delegate currentJID] full]];
+		[topicIQ addAttributeWithName:@"id" stringValue:[self.delegate generateMessageID]];
+		return topicIQ;
+	}
+}
+
+
+- (void)fetchItemsFromTopic:(MMXTopic *)topic
+			  forMessageIDs:(NSArray *)messageIDs
+					success:(void (^)(NSArray * messages))success
+					failure:(void (^)(NSError * error))failure {
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
+	
+	NSError * parsingError;
+	NSMutableDictionary * topicDictionary = @{@"topicName":topic.topicName,
+											  @"userID":(topic.topicCreator && topic.topicCreator.username) ? topic.topicCreator.username : [NSNull null]
+											  }.mutableCopy;
+	BOOL all = YES;
+	if (messageIDs && messageIDs.count) {
+		[topicDictionary setObject:messageIDs forKey:@"itemIds"];
+		all = NO;
+	}
+	XMPPIQ *topicIQ = [self fetchItemsFromTopicIQ:topicDictionary error:&parsingError];
+	if (!parsingError) {
+		[self.delegate sendIQ:topicIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
+			XMPPIQ * iq = (XMPPIQ *)obj;
+			if ([iq isErrorIQ]) {
+				if (failure) {
+					dispatch_async(self.callbackQueue, ^{
+						failure([iq errorWithTitle:@"Fetch Items Failure."]);
+					});
+				}
+			} else {
+				NSError * parsingError;
+				NSArray * messageArray = [MMXMessage pubsubMessagesFromFetchResponseIQ:iq topic:topic error:&parsingError];
+				if (parsingError) {
+					if (failure) {
+						dispatch_async(self.callbackQueue, ^{
+							failure(parsingError);
+						});
+					}
+				} else {
+					if (success) {
+						dispatch_async(self.callbackQueue, ^{
+							success(messageArray);
+						});
+					}
+				}
+				NSString* iqId = [iq elementID];
+				[self.delegate stopTrackingIQWithID:iqId];
+			}
+		}];
+	} else {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure(parsingError);
+			});
+		}
+	}
+
+}
+
 
 #pragma mark - Request Latest Posts
 
@@ -1113,9 +1193,9 @@
     NSXMLElement *mmxElement = [[NSXMLElement alloc] initWithName:MXmmxElement xmlns:MXnsDataPayload];
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        NSLog(@"Finding address");
+        [[MMXLogger sharedLogger] verbose:@"Finding address"];
         if (error) {
-            NSLog(@"Error %@", error.description);
+            [[MMXLogger sharedLogger] error:@"Error %@", error.description];
         } else {
             CLPlacemark *placemark = [placemarks lastObject];
             NSXMLElement *payload = [self payloadFromlocation:location placemark:placemark];

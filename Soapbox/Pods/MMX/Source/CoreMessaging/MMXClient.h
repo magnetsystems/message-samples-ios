@@ -31,6 +31,9 @@
 @class MMXConfiguration;
 @class CLLocation;
 
+/**
+ *  Values representing the connection status of the MMXClient.
+ */
 typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 	/**
 	 *  Not yet connected or authenticated.
@@ -59,6 +62,11 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 };
 
 #pragma mark - MMXClientDelegate Protocol
+/**
+ *  The MMXClientDelegate protocol defines the methods that a delegate of a MMXClient object can adopt. 
+ *	The methods of the protocol allow the delegate to monitor the connection lifecycle, user registration, incoming messages, message failures and errors. 
+ *	All methods are optional.
+ */
 @protocol MMXClientDelegate <NSObject>
 
 @optional
@@ -66,9 +74,9 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 /**
  *  This method is called whenever the connection status changes
  *
- *  @param client          - The client providing the status change
- *  @param connectionEvent - The value of the new status
- *  @param error           - The error will typically be nil unless the status is MMXConnectionStatusAuthenticationFailure or MMXConnectionStatusFailed
+ *  @param client			- The client providing the status change
+ *  @param connectionStatus - The value of the new status
+ *  @param error			- The error will typically be nil unless the status is MMXConnectionStatusAuthenticationFailure or MMXConnectionStatusFailed
  */
 - (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError*)error;
 
@@ -131,6 +139,11 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 @end
 
 #pragma mark - MMXClient Interface
+/**
+ *  MMXClient is the primary class for using Magnet Message. 
+ *	MMXClient has properties for accessing the manager classes that expose advanced functionality, configuration, connection status and important settings. 
+ *	It also contains the majority of the core methods for task like; connection lifecycle, sending messages, message state and queued messages.
+ */
 @interface MMXClient : NSObject
 
 #pragma mark - MMXClient Properties
@@ -249,8 +262,8 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 /**
  *  Sends a message to a desired user.
  *
- *  @param message           - The MMXMessage to send.
- *  @param withOptions       - MMXMessageOptions object that sets the value for requesting a delivery receipt and performance optimization
+ *  @param message	- The MMXMessage to send.
+ *  @param options	- MMXMessageOptions object that sets the value for requesting a delivery receipt and performance optimization
  *
  *  @return - The UUID of the message for use in tracking.
  */
@@ -279,6 +292,7 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 
 
 /**
+ *	Messages are queued if sent when the user is not connected.
  *  Returns an array of MMXOutboundMessage objects that are currently queued to be sent.
  *  This feature is only available offline as the messages will be sent the next time the user is authenticated
  */
@@ -286,17 +300,18 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 
 /**
  *  Delete queued messages that you no longer want to send.
- *  This feature is only available offline as the messages will be sent the next time the user is authenticated
+ *  This feature is only available offline as the messages will be sent the next time the user is authenticated.
  *
- *  @param messages - An array of the messages you wish to delete
+ *  @param messages - An array of the messages you wish to delete.
  *
- *  @return - An array of any messages that failed to be deleted
+ *  @return - An array of any messages that failed to be deleted.
  */
 - (NSArray *)deleteQueuedMessages:(NSArray *)messages;
 
 /**
- *  Get a list of MMXPubSubMessages that are queued to be sent the next time the user connects
- *  This feature is only available offline as the messages will be sent the next time the user is authenticated
+ *	Messages are queued if sent when the user is not connected.
+ *  Get a list of MMXPubSubMessages that are queued to be sent the next time the user connects.
+ *  This feature is only available offline as the messages will be sent the next time the user is authenticated.
  *
  *  @return - An array of MMXPubSubMessage objects that are currently queued to be sent.
  */
@@ -304,11 +319,11 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 
 /**
  *  Delete queued messages that you no longer want to send.
- *  This feature is only available offline as the messages will be sent the next time the user is authenticated
+ *  This feature is only available offline as the messages will be sent the next time the user is authenticated.
  *
- *  @param messages - An array of the messages you wish to delete
+ *  @param messages - An array of the messages you wish to delete.
  *
- *  @return - An array of any messages that failed to be deleted
+ *  @return - An array of any messages that failed to be deleted.
  */
 - (NSArray *)deleteQueuedPubSubMessages:(NSArray *)messages;
 

@@ -15,11 +15,32 @@
  * permissions and limitations under the License.
  */
 
+/**
+ *  Used as an indication of the severity an error.
+ */
 typedef NS_ENUM(NSInteger, MMXErrorSeverity){
-    MMXErrorSeverityNone = 0,
-    MMXErrorSeverityUnknown,
-    MMXErrorSeverityTrivial,
-    MMXErrorSeverityTemporary,
-    MMXErrorSeverityMajor,
-    MMXErrorSeverityCritical
+	/**
+	 *  No error.
+	 */
+	MMXErrorSeverityNone = 0,
+	/**
+	 *  The server is unable to quantify the severity of the error.
+	 */
+	MMXErrorSeverityUnknown,
+	/**
+	 *  Most likely a user error.
+	 */
+	MMXErrorSeverityTrivial,
+	/**
+	 *  An error that a simple rety should solve the error.
+	 */
+	MMXErrorSeverityTemporary,
+	/**
+	 *  An error that suggests this operation should be avoided
+	 */
+	MMXErrorSeverityMajor,
+	/**
+	 *  An issue in the server that client should abort or exit
+	 */
+	MMXErrorSeverityCritical
 };

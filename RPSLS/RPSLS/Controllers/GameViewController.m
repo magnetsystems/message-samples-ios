@@ -424,9 +424,9 @@
 			break;
 		}
 		case RPSLSResultTie: {
-			imageName = [RPSLSEngine valueToString:self.myChoice].lowercaseString;
+			[RPSLSUserStats incrementMyTies];
 			[self showOverlayWithTitle:[self stringFromResult:result myChoice:self.myChoice opponentChoice:self.opponentChoice]
-							 imageName:imageName
+							 imageName:@"draw"
 							showButton:YES];
 			break;
 		}
@@ -457,14 +457,14 @@
 	UILabel *choiceLabel = [[UILabel alloc]initWithFrame:CGRectMake(width * 0.05, width * 0.05, width * 0.9, height * 0.1)];
 	choiceLabel.adjustsFontSizeToFitWidth = YES;
 	choiceLabel.textAlignment = NSTextAlignmentCenter;
-	choiceLabel.text = title;
+	choiceLabel.text = @"You chose...";
 	[waitingView addSubview:choiceLabel];
 	
 	UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(width * 0.15, width * 0.2, width * 0.7, width * 0.7)];
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	UIImage * image = [UIImage imageNamed:imageName];
 	imageView.image = image;
-	imageView.layer.cornerRadius = width * 0.35;
+//	imageView.layer.cornerRadius = width * 0.35;
 	imageView.layer.borderWidth = 1.0;
 	imageView.layer.borderColor = [UIColor grayColor].CGColor;
 	imageView.clipsToBounds = YES;
@@ -481,6 +481,7 @@
 		button.titleLabel.font = [GameViewController regularFontForSize:30];
 
 		[waitingView addSubview:button];
+		choiceLabel.hidden = YES;
 	}
 	[self.view addSubview:waitingView];
 }
