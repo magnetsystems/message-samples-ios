@@ -202,7 +202,6 @@ int const kTempVersionMinor = 0;
 
 - (void)disconnectAndDeactivateWithSuccess:(void (^)(BOOL ))success
 								   failure:(void (^)(NSError * error))failure {
-    [self.deviceManager deactivateCurrentDeviceSuccess:success failure:failure];
 	[self.deviceManager deactivateCurrentDeviceSuccess:^(BOOL successful) {
 		[self disconnect];
 		if (success) {
