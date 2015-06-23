@@ -1,3 +1,4 @@
+CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/CocoaAsyncSocket" "${PODS_ROOT}/Headers/Public/CocoaLumberjack" "${PODS_ROOT}/Headers/Public/MDMCoreData" "${PODS_ROOT}/Headers/Public/MMX" "${PODS_ROOT}/Headers/Public/Magnet-XMPPFramework" "${PODS_ROOT}/Headers/Public/Mantle" $(SDKROOT)/usr/include/libxml2 $(SDKROOT)/usr/include/libxml2 $(SDKROOT)/usr/include/libresolv $(SDKROOT)/usr/include/libiconv
 LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/Magnet-XMPPFramework/Vendor/libidn" "$(PODS_ROOT)/Magnet-XMPPFramework/Vendor/libidn"
