@@ -120,7 +120,8 @@ int const kTempVersionMinor = 0;
 										  resource:[MMXDeviceManager deviceUUID]]];
 
     [self.xmppStream setHostName:host];
-
+	[self.xmppStream setHostPort:[self.configuration.baseURL.port integerValue]];
+	
     if (self.configuration.shouldForceTLS) {
         self.xmppStream.startTLSPolicy = XMPPStreamStartTLSPolicyRequired;
     }
