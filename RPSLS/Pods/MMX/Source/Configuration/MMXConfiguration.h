@@ -44,6 +44,12 @@
 @property(nonatomic, strong) NSURL *baseURL;
 
 /**
+ *	This is used for the createUser API.
+ *	By default this is set to 5220. There is no need to change this unless you are using non-standard ports.
+ */
+@property(nonatomic, assign) NSInteger publicAPIPort;
+
+/**
  *	An identifier representing the network gateway or 'primary' server to which mobile clients connect.
  *	By default the value is "mmx".
  *	This value needs to match the Domain value found on the settings page of your Magnet Message Web Interface

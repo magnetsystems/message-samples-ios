@@ -62,6 +62,8 @@
 	 */
 	[MMXClient sharedClient].delegate = self;
 	
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
+
 	[self setupDefaultTopic];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resigningActive) name:UIApplicationWillResignActiveNotification object:nil];

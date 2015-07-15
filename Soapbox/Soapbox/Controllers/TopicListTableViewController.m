@@ -62,6 +62,8 @@
 	 */
 	[MMXClient sharedClient].delegate = self;
 	
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
+
 	[self fetchTopics];
 }
 
@@ -120,9 +122,11 @@
 			 *  Subscribing to a MMXTopic
 			 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
 			 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
-			 *	I am passing nil to success because there is not any business logic I need to execute upon success.
 			 */
-			[[MMXClient sharedClient].pubsubManager subscribeToTopic:companyTopic device:nil success:nil failure:^(NSError *error) {
+			[[MMXClient sharedClient].pubsubManager subscribeToTopic:companyTopic device:nil success:^(MMXTopicSubscription *subscription) {
+				//Fetching topics again to make sure that the company_announcements topic show up under subscribed.
+				[self fetchTopics];
+			}  failure:^(NSError *error) {
 
 				/**
 				 *  MagnetNote: MMXLogger

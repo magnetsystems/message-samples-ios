@@ -75,6 +75,8 @@
 	
 	[self collectListOfAvailablePlayers];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resigningActive) name:UIApplicationWillResignActiveNotification object:nil];
+
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

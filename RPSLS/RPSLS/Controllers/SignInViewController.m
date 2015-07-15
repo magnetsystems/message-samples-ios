@@ -48,6 +48,14 @@
 	[MMXClient sharedClient].configuration = config;
 	
 	/**
+	 *  MagnetNote: MMXClient shouldSuspendIncomingMessages
+	 *
+	 *  Suspending incoming messages because there is not a mechanism or need to handle them in this controller.
+	 *	Will allow incoming messages in a controller where I can handle them.
+	 */
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
+	
+	/**
 	 *  MagnetNote: MMXLogger startLogging
 	 *  MagnetNote: MMXLogger level
 	 *

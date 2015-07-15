@@ -62,6 +62,8 @@
 	 *	All MMXClientDelegate protocol methods are optional.
 	 */
 	[MMXClient sharedClient].delegate = self;
+
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
 }
 
 #pragma mark - MMXClientDelegate Callbacks

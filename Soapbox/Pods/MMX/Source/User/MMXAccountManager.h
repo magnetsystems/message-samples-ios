@@ -30,6 +30,23 @@
 @interface MMXAccountManager : NSObject
 
 /**
+ *  Method to register a new user
+ *
+ *  @param username		- The username for the user you want to create
+ *  @param displayName	- The name you want to have publicly displayed for the user. The valid character set is alphanumeric plus period, dash and underscore. .-_
+ *  @param email		- The email for the user.
+ *  @param password		- Password you wish to set for the user.
+ *  @param success		- Block with MMXUserProfile for the newly created user.
+ *  @param failure		- Block with an NSError with details about the call failure.
+ */
+- (void)createAccountForUsername:(NSString *)username
+					 displayName:(NSString *)displayName
+						   email:(NSString *)email
+						password:(NSString *)password
+						 success:(void (^)(MMXUserProfile *userProfile))success
+						 failure:(void (^)(NSError * error))failure;
+
+/**
  *  The callback dispatch queue. Value is initially set to the main queue.
  */
 @property (nonatomic, assign) dispatch_queue_t callbackQueue;

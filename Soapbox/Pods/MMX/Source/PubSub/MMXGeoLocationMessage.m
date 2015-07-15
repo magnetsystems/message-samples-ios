@@ -19,6 +19,7 @@
 #import "MMXMessage_Private.h"
 #import "MMXUserID_Private.h"
 #import "MMXTopic_Private.h"
+#import "NSString+XEP_0106.h"
 
 @import CoreLocation;
 
@@ -32,7 +33,7 @@
 
 - (MMXUserID *)userID {
 	NSString * username = self.mmxMessage.topic.nameSpace;
-    return [MMXUserID userIDWithUsername:username];
+    return [MMXUserID userIDWithUsername:[username jidUnescapedString]];
 }
 
 - (CLLocation *)location {

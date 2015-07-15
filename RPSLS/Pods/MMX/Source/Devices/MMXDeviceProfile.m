@@ -18,13 +18,14 @@
 #import "MMXDeviceProfile_Private.h"
 #import "MMXUtils.h"
 #import "MMXEndpoint_Private.h"
+#import "NSString+XEP_0106.h"
 
 @implementation MMXDeviceProfile
 
 + (instancetype)deviceFromResponseDictionary:(NSDictionary *)deviceDict username:(NSString *)username{
     MMXDeviceProfile * device = [[MMXDeviceProfile alloc] init];
 	NSString * deviceID = mmxNullSafeConversion(deviceDict[@"devId"]);
-    device.endpoint = [MMXEndpoint endpointWithUsername:username deviceID:deviceID];
+    device.endpoint = [MMXEndpoint endpointWithUsername:[username jidUnescapedString] deviceID:deviceID];
     device.modelInfo = mmxNullSafeConversion(deviceDict[@"modelInfo"]);
     device.displayName = mmxNullSafeConversion(deviceDict[@"displayName"]);
     device.osType = mmxNullSafeConversion(deviceDict[@"osType"]);

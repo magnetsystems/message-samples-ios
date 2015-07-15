@@ -57,6 +57,7 @@
 	[super viewWillAppear:animated];
 	self.timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(handleTimer) userInfo:nil repeats:YES];
 	[self layoutButtons];
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -389,14 +390,13 @@
 #pragma mark - Game Logic
 
 - (NSString *)stringFromResult:(RPSLSResult)result myChoice:(RPSLSValue)myChoice opponentChoice:(RPSLSValue)opponentChoice {
-	NSString * resultString = [RPSLSEngine resultAsString:[RPSLSEngine myResult:self.myChoice them:self.opponentChoice]];
 	switch (result) {
 		case RPSLSResultWin:
-			return [NSString stringWithFormat:@"%@ %@ %@ %@.",resultString,[RPSLSEngine valueToString:self.myChoice], [RPSLSEngine verbFromWinner:self.myChoice loser:self.opponentChoice], [RPSLSEngine valueToString:self.opponentChoice]];
+			return @"Winner!";
 		case RPSLSResultLoss:
-			return [NSString stringWithFormat:@"%@ %@ %@ %@.",resultString,[RPSLSEngine valueToString:self.opponentChoice], [RPSLSEngine verbFromWinner:self.opponentChoice loser:self.myChoice], [RPSLSEngine valueToString:self.myChoice]];
+			return @"Loser!";
 		case RPSLSResultTie:
-			return [NSString stringWithFormat:@"%@ You both picked %@.",resultString,[RPSLSEngine valueToString:self.myChoice]];
+			return @"Tie!";
 		default:
 			break;
 	}
@@ -481,7 +481,7 @@
 		button.titleLabel.font = [GameViewController regularFontForSize:30];
 
 		[waitingView addSubview:button];
-		choiceLabel.hidden = YES;
+		choiceLabel.text = title;
 	}
 	[self.view addSubview:waitingView];
 }

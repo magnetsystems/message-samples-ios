@@ -63,6 +63,15 @@
 	 *	By setting this value to yes the SDK will try and create a new user with the provided credentials if the user does not already exist.
 	 */
 	[MMXClient sharedClient].shouldAutoCreateUser = YES;
+
+	/**
+	 *  MagnetNote: MMXClient shouldSuspendIncomingMessages
+	 *
+	 *  Suspending incoming messages because there is not a mechanism or need to handle them in this controller.
+	 *	Will allow incoming messages in a controller where I can handle them.
+	 */
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

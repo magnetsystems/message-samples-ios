@@ -18,6 +18,7 @@
 #import "MMXTopic_Private.h"
 #import "MMXUserProfile_Private.h"
 #import "MMXUtils.h"
+#import "NSString+XEP_0106.h"
 
 @implementation MMXTopic
 
@@ -57,7 +58,7 @@
 	if (topicDict[@"creator"] && [topicDict[@"creator"] isKindOfClass:[NSNull class]]) {
 		NSString * username = [MMXUserID stripUsername:topicDict[@"creator"]];
 		if ([MMXUtils objectIsValidString:username]) {
-			topic.topicCreator = [MMXUserID userIDWithUsername:username];
+			topic.topicCreator = [MMXUserID userIDWithUsername:[username jidUnescapedString]];
 		}
 	}
     topic.isCollection = [topicDict[@"isCollection"] boolValue];
@@ -81,7 +82,7 @@
 	if ([splitTopic[2] isEqualToString:@"*"]) {
 		topic.nameSpace = @"*";
 	} else {
-		topic.nameSpace = splitTopic[2];
+		topic.nameSpace = [splitTopic[2] jidUnescapedString];
 	}
     return topic;
 }
@@ -122,7 +123,7 @@
 - (NSDictionary *)dictionaryForTopicSummary {
     id username;
     if ([self inUserNameSpace]) {
-        username = self.nameSpace;
+        username = [self.nameSpace jidEscapedString];
     } else {
         username = [NSNull null];
     }

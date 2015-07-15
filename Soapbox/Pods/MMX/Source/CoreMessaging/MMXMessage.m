@@ -30,6 +30,7 @@
 
 #import "XMPPIQ.h"
 #import "XMPPMessage.h"
+#import "NSString+XEP_0106.h"
 
 #import "DDXML.h"
 #import <CoreLocation/CoreLocation.h>
@@ -48,15 +49,15 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
         XMPPJID* sender =[xmppMessage from];
 		NSString * senderUsername = [sender usernameWithoutAppID];
 		if ([MMXUtils objectIsValidString:senderUsername]) {
-			_senderUserID = [MMXUserID userIDWithUsername:senderUsername];
+			_senderUserID = [MMXUserID userIDWithUsername:[senderUsername jidUnescapedString]];
 			if ([MMXUtils objectIsValidString:[sender resource]]) {
 				_senderDeviceId = [sender resource];
-				_senderEndpoint = [MMXEndpoint endpointWithUsername:senderUsername deviceID:[sender resource]];
+				_senderEndpoint = [MMXEndpoint endpointWithUsername:[senderUsername jidUnescapedString] deviceID:[sender resource]];
 			}
 		}
 		NSString * receiverUsername = [recipient usernameWithoutAppID];
 		if ([MMXUtils objectIsValidString:receiverUsername]) {
-			_receiverUsername = [recipient usernameWithoutAppID];
+			_receiverUsername = [[recipient usernameWithoutAppID] jidUnescapedString];
 			_receiverDeviceId = [recipient resource];
 		}
         _messageID = [xmppMessage elementID];
@@ -68,7 +69,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 //		if (addressesElement) {
 //			_recipients = [self recipientsFromAddresses:addressesElement];
 //		} else {
-//			_recipients = @[[MMXUserID userIDWithUsername:recipient.usernameWithoutAppID]];
+//			_recipients = @[[MMXUserID userIDWithUsername:[recipient.usernameWithoutAppID jidUnescapedString]]];
 //		}
         //payload
         NSArray* payLoadElements = [mmxElement elementsForName:MXpayloadElement];
@@ -105,7 +106,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	if (addresses && addresses.count) {
 		for (NSXMLElement * address in addresses) {
 			NSString * username = [MMXUserID stripUsername:[[address attributeForName:@"jid"] stringValue]];
-			[recipientArray addObject:[MMXUserID userIDWithUsername:username]];
+			[recipientArray addObject:[MMXUserID userIDWithUsername:[username jidUnescapedString]]];
 		}
 	}
 	return recipientArray.copy;
@@ -118,9 +119,9 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 		_senderDeviceId = [sender resource];
 		_receiverDeviceId = [recipient resource];
 		NSString * username = [sender usernameWithoutAppID];
-		_senderUserID = [MMXUserID userIDWithUsername:username];
-		_senderEndpoint = [MMXEndpoint endpointWithUsername:username deviceID:[sender resource]];
-		_receiverUsername = [recipient usernameWithoutAppID];
+		_senderUserID = [MMXUserID userIDWithUsername:[username jidUnescapedString]];
+		_senderEndpoint = [MMXEndpoint endpointWithUsername:[username jidUnescapedString] deviceID:[sender resource]];
+		_receiverUsername = [[recipient usernameWithoutAppID] jidUnescapedString];
 		NSXMLElement *eventElement = [xmppMessage elementForName:@"event"];
 		NSXMLElement *itemsElement = [eventElement elementForName:@"items"];
 		NSXMLNode* node = [itemsElement attributeForName:@"node"];

@@ -45,6 +45,7 @@
 #import "XMPP.h"
 #import "XMPPJID+MMX.h"
 #import "MMXConfiguration.h"
+#import "NSString+XEP_0106.h"
 
 #import <AssertMacros.h>
 
@@ -109,7 +110,7 @@ int const kTempVersionMinor = 0;
     [self disconnect];
     self.xmppStream = [[XMPPStream alloc] init];
     self.iqTracker = [[XMPPIDTracker alloc] initWithStream:self.xmppStream dispatchQueue:self.mmxQueue];
-    NSMutableString *userWithAppId = [[NSMutableString alloc] initWithString:self.configuration.credential.user];
+    NSMutableString *userWithAppId = [[NSMutableString alloc] initWithString:[self.configuration.credential.user jidEscapedString]];
     [userWithAppId appendString:@"%"];
     [userWithAppId appendString:self.configuration.appID];
     
@@ -265,7 +266,6 @@ int const kTempVersionMinor = 0;
 
 - (MMXAccountManager *)accountManager {
     if (!_accountManager) {
-        MMXAssert((self.xmppStream && [self.xmppStream isConnected] && self.iqTracker && self.mmxQueue), @"You must be connected or logged in to use the MMXDeviceManager");
         _accountManager = [[MMXAccountManager alloc] initWithDelegate:self];
     }
     return _accountManager;
@@ -412,7 +412,7 @@ int const kTempVersionMinor = 0;
 }
 
 - (NSString *)sendDeliveryConfirmationForMessage:(MMXInboundMessage *)message {
-	NSString *sender = [NSString stringWithFormat:@"%@%%%@@%@", message.senderUserID.username, self.configuration.appID, self.configuration.domain];
+	NSString *sender = [NSString stringWithFormat:@"%@%%%@@%@", [message.senderUserID address], self.configuration.appID, self.configuration.domain];
 	if (message.senderEndpoint.deviceID != nil && ![message.senderEndpoint.deviceID isEqualToString:@""]) {
 		sender = [NSString stringWithFormat:@"%@/%@", sender, message.senderEndpoint.deviceID];
 	}
@@ -797,7 +797,7 @@ int const kTempVersionMinor = 0;
 			[self sendSDKAckMessageId:msgId sourceFrom:from sourceTo:to];
 			if ([self.delegate respondsToSelector:@selector(client:didDeliverMessage:recipient:)]) {
 				dispatch_async(self.callbackQueue, ^{
-					[self.delegate client:self didDeliverMessage:[xmppMessage elementID] recipient:[MMXUserID userIDWithUsername:[from usernameWithoutAppID]]];
+					[self.delegate client:self didDeliverMessage:[xmppMessage elementID] recipient:[MMXUserID userIDWithUsername:[[from usernameWithoutAppID] jidUnescapedString]]];
 				});
 			}
 		}
@@ -907,7 +907,7 @@ int const kTempVersionMinor = 0;
 }
 
 + (BOOL)validateCharacterSet:(NSString *)string {
-    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-."];
+    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-.@"];
     NSCharacterSet *invalidSet = [allowedSet invertedSet];
     NSRange r = [string rangeOfCharacterFromSet:invalidSet];
     if (r.location != NSNotFound) {
