@@ -104,7 +104,11 @@
 	if (connectionStatus == MMXConnectionStatusAuthenticated) {
 		[self performSegueWithIdentifier:@"ShowTopicList" sender:nil];
 	} else {
-		[self showAlertWithTitle:@"Error" message:error ? error.localizedFailureReason : @"An unknown error occurred. Please try logging in again"];
+		NSString *errorMessage;
+		if (error) {
+			errorMessage = error.localizedFailureReason ?: error.localizedDescription;
+		}
+		[self showAlertWithTitle:@"Error" message:(errorMessage && ![errorMessage isEqualToString:@""]) ? errorMessage : @"An unknown error occurred. Please try logging in again"];
 		[self setInputsEnabled:YES];
 	}
 	NSLog(@"Status = %ld",(long)connectionStatus);
