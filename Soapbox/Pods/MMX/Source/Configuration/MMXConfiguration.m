@@ -56,12 +56,15 @@
     self = [super init];
     if (self) {
 		self.baseURL = baseURL;
-		self.domain = @"mmx";
 		self.publicAPIPort = 5220;
         self.shouldForceTLS = YES;
         self.allowInvalidCertificates = NO;
     }
     return self;
+}
+
+- (NSString *)domain {
+	return _domain ?: @"mmx";
 }
 
 #pragma mark - Equality
