@@ -94,8 +94,15 @@
 
 #pragma mark - MMXClientDelegate Callbacks
 
+/**
+ *  MagnetNote: MMXClientDelegate client:didReceiveConnectionStatusChange:error:
+ *
+ *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
+ */
 - (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-	//FIXME: Show popover if connection lost
+	if (connectionStatus == MMXConnectionStatusDisconnected) {
+		[self.navigationController popToRootViewControllerAnimated:YES];
+	}
 }
 
 - (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {

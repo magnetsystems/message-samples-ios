@@ -75,6 +75,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+	self.navigationController.navigationBarHidden = YES;
 
 	/**
 	 *  MagnetNote: MMXClientDelegate
@@ -182,6 +183,8 @@
 	[self presentViewController:alertController animated:YES completion:nil];
 }
 
-
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+	self.navigationController.navigationBarHidden = NO;
+}
 
 @end
