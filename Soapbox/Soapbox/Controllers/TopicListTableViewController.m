@@ -266,7 +266,7 @@
 	
 	for (NSString *searchString in searchItems) {
 		NSMutableArray *searchItemsPredicate = [NSMutableArray array];
-		NSExpression *lhs = [NSExpression expressionForKeyPath:@"topicName"];
+		NSExpression *lhs = [NSExpression expressionForKeyPath:@"topic.topicName"];
 		NSExpression *rhs = [NSExpression expressionForConstantValue:searchString];
 		NSPredicate *finalPredicate = [NSComparisonPredicate
 									   predicateWithLeftExpression:lhs
