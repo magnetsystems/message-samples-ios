@@ -21,13 +21,6 @@
 
 @interface MMXQuery ()
 
-/**
- *	NOT IMPLEMENTED YET
- *  The offset into the results you want. To be used for pagination.
- */
-@property (nonatomic, assign) int offset;
-
-
 - (NSDictionary *)dictionaryRepresentation;
 
 @end
