@@ -109,7 +109,7 @@
 		
 		NSMutableArray *tempMessageList = self.messageList.mutableCopy;
 		[tempMessageList insertObject:message atIndex:0];
-		self.messageList = tempMessageList.copy;
+		self.messageList = tempMessageList;
 		
 		[self.tableView reloadData];
 	}
@@ -189,7 +189,7 @@
 	 *	We are passing the username of the sender in the metaData of the message to be able to show the sender as part of our app functionality.
 	 */
 	MMXPubSubMessage * message = [MMXPubSubMessage pubSubMessageToTopic:self.topic
-																content:self.textView.text.copy
+																content:self.textView.text
 															   metaData:@{@"username":[MMXClient sharedClient].configuration.credential.user}];
 	
 	/*

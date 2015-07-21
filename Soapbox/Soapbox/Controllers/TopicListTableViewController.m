@@ -158,7 +158,7 @@
 			[tempSubArray addObject:topicSub.topic];
 		}
 		
-		self.subscribedTopicsList = tempSubArray.copy;
+		self.subscribedTopicsList = tempSubArray;
 
 		/*
 		 *  Getting the list all topics(max of 100)
