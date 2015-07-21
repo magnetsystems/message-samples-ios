@@ -16,6 +16,7 @@
  */
 
 #import "MMXUserID_Private.h"
+#import "NSString+XEP_0106.h"
 
 @implementation MMXUserID
 
@@ -26,7 +27,7 @@
 }
 
 - (NSString *)address {
-	return self.username;
+	return [self.username jidEscapedString];
 }
 
 - (NSString *)subAddress {

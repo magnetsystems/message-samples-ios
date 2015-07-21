@@ -19,6 +19,7 @@
 #import "MMXUserProfile_Private.h"
 #import "MMXConstants.h"
 #import "XMPP.h"
+#import "NSString+XEP_0106.h"
 
 @implementation MMXUserProfile
 
@@ -39,7 +40,7 @@
 + (instancetype)initWithDictionary:(NSDictionary *)userDict {
 	MMXUserProfile * user = [[MMXUserProfile alloc] init];
 	NSString * username = [MMXUserID stripUsername:userDict[@"userId"]];
-	user.userID = [MMXUserID userIDWithUsername:username];;
+	user.userID = [MMXUserID userIDWithUsername:[username jidUnescapedString]];;
 	user.displayName = userDict[@"displayName"];
 	user.email = userDict[@"email"];
 	return user;

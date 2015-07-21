@@ -48,6 +48,14 @@
 	[MMXClient sharedClient].configuration = config;
 	
 	/**
+	 *  MagnetNote: MMXClient shouldSuspendIncomingMessages
+	 *
+	 *  Suspending incoming messages because there is not a mechanism or need to handle them in this controller.
+	 *	Will allow incoming messages in a controller where I can handle them.
+	 */
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
+	
+	/**
 	 *  MagnetNote: MMXLogger startLogging
 	 *  MagnetNote: MMXLogger level
 	 *
@@ -67,6 +75,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+	self.navigationController.navigationBarHidden = YES;
 
 	/**
 	 *  MagnetNote: MMXClientDelegate
@@ -174,6 +183,8 @@
 	[self presentViewController:alertController animated:YES completion:nil];
 }
 
-
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+	self.navigationController.navigationBarHidden = NO;
+}
 
 @end

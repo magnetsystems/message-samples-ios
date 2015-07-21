@@ -28,6 +28,7 @@
 @protocol MMXAccountManagerDelegate <NSObject>
 
 @property (nonatomic, strong) MMXConfiguration *configuration;
+@property (nonatomic, assign) MMXConnectionStatus connectionStatus;
 @property (nonatomic, readonly) MMXDeviceManager * deviceManager;
 
 - (void)authenticate;
@@ -54,15 +55,6 @@
 
 - (instancetype)initWithDelegate:(id<MMXAccountManagerDelegate>)delegate;
 
-/**
- *  Method to register a new user
- *  You must have an active connection to use this API.
- *
- *  @param user		- The MMXUserProfile object of the user you want to register
- *  @param password - Password you wish to set for the user.
- *  @param success	- Block with BOOL. Value should be YES.
- *  @param failure	- Block with an NSError with details about the call failure.
- */
 - (void)registerUser:(MMXUserProfile*)user
 			password:(NSString *)password
 			 success:(void (^)(BOOL success))success

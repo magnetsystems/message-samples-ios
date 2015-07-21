@@ -85,6 +85,8 @@
 	 *	All MMXClientDelegate protocol methods are optional.
 	 */
 	[MMXClient sharedClient].delegate = self;
+
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -47,6 +47,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+	[self.navigationItem setHidesBackButton:YES animated:YES];
+
 	self.inGame = NO;
 	self.connectedLabel.text = [NSString stringWithFormat:@"Connecting as %@",[RPSLSUser me].username];
 	self.winsLabel.text = [NSString stringWithFormat:@"Wins: %lu",(unsigned long)[RPSLSUser me].stats.wins];
@@ -62,6 +64,8 @@
 	 */
 	[MMXClient sharedClient].delegate = self;
 	
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
+
 	[self setupDefaultTopic];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resigningActive) name:UIApplicationWillResignActiveNotification object:nil];

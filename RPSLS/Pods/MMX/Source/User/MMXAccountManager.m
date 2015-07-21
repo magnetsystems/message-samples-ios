@@ -36,6 +36,7 @@
 
 #import "MMXUtils.h"
 #import "MMXConfiguration.h"
+#import "NSString+XEP_0106.h"
 
 #if TARGET_OS_IPHONE
 	#import <UIKit/UIKit.h>
@@ -67,26 +68,26 @@
 			 success:(void (^)(BOOL success))success
 			 failure:(void (^)(NSError * error))failure {
 	[[MMXLogger sharedLogger] verbose:@"MMXAccountManager registerUser. User = %@", user];
-    if (![MMXClient validateCharacterSet:user.userID.username]) {
-        NSError * error = [MMXClient errorWithTitle:@"Invalid Characters" message:@"There are invalid characters used in the login information provided." code:400];
-        if (failure) {
+	if (![MMXClient validateCharacterSet:user.userID.username]) {
+		NSError * error = [MMXClient errorWithTitle:@"Invalid Characters" message:@"There are invalid characters used in the login information provided." code:400];
+		if (failure) {
 			dispatch_async(self.callbackQueue, ^{
 				failure(error);
 			});
-        }
-        return;
-    }
-    if (user.userID.username.length > kMaxUsernameLength || user.userID.username.length < kMinUsernameLength || password.length > kMaxPasswordLength || password.length < kMinPasswordLength) {
-        NSError * error = [MMXClient errorWithTitle:@"Invalid Character Count" message:@"There is an invalid length of characters used in the login information provided." code:400];
-        if (failure) {
+		}
+		return;
+	}
+	if (user.userID.username.length > kMaxUsernameLength || user.userID.username.length < kMinUsernameLength || password.length > kMaxPasswordLength || password.length < kMinPasswordLength) {
+		NSError * error = [MMXClient errorWithTitle:@"Invalid Character Count" message:@"There is an invalid length of characters used in the login information provided." code:400];
+		if (failure) {
 			dispatch_async(self.callbackQueue, ^{
 				failure(error);
 			});
-        }
-        return;
-    }
+		}
+		return;
+	}
 	NSError * iqError;
-    XMPPIQ *userIQ = [self registrationIQForUser:user createMode:@"UPGRADE_USER" password:password error:&iqError];
+	XMPPIQ *userIQ = [self registrationIQForUser:user createMode:@"UPGRADE_USER" password:password error:&iqError];
 	if (userIQ) {
 		[self.delegate sendIQ:userIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
 			XMPPIQ * iq = (XMPPIQ *)obj;
@@ -122,6 +123,80 @@
 			});
 		}
 	}
+}
+
+- (void)createAccountForUsername:(NSString *)username
+					 displayName:(NSString *)displayName
+						   email:(NSString *)email
+						password:(NSString *)password
+						 success:(void (^)(MMXUserProfile *userProfile))success
+						 failure:(void (^)(NSError * error))failure {
+	[[MMXLogger sharedLogger] verbose:@"MMXAccountManager createAccountForUsername. Username = %@", username];
+    if (![MMXClient validateCharacterSet:username]) {
+        NSError * error = [MMXClient errorWithTitle:@"Invalid Characters" message:@"There are invalid characters used in the login information provided." code:400];
+        if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure(error);
+			});
+        }
+        return;
+    }
+    if (username.length > kMaxUsernameLength || username.length < kMinUsernameLength || password.length > kMaxPasswordLength || password.length < kMinPasswordLength) {
+        NSError * error = [MMXClient errorWithTitle:@"Invalid Character Count" message:@"There is an invalid length of characters used in the login information provided." code:400];
+        if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure(error);
+			});
+        }
+        return;
+    }
+	NSURLSessionConfiguration * config = [NSURLSessionConfiguration defaultSessionConfiguration];
+	
+	NSURLSession * session = [NSURLSession sessionWithConfiguration:config];
+	
+	NSString *usersURLString = [NSString stringWithFormat:@"http://%@:%li/mmxmgmt/api/v1/users",self.delegate.configuration.baseURL.host,(long)self.delegate.configuration.publicAPIPort];
+	
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:usersURLString]];
+	
+	[request setValue:self.delegate.configuration.appID forHTTPHeaderField:@"X-mmx-app-id"];
+	[request setValue:self.delegate.configuration.apiKey forHTTPHeaderField:@"X-mmx-api-key"];
+	[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+	
+	request.HTTPMethod = @"POST";
+		
+	NSError *error;
+	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{ @"username": [username jidEscapedString],
+																  @"password": password,
+																  @"name": displayName ?: [NSNull null],
+																  @"email": email ?: [NSNull null]}
+													   options:NSUTF8StringEncoding
+														 error:&error];
+	
+	[request setHTTPBody:jsonData];
+
+	[[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+		if (httpResponse.statusCode == 201) {
+			if (success) {
+				MMXUserProfile * profile = [MMXUserProfile initWithUsername:username displayName:displayName email:email tags:nil];
+				success(profile);
+			}
+		} else if (error) {
+			if (failure) {
+				failure(error);
+			}
+		} else if (httpResponse.statusCode == 409) {
+			NSError *httpError = [self.delegate errorWithTitle:@"Duplicate entry" message:@"You have tried to create a duplicate entry." code:(int)httpResponse.statusCode];
+			if (failure) {
+				failure(httpError);
+			}
+		} else {
+			NSError *httpError = [self.delegate errorWithTitle:@"Unknown Error" message:@"Unfortunately an unknown error occurred while trying to create your user." code:(int)httpResponse.statusCode];
+			if (failure) {
+				failure(httpError);
+			}
+		}
+	}] resume];
 }
 
 - (void)registerAnonymousWithSuccess:(void (^)(BOOL success))success
@@ -193,7 +268,16 @@
 #pragma mark - Current User
 
 - (void)userProfileWithSuccess:(void (^)(MMXUserProfile *))success
-							  failure:(void (^)(NSError *))failure {
+					   failure:(void (^)(NSError *))failure {
+	[[MMXLogger sharedLogger] verbose:@"MMXAccountManager userProfileWithSuccess"];
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
 	NSError *error;
 	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:@{}
 																 xmlns:MXnsUser
@@ -213,7 +297,7 @@
 			} else {
 				NSString* iqId = [iq elementID];
 				[self.delegate stopTrackingIQWithID:iqId];
-				MMXUserProfile * user = [MMXUserProfile userFromIQ:iq username:[[self.delegate currentJID] usernameWithoutAppID]];
+				MMXUserProfile * user = [MMXUserProfile userFromIQ:iq username:[[[self.delegate currentJID] usernameWithoutAppID] jidUnescapedString]];
 				if (user) {
 					if (success) {
 						dispatch_async(self.callbackQueue, ^{
@@ -241,6 +325,15 @@
 - (void)endpointsForUser:(MMXUserID *)user
 				 success:(void (^)(NSArray *))success
 				 failure:(void (^)(NSError *))failure {
+	[[MMXLogger sharedLogger] verbose:@"MMXAccountManager endpointsForUser. Username = %@", user.username];
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
 	if (user == nil || user.username == nil || [user.username isEqualToString:@""]) {
 		if (failure) {
 			dispatch_async(self.callbackQueue, ^{
@@ -274,6 +367,14 @@
 			success:(void (^)(BOOL))success
 			failure:(void (^)(NSError *))failure {
 	[[MMXLogger sharedLogger] verbose:@"MMXAccountManager updateEmail. Email = %@", email];
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
 	if (email && ![email isEqualToString:@""]) {
 		XMPPIQ *userIQ = [self updateIQForUserDict:@{@"email": email}];
 		[self.delegate sendIQ:userIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
@@ -316,6 +417,14 @@
 				  success:(void (^)(BOOL))success
 				  failure:(void (^)(NSError *))failure {
 	[[MMXLogger sharedLogger] verbose:@"MMXAccountManager updateDisplayName. DisplayName = %@", displayName];
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
 	if (displayName && ![displayName isEqualToString:@""]) {
 		XMPPIQ *userIQ = [self updateIQForUserDict:@{@"displayName": displayName}];
 		[self.delegate sendIQ:userIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
@@ -359,6 +468,14 @@
 		   success:(void (^)(BOOL))success
 		   failure:(void (^)(NSError *))failure {
 	[[MMXLogger sharedLogger] verbose:@"MMXAccountManager updateUser. User = %@", user];
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
 	if (user == nil) {
 		if (failure) {
 			dispatch_async(self.callbackQueue, ^{
@@ -447,6 +564,14 @@
 		   success:(void (^)(int totalCount, NSArray * users))success
 		   failure:(void (^)(NSError * error))failure {
 	[[MMXLogger sharedLogger] verbose:@"MMXAccountManager queryUsers. MMXQuery = %@", userQuery];
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
 	NSError *error;
 	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:[userQuery dictionaryRepresentation] xmlns:MXnsUser commandStringValue:@"search" error:&error];
 	
@@ -475,7 +600,7 @@
 #pragma mark - Users Tags
 
 - (void)tagsWithSuccess:(void (^)(NSArray * tags))success
-                              failure:(void (^)(NSError * error))failure {
+				failure:(void (^)(NSError * error))failure {
     NSError *creationError;
     NSXMLElement *mmxElement = [[NSXMLElement alloc] initWithName:MXmmxElement xmlns:MXnsUser];
     [mmxElement addAttributeWithName:MXcommandString stringValue:MXcommandGetTags];
@@ -548,6 +673,14 @@
 					  updateType:(NSString *)updateType
 						 success:(void (^)(BOOL))success
 						 failure:(void (^)(NSError *))failure {
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
 	if ([updateType isEqualToString:@"add"] && (tags == nil || tags.count < 1)) {
 		if (failure) {
 			dispatch_async(self.callbackQueue, ^{
@@ -610,8 +743,16 @@
 }
 
 - (void)updatePassword:(NSString *)password
-							success:(void (^)(BOOL))success
-							failure:(void (^)(NSError *))failure {
+			   success:(void (^)(BOOL))success
+			   failure:(void (^)(NSError *))failure {
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
 	if (password.length > kMaxPasswordLength || password.length < kMinPasswordLength) {
 		if (failure) {
 			NSError * error = [MMXClient errorWithTitle:@"Invalid Character Count" message:@"There is an invalid length of characters used in the password provided." code:400];
@@ -653,6 +794,20 @@
 			}
 		}
 	}];
+}
+
+#pragma mark - Helper Methods
+
+- (BOOL)hasActiveConnection {
+	if (self.delegate.connectionStatus != MMXConnectionStatusAuthenticated &&
+		self.delegate.connectionStatus != MMXConnectionStatusConnected) {
+		return NO;
+	}
+	return YES;
+}
+
+- (NSError *)connectionStatusError {
+	return [MMXClient errorWithTitle:@"Not currently connected." message:@"The feature you are trying to use requires an active connection." code:503];
 }
 
 @end

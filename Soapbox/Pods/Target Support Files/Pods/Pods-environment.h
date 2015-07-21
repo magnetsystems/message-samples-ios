@@ -70,49 +70,55 @@
 #define COCOAPODS_POD_AVAILABLE_MMX
 #define COCOAPODS_VERSION_MAJOR_MMX 1
 #define COCOAPODS_VERSION_MINOR_MMX 0
-#define COCOAPODS_VERSION_PATCH_MMX 2
+#define COCOAPODS_VERSION_PATCH_MMX 3
 
 // Magnet-XMPPFramework
 #define COCOAPODS_POD_AVAILABLE_Magnet_XMPPFramework
 #define COCOAPODS_VERSION_MAJOR_Magnet_XMPPFramework 3
 #define COCOAPODS_VERSION_MINOR_Magnet_XMPPFramework 6
-#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework 7
+#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework 9
 
 // Magnet-XMPPFramework/Core
 #define COCOAPODS_POD_AVAILABLE_Magnet_XMPPFramework_Core
 #define COCOAPODS_VERSION_MAJOR_Magnet_XMPPFramework_Core 3
 #define COCOAPODS_VERSION_MINOR_Magnet_XMPPFramework_Core 6
-#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_Core 7
+#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_Core 9
 
 // Magnet-XMPPFramework/CoreDataStorage
 #define COCOAPODS_POD_AVAILABLE_Magnet_XMPPFramework_CoreDataStorage
 #define COCOAPODS_VERSION_MAJOR_Magnet_XMPPFramework_CoreDataStorage 3
 #define COCOAPODS_VERSION_MINOR_Magnet_XMPPFramework_CoreDataStorage 6
-#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_CoreDataStorage 7
+#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_CoreDataStorage 9
 
 // Magnet-XMPPFramework/Roster
 #define COCOAPODS_POD_AVAILABLE_Magnet_XMPPFramework_Roster
 #define COCOAPODS_VERSION_MAJOR_Magnet_XMPPFramework_Roster 3
 #define COCOAPODS_VERSION_MINOR_Magnet_XMPPFramework_Roster 6
-#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_Roster 7
+#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_Roster 9
 
 // Magnet-XMPPFramework/XEP-0060
 #define COCOAPODS_POD_AVAILABLE_Magnet_XMPPFramework_XEP_0060
 #define COCOAPODS_VERSION_MAJOR_Magnet_XMPPFramework_XEP_0060 3
 #define COCOAPODS_VERSION_MINOR_Magnet_XMPPFramework_XEP_0060 6
-#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_XEP_0060 7
+#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_XEP_0060 9
 
 // Magnet-XMPPFramework/XEP-0082
 #define COCOAPODS_POD_AVAILABLE_Magnet_XMPPFramework_XEP_0082
 #define COCOAPODS_VERSION_MAJOR_Magnet_XMPPFramework_XEP_0082 3
 #define COCOAPODS_VERSION_MINOR_Magnet_XMPPFramework_XEP_0082 6
-#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_XEP_0082 7
+#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_XEP_0082 9
+
+// Magnet-XMPPFramework/XEP-0106
+#define COCOAPODS_POD_AVAILABLE_Magnet_XMPPFramework_XEP_0106
+#define COCOAPODS_VERSION_MAJOR_Magnet_XMPPFramework_XEP_0106 3
+#define COCOAPODS_VERSION_MINOR_Magnet_XMPPFramework_XEP_0106 6
+#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_XEP_0106 9
 
 // Magnet-XMPPFramework/XEP-0203
 #define COCOAPODS_POD_AVAILABLE_Magnet_XMPPFramework_XEP_0203
 #define COCOAPODS_VERSION_MAJOR_Magnet_XMPPFramework_XEP_0203 3
 #define COCOAPODS_VERSION_MINOR_Magnet_XMPPFramework_XEP_0203 6
-#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_XEP_0203 7
+#define COCOAPODS_VERSION_PATCH_Magnet_XMPPFramework_XEP_0203 9
 
 // Mantle
 #define COCOAPODS_POD_AVAILABLE_Mantle

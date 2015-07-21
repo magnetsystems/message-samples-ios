@@ -63,6 +63,15 @@
 	 *	By setting this value to yes the SDK will try and create a new user with the provided credentials if the user does not already exist.
 	 */
 	[MMXClient sharedClient].shouldAutoCreateUser = YES;
+
+	/**
+	 *  MagnetNote: MMXClient shouldSuspendIncomingMessages
+	 *
+	 *  Suspending incoming messages because there is not a mechanism or need to handle them in this controller.
+	 *	Will allow incoming messages in a controller where I can handle them.
+	 */
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -95,7 +104,11 @@
 	if (connectionStatus == MMXConnectionStatusAuthenticated) {
 		[self performSegueWithIdentifier:@"ShowTopicList" sender:nil];
 	} else {
-		[self showAlertWithTitle:@"Error" message:error ? error.localizedFailureReason : @"An unknown error occurred. Please try logging in again"];
+		NSString *errorMessage;
+		if (error) {
+			errorMessage = error.localizedFailureReason ?: error.localizedDescription;
+		}
+		[self showAlertWithTitle:@"Error" message:(errorMessage && ![errorMessage isEqualToString:@""]) ? errorMessage : @"An unknown error occurred. Please try logging in again"];
 		[self setInputsEnabled:YES];
 	}
 	NSLog(@"Status = %ld",(long)connectionStatus);
