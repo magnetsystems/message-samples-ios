@@ -34,9 +34,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	/**
-	 *  MagnetNote: Tags
-	 *
+	/*
 	 *  Create Array of potential tags.
 	 *	Tags are strings. They cannot contain spaces.
 	 */
@@ -54,9 +52,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	/**
-	 *  MagnetNote: MMXClientDelegate
-	 *
+	/*
 	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
 	 *	I only care about client:didReceiveConnectionStatusChange:error: in this class.
 	 *	All MMXClientDelegate protocol methods are optional.
@@ -68,9 +64,7 @@
 
 #pragma mark - MMXClientDelegate Callbacks
 
-/**
- *  MagnetNote: MMXClientDelegate client:didReceiveConnectionStatusChange:error:
- *
+/*
  *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
  */
 - (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
@@ -95,16 +89,12 @@
 		[self showAlertForSuccess:NO title:@"Invalid Topic Name" description:@"Topic name cannot contain spaces."];
 	} else {
 		
-		/**
-		 *  MagnetNote: MMXTopic topicWithName:maxItemsToPersist:permissionsLevel:
-		 *
+		/*
 		 *  Creating a new MMXTopic object. I could have also used MMXTopic topicWithName: as the values I passed in are same as the defaults.
 		 */
 		MMXTopic * topic = [MMXTopic topicWithName:topicName maxItemsToPersist:-1 permissionsLevel:MMXPublishPermissionsLevelAnyone];
 		
-		/**
-		 *  MagnetNote: MMXPubSubManager createTopic:success:failure:
-		 *
+		/*
 		 *  Creating a new topic by passing my MMXTopic object.
 		 *	When a user creates a topic they are NOT automatically subscribed to it.
 		 */
@@ -112,9 +102,7 @@
 			NSArray * tagsArray = [self topicTags];
 			if (tagsArray.count) {
 				
-				/**
-				 *  MagnetNote: MMXPubSubManager setTags:topic:success:failure:
-				 *
+				/*
 				 *  Setting tags on the newly created topic.
 				 *	There are also APIs to get the list of existing tags, add tags and remove tags.
 				 */
@@ -160,9 +148,7 @@
 								 style:UIAlertActionStyleDefault
 								 handler:^(UIAlertAction *action) {
 
-									 /**
-									  *  MagnetNote: MMXPubSubManager subscribeToTopic:device:success:failure:
-									  *
+									 /*
 									  *  Subscribing to a MMXTopic
 									  *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
 									  *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
