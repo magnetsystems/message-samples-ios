@@ -25,8 +25,8 @@
 
 @implementation MMXQuery
 
-+ (instancetype)queryForUserDisplayNameStartsWith:(NSString *)displayName tags:(NSArray *)tags limit:(int)limit offset:(int)offset {
-	MMXQuery * query = [MMXQuery queryWithTags:tags compoundPredicateType:MMXAndPredicateType limit:limit offset:offset];
++ (instancetype)queryForUserDisplayNameStartsWith:(NSString *)displayName tags:(NSArray *)tags limit:(int)limit {
+	MMXQuery * query = [MMXQuery queryWithTags:tags compoundPredicateType:MMXAndPredicateType limit:limit];
 	MMXUserQueryFilter * userFilter = [[MMXUserQueryFilter alloc] init];
 	userFilter.displayName = displayName;
 	userFilter.predicateOperatorType = MMXBeginsWithPredicateOperatorType;
@@ -34,8 +34,8 @@
 	return query;
 }
 
-+ (instancetype)queryForEmailStartsWith:(NSString *)email tags:(NSArray *)tags limit:(int)limit offset:(int)offset {
-	MMXQuery * query = [MMXQuery queryWithTags:tags compoundPredicateType:MMXAndPredicateType limit:limit offset:offset];
++ (instancetype)queryForEmailStartsWith:(NSString *)email tags:(NSArray *)tags limit:(int)limit {
+	MMXQuery * query = [MMXQuery queryWithTags:tags compoundPredicateType:MMXAndPredicateType limit:limit];
 	MMXUserQueryFilter * userFilter = [[MMXUserQueryFilter alloc] init];
 	userFilter.email = email;
 	userFilter.predicateOperatorType = MMXBeginsWithPredicateOperatorType;
@@ -43,8 +43,8 @@
 	return query;
 }
 
-+ (instancetype)queryForTopicNameStartsWith:(NSString *)topicName tags:(NSArray *)tags limit:(int)limit offset:(int)offset {
-	MMXQuery * query = [MMXQuery queryWithTags:tags compoundPredicateType:MMXAndPredicateType limit:limit offset:offset];
++ (instancetype)queryForTopicNameStartsWith:(NSString *)topicName tags:(NSArray *)tags limit:(int)limit {
+	MMXQuery * query = [MMXQuery queryWithTags:tags compoundPredicateType:MMXAndPredicateType limit:limit];
 	MMXTopicQueryFilter * topicFilter = [[MMXTopicQueryFilter alloc] init];
 	topicFilter.topicName = topicName;
 	topicFilter.predicateOperatorType = MMXBeginsWithPredicateOperatorType;
@@ -52,8 +52,8 @@
 	return query;
 }
 
-+ (instancetype)queryForTopicDescriptionStartsWith:(NSString *)topicDescription tags:(NSArray *)tags limit:(int)limit offset:(int)offset {
-	MMXQuery * query = [MMXQuery queryWithTags:tags compoundPredicateType:MMXAndPredicateType limit:limit offset:offset];
++ (instancetype)queryForTopicDescriptionStartsWith:(NSString *)topicDescription tags:(NSArray *)tags limit:(int)limit {
+	MMXQuery * query = [MMXQuery queryWithTags:tags compoundPredicateType:MMXAndPredicateType limit:limit];
 	MMXTopicQueryFilter * topicFilter = [[MMXTopicQueryFilter alloc] init];
 	topicFilter.topicDescription = topicDescription;
 	topicFilter.predicateOperatorType = MMXBeginsWithPredicateOperatorType;
@@ -61,12 +61,11 @@
 	return query;
 }
 
-+ (instancetype)queryWithTags:(NSArray *)tags compoundPredicateType:(MMXCompoundPredicateType)compoundPredicateType limit:(int)limit offset:(int)offset {
++ (instancetype)queryWithTags:(NSArray *)tags compoundPredicateType:(MMXCompoundPredicateType)compoundPredicateType limit:(int)limit {
 	MMXQuery * query = [[MMXQuery alloc] init];
 	query.tags = tags;
 	query.compoundPredicateType = compoundPredicateType;
 	query.limit = limit;
-	query.offset = offset;
 	return query;
 }
 
@@ -84,7 +83,6 @@
 	return @{
 			 @"operator": [self operatorAsString],
 			 @"limit":self.limit ? @(self.limit) : @20,
-			 @"offset":self.offset ? @(self.offset) : @0,
 			 @"tags":(self.tags && self.tags.count) ? @{@"match": @"EXACT",
 														@"values":self.tags} : [NSNull null]
 			 }.mutableCopy;

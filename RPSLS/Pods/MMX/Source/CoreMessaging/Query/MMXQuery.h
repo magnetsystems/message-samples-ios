@@ -57,14 +57,12 @@ typedef NS_ENUM(NSInteger, MMXCompoundPredicateType){
  *  @param displayName - Partial user displayName you want to query for.
  *  @param tags        - One or more NSString tags. Objects that contain ANY of the tags will be returned.
  *  @param limit       - The max number of results you want returned.
- *  @param offset      - The offset into the results you want. To be used for pagination.
  *
  *  @return MMXQuery object
  */
 + (instancetype)queryForUserDisplayNameStartsWith:(NSString *)displayName
 											 tags:(NSArray *)tags
-											limit:(int)limit
-										   offset:(int)offset;
+											limit:(int)limit;
 
 /**
  *  Creates a MMXQuery with a MMXUserQueryFilter where email = value passed for email
@@ -73,14 +71,12 @@ typedef NS_ENUM(NSInteger, MMXCompoundPredicateType){
  *  @param email  - Partial user email you want to query for.
  *  @param tags   - One or more NSString tags. Objects that contain ANY of the tags will be returned.
  *  @param limit  - The max number of results you want returned.
- *  @param offset - The offset into the results you want. To be used for pagination.
  *
  *  @return MMXQuery object
  */
 + (instancetype)queryForEmailStartsWith:(NSString *)email
 								   tags:(NSArray *)tags
-								  limit:(int)limit
-								 offset:(int)offset;
+								  limit:(int)limit;
 
 /**
  *  Creates a MMXQuery with a MMXTopicQueryFilter where topicName = value passed for topicName
@@ -89,14 +85,12 @@ typedef NS_ENUM(NSInteger, MMXCompoundPredicateType){
  *  @param topicName	- Partial topic name you want to query for.
  *  @param tags			- One or more NSString tags. Objects that contain ANY of the tags will be returned.
  *  @param limit		- The max number of results you want returned.
- *  @param offset		- The offset into the results you want. To be used for pagination.
  *
  *  @return MMXQuery object
  */
 + (instancetype)queryForTopicNameStartsWith:(NSString *)topicName
 									   tags:(NSArray *)tags
-									  limit:(int)limit
-									 offset:(int)offset;
+									  limit:(int)limit;
 
 /**
  *  Creates a MMXQuery with a MMXTopicQueryFilter where topicDescription = value passed for topicDescription
@@ -105,13 +99,11 @@ typedef NS_ENUM(NSInteger, MMXCompoundPredicateType){
  *  @param topicDescription - Partial topic topicDescription you want to query for.
  *  @param tags				- One or more NSString tags. Objects that contain ANY of the tags will be returned.
  *  @param limit			- The max number of results you want returned.
- *  @param offset			- The offset into the results you want. To be used for pagination.
  *
  *  @return MMXQuery object
  */
 + (instancetype)queryForTopicDescriptionStartsWith:(NSString *)topicDescription
 											  tags:(NSArray *)tags
-											 limit:(int)limit
-											offset:(int)offset;
+											 limit:(int)limit;
 
 @end
