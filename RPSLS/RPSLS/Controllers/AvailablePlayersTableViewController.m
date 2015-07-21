@@ -53,9 +53,7 @@
 
 	self.title = @"Available Players";
 
-	/**
-	 *  MagnetNote: MMXClientDelegate
-	 *
+	/*
 	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
 	 *	I only care about client:didReceiveConnectionStatusChange:error:
 	 *	All MMXClientDelegate protocol methods are optional.
@@ -64,9 +62,7 @@
 	
 	self.inGame = NO;
 	
-	/**
-	 *  MagnetNote: MMXClient connectionStatus
-	 *
+	/*
 	 *  Checking current MMXConnectionStatus
 	 */
 	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated) {
@@ -88,35 +84,27 @@
 
 - (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
 	
-	/**
-	 *  MagnetNote: MMXClientDelegate client:didReceiveConnectionStatusChange:error:
-	 *
+	/*
 	 *  If we get a status other than MMXConnectionStatusAuthenticated we are trying to reconnect
 	 */
 	if (connectionStatus == MMXConnectionStatusAuthenticated) {
 		[self postAvailabilityStatusAs:YES];
 	} else {
 		
-		/**
-		 *  MagnetNote: MMXClient connectWithCredentials
-		 *
+		/*
 		 *  If something happens I will try to reconnect.
 		 */
 		[[MMXClient sharedClient] connectWithCredentials];
 	}
 	
-	/**
-	 *  MagnetNote: MMXLogger info
-	 *
+	/*
 	 *  Logging info.
 	 */
 	[[MMXLogger sharedLogger] info:@"Connection Status Change = %@",[RPSLSUtils statusToString:connectionStatus]];
 }
 
 - (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {
-	/**
-	 *  MagnetNote: MMXClientDelegate client:didReceiveMessage:deliveryReceiptRequested:
-	 *
+	/*
 	 *  Checking the incoming message and sending a confirmation if necessary.
 	 */
 	if ([message isTimelyMessage]) {
@@ -124,9 +112,7 @@
 	}
 	if (receiptRequested) {
 		
-		/**
-		 *  MagnetNote: MMXClient sendDeliveryConfirmationForMessage:
-		 *
+		/*
 		 *  Sending delivery confirmation.
 		 */
 		[[MMXClient sharedClient] sendDeliveryConfirmationForMessage:message];
@@ -135,9 +121,7 @@
 
 - (void)client:(MMXClient *)client didReceivePubSubMessage:(MMXPubSubMessage *)message {
 	
-	/**
-	 *  MagnetNote: MMXClientDelegate client:didReceivePubSubMessage:
-	 *
+	/*
 	 *  Checking to see if the message is from the availability topic and ignoring all others
 	 */
 	if ([message.topic.topicName isEqualToString:kPostStatus_TopicName]) {
@@ -149,9 +133,7 @@
 
 - (void)postAvailabilityStatusAs:(BOOL)available {
 
-	/**
-	 *  MagnetNote: MMXPubSubManager publishPubSubMessage:success:failure:
-	 *
+	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
 	[[MMXClient sharedClient].pubsubManager publishPubSubMessage:[RPSLSUtils availablilityMessage:available] success:nil failure:^(NSError *error) {
@@ -163,9 +145,7 @@
 
 - (MMXPubSubFetchRequest *)requestForAvailablePlayers {
 	
-	/**
-	 *  MagnetNote: MMXPubSubFetchRequest
-	 *
+	/*
 	 *  Creating a fetch request to get the all the availability topic posts for the last 10 minutes with a max of 100 messages.
 	 */
 	MMXPubSubFetchRequest *request = [[MMXPubSubFetchRequest alloc] init];
@@ -177,18 +157,14 @@
 
 - (void)collectListOfAvailablePlayers {
 	
-	/**
-	 *  MagnetNote: MMXPubSubManager fetchItems:success:failure:
-	 *
+	/*
 	 *  Passing my MMXPubSubFetchRequest to the fetchItems API. It will return a NSArray of MMXPubSubMessages
 	 */
 	[[MMXClient sharedClient].pubsubManager fetchItems:[self requestForAvailablePlayers] success:^(NSArray *messages) {
 		[self refreshAvailablePlayersWithMessages:messages];
 	} failure:^(NSError *error) {
 		
-		/**
-		 *  MagnetNote: MMXLogger error
-		 *
+		/*
 		 *  Logging an error.
 		 */
 		[[MMXLogger sharedLogger] error:@"collectListOfAvailablePlayers error = %@",error];
@@ -249,16 +225,12 @@
 
 - (void)sendInviteTo:(NSString *)username {
 
-	/**
-	 *  MagnetNote: MMXUserID userIDWithUsername:
-	 *
+	/*
 	 *  Creating a MMXUserID from a NSString username.
 	 */
 	MMXUserID * recipient = [MMXUserID userIDWithUsername:username];
 	
-	/**
-	 *  MagnetNote: MMXOutboundMessage messageTo:withContent:metaData:
-	 *
+	/*
 	 *  Creating new MMXOutboundMessage.
 	 */
 	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:recipient
@@ -271,16 +243,12 @@
 																   kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
 																   kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]}];
 
-	/**
-	 *  MagnetNote: MMXMessageOptions
-	 *
+	/*
 	 *  Creating MMXMessageOptions object. Using defaults.
 	 */
 	MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
 
-	/**
-	 *  MagnetNote: MMXClient sendMessage:withOptions:
-	 *
+	/*
 	 *  Sending my message.
 	 */
 	[[MMXClient sharedClient] sendMessage:message withOptions:options];
@@ -288,10 +256,7 @@
 
 - (void)replyToInvite:(MMXInboundMessage *)invite accept:(BOOL)accept {
 
-	/**
-	 *  MagnetNote: MMXOutboundMessage messageTo:withContent:metaData:
-	 *  MagnetNote: MMXInboundMessage senderUserID
-	 *
+	/*
 	 *  Creating new MMXOutboundMessage. Taking the MMXUserID from the MMXInboundMessage senderUserID property
 	 */
 	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:invite.senderUserID
@@ -305,16 +270,12 @@
 																   kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
 																   kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]}];
 
-	/**
-	 *  MagnetNote: MMXMessageOptions
-	 *
+	/*
 	 *  Creating MMXMessageOptions object. Using defaults.
 	 */
 	MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
 	
-	/**
-	 *  MagnetNote: MMXClient sendMessage:withOptions:
-	 *
+	/*
 	 *  Sending my message.
 	 */
 	[[MMXClient sharedClient] sendMessage:message withOptions:options];
@@ -330,9 +291,7 @@
 	GameViewController* game = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:NSStringFromClass([GameViewController class])];
 	[game setupGameWithID:message.metaData[kMessageKey_GameID] opponent:user];
 
-	/**
-	 *  MagnetNote: MMXClientDelegate
-	 *
+	/*
 	 *  Setting GameViewController as the delegate to receive the MMXClientDelegate callbacks.
 	 */
 	[MMXClient sharedClient].delegate = (id<MMXClientDelegate>)game;
@@ -365,9 +324,7 @@
 
 - (RPSLSMessageType)typeForMessage:(MMXInboundMessage *)message {
 
-	/**
-	 *  MagnetNote: MMXInboundMessage metaData
-	 *
+	/*
 	 *  Extracting information from the MMXInboundMessage metaData property.
 	 */
 	if (message == nil || message.metaData == nil || message.metaData[kMessageKey_Type] == nil || [message.metaData[kMessageKey_Type] isEqualToString:@""]) {

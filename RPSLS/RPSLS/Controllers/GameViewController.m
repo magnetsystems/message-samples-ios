@@ -72,9 +72,7 @@
 
 - (void)postAvailabilityStatusAs:(BOOL)available {
 	
-	/**
-	 *  MagnetNote: MMXPubSubManager publishPubSubMessage:success:failure:
-	 *
+	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
 	[[MMXClient sharedClient].pubsubManager publishPubSubMessage:[RPSLSUtils availablilityMessage:available] success:nil failure:^(NSError *error) {
@@ -94,9 +92,7 @@
 
 #pragma mark - MMXClientDelegate Callbacks
 
-/**
- *  MagnetNote: MMXClientDelegate client:didReceiveConnectionStatusChange:error:
- *
+/*
  *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
  */
 - (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
@@ -107,9 +103,7 @@
 
 - (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {
 	
-	/**
-	 *  MagnetNote: MMXClientDelegate client:didReceiveMessage:deliveryReceiptRequested:
-	 *
+	/*
 	 *  Checking the incoming message and sending a confirmation if necessary.
 	 */
 	if ([message isTimelyMessage]) {
@@ -117,9 +111,7 @@
 	}
 	if (receiptRequested) {
 		
-		/**
-		 *  MagnetNote: MMXClient sendDeliveryConfirmationForMessage:
-		 *
+		/*
 		 *  Sending delivery confirmation.
 		 */
 		[[MMXClient sharedClient] sendDeliveryConfirmationForMessage:message];
@@ -127,18 +119,14 @@
 }
 
 - (void)client:(MMXClient *)client didReceiveError:(NSError *)error severity:(MMXErrorSeverity)severity messageID:(NSString *)messageID {
-	/**
-	 *  MagnetNote: MMXClientDelegate client:didReceiveMessage:deliveryReceiptRequested:
-	 *
+	/*
 	 *  Could be checking to see if something went wrong when sending my choice.
 	 */
 }
 
 - (void)client:(MMXClient *)client didDeliverMessage:(NSString *)messageID recipient:(id<MMXAddressable>)recipient {
 
-	/**
-	 *  MagnetNote: MMXLogger info
-	 *
+	/*
 	 *  Logging info.
 	 */
 	[[MMXLogger sharedLogger] info:@"Message %@ was delivered",messageID];
@@ -148,9 +136,7 @@
 
 - (void)sendMyChoice:(RPSLSValue)choice {
 	
-	/**
-	 *  MagnetNote: MMXOutboundMessage
-	 *
+	/*
 	 *  Composing a new MMXOutboundMessage. Most of the relevant data for our usecase is being placed in the MMXOutboundMessage metaData property.
 	 *	In other usecases it may make more sense to serialize the data and use the messageContent property.
 	 */
@@ -165,16 +151,12 @@
 																   kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
 																   kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]}];
 	
-	/**
-	 *  MagnetNote: MMXMessageOptions
-	 *
+	/*
 	 *  Creating MMXMessageOptions object. Using defaults.
 	 */
 	MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
 	
-	/**
-	 *  MagnetNote: MMXClient sendMessage:withOptions:
-	 *
+	/*
 	 *  Sending my message.
 	 */
 	[[MMXClient sharedClient] sendMessage:message withOptions:options];
@@ -201,9 +183,7 @@
 
 - (RPSLSMessageType)typeForMessage:(MMXInboundMessage *)message {
 	
-	/**
-	 *  MagnetNote: MMXInboundMessage metaData
-	 *
+	/*
 	 *  Extracting information from the MMXInboundMessage metaData property.
 	 */
 	if (message == nil || message.metaData == nil || message.metaData[kMessageKey_Type] == nil || [message.metaData[kMessageKey_Type] isEqualToString:@""]) {
@@ -471,7 +451,6 @@
 	imageView.contentMode = UIViewContentModeScaleAspectFit;
 	UIImage * image = [UIImage imageNamed:imageName];
 	imageView.image = image;
-//	imageView.layer.cornerRadius = width * 0.35;
 	imageView.layer.borderWidth = 1.0;
 	imageView.layer.borderColor = [UIColor grayColor].CGColor;
 	imageView.clipsToBounds = YES;

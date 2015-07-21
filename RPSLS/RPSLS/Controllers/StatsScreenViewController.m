@@ -55,9 +55,7 @@
 	self.lossesLabel.text = [NSString stringWithFormat:@"Losses: %lu",(unsigned long)[RPSLSUser me].stats.losses];
 	self.tiesLabel.text = [NSString stringWithFormat:@"Ties: %lu",(unsigned long)[RPSLSUser me].stats.ties];
 
-	/**
-	 *  MagnetNote: MMXClientDelegate
-	 *
+	/*
 	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
 	 *	I only care about client:didReceiveConnectionStatusChange:error: and client:didReceiveUserAutoRegistrationResult:error: in this class.
 	 *	All MMXClientDelegate protocol methods are optional.
@@ -70,16 +68,12 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resigningActive) name:UIApplicationWillResignActiveNotification object:nil];
 
-	/**
-	 *  MagnetNote: MMXClient connectionStatus
-	 *
+	/*
 	 *  Checking current MMXConnectionStatus
 	 */
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 
-		/**
-		 *  MagnetNote: MMXClient connectWithCredentials
-		 *
+		/*
 		 *  Calling connectWithCredentials will try to create a new session using the NSURLCredential object we set on our MMXConfiguration.
 		 *	Since shouldAutoCreateUser is set as YES it create a new user with the provided credentials if the user does not already exist.
 		 */
@@ -98,9 +92,7 @@
 
 - (void)postAvailabilityStatusAs:(BOOL)available {
 
-	/**
-	 *  MagnetNote: MMXPubSubManager publishPubSubMessage:success:failure:
-	 *
+	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
 	[[MMXClient sharedClient].pubsubManager publishPubSubMessage:[RPSLSUtils availablilityMessage:available] success:nil failure:^(NSError *error) {
@@ -112,10 +104,7 @@
 
 - (void)replyToInvite:(MMXInboundMessage *)invite accept:(BOOL)accept {
 	
-	/**
-	 *  MagnetNote: MMXOutboundMessage messageTo:withContent:metaData:
-	 *  MagnetNote: MMXInboundMessage senderUserID
-	 *
+	/*
 	 *  Creating new MMXOutboundMessage. Taking the MMXUserID from the MMXInboundMessage senderUserID property
 	 */
 	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:invite.senderUserID
@@ -129,16 +118,12 @@
 																   kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
 																   kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]}];
 	
-	/**
-	 *  MagnetNote: MMXMessageOptions
-	 *
+	/*
 	 *  Creating MMXMessageOptions object. Using defaults.
 	 */
 	MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
 	
-	/**
-	 *  MagnetNote: MMXClient sendMessage:withOptions:
-	 *
+	/*
 	 *  Sending my message.
 	 */
 	[[MMXClient sharedClient] sendMessage:message withOptions:options];
@@ -154,9 +139,7 @@
 	GameViewController* game = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:NSStringFromClass([GameViewController class])];
 	[game setupGameWithID:message.metaData[kMessageKey_GameID] opponent:user];
 	
-	/**
-	 *  MagnetNote: MMXClientDelegate
-	 *
+	/*
 	 *  Setting GameViewController as the delegate to receive the MMXClientDelegate callbacks.
 	 */
 	[MMXClient sharedClient].delegate = (id<MMXClientDelegate>)game;
@@ -187,9 +170,7 @@
 
 - (RPSLSMessageType)typeForMessage:(MMXInboundMessage *)message {
 
-	/**
-	 *  MagnetNote: MMXInboundMessage metaData
-	 *
+	/*
 	 *  Extracting information from the MMXInboundMessage metaData property.
 	 */
 	if (message == nil || message.metaData == nil || message.metaData[kMessageKey_Type] == nil || [message.metaData[kMessageKey_Type] isEqualToString:@""]) {
@@ -216,9 +197,7 @@
 }
 
 - (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {
-	/**
-	 *  MagnetNote: MMXClientDelegate client:didReceiveMessage:deliveryReceiptRequested:
-	 *
+	/*
 	 *  Checking the incoming message and sending a confirmation if necessary.
 	 */
 	if ([message isTimelyMessage]) {
@@ -226,9 +205,7 @@
 	}
 	if (receiptRequested) {
 		
-		/**
-		 *  MagnetNote: MMXClient sendDeliveryConfirmationForMessage:
-		 *
+		/*
 		 *  Sending delivery confirmation.
 		 */
 		[[MMXClient sharedClient] sendDeliveryConfirmationForMessage:message];
@@ -283,25 +260,19 @@
 #pragma mark - Setup Default Topic
 
 - (void)setupDefaultTopic {
-	/**
-	 *  MagnetNote: MMXClient connectionStatus
-	 *
+	/*
 	 *  If we get a status other than MMXConnectionStatusAuthenticated we are trying to reconnect
 	 */
 	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated) {
 		self.connectedLabel.text = [NSString stringWithFormat:@"Connected as %@",[RPSLSUser me].username];
 		[self postAvailabilityStatusAs:YES];
-		/**
-		 *  MagnetNote: MMXPubSubManager createTopic:success:failure:
-		 *
+		/*
 		 *  Creating a new topic by passing my MMXTopic object.
 		 *	When a user creates a topic they are NOT automatically subscribed to it.
 		 */
 		[[MMXClient sharedClient].pubsubManager createTopic:[RPSLSUtils availablePlayersTopic] success:^(BOOL success) {
 			
-			/**
-			 *  MagnetNote: MMXPubSubManager subscribeToTopic:device:success:failure:
-			 *
+			/*
 			 *  Subscribing to a MMXTopic
 			 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
 			 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
@@ -309,9 +280,7 @@
 			 */
 			[[MMXClient sharedClient].pubsubManager subscribeToTopic:[RPSLSUtils availablePlayersTopic] device:nil success:nil failure:^(NSError *error) {
 				
-				/**
-				 *  MagnetNote: MMXLogger error
-				 *
+				/*
 				 *  Logging an error.
 				 */
 				[[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
@@ -320,9 +289,7 @@
 			//The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
 			if (error.code == 409) {
 				
-				/**
-				 *  MagnetNote: MMXPubSubManager subscribeToTopic:device:success:failure:
-				 *
+				/*
 				 *  Subscribing to a MMXTopic
 				 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
 				 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
@@ -330,9 +297,7 @@
 				 */
 				[[MMXClient sharedClient].pubsubManager subscribeToTopic:[RPSLSUtils availablePlayersTopic] device:nil success:nil failure:^(NSError *error) {
 					
-					/**
-					 *  MagnetNote: MMXLogger error
-					 *
+					/*
 					 *  Logging an error.
 					 */
 					[[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
