@@ -157,21 +157,27 @@
 		for (MMXTopicSubscription * topicSub in subscriptions) {
 			[tempSubArray addObject:topicSub.topic];
 		}
-		
-		self.subscribedTopicsList = tempSubArray;
-
 		/*
 		 *  Getting the list all topics(max of 100)
 		 */
 		[[MMXClient sharedClient].pubsubManager listTopics:100 success:^(int totalCount, NSArray *topics) {
-			NSMutableArray * fullList = topics.mutableCopy;
-			for (MMXTopic * topic in self.subscribedTopicsList) {
-				[fullList removeObject:topic];
-			}
-			self.unSubscribedTopicsList = fullList;
-
-			[self.tableView reloadData];
-			[self.refreshControl endRefreshing];
+			[[MMXClient sharedClient].pubsubManager summaryOfTopics:topics since:[[NSDate date] dateByAddingTimeInterval:-60*60*24] until:[NSDate date] success:^(NSArray *summaries) {
+				NSMutableArray *subTopicsList = @[].mutableCopy;
+				NSMutableArray *otherTopicsList = @[].mutableCopy;
+				for (MMXTopicSummary *summary in summaries) {
+					if ([tempSubArray containsObject:summary.topic]) {
+						[subTopicsList addObject:summary];
+					} else {
+						[otherTopicsList addObject:summary];
+					}
+				}
+				self.subscribedTopicsList = subTopicsList;
+				self.unSubscribedTopicsList = otherTopicsList;
+				[self.tableView reloadData];
+				[self.refreshControl endRefreshing];
+			} failure:^(NSError *error) {
+				[[MMXLogger sharedLogger] error:@"TopicListTableViewController fetchTopics Error = %@",error.localizedFailureReason];
+			}];
 		} failure:^(NSError *error) {
 
 			/*
@@ -358,13 +364,13 @@
 		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	}
 	
-	MMXTopic *topic;
+	MMXTopicSummary *topicSummary;
 	if (indexPath.section == 0) {
-		topic = self.filteredSubscribedTopicsList[indexPath.row];
-		[cell setTopic:topic isSubscribed:YES];
+		topicSummary = self.filteredSubscribedTopicsList[indexPath.row];
+		[cell setTopicSummary:topicSummary isSubscribed:YES];
 	} else {
-		topic = self.filteredUnSubscribedTopicsList[indexPath.row];
-		[cell setTopic:topic isSubscribed:NO];
+		topicSummary = self.filteredUnSubscribedTopicsList[indexPath.row];
+		[cell setTopicSummary:topicSummary isSubscribed:NO];
 	}
 
 	return cell;
@@ -381,7 +387,7 @@
 	if ([[segue identifier] isEqualToString:@"TopicMessagesSegue"]) {
 		MessagesViewController *vc = [segue destinationViewController];
 		TopicListCell *cell = (TopicListCell *)sender;
-		[vc setTopic:cell.topic isSubscribed:cell.isSubscribed];
+		[vc setTopic:cell.topicSummary.topic isSubscribed:cell.isSubscribed];
 	}
 }
 

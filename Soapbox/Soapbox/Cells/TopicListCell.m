@@ -37,9 +37,9 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void)setTopic:(MMXTopic *)topic isSubscribed:(BOOL)isSubscribed {
-	
-	self.topic = topic;
+- (void)setTopicSummary:(MMXTopicSummary *)topicSummary isSubscribed:(BOOL)isSubscribed {
+
+	self.topicSummary = topicSummary;
 	self.isSubscribed = isSubscribed;
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
@@ -47,11 +47,11 @@
 		 *  Extracting the topic name using the MMXTopic topicName property
 		 */
 
-		self.topicLabel.text = self.topic.topicName;
+		self.topicLabel.text = self.topicSummary.topic.topicName;
 	});
 	
 	[self setupBadge];
-	[self fetchSummary];
+	[self updateBadge:self.topicSummary.numItemsPublished];
 }
 
 - (void)setupBadge {
@@ -61,26 +61,6 @@
 	self.badgeLabel.layer.cornerRadius = self.badgeLabel.frame.size.height / 2.0;
 	self.badgeLabel.backgroundColor = [UIColor soapboxNewMessagesBadge];
 	self.badgeLabel.clipsToBounds = YES;
-}
-
-- (void)fetchSummary {
-	if (self.topic && ![self.topic.topicName isEqualToString:@""]) {
-		/*
-		 *  Fetching the summary for the last 24 hours of the topic. In a typical app you would not want to make this call here since it will make one call to summaryOfTopics for each topic displayed. Instead you can pass an array of MMXTopic objects that you are interested in and it will return an array of MMXTopicSummary objects.
-		 */
-		[[MMXClient sharedClient].pubsubManager summaryOfTopics:@[self.topic] since:[[NSDate date]dateByAddingTimeInterval:-60*60*24] until:[NSDate date] success:^(NSArray *summaries) {
-			if (summaries.count) {
-				/*
-				 *  Extracting the number of items publish to the topic in the timeframe specified using the MMXTopicSummary numItemsPublished property
-				 */
-
-				MMXTopicSummary * sum = summaries.firstObject;
-				[self updateBadge:sum.numItemsPublished];
-			}
-		} failure:^(NSError *error) {
-			NSLog(@"Topic summary failure. Error = %@",error);
-		}];
-	}
 }
 
 - (void)updateBadge:(int)badgeCount {
@@ -94,7 +74,7 @@
 }
 
 - (void)prepareForReuse {
-	self.topic = nil;
+	self.topicSummary = nil;
 	self.topicLabel.text = @"";
 	self.badgeLabel.text = @"";
 }
