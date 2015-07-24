@@ -61,9 +61,7 @@ const float kPubSubCellLabelOffsetPercentage = 0.02;
 }
 
 - (void)extractSenderUsername {
-	/**
-	 *  MagnetNote: MMXPubSubMessage
-	 *
+	/*
 	 *  Extract username from MMXPubSubMessage metaData property
 	 *  By default the PubSub is anonymous and MMXPubSubMessage does not include the sender's username
 	 */
@@ -112,9 +110,7 @@ const float kPubSubCellLabelOffsetPercentage = 0.02;
 	label.font = font;
 	label.numberOfLines = 0;
 	
-	/**
-	 *  MagnetNote: MMXPubSubMessage
-	 *
+	/*
 	 *  Extract message content from MMXPubSubMessage messageContent property
 	 */
 	label.text = message.messageContent;

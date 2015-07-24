@@ -1,0 +1,6 @@
+#include "Mantle.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/Mantle" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/CocoaAsyncSocket" "${PODS_ROOT}/Headers/Public/CocoaLumberjack" "${PODS_ROOT}/Headers/Public/MDMCoreData" "${PODS_ROOT}/Headers/Public/MMX" "${PODS_ROOT}/Headers/Public/Magnet-XMPPFramework" "${PODS_ROOT}/Headers/Public/Mantle"
+OTHER_LDFLAGS = ${MANTLE_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}
+SKIP_INSTALL = YES

@@ -17,13 +17,13 @@
 
 
 #import <UIKit/UIKit.h>
-@class MMXTopic;
+@class MMXTopicSummary;
 
 @interface TopicListCell : UITableViewCell
 
-@property (nonatomic, strong) MMXTopic *topic;
+@property (nonatomic, strong) MMXTopicSummary *topicSummary;
 @property (nonatomic, assign) BOOL isSubscribed;
 
-- (void)setTopic:(MMXTopic *)topic isSubscribed:(BOOL)isSubscribed;
+- (void)setTopicSummary:(MMXTopicSummary *)topicSummary isSubscribed:(BOOL)isSubscribed;
 
 @end

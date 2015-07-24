@@ -1,0 +1,7 @@
+#include "Magnet-XMPPFramework.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/Magnet-XMPPFramework" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/CocoaAsyncSocket" "${PODS_ROOT}/Headers/Public/CocoaLumberjack" "${PODS_ROOT}/Headers/Public/MDMCoreData" "${PODS_ROOT}/Headers/Public/MMX" "${PODS_ROOT}/Headers/Public/Magnet-XMPPFramework" "${PODS_ROOT}/Headers/Public/Mantle" ${MAGNET_XMPPFRAMEWORK_HEADER_SEARCH_PATHS}
+LIBRARY_SEARCH_PATHS = ${MAGNET_XMPPFRAMEWORK_LIBRARY_SEARCH_PATHS}
+OTHER_LDFLAGS = ${MAGNET_XMPPFRAMEWORK_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}
+SKIP_INSTALL = YES

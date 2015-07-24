@@ -33,9 +33,7 @@
 	if (message.metaData) {
 		RPSLSUser * user = [[RPSLSUser alloc] init];
 
-		/**
-		 *  MagnetNote: MMXInboundMessage metaData
-		 *
+		/*
 		 *  Extracting info from the MMXInboundMessage metaData to populate the RPSLSUser objects
 		 */
 		user.username = message.metaData[kMessageKey_Username] ?: @"Unknown";
@@ -58,9 +56,7 @@
 	if (message.metaData) {
 		RPSLSUser * user = [[RPSLSUser alloc] init];
 		
-		/**
-		 *  MagnetNote: MMXInboundMessage metaData
-		 *
+		/*
 		 *  Extracting info from the MMXInboundMessage metaData to populate the RPSLSUser objects
 		 */
 		user.username = message.metaData[kMessageKey_Username] ?: @"Unknown";
@@ -73,10 +69,7 @@
 }
 
 + (NSString *)myUsername {
-	/**
-	 *  MagnetNote: MMXClient
-	 *  MagnetNote: MMXConfiguration
-	 *
+	/*
 	 *  Checking the current username of the logged in user.
 	 */
 	return [MMXClient sharedClient].configuration.credential.user;

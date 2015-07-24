@@ -53,9 +53,7 @@
 	
 	self.textInputbar.autoHideRightButton = NO;
 	
-	/**
-	 *  MagnetNote: MMXTopic topicName
-	 *
+	/*
 	 *  Extracting the MMXTopic topicName property and setting it as the title of the view.
 	 */
 	self.title = self.topic.topicName;
@@ -77,9 +75,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	/**
-	 *  MagnetNote: MMXClientDelegate
-	 *
+	/*
 	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
 	 *	I only care about client:didReceiveConnectionStatusChange:error:  and client:didReceivePubSubMessage: in this class.
 	 *	All MMXClientDelegate protocol methods are optional.
@@ -96,9 +92,7 @@
 
 #pragma mark - MMXClientDelegate Callbacks
 
-/**
- *  MagnetNote: MMXClientDelegate client:didReceiveConnectionStatusChange:error:
- *
+/*
  *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
  */
 - (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
@@ -107,9 +101,7 @@
 	}
 }
 
-/**
- *  MagnetNote: MMXClientDelegate client:didReceivePubSubMessage:
- *
+/*
  *  Monitoring for new messages that may be received while the user is viewing the previously fetched messages.
  */
 - (void)client:(MMXClient *)client didReceivePubSubMessage:(MMXPubSubMessage *)message {
@@ -117,7 +109,7 @@
 		
 		NSMutableArray *tempMessageList = self.messageList.mutableCopy;
 		[tempMessageList insertObject:message atIndex:0];
-		self.messageList = tempMessageList.copy;
+		self.messageList = tempMessageList;
 		
 		[self.tableView reloadData];
 	}
@@ -127,9 +119,7 @@
 
 - (void)fetchMessages {
 
-	/**
-	 *  MagnetNote: MMXPubSubFetchRequest requestWithTopic:
-	 *
+	/*
 	 *  Creating a MMXPubSubFetchRequest
 	 *	By setting ascending to YES it will the most recent result up to 25 total (based on the value set for maxItems)
 	 */
@@ -137,9 +127,7 @@
 	request.ascending = YES;
 	request.maxItems = 25;
 	
-	/**
-	 *  MagnetNote: MMXPubSubManager fetchItems:success:failure:
-	 *
+	/*
 	 *  Passing my MMXPubSubFetchRequest to the fetchItems API. It will return a NSArray of MMXPubSubMessages
 	 */
 	[[MMXClient sharedClient].pubsubManager fetchItems:request success:^(NSArray *messages) {
@@ -147,9 +135,7 @@
 		[self.tableView reloadData];
 	} failure:^(NSError *error) {
 		
-		/**
-		 *  MagnetNote: MMXLogger
-		 *
+		/*
 		 *  Logging an error.
 		 */
 		[[MMXLogger sharedLogger] error:@"MessagesViewController fetchMessages Error = %@",error.localizedFailureReason];
@@ -162,9 +148,7 @@
 
 - (void)subscribeToTopic {
 	if (self.topic) {
-		/**
-		 *  MagnetNote: MMXPubSubManager subscribeToTopic:device:success:failure:
-		 *
+		/*
 		 *  Subscribing to a MMXTopic
 		 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
 		 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
@@ -180,9 +164,7 @@
 
 - (void)unSubscribeFromTopic {
 	if (self.topic) {
-		/**
-		 *  MagnetNote: MMXPubSubManager unsubscribeFromTopic:subscriptionID:success:failure:
-		 *
+		/*
 		 *  Subscribing to a MMXTopic
 		 *	By passing nil to the subscriptionID parameter all devices for the user will unsubscribed from this topic.
 		 *	If the user only wants to be unsubscribed for a specific device pass the subscriptionID for that subscription.
@@ -201,20 +183,16 @@
 - (void)didPressRightButton:(id)sender {
 	[self.textView refreshFirstResponder];
 	
-	/**
-	 *  MagnetNote: MMXPubSubMessage pubSubMessageToTopic:content:metaData:
-	 *
+	/*
 	 *  Creating a new MMXPubSubMessage. The topic cannot be nil.
 	 *  By default the PubSub is anonymous and MMXPubSubMessage does not include the sender's username.
 	 *	We are passing the username of the sender in the metaData of the message to be able to show the sender as part of our app functionality.
 	 */
 	MMXPubSubMessage * message = [MMXPubSubMessage pubSubMessageToTopic:self.topic
-																content:self.textView.text.copy
+																content:self.textView.text
 															   metaData:@{@"username":[MMXClient sharedClient].configuration.credential.user}];
 	
-	/**
-	 *  MagnetNote: MMXPubSubManager publishPubSubMessage:success:failure:
-	 *
+	/*
 	 *  Publishing our message. In this case I do not need to do anything on success. I will receive the MMXClientDelegate callback client:didReceivePubSubMessage:
 	 *	I can then treat the message that was sent the same way as any other message I receive.
 	 */
@@ -236,10 +214,7 @@
 		color = [self colorForName:senderName];
 	}
 	
-	/**
-	 *  MagnetNote: MMXClient
-	 *  MagnetNote: MMXConfiguration
-	 *
+	/*
 	 *  Checking the current username against the username of the poster.
 	 */
 	BOOL isCurrentUser = [senderName isEqualToString:[MMXClient sharedClient].configuration.credential.user];

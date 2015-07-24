@@ -36,10 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-	/**
-	 *  MagnetNote: MMXConfiguration configurationWithName:
-	 *  MagnetNote: MMXClient configuration
-	 *
+	/*
 	 *  Creating a new MMXConfiguration using the "default" profile from the Configurations.plist file.
 	 *	The Configurations.plist file can contain multiple profiles.
 	 *	Setting the configuration property of our MMXClient.
@@ -47,26 +44,19 @@
 	MMXConfiguration * config = [MMXConfiguration configurationWithName:@"default"];
 	[MMXClient sharedClient].configuration = config;
 	
-	/**
-	 *  MagnetNote: MMXLogger startLogging
-	 *  MagnetNote: MMXLogger level
-	 *
+	/*
 	 *  Starting the logger and setting the level to get the most information possible.
 	 */
 	[[MMXLogger sharedLogger] startLogging];
 	[MMXLogger sharedLogger].level = MMXLoggerLevelVerbose;
 	
-	/**
-	 *  MagnetNote: MMXClient shouldAutoCreateUser
-	 *
+	/*
 	 *  Setting the value of the MMXClient shouldAutoCreateUser property to YES.
 	 *	By setting this value to yes the SDK will try and create a new user with the provided credentials if the user does not already exist.
 	 */
 	[MMXClient sharedClient].shouldAutoCreateUser = YES;
 
-	/**
-	 *  MagnetNote: MMXClient shouldSuspendIncomingMessages
-	 *
+	/*
 	 *  Suspending incoming messages because there is not a mechanism or need to handle them in this controller.
 	 *	Will allow incoming messages in a controller where I can handle them.
 	 */
@@ -77,9 +67,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	/**
-	 *  MagnetNote: MMXClientDelegate
-	 *
+	/*
 	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
 	 *	I only care about client:didReceiveConnectionStatusChange:error: and client:didReceiveUserAutoRegistrationResult:error: in this class.
 	 *	All MMXClientDelegate protocol methods are optional.
@@ -95,9 +83,7 @@
 
 #pragma mark - MMXClientDelegate Callbacks
 
-/**
- *  MagnetNote: MMXClientDelegate client:didReceiveConnectionStatusChange:error:
- *
+/*
  *  Monitoring the connection status change to MMXConnectionStatusAuthenticated.
  */
 - (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
@@ -114,9 +100,7 @@
 	NSLog(@"Status = %ld",(long)connectionStatus);
 }
 
-/**
- *  MagnetNote: MMXClientDelegate client:didReceiveUserAutoRegistrationResult:error:
- *
+/*
  *  Monitoring for registration errors to alert the user and allow them to try again.
  */
 - (void)client:(MMXClient *)client didReceiveUserAutoRegistrationResult:(BOOL)success error:(NSError *)error {
@@ -136,16 +120,12 @@
 	[self setInputsEnabled:NO];
 	if (self.usernameTextField.text.length >= 5 && self.passwordTextField.text.length >= 5) {
 
-		/**
-		 *  MagnetNote: MMXConfiguration credential
-		 *
+		/*
 		 *  Creating a new NSURLCredential and setting it as the credential propery on our MMXConfiguration.
 		 */
 		[MMXClient sharedClient].configuration.credential = [NSURLCredential credentialWithUser:self.usernameTextField.text password:self.passwordTextField.text persistence:NSURLCredentialPersistenceNone];
 		
-		/**
-		 *  MagnetNote: MMXClient connectWithCredentials
-		 *
+		/*
 		 *  Calling connectWithCredentials will try to create a new session using the NSURLCredential object we set on our MMXConfiguration.
 		 *	Since shouldAutoCreateUser is set as YES it creates a new user with the provided credentials if the user does not already exist.
 		 */
