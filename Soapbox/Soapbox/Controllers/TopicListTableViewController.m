@@ -161,7 +161,12 @@
 		 *  Getting the list all topics(max of 100)
 		 */
 		[[MMXClient sharedClient].pubsubManager listTopics:100 success:^(int totalCount, NSArray *topics) {
-			[[MMXClient sharedClient].pubsubManager summaryOfTopics:topics since:[[NSDate date] dateByAddingTimeInterval:-60*60*24] until:[NSDate date] success:^(NSArray *summaries) {
+			/*
+			 *  Getting the summaries for the topics. 
+			 *	In this case I am request the summary for the last 24 hours. This will give me the message count for that period.
+			 *	PAssing nil for the until field will default it to "now"
+			 */
+			[[MMXClient sharedClient].pubsubManager summaryOfTopics:topics since:[[NSDate date] dateByAddingTimeInterval:-60*60*24] until:nil success:^(NSArray *summaries) {
 				NSMutableArray *subTopicsList = @[].mutableCopy;
 				NSMutableArray *otherTopicsList = @[].mutableCopy;
 				for (MMXTopicSummary *summary in summaries) {
