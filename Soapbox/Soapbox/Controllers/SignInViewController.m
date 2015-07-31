@@ -45,12 +45,6 @@
 	[MMXClient sharedClient].configuration = config;
 	
 	/*
-	 *  Starting the logger and setting the level to get the most information possible.
-	 */
-	[[MMXLogger sharedLogger] startLogging];
-	[MMXLogger sharedLogger].level = MMXLoggerLevelVerbose;
-	
-	/*
 	 *  Setting the value of the MMXClient shouldAutoCreateUser property to YES.
 	 *	By setting this value to yes the SDK will try and create a new user with the provided credentials if the user does not already exist.
 	 */

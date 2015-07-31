@@ -24,63 +24,49 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	// Override point for customization after application launch.
-
 	//You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Console
 	NSString *pathAndFileName = [[NSBundle mainBundle] pathForResource:@"Configurations" ofType:@"plist"];
 	NSAssert([[NSFileManager defaultManager] fileExistsAtPath:pathAndFileName], @"You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface");
-
-	/* //UNCOMMENT THIS SECTION FOR PUSH NOTIFICATIONS
-	 //You need to change the bundle Identifier to match the one your push certificate is set up to work with.
-	 
-	 //Code to register for notifications
-	 if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-		UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge
-	 |UIUserNotificationTypeSound
-	 |UIUserNotificationTypeAlert) categories:nil];
-		[application registerUserNotificationSettings:settings];
-	 } else {
-		UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
-		[application registerForRemoteNotificationTypes:myTypes];
-	 }
-	 */
+	//You need to change the bundle Identifier to match the one your push certificate is set up to work with.
+	//Code to register for notifications
+	UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge |
+																						 UIUserNotificationTypeSound |
+																						 UIUserNotificationTypeAlert) categories:nil];
+	[application registerUserNotificationSettings:settings];
 	return YES;
 }
 
-/* //UNCOMMENT THIS SECTION FOR PUSH NOTIFICATIONS
- - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 	[[MMXClient sharedClient] updateRemoteNotificationDeviceToken:deviceToken];
- }
- 
- - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-	NSLog(@"didFailToRegisterForRemoteNotificationsWithError = %@",error.localizedDescription);
- }
- 
- - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
- {
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+	NSLog(@"Please make sure you have followed the steps outlined on the following page to set up push notifications and use it with Magnet Message:\nhttps://docs.magnet.com/message/ios/set-up-apns/");
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
 	//register to receive notifications
 	[application registerForRemoteNotifications];
- }
- 
- - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
- 
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+	
 	//In the case of a silent notification use the following code to see if it is a wakeup notification
 	if ([MMXRemoteNotification isWakeupRemoteNotification:userInfo]) {
- //Send local notification to the user or connect via MMXClient
- completionHandler(UIBackgroundFetchResultNewData);
+		//Send local notification to the user or connect via MMXClient
+		completionHandler(UIBackgroundFetchResultNewData);
 	} else if ([MMXRemoteNotification isMMXRemoteNotification:userInfo]) {
- NSLog(@"userInfo = %@",userInfo);
- //Check if the message is designed to wake up the client
- [MMXRemoteNotification acknowledgeRemoteNotification:userInfo completion:^(BOOL success) {
- completionHandler(UIBackgroundFetchResultNewData);
- }];
+		NSLog(@"userInfo = %@",userInfo);
+		//Check if the message is designed to wake up the client
+		[MMXRemoteNotification acknowledgeRemoteNotification:userInfo completion:^(BOOL success) {
+			completionHandler(UIBackgroundFetchResultNewData);
+		}];
 	} else {
- completionHandler(UIBackgroundFetchResultNoData);
+		completionHandler(UIBackgroundFetchResultNoData);
 	}
- }
- */
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
 	[[MMXClient sharedClient] disconnect];

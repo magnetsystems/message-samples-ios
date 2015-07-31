@@ -44,6 +44,7 @@
 
 #import "XMPP.h"
 #import "XMPPJID+MMX.h"
+#import "XMPPReconnect.h"
 #import "MMXConfiguration.h"
 #import "NSString+XEP_0106.h"
 
@@ -66,14 +67,18 @@ static BOOL MMXServerTrustIsValid(SecTrustRef serverTrust) {
 //FIXME: At some point this should be set in a plist or something.
 int const kTempVersionMajor = 1;
 int const kTempVersionMinor = 0;
+int const kMaxReconnectionTries = 4;
+int const kReconnectionTimerInterval = 4;
 
-@interface MMXClient () <XMPPStreamDelegate, MMXDeviceManagerDelegate, MMXAccountManagerDelegate, MMXPubSubManagerDelegate>
+@interface MMXClient () <XMPPStreamDelegate, XMPPReconnectDelegate, MMXDeviceManagerDelegate, MMXAccountManagerDelegate, MMXPubSubManagerDelegate>
 
 @property (nonatomic, readwrite) MMXDeviceManager * deviceManager;
 @property (nonatomic, readwrite) MMXAccountManager * accountManager;
 @property (nonatomic, readwrite) MMXPubSubManager * pubsubManager;
+@property (nonatomic, strong) XMPPReconnect * xmppReconnect;
 @property (nonatomic, assign) BOOL switchingUser;
 @property (nonatomic, assign) NSUInteger messageNumber;
+@property (nonatomic, assign) NSUInteger reconnectionTryCount;
 
 - (NSString *)sanitizeDeviceToken:(NSData *)deviceToken;
 
@@ -99,6 +104,7 @@ int const kTempVersionMinor = 0;
 		_callbackQueue = dispatch_get_main_queue();
         _connectionStatus = MMXConnectionStatusNotConnected;
 		_messageNumber = 0;
+		_reconnectionTryCount = 0;
 		_configuration = configuration;
 	}
     return self;
@@ -110,7 +116,18 @@ int const kTempVersionMinor = 0;
     [self disconnect];
     self.xmppStream = [[XMPPStream alloc] init];
     self.iqTracker = [[XMPPIDTracker alloc] initWithStream:self.xmppStream dispatchQueue:self.mmxQueue];
-    NSMutableString *userWithAppId = [[NSMutableString alloc] initWithString:[self.configuration.credential.user jidEscapedString]];
+
+	if (self.xmppReconnect != nil) {
+		[self.xmppReconnect removeDelegate:self delegateQueue:self.mmxQueue];
+		[self.xmppReconnect deactivate];
+	} else {
+		self.xmppReconnect = [[XMPPReconnect alloc] init];
+	}
+	[self.xmppReconnect addDelegate:self delegateQueue:self.mmxQueue];
+	[self.xmppReconnect activate:self.xmppStream];
+	self.xmppReconnect.reconnectTimerInterval = kReconnectionTimerInterval;
+	
+	NSMutableString *userWithAppId = [[NSMutableString alloc] initWithString:[self.configuration.credential.user jidEscapedString]];
     [userWithAppId appendString:@"%"];
     [userWithAppId appendString:self.configuration.appID];
     
@@ -383,14 +400,13 @@ int const kTempVersionMinor = 0;
     }
     
     [xmppMessage addChild:mmxElement];
-    NSString *messageID = [self generateMessageID];
-    [xmppMessage addAttributeWithName:@"id" stringValue:messageID];
+    [xmppMessage addAttributeWithName:@"id" stringValue:outboundMessage.messageID];
     
     [[MMXLogger sharedLogger] verbose:@"About to send the message %@", outboundMessage.messageID];
     
     [self.xmppStream sendElement: xmppMessage];
     
-    return messageID;
+    return outboundMessage.messageID;
 }
 
 //FIXME: Add this back when the server has full support for multiple recipients
@@ -638,6 +654,36 @@ int const kTempVersionMinor = 0;
     }
 }
 
+#pragma mark - XMPPReconnect
+#pragma mark - XMPPReconnectDelegate Callbacks
+
+- (void)xmppReconnect:(XMPPReconnect *)sender didDetectAccidentalDisconnect:(SCNetworkConnectionFlags)connectionFlags {
+	[[MMXLogger sharedLogger] error:@"Received didDetectAccidentalDisconnect callback."];
+}
+
+- (BOOL)xmppReconnect:(XMPPReconnect *)sender shouldAttemptAutoReconnect:(SCNetworkConnectionFlags)connectionFlags {
+	/*
+		isNetworkReachable logic borrowed from AFNetworking/AFNetworkReachabilityManager
+		https://github.com/AFNetworking/AFNetworking/blob/master/AFNetworking/AFNetworkReachabilityManager.m
+	 */
+	
+	BOOL isReachable = ((connectionFlags & kSCNetworkReachabilityFlagsReachable) != 0);
+	BOOL needsConnection = ((connectionFlags & kSCNetworkReachabilityFlagsConnectionRequired) != 0);
+	BOOL canConnectionAutomatically = (((connectionFlags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) || ((connectionFlags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0));
+	BOOL canConnectWithoutUserInteraction = (canConnectionAutomatically && (connectionFlags & kSCNetworkReachabilityFlagsInterventionRequired) == 0);
+	BOOL isNetworkReachable = (isReachable && (!needsConnection || canConnectWithoutUserInteraction));
+	
+	if (isNetworkReachable) {
+		if (self.connectionStatus != MMXConnectionStatusReconnecting) {
+			[self updateConnectionStatus:MMXConnectionStatusReconnecting error:nil];
+		}
+		return YES;
+	}
+	return NO;
+}
+
+
+
 #pragma mark - XMPPStreamDelegate
 #pragma mark - XMPPStreamDelegate Connection Lifecycle Methods
 
@@ -666,6 +712,7 @@ int const kTempVersionMinor = 0;
 }
 
 - (void)xmppStreamDidConnect:(XMPPStream *)sender {
+	self.reconnectionTryCount = 0;
     [[MMXLogger sharedLogger] verbose:@"Successfully created TCP connection"];
     [self authenticate];
 }
@@ -734,7 +781,16 @@ int const kTempVersionMinor = 0;
 
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
 	if (error) {
-		[[MMXLogger sharedLogger] error:@"%@", error.localizedDescription];
+		[[MMXLogger sharedLogger] error:@"%@\ncode=%li", error.localizedDescription,(long)error.code];
+	}
+	if (self.connectionStatus == MMXConnectionStatusReconnecting) {
+		if (self.reconnectionTryCount >= kMaxReconnectionTries) {
+			self.reconnectionTryCount = 0;
+			[self.xmppReconnect stop];
+		} else {
+			self.reconnectionTryCount++;
+			return;
+		}
 	}
     if (!self.switchingUser) {
         [self updateConnectionStatus:MMXConnectionStatusDisconnected error:error];

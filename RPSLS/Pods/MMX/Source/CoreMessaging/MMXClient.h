@@ -56,9 +56,13 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 	 */
     MMXConnectionStatusAuthenticationFailure,
 	/**
-	 *  Some occured which caused the connection to fail.
+	 *  Something occured which caused the connection to fail.
 	 */
-    MMXConnectionStatusFailed,
+	MMXConnectionStatusFailed,
+	/**
+	 *  An accidental disconnect occurred and the SDK will automatically try to reconnect.
+	 */
+	MMXConnectionStatusReconnecting,
 };
 
 #pragma mark - MMXClientDelegate Protocol
