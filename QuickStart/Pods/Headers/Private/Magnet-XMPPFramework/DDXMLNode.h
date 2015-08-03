@@ -1,0 +1,1 @@
+../../../Magnet-XMPPFramework/Vendor/KissXML/DDXMLNode.h

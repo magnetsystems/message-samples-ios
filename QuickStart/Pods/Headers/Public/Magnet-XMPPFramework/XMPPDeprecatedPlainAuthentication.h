@@ -1,0 +1,1 @@
+../../../Magnet-XMPPFramework/Authentication/Deprecated-Plain/XMPPDeprecatedPlainAuthentication.h
