@@ -13,7 +13,7 @@ We created a Rock Paper Scissors Lizard Spock game as popularized by the show â€
 
 ### Build Instructions
 
-You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+You must replace the existing Configurations.plist file in the project with your own. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
 
 ### How it works (Technical Highlights)
 
@@ -35,13 +35,29 @@ We needed an app to address one of the the most important issues in our office â
 
 ### Build Instructions
 
-You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+You must replace the existing Configurations.plist file in the project with your own. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
 
 ### How it works (Technical Highlights)
 
 SoapBox leverages the Magnet Message topic functionality to provide a channel for employees/friends to communicate effectively by publishing/subscribing/receiving simple text messages against a pre-configured set of topics or topics they choose to create.
 
 Feature highlights: -- quick account provisioning -- retrieve all topics using topic search -- retrieve topics subscribed by the user -- retrieve topic summaries (used to show the number of postings in a certain timeframe which is, in the case of SoapBox, the last 24 hours) -- retrieve the last 25 items for a topic -- create topics -- subscribe and unsubscribe from topics -- adding tags for topics (tags can be used as search criteria)
+
+
+<hr>
+## Quickstart
+
+Quickstart was created to have a simple app that could demonstrate the most basic messaging features including logging in and sending and receiving a message.
+
+### Build Instructions
+
+You must replace the existing Configurations.plist file in the project with your own. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+
+### How it works (Technical Highlights)
+
+Quickstart auto-creates a user and allows you to send a message to yourself by default. By sending a message to yourself you can easily see the roundtrip from device to server and back.
+
+Feature highlights: -- quick account provisioning -- addressing and sending a message -- receiving a message and accessing its content.
 
 
 
