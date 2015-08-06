@@ -22,7 +22,7 @@
 
 @interface MMXOutboundMessage ()
 
-@property (nonatomic, readwrite) id<MMXAddressable> recipient;
+@property (nonatomic, readwrite) NSArray *recipients;
 
 /**
  *  Unique UUID for the message to allow tracking.
@@ -39,6 +39,7 @@
  */
 @property (nonatomic, copy, readwrite) NSString *messageContent;
 
+- (NSXMLElement *)recipientsAsXML;
 - (NSXMLElement *)contentAsXMLForType:(NSString *)type;
 - (NSXMLElement *)metaDataAsXML;
 + (instancetype)initWithMessage:(MMXMessage *)message;

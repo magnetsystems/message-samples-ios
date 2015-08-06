@@ -140,7 +140,7 @@
 	 *  Composing a new MMXOutboundMessage. Most of the relevant data for our usecase is being placed in the MMXOutboundMessage metaData property.
 	 *	In other usecases it may make more sense to serialize the data and use the messageContent property.
 	 */
-	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:[MMXUserID userIDWithUsername:self.opponent.username]
+	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:@[[MMXUserID userIDWithUsername:self.opponent.username]]
 													 withContent:[NSString stringWithFormat:@"I chose %@",[RPSLSEngine valueToString:choice]]
 														metaData:@{kMessageKey_Username	:[RPSLSUser me].username,
 																   kMessageKey_Timestamp:[RPSLSUtils timestamp],

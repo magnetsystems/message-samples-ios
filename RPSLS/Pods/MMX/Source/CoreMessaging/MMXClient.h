@@ -107,10 +107,10 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
  *
  *  @param client       - The client providing the message result.
  *  @param messageID    - The message ID of the message failed to send.
- *  @param recipient    - The MMXUserID or MMXEndpoint the message was targeted for.
+ *  @param recipients   - The MMXUserIDs and/or MMXEndpoints the message was targeted for.
  *  @param error		- Information about the error that occured.
  */
-- (void)client:(MMXClient *)client didFailToSendMessage:(NSString *)messageID recipient:(id<MMXAddressable>)recipient error:(NSError *)error;
+- (void)client:(MMXClient *)client didFailToSendMessage:(NSString *)messageID recipients:(NSArray *)recipients error:(NSError *)error;
 
 /**
  *  This method is called when a message is received.

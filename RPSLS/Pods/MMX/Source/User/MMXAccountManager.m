@@ -186,12 +186,12 @@
 				failure(error);
 			}
 		} else if (httpResponse.statusCode == 409) {
-			NSError *httpError = [self.delegate errorWithTitle:@"Duplicate entry" message:@"You have tried to create a duplicate entry." code:(int)httpResponse.statusCode];
+			NSError *httpError = [MMXClient errorWithTitle:@"Duplicate entry" message:@"You have tried to create a duplicate entry." code:(int)httpResponse.statusCode];
 			if (failure) {
 				failure(httpError);
 			}
 		} else {
-			NSError *httpError = [self.delegate errorWithTitle:@"Unknown Error" message:@"Unfortunately an unknown error occurred while trying to create your user." code:(int)httpResponse.statusCode];
+			NSError *httpError = [MMXClient errorWithTitle:@"Unknown Error" message:@"Unfortunately an unknown error occurred while trying to create your user." code:(int)httpResponse.statusCode];
 			if (failure) {
 				failure(httpError);
 			}

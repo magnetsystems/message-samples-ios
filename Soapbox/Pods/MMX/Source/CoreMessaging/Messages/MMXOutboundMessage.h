@@ -26,9 +26,9 @@
 @interface MMXOutboundMessage : NSObject
 
 /**
- *  MMXAddressable object to whom you want to send the message.
+ *  NSArray of MMXAddressable objects to whom you want to send the message.
  */
-@property (nonatomic, readonly) id<MMXAddressable> recipient;
+@property (nonatomic, copy, readonly) NSArray *recipients;
 
 /**
  *  Unique UUID for the message to allow tracking.
@@ -49,13 +49,13 @@
 /**
  *  Send message to other users
  *
- *  @param recipient  - The MMXUserID or MMXEndpoint the message was targeted for.
- *  @param content    - The content of the message in NSString format.
- *  @param metaData   - A dictionary of additional information that could be used when displaying the message. Meta Data dictionary must be JSON serializable.
+ *  @param recipients	- The MMXUserIDs and/or MMXEndpoints the message was targeted for.
+ *  @param content		- The content of the message in NSString format.
+ *  @param metaData		- A dictionary of additional information that could be used when displaying the message. Meta Data dictionary must be JSON serializable.
  *
  *  @return A MMXOutboundMessage object for use with the sendMessage:withOptions: method of the MMXClient
  */
-+ (instancetype)messageTo:(id<MMXAddressable>)recipient
++ (instancetype)messageTo:(NSArray *)recipients
               withContent:(NSString *)content
                  metaData:(NSDictionary *)metaData;
 

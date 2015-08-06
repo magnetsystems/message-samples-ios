@@ -25,9 +25,11 @@
 
 @implementation MMXOutboundMessage
 
-+ (instancetype)messageTo:(id<MMXAddressable>)recipient withContent:(NSString *)content metaData:(NSDictionary *)metaData {
++ (instancetype)messageTo:(NSArray *)recipients
+			  withContent:(NSString *)content
+				 metaData:(NSDictionary *)metaData {
     MMXOutboundMessage * msg = [[MMXOutboundMessage alloc] init];
-	msg.recipient = recipient;
+	msg.recipients = recipients;
 	msg.messageContent = content;
 	msg.metaData = metaData;
 	msg.messageID = nil;
@@ -36,17 +38,46 @@
 
 + (instancetype)initWithMessage:(MMXMessage *)message {
     MMXOutboundMessage * msg = [[MMXOutboundMessage alloc] init];
-	if (message.recipient) {
-		msg.recipient = message.recipient;
+	if (message.recipients) {
+		msg.recipients = message.recipients;
 	} else if (message.receiverUsername) {
-		msg.recipient = [MMXUserID userIDWithUsername:message.receiverUsername];
+		MMXUserID *user = [MMXUserID userIDWithUsername:message.receiverUsername];
+		msg.recipients = @[user];
 	} else {
-		msg.recipient = nil;
+		msg.recipients = nil;
 	}
 	msg.messageContent = message.messageContent;
 	msg.metaData = message.metaData;
 	msg.messageID = (message.messageID && [message.messageID isEqualToString:@""]) ? message.messageID : nil;
     return msg;
+}
+
+- (NSXMLElement *)recipientsAsXML {
+	if (self.recipients == nil || self.recipients.count < 1) {
+		return nil;
+	}
+	NSXMLElement *metaDataElement = [[NSXMLElement alloc] initWithName:@"mmxmeta"];
+	
+	NSMutableArray *recipientArray = @[].mutableCopy;
+	for (id<MMXAddressable> recipient in self.recipients) {
+		if ([recipient address] && ![[recipient address] isEqualToString:@""]) {
+			[recipientArray addObject:@{@"userId":[recipient address],
+										@"devId":[recipient subAddress] ?: [NSNull null]}];
+		}
+	}
+	NSError *error;
+	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"To":recipientArray}
+													   options:NSJSONWritingPrettyPrinted
+														 error:&error];
+	NSString *json = [[NSString alloc] initWithData:jsonData
+										   encoding:NSUTF8StringEncoding];
+	
+	[metaDataElement setStringValue:json];
+	
+	if (error == nil) {
+		return metaDataElement;
+	}
+	return nil;
 }
 
 - (NSXMLElement *)contentAsXMLForType:(NSString *)type {
@@ -55,6 +86,10 @@
 
 - (NSXMLElement *)metaDataAsXML {
 	return [MMXMessageUtils xmlFromMetaDataDict:self.metaData];
+}
+
+- (NSXMLElement *)asMMXStanza {
+	return nil;
 }
 
 @end

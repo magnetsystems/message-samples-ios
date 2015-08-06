@@ -31,6 +31,7 @@ NSString * const MXpayloadElement = @"payload";
 NSString * const MXrequestElement = @"request";
 NSString * const MXreceivedElement = @"received";
 NSString * const MXmetaElement = @"meta";
+NSString * const MXmmxMetaElement = @"mmxmeta";
 NSString * const MXosType = @"IOS";
 NSString * const MXcommandString = @"command";
 NSString * const MXcommandRegister = @"REGISTER";

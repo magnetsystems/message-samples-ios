@@ -233,7 +233,7 @@
 	/*
 	 *  Creating new MMXOutboundMessage.
 	 */
-	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:recipient
+	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:@[recipient]
 													 withContent:@"This is an invite message"
 														metaData:@{kMessageKey_Username	:[RPSLSUser me].username,
 																   kMessageKey_Timestamp:[RPSLSUtils timestamp],
@@ -259,7 +259,7 @@
 	/*
 	 *  Creating new MMXOutboundMessage. Taking the MMXUserID from the MMXInboundMessage senderUserID property
 	 */
-	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:invite.senderUserID
+	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:@[invite.senderUserID]
 													 withContent:@"This is an invite reply message"
 														metaData:@{kMessageKey_Username	:[RPSLSUser me].username,
 																   kMessageKey_Timestamp:[RPSLSUtils timestamp],

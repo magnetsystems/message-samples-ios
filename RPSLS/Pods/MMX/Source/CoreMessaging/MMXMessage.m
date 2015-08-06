@@ -51,26 +51,16 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 		if ([MMXUtils objectIsValidString:senderUsername]) {
 			_senderUserID = [MMXUserID userIDWithUsername:[senderUsername jidUnescapedString]];
 			if ([MMXUtils objectIsValidString:[sender resource]]) {
-				_senderDeviceId = [sender resource];
 				_senderEndpoint = [MMXEndpoint endpointWithUsername:[senderUsername jidUnescapedString] deviceID:[sender resource]];
 			}
 		}
 		NSString * receiverUsername = [recipient usernameWithoutAppID];
 		if ([MMXUtils objectIsValidString:receiverUsername]) {
 			_receiverUsername = [[recipient usernameWithoutAppID] jidUnescapedString];
-			_receiverDeviceId = [recipient resource];
 		}
         _messageID = [xmppMessage elementID];
         NSXMLElement *mmxElement = [xmppMessage elementForName:MXmmxElement];
 
-		//addresses
-		//FIXME: add back when there is full server support of multiple recipients
-//		NSXMLElement* addressesElement = [mmxElement elementForName:@"addresses"];
-//		if (addressesElement) {
-//			_recipients = [self recipientsFromAddresses:addressesElement];
-//		} else {
-//			_recipients = @[[MMXUserID userIDWithUsername:[recipient.usernameWithoutAppID jidUnescapedString]]];
-//		}
         //payload
         NSArray* payLoadElements = [mmxElement elementsForName:MXpayloadElement];
         _messageContent = [MMXMessage extractPayload:payLoadElements];
@@ -86,7 +76,10 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
         //meta
         NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
         _metaData = [MMXMessage extractMetaData:metaElements];
-        
+		
+		NSArray* mmxMetaElements = [mmxElement elementsForName:MXmmxMetaElement];
+        _recipients = [MMXMessage extractRecipients:mmxMetaElements];
+		
         NSArray* elements = [xmppMessage elementsForXmlns:MXnsDeliveryReceipt];
         BOOL deliveryFlag = NO;
         if ([elements count]) {
@@ -97,27 +90,10 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
     return self;
 }
 
-- (NSArray *)recipientsFromAddresses:(NSXMLElement *)addressesElement {
-	if (addressesElement == nil) {
-		return @[];
-	}
-	NSMutableArray *recipientArray = @[].mutableCopy;
-	NSArray* addresses = [addressesElement elementsForName:@"address"];
-	if (addresses && addresses.count) {
-		for (NSXMLElement * address in addresses) {
-			NSString * username = [MMXUserID stripUsername:[[address attributeForName:@"jid"] stringValue]];
-			[recipientArray addObject:[MMXUserID userIDWithUsername:[username jidUnescapedString]]];
-		}
-	}
-	return recipientArray.copy;
-}
-
 - (instancetype)initWithPubSubMessage:(XMPPMessage *)xmppMessage {
 	if ((self = [super init])) {
 		XMPPJID* recipient = [xmppMessage to] ;
 		XMPPJID* sender =[xmppMessage from];
-		_senderDeviceId = [sender resource];
-		_receiverDeviceId = [recipient resource];
 		NSString * username = [sender usernameWithoutAppID];
 		_senderUserID = [MMXUserID userIDWithUsername:[username jidUnescapedString]];
 		_senderEndpoint = [MMXEndpoint endpointWithUsername:[username jidUnescapedString] deviceID:[sender resource]];
@@ -139,17 +115,14 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 			NSXMLNode* mtype = [payLoadElement attributeForName:MESSAGE_ATTRIBUE_MESSAGE_TYPE];
 			_mType = mtype ? [mtype stringValue] : nil;
 		}
-		if ([_topic.topicName hasSuffix:@"com.magnet.geoloc"]) {
-			_location = [MMXMessage locationFromMessagePayload:payLoadElements];
-		} else {
-			_messageContent = [MMXMessage extractPayload:payLoadElements];
-		}
+		_messageContent = [MMXMessage extractPayload:payLoadElements];
 		NSXMLNode* mtype = [[mmxElement elementForName:MXpayloadElement] attributeForName:MESSAGE_ATTRIBUE_MESSAGE_TYPE];
 		NSXMLNode* timestamp = [[mmxElement elementForName:MXpayloadElement] attributeForName:@"stamp"];
 		_mType = mtype ? [mtype stringValue] : nil;
 		if ([timestamp stringValue] && ![[timestamp stringValue] isEqualToString:@""]) {
 			_timestamp = [MMXUtils dateFromiso8601Format:[timestamp stringValue]];
 		}
+		
 		//meta
 		NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
 		_metaData = [MMXMessage extractMetaData:metaElements];
@@ -159,27 +132,14 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	return self;
 }
 
-//FIXME: refactor this method
-- (instancetype)initWith:(id<MMXAddressable>)recipient
+- (instancetype)initWith:(NSArray *)recipients
              withContent:(NSString *)content
              messageType:(NSString *)mType
                 metaData:(NSDictionary *)metaData {
 	
     if (self = [super init]) {
-        if (recipient) {
-			MMXUserID * toUser;
-			if ([recipient isKindOfClass:[MMXEndpoint class]]) {
-				MMXEndpoint * endpoint = recipient;
-				toUser = endpoint.userID;
-			} else {
-				toUser = (MMXUserID *)recipient;
-			}
-            XMPPJID* toJID = [XMPPJID jidWithString:toUser.username];
-            _recipient = recipient;
-            _receiverDeviceId = [toJID resource];
-            _receiverUsername = [toJID usernameWithoutAppID];
-        }        
-        _messageContent = content.copy;
+		_recipients = recipients.copy;
+		_messageContent = content.copy;
         _contentType = MXctypeJSON;
         if (nil == mType) {
             mType = @"default";
@@ -190,11 +150,11 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
     return self;
 }
 
-+ (instancetype)messageTo:(id<MMXAddressable>)recipient
++ (instancetype)messageTo:(NSArray *)recipients
               withContent:(NSString *)content
               messageType:(NSString *)messageType
                  metaData:(NSDictionary *)metaData {
-    return [[MMXMessage alloc] initWith:recipient withContent:content messageType:messageType metaData:metaData];
+    return [[MMXMessage alloc] initWith:recipients withContent:content messageType:messageType metaData:metaData];
 }
 
 + (NSArray *)pubsubMessagesFromFetchResponseIQ:(XMPPIQ *)iq topic:(MMXTopic *)topic error:(NSError **)error {
@@ -265,26 +225,42 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
     return @{};
 }
 
-#pragma mark - Helper Methods
++ (NSArray *)extractRecipients:(NSArray *)recipientElements {
+	if ([recipientElements count] > 0) {
+		NSXMLElement *recipientElement = recipientElements[0];
+		NSString* metaJSON = [recipientElement stringValue];
+		if (metaJSON && [metaJSON length] > 0) {
+			NSData* jsonData = [metaJSON dataUsingEncoding:NSUTF8StringEncoding];
+			NSError* readError;
+			NSDictionary * recipientDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&readError];
+			if (!readError) {
+				if (recipientDict && recipientDict[@"To"]) {
+					NSArray *tempRecipientArray = recipientDict[@"To"];
+					NSMutableArray *recipientOutputArray = [NSMutableArray arrayWithCapacity:tempRecipientArray.count];
+					for (NSDictionary *userDict in tempRecipientArray) {
+						if (userDict[@"userId"] && userDict[@"userId"] != [NSNull null] && ![userDict[@"userId"] isEqualToString:@""]) {
+							if (userDict[@"devId"] && userDict[@"devId"] != [NSNull null] && ![userDict[@"devId"] isEqualToString:@""]) {
+								MMXEndpoint *end = [MMXEndpoint endpointWithUsername:userDict[@"userId"] deviceID:userDict[@"devId"]];
+								[recipientOutputArray addObject:end];
+							} else {
+								MMXUserID *user = [MMXUserID userIDWithUsername:userDict[@"userId"]];
+								[recipientOutputArray addObject:user];
+							}
+						}
+					}
+					return recipientOutputArray.copy;
+				}
+			}
+		}
+	}
+	//NSLog(@"Badly formatted message ?");
+	return @[];
+}
 
-//FIXME: Add back when server has full support for multiple recipients
-//- (BOOL)hasMultipleRecipients {
-//    if (self.recipients && self.recipients.count > 1) {
-//        return YES;
-//    }
-//    return NO;
-//}
+#pragma mark - Helper Methods
 
 - (BOOL)deliveryReceiptRequested {
     return _deliveryReceiptRequested;
-}
-
-- (BOOL)deliveryReceipt {
-    if (!_deliveryReceipt) {
-        //TODO: Fix this
-        _deliveryReceipt = NO;
-    }
-    return _deliveryReceipt;
 }
 
 #pragma mark - Payload Conversion
@@ -327,34 +303,38 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
     return nil;
 }
 
+- (NSXMLElement *)recipientsAsXML {
+	if (self.recipients == nil || self.recipients.count < 1) {
+		return nil;
+	}
+	NSXMLElement *metaDataElement = [[NSXMLElement alloc] initWithName:@"mmxmeta"];
+	
+	NSMutableArray *recipientArray = @[].mutableCopy;
+	for (id<MMXAddressable> recipient in self.recipients) {
+		if ([recipient address] && ![[recipient address] isEqualToString:@""]) {
+			[recipientArray addObject:@{@"userId":[recipient address],
+										@"devId":[recipient subAddress] ?: [NSNull null]}];
+		}
+	}
+	NSError *error;
+	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"To":recipientArray}
+													   options:NSJSONWritingPrettyPrinted
+														 error:&error];
+	NSString *json = [[NSString alloc] initWithData:jsonData
+										   encoding:NSUTF8StringEncoding];
+	
+	[metaDataElement setStringValue:json];
+	
+	if (error == nil) {
+		return metaDataElement;
+	}
+	return nil;
+}
+
 +(NSXMLNode*)buildAttributeNodeWith:(NSString *)name
                      attributeValue:(NSString *)attributeValue {
     NSXMLNode* attribute = [NSXMLNode attributeWithName:name stringValue:attributeValue];
     return attribute;
-}
-
-+ (CLLocation *)locationFromMessagePayload:(NSArray *)payloadElements {
-    if (!payloadElements.count) {
-        return nil;
-    }
-    NSXMLElement * payload = payloadElements[0];
-    NSString* jsonContent =  [payload XMLString];
-    NSError* error;
-    NSData* jsonData = [jsonContent dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-    if (error) {
-        return nil;
-    }
-    NSDate * timestamp = [MMXUtils dateFromiso8601Format:[[payload attributeForName:@"id"] stringValue]];
-    CLLocation *newLocation = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake([jsonDictionary[@"lat"] doubleValue],
-                                                                                                [jsonDictionary[@"lng"] doubleValue])
-                                                            altitude:[jsonDictionary[@"alt"] doubleValue]
-                                                  horizontalAccuracy:[jsonDictionary[@"accuracy"] doubleValue]
-                                                    verticalAccuracy:[jsonDictionary[@"altaccuracy"] doubleValue]
-                                                           timestamp:timestamp];
-    
-    
-    return newLocation;
 }
 
 #pragma mark - NSCoding
@@ -368,10 +348,8 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
         _messageContent = [coder decodeObjectForKey:@"_messageContent"];
 		_senderUserID = [coder decodeObjectForKey:@"_senderUserID"];
 		_senderEndpoint = [coder decodeObjectForKey:@"_senderEndpoint"];
-        _senderDeviceId = [coder decodeObjectForKey:@"_senderDeviceId"];
         _receiverUsername = [coder decodeObjectForKey:@"_receiverUsername"];
-        _receiverDeviceId = [coder decodeObjectForKey:@"_receiverDeviceId"];
-        _recipient = [coder decodeObjectForKey:@"_recipient"];
+        _recipients = [coder decodeObjectForKey:@"_recipients"];
     }
 
     return self;
@@ -384,10 +362,8 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
     [coder encodeObject:self.messageContent forKey:@"_messageContent"];
 	[coder encodeObject:self.senderUserID forKey:@"_senderUserID"];
 	[coder encodeObject:self.senderEndpoint forKey:@"_senderEndpoint"];
-    [coder encodeObject:self.senderDeviceId forKey:@"_senderDeviceId"];
     [coder encodeObject:self.receiverUsername forKey:@"_receiverUsername"];
-    [coder encodeObject:self.receiverDeviceId forKey:@"_receiverDeviceId"];
-    [coder encodeObject:self.recipient forKey:@"_recipient"];
+    [coder encodeObject:self.recipients forKey:@"_recipients"];
 }
 
 

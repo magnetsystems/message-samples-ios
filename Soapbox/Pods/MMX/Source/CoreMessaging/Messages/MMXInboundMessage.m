@@ -24,15 +24,15 @@
 @implementation MMXInboundMessage
 
 + (instancetype)initWithMessage:(MMXMessage *)message {
-    MMXInboundMessage * msg = [[MMXInboundMessage alloc] init];
+	MMXInboundMessage * msg = [[MMXInboundMessage alloc] init];
 	msg.messageID		= message.messageID;
 	msg.timestamp		= message.timestamp;
 	msg.metaData		= message.metaData;
 	msg.messageContent	= message.messageContent;
+	msg.recipients		= message.recipients;
 	msg.senderUserID	= message.senderUserID;
 	msg.senderEndpoint	= message.senderEndpoint;
-    return msg;
+	return msg;
 }
-
 
 @end

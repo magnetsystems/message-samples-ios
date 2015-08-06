@@ -25,6 +25,7 @@
 @property(nonatomic, readwrite) NSString *messageContent;
 @property(nonatomic, readwrite) MMXUserID *senderUserID;
 @property(nonatomic, readwrite) MMXEndpoint *senderEndpoint;
+@property(nonatomic, readwrite) NSArray *recipients;
 @property(nonatomic, readwrite) NSDate *timestamp;
 
 + (instancetype)initWithMessage:(MMXMessage *)message;

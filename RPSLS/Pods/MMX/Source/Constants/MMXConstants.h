@@ -31,6 +31,7 @@ extern NSString  * const MXpayloadElement;
 extern NSString  * const MXrequestElement;
 extern NSString  * const MXreceivedElement;
 extern NSString  * const MXmetaElement;
+extern NSString  * const MXmmxMetaElement;
 extern NSString  * const MXosType;
 extern NSString  * const MXcommandString;
 extern NSString  * const MXcommandRegister;

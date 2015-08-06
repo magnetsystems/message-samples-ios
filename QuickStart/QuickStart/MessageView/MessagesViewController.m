@@ -184,7 +184,7 @@ NSString * const kMeString = @"Me";
 	
 	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated) {
 		//Creating a MMXOutboundMessage with the contents of the text box
-		MMXOutboundMessage * msg = [MMXOutboundMessage messageTo:self.currentRecipient
+		MMXOutboundMessage * msg = [MMXOutboundMessage messageTo:@[self.currentRecipient]
 													 withContent:self.textView.text.copy
 														metaData:nil];
 		

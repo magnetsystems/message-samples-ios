@@ -21,6 +21,7 @@
 @class CLLocation;
 @class MMXUserID;
 @class MMXEndpoint;
+@class MMXTopic;
 
 @interface MMXMessage : NSObject <NSCoding>
 
@@ -35,12 +36,15 @@
 @property(nonatomic, strong, readonly) NSDate *timestamp;
 
 //Outbound Messages
-@property(nonatomic, readonly) id<MMXAddressable> recipient;
+@property(nonatomic, readonly) NSArray *recipients;
+
+//PubSub
+@property(nonatomic, strong, readonly) MMXTopic *topic;
 
 //GeoLocation Message
 @property(nonatomic, copy, readonly) CLLocation *location;
 
-+ (instancetype)messageTo:(id<MMXAddressable>)recipient
++ (instancetype)messageTo:(NSArray *)recipients
               withContent:(NSString *)content
               messageType:(NSString *)messageType
                  metaData:(NSDictionary *)metaData;
