@@ -36,6 +36,7 @@
 @property (nonatomic, strong) NSString* mType;
 
 @property(nonatomic, strong, readwrite) MMXUserID *senderUserID;
+@property(nonatomic, strong, readwrite) MMXUserID *targetUserID;
 @property(nonatomic, strong, readwrite) MMXEndpoint *senderEndpoint;
 @property(nonatomic, strong, readwrite) NSString* receiverUsername;
 @property(nonatomic, readwrite) CLLocation *location;

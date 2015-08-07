@@ -53,9 +53,9 @@
 @property(nonatomic, copy, readonly) MMXEndpoint *senderEndpoint;
 
 /**
- *  The list of users the message was sent to.
+ *  The list of the other users the message was sent to.
  */
-@property(nonatomic, copy, readonly) NSArray *recipients;
+@property(nonatomic, copy, readonly) NSArray *otherRecipients;
 
 /**
  *  The timestamp for when the message was originally sent.

@@ -32,6 +32,7 @@
 
 //Inbound Messages
 @property(nonatomic, strong, readonly) MMXUserID *senderUserID;
+@property(nonatomic, strong, readonly) MMXUserID *targetUserID;
 @property(nonatomic, strong, readonly) MMXEndpoint *senderEndpoint;
 @property(nonatomic, strong, readonly) NSDate *timestamp;
 
