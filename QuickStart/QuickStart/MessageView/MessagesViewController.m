@@ -25,7 +25,6 @@
 
 @interface MessagesViewController () <MMXClientDelegate>
 
-@property (nonatomic, strong) MMXTopic * topic;
 @property (nonatomic, copy) NSArray * messageList;
 @property (nonatomic, copy) NSArray * colorArray;
 @property (nonatomic, assign) BOOL isSubscribed;

@@ -17,7 +17,6 @@
 
 
 #import <UIKit/UIKit.h>
-@class MMXInboundMessage;
 
 @interface MessageCell : UITableViewCell
 
