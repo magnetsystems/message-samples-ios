@@ -307,7 +307,9 @@
 		case RPSLSMessageTypeUnknown:
 			break;
 		case RPSLSMessageTypeInvite:
-			[self showInviteAlertForUser:message.metaData[kMessageKey_Username] invite:message];
+			if (message.metaData[kMessageKey_Username]) {
+				[self showInviteAlertForUser:message.metaData[kMessageKey_Username] invite:message];
+			}
 			break;
 		case RPSLSMessageTypeAccept:
 			if ([message.metaData[kMessageKey_Result] boolValue]) {
