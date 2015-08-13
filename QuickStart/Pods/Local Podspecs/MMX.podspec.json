@@ -41,7 +41,7 @@
       "~>1.4"
     ],
     "CocoaAsyncSocket": [
-      "~>7.4.1"
+      "7.4.1"
     ],
     "CocoaLumberjack": [
       "~>1.9"

@@ -38,7 +38,7 @@ NSString * const kDefaultUsername = @"QuickstartUser1";
 NSString * const kEchoBotUsername = @"echo_bot";
 NSString * const kAmazingBotUsername = @"amazing_bot";
 NSString * const kMeString = @"Me";
-NSString * const kTextContent = @"TextContent";
+NSString * const kTextContent = @"textContent";
 
 @implementation MessagesViewController
 
@@ -124,7 +124,9 @@ NSString * const kTextContent = @"TextContent";
 
 //Created convenience method to get my MMXUserID
 - (MMXUser *)me {
-	return [MMXUser currentUser];
+	MMXUser *me = [MMXUser new];
+	me.username = kDefaultUsername;
+	return me;
 }
 
 //Added methods to get the MMUserIDs for the bots
@@ -222,31 +224,25 @@ NSString * const kTextContent = @"TextContent";
 										  preferredStyle:UIAlertControllerStyleAlert];
 	
 	UIAlertAction *meAction = [UIAlertAction
-									  actionWithTitle:[self me].username
+									  actionWithTitle:kDefaultUsername
 									  style:UIAlertActionStyleDefault
 									  handler:^(UIAlertAction *action)
 									  {
-										  dispatch_async(dispatch_get_main_queue(), ^{
 											  self.currentRecipient = [self me];
-										  });
 									  }];
 	UIAlertAction *echoAction = [UIAlertAction
 									  actionWithTitle:[self echoBot].username
 									  style:UIAlertActionStyleDefault
 									  handler:^(UIAlertAction *action)
 									  {
-										  dispatch_async(dispatch_get_main_queue(), ^{
 											  self.currentRecipient = [self echoBot];
-										  });
 									  }];
 	UIAlertAction *amazingAction = [UIAlertAction
 									actionWithTitle:[self amazingBot].username
 									style:UIAlertActionStyleDefault
 									handler:^(UIAlertAction *action)
 									{
-										dispatch_async(dispatch_get_main_queue(), ^{
 											self.currentRecipient = [self amazingBot];
-										});
 									}];
 	UIAlertAction *cancelAction = [UIAlertAction
 									actionWithTitle:@"Cancel"

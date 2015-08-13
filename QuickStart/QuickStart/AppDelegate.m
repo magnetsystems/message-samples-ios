@@ -17,6 +17,7 @@
 
 #import "AppDelegate.h"
 #import <MagnetMessage.h>
+#import <MMX/MMXRemoteNotification.h>
 
 @interface AppDelegate ()
 
@@ -58,18 +59,18 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 
 	//In the case of a silent notification use the following code to see if it is a wakeup notification
-//	if ([MMXRemoteNotification isWakeupRemoteNotification:userInfo]) {
-//		//Send local notification to the user or connect via MMXClient
-//		completionHandler(UIBackgroundFetchResultNewData);
-//	} else if ([MMXRemoteNotification isMMXRemoteNotification:userInfo]) {
-//		NSLog(@"userInfo = %@",userInfo);
-//		//Check if the message is designed to wake up the client
-//		[MMXRemoteNotification acknowledgeRemoteNotification:userInfo completion:^(BOOL success) {
-//			completionHandler(UIBackgroundFetchResultNewData);
-//		}];
-//	} else {
-//		completionHandler(UIBackgroundFetchResultNoData);
-//	}
+	if ([MMXRemoteNotification isWakeupRemoteNotification:userInfo]) {
+		//Send local notification to the user or connect via MMXClient
+		completionHandler(UIBackgroundFetchResultNewData);
+	} else if ([MMXRemoteNotification isMMXRemoteNotification:userInfo]) {
+		NSLog(@"userInfo = %@",userInfo);
+		//Check if the message is designed to wake up the client
+		[MMXRemoteNotification acknowledgeRemoteNotification:userInfo completion:^(BOOL success) {
+			completionHandler(UIBackgroundFetchResultNewData);
+		}];
+	} else {
+		completionHandler(UIBackgroundFetchResultNoData);
+	}
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -85,6 +86,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+	[MagnetMessage startSession];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
