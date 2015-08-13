@@ -16,7 +16,7 @@
  */
 
 #import "AppDelegate.h"
-#import <MMX/MMX.h>
+#import <MagnetMessage.h>
 
 @interface AppDelegate ()
 
@@ -29,6 +29,9 @@
 	//You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Console
 	NSString *pathAndFileName = [[NSBundle mainBundle] pathForResource:@"Configurations" ofType:@"plist"];
 	NSAssert([[NSFileManager defaultManager] fileExistsAtPath:pathAndFileName], @"You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface");
+	
+	[MagnetMessage startSession];
+
 	//You need to change the bundle Identifier to match the one your push certificate is set up to work with.
 	//Code to register for notifications
 	UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge |
@@ -39,7 +42,7 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-	[[MMXClient sharedClient] updateRemoteNotificationDeviceToken:deviceToken];
+//	[[MMXClient sharedClient] updateRemoteNotificationDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -55,22 +58,22 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 
 	//In the case of a silent notification use the following code to see if it is a wakeup notification
-	if ([MMXRemoteNotification isWakeupRemoteNotification:userInfo]) {
-		//Send local notification to the user or connect via MMXClient
-		completionHandler(UIBackgroundFetchResultNewData);
-	} else if ([MMXRemoteNotification isMMXRemoteNotification:userInfo]) {
-		NSLog(@"userInfo = %@",userInfo);
-		//Check if the message is designed to wake up the client
-		[MMXRemoteNotification acknowledgeRemoteNotification:userInfo completion:^(BOOL success) {
-			completionHandler(UIBackgroundFetchResultNewData);
-		}];
-	} else {
-		completionHandler(UIBackgroundFetchResultNoData);
-	}
+//	if ([MMXRemoteNotification isWakeupRemoteNotification:userInfo]) {
+//		//Send local notification to the user or connect via MMXClient
+//		completionHandler(UIBackgroundFetchResultNewData);
+//	} else if ([MMXRemoteNotification isMMXRemoteNotification:userInfo]) {
+//		NSLog(@"userInfo = %@",userInfo);
+//		//Check if the message is designed to wake up the client
+//		[MMXRemoteNotification acknowledgeRemoteNotification:userInfo completion:^(BOOL success) {
+//			completionHandler(UIBackgroundFetchResultNewData);
+//		}];
+//	} else {
+//		completionHandler(UIBackgroundFetchResultNoData);
+//	}
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-	[[MMXClient sharedClient] disconnect];
+	[MagnetMessage endSession];
 	// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
 	// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }

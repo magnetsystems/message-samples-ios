@@ -17,7 +17,7 @@
 
 
 #import "MMXOutboundMessage.h"
-@class MMXMessage;
+@class MMXInternalMessageAdaptor;
 @class NSXMLElement;
 
 @interface MMXOutboundMessage ()
@@ -42,6 +42,6 @@
 - (NSXMLElement *)recipientsAsXML;
 - (NSXMLElement *)contentAsXMLForType:(NSString *)type;
 - (NSXMLElement *)metaDataAsXML;
-+ (instancetype)initWithMessage:(MMXMessage *)message;
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message;
 
 @end
