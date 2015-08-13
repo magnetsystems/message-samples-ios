@@ -29,7 +29,7 @@ typedef void(^MessageFailureBlock)(NSError *);
 
 @property (nonatomic, copy) void (^logOutFailureBlock)(NSError *);
 
-@property (nonatomic, copy) NSMutableDictionary *messageBlockQueue;
+@property (nonatomic, strong) NSMutableDictionary *messageBlockQueue;
 
 @end
 
@@ -41,6 +41,7 @@ typedef void(^MessageFailureBlock)(NSError *);
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		_sharedClient = [[MagnetDelegate alloc] init];
+		_sharedClient.messageBlockQueue = [NSMutableDictionary dictionary];
 	});
 	return _sharedClient;
 }
@@ -91,13 +92,23 @@ typedef void(^MessageFailureBlock)(NSError *);
 }
 
 - (NSString *)sendMessage:(MMXMessage *)message
-			success:(void (^)(void))success
-			failure:(void (^)(NSError *error))failure {
+				  success:(void (^)(void))success
+				  failure:(void (^)(NSError *error))failure {
 	//FIXME: Needs to properly handle failure and success blocks
 	MMXOutboundMessage *msg = [MMXOutboundMessage messageTo:[message recipientsForOutboundMessage] withContent:nil metaData:message.messageContent];
 	NSString *messageID = [[MMXClient sharedClient] sendMessage:msg];
-	[self.messageBlockQueue setObject:@{@"success":success,
-										@"failure":failure} forKey:messageID];
+	
+	if (success || failure) {
+		NSMutableDictionary *blockDict = [NSMutableDictionary dictionary];
+		if (success) {
+			[blockDict setObject:success forKey:@"success"];
+		}
+		if (failure) {
+			[blockDict setObject:failure forKey:@"failure"];
+		}
+		[self.messageBlockQueue setObject:blockDict forKey:messageID];
+	}
+	
 	double delayInSeconds = 2.0;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -110,7 +121,7 @@ typedef void(^MessageFailureBlock)(NSError *);
 			[self.messageBlockQueue removeObjectForKey:messageID];
 		}
 	});
-
+	
 	return messageID;
 }
 

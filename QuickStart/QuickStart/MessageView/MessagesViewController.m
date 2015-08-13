@@ -34,7 +34,7 @@
 
 @end
 
-NSString * const kDefaultUsername = @"QuickstartUser4";
+NSString * const kDefaultUsername = @"QuickstartUser1";
 NSString * const kEchoBotUsername = @"echo_bot";
 NSString * const kAmazingBotUsername = @"amazing_bot";
 NSString * const kMeString = @"Me";
@@ -55,8 +55,7 @@ NSString * const kTextContent = @"TextContent";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	[MMXLogger sharedLogger].level = MMXLoggerLevelVerbose;
-	[[MMXLogger sharedLogger] startLogging];
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMessage:) name:MMXDidReceiveMessageNotification object:nil];
 	
 	[self setupUI];
@@ -96,6 +95,7 @@ NSString * const kTextContent = @"TextContent";
 	MMXUser *user = [MMXUser new];
 	user.username = kDefaultUsername;
 	[user registerWithCredentials:self.currentCredential success:^{
+		[self logIn];
 	} failure:^(NSError *error) {
 		if (error.code == 409) {
 			//Already registered
