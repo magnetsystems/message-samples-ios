@@ -17,9 +17,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MagnetMessage : NSObject
+@interface MMXAsyncOperation : NSOperation
 
-+ (void)startSession;
-+ (void)endSession;
+- (void)execute;
+
+- (void)finish;
 
 @end

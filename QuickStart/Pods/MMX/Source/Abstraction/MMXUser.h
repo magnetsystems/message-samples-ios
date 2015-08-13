@@ -15,7 +15,6 @@
  * permissions and limitations under the License.
  */
 
-
 #import <Foundation/Foundation.h>
 #import <Mantle/Mantle.h>
 

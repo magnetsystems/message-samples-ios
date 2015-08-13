@@ -15,11 +15,23 @@
  * permissions and limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "MMXLogInOperation.h"
+#import "MagnetDelegate.h"
 
-@interface MagnetMessage : NSObject
+@implementation MMXLogInOperation
 
-+ (void)startSession;
-+ (void)endSession;
+- (void)execute {
+	[[MagnetDelegate sharedDelegate] privateLogInWithCredential:self.creds success:^(MMXUser *user) {
+		if (self.logInSuccessBlock) {
+			self.logInSuccessBlock(user);
+		}
+		[self finish];
+	} failure:^(NSError *error) {
+		if (self.logInFailureBlock) {
+			self.logInFailureBlock(error);
+		}
+		[self finish];
+	}];
+}
 
 @end

@@ -15,11 +15,12 @@
  * permissions and limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "MMXAsyncOperation.h"
 
-@interface MagnetMessage : NSObject
+@interface MMXConnectionOperation : MMXAsyncOperation
 
-+ (void)startSession;
-+ (void)endSession;
+@property (nonatomic, copy) void (^connectSuccessBlock)(void);
+
+@property (nonatomic, copy) void (^connectFailureBlock)(NSError *);
 
 @end

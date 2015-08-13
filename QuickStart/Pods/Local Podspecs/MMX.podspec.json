@@ -12,7 +12,7 @@
   },
   "source": {
     "git": "https://github.com/magnetsystems/message-ios.git",
-    "branch": "friends_of_magnet",
+    "branch": "api_simplification",
     "submodules": true
   },
   "platforms": {
@@ -32,19 +32,16 @@
   },
   "dependencies": {
     "Magnet-XMPPFramework": [
-      "~> 3.6.10"
+      "3.6.10"
     ],
     "MDMCoreData": [
-      "~> 1.4.0"
+      "1.5.0"
     ],
     "Mantle": [
-      "~>1.4"
+      "1.5.4"
     ],
     "CocoaAsyncSocket": [
       "7.4.1"
-    ],
-    "CocoaLumberjack": [
-      "~>1.9"
     ]
   }
 }

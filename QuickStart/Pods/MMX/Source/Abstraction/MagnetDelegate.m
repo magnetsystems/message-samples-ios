@@ -1,10 +1,19 @@
-//
-//  MagnetDelegate.m
-//  QuickStart
-//
-//  Created by Jason Ferguson on 8/5/15.
-//  Copyright (c) 2015 Magnet Systems, Inc. All rights reserved.
-//
+/*
+ * Copyright (c) 2015 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 #import "MagnetDelegate.h"
 #import "MMXMessage_Private.h"
@@ -13,13 +22,20 @@
 #import "MMXMessageTypes.h"
 #import "MMX.h"
 #import "MMXChannel.h"
+#import "MMXLogInOperation.h"
+#import "MMXConnectionOperation.h"
 
 typedef void(^MessageSuccessBlock)(void);
 typedef void(^MessageFailureBlock)(NSError *);
 
+NSString  * const MMXMessageSuccessBlockKey = @"MMXMessageSuccessBlockKey";
+NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
+
 @interface MagnetDelegate () <MMXClientDelegate>
 
-//@property (nonatomic, strong) MMXClient *client;
+@property (nonatomic, copy) void (^connectSuccessBlock)(void);
+
+@property (nonatomic, copy) void (^connectFailureBlock)(NSError *);
 
 @property (nonatomic, copy) void (^logInSuccessBlock)(MMXUser *);
 
@@ -30,6 +46,8 @@ typedef void(^MessageFailureBlock)(NSError *);
 @property (nonatomic, copy) void (^logOutFailureBlock)(NSError *);
 
 @property (nonatomic, strong) NSMutableDictionary *messageBlockQueue;
+
+@property(nonatomic, strong) NSOperationQueue *internalQueue;
 
 @end
 
@@ -47,14 +65,18 @@ typedef void(^MessageFailureBlock)(NSError *);
 }
 
 - (void)startMMXClient {
-	//TODO: Test this logic to make sure you can call startMMXClient multiple times without messing up an existing connection.
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated &&
 		[MMXClient sharedClient].connectionStatus != MMXConnectionStatusConnected) {
 		MMXConfiguration * config = [MMXConfiguration configurationWithName:@"default"];
 		[MMXClient sharedClient].configuration = config;
 		[MMXClient sharedClient].delegate = self;
-		[[MMXClient sharedClient] connectAnonymous];
+		[self connect];
 	}
+}
+
+- (void)connect {
+	MMXConnectionOperation *op = [MMXConnectionOperation new];
+	[self.internalQueue addOperation:op];
 }
 
 - (void)registerUser:(MMXUser *)user
@@ -72,17 +94,38 @@ typedef void(^MessageFailureBlock)(NSError *);
 	}];
 }
 
+- (void)connectWithSuccess:(void (^)(void))success
+				   failure:(void (^)(NSError *error))failure {
+	
+	self.connectSuccessBlock = success;
+	self.connectFailureBlock = failure;
+	[[MMXClient sharedClient] connectAnonymous];
+	
+}
+
+
 - (void)logInWithCredential:(NSURLCredential *)credential
 					success:(void (^)(MMXUser *))success
 					failure:(void (^)(NSError *error))failure {
+
+	MMXLogInOperation *op = [MMXLogInOperation new];
+	op.creds = credential.copy;
+	op.logInSuccessBlock = success;
+	op.logInFailureBlock = failure;
+	[self.internalQueue addOperation:op];
+
+}
+
+- (void)privateLogInWithCredential:(NSURLCredential *)credential
+						   success:(void (^)(MMXUser *))success
+						   failure:(void (^)(NSError *error))failure {
+	
 	[MMXClient sharedClient].configuration.credential = credential;
-	self.logInSuccessBlock = ^ (MMXUser *user) {
-		success(user);
-	};
+	self.logInSuccessBlock = success;
 	self.logInFailureBlock = failure;
 	[[MMXClient sharedClient] connectWithCredentials];
-	
 }
+
 
 - (void)logOutWithSuccess:(void (^)(void))success
 				  failure:(void (^)(NSError *error))failure {
@@ -101,10 +144,10 @@ typedef void(^MessageFailureBlock)(NSError *);
 	if (success || failure) {
 		NSMutableDictionary *blockDict = [NSMutableDictionary dictionary];
 		if (success) {
-			[blockDict setObject:success forKey:@"success"];
+			[blockDict setObject:success forKey:MMXMessageSuccessBlockKey];
 		}
 		if (failure) {
-			[blockDict setObject:failure forKey:@"failure"];
+			[blockDict setObject:failure forKey:MMXMessageFailureBlockKey];
 		}
 		[self.messageBlockQueue setObject:blockDict forKey:messageID];
 	}
@@ -114,7 +157,7 @@ typedef void(^MessageFailureBlock)(NSError *);
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		NSDictionary *blockDict = [self.messageBlockQueue objectForKey:messageID];
 		if (blockDict) {
-			MessageSuccessBlock successBlock = [blockDict objectForKey:@"success"];
+			MessageSuccessBlock successBlock = [blockDict objectForKey:MMXMessageSuccessBlockKey];
 			if (successBlock) {
 				successBlock();
 			}
@@ -162,6 +205,11 @@ typedef void(^MessageFailureBlock)(NSError *);
 			}
 			break;
 		case MMXConnectionStatusConnected: {
+			if (self.connectSuccessBlock) {
+				self.connectSuccessBlock();
+			}
+			self.connectSuccessBlock = nil;
+			self.connectFailureBlock = nil;
 			}
 			break;
 		case MMXConnectionStatusDisconnected: {
@@ -169,11 +217,27 @@ typedef void(^MessageFailureBlock)(NSError *);
 			if (self.logOutSuccessBlock) {
 				self.logOutSuccessBlock();
 			}
+			if (self.connectFailureBlock) {
+				self.connectFailureBlock(error);
+			}
+			self.connectSuccessBlock = nil;
+			self.connectFailureBlock = nil;
 			self.logOutSuccessBlock = nil;
 			self.logOutFailureBlock = nil;
 		}
 			break;
 		case MMXConnectionStatusFailed: {
+			if (self.connectFailureBlock) {
+				self.connectFailureBlock(error);
+			}
+			if (self.logInFailureBlock) {
+				self.logInFailureBlock(error);
+			}
+			self.connectSuccessBlock = nil;
+			self.connectFailureBlock = nil;
+			self.logInSuccessBlock = nil;
+			self.logInFailureBlock = nil;
+
 			}
 			break;
 		case MMXConnectionStatusReconnecting: {
@@ -214,7 +278,7 @@ typedef void(^MessageFailureBlock)(NSError *);
 - (void)client:(MMXClient *)client didReceiveMessageSentSuccessfully:(NSString *)messageID {
 	NSDictionary *messageBlockDict = [self.messageBlockQueue objectForKey:messageID];
 	if (messageBlockDict) {
-		MessageSuccessBlock success = messageBlockDict[@"success"];
+		MessageSuccessBlock success = messageBlockDict[MMXMessageSuccessBlockKey];
 		if (success) {
 			success();
 		}
@@ -225,12 +289,24 @@ typedef void(^MessageFailureBlock)(NSError *);
 - (void)client:(MMXClient *)client didFailToSendMessage:(NSString *)messageID recipients:(NSArray *)recipients error:(NSError *)error {
 	NSDictionary *messageBlockDict = [self.messageBlockQueue objectForKey:messageID];
 	if (messageBlockDict) {
-		MessageFailureBlock failure = messageBlockDict[@"failure"];
+		MessageFailureBlock failure = messageBlockDict[MMXMessageFailureBlockKey];
 		if (failure) {
 			failure(error);
 		}
 		[self.messageBlockQueue removeObjectForKey:messageID];
 	}
+}
+
+#pragma mark - Overriden getters
+
+- (NSOperationQueue *)internalQueue {
+	
+	if (!_internalQueue) {
+		_internalQueue = [[NSOperationQueue alloc] init];
+		_internalQueue.maxConcurrentOperationCount = 1;
+	}
+	
+	return _internalQueue;
 }
 
 @end

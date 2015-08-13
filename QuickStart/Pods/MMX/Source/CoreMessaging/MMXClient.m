@@ -878,7 +878,8 @@ int const kReconnectionTimerInterval = 4;
 			[self sendSDKAckMessageId:msgId sourceFrom:from sourceTo:to];
 			if ([self.delegate respondsToSelector:@selector(client:didDeliverMessage:recipient:)]) {
 				dispatch_async(self.callbackQueue, ^{
-					[self.delegate client:self didDeliverMessage:[xmppMessage elementID] recipient:[MMXUserID userIDWithUsername:[[from usernameWithoutAppID] jidUnescapedString]]];
+					NSString *confirmedMessageID = [[mmxElement attributeForName:@"id"] stringValue];
+					[self.delegate client:self didDeliverMessage:confirmedMessageID recipient:[MMXUserID userIDWithUsername:[[from usernameWithoutAppID] jidUnescapedString]]];
 				});
 			}
 		} else {

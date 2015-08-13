@@ -15,11 +15,16 @@
  * permissions and limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "MMXAsyncOperation.h"
+@class MMXUser;
 
-@interface MagnetMessage : NSObject
+@interface MMXLogInOperation : MMXAsyncOperation
 
-+ (void)startSession;
-+ (void)endSession;
+@property (nonatomic, strong) NSURLCredential *creds;
+
+@property (nonatomic, strong) void (^logInSuccessBlock)(MMXUser *);
+
+@property (nonatomic, strong) void (^logInFailureBlock)(NSError *);
+
 
 @end
