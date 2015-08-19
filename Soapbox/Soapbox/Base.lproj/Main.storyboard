@@ -93,17 +93,17 @@
                         <outlet property="passwordTextField" destination="W6h-MQ-IY8" id="H8N-4V-XPy"/>
                         <outlet property="signInButton" destination="GfD-5k-mPL" id="tHU-VP-LQ9"/>
                         <outlet property="usernameTextField" destination="tsm-yG-wFd" id="h0z-Mn-u1N"/>
-                        <segue destination="bTf-jc-UBw" kind="presentation" identifier="ShowTopicList" id="KHE-ec-gRf"/>
+                        <segue destination="bTf-jc-UBw" kind="presentation" identifier="ShowChannelList" id="KHE-ec-gRf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="591" y="375"/>
         </scene>
-        <!--Topics-->
+        <!--Channels-->
         <scene sceneID="m5y-Ba-heI">
             <objects>
-                <tableViewController storyboardIdentifier="TopicListTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="OV6-ml-w6O" customClass="TopicListTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ChannelListTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="OV6-ml-w6O" customClass="ChannelListTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="KkV-XB-sMH">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -113,7 +113,7 @@
                             <outlet property="delegate" destination="OV6-ml-w6O" id="ku1-Xn-HWh"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Topics" id="Ive-zN-jLS">
+                    <navigationItem key="navigationItem" title="Channels" id="Ive-zN-jLS">
                         <barButtonItem key="leftBarButtonItem" title="Sign Out" id="dUy-1o-EhJ">
                             <connections>
                                 <action selector="signoutPressed:" destination="OV6-ml-w6O" id="eE9-BE-qbz"/>
@@ -121,13 +121,13 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="dCE-FN-m8Z">
                             <connections>
-                                <action selector="createNewTopic:" destination="OV6-ml-w6O" id="KCf-L2-Ueh"/>
+                                <action selector="createNewChannel:" destination="OV6-ml-w6O" id="KCf-L2-Ueh"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="kPZ-0Y-QtM" kind="show" identifier="NewTopicSegue" id="6XK-es-Gnl"/>
-                        <segue destination="4jN-CL-63i" kind="show" identifier="TopicMessagesSegue" id="R9c-u3-NV9"/>
+                        <segue destination="kPZ-0Y-QtM" kind="show" identifier="NewChannelSegue" id="6XK-es-Gnl"/>
+                        <segue destination="4jN-CL-63i" kind="show" identifier="ChannelMessagesSegue" id="R9c-u3-NV9"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yRq-Cr-Ykw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -152,10 +152,10 @@
             </objects>
             <point key="canvasLocation" x="2753" y="-85"/>
         </scene>
-        <!--New Topic-->
+        <!--New Channel-->
         <scene sceneID="4Jz-aA-FIs">
             <objects>
-                <tableViewController storyboardIdentifier="NewTopicTableViewController" title="New Topic" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kPZ-0Y-QtM" customClass="NewTopicTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="NewTopicTableViewController" title="New Channel" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kPZ-0Y-QtM" customClass="NewTopicTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="33O-iS-WLa">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

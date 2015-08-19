@@ -16,18 +16,18 @@
  */
 
 
-#import "TopicListCell.h"
+#import "ChannelListCell.h"
 #import "UIColor+Soapbox.h"
 #import <MMX.h>
 
-@interface TopicListCell () <UISearchBarDelegate>
+@interface ChannelListCell () <UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *topicLabel;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
 
 @end
 
-@implementation TopicListCell
+@implementation ChannelListCell
 
 - (void)awakeFromNib {
     // Initialization code

@@ -17,7 +17,10 @@
 
 
 #import <UIKit/UIKit.h>
+@class MMXChannel;
 
-@interface TopicListTableViewController : UITableViewController
+@interface ChannelListCell : UITableViewCell
+
+@property (nonatomic, strong) MMXChannel *channel;
 
 @end

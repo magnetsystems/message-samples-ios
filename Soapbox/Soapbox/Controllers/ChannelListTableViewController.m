@@ -16,25 +16,25 @@
  */
 
 
-#import "TopicListTableViewController.h"
-#import "TopicListCell.h"
+#import "ChannelListTableViewController.h"
+#import "ChannelListCell.h"
 #import "MessagesViewController.h"
 #import <MMX/MMX.h>
 
-@interface TopicListTableViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
+@interface ChannelListTableViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 
-@property (nonatomic, copy) NSArray * subscribedTopicsList;
-@property (nonatomic, copy) NSArray * unSubscribedTopicsList;
+@property (nonatomic, copy) NSArray *subscribedChannelsList;
+@property (nonatomic, copy) NSArray *unSubscribedChannelsList;
 
-@property (nonatomic, copy) NSArray * filteredSubscribedTopicsList;
-@property (nonatomic, copy) NSArray * filteredUnSubscribedTopicsList;
+@property (nonatomic, copy) NSArray *filteredSubscribedChannelsList;
+@property (nonatomic, copy) NSArray *filteredUnSubscribedChannelsList;
 
 @property (nonatomic, strong) UISearchController *searchController;
 
 - (void)goToLoginScreen;
 @end
 
-@implementation TopicListTableViewController
+@implementation ChannelListTableViewController
 
 #pragma mark - Lifecycle
 
@@ -43,105 +43,97 @@
 	
 	[self setupTableViewProperties];
 	
-	self.subscribedTopicsList = @[];
-	self.unSubscribedTopicsList = @[];
-	self.filteredSubscribedTopicsList = @[];
-	self.filteredUnSubscribedTopicsList = @[];
-	
-	[self setupTopics];
+	self.subscribedChannelsList = @[];
+	self.unSubscribedChannelsList = @[];
+	self.filteredSubscribedChannelsList = @[];
+	self.filteredUnSubscribedChannelsList = @[];
+
+    [self setupChannels];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	[self fetchTopics];
+    [self fetchChannels];
 }
 
-#pragma mark - Create Default Topics
+#pragma mark - Create Default Channels
 
-//This is used to create our 2 default topics for this app and subscribe the user to the Announcements topic
-- (void)setupTopics {
+// This is used to create our 2 default channels for this app and subscribe the user to the Announcements channel
+- (void)setupChannels {
     /*
-	 *  Creating a new MMXTopic object. I could have also used MMXTopic topicWithName:maxItemsToPersist:permissionsLevel:
-	 *	I am setting a description to potentially display to future users as part of topic discovery.
+	 *  Creating a new MMXChannel object.
+	 *	I am setting a summary to potentially display to future users as part of channel discovery.
 	 */
     MMXChannel *companyChannel = [MMXChannel channelWithName:@"company_announcements"
-                                                     summary:@"The Company Announcements topic is designed to distribute information that should be available to all employees."];
+                                                     summary:@"The Company Announcements channel is designed to distribute information that should be available to all employees."];
 
 	/*
-	 *  Creating a new topic by passing my MMXTopic object.
-	 *	When a user creates a topic they are NOT automatically subscribed to it.
+	 *  Creating a new channel by passing my MMXChannel object.
+	 *	When a user creates a channel they are NOT automatically subscribed to it.
 	 */
     [companyChannel createWithSuccess:^{
         
         /*
-         *  Subscribe the current user to the newly created topic.
-         *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
-         *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
+         *  Subscribe the current user to the newly created channel.
          */
         [companyChannel subscribeWithSuccess:^{
-            //Fetching topics again to make sure that the company_announcements topic show up under subscribed.
-            [self fetchTopics];
+            // Fetching channels again to make sure that the company_announcements channel show up under subscribed.
+            [self fetchChannels];
         } failure:^(NSError *error) {
             /*
              *  Logging an error.
              */
-            [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
+            [[MMXLogger sharedLogger] error:@"ChannelListTableViewController setupChannels Error = %@", error.localizedFailureReason];
         }];
     } failure:^(NSError *error) {
-        //The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
+        //The error code for "duplicate channel" is 409. This means the channel already exists and I can continue to subscribe.
         if (error.code == 409) {
             
             /*
-             *  Subscribing to a MMXTopic
-             *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
-             *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
+             *  Subscribing to a MMXChannel
              */
             [companyChannel subscribeWithSuccess:^{
-                //Fetching topics again to make sure that the company_announcements topic show up under subscribed.
-                [self fetchTopics];
-            } failure:^(NSError *error) {
+                // Fetching channels again to make sure that the company_announcements channel show up under subscribed.
+                [self fetchChannels];
+            } failure:^(NSError *subscribeError) {
                 /*
                  *  Logging an error.
                  */
-                [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
+                [[MMXLogger sharedLogger] error:@"ChannelListTableViewController setupChannels Error = %@", subscribeError.localizedFailureReason];
             }];
         }
     }];
 
-	/*
-	 *  Creating a new MMXTopic object. I could have also used MMXTopic topicWithName:maxItemsToPersist:permissionsLevel:
-	 *	I am setting a description to potentially display to future users as part of topic discovery.
-	 */
-    MMXChannel *lunchChannel = [MMXChannel channelWithName:@"lunch_buddies" summary:@"Lunch Buddies is a topic for finding other people to go to lunch with."];
+    /*
+     *  Creating a new MMXChannel object.
+     *	I am setting a summary to potentially display to future users as part of channel discovery.
+     */
+    MMXChannel *lunchChannel = [MMXChannel channelWithName:@"lunch_buddies"
+                                                   summary:@"Lunch Buddies is a channel for finding other people to go to lunch with."];
 	
 	/*
-	 *  Creating a new topic by passing my MMXTopic object.
+	 *  Creating a new channel by passing my MMXChannel object.
 	 *	I am passing nil to success because there is not any business logic I need to execute upon success.
 	 */
     [lunchChannel createWithSuccess:nil failure:^(NSError *error) {
-        NSLog(@"createTopic for topic %@ Error = %@", lunchChannel.name, error);
+        NSLog(@"createChannel for channel %@ Error = %@", lunchChannel.name, error);
     }];
 }
 
-#pragma mark - Fetch all Topics
+#pragma mark - Fetch all Channels
 
-- (void)fetchTopics {
+- (void)fetchChannels {
     [self.refreshControl beginRefreshing];
 
     [MMXChannel channelsStartingWith:@"" limit:100 success:^(int totalCount, NSSet *channels) {
 
-        NSMutableArray *subTopicsList = @[].mutableCopy;
-        NSMutableArray *otherTopicsList = @[].mutableCopy;
-        for (MMXChannel *channel in channels) {
-            if (channel.isSubscribed) {
-                [subTopicsList addObject:channel];
-            } else {
-                [otherTopicsList addObject:channel];
-            }
-        }
-        self.subscribedTopicsList = subTopicsList;
-        self.unSubscribedTopicsList = otherTopicsList;
+        NSPredicate *subscribedPredicate = [NSPredicate predicateWithFormat:@"isSubscribed == YES"];
+        NSPredicate *notSubscribedPredicate = [NSPredicate predicateWithFormat:@"isSubscribed == NO"];
+
+        self.subscribedChannelsList = [[channels filteredSetUsingPredicate:subscribedPredicate] allObjects];
+        self.unSubscribedChannelsList = [[channels filteredSetUsingPredicate:notSubscribedPredicate] allObjects];
+
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];
 
@@ -149,7 +141,7 @@
         /*
          *  Logging an error.
          */
-        [[MMXLogger sharedLogger] error:@"TopicListTableViewController fetchTopics Error = %@",error.localizedFailureReason];
+        [[MMXLogger sharedLogger] error:@"ChannelListTableViewController fetchChannels Error = %@", error.localizedFailureReason];
 
         [self.refreshControl endRefreshing];
     }];
@@ -211,9 +203,7 @@
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
 	// update the filtered array based on the search text
 	NSString *searchText = searchController.searchBar.text;
-	NSMutableArray *subSearchResults = [self.subscribedTopicsList mutableCopy];
-	NSMutableArray *unsubSearchResults = [self.unSubscribedTopicsList mutableCopy];
-	
+
 	// strip out all the leading and trailing spaces
 	NSString *strippedString = [searchText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 	
@@ -222,46 +212,35 @@
 	if (strippedString.length > 0) {
 		searchItems = [strippedString componentsSeparatedByString:@" "];
 	}
+
+
 	
-	NSMutableArray *andMatchPredicates = [NSMutableArray array];
+	NSMutableArray *searchStringPredicates = [NSMutableArray array];
 	
 	for (NSString *searchString in searchItems) {
-		NSMutableArray *searchItemsPredicate = [NSMutableArray array];
-		NSExpression *lhs = [NSExpression expressionForKeyPath:@"name"];
-		NSExpression *rhs = [NSExpression expressionForConstantValue:searchString];
-		NSPredicate *finalPredicate = [NSComparisonPredicate
-									   predicateWithLeftExpression:lhs
-									   rightExpression:rhs
-									   modifier:NSDirectPredicateModifier
-									   type:NSContainsPredicateOperatorType
-									   options:NSCaseInsensitivePredicateOption];
-		[searchItemsPredicate addObject:finalPredicate];
-		
-		// at this OR predicate to our master AND predicate
-		NSCompoundPredicate *orMatchPredicates = [NSCompoundPredicate orPredicateWithSubpredicates:searchItemsPredicate];
-		[andMatchPredicates addObject:orMatchPredicates];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@", searchString];
+		[searchStringPredicates addObject:predicate];
 	}
-	
-	// match up the fields of the Product object
-	NSCompoundPredicate *finalCompoundPredicate =
-	[NSCompoundPredicate andPredicateWithSubpredicates:andMatchPredicates];
+
+    // match up the fields of the Product object
+	NSCompoundPredicate *finalCompoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:searchStringPredicates];
 	
 	// hand over the filtered results to our search results table
-	self.filteredSubscribedTopicsList = [subSearchResults filteredArrayUsingPredicate:finalCompoundPredicate];
-	self.filteredUnSubscribedTopicsList = [unsubSearchResults filteredArrayUsingPredicate:finalCompoundPredicate];
+	self.filteredSubscribedChannelsList = [self.subscribedChannelsList filteredArrayUsingPredicate:finalCompoundPredicate];
+	self.filteredUnSubscribedChannelsList = [self.unSubscribedChannelsList filteredArrayUsingPredicate:finalCompoundPredicate];
 	[self.tableView reloadData];
 }
 
 #pragma mark - Set up lists
 
-- (void)setSubscribedTopicsList:(NSArray *)subscribedTopicsList {
-	_subscribedTopicsList = subscribedTopicsList;
-	self.filteredSubscribedTopicsList = subscribedTopicsList.copy;
+- (void)setSubscribedChannelsList:(NSArray *)subscribedChannelsList {
+	_subscribedChannelsList = subscribedChannelsList;
+	self.filteredSubscribedChannelsList = subscribedChannelsList.copy;
 }
 
-- (void)setUnSubscribedTopicsList:(NSArray *)unSubscribedTopicsList {
-	_unSubscribedTopicsList = unSubscribedTopicsList;
-	self.filteredUnSubscribedTopicsList = unSubscribedTopicsList.copy;
+- (void)setUnSubscribedChannelsList:(NSArray *)unSubscribedChannelsList {
+	_unSubscribedChannelsList = unSubscribedChannelsList;
+	self.filteredUnSubscribedChannelsList = unSubscribedChannelsList.copy;
 }
 
 #pragma mark - TableView
@@ -270,7 +249,7 @@
 	UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
  
 	// Configure Refresh Control
-	[refreshControl addTarget:self action:@selector(fetchTopics) forControlEvents:UIControlEventValueChanged];
+    [refreshControl addTarget:self action:@selector(fetchChannels) forControlEvents:UIControlEventValueChanged];
  
 	// Configure View Controller
 	[self setRefreshControl:refreshControl];
@@ -290,8 +269,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	TopicListCell *cell = (TopicListCell *)[tableView cellForRowAtIndexPath:indexPath];
-	[self performSegueWithIdentifier:@"TopicMessagesSegue" sender:cell];
+	ChannelListCell *cell = (ChannelListCell *)[tableView cellForRowAtIndexPath:indexPath];
+	[self performSegueWithIdentifier:@"ChannelMessagesSegue" sender:cell];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -300,9 +279,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == 0) {
-		return self.filteredSubscribedTopicsList.count;
+		return self.filteredSubscribedChannelsList.count;
 	} else if (section == 1) {
-		return self.filteredUnSubscribedTopicsList.count;
+		return self.filteredUnSubscribedChannelsList.count;
 	}
 	return 0;
 }
@@ -311,24 +290,24 @@
 	if (section == 0) {
 		return @"Subscriptions";
 	} else if (section == 1) {
-		return @"Other Topics";
+		return @"Other Channels";
 	}
 	return @"";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"TopicListCell";
+	static NSString *CellIdentifier = @"ChannelListCell";
 	
-	TopicListCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	ChannelListCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (!cell) {
-		[tableView registerNib:[UINib nibWithNibName:@"TopicListCell" bundle:nil] forCellReuseIdentifier:CellIdentifier];
+		[tableView registerNib:[UINib nibWithNibName:@"ChannelListCell" bundle:nil] forCellReuseIdentifier:CellIdentifier];
 		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	}
 	
 	if (indexPath.section == 0) {
-        cell.channel = self.filteredSubscribedTopicsList[indexPath.row];
+        cell.channel = self.filteredSubscribedChannelsList[indexPath.row];
 	} else {
-        cell.channel = self.filteredUnSubscribedTopicsList[indexPath.row];
+        cell.channel = self.filteredUnSubscribedChannelsList[indexPath.row];
 	}
 
 	return cell;
@@ -336,15 +315,15 @@
 
 #pragma mark - Actions & UIStoryboardSegue
 
-- (IBAction)createNewTopic:(id)sender {
-	[self performSegueWithIdentifier:@"NewTopicSegue" sender:self];
+- (IBAction)createNewChannel:(id)sender {
+	[self performSegueWithIdentifier:@"NewChannelSegue" sender:self];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	self.searchController.active = NO;
-	if ([[segue identifier] isEqualToString:@"TopicMessagesSegue"]) {
+	if ([[segue identifier] isEqualToString:@"ChannelMessagesSegue"]) {
 		MessagesViewController *vc = [segue destinationViewController];
-		TopicListCell *cell = (TopicListCell *)sender;
+		ChannelListCell *cell = (ChannelListCell *)sender;
 		vc.channel = cell.channel;
 	}
 }

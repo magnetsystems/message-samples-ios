@@ -68,7 +68,7 @@
 
 - (void)logInWithCredential:(NSURLCredential *)credential {
     [MMXUser logInWithCredentials:credential success:^(MMXUser *user) {
-        [self performSegueWithIdentifier:@"ShowTopicList" sender:nil];
+        [self performSegueWithIdentifier:@"ShowChannelList" sender:nil];
     } failure:^(NSError *error) {
         NSString *errorMessage;
         if (error) {
