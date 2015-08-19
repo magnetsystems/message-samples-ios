@@ -22,6 +22,7 @@ extern NSString  * const MXnsAppReg;
 extern NSString  * const MXnsDevice;
 extern NSString  * const MXnsMsgAck;
 extern NSString  * const MXnsDataPayload;
+extern NSString  * const MXnsServerSignal;
 extern NSString  * const MXnsMsgState;
 extern NSString  * const MXnsDeliveryReceipt;
 extern NSString  * const MXnsUser;

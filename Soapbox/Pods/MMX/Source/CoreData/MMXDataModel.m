@@ -19,7 +19,7 @@
 #import "MMXDataModel.h"
 #import "MDMPersistenceController.h"
 #import "MMXKeyedUnarchiver.h"
-#import "MMXMessage.h"
+#import "MMXInternalMessageAdaptor.h"
 #import "MMXMessageOptions.h"
 #import "MMXAssert.h"
 #import "MMXOutboxEntry.h"
@@ -60,7 +60,7 @@
     return _sharedDataModel;
 }
 
-- (MMXOutboxEntry *)addOutboxEntryWithMessage:(MMXMessage *)message
+- (MMXOutboxEntry *)addOutboxEntryWithMessage:(MMXInternalMessageAdaptor *)message
                                  options:(MMXMessageOptions *)options
                                 username:(NSString *)username {
 
@@ -118,7 +118,7 @@
     return _success;
 }
 
-- (MMXMessage *)extractMessageFromOutboxEntry:(MMXOutboxEntry *)outboxEntry {
+- (MMXInternalMessageAdaptor *)extractMessageFromOutboxEntry:(MMXOutboxEntry *)outboxEntry {
     return [MMXKeyedUnarchiver unarchiveObjectWithData:outboxEntry.message];
 }
 

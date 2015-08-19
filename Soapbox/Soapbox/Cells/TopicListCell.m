@@ -37,22 +37,38 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void)setTopicSummary:(MMXTopicSummary *)topicSummary isSubscribed:(BOOL)isSubscribed {
+#pragma mark - Overriden setters
 
-	self.topicSummary = topicSummary;
-	self.isSubscribed = isSubscribed;
-	
-	dispatch_async(dispatch_get_main_queue(), ^{
-		/*
-		 *  Extracting the topic name using the MMXTopic topicName property
-		 */
-
-		self.topicLabel.text = self.topicSummary.topic.topicName;
-	});
-	
-	[self setupBadge];
-	[self updateBadge:self.topicSummary.numItemsPublished];
+- (void)setChannel:(MMXChannel *)channel {
+    _channel = channel;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        /*
+         *  Extracting the topic name using the MMXTopic topicName property
+         */
+        
+        self.topicLabel.text = _channel.name;
+    });
+    
+    [self setupBadge];
+    [self updateBadge:_channel.numberOfMessages];
 }
+
+//- (void)setTopicSummary:(MMXTopicSummary *)topicSummary isSubscribed:(BOOL)isSubscribed {
+//
+//	self.topicSummary = topicSummary;
+//	self.isSubscribed = isSubscribed;
+//	
+//	dispatch_async(dispatch_get_main_queue(), ^{
+//		/*
+//		 *  Extracting the topic name using the MMXTopic topicName property
+//		 */
+//
+//		self.topicLabel.text = self.topicSummary.topic.topicName;
+//	});
+//	
+//	[self setupBadge];
+//	[self updateBadge:self.topicSummary.numItemsPublished];
+//}
 
 - (void)setupBadge {
 	self.badgeLabel.hidden = YES;
@@ -74,7 +90,7 @@
 }
 
 - (void)prepareForReuse {
-	self.topicSummary = nil;
+	self.channel = nil;
 	self.topicLabel.text = @"";
 	self.badgeLabel.text = @"";
 }

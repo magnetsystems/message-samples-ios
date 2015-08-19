@@ -21,7 +21,7 @@
 #import "MessagesViewController.h"
 #import <MMX/MMX.h>
 
-@interface TopicListTableViewController () <MMXClientDelegate, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
+@interface TopicListTableViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 
 @property (nonatomic, copy) NSArray * subscribedTopicsList;
 @property (nonatomic, copy) NSArray * unSubscribedTopicsList;
@@ -31,6 +31,7 @@
 
 @property (nonatomic, strong) UISearchController *searchController;
 
+- (void)goToLoginScreen;
 @end
 
 @implementation TopicListTableViewController
@@ -53,167 +54,117 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	/*
-	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
-	 *	I only care about client:didReceiveConnectionStatusChange:error:
-	 *	All MMXClientDelegate protocol methods are optional.
-	 */
-	[MMXClient sharedClient].delegate = self;
-	
-	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
-
 	[self fetchTopics];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Create Default Topics
 
 //This is used to create our 2 default topics for this app and subscribe the user to the Announcements topic
 - (void)setupTopics {
-	/*
+    /*
 	 *  Creating a new MMXTopic object. I could have also used MMXTopic topicWithName:maxItemsToPersist:permissionsLevel:
 	 *	I am setting a description to potentially display to future users as part of topic discovery.
 	 */
-	MMXTopic * companyTopic = [MMXTopic topicWithName:@"company_announcements"];
-	companyTopic.topicDescription = @"The Company Announcements topic is designed to distribute information that should be available to all employees.";
+    MMXChannel *companyChannel = [MMXChannel channelWithName:@"company_announcements"
+                                                     summary:@"The Company Announcements topic is designed to distribute information that should be available to all employees."];
 
 	/*
 	 *  Creating a new topic by passing my MMXTopic object.
 	 *	When a user creates a topic they are NOT automatically subscribed to it.
 	 */
-	[[MMXClient sharedClient].pubsubManager createTopic:companyTopic success:^(BOOL success) {
-		
-		/*
-		 *  Subscribe the current user to the newly created topic.
-		 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
-		 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
-		 */
-		[[MMXClient sharedClient].pubsubManager subscribeToTopic:companyTopic device:nil success:^(MMXTopicSubscription *subscription) {
-			//Fetching topics again to make sure that the company_announcements topic show up under subscribed.
-			[self fetchTopics];
-		} failure:^(NSError *error) {
-			
-			/*
-			 *  Logging an error.
-			 */
-			[[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
-		}];
-	} failure:^(NSError *error) {
-		//The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
-		if (error.code == 409) {
-
-			/*
-			 *  Subscribing to a MMXTopic
-			 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
-			 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
-			 */
-			[[MMXClient sharedClient].pubsubManager subscribeToTopic:companyTopic device:nil success:^(MMXTopicSubscription *subscription) {
-				//Fetching topics again to make sure that the company_announcements topic show up under subscribed.
-				[self fetchTopics];
-			}  failure:^(NSError *error) {
-
-				/*
-				 *  Logging an error.
-				 */
-				[[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
-			}];
-		}
-	}];
+    [companyChannel createWithSuccess:^{
+        
+        /*
+         *  Subscribe the current user to the newly created topic.
+         *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
+         *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
+         */
+        [companyChannel subscribeWithSuccess:^{
+            //Fetching topics again to make sure that the company_announcements topic show up under subscribed.
+            [self fetchTopics];
+        } failure:^(NSError *error) {
+            /*
+             *  Logging an error.
+             */
+            [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
+        }];
+    } failure:^(NSError *error) {
+        //The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
+        if (error.code == 409) {
+            
+            /*
+             *  Subscribing to a MMXTopic
+             *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
+             *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
+             */
+            [companyChannel subscribeWithSuccess:^{
+                //Fetching topics again to make sure that the company_announcements topic show up under subscribed.
+                [self fetchTopics];
+            } failure:^(NSError *error) {
+                /*
+                 *  Logging an error.
+                 */
+                [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
+            }];
+        }
+    }];
 
 	/*
 	 *  Creating a new MMXTopic object. I could have also used MMXTopic topicWithName:maxItemsToPersist:permissionsLevel:
 	 *	I am setting a description to potentially display to future users as part of topic discovery.
 	 */
-	MMXTopic * lunchTopic = [MMXTopic topicWithName:@"lunch_buddies"];
-	lunchTopic.topicDescription = @"Lunch Buddies is a topic for finding other people to go to lunch with.";
+    MMXChannel *lunchChannel = [MMXChannel channelWithName:@"lunch_buddies" summary:@"Lunch Buddies is a topic for finding other people to go to lunch with."];
 	
 	/*
 	 *  Creating a new topic by passing my MMXTopic object.
 	 *	I am passing nil to success because there is not any business logic I need to execute upon success.
 	 */
-	[[MMXClient sharedClient].pubsubManager createTopic:lunchTopic success:nil failure:^(NSError *error) {
-		NSLog(@"createTopic for topic %@ Error = %@",lunchTopic.topicName,error);
-	}];
+    [lunchChannel createWithSuccess:nil failure:^(NSError *error) {
+        NSLog(@"createTopic for topic %@ Error = %@", lunchChannel.name, error);
+    }];
 }
 
 #pragma mark - Fetch all Topics
 
 - (void)fetchTopics {
-	[self.refreshControl beginRefreshing];
-	
-	/*
-	 *  Getting the list of all subscriptions for the current user.
-	 */
-	[[MMXClient sharedClient].pubsubManager listSubscriptionsWithSuccess:^(NSArray *subscriptions) {
-		NSMutableArray * tempSubArray = [NSMutableArray arrayWithCapacity:subscriptions.count];
+    [self.refreshControl beginRefreshing];
 
-		/*
-		 *  Extracting the MMXTopics from the MMXTopicSubscription objects.
-		 */
-		for (MMXTopicSubscription * topicSub in subscriptions) {
-			[tempSubArray addObject:topicSub.topic];
-		}
-		/*
-		 *  Getting the list all topics(max of 100)
-		 */
-		[[MMXClient sharedClient].pubsubManager listTopics:100 success:^(int totalCount, NSArray *topics) {
-			/*
-			 *  Getting the summaries for the topics. 
-			 *	In this case I am request the summary for the last 24 hours. This will give me the message count for that period.
-			 *	PAssing nil for the until field will default it to "now"
-			 */
-			[[MMXClient sharedClient].pubsubManager summaryOfTopics:topics since:[[NSDate date] dateByAddingTimeInterval:-60*60*24] until:nil success:^(NSArray *summaries) {
-				NSMutableArray *subTopicsList = @[].mutableCopy;
-				NSMutableArray *otherTopicsList = @[].mutableCopy;
-				for (MMXTopicSummary *summary in summaries) {
-					if ([tempSubArray containsObject:summary.topic]) {
-						[subTopicsList addObject:summary];
-					} else {
-						[otherTopicsList addObject:summary];
-					}
-				}
-				self.subscribedTopicsList = subTopicsList;
-				self.unSubscribedTopicsList = otherTopicsList;
-				[self.tableView reloadData];
-				[self.refreshControl endRefreshing];
-			} failure:^(NSError *error) {
-				[[MMXLogger sharedLogger] error:@"TopicListTableViewController fetchTopics Error = %@",error.localizedFailureReason];
-			}];
-		} failure:^(NSError *error) {
+    [MMXChannel channelsStartingWith:@"" limit:100 success:^(int totalCount, NSSet *channels) {
 
-			/*
-			 *  Logging an error.
-			 */
-			[[MMXLogger sharedLogger] error:@"TopicListTableViewController fetchTopics Error = %@",error.localizedFailureReason];
+        NSMutableArray *subTopicsList = @[].mutableCopy;
+        NSMutableArray *otherTopicsList = @[].mutableCopy;
+        for (MMXChannel *channel in channels) {
+            if (channel.isSubscribed) {
+                [subTopicsList addObject:channel];
+            } else {
+                [otherTopicsList addObject:channel];
+            }
+        }
+        self.subscribedTopicsList = subTopicsList;
+        self.unSubscribedTopicsList = otherTopicsList;
+        [self.tableView reloadData];
+        [self.refreshControl endRefreshing];
 
-			[self.tableView reloadData];
-			[self.refreshControl endRefreshing];
-		}];
-	} failure:^(NSError *error) {
+    } failure:^(NSError *error) {
+        /*
+         *  Logging an error.
+         */
+        [[MMXLogger sharedLogger] error:@"TopicListTableViewController fetchTopics Error = %@",error.localizedFailureReason];
 
-		/*
-		 *  Logging an error.
-		 */
-		[[MMXLogger sharedLogger] error:@"TopicListTableViewController fetchTopics Error = %@",error.localizedFailureReason];
-
-		[self.refreshControl endRefreshing];
-	}];
+        [self.refreshControl endRefreshing];
+    }];
 }
 
 #pragma mark - MMXClientDelegate Callbacks
 
-/*
- *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
- */
-- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-	if (connectionStatus == MMXConnectionStatusDisconnected) {
-		[self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-	}
-}
+///*
+// *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
+// */
+//- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
+//	if (connectionStatus == MMXConnectionStatusDisconnected) {
+//		[self goToLoginScreen];
+//	}
+//}
 
 #pragma mark - Actions
 
@@ -231,7 +182,12 @@
 									   /*
 										*  Ending our session.
 										*/
-									   [[MMXClient sharedClient] disconnect];
+                                       [MMXUser logOutWithSuccess:^{
+                                           [self goToLoginScreen];
+                                       } failure:^(NSError *error) {
+
+                                       }];
+
 								   }];
 	UIAlertAction *cancelAction = [UIAlertAction
 								 actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
@@ -271,7 +227,7 @@
 	
 	for (NSString *searchString in searchItems) {
 		NSMutableArray *searchItemsPredicate = [NSMutableArray array];
-		NSExpression *lhs = [NSExpression expressionForKeyPath:@"topic.topicName"];
+		NSExpression *lhs = [NSExpression expressionForKeyPath:@"name"];
 		NSExpression *rhs = [NSExpression expressionForConstantValue:searchString];
 		NSPredicate *finalPredicate = [NSComparisonPredicate
 									   predicateWithLeftExpression:lhs
@@ -369,13 +325,10 @@
 		cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	}
 	
-	MMXTopicSummary *topicSummary;
 	if (indexPath.section == 0) {
-		topicSummary = self.filteredSubscribedTopicsList[indexPath.row];
-		[cell setTopicSummary:topicSummary isSubscribed:YES];
+        cell.channel = self.filteredSubscribedTopicsList[indexPath.row];
 	} else {
-		topicSummary = self.filteredUnSubscribedTopicsList[indexPath.row];
-		[cell setTopicSummary:topicSummary isSubscribed:NO];
+        cell.channel = self.filteredUnSubscribedTopicsList[indexPath.row];
 	}
 
 	return cell;
@@ -392,8 +345,14 @@
 	if ([[segue identifier] isEqualToString:@"TopicMessagesSegue"]) {
 		MessagesViewController *vc = [segue destinationViewController];
 		TopicListCell *cell = (TopicListCell *)sender;
-		[vc setTopic:cell.topicSummary.topic isSubscribed:cell.isSubscribed];
+		vc.channel = cell.channel;
 	}
+}
+
+#pragma mark - Private implementation
+
+- (void)goToLoginScreen {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

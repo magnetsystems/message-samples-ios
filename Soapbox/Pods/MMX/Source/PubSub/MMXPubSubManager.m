@@ -27,7 +27,7 @@
 #import "MMXTopicListResponse.h"
 #import "MMXTopicSummaryRequestResponse.h"
 #import "MMXTopicSubscription_Private.h"
-#import "MMXMessage_Private.h"
+#import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXQuery_Private.h"
 #import "MMXEndpoint_Private.h"
 #import "MMXTopicQueryResponse_Private.h"
@@ -442,7 +442,7 @@
                 }
             } else {
                 NSError * parsingError;
-                NSArray * messageArray = [MMXMessage pubsubMessagesFromFetchResponseIQ:iq topic:query.topic error:&parsingError];
+                NSArray * messageArray = [MMXInternalMessageAdaptor pubsubMessagesFromFetchResponseIQ:iq topic:query.topic error:&parsingError];
 				if (parsingError) {
 					if (failure) {
 						dispatch_async(self.callbackQueue, ^{
@@ -1076,7 +1076,7 @@
 				}
 			} else {
 				NSError * parsingError;
-				NSArray * messageArray = [MMXMessage pubsubMessagesFromFetchResponseIQ:iq topic:topic error:&parsingError];
+				NSArray * messageArray = [MMXInternalMessageAdaptor pubsubMessagesFromFetchResponseIQ:iq topic:topic error:&parsingError];
 				if (parsingError) {
 					if (failure) {
 						dispatch_async(self.callbackQueue, ^{

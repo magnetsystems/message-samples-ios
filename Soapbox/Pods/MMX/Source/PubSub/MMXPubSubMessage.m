@@ -17,7 +17,7 @@
 
 #import "XMPPIQ.h"
 #import "MMXPubSubMessage_Private.h"
-#import "MMXMessage_Private.h"
+#import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXConstants.h"
 #import "MMXPubSubManager.h"
 #import "MMXClient.h"
@@ -31,7 +31,7 @@
 //messageType = @"TEXTMSG"
 @implementation MMXPubSubMessage
 
-+ (instancetype)initWithMessage:(MMXMessage *)message {
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message {
     MMXPubSubMessage * msg = [[MMXPubSubMessage alloc] init];
 	msg.messageID = message.messageID;
 	msg.messageContent = message.messageContent;
@@ -76,8 +76,8 @@
 	return messageArray.copy;
 }
 
-- (MMXMessage *)asMMXMessage {
-	MMXMessage * message = [[MMXMessage alloc] init];
+- (MMXInternalMessageAdaptor *)asMMXMessage {
+	MMXInternalMessageAdaptor * message = [[MMXInternalMessageAdaptor alloc] init];
 	message.messageID = self.messageID;
 	message.messageContent = self.messageContent;
 	message.topic = self.topic;

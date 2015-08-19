@@ -27,6 +27,7 @@
 		0E9A44341B151F8100EC2859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A44331B151F8100EC2859 /* LaunchScreen.storyboard */; };
 		0EBEC9081B436020000DD49A /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EBEC9071B436020000DD49A /* Configurations.plist */; };
 		170A1378E9AEB55FCE9C85C0 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74904CBC54923F60562BB705 /* libPods.a */; };
+		660217D3FC6316094652C506 /* Announcement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602170402AA3E62FBC304C6 /* Announcement.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,8 @@
 		0EBEC9071B436020000DD49A /* Configurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Configurations.plist; sourceTree = "<group>"; };
 		454FD38601BAF73A50999AB4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		58C7AD9B3133B3475F5B9A10 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		660216BA41C0FBACFA728FB9 /* Announcement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Announcement.h; sourceTree = "<group>"; };
+		6602170402AA3E62FBC304C6 /* Announcement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Announcement.m; sourceTree = "<group>"; };
 		74904CBC54923F60562BB705 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -175,6 +178,7 @@
 				0E3614FC1AFBFD2C0097E421 /* Main.storyboard */,
 				0E9A44331B151F8100EC2859 /* LaunchScreen.storyboard */,
 				0E3614F21AFBFD2C0097E421 /* Supporting Files */,
+				66021D502400F28B06D92497 /* Models */,
 			);
 			path = Soapbox;
 			sourceTree = "<group>";
@@ -204,6 +208,15 @@
 				0E36150D1AFBFD2C0097E421 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		66021D502400F28B06D92497 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6602170402AA3E62FBC304C6 /* Announcement.m */,
+				660216BA41C0FBACFA728FB9 /* Announcement.h */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		8415ECB4B9C62BEF24E9DB7D /* Frameworks */ = {
@@ -373,6 +386,7 @@
 				0E2573141B05003D00916A9C /* NewTopicTableViewController.m in Sources */,
 				0E2573101B05003D00916A9C /* TopicListCell.m in Sources */,
 				0E2573121B05003D00916A9C /* MessagesViewController.m in Sources */,
+				660217D3FC6316094652C506 /* Announcement.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

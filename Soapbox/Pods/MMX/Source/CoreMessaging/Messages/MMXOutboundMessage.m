@@ -17,7 +17,7 @@
 
 
 #import "MMXOutboundMessage_Private.h"
-#import "MMXMessage_Private.h"
+#import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXConstants.h"
 #import "MMXMessageUtils.h"
 #import "MMXUserID_Private.h"
@@ -36,7 +36,7 @@
     return msg;
 }
 
-+ (instancetype)initWithMessage:(MMXMessage *)message {
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message {
     MMXOutboundMessage * msg = [[MMXOutboundMessage alloc] init];
 	if (message.recipients) {
 		msg.recipients = message.recipients;

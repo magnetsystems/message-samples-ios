@@ -16,7 +16,7 @@
  */
 
 #import "MMXInboundMessage.h"
-@class MMXMessage;
+@class MMXInternalMessageAdaptor;
 
 @interface MMXInboundMessage ()
 
@@ -28,6 +28,6 @@
 @property(nonatomic, readwrite) NSArray *otherRecipients;
 @property(nonatomic, readwrite) NSDate *timestamp;
 
-+ (instancetype)initWithMessage:(MMXMessage *)message;
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message;
 
 @end

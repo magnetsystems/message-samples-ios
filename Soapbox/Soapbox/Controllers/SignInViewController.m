@@ -17,10 +17,9 @@
 
 
 #import "SignInViewController.h"
-#import "TopicListTableViewController.h"
-#import "MMX/MMX.h"
+#import <MMX/MMX.h>
 
-@interface SignInViewController () <MMXClientDelegate>
+@interface SignInViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
@@ -33,79 +32,10 @@
 
 #pragma mark - Lifecycle
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-	/*
-	 *  Creating a new MMXConfiguration using the "default" profile from the Configurations.plist file.
-	 *	The Configurations.plist file can contain multiple profiles.
-	 *	Setting the configuration property of our MMXClient.
-	 */
-	MMXConfiguration * config = [MMXConfiguration configurationWithName:@"default"];
-	[MMXClient sharedClient].configuration = config;
-	
-	/*
-	 *  Setting the value of the MMXClient shouldAutoCreateUser property to YES.
-	 *	By setting this value to yes the SDK will try and create a new user with the provided credentials if the user does not already exist.
-	 */
-	[MMXClient sharedClient].shouldAutoCreateUser = YES;
-
-	/*
-	 *  Suspending incoming messages because there is not a mechanism or need to handle them in this controller.
-	 *	Will allow incoming messages in a controller where I can handle them.
-	 */
-	[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
-
-}
-
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	/*
-	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
-	 *	I only care about client:didReceiveConnectionStatusChange:error: and client:didReceiveUserAutoRegistrationResult:error: in this class.
-	 *	All MMXClientDelegate protocol methods are optional.
-	 */
-	[MMXClient sharedClient].delegate = self;
 	[self setInputsEnabled:YES];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - MMXClientDelegate Callbacks
-
-/*
- *  Monitoring the connection status change to MMXConnectionStatusAuthenticated.
- */
-- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-	if (connectionStatus == MMXConnectionStatusAuthenticated) {
-		[self performSegueWithIdentifier:@"ShowTopicList" sender:nil];
-	} else {
-		NSString *errorMessage;
-		if (error) {
-			errorMessage = error.localizedFailureReason ?: error.localizedDescription;
-		}
-		[self showAlertWithTitle:@"Error" message:(errorMessage && ![errorMessage isEqualToString:@""]) ? errorMessage : @"An unknown error occurred. Please try logging in again"];
-		[self setInputsEnabled:YES];
-	}
-	NSLog(@"Status = %ld",(long)connectionStatus);
-}
-
-/*
- *  Monitoring for registration errors to alert the user and allow them to try again.
- */
-- (void)client:(MMXClient *)client didReceiveUserAutoRegistrationResult:(BOOL)success error:(NSError *)error {
-	if	(error) {
-		if ([error.localizedFailureReason isEqualToString:@"userId is taken"]) {
-			[self showAlertWithTitle:@"Error Logging In" message:@"There was an error when trying to log in. Make sure you are using the correct username and password. If this is your first time logging the username you are trying to use may already be taken."];
-		} else {
-			[self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
-		}
-		[self setInputsEnabled:YES];
-	}
 }
 
 #pragma mark - Actions
@@ -115,19 +45,38 @@
 	if (self.usernameTextField.text.length >= 5 && self.passwordTextField.text.length >= 5) {
 
 		/*
-		 *  Creating a new NSURLCredential and setting it as the credential propery on our MMXConfiguration.
+		 *  Creating a new NSURLCredential.
 		 */
-		[MMXClient sharedClient].configuration.credential = [NSURLCredential credentialWithUser:self.usernameTextField.text password:self.passwordTextField.text persistence:NSURLCredentialPersistenceNone];
+		NSURLCredential *credential = [NSURLCredential credentialWithUser:self.usernameTextField.text
+                                                                 password:self.passwordTextField.text
+                                                              persistence:NSURLCredentialPersistenceNone];
 		
-		/*
-		 *  Calling connectWithCredentials will try to create a new session using the NSURLCredential object we set on our MMXConfiguration.
-		 *	Since shouldAutoCreateUser is set as YES it creates a new user with the provided credentials if the user does not already exist.
-		 */
-		[[MMXClient sharedClient] connectWithCredentials];
-	} else {
+		MMXUser *user = [[MMXUser alloc] init];
+        [user registerWithCredentials:credential success:^{
+            [self logInWithCredential:credential];
+        } failure:^(NSError *error) {
+            // If the user is already registered, try logging in.
+            if (error.code == 409) {
+                [self logInWithCredential:credential];
+            }
+        }];
+    } else {
 		[self showAlertWithTitle:@"Error" message:@"Username and password must be at least 5 charaters in length."];
 		[self setInputsEnabled:YES];
 	}
+}
+
+- (void)logInWithCredential:(NSURLCredential *)credential {
+    [MMXUser logInWithCredentials:credential success:^(MMXUser *user) {
+        [self performSegueWithIdentifier:@"ShowTopicList" sender:nil];
+    } failure:^(NSError *error) {
+        NSString *errorMessage;
+        if (error) {
+            errorMessage = error.localizedFailureReason ?: error.localizedDescription;
+        }
+        [self showAlertWithTitle:@"Error" message:(errorMessage && ![errorMessage isEqualToString:@""]) ? errorMessage : @"An unknown error occurred. Please try logging in again"];
+        [self setInputsEnabled:YES];
+    }];
 }
 
 #pragma mark - Enable/Disable UI Elements

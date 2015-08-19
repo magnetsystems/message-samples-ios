@@ -15,28 +15,28 @@
  * permissions and limitations under the License.
  */
 
-#ifndef _MMX_
-    #define _MMX_
+#ifndef MMX_MMX_Private_h
+	#define MMX_MMX_Private_h
 
-    #import "MMXClient.h"
-    #import "MMXDeviceManager.h"
-    #import "MMXDeviceProfile.h"
+	#import "MMXClient.h"
+	#import "MMXDeviceManager.h"
+	#import "MMXDeviceProfile.h"
 	#import "MMXEndpoint.h"
-    #import "MMXAccountManager.h"
+	#import "MMXAccountManager.h"
 	#import "MMXUserID.h"
-    #import "MMXUserProfile.h"
-    #import "MMXMessageOptions.h"
-    #import "MMXTopic.h"
+	#import "MMXUserProfile.h"
+	#import "MMXMessageOptions.h"
+	#import "MMXTopic.h"
 	#import "MMXTopicSummary.h"
-    #import "MMXTopicSubscription.h"
-    #import "MMXPubSubManager.h"
-    #import "MMXLogger.h"
-    #import "MMXConfiguration.h"
-    #import "MMXInboundMessage.h"
-    #import "MMXOutboundMessage.h"
-    #import "MMXPubSubMessage.h"
-    #import "MMXPubSubFetchRequest.h"
-    #import "MMXErrorSeverityEnum.h"
+	#import "MMXTopicSubscription.h"
+	#import "MMXPubSubManager.h"
+	#import "MMXLogger.h"
+	#import "MMXConfiguration.h"
+	#import "MMXInboundMessage.h"
+	#import "MMXOutboundMessage.h"
+	#import "MMXPubSubMessage.h"
+	#import "MMXPubSubFetchRequest.h"
+	#import "MMXErrorSeverityEnum.h"
 	#import "MMXAddressable.h"
 	#import "MMXRemoteNotification.h"
 	#import "MMXQuery.h"
@@ -44,4 +44,4 @@
 	#import "MMXUserQueryFilter.h"
 	#import "MMXTopicQueryFilter.h"
 
-#endif /* _MMX_ */
+#endif
