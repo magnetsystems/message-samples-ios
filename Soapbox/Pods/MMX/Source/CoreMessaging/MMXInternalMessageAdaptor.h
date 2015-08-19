@@ -23,7 +23,7 @@
 @class MMXEndpoint;
 @class MMXTopic;
 
-@interface MMXMessage : NSObject <NSCoding>
+@interface MMXInternalMessageAdaptor : NSObject <NSCoding>
 
 //All Messages
 @property(nonatomic, strong, readonly) NSString *messageID;

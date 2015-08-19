@@ -16,7 +16,7 @@
  */
 
 #import "XMPPIQ.h"
-#import "MMXMessage_Private.h"
+#import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXConstants.h"
 #import "MMXTopic_Private.h"
 #import "MMXUserID_Private.h"
@@ -35,7 +35,7 @@
 #import "DDXML.h"
 #import <CoreLocation/CoreLocation.h>
 
-@implementation MMXMessage
+@implementation MMXInternalMessageAdaptor
 
 static  NSString *const MESSAGE_ATTRIBUE_CONTENT_TYPE = @"ctype";
 static  NSString *const MESSAGE_ATTRIBUE_MESSAGE_TYPE = @"mtype";
@@ -67,7 +67,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 
         //payload
         NSArray* payLoadElements = [mmxElement elementsForName:MXpayloadElement];
-        _messageContent = [MMXMessage extractPayload:payLoadElements];
+        _messageContent = [MMXInternalMessageAdaptor extractPayload:payLoadElements];
 		if (payLoadElements && payLoadElements.count) {
 			NSString * stamp = [[payLoadElements[0] attributeForName:@"stamp"] stringValue];
 			if (stamp && ![stamp isEqualToString:@""]) {
@@ -79,10 +79,10 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 
         //meta
         NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
-        _metaData = [MMXMessage extractMetaData:metaElements];
+        _metaData = [MMXInternalMessageAdaptor extractMetaData:metaElements];
 		
 		NSArray* mmxMetaElements = [mmxElement elementsForName:MXmmxMetaElement];
-		_recipients = [MMXMessage extractRecipients:mmxMetaElements];
+        _recipients = [MMXInternalMessageAdaptor extractRecipients:mmxMetaElements];
 		
         NSArray* elements = [xmppMessage elementsForXmlns:MXnsDeliveryReceipt];
         BOOL deliveryFlag = NO;
@@ -119,7 +119,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 			NSXMLNode* mtype = [payLoadElement attributeForName:MESSAGE_ATTRIBUE_MESSAGE_TYPE];
 			_mType = mtype ? [mtype stringValue] : nil;
 		}
-		_messageContent = [MMXMessage extractPayload:payLoadElements];
+		_messageContent = [MMXInternalMessageAdaptor extractPayload:payLoadElements];
 		NSXMLNode* mtype = [[mmxElement elementForName:MXpayloadElement] attributeForName:MESSAGE_ATTRIBUE_MESSAGE_TYPE];
 		NSXMLNode* timestamp = [[mmxElement elementForName:MXpayloadElement] attributeForName:@"stamp"];
 		_mType = mtype ? [mtype stringValue] : nil;
@@ -129,7 +129,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 		
 		//meta
 		NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
-		_metaData = [MMXMessage extractMetaData:metaElements];
+		_metaData = [MMXInternalMessageAdaptor extractMetaData:metaElements];
 		
 		_deliveryReceiptRequested = NO;
 	}
@@ -158,7 +158,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
               withContent:(NSString *)content
               messageType:(NSString *)messageType
                  metaData:(NSDictionary *)metaData {
-    return [[MMXMessage alloc] initWith:recipients withContent:content messageType:messageType metaData:metaData];
+    return [[MMXInternalMessageAdaptor alloc] initWith:recipients withContent:content messageType:messageType metaData:metaData];
 }
 
 + (NSArray *)pubsubMessagesFromFetchResponseIQ:(XMPPIQ *)iq topic:(MMXTopic *)topic error:(NSError **)error {
@@ -180,19 +180,19 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
         NSXMLElement *messageElement = [[NSXMLElement alloc] initWithXMLString:payloadString error:&xmlError];
         //payload
         NSArray* payLoadElements = [messageElement elementsForName:MXpayloadElement];
-        NSString * content = [MMXMessage extractPayload:payLoadElements];
+        NSString * content = [MMXInternalMessageAdaptor extractPayload:payLoadElements];
         
         NSXMLNode* mtype = [payLoadElements[0] attributeForName:MESSAGE_ATTRIBUE_MESSAGE_TYPE];
         NSString * mTypeExtracted = mtype ? [mtype stringValue] : nil;
         
         //meta
         NSArray* metaElements = [messageElement elementsForName:MXmetaElement];
-        NSDictionary * metaData = [MMXMessage extractMetaData:metaElements];
+        NSDictionary * metaData = [MMXInternalMessageAdaptor extractMetaData:metaElements];
         NSString * stamp = [[payLoadElements[0] attributeForName:@"stamp"] stringValue];
 		NSDate * timestamp = [MMXUtils dateFromiso8601Format:stamp];
         NSString * messageID = dict[@"itemId"];
         if (!xmlError) {
-            MMXMessage * message =  [[MMXMessage alloc] initWith:nil withContent:content messageType:mTypeExtracted metaData:metaData ? metaData : @{}];
+            MMXInternalMessageAdaptor * message =  [[MMXInternalMessageAdaptor alloc] initWith:nil withContent:content messageType:mTypeExtracted metaData:metaData ? metaData : @{}];
             message.timestamp = timestamp;
             message.messageID = messageID;
             message.topic = topic;
@@ -272,12 +272,12 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 - (NSXMLElement *)contentToXML {
     NSXMLElement *payloadElement = [[NSXMLElement alloc] initWithName:MXpayloadElement];
     
-    NSXMLNode* mtypeAttribute = [MMXMessage buildAttributeNodeWith:MESSAGE_ATTRIBUE_MESSAGE_TYPE attributeValue:self.mType];
+    NSXMLNode* mtypeAttribute = [MMXInternalMessageAdaptor buildAttributeNodeWith:MESSAGE_ATTRIBUE_MESSAGE_TYPE attributeValue:self.mType];
     
     
     NSString* offsetValue = offsetValue = [NSString stringWithFormat:@"%d/%d/%d", 0, (int)self.messageContent.length, (int)self.messageContent.length];
-    NSXMLNode* chunkAttribute = [MMXMessage buildAttributeNodeWith:MESSAGE_ATTRIBUE_CHUNK attributeValue:offsetValue];
-    NSXMLNode* stampAttribute = [MMXMessage buildAttributeNodeWith:MESSAGE_ATTRIBUE_STAMP
+    NSXMLNode* chunkAttribute = [MMXInternalMessageAdaptor buildAttributeNodeWith:MESSAGE_ATTRIBUE_CHUNK attributeValue:offsetValue];
+    NSXMLNode* stampAttribute = [MMXInternalMessageAdaptor buildAttributeNodeWith:MESSAGE_ATTRIBUE_STAMP
                                                     attributeValue:[MMXUtils iso8601FormatTimeStamp]];
     
     [payloadElement addAttribute:mtypeAttribute];

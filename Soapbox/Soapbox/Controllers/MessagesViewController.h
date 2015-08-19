@@ -17,10 +17,10 @@
 
 
 #import "SLKTextViewController.h"
-@class MMXTopic;
+@class MMXChannel;
 
 @interface MessagesViewController : SLKTextViewController
 
-- (void)setTopic:(MMXTopic *)topic isSubscribed:(BOOL)isSubscribed;
+@property (nonatomic, strong) MMXChannel *channel;
 
 @end

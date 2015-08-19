@@ -17,13 +17,13 @@
 
 
 #import "MMXInboundMessage_Private.h"
-#import "MMXMessage_Private.h"
+#import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXUserID_Private.h"
 #import "MMXEndpoint_Private.h"
 
 @implementation MMXInboundMessage
 
-+ (instancetype)initWithMessage:(MMXMessage *)message {
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message {
 	MMXInboundMessage * msg = [[MMXInboundMessage alloc] init];
 	msg.messageID		= message.messageID;
 	msg.timestamp		= message.timestamp;

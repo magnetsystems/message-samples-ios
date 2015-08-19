@@ -15,9 +15,28 @@
  * permissions and limitations under the License.
  */
 
+#import <Foundation/Foundation.h>
+#import "MagnetDelegate.h"
+#import "MMXMessage.h"
+#import "MMXChannel.h"
+#import "MMXUser.h"
+#import "MagnetConstants.h"
+#import "MMXMessageTypes.h"
+#import "MMXLogger.h"
+#import "MMXRemoteNotification.h"
 
-#import <UIKit/UIKit.h>
+@interface MMX : NSObject
 
-@interface TopicListTableViewController : UITableViewController
+/**
+ *  Initialize MMX with a configuration
+ *
+ *  @param name The name of the configuration in your Configurations.plist file that you want to connect to.
+ */
++ (void)setupWithConfiguration:(NSString *)name;
+
+/**
+ *  Call when no longer need to use the MMX features or when the app goes to the background
+ */
++ (void)teardown;
 
 @end

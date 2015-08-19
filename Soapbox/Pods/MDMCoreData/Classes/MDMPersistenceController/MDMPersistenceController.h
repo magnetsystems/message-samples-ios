@@ -32,7 +32,7 @@ extern NSString *const MDMPersistenceControllerDidInitialize;
 /**
  Posted whenever any independent managed object context (created thru this class) completes a save operation.
  */
-extern NSString *const MDMIndpendentManagedObjectContextDidSaveNotification;
+extern NSString *const MDMIndependentManagedObjectContextDidSaveNotification;
 
 /**
  `MDMPersistenceController` is a lightweight class that sets up an efficient Core Data stack with support for
@@ -47,24 +47,42 @@ extern NSString *const MDMIndpendentManagedObjectContextDidSaveNotification;
 @property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
 
 /**
- Returns a persistence controller initialized with the given arguments.
+ Returns a SQLite backed persistence controller initialized with the given arguments.
  
  @param storeURL The URL of the SQLite store to load.
  @param model A managed object model.
 
  @return A new persistence controller object with a store at the specified location with model.
  */
-- (id)initWithStoreURL:(NSURL *)storeURL model:(NSManagedObjectModel *)model;
+- (instancetype)initWithStoreURL:(NSURL *)storeURL model:(NSManagedObjectModel *)model;
 
 /**
- Returns a persistence controller initialized with the given arguments.
+ Returns a SQLite backed persistence controller initialized with the given arguments.
  
  @param storeURL The URL of the SQLite store to load.
  @param modelURL The URL of the managed object model.
 
  @return A new persistence controller object with a store at the specified location and a model at the specified location.
  */
-- (id)initWithStoreURL:(NSURL *)storeURL modelURL:(NSURL *)modelURL;
+- (instancetype)initWithStoreURL:(NSURL *)storeURL modelURL:(NSURL *)modelURL;
+
+/**
+ Returns an inMemory backed persistence controller initialized with the given arguments.
+ 
+ @param model A managed object model.
+ 
+ @return A new persistence controller object with an inMemoryStore type with model.
+ */
+- (instancetype)initInMemoryTypeWithModel:(NSManagedObjectModel *)model;
+
+/**
+ Returns an inMemory backed persistence controller initialized with the given arguments.
+ 
+ @param modelURL The URL of the managed object model.
+ 
+ @return A new persistence controller object with an inMemoryStore type with a model at the specified location.
+ */
+- (instancetype)initInMemoryTypeWithModelURL:(NSURL *)modelURL;
 
 /**
  Returns a new private child managed object context with a concurrency type of `NSPrivateQueueConcurrencyType`.
@@ -88,9 +106,9 @@ extern NSString *const MDMIndpendentManagedObjectContextDidSaveNotification;
  feature of SQLite (default SQLite mode from iOS7 onwards).
  
  @return A private independent managed object context with a concurrency type of `NSPrivateQueueConcurrencyType`
- or nil if an error occured.
+ or nil if an error occurred.
  */
-- (NSManagedObjectContext *)createPrivateManagedObjectContextWithNewPersistentStoreCoordinator;
+- (NSManagedObjectContext *)newIndependentManagedObjectContext;
 
 /**
  Attempts to commit unsaved changes to registered objects to disk.

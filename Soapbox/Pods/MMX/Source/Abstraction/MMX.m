@@ -15,15 +15,21 @@
  * permissions and limitations under the License.
  */
 
+#import "MMX.h"
+#import "MagnetDelegate.h"
+#import "MMX_Private.h"
 
-#import <UIKit/UIKit.h>
-@class MMXTopicSummary;
+@implementation MMX
 
-@interface TopicListCell : UITableViewCell
++ (void)setupWithConfiguration:(NSString *)name {
+	[[MagnetDelegate sharedDelegate] startMMXClientWithConfiguration:name];
+}
 
-@property (nonatomic, strong) MMXTopicSummary *topicSummary;
-@property (nonatomic, assign) BOOL isSubscribed;
-
-- (void)setTopicSummary:(MMXTopicSummary *)topicSummary isSubscribed:(BOOL)isSubscribed;
++ (void)teardown {
+	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated ||
+		[MMXClient sharedClient].connectionStatus == MMXConnectionStatusConnected) {
+		[[MMXClient sharedClient] disconnect];
+	}
+}
 
 @end
