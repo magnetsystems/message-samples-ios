@@ -22,6 +22,9 @@
 #import "MMXMessageUtils.h"
 #import "MMXUserID_Private.h"
 #import "DDXML.h"
+#import "MMXClient_Private.h"
+#import "MMXInternalAddress.h"
+#import "MMXUserProfile.h"
 
 @implementation MMXOutboundMessage
 
@@ -40,9 +43,8 @@
     MMXOutboundMessage * msg = [[MMXOutboundMessage alloc] init];
 	if (message.recipients) {
 		msg.recipients = message.recipients;
-	} else if (message.receiverUsername) {
-		MMXUserID *user = [MMXUserID userIDWithUsername:message.receiverUsername];
-		msg.recipients = @[user];
+	} else if (message.senderUserID && ![message.senderUserID.username isEqualToString:@""]) {
+		msg.recipients = @[message.senderUserID];
 	} else {
 		msg.recipients = nil;
 	}
@@ -50,34 +52,6 @@
 	msg.metaData = message.metaData;
 	msg.messageID = (message.messageID && [message.messageID isEqualToString:@""]) ? message.messageID : nil;
     return msg;
-}
-
-- (NSXMLElement *)recipientsAsXML {
-	if (self.recipients == nil || self.recipients.count < 1) {
-		return nil;
-	}
-	NSXMLElement *metaDataElement = [[NSXMLElement alloc] initWithName:@"mmxmeta"];
-	
-	NSMutableArray *recipientArray = @[].mutableCopy;
-	for (id<MMXAddressable> recipient in self.recipients) {
-		if ([recipient address] && ![[recipient address] isEqualToString:@""]) {
-			[recipientArray addObject:@{@"userId":[recipient address],
-										@"devId":[recipient subAddress] ?: [NSNull null]}];
-		}
-	}
-	NSError *error;
-	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"To":recipientArray}
-													   options:NSJSONWritingPrettyPrinted
-														 error:&error];
-	NSString *json = [[NSString alloc] initWithData:jsonData
-										   encoding:NSUTF8StringEncoding];
-	
-	[metaDataElement setStringValue:json];
-	
-	if (error == nil) {
-		return metaDataElement;
-	}
-	return nil;
 }
 
 - (NSXMLElement *)contentAsXMLForType:(NSString *)type {

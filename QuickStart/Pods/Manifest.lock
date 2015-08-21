@@ -70,7 +70,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   MMX:
-    :commit: 5dd4a7f3c9a36d237f557f91e900202a5100bb2d
+    :commit: 48836054dbce00a01db1e01d354cfca261369428
     :git: https://github.com/magnetsystems/message-ios.git
 
 SPEC CHECKSUMS:

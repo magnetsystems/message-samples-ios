@@ -17,10 +17,17 @@
 
 
 #import <Foundation/Foundation.h>
+#import "Mantle.h"
 @class MMXUser;
 @class MMXMessage;
+@class MMXInvite;
 
-@interface MMXChannel : NSObject
+@interface MMXChannel : MTLModel
+
+/**
+ *  Is the topic public?
+ */
+@property (nonatomic, assign) BOOL isPublic;
 
 /**
  *  The unique name of the channel.
@@ -35,7 +42,7 @@
 /**
  *  The owner/creator of the channel.
  */
-@property (nonatomic, readonly) MMXUser *owner;
+@property (nonatomic, readonly) NSString *ownerUsername;
 
 /**
  *  The total number of messages that have been posted to the channel.
@@ -46,11 +53,6 @@
  *  The timestamp of the most recent message published to the channel.
  */
 @property (nonatomic, readonly) NSDate *lastTimeActive;
-
-/**
- *  Tags currently set on the channel.
- */
-@property (nonatomic, copy, readonly) NSSet *tags;
 
 /**
  *  BOOL letting you know if the current user is subscribed to the channel.
@@ -72,24 +74,35 @@
 /**
  *  Method used to discover existing channels by name
  *
- *  @param name    The exact name of the tpic you are searching for.
- *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
+ *  @param name     The exact name of the channel you are searching for.
+ *  @param limit	The max number of items you want returned.
+ *  @param success  Block with the number of channels that match the query and a NSSet of MMXChannels that match the criteria.
  *  @param failure  Block with an NSError with details about the call failure.
  */
-+ (void)findByName:(NSString *)name
-		   success:(void (^)(int totalCount, NSArray *channels))success
-		   failure:(void (^)(NSError *error))failure;
++ (void)channelsStartingWith:(NSString *)name
+					   limit:(int)limit
+					 success:(void (^)(int totalCount, NSArray *channels))success
+					 failure:(void (^)(NSError *error))failure;
 
 /**
- *  Method used to discover existing channels by tags
+ *  Method used to discover existing channels that have any of the tags provided
  *
  *  @param tags		A set of unique tags
  *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
- *  @param failure  Block with an NSError with details about the call failure.
+ *  @param failure  Block with a NSError with details about the call failure.
  */
 + (void)findByTags:(NSSet *)tags
 		   success:(void (^)(int totalCount, NSArray *channels))success
 		   failure:(void (^)(NSError *error))failure;
+
+/**
+ *  Get tags for this channel
+ *
+ *  @param success - Block with a NSSet of tags(NSStrings)
+ *  @param failure - Block with a NSError with details about the call failure.
+ */
+- (void)tagsWithSuccess:(void (^)(NSSet * tags))success
+				failure:(void (^)(NSError * error))failure;
 
 /**
  *  Set tags for a specific channel. This will overwrite ALL existing tags for the chanel.
@@ -97,7 +110,7 @@
  *
  *  @param tags    - NSSet of tags(NSStrings).
  *  @param success - Block called if operation is successful.
- *  @param failure - Block with an NSError with details about the call failure.
+ *  @param failure - Block with a NSError with details about the call failure.
  */
 - (void)setTags:(NSSet *)tags
 		success:(void (^)(void))success
@@ -140,30 +153,67 @@
 - (void)unSubscribeWithSuccess:(void (^)(void))success
 					   failure:(void (^)(NSError * error))failure;
 
+
+/**
+ *  Get all channels the current user is subscribed to
+ *
+ *  @param success Block with a NSArray of channels
+ *  @param failure - Block with an NSError with details about the call failure.
+ */
++ (void)subscribedChannelsWithSuccess:(void (^)(NSArray *channels))success
+							  failure:(void (^)(NSError *error))failure;
+
+/**
+ *  Get the subscribers for a channel
+ *	Must be subscribed to the channel to use this API
+ *
+ *  @param success Block with the total count of subscribers and a NSSet of the subscribers(MMXUser objects)
+ *  @param failure Block with an NSError with details about the call failure.
+ */
+- (void)subscribersWithSuccess:(void (^)(int, NSSet *))success
+					   failure:(void (^)(NSError *error))failure;
+
 /**
  *  Method to publish to a channel.
  *
- *  @param message MMXMessage with the content you want to publish
- *  @param success Block with the published message
- *  @param failure Block with an NSError with details about the call failure.
+ *  @param messageContent The content you want to publish
+ *  @param success		  Block with the published message
+ *  @param failure		  Block with an NSError with details about the call failure.
  */
-- (void)publish:(MMXMessage *)message
+- (void)publish:(NSDictionary *)messageContent
 		success:(void (^)(MMXMessage *message))success
 		failure:(void (^)(NSError *error))failure;
 
 /**
  *  Fetch previous items posted to this channel.
  *
- *  @param from          The earliest date you would like messages from.
- *  @param to            The latest date you would like messages until. Defaults to now.
- *  @param maxToReturned The max number of items you want returned.
- *  @param success		 Block with a NSArray of MMXMessages
+ *  @param startDate     The earliest date you would like messages from.
+ *  @param endDate       The latest date you would like messages until. Defaults to now.
+ *  @param limit		 The max number of items you want returned.
+ *  @param ascending	 The sort order(by date) for the messages returned.
+ *  @param success		 NSArray of MMXMessages
  *  @param failure		 Block with an NSError with details about the call failure.
  */
-- (void)fetchMessagesFrom:(NSDate *)from
-					   to:(NSDate *)to
-			maxToReturned:(int)maxToReturned
-				  success:(void (^)(NSArray *messages))success
-				  failure:(void (^)(NSError *error))failure;
+- (void)fetchMessagesBetweenStartDate:(NSDate *)startDate
+							  endDate:(NSDate *)endDate
+								limit:(int)limit
+							ascending:(BOOL)ascending
+							  success:(void (^)(NSArray *messages))success
+							  failure:(void (^)(NSError *error))failure;
+
+/**
+ *  Invite a user to the channel
+ *
+ *  @param user			The MMXUser object for the user you want to invite
+ *  @param textMessage	An optional message telling the user why you want them to join the channel
+ *  @param success		Block with the MMXInvite object that was sent.
+ *  @param failure		Block with an NSError with details about the call failure.
+ *
+ *  @return The messageID for the invite sent
+ */
+- (NSString *)inviteUser:(MMXUser *)user
+			 textMessage:(NSString *)textMessage
+				 success:(void (^)(MMXInvite *invite))success
+				 failure:(void (^)(NSError *error))failure;
 
 @end

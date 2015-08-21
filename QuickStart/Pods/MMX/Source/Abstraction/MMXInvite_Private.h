@@ -15,14 +15,20 @@
  * permissions and limitations under the License.
  */
 
-#ifndef _MagnetAbstraction_
-	#define _MagnetAbstraction_
+#import "MMXInvite.h"
+@class MMXInternalMessageAdaptor;
 
-	#import "MagnetMessage.h"
-	#import "MagnetDelegate.h"
-	#import "MMXMessage.h"
-	#import "MMXChannel.h"
-	#import "MMXUser.h"
-	#import "MagnetConstants.h"
-	#import "MMXMessageTypes.h"
-#endif /* _MagnetAbstraction_ */
+@interface MMXInvite ()
+
+@property (nonatomic, readwrite) NSDate *timestamp;
+
+@property (nonatomic, readwrite) NSString *textMessage;
+
+@property (nonatomic, readwrite) MMXUser *sender;
+
+@property (nonatomic, readwrite) MMXChannel *channel;
+
++ (instancetype)inviteFromMMXInternalMessage:(MMXInternalMessageAdaptor *)message;
++ (MMXChannel *)channelFromMessageMetaData:(NSDictionary *)metaData;
+
+@end

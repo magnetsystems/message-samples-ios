@@ -15,11 +15,21 @@
  * permissions and limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "MMX.h"
+#import "MagnetDelegate.h"
+#import "MMX_Private.h"
 
-@interface MagnetMessage : NSObject
+@implementation MMX
 
-+ (void)startSession;
-+ (void)endSession;
++ (void)setupWithConfiguration:(NSString *)name {
+	[[MagnetDelegate sharedDelegate] startMMXClientWithConfiguration:name];
+}
+
++ (void)teardown {
+	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated ||
+		[MMXClient sharedClient].connectionStatus == MMXConnectionStatusConnected) {
+		[[MMXClient sharedClient] disconnect];
+	}
+}
 
 @end

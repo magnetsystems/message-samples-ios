@@ -38,8 +38,11 @@
 + (NSArray *)removeUser:(MMXUserID *)userID fromRecipients:(NSArray *)recipients {
 	NSMutableArray *otherRecipients = @[].mutableCopy;
 	for (id<MMXAddressable> recipient in recipients) {
-		if (![[recipient address] isEqualToString:[userID address]]) {
-			[otherRecipients addObject:recipient];
+		MMXInternalAddress *address = recipient.address;
+		if (address) {
+			if (![address.username isEqualToString:userID.username]) {
+				[otherRecipients addObject:recipient];
+			}
 		}
 	}
 	return otherRecipients.copy;

@@ -18,6 +18,8 @@
 #import <Foundation/Foundation.h>
 @class MMXMessage;
 @class MMXUser;
+@class MMXChannel;
+@class MMXInternalMessageAdaptor;
 
 @interface MagnetDelegate : NSObject
 
@@ -25,7 +27,7 @@
 
 + (instancetype)sharedDelegate;
 
-- (void)startMMXClient;
+- (void)startMMXClientWithConfiguration:(NSString *)name;
 
 /**
  *  Method to register a new user with Magnet Message
@@ -79,5 +81,11 @@
 - (NSString *)sendMessage:(MMXMessage *)message
 				  success:(void (^)(void))success
 				  failure:(void (^)(NSError *error))failure;
+
+- (NSString *)sendInternalMessageFormat:(MMXInternalMessageAdaptor *)message
+								success:(void (^)(void))success
+								failure:(void (^)(NSError *error))failure;
+
++ (NSError *)notNotLoggedInError;
 
 @end

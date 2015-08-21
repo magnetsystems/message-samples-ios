@@ -29,6 +29,7 @@
 #import "MMXDeviceManager_Private.h"
 #import "MMXEndpoint_Private.h"
 #import "MMXDeviceProfile_Private.h"
+#import "MMXUser.h"
 
 #import "XMPP.h"
 #import "XMPPIQ+MMX.h"
@@ -359,6 +360,84 @@
 			failure(error);
 		});
 	}];
+}
+
+#pragma mark - Get User
+//FIXME: This should be refactored and handle edge cases better
+- (void)userForUserName:(NSString *)username
+				success:(void (^)(MMXUser *))success
+				failure:(void (^)(NSError *))failure {
+	[[MMXLogger sharedLogger] verbose:@"MMXAccountManager userForUserName. MMXQuery = %@", username];
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
+	NSError *error;
+	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:@{@"userId": username} xmlns:MXnsUser commandStringValue:@"get" error:&error];
+	
+	XMPPIQ *userIQ = [[XMPPIQ alloc] initWithType:@"get" child:mmxElement];
+	[userIQ addAttributeWithName:@"id" stringValue:[[NSUUID UUID] UUIDString]];
+	[self.delegate sendIQ:userIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
+		XMPPIQ * iq = (XMPPIQ *)obj;
+		if ([iq isErrorIQ]) {
+			if (failure) {
+				dispatch_async(self.callbackQueue, ^{
+					failure([iq errorWithTitle:@"Get User Failure."]);
+				});
+			}
+		} else {
+			NSString* iqId = [iq elementID];
+			[self.delegate stopTrackingIQWithID:iqId];
+			NSXMLElement* mmxElement =  [iq elementForName:MXmmxElement];
+			MMXUser *user = [MMXUser new];
+			if (mmxElement) {
+				NSString* jsonContent =  [[mmxElement childAtIndex:0] XMLString];
+				NSError* error;
+				NSData* jsonData = [jsonContent dataUsingEncoding:NSUTF8StringEncoding];
+				NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+				if (jsonDictionary) {
+						if (error) {
+							if (failure) {
+								dispatch_async(self.callbackQueue, ^{
+									failure(error);
+								});
+							}
+						} else {
+							if (jsonDictionary[@"userId"]) {
+								user.username = jsonDictionary[@"userId"];
+							}
+							if (jsonDictionary[@"displayName"]) {
+								user.displayName = jsonDictionary[@"displayName"];
+							}
+						}
+					if (user.username) {
+						dispatch_async(self.callbackQueue, ^{
+							success(user);
+						});
+					} else {
+						if (failure) {
+							NSError * parsingError = [MMXClient errorWithTitle:@"Unknown Error Occurred." message:@"Please try again later." code:500];
+							dispatch_async(self.callbackQueue, ^{
+								failure(parsingError);
+							});
+						}
+					}
+				}
+			} else {
+				if (failure) {
+					NSError * parsingError = [MMXClient errorWithTitle:@"Unknown Error Occurred." message:@"Please try again later." code:500];
+					dispatch_async(self.callbackQueue, ^{
+						failure(parsingError);
+					});
+				}
+			}
+		}
+	}];
+
 }
 
 #pragma mark - Update User

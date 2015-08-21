@@ -17,16 +17,19 @@
 
 #import "MMXUser.h"
 #import "MagnetDelegate.h"
-#import "MMX.h"
+#import "MMX_Private.h"
+#import "MMXAccountManager_Private.h"
+#import "NSString+XEP_0106.h"
 
 @implementation MMXUser
 
 + (MMXUser *)currentUser {
 	return [MagnetDelegate sharedDelegate].currentUser;
 }
-- (void)registerWithCredentials:(NSURLCredential *)credential
-						success:(void (^)(void))success
-						failure:(void (^)(NSError *))failure {
+
+- (void)registerWithCredential:(NSURLCredential *)credential
+					   success:(void (^)(void))success
+					   failure:(void (^)(NSError *))failure {
 	[[MMXClient sharedClient].accountManager createAccountForUsername:credential.user
 														  displayName:self.displayName
 																email:self.email password:credential.password
@@ -41,9 +44,9 @@
 	}];
 }
 
-+ (void)logInWithCredentials:(NSURLCredential *)credential
-					 success:(void (^)(MMXUser *))success
-					 failure:(void (^)(NSError *))failure {
++ (void)logInWithCredential:(NSURLCredential *)credential
+					success:(void (^)(MMXUser *))success
+					failure:(void (^)(NSError *))failure {
 	[[MagnetDelegate sharedDelegate] logInWithCredential:credential
 												 success:^(MMXUser *user) {
 		if (success) {
@@ -75,10 +78,15 @@
 	}
 }
 
-- (void)changePasswordWithCredentials:(NSURLCredential *)credential
-							  success:(void (^)(void))success
-							  failure:(void (^)(NSError *))failure {
-	//FIXME: This is not correct. Must be logged in, etc. Think through the cases.
+- (void)changePasswordWithCredential:(NSURLCredential *)credential
+							 success:(void (^)(void))success
+							 failure:(void (^)(NSError *))failure {
+	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+		if (failure) {
+			failure([MagnetDelegate notNotLoggedInError]);
+		}
+		return;
+	}
 	[[MMXClient sharedClient].accountManager updatePassword:credential.password success:^(BOOL successful) {
 		if (success) {
 			success();
@@ -90,11 +98,17 @@
 	}];
 }
 
-+ (void)findByName:(NSString *)name
-			 limit:(int)limit
-		   success:(void (^)(int, NSArray *))success
-		   failure:(void (^)(NSError *))failure {
-	MMXQuery *query = [MMXQuery queryForUserDisplayNameStartsWith:name
++ (void)findByDisplayName:(NSString *)displayName
+					limit:(int)limit
+				  success:(void (^)(int, NSSet *))success
+				  failure:(void (^)(NSError *))failure {
+	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+		if (failure) {
+			failure([MagnetDelegate notNotLoggedInError]);
+		}
+		return;
+	}
+	MMXQuery *query = [MMXQuery queryForUserDisplayNameStartsWith:displayName
 															 tags:nil
 															limit:limit];
 	[[MMXClient sharedClient].accountManager queryUsers:query
@@ -104,7 +118,27 @@
 			[userArray addObject:[MMXUser userFromMMXUserProfile:profile]];
 		}
 		if (success) {
-			success(totalCount, userArray.copy);
+			success(totalCount, [NSSet setWithArray:userArray]);
+		}
+	} failure:^(NSError *error) {
+		if (failure) {
+			failure(error);
+		}
+	}];
+}
+
++ (void)userForUsername:(NSString *)username
+				success:(void (^)(MMXUser *))success
+				failure:(void (^)(NSError *))failure {
+	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+		if (failure) {
+			failure([MagnetDelegate notNotLoggedInError]);
+		}
+		return;
+	}
+	[[MMXClient sharedClient].accountManager userForUserName:username success:^(MMXUser *user) {
+		if (success) {
+			success(user);
 		}
 	} failure:^(NSError *error) {
 		if (failure) {
@@ -117,6 +151,12 @@
 			 limit:(int)limit
 		   success:(void (^)(int, NSArray *))success
 		   failure:(void (^)(NSError *))failure {
+	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+		if (failure) {
+			failure([MagnetDelegate notNotLoggedInError]);
+		}
+		return;
+	}
 	MMXQuery *query = [MMXQuery queryForUserDisplayNameStartsWith:@"" tags:[tags allObjects] limit:limit];
 	[[MMXClient sharedClient].accountManager queryUsers:query success:^(int totalCount, NSArray *users) {
 		NSMutableArray *userArray = [[NSMutableArray alloc] initWithCapacity:users.count];
@@ -148,6 +188,15 @@
 		 [[MMXUser currentUser].username isEqualToString:self.username])) {
 		[[MMXClient sharedClient] updateRemoteNotificationDeviceToken:token];
 	}	
+}
+
+#pragma mark - MMXAddressable
+
+- (MMXInternalAddress *)address {
+	MMXInternalAddress *address = [MMXInternalAddress new];
+	address.username = [self.username jidEscapedString];
+	address.displayName = self.displayName;
+	return address;
 }
 
 @end

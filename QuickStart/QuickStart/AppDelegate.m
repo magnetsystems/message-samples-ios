@@ -16,8 +16,7 @@
  */
 
 #import "AppDelegate.h"
-#import <MagnetMessage.h>
-#import <MMX/MMXRemoteNotification.h>
+#import <MMX.h>
 
 @interface AppDelegate ()
 
@@ -31,7 +30,7 @@
 	NSString *pathAndFileName = [[NSBundle mainBundle] pathForResource:@"Configurations" ofType:@"plist"];
 	NSAssert([[NSFileManager defaultManager] fileExistsAtPath:pathAndFileName], @"You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface");
 	
-	[MagnetMessage startSession];
+	[MMX setupWithConfiguration:@"default"];
 
 	//You need to change the bundle Identifier to match the one your push certificate is set up to work with.
 	//Code to register for notifications
@@ -74,7 +73,7 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-	[MagnetMessage endSession];
+	[MMX teardown];
 	// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
 	// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
@@ -86,7 +85,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-	[MagnetMessage startSession];
+	[MMX setupWithConfiguration:@"default"];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

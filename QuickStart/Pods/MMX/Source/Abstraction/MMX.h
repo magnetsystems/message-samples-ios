@@ -15,21 +15,29 @@
  * permissions and limitations under the License.
  */
 
-#import "MagnetMessage.h"
+#import <Foundation/Foundation.h>
 #import "MagnetDelegate.h"
-#import "MMX.h"
+#import "MMXMessage.h"
+#import "MMXChannel.h"
+#import "MMXInvite.h"
+#import "MMXUser.h"
+#import "MagnetConstants.h"
+#import "MMXMessageTypes.h"
+#import "MMXLogger.h"
+#import "MMXRemoteNotification.h"
 
-@implementation MagnetMessage
+@interface MMX : NSObject
 
-+ (void)startSession {
-	[[MagnetDelegate sharedDelegate] startMMXClient];
-}
+/**
+ *  Initialize MMX with a configuration
+ *
+ *  @param name The name of the configuration in your Configurations.plist file that you want to connect to.
+ */
++ (void)setupWithConfiguration:(NSString *)name;
 
-+ (void)endSession {
-	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated ||
-		[MMXClient sharedClient].connectionStatus == MMXConnectionStatusConnected) {
-		[[MMXClient sharedClient] disconnect];
-	}
-}
+/**
+ *  Call when no longer need to use the MMX features or when the app goes to the background
+ */
++ (void)teardown;
 
 @end

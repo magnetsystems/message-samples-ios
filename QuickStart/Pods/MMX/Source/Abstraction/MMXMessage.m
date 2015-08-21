@@ -19,9 +19,11 @@
 #import "MagnetDelegate.h"
 #import "MMXUser.h"
 #import "MMXChannel.h"
-#import "MMX.h"
+#import "MMX_Private.h"
 #import "MMXMessageUtils.h"
 #import "MMXClient_Private.h"
+#import "MMXChannel_Private.h"
+#import "MMXPubSubMessage_Private.h"
 
 @implementation MMXMessage
 
@@ -41,28 +43,51 @@
 	return msg;
 }
 
++ (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage {
+	MMXMessage *msg = [MMXMessage new];
+	msg.channel = [MMXChannel channelWithName:pubSubMessage.topic.topicName summary:pubSubMessage.topic.topicDescription];
+	msg.messageContent = pubSubMessage.metaData;
+	return msg;
+}
+
 - (NSString *)sendWithSuccess:(void (^)(void))success
 					  failure:(void (^)(NSError *))failure {
 	//FIXME: Handle case that user is not logged in
 	//FIXME: Make sure that the content is JSON serializable
 	if (![MMXMessageUtils isValidMetaData:self.messageContent]) {
-		NSError * error = [MMXClient errorWithTitle:@"Message Content Not Valid" message:@"Message Content dictionary must be JSON serializable." code:401];
+		NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
 		if (failure) {
 			failure(error);
 		}
 		return nil;
 	}
-	NSString * messageID = [[MagnetDelegate sharedDelegate] sendMessage:self.copy success:^(void) {
-		if (success) {
-			success();
-		}
-	} failure:^(NSError *error) {
-		if (failure) {
-			failure(error);
-		}
-	}];
-	
-	return messageID;
+	if (self.channel) {
+		NSString *messageID = [[MMXClient sharedClient] generateMessageID];
+		self.messageID = messageID;
+		MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self.channel asTopic] content:nil metaData:self.messageContent];
+		msg.messageID = messageID;
+		[[MMXClient sharedClient].pubsubManager publishPubSubMessage:msg success:^(BOOL successful, NSString *messageID) {
+			if (success) {
+				success();
+			}
+		} failure:^(NSError *error) {
+			if (failure) {
+				failure(error);
+			}
+		}];
+		return messageID;
+	} else {
+		NSString * messageID = [[MagnetDelegate sharedDelegate] sendMessage:self.copy success:^(void) {
+			if (success) {
+				success();
+			}
+		} failure:^(NSError *error) {
+			if (failure) {
+				failure(error);
+			}
+		}];
+		return messageID;
+	}
 }
 
 - (NSString *)replyWithContent:(NSDictionary *)content
@@ -101,25 +126,16 @@
 	return messageID;
 }
 
-#pragma mark - Conversion Helpers
-- (NSArray *)recipientsForOutboundMessage {
-	return [self converArrayOfUsersToUserIDs:[self.recipients allObjects]];
-}
-
-- (NSArray *)converArrayOfUsersToUserIDs:(NSArray *)users {
-	NSMutableArray *recipientArray = [[NSMutableArray alloc] initWithCapacity:users.count];
-	for (MMXUser *user in users) {
-		MMXUserID *userID = [MMXUserID userIDWithUsername:user.username];
-		[recipientArray addObject:userID];
-	}
-	return recipientArray.copy;
-}
-
+#pragma mark - Helpers
 - (NSArray *)replyAllArray {
 	NSMutableArray *recipients = [NSMutableArray arrayWithCapacity:self.recipients.count + 1];
 	[recipients addObject:self.sender];
 	[recipients addObjectsFromArray:[self.recipients allObjects]];
 	return recipients.copy;
+}
+
+- (void)sendDeliveryConfirmation {
+	[[MMXClient sharedClient] sendDeliveryConfirmationForAddress:self.sender.address messageID:self.messageID toDeviceID:self.senderDeviceID];
 }
 
 #pragma mark - NSCoding
