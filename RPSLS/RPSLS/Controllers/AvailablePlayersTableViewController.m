@@ -135,7 +135,11 @@
 #pragma mark - Available Players
 
 - (void)refreshAvailablePlayersWithMessages:(NSArray *)messages {
-	NSMutableArray *tempArray = @[].mutableCopy;
+	RPSLSUserStats *stats = [RPSLSUserStats new];
+	
+	RPSLSUser * user = [RPSLSUser userWithUsername:@"player_bot" stats:stats];
+	user.isAvailable = YES;
+	NSMutableArray *tempArray = @[user].mutableCopy;
 	for (MMXMessage *msg in messages) {
 		RPSLSUser * user = [RPSLSUser availablePlayerFromMessage:msg];
 		[tempArray addObject:user];
