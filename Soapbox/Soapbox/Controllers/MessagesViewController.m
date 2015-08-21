@@ -145,17 +145,16 @@
 //
 //		[self showAlertWithTitle:@"Failed To Fetch Messages" message:error.localizedFailureReason];
 //	}];
-
-    [self.channel fetchMessagesBetweenStartDate:nil endDate:nil limit:25 ascending:NO success:^(NSSet *messages) {
-        self.messageList = [messages allObjects];
+    
+    [self.channel fetchMessagesBetweenStartDate:nil endDate:nil limit:25 ascending:NO success:^(NSArray *messages) {
+        self.messageList = messages;
         [self.tableView reloadData];
     } failure:^(NSError *error) {
-
         /*
-		 *  Logging an error.
-		 */
+         *  Logging an error.
+         */
         [[MMXLogger sharedLogger] error:@"MessagesViewController fetchMessages Error = %@",error.localizedFailureReason];
-
+        
         [self showAlertWithTitle:@"Failed To Fetch Messages" message:error.localizedFailureReason];
     }];
 }
@@ -209,7 +208,7 @@
 	 *  Publishing our message. In this case I do not need to do anything on success. I will receive the MMXClientDelegate callback client:didReceivePubSubMessage:
 	 *	I can then treat the message that was sent the same way as any other message I receive.
 	 */
-    [self.channel publish:messageToSend success:nil failure:^(NSError *error) {
+    [self.channel publish:messageToSend.messageContent success:nil failure:^(NSError *error) {
         [self showAlertWithTitle:@"Failed to Publish" message:error ? error.localizedFailureReason : @"An unknown error occured when trying to send your message."];
     }];
 	

@@ -25,6 +25,9 @@
 #import "MMXLogInOperation.h"
 #import "MMXConnectionOperation.h"
 #import "MMXClient_Private.h"
+#import "MMXAddressable.h"
+#import "MMXInternalMessageAdaptor.h"
+#import "MMXClient_Private.h"
 
 typedef void(^MessageSuccessBlock)(void);
 typedef void(^MessageFailureBlock)(NSError *);
@@ -141,7 +144,7 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 				  success:(void (^)(void))success
 				  failure:(void (^)(NSError *error))failure {
 	//FIXME: Needs to properly handle failure and success blocks
-	MMXOutboundMessage *msg = [MMXOutboundMessage messageTo:[message recipientsForOutboundMessage] withContent:nil metaData:message.messageContent];
+	MMXOutboundMessage *msg = [MMXOutboundMessage messageTo:[message.recipients allObjects] withContent:nil metaData:message.messageContent];
 	NSString *messageID = [[MMXClient sharedClient] sendMessage:msg];
 	
 	if (success || failure) {
@@ -154,20 +157,24 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 		}
 		[self.messageBlockQueue setObject:blockDict forKey:messageID];
 	}
-	
-//	double delayInSeconds = 2.0;
-//	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-//	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-//		NSDictionary *blockDict = [self.messageBlockQueue objectForKey:messageID];
-//		if (blockDict) {
-//			MessageSuccessBlock successBlock = [blockDict objectForKey:MMXMessageSuccessBlockKey];
-//			if (successBlock) {
-//				successBlock();
-//			}
-//			[self.messageBlockQueue removeObjectForKey:messageID];
-//		}
-//	});
-	
+	return messageID;
+}
+
+- (NSString *)sendInternalMessageFormat:(MMXInternalMessageAdaptor *)message
+								success:(void (^)(void))success
+								failure:(void (^)(NSError *error))failure {
+
+	NSString *messageID = [[MMXClient sharedClient] sendMMXMessage:message withOptions:nil];
+	if (success || failure) {
+		NSMutableDictionary *blockDict = [NSMutableDictionary dictionary];
+		if (success) {
+			[blockDict setObject:success forKey:MMXMessageSuccessBlockKey];
+		}
+		if (failure) {
+			[blockDict setObject:failure forKey:MMXMessageFailureBlockKey];
+		}
+		[self.messageBlockQueue setObject:blockDict forKey:messageID];
+	}
 	return messageID;
 }
 
@@ -177,6 +184,7 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 	switch (connectionStatus) {
 		case MMXConnectionStatusAuthenticated: {
 			[[MMXClient sharedClient].accountManager userProfileWithSuccess:^(MMXUserProfile *userProfile) {
+				[MMXClient sharedClient].currentProfile = userProfile;
 				MMXUser *user = [MMXUser new];
 				user.username = userProfile.userID.username;
 				user.displayName = userProfile.displayName;
@@ -216,7 +224,9 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 			}
 			break;
 		case MMXConnectionStatusDisconnected: {
-			self.currentUser = nil;
+			if (error == nil) {
+				self.currentUser = nil;
+			}
 			if (self.logOutSuccessBlock) {
 				self.logOutSuccessBlock();
 			}
@@ -252,15 +262,19 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 
 
 - (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {
-	//FIXME: remove the receiver/current user from the list of recipients.
-	MMXMessage *msg = [MMXMessage messageToRecipients:[NSSet setWithArray:message.otherRecipients]
-							 messageContent:message.metaData];
+
+	MMXMessage *msg = [MMXMessage messageToRecipients:[self usersFromInboundRecipients:message.otherRecipients]
+									   messageContent:message.metaData];
+
+	MMXInternalAddress *address = message.senderUserID.address;
 	MMXUser *user = [MMXUser new];
 	msg.messageType = MMXMessageTypeDefault;
-	user.username = message.senderUserID.username;
+	user.username = address.username;
+	user.displayName = address.displayName;
 	msg.sender = user;
 	msg.timestamp = message.timestamp;
 	msg.messageID = message.messageID;
+	msg.senderDeviceID = message.senderEndpoint.deviceID;
 	[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveMessageNotification
 														object:nil
 													  userInfo:@{MagnetMessageKey:msg}];
@@ -300,9 +314,36 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 	}
 }
 
+- (void)client:(MMXClient *)client didDeliverMessage:(NSString *)messageID recipient:(id<MMXAddressable>)recipient {
+	MMXUser *user = [MMXUser new];
+	MMXInternalAddress *address = recipient.address;
+	if (address) {
+		user.username = address.username;
+		user.displayName = address.displayName;
+	}
+	[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveDeliveryConfirmationNotification
+														object:nil
+													  userInfo:@{MagnetRecipientKey:user,
+																 MagnetMessageIDKey:messageID}];
+}
+
 + (NSError *)notNotLoggedInError {
 	NSError * error = [MMXClient errorWithTitle:@"Forbidden" message:@"You must log in to use this API." code:403];
 	return error;
+}
+
+#pragma mark - Recipient conversion
+
+- (NSSet *)usersFromInboundRecipients:(NSArray *)recipients {
+	NSMutableSet *set = [NSMutableSet setWithCapacity:recipients.count];
+	for (id<MMXAddressable> recipient in recipients) {
+		MMXInternalAddress *address = recipient.address;
+		MMXUser *user = [MMXUser new];
+		user.username = address.username;
+		user.displayName = address.displayName;
+		[set addObject:user];
+	}
+	return set.copy;
 }
 
 #pragma mark - Overriden getters

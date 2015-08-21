@@ -29,7 +29,7 @@
 /**
  *  A custom message from the sender
  */
-@property (nonatomic, copy, readonly) NSString *message;
+@property (nonatomic, copy, readonly) NSString *textMessage;
 
 /**
  *  The user that sent the invite
@@ -44,20 +44,23 @@
 /**
  *  Accept the invite to the channel and start receiving message published to the channel.
  *
- *  @param success Block with the MMXInvite object that you accepted.
- *  @param failure Block with an NSError with details about the call failure.
+ *  @param textMessage	Optional custom message
+ *  @param success		Block called if operation is successful.
+ *  @param failure		Block with an NSError with details about the call failure.
  */
-- (void)acceptWithSuccess:(void (^)(MMXInvite *invite))success
+- (void)acceptWithMessage:(NSString *)textMessage
+				  success:(void (^)(void))success
 				  failure:(void (^)(NSError *error))failure;
 
 /**
  *  Decline the invite to the channel.
  *
- *  @param success Block with the MMXInvite object that you declined.
- *  @param failure Block with an NSError with details about the call failure.
+ *  @param textMessage	Optional custom message
+ *  @param success		Block called if operation is successful.
+ *  @param failure		Block with an NSError with details about the call failure.
  */
-
-- (void)declineWithSuccess:(void (^)(MMXInvite *invite))success
+- (void)declineWithMessage:(NSString *)textMessage
+				   success:(void (^)(void))success
 				   failure:(void (^)(NSError *error))failure;
 
 

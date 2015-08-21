@@ -39,6 +39,10 @@
 #import "MMXUserProfile_Private.h"
 #import "MMXEndpoint.h"
 
+#import "MMXInvite_Private.h"
+#import "MMXInviteResponse_Private.h"
+#import "MagnetConstants.h"
+
 #import "MMXUtils.h"
 #import "MMXMessageUtils.h"
 
@@ -351,7 +355,7 @@ int const kReconnectionTimerInterval = 4;
 
 	NSString * mType = @"chat";
     NSXMLElement *mmxElement = [[NSXMLElement alloc] initWithName:MXmmxElement xmlns:MXnsDataPayload];
-	[mmxElement addChild:[outboundMessage recipientsAsXML]];
+	[mmxElement addChild:[MMXInternalMessageAdaptor xmlFromRecipients:outboundMessage.recipients senderAddress:self.currentProfile.address]];
 	[mmxElement addChild:[outboundMessage contentToXML]];
 
     if (outboundMessage.metaData) {
@@ -362,9 +366,10 @@ int const kReconnectionTimerInterval = 4;
 	NSUInteger sentCount = 0;
 	NSMutableArray *failedList = @[].mutableCopy;
 	for (id<MMXAddressable> recipient in outboundMessage.recipients) {
-		if ([recipient respondsToSelector:@selector(address)]) {
-			NSString *fullUsername = [NSString stringWithFormat:@"%@%%%@",[recipient address],self.configuration.appID];
-			XMPPJID *toAddress = [XMPPJID jidWithUser:fullUsername domain:[[self currentJID] domain] resource:[recipient subAddress]];
+		MMXInternalAddress *address = recipient.address;
+		if (address) {
+			NSString *fullUsername = [NSString stringWithFormat:@"%@%%%@",address.username,self.configuration.appID];
+			XMPPJID *toAddress = [XMPPJID jidWithUser:fullUsername domain:[[self currentJID] domain] resource:address.deviceID];
 			xmppMessage = [[XMPPMessage alloc] initWithType:mType to:toAddress];
 			[xmppMessage addAttributeWithName:@"from" stringValue: [[self currentJID] full]];
 
@@ -419,7 +424,7 @@ int const kReconnectionTimerInterval = 4;
 	
 	if (![MMXMessageUtils isValidMetaData:outboundMessage.metaData]) {
 		if ([self.delegate respondsToSelector:@selector(client:didFailToSendMessage:recipients:error:)]) {
-			NSError * error = [MMXClient errorWithTitle:@"Meta Data Not Valid" message:@"Meta Data dictionary must be JSON serializable." code:401];
+			NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
 			[self.delegate client:self didFailToSendMessage:outboundMessage.messageID recipients:outboundMessage.recipients error:error];
 		}
 		return NO;
@@ -434,28 +439,14 @@ int const kReconnectionTimerInterval = 4;
 	return YES;
 }
 
-//FIXME: Add this back when the server has full support for multiple recipients
-- (NSXMLElement *)addressElementWithRecipients:(NSArray *)recipients {
-	NSXMLElement *addressesElement = [[NSXMLElement alloc] initWithName:@"addresses" xmlns:@"http://jabber.org/protocol/address"];
-	
-	for (id<MMXAddressable> addressable in recipients) {
-		NSXMLElement *address = [[NSXMLElement alloc] initWithName:@"address"];
-		[address addAttributeWithName:@"type" stringValue:@"to"];
-
-		if ([addressable respondsToSelector:@selector(address)]) {
-			NSString *fullUsername = [NSString stringWithFormat:@"%@%%%@",[addressable address],self.configuration.appID];
-			XMPPJID *toAddress = [XMPPJID jidWithUser:fullUsername domain:[[self currentJID] domain] resource:[addressable subAddress]];
-			[address addAttributeWithName:@"jid" stringValue:[toAddress full]];
-			[addressesElement addChild:address];
-		}
-	}
-	return addressesElement;
+- (NSString *)sendDeliveryConfirmationForMessage:(MMXInboundMessage *)message {
+	return [self sendDeliveryConfirmationForAddress:message.senderUserID.address messageID:message.messageID toDeviceID:message.senderEndpoint.deviceID];
 }
 
-- (NSString *)sendDeliveryConfirmationForMessage:(MMXInboundMessage *)message {
-	NSString *sender = [NSString stringWithFormat:@"%@%%%@@%@", [message.senderUserID address], self.configuration.appID, self.configuration.domain];
-	if (message.senderEndpoint.deviceID != nil && ![message.senderEndpoint.deviceID isEqualToString:@""]) {
-		sender = [NSString stringWithFormat:@"%@/%@", sender, message.senderEndpoint.deviceID];
+- (NSString *)sendDeliveryConfirmationForAddress:(MMXInternalAddress *)address messageID:(NSString *)messageID toDeviceID:(NSString *)deviceID {
+	NSString *sender = [NSString stringWithFormat:@"%@%%%@@%@", address.username, self.configuration.appID, self.configuration.domain];
+	if (deviceID) {
+		sender = [NSString stringWithFormat:@"%@/%@", sender, deviceID];
 	}
     XMPPJID *respondToAddress = [XMPPJID jidWithString:sender];
     
@@ -464,13 +455,13 @@ int const kReconnectionTimerInterval = 4;
 	[confirmationMessage addBody:@"."];
 
     NSXMLElement *receivedElement = [[NSXMLElement alloc] initWithName:MXreceivedElement xmlns:MXnsDeliveryReceipt];
-    NSString *sourceMessageId = message.messageID;
+    NSString *sourceMessageId = messageID;
     [receivedElement addAttributeWithName:@"id" stringValue:sourceMessageId];
     [confirmationMessage addChild:receivedElement];
     
-    NSString *messageID = [self generateMessageID];
+    NSString *confirmationMessageID = [self generateMessageID];
     //id for this message
-    [confirmationMessage addAttributeWithName:@"id" stringValue:messageID];
+    [confirmationMessage addAttributeWithName:@"id" stringValue:confirmationMessageID];
     [[MMXLogger sharedLogger] verbose:@"About to send the delivery confirmation message %@", confirmationMessage];
     
     [self.xmppStream sendElement:confirmationMessage];
@@ -774,7 +765,8 @@ int const kReconnectionTimerInterval = 4;
                 }];
             }
         } else {
-            [self updateConnectionStatus:MMXConnectionStatusAuthenticationFailure error:nil];
+			NSError *authError = [MMXClient errorWithTitle:@"Authentication Failure" message:@"Not Authorized. Please check your credentials and try again." code:401];
+            [self updateConnectionStatus:MMXConnectionStatusAuthenticationFailure error:authError];
         }
 }
 
@@ -835,7 +827,7 @@ int const kReconnectionTimerInterval = 4;
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)xmppMessage {
     if ([xmppMessage isErrorMessage]) {
         if ([self.delegate respondsToSelector:@selector(client:didReceiveError:severity:messageID:)]) {
-            MMXInternalMessageAdaptor * message = [[MMXInternalMessageAdaptor alloc] initWithXMPPMessage:xmppMessage];
+            MMXInternalMessageAdaptor * message = [MMXInternalMessageAdaptor initWithXMPPMessage:xmppMessage];
 			if ([message.mType isEqualToString:@"mmxerror"]) {
 				[self handleErrorMessage:message];
 			} else {
@@ -857,19 +849,32 @@ int const kReconnectionTimerInterval = 4;
 		}
         return;
     }
-    XMPPJID* to = [xmppMessage to] ;
-    XMPPJID* from =[xmppMessage from];
-    NSString* msgId = [xmppMessage elementID];
     if ([xmppMessage elementsForXmlns:MXnsDataPayload].count) {
-		MMXInternalMessageAdaptor* inMessage = [[MMXInternalMessageAdaptor alloc] initWithXMPPMessage:xmppMessage];
+		XMPPJID* to = [xmppMessage to] ;
+		XMPPJID* from =[xmppMessage from];
+		NSString* msgId = [xmppMessage elementID];
+		MMXInternalMessageAdaptor* inMessage = [MMXInternalMessageAdaptor initWithXMPPMessage:xmppMessage];
 		if (![inMessage.mType isEqualToString:@"normal"]) {
 			[self sendSDKAckMessageId:msgId sourceFrom:from sourceTo:to];
 		}
-		if ([self.delegate respondsToSelector:@selector(client:didReceiveMessage:deliveryReceiptRequested:)]) {
-			MMXInboundMessage * inboundMessage = [MMXInboundMessage initWithMessage:inMessage];
-			dispatch_async(self.callbackQueue, ^{
-				[self.delegate client:self didReceiveMessage:inboundMessage deliveryReceiptRequested:inMessage.deliveryReceiptRequested];
-			});
+		if ([inMessage.mType isEqualToString:@"invitation"]) {
+			MMXInvite *invite = [MMXInvite inviteFromMMXInternalMessage:inMessage];
+			[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInvitationNotification
+																object:nil
+															  userInfo:@{MagnetInviteKey:invite}];
+		} else if ([inMessage.mType isEqualToString:@"invitationResponse"]) {
+			MMXInviteResponse *inviteResponse = [MMXInviteResponse inviteResponseFromMMXInternalMessage:inMessage];
+				[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInvitationResponseNotification
+																	object:nil
+																  userInfo:@{MagnetInviteResponseKey:inviteResponse}];
+
+		} else {
+			if ([self.delegate respondsToSelector:@selector(client:didReceiveMessage:deliveryReceiptRequested:)]) {
+				MMXInboundMessage * inboundMessage = [MMXInboundMessage initWithMessage:inMessage];
+				dispatch_async(self.callbackQueue, ^{
+					[self.delegate client:self didReceiveMessage:inboundMessage deliveryReceiptRequested:inMessage.deliveryReceiptRequested];
+				});
+			}
 		}
 	} else if ([xmppMessage elementsForXmlns:MXnsServerSignal].count) {
 		NSArray* mmxElements = [xmppMessage elementsForName:MXmmxElement];
@@ -899,6 +904,9 @@ int const kReconnectionTimerInterval = 4;
     } else {
         NSXMLElement *mmxElement = [xmppMessage elementForName:MXreceivedElement];
 		if (mmxElement) {
+			XMPPJID* to = [xmppMessage to] ;
+			XMPPJID* from =[xmppMessage from];
+			NSString* msgId = [xmppMessage elementID];
 			[self sendSDKAckMessageId:msgId sourceFrom:from sourceTo:to];
 			if ([self.delegate respondsToSelector:@selector(client:didDeliverMessage:recipient:)]) {
 				dispatch_async(self.callbackQueue, ^{
@@ -920,7 +928,7 @@ int const kReconnectionTimerInterval = 4;
 	if (error) {
 		[[MMXLogger sharedLogger] error:@"%@", error.localizedDescription];
 	}
-    MMXInternalMessageAdaptor* outboundMessage = [[MMXInternalMessageAdaptor alloc] initWithXMPPMessage:message];
+    MMXInternalMessageAdaptor* outboundMessage = [MMXInternalMessageAdaptor initWithXMPPMessage:message];
     MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
     options.shouldRequestDeliveryReceipt = outboundMessage.deliveryReceiptRequested;
     

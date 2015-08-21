@@ -46,6 +46,7 @@ NSString * const MXcommandDeleteTopic = @"deletetopic";
 NSString * const MXcommandSubscribe = @"subscribe";
 NSString * const MXcommandUnsubscribe = @"unsubscribe";
 NSString * const MXcommandUnsubscribeForDevice = @"unsubscribeForDev";
+NSString * const MXcommandGetSubscribers = @"getSubscribers";
 NSString * const MXcommandRetract = @"retract";
 NSString * const MXcommandRetractAll = @"retractAll";
 NSString * const MXcommandGetSummary = @"getSummary";
@@ -73,5 +74,9 @@ NSInteger  const kMaxPasswordLength = 32;
 NSUInteger const kMaxMessageSize = 2 * 100 * 1024;
 
 NSString * const kMMXXMPPProtocol = @"xmpp";
+
+NSString * const kAddressUsernameKey = @"userId";
+NSString * const kAddressDeviceIDKey = @"devId";
+NSString * const kAddressDisplayNameKey = @"displayName";
 
 @end

@@ -126,13 +126,13 @@
 - (void)fetchChannels {
     [self.refreshControl beginRefreshing];
 
-    [MMXChannel channelsStartingWith:@"" limit:100 success:^(int totalCount, NSSet *channels) {
+    [MMXChannel channelsStartingWith:@"" limit:100 success:^(int totalCount, NSArray *channels) {
 
         NSPredicate *subscribedPredicate = [NSPredicate predicateWithFormat:@"isSubscribed == YES"];
         NSPredicate *notSubscribedPredicate = [NSPredicate predicateWithFormat:@"isSubscribed == NO"];
 
-        self.subscribedChannelsList = [[channels filteredSetUsingPredicate:subscribedPredicate] allObjects];
-        self.unSubscribedChannelsList = [[channels filteredSetUsingPredicate:notSubscribedPredicate] allObjects];
+        self.subscribedChannelsList = [channels filteredArrayUsingPredicate:subscribedPredicate];
+        self.unSubscribedChannelsList = [channels filteredArrayUsingPredicate:notSubscribedPredicate];
 
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];

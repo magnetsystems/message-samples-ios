@@ -16,9 +16,10 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "MMXAddressable.h"
 #import <Mantle/Mantle.h>
 
-@interface MMXUser : MTLModel
+@interface MMXUser : MTLModel <MMXAddressable>
 
 /**
  *  Unique username the user.
@@ -50,9 +51,9 @@
  *  @param success 	  - Block called if operation is successful.
  *  @param failure    - Block with an NSError with details about the call failure.
  */
-- (void)registerWithCredentials:(NSURLCredential *)credential
-						success:(void (^)(void))success
-						failure:(void (^)(NSError * error))failure;
+- (void)registerWithCredential:(NSURLCredential *)credential
+					   success:(void (^)(void))success
+					   failure:(void (^)(NSError * error))failure;
 
 /**
  *  Method to log in to Magnet Message
@@ -61,9 +62,9 @@
  *  @param success 	  - Block with the MMXUser object for the newly logged in user.
  *  @param failure    - Block with an NSError with details about the call failure.
  */
-+ (void)logInWithCredentials:(NSURLCredential *)credential
-					 success:(void (^)(MMXUser *user))success
-					 failure:(void (^)(NSError * error))failure;
++ (void)logInWithCredential:(NSURLCredential *)credential
+					success:(void (^)(MMXUser *user))success
+					failure:(void (^)(NSError * error))failure;
 
 
 /**
@@ -82,22 +83,33 @@
  *  @param success    - Block called if operation is successful.
  *  @param failure    - Block with an NSError with details about the call failure.
  */
-- (void)changePasswordWithCredentials:(NSURLCredential *)credential
-							  success:(void (^)(void))success
-							  failure:(void (^)(NSError * error))failure;
+- (void)changePasswordWithCredential:(NSURLCredential *)credential
+							 success:(void (^)(void))success
+							 failure:(void (^)(NSError * error))failure;
 
 /**
- *  Method used to discover existing users by name
+ *  Method used to discover existing users by displayName
  *
- *  @param name		The start of the name for the user you are searching for.
- *  @param limit	The max number of results you want returned. Defaults to 20.
- *  @param success  Block with the number of users that match the query and a NSSet of MMXUsers that match the criteria.
+ *  @param displayName	The start of the displayName for the user you are searching for.
+ *  @param limit		The max number of results you want returned. Defaults to 20.
+ *  @param success		Block with the number of users that match the query and a NSSet of MMXUsers that match the criteria.
+ *  @param failure		Block with an NSError with details about the call failure.
+ */
++ (void)findByDisplayName:(NSString *)displayName
+					limit:(int)limit
+				  success:(void (^)(int totalCount, NSSet *users))success
+				  failure:(void (^)(NSError *error))failure;
+
+/**
+ *  Method for getting the full user object from a username
+ *
+ *  @param username The username for the user you want
+ *  @param success 	Block with the MMXUser object for the user.
  *  @param failure  Block with an NSError with details about the call failure.
  */
-+ (void)findByName:(NSString *)name
-			 limit:(int)limit
-		   success:(void (^)(int totalCount, NSSet *users))success
-		   failure:(void (^)(NSError *error))failure;
++ (void)userForUsername:(NSString *)username
+				success:(void (^)(MMXUser *user))success
+				failure:(void (^)(NSError *error))failure;
 
 /**
  *  Set push token for this device
@@ -105,5 +117,8 @@
  *  @param token returned in application:didRegisterForRemoteNotificationsWithDeviceToken:
  */
 - (void)addDeviceToken:(NSData *)token;
+
+//MMXAddressable Protocol
+@property (nonatomic, readonly) MMXInternalAddress *address;
 
 @end

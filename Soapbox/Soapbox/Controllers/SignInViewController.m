@@ -52,7 +52,7 @@
                                                               persistence:NSURLCredentialPersistenceNone];
 		
 		MMXUser *user = [[MMXUser alloc] init];
-        [user registerWithCredentials:credential success:^{
+        [user registerWithCredential:credential success:^{
             [self logInWithCredential:credential];
         } failure:^(NSError *error) {
             // If the user is already registered, try logging in.
@@ -67,7 +67,7 @@
 }
 
 - (void)logInWithCredential:(NSURLCredential *)credential {
-    [MMXUser logInWithCredentials:credential success:^(MMXUser *user) {
+    [MMXUser logInWithCredential:credential success:^(MMXUser *user) {
         [self performSegueWithIdentifier:@"ShowChannelList" sender:nil];
     } failure:^(NSError *error) {
         NSString *errorMessage;

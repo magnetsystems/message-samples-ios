@@ -18,6 +18,8 @@
 #import <Foundation/Foundation.h>
 @class MMXMessage;
 @class MMXUser;
+@class MMXChannel;
+@class MMXInternalMessageAdaptor;
 
 @interface MagnetDelegate : NSObject
 
@@ -79,6 +81,10 @@
 - (NSString *)sendMessage:(MMXMessage *)message
 				  success:(void (^)(void))success
 				  failure:(void (^)(NSError *error))failure;
+
+- (NSString *)sendInternalMessageFormat:(MMXInternalMessageAdaptor *)message
+								success:(void (^)(void))success
+								failure:(void (^)(NSError *error))failure;
 
 + (NSError *)notNotLoggedInError;
 

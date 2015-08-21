@@ -15,27 +15,20 @@
  * permissions and limitations under the License.
  */
 
-#import "MMXMessage.h"
-@class MMXPubSubMessage;
+#import "MMXInvite.h"
+@class MMXInternalMessageAdaptor;
 
-@interface MMXMessage ()
+@interface MMXInvite ()
 
-@property (nonatomic, readwrite) MMXMessageType messageType;
+@property (nonatomic, readwrite) NSDate *timestamp;
 
-@property(nonatomic, readwrite) NSString *messageID;
+@property (nonatomic, readwrite) NSString *textMessage;
 
-@property(nonatomic, readwrite) NSDate *timestamp;
-
-@property(nonatomic, readwrite) MMXUser *sender;
-
-@property(nonatomic, copy) NSString *senderDeviceID;
+@property (nonatomic, readwrite) MMXUser *sender;
 
 @property (nonatomic, readwrite) MMXChannel *channel;
 
-@property(nonatomic, readwrite) NSSet *recipients;
-
-@property(nonatomic, readwrite) NSDictionary *messageContent;
-
-+ (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage;
++ (instancetype)inviteFromMMXInternalMessage:(MMXInternalMessageAdaptor *)message;
++ (MMXChannel *)channelFromMessageMetaData:(NSDictionary *)metaData;
 
 @end

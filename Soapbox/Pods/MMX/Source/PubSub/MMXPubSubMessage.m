@@ -38,6 +38,7 @@
 	msg.topic = message.topic;
 	msg.metaData = message.metaData;
 	msg.timestamp = message.timestamp;
+	msg.senderUserID = message.senderUserID;
     return msg;
 }
 
@@ -71,6 +72,15 @@
 		NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
 		msg.metaData = [MMXMessageUtils extractMetaData:metaElements];
 		msg.topic = topic.copy;
+		
+		NSArray* mmxMetaElements = [mmxElement elementsForName:MXmmxMetaElement];
+		if (mmxMetaElements) {
+			NSDictionary *mmxMetaDict = [MMXInternalMessageAdaptor extractMMXMetaData:mmxMetaElements];
+			MMXUserID *senderID = [MMXInternalMessageAdaptor extractSenderFromMMXMetaDict:mmxMetaDict];
+			if (senderID) {
+				msg.senderUserID = senderID;
+			}
+		}
 		[messageArray addObject:msg];
 	}
 	return messageArray.copy;
@@ -105,6 +115,13 @@
         NSXMLElement *meta = [MMXUtils metaDataToXML:self.metaData];
         [mmxElement addChild:meta];
     }
+	
+	MMXUserProfile *sender = [MMXClient sharedClient].currentProfile;
+	if (sender && sender.address) {
+		NSXMLElement *mmxMeta = [MMXInternalMessageAdaptor xmlFromRecipients:nil senderAddress:sender.address];
+		[mmxElement addChild:mmxMeta];
+	}
+	
     NSXMLElement *itemElement = [[NSXMLElement alloc] initWithName:@"item"];
     [itemElement addAttributeWithName:@"id" stringValue:itemID];
     [itemElement addChild:mmxElement];

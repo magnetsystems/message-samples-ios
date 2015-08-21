@@ -15,27 +15,14 @@
  * permissions and limitations under the License.
  */
 
-#import "MMXMessage.h"
-@class MMXPubSubMessage;
+#import <Foundation/Foundation.h>
+@class XMPPIQ;
 
-@interface MMXMessage ()
+@interface MMXTopicSubscribersResponse : NSObject
 
-@property (nonatomic, readwrite) MMXMessageType messageType;
+@property (nonatomic, assign) int totalCount;
+@property (nonatomic, strong) NSArray *subscribers;
 
-@property(nonatomic, readwrite) NSString *messageID;
-
-@property(nonatomic, readwrite) NSDate *timestamp;
-
-@property(nonatomic, readwrite) MMXUser *sender;
-
-@property(nonatomic, copy) NSString *senderDeviceID;
-
-@property (nonatomic, readwrite) MMXChannel *channel;
-
-@property(nonatomic, readwrite) NSSet *recipients;
-
-@property(nonatomic, readwrite) NSDictionary *messageContent;
-
-+ (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage;
+- (instancetype)initWithIQ:(XMPPIQ *)iq;
 
 @end

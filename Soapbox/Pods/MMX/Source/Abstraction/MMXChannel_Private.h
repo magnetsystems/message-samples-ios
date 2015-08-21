@@ -15,27 +15,19 @@
  * permissions and limitations under the License.
  */
 
-#import "MMXMessage.h"
-@class MMXPubSubMessage;
+#import "MMXChannel.h"
+@class MMXTopic;
 
-@interface MMXMessage ()
+@interface MMXChannel ()
 
-@property (nonatomic, readwrite) MMXMessageType messageType;
+@property (nonatomic, readwrite) NSString *name;
+@property (nonatomic, readwrite) NSString *ownerUsername;
+@property (nonatomic, readwrite) int numberOfMessages;
+@property (nonatomic, readwrite) NSDate *lastTimeActive;
+@property (nonatomic, readwrite) NSSet *tags;
+@property (nonatomic, readwrite) BOOL isSubscribed;
 
-@property(nonatomic, readwrite) NSString *messageID;
+- (MMXTopic *)asTopic;
 
-@property(nonatomic, readwrite) NSDate *timestamp;
-
-@property(nonatomic, readwrite) MMXUser *sender;
-
-@property(nonatomic, copy) NSString *senderDeviceID;
-
-@property (nonatomic, readwrite) MMXChannel *channel;
-
-@property(nonatomic, readwrite) NSSet *recipients;
-
-@property(nonatomic, readwrite) NSDictionary *messageContent;
-
-+ (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage;
 
 @end
