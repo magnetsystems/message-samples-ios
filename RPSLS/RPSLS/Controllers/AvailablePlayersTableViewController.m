@@ -23,13 +23,11 @@
 #import "RPSLSUtils.h"
 #import "GameViewController.h"
 #import "AvailablePlayersTableViewCell.h"
-#import "MMXInboundMessage+RPSLS.h"
-#import <MMX/MMX.h>
+#import "MMXMessage+RPSLS.h"
 
-@interface AvailablePlayersTableViewController () <MMXClientDelegate>
+@interface AvailablePlayersTableViewController ()
 
 @property (nonatomic, copy) NSArray * availablePlayersList;
-@property (nonatomic, strong) MMXUserID * oponent;
 @property (nonatomic, assign) BOOL inGame;
 
 @end
@@ -53,26 +51,41 @@
 
 	self.title = @"Available Players";
 
-	/*
-	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
-	 *	I only care about client:didReceiveConnectionStatusChange:error:
-	 *	All MMXClientDelegate protocol methods are optional.
-	 */
-	[MMXClient sharedClient].delegate = self;
-	
 	self.inGame = NO;
-	
-	/*
-	 *  Checking current MMXConnectionStatus
-	 */
-	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated) {
-		[self postAvailabilityStatusAs:YES];
-	}
+
+    [self postAvailabilityStatusAs:YES];
 	
 	[self collectListOfAvailablePlayers];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resigningActive) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMessage:)
+                                                 name:MMXDidReceiveMessageNotification
+                                               object:nil];
+}
 
-	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
+- (void)didReceiveMessage:(NSNotification *)notification {
+    MMXMessage *message = notification.userInfo[MagnetMessageKey];
+    switch (message.messageType) {
+
+        case MMXMessageTypeDefault:{
+            /*
+             *  Checking the incoming message and sending a confirmation if necessary.
+             */
+            if ([message isTimelyMessage]) {
+                [self handleMessage:message];
+            }
+            break;
+        }
+        case MMXMessageTypeChannel:{
+            /*
+             *  Checking to see if the message is from the availability topic and ignoring all others
+             */
+            if ([message.channel.name isEqualToString:kPostStatus_TopicName]) {
+                [self updateListWithMessage:message];
+            }
+            break;
+        }
+    };
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -80,103 +93,51 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - MMXClientDelegate Callbacks
-
-- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-	
-	/*
-	 *  If we get a status other than MMXConnectionStatusAuthenticated we are trying to reconnect
-	 */
-	if (connectionStatus == MMXConnectionStatusAuthenticated) {
-		[self postAvailabilityStatusAs:YES];
-	} else {
-		
-		/*
-		 *  If something happens I will try to reconnect.
-		 */
-		[[MMXClient sharedClient] connectWithCredentials];
-	}
-	
-	/*
-	 *  Logging info.
-	 */
-	[[MMXLogger sharedLogger] info:@"Connection Status Change = %@",[RPSLSUtils statusToString:connectionStatus]];
-}
-
-- (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {
-	/*
-	 *  Checking the incoming message and sending a confirmation if necessary.
-	 */
-	if ([message isTimelyMessage]) {
-		[self handleMessage:message];
-	}
-	if (receiptRequested) {
-		
-		/*
-		 *  Sending delivery confirmation.
-		 */
-		[[MMXClient sharedClient] sendDeliveryConfirmationForMessage:message];
-	}
-}
-
-- (void)client:(MMXClient *)client didReceivePubSubMessage:(MMXPubSubMessage *)message {
-	
-	/*
-	 *  Checking to see if the message is from the availability topic and ignoring all others
-	 */
-	if ([message.topic.topicName isEqualToString:kPostStatus_TopicName]) {
-		[self updateListWithMessage:message];
-	}
-}
-
 #pragma mark - Availability
 
 - (void)postAvailabilityStatusAs:(BOOL)available {
-
 	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-	[[MMXClient sharedClient].pubsubManager publishPubSubMessage:[RPSLSUtils availablilityMessage:available] success:nil failure:^(NSError *error) {
-		[[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
-	}];
+    [[RPSLSUtils availablePlayersChannel] publish:[RPSLSUtils availablilityMessage:available].messageContent success:nil failure:^(NSError *error) {
+        [[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
+    }];
 }
 
 #pragma mark - Request Available Players
-
-- (MMXPubSubFetchRequest *)requestForAvailablePlayers {
-	
-	/*
-	 *  Creating a fetch request to get the all the availability topic posts for the last 10 minutes with a max of 100 messages.
-	 */
-	MMXPubSubFetchRequest *request = [[MMXPubSubFetchRequest alloc] init];
-	request.topic = [RPSLSUtils availablePlayersTopic];
-	request.since = [NSDate dateWithTimeIntervalSinceNow:kAvailableTimeFrame];
-	request.maxItems = 100;
-	return request;
-}
 
 - (void)collectListOfAvailablePlayers {
 	
 	/*
 	 *  Passing my MMXPubSubFetchRequest to the fetchItems API. It will return a NSArray of MMXPubSubMessages
 	 */
-	[[MMXClient sharedClient].pubsubManager fetchItems:[self requestForAvailablePlayers] success:^(NSArray *messages) {
-		[self refreshAvailablePlayersWithMessages:messages];
-	} failure:^(NSError *error) {
-		
-		/*
-		 *  Logging an error.
-		 */
-		[[MMXLogger sharedLogger] error:@"collectListOfAvailablePlayers error = %@",error];
-	}];
+    MMXChannel *availablePlayersChannel = [RPSLSUtils availablePlayersChannel];
+    NSDate *now = [NSDate date];
+
+    [availablePlayersChannel fetchMessagesBetweenStartDate:[NSDate dateWithTimeIntervalSinceNow:kAvailableTimeFrame]
+                                                   endDate:now
+                                                     limit:100
+                                                 ascending:NO
+                                                   success:^(NSArray *messages) {
+
+                                                       [self refreshAvailablePlayersWithMessages:messages];
+
+                                                   } failure:^(NSError *error) {
+
+                /*
+		         *  Logging an error.
+		         */
+                [[MMXLogger sharedLogger] error:@"collectListOfAvailablePlayers error = %@",error];
+
+            }];
 }
 
 #pragma mark - Available Players
 
 - (void)refreshAvailablePlayersWithMessages:(NSArray *)messages {
 	NSMutableArray *tempArray = @[].mutableCopy;
-	for (MMXPubSubMessage *msg in messages) {
-		RPSLSUser * user = [RPSLSUser availablePlayerFromPubSubMessage:msg];
+	for (MMXMessage *msg in messages) {
+		RPSLSUser * user = [RPSLSUser availablePlayerFromMessage:msg];
 		[tempArray addObject:user];
 	}
 	
@@ -191,8 +152,8 @@
 	[self.refreshControl endRefreshing];
 }
 
-- (void)updateListWithMessage:(MMXPubSubMessage *)message {
-	RPSLSUser * user = [RPSLSUser availablePlayerFromPubSubMessage:message];
+- (void)updateListWithMessage:(MMXMessage *)message {
+	RPSLSUser * user = [RPSLSUser availablePlayerFromMessage:message];
 	
 	if (![user isEqual:[RPSLSUser me]]) {
 		if (!user.isAvailable) {
@@ -225,94 +186,75 @@
 
 - (void)sendInviteTo:(NSString *)username {
 
-	/*
-	 *  Creating a MMXUserID from a NSString username.
-	 */
-	MMXUserID * recipient = [MMXUserID userIDWithUsername:username];
-	
-	/*
-	 *  Creating new MMXOutboundMessage.
-	 */
-	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:@[recipient]
-													 withContent:@"This is an invite message"
-														metaData:@{kMessageKey_Username	:[RPSLSUser me].username,
-																   kMessageKey_Timestamp:[RPSLSUtils timestamp],
-																   kMessageKey_Type		:kMessageTypeValue_Invite,
-																   kMessageKey_GameID	:[AvailablePlayersTableViewController newGameID],
-																   kMessageKey_Wins		:[@([RPSLSUser me].stats.wins) stringValue],
-																   kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
-																   kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]}];
+    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
+            kMessageKey_Timestamp : [RPSLSUtils timestamp],
+            kMessageKey_Type : kMessageTypeValue_Invite,
+            kMessageKey_GameID : [AvailablePlayersTableViewController newGameID],
+            kMessageKey_Wins : [@([RPSLSUser me].stats.wins) stringValue],
+            kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
+            kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]};
 
-	/*
-	 *  Creating MMXMessageOptions object. Using defaults.
-	 */
-	MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
+    MMXUser *user = [[MMXUser alloc] init];
+    user.username = username;
 
-	/*
-	 *  Sending my message.
-	 */
-	[[MMXClient sharedClient] sendMessage:message withOptions:options];
+    MMXMessage *message = [MMXMessage messageToRecipients:[NSSet setWithArray:@[user]] messageContent:messageContent];
+
+    [message sendWithSuccess:^{
+
+    } failure:^(NSError *error) {
+
+    }];
 }
 
-- (void)replyToInvite:(MMXInboundMessage *)invite accept:(BOOL)accept {
+- (void)replyToInvite:(MMXMessage *)invite accept:(BOOL)accept {
 
-	/*
-	 *  Creating new MMXOutboundMessage. Taking the MMXUserID from the MMXInboundMessage senderUserID property
-	 */
-	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:@[invite.senderUserID]
-													 withContent:@"This is an invite reply message"
-														metaData:@{kMessageKey_Username	:[RPSLSUser me].username,
-																   kMessageKey_Timestamp:[RPSLSUtils timestamp],
-																   kMessageKey_Type		:kMessageTypeValue_Accept,
-																   kMessageKey_Result	:@(accept),
-																   kMessageKey_GameID	:invite.metaData[kMessageKey_GameID],
-																   kMessageKey_Wins		:[@([RPSLSUser me].stats.wins) stringValue],
-																   kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
-																   kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]}];
+    NSDictionary *messageContent = @{kMessageKey_Username	:[RPSLSUser me].username,
+            kMessageKey_Timestamp:[RPSLSUtils timestamp],
+            kMessageKey_Type		:kMessageTypeValue_Accept,
+            kMessageKey_Result	:@(accept),
+            kMessageKey_GameID	:invite.messageContent[kMessageKey_GameID],
+            kMessageKey_Wins		:[@([RPSLSUser me].stats.wins) stringValue],
+            kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
+            kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]};
 
-	/*
-	 *  Creating MMXMessageOptions object. Using defaults.
-	 */
-	MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
-	
-	/*
-	 *  Sending my message.
-	 */
-	[[MMXClient sharedClient] sendMessage:message withOptions:options];
+    [invite replyWithContent:messageContent success:^{
 
-	if (accept) {
-		self.inGame = YES;
-		[self startGame:invite];
-	}
+    } failure:^(NSError *error) {
+
+    }];
+
+    if (accept) {
+        self.inGame = YES;
+        [self startGame:invite];
+    }
 }
 
-- (void)startGame:(MMXInboundMessage *)message {
+- (void)startGame:(MMXMessage *)message {
 	RPSLSUser * user = [RPSLSUser playerFromInvite:message];
 	GameViewController* game = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:NSStringFromClass([GameViewController class])];
-	[game setupGameWithID:message.metaData[kMessageKey_GameID] opponent:user];
+	[game setupGameWithID:message.messageContent[kMessageKey_GameID] opponent:user];
 
 	/*
 	 *  Setting GameViewController as the delegate to receive the MMXClientDelegate callbacks.
 	 */
-	[MMXClient sharedClient].delegate = (id<MMXClientDelegate>)game;
 	[self presentViewController:game animated:YES completion:nil];
 }
 
 
 #pragma mark - Message Logic
 
-- (void)handleMessage:(MMXInboundMessage *)message {
+- (void)handleMessage:(MMXMessage *)message {
 	RPSLSMessageType type = [self typeForMessage:message];
 	switch (type) {
 		case RPSLSMessageTypeUnknown:
 			break;
 		case RPSLSMessageTypeInvite:
-			if (message.metaData[kMessageKey_Username]) {
-				[self showInviteAlertForUser:message.metaData[kMessageKey_Username] invite:message];
+			if (message.messageContent[kMessageKey_Username]) {
+				[self showInviteAlertForUser:message.messageContent[kMessageKey_Username] invite:message];
 			}
 			break;
 		case RPSLSMessageTypeAccept:
-			if ([message.metaData[kMessageKey_Result] boolValue]) {
+			if ([message.messageContent[kMessageKey_Result] boolValue]) {
 				self.inGame = YES;
 				[self startGame:message];
 			}
@@ -324,21 +266,21 @@
 	}
 }
 
-- (RPSLSMessageType)typeForMessage:(MMXInboundMessage *)message {
+- (RPSLSMessageType)typeForMessage:(MMXMessage *)message {
 
 	/*
 	 *  Extracting information from the MMXInboundMessage metaData property.
 	 */
-	if (message == nil || message.metaData == nil || message.metaData[kMessageKey_Type] == nil || [message.metaData[kMessageKey_Type] isEqualToString:@""]) {
+	if (message == nil || message.messageContent == nil || message.messageContent[kMessageKey_Type] == nil || [message.messageContent[kMessageKey_Type] isEqualToString:@""]) {
 		return RPSLSMessageTypeUnknown;
 	}
-	if ([message.metaData[kMessageKey_Type] isEqualToString:kMessageTypeValue_Invite]) {
+	if ([message.messageContent[kMessageKey_Type] isEqualToString:kMessageTypeValue_Invite]) {
 		return RPSLSMessageTypeInvite;
 	}
-	if ([message.metaData[kMessageKey_Type] isEqualToString:kMessageTypeValue_Accept]) {
+	if ([message.messageContent[kMessageKey_Type] isEqualToString:kMessageTypeValue_Accept]) {
 		return RPSLSMessageTypeAccept;
 	}
-	if ([message.metaData[kMessageKey_Type] isEqualToString:kMessageTypeValue_Choice]) {
+	if ([message.messageContent[kMessageKey_Type] isEqualToString:kMessageTypeValue_Choice]) {
 		return RPSLSMessageTypeChoice;
 	}
 	return 0;
@@ -346,7 +288,7 @@
 
 #pragma mark - Invite Alert View
 
-- (void)showInviteAlertForUser:(NSString *)username invite:(MMXInboundMessage *)invite {
+- (void)showInviteAlertForUser:(NSString *)username invite:(MMXMessage *)invite {
 	UIAlertController *alertController = [UIAlertController
 										  alertControllerWithTitle:@"Invitation"
 										  message:[NSString stringWithFormat:@"You received an invitation from %@",username]

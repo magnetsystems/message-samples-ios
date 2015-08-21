@@ -15,6 +15,8 @@
  * permissions and limitations under the License.
  */
 
+#import "MMXInternalAddress.h"
+
 #pragma mark - MMXAddressable Protocol
 /**
  *  A protocol used internally for properly addressing messages.
@@ -27,12 +29,6 @@
 /**
  *  Primary means of addressing a message
  */
-@property (nonatomic, readonly) NSString *address;
-
-/**
- *  Secondary means of addressing a message.
- *	Used primarily for addressing a message to a specific device.
- */
-@property (nonatomic, readonly) NSString *subAddress;
+@property (nonatomic, readonly) MMXInternalAddress *address;
 
 @end

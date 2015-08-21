@@ -22,6 +22,8 @@
 @class XMPPIDTracker;
 @class XMPPIQ;
 @class XMPPJID;
+@class MMXUserProfile;
+@class MMXInternalMessageAdaptor;
 
 typedef void (^IQCompletionBlock)(id obj, id <XMPPTrackingInfo> info);
 
@@ -37,11 +39,19 @@ extern int const kTempVersionMinor;
 @property (nonatomic, readwrite) NSString *deviceToken;
 @property (nonatomic, assign) MMXConnectionStatus connectionStatus;
 
+@property (nonatomic, strong) MMXUserProfile *currentProfile;
+
 - (XMPPJID *)currentJID;
 - (NSString *)generateMessageID;
 - (void)sendIQ:(XMPPIQ *)iq completion:(IQCompletionBlock)completion;
 - (void)stopTrackingIQWithID:(NSString*)trackingID;
 + (BOOL)validateCharacterSet:(NSString *)string;
 + (NSError *)errorWithTitle:(NSString *)title message:(NSString *)message code:(int)code;
+- (NSString *)sendMMXMessage:(MMXInternalMessageAdaptor *)outboundMessage
+				 withOptions:(MMXMessageOptions *)options;
+
+- (NSString *)sendDeliveryConfirmationForAddress:(MMXInternalAddress *)address
+									   messageID:(NSString *)messageID
+									  toDeviceID:(NSString *)deviceID;
 
 @end

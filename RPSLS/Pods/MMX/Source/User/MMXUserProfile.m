@@ -97,6 +97,15 @@
     return description;
 }
 
+#pragma mark - MMXAddressable
+
+- (MMXInternalAddress *)address {
+	MMXInternalAddress *address = [MMXInternalAddress new];
+	address.username = [self.userID.username jidEscapedString];
+	address.displayName = self.displayName;
+	return address;
+}
+
 #pragma mark - NSCoding
 
 - (id)initWithCoder:(NSCoder *)coder {

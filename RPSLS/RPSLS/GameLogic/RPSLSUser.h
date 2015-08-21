@@ -18,7 +18,7 @@
 #import <Foundation/Foundation.h>
 @class RPSLSUserStats;
 @class MMXPubSubMessage;
-@class MMXInboundMessage;
+@class MMXMessage;
 
 @interface RPSLSUser : NSObject
 
@@ -34,8 +34,8 @@
 
 + (NSString *)myUsername;
 
-+ (instancetype)availablePlayerFromPubSubMessage:(MMXPubSubMessage *)message;
++ (instancetype)availablePlayerFromMessage:(MMXMessage *)message;
 
-+ (instancetype)playerFromInvite:(MMXInboundMessage *)message;
++ (instancetype)playerFromInvite:(MMXMessage *)message;
 
 @end

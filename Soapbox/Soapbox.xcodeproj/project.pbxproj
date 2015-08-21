@@ -10,13 +10,13 @@
 		0E25730D1B05003D00916A9C /* NewTopicNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2572F51B05003D00916A9C /* NewTopicNameCell.m */; };
 		0E25730E1B05003D00916A9C /* NewTopicTagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2572F71B05003D00916A9C /* NewTopicTagCell.m */; };
 		0E25730F1B05003D00916A9C /* PubSubCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2572F91B05003D00916A9C /* PubSubCell.m */; };
-		0E2573101B05003D00916A9C /* TopicListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2572FB1B05003D00916A9C /* TopicListCell.m */; };
-		0E2573111B05003D00916A9C /* TopicListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E2572FC1B05003D00916A9C /* TopicListCell.xib */; };
+		0E2573101B05003D00916A9C /* ChannelListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2572FB1B05003D00916A9C /* ChannelListCell.m */; };
+		0E2573111B05003D00916A9C /* ChannelListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E2572FC1B05003D00916A9C /* ChannelListCell.xib */; };
 		0E2573121B05003D00916A9C /* MessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2572FF1B05003D00916A9C /* MessagesViewController.m */; };
 		0E2573131B05003D00916A9C /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2573011B05003D00916A9C /* MessageTextView.m */; };
 		0E2573141B05003D00916A9C /* NewTopicTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2573031B05003D00916A9C /* NewTopicTableViewController.m */; };
 		0E2573151B05003D00916A9C /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2573051B05003D00916A9C /* SignInViewController.m */; };
-		0E2573161B05003D00916A9C /* TopicListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2573071B05003D00916A9C /* TopicListTableViewController.m */; };
+		0E2573161B05003D00916A9C /* ChannelListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2573071B05003D00916A9C /* ChannelListTableViewController.m */; };
 		0E2573171B05003D00916A9C /* SoapboxUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E25730A1B05003D00916A9C /* SoapboxUtils.m */; };
 		0E2573181B05003D00916A9C /* UIColor+Soapbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E25730C1B05003D00916A9C /* UIColor+Soapbox.m */; };
 		0E3614F51AFBFD2C0097E421 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3614F41AFBFD2C0097E421 /* main.m */; };
@@ -27,6 +27,7 @@
 		0E9A44341B151F8100EC2859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A44331B151F8100EC2859 /* LaunchScreen.storyboard */; };
 		0EBEC9081B436020000DD49A /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EBEC9071B436020000DD49A /* Configurations.plist */; };
 		170A1378E9AEB55FCE9C85C0 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74904CBC54923F60562BB705 /* libPods.a */; };
+		660217D3FC6316094652C506 /* Announcement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602170402AA3E62FBC304C6 /* Announcement.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,9 +47,9 @@
 		0E2572F71B05003D00916A9C /* NewTopicTagCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewTopicTagCell.m; sourceTree = "<group>"; };
 		0E2572F81B05003D00916A9C /* PubSubCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubSubCell.h; sourceTree = "<group>"; };
 		0E2572F91B05003D00916A9C /* PubSubCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PubSubCell.m; sourceTree = "<group>"; };
-		0E2572FA1B05003D00916A9C /* TopicListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicListCell.h; sourceTree = "<group>"; };
-		0E2572FB1B05003D00916A9C /* TopicListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicListCell.m; sourceTree = "<group>"; };
-		0E2572FC1B05003D00916A9C /* TopicListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TopicListCell.xib; sourceTree = "<group>"; };
+		0E2572FA1B05003D00916A9C /* ChannelListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelListCell.h; sourceTree = "<group>"; };
+		0E2572FB1B05003D00916A9C /* ChannelListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelListCell.m; sourceTree = "<group>"; };
+		0E2572FC1B05003D00916A9C /* ChannelListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChannelListCell.xib; sourceTree = "<group>"; };
 		0E2572FE1B05003D00916A9C /* MessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagesViewController.h; sourceTree = "<group>"; };
 		0E2572FF1B05003D00916A9C /* MessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesViewController.m; sourceTree = "<group>"; };
 		0E2573001B05003D00916A9C /* MessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTextView.h; sourceTree = "<group>"; };
@@ -57,8 +58,8 @@
 		0E2573031B05003D00916A9C /* NewTopicTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewTopicTableViewController.m; sourceTree = "<group>"; };
 		0E2573041B05003D00916A9C /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = "<group>"; };
 		0E2573051B05003D00916A9C /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = "<group>"; };
-		0E2573061B05003D00916A9C /* TopicListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicListTableViewController.h; sourceTree = "<group>"; };
-		0E2573071B05003D00916A9C /* TopicListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicListTableViewController.m; sourceTree = "<group>"; };
+		0E2573061B05003D00916A9C /* ChannelListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelListTableViewController.h; sourceTree = "<group>"; };
+		0E2573071B05003D00916A9C /* ChannelListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelListTableViewController.m; sourceTree = "<group>"; };
 		0E2573091B05003D00916A9C /* SoapboxUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoapboxUtils.h; sourceTree = "<group>"; };
 		0E25730A1B05003D00916A9C /* SoapboxUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoapboxUtils.m; sourceTree = "<group>"; };
 		0E25730B1B05003D00916A9C /* UIColor+Soapbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Soapbox.h"; sourceTree = "<group>"; };
@@ -77,6 +78,8 @@
 		0EBEC9071B436020000DD49A /* Configurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Configurations.plist; sourceTree = "<group>"; };
 		454FD38601BAF73A50999AB4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		58C7AD9B3133B3475F5B9A10 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		660216BA41C0FBACFA728FB9 /* Announcement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Announcement.h; sourceTree = "<group>"; };
+		6602170402AA3E62FBC304C6 /* Announcement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Announcement.m; sourceTree = "<group>"; };
 		74904CBC54923F60562BB705 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -108,9 +111,9 @@
 				0E2572F71B05003D00916A9C /* NewTopicTagCell.m */,
 				0E2572F81B05003D00916A9C /* PubSubCell.h */,
 				0E2572F91B05003D00916A9C /* PubSubCell.m */,
-				0E2572FA1B05003D00916A9C /* TopicListCell.h */,
-				0E2572FB1B05003D00916A9C /* TopicListCell.m */,
-				0E2572FC1B05003D00916A9C /* TopicListCell.xib */,
+				0E2572FA1B05003D00916A9C /* ChannelListCell.h */,
+				0E2572FB1B05003D00916A9C /* ChannelListCell.m */,
+				0E2572FC1B05003D00916A9C /* ChannelListCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -126,8 +129,8 @@
 				0E2573031B05003D00916A9C /* NewTopicTableViewController.m */,
 				0E2573041B05003D00916A9C /* SignInViewController.h */,
 				0E2573051B05003D00916A9C /* SignInViewController.m */,
-				0E2573061B05003D00916A9C /* TopicListTableViewController.h */,
-				0E2573071B05003D00916A9C /* TopicListTableViewController.m */,
+				0E2573061B05003D00916A9C /* ChannelListTableViewController.h */,
+				0E2573071B05003D00916A9C /* ChannelListTableViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 				0E3614FC1AFBFD2C0097E421 /* Main.storyboard */,
 				0E9A44331B151F8100EC2859 /* LaunchScreen.storyboard */,
 				0E3614F21AFBFD2C0097E421 /* Supporting Files */,
+				66021D502400F28B06D92497 /* Models */,
 			);
 			path = Soapbox;
 			sourceTree = "<group>";
@@ -204,6 +208,15 @@
 				0E36150D1AFBFD2C0097E421 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		66021D502400F28B06D92497 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6602170402AA3E62FBC304C6 /* Announcement.m */,
+				660216BA41C0FBACFA728FB9 /* Announcement.h */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		8415ECB4B9C62BEF24E9DB7D /* Frameworks */ = {
@@ -309,7 +322,7 @@
 				0E3615001AFBFD2C0097E421 /* Images.xcassets in Resources */,
 				0EBEC9081B436020000DD49A /* Configurations.plist in Resources */,
 				0E9A44341B151F8100EC2859 /* LaunchScreen.storyboard in Resources */,
-				0E2573111B05003D00916A9C /* TopicListCell.xib in Resources */,
+				0E2573111B05003D00916A9C /* ChannelListCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,13 +379,14 @@
 				0E2573131B05003D00916A9C /* MessageTextView.m in Sources */,
 				0E25730E1B05003D00916A9C /* NewTopicTagCell.m in Sources */,
 				0E25730D1B05003D00916A9C /* NewTopicNameCell.m in Sources */,
-				0E2573161B05003D00916A9C /* TopicListTableViewController.m in Sources */,
+				0E2573161B05003D00916A9C /* ChannelListTableViewController.m in Sources */,
 				0E2573171B05003D00916A9C /* SoapboxUtils.m in Sources */,
 				0E3614F51AFBFD2C0097E421 /* main.m in Sources */,
 				0E25730F1B05003D00916A9C /* PubSubCell.m in Sources */,
 				0E2573141B05003D00916A9C /* NewTopicTableViewController.m in Sources */,
-				0E2573101B05003D00916A9C /* TopicListCell.m in Sources */,
+				0E2573101B05003D00916A9C /* ChannelListCell.m in Sources */,
 				0E2573121B05003D00916A9C /* MessagesViewController.m in Sources */,
+				660217D3FC6316094652C506 /* Announcement.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

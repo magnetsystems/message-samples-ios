@@ -1,1 +1,1 @@
-../../../MMX/Source/CoreMessaging/MMXMessage.h
+../../../MMX/Source/Abstraction/MMXMessage.h

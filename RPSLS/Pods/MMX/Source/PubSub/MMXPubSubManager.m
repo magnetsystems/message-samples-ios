@@ -27,7 +27,7 @@
 #import "MMXTopicListResponse.h"
 #import "MMXTopicSummaryRequestResponse.h"
 #import "MMXTopicSubscription_Private.h"
-#import "MMXMessage_Private.h"
+#import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXQuery_Private.h"
 #import "MMXEndpoint_Private.h"
 #import "MMXTopicQueryResponse_Private.h"
@@ -38,6 +38,7 @@
 #import "MMXDataModel.h"
 #import "MMXLogger.h"
 #import "MMXAssert.h"
+#import "MMXTopicSubscribersResponse.h"
 
 #import "XMPP.h"
 #import "XMPPIQ+MMX.h"
@@ -442,7 +443,7 @@
                 }
             } else {
                 NSError * parsingError;
-                NSArray * messageArray = [MMXMessage pubsubMessagesFromFetchResponseIQ:iq topic:query.topic error:&parsingError];
+                NSArray * messageArray = [MMXInternalMessageAdaptor pubsubMessagesFromFetchResponseIQ:iq topic:query.topic error:&parsingError];
 				if (parsingError) {
 					if (failure) {
 						dispatch_async(self.callbackQueue, ^{
@@ -634,6 +635,82 @@
         }
     }
 }
+
+#pragma mark - Subscribers
+
+- (XMPPIQ *)subscribersForTopicIQ:(MMXTopic *)topic
+							limit:(int)limit
+							error:(NSError**)error {
+	NSDictionary * topicDictionary = @{@"userId":topic.inUserNameSpace ? topic.nameSpace : [NSNull null],
+									   @"topicName":topic.topicName,
+									   @"limit":@(limit)};
+	
+	NSError * parsingError;
+	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:topicDictionary xmlns:MXnsPubSub commandStringValue:MXcommandGetSubscribers error:&parsingError];
+	if (parsingError) {
+		*error = parsingError;
+		return nil;
+	} else {
+		XMPPIQ *topicIQ = [[XMPPIQ alloc] initWithType:@"get" child:mmxElement];
+		[topicIQ addAttributeWithName:@"from" stringValue: [[self.delegate currentJID] full]];
+		[topicIQ addAttributeWithName:@"id" stringValue:[self.delegate generateMessageID]];
+		return topicIQ;
+	}
+}
+
+- (void)subscribersForTopic:(MMXTopic *)topic
+					  limit:(int)limit
+					success:(void (^)(int,NSArray *))success
+					failure:(void (^)(NSError *))failure {
+	[[MMXLogger sharedLogger] verbose:@"MMXPubSubManager subscribersForTopic. Topic = %@", topic.topicName];
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
+	NSError * parsingError;
+	XMPPIQ *topicIQ = [self subscribersForTopicIQ:topic limit:limit error:&parsingError];
+	if (!parsingError) {
+		[self.delegate sendIQ:topicIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
+			XMPPIQ * iq = (XMPPIQ *)obj;
+			if ([iq isErrorIQ]) {
+				if (failure) {
+					dispatch_async(self.callbackQueue, ^{
+						failure([iq errorWithTitle:@"Subscribers Failure."]);
+					});
+				}
+			} else {
+				MMXTopicSubscribersResponse *response = [[MMXTopicSubscribersResponse alloc] initWithIQ:iq];
+				NSString* iqId = [iq elementID];
+				[self.delegate stopTrackingIQWithID:iqId];
+				if (response) {
+					if (success) {
+						dispatch_async(self.callbackQueue, ^{
+							success(response.totalCount,response.subscribers);
+						});
+					}
+				} else {
+					if (failure) {
+						dispatch_async(self.callbackQueue, ^{
+							failure([MMXClient errorWithTitle:@"Subscribers Error" message:@"An unknown error occured" code:500]);
+						});
+					}
+				}
+			}
+		}];
+	} else {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure(parsingError);
+			});
+		}
+	}
+
+}
+
 
 #pragma mark - Retract Published Items from Topic
 
@@ -1076,7 +1153,7 @@
 				}
 			} else {
 				NSError * parsingError;
-				NSArray * messageArray = [MMXMessage pubsubMessagesFromFetchResponseIQ:iq topic:topic error:&parsingError];
+				NSArray * messageArray = [MMXInternalMessageAdaptor pubsubMessagesFromFetchResponseIQ:iq topic:topic error:&parsingError];
 				if (parsingError) {
 					if (failure) {
 						dispatch_async(self.callbackQueue, ^{

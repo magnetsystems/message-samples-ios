@@ -18,11 +18,12 @@
 
 #import "PubSubCell.h"
 #import "SoapboxUtils.h"
-#import <MMX.h>
+#import "Announcement.h"
+#import <MMX/MMX.h>
 
 @interface PubSubCell ()
 
-@property (nonatomic, strong) MMXPubSubMessage *message;
+@property (nonatomic, strong) MMXMessage *message;
 @property (nonatomic, strong) NSString *senderUsername;
 @property (nonatomic, strong) UIColor *contentBackgroundColor;
 @property (nonatomic, assign) BOOL isCurrentUser;
@@ -52,7 +53,7 @@ const float kPubSubCellLabelOffsetPercentage = 0.02;
 }
 
 #pragma mark - Customize Cell Methods
-- (void)setMessage:(MMXPubSubMessage *)message isCurrentUser:(BOOL)isCurrentUser color:(UIColor *)color {
+- (void)setMessage:(MMXMessage *)message isCurrentUser:(BOOL)isCurrentUser color:(UIColor *)color {
 	self.message = message;
 	self.isCurrentUser = isCurrentUser;
 	self.contentBackgroundColor = color;
@@ -65,7 +66,7 @@ const float kPubSubCellLabelOffsetPercentage = 0.02;
 	 *  Extract username from MMXPubSubMessage metaData property
 	 *  By default the PubSub is anonymous and MMXPubSubMessage does not include the sender's username
 	 */
-	NSString * senderUserName = self.message.metaData[@"username"];
+	NSString * senderUserName = self.message.messageContent[@"username"];
 	if (self.isCurrentUser) {
 		senderUserName = @"Me";
 	} else if (senderUserName == nil || [senderUserName isEqualToString:@""]) {
@@ -104,7 +105,7 @@ const float kPubSubCellLabelOffsetPercentage = 0.02;
 	[self.contentView addSubview:subTitleLabel];
 }
 
-+ (UILabel *)contentLabelForMessage:(MMXPubSubMessage *)message cellWidth:(float)width {
++ (UILabel *)contentLabelForMessage:(MMXMessage *)message cellWidth:(float)width {
 	UIFont *font = [PubSubCell regularFont];
 	UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width * kPubSubCellLabelWidthPercentage, 20000.0f)];
 	label.font = font;
@@ -113,25 +114,31 @@ const float kPubSubCellLabelOffsetPercentage = 0.02;
 	/*
 	 *  Extract message content from MMXPubSubMessage messageContent property
 	 */
-	label.text = message.messageContent;
-	
-	NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
-	CGRect boundingBox = [label.text boundingRectWithSize:label.frame.size
-												  options:NSStringDrawingUsesLineFragmentOrigin
-											   attributes:@{NSFontAttributeName:font}
-												  context:context];
+    NSError *error;
+    Announcement *announcement = [MTLJSONAdapter modelOfClass:[Announcement class] fromJSONDictionary:message.messageContent error:&error];
+    if (!error) {
+        // FIXME:
+        label.text = announcement.content ? : @"Message sent from v1";
 
-	label.frame = boundingBox;
+        NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
+        CGRect boundingBox = [label.text boundingRectWithSize:label.frame.size
+                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                   attributes:@{NSFontAttributeName:font}
+                                                      context:context];
+
+        label.frame = boundingBox;
+    }
+
 	return label;
 }
 
-+ (CGSize)sizeOfContentLabelForMessage:(MMXPubSubMessage *)message cellWidth:(float)width {
++ (CGSize)sizeOfContentLabelForMessage:(MMXMessage *)message cellWidth:(float)width {
 	
 	UILabel * label = [PubSubCell contentLabelForMessage:message cellWidth:width];
 	return label.frame.size;
 }
 
-+ (CGFloat)estimatedHeightForMessage:(MMXPubSubMessage *)message cellWidth:(float)width {
++ (CGFloat)estimatedHeightForMessage:(MMXMessage *)message cellWidth:(float)width {
 	CGFloat height = [PubSubCell sizeOfContentLabelForMessage:message cellWidth:width].height;
 	return height + width * kPubSubCellLabelOffsetPercentage * 3.5 + kPubSubCellFontSize;
 }

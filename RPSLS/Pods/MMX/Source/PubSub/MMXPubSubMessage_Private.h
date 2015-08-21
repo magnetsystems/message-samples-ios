@@ -16,7 +16,7 @@
  */
 
 #import "MMXPubSubMessage.h"
-@class MMXMessage;
+@class MMXInternalMessageAdaptor;
 @class XMPPIQ;
 @class XMPPMessage;
 
@@ -27,10 +27,11 @@
 @property (nonatomic, readwrite) NSString *messageContent;
 @property (nonatomic, readwrite) NSDate *timestamp;
 @property (nonatomic, readwrite) MMXTopic * topic;
+@property (nonatomic, readwrite) MMXUserID *senderUserID;
 
-+ (instancetype)initWithMessage:(MMXMessage *)message;
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message;
 + (NSArray *)pubSubMessagesFromXMPPMessage:(XMPPMessage *)xmppMessage;
-- (MMXMessage *)asMMXMessage;
+- (MMXInternalMessageAdaptor *)asMMXMessage;
 
 - (XMPPIQ *)pubsubIQForAppID:(NSString *)appID
 				  currentJID:(XMPPJID *)currentJID
