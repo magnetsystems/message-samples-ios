@@ -17,7 +17,6 @@
 		0E44EF451B0556F40037A742 /* RPSLSHistoricalSelections.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF341B0556F40037A742 /* RPSLSHistoricalSelections.m */; };
 		0E44EF461B0556F40037A742 /* RPSLSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF371B0556F40037A742 /* RPSLSUser.m */; };
 		0E44EF471B0556F40037A742 /* RPSLSUserStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF391B0556F40037A742 /* RPSLSUserStats.m */; };
-		0E44EF481B0556F40037A742 /* MMXInboundMessage+RPSLS.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF3C1B0556F40037A742 /* MMXInboundMessage+RPSLS.m */; };
 		0E44EF491B0556F40037A742 /* RPSLSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF3E1B0556F40037A742 /* RPSLSUtils.m */; };
 		0E47F4FA1B0664140089E887 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E47F4F91B0664140089E887 /* SignInViewController.m */; };
 		0E7AE7D41AE16AFD0083A47A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E7AE7D31AE16AFD0083A47A /* main.m */; };
@@ -26,6 +25,7 @@
 		0E7AE7DF1AE16AFD0083A47A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E7AE7DE1AE16AFD0083A47A /* Images.xcassets */; };
 		0E7AE7EE1AE16AFD0083A47A /* RPSLSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E7AE7ED1AE16AFD0083A47A /* RPSLSTests.m */; };
 		0E9A44361B15206400EC2859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A44351B15206400EC2859 /* LaunchScreen.storyboard */; };
+		66021B2C40868A5D1B03FF37 /* MMXMessage+RPSLS.m in Sources */ = {isa = PBXBuildFile; fileRef = 66021FC50C537BCB1E5EB983 /* MMXMessage+RPSLS.m */; };
 		BD8AAD43633225AC0980C00C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FC0CF76613AE210C93702B0 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -60,8 +60,6 @@
 		0E44EF371B0556F40037A742 /* RPSLSUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPSLSUser.m; sourceTree = "<group>"; };
 		0E44EF381B0556F40037A742 /* RPSLSUserStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPSLSUserStats.h; sourceTree = "<group>"; };
 		0E44EF391B0556F40037A742 /* RPSLSUserStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPSLSUserStats.m; sourceTree = "<group>"; };
-		0E44EF3B1B0556F40037A742 /* MMXInboundMessage+RPSLS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MMXInboundMessage+RPSLS.h"; sourceTree = "<group>"; };
-		0E44EF3C1B0556F40037A742 /* MMXInboundMessage+RPSLS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MMXInboundMessage+RPSLS.m"; sourceTree = "<group>"; };
 		0E44EF3D1B0556F40037A742 /* RPSLSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPSLSUtils.h; sourceTree = "<group>"; };
 		0E44EF3E1B0556F40037A742 /* RPSLSUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPSLSUtils.m; sourceTree = "<group>"; };
 		0E47F4F81B0664140089E887 /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = "<group>"; };
@@ -79,6 +77,8 @@
 		0E9A44351B15206400EC2859 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2FC0CF76613AE210C93702B0 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C98BB9CC0F11C9B09999F64 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		660215AA64BD43C8B3B9F994 /* MMXMessage+RPSLS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MMXMessage+RPSLS.h"; sourceTree = "<group>"; };
+		66021FC50C537BCB1E5EB983 /* MMXMessage+RPSLS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MMXMessage+RPSLS.m"; sourceTree = "<group>"; };
 		B55DA8AAAAB09F4F5E965943 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -146,10 +146,10 @@
 		0E44EF3A1B0556F40037A742 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				0E44EF3B1B0556F40037A742 /* MMXInboundMessage+RPSLS.h */,
-				0E44EF3C1B0556F40037A742 /* MMXInboundMessage+RPSLS.m */,
 				0E44EF3D1B0556F40037A742 /* RPSLSUtils.h */,
 				0E44EF3E1B0556F40037A742 /* RPSLSUtils.m */,
+				66021FC50C537BCB1E5EB983 /* MMXMessage+RPSLS.m */,
+				660215AA64BD43C8B3B9F994 /* MMXMessage+RPSLS.h */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -374,7 +374,6 @@
 				0E47F4FA1B0664140089E887 /* SignInViewController.m in Sources */,
 				0E44EF491B0556F40037A742 /* RPSLSUtils.m in Sources */,
 				0E44EF411B0556F40037A742 /* AvailablePlayersTableViewController.m in Sources */,
-				0E44EF481B0556F40037A742 /* MMXInboundMessage+RPSLS.m in Sources */,
 				0E44EF461B0556F40037A742 /* RPSLSUser.m in Sources */,
 				0E44EF401B0556F40037A742 /* GameViewController.m in Sources */,
 				0E44EF471B0556F40037A742 /* RPSLSUserStats.m in Sources */,
@@ -385,6 +384,7 @@
 				0E44EF421B0556F40037A742 /* StatsScreenViewController.m in Sources */,
 				0E7AE7D71AE16AFD0083A47A /* AppDelegate.m in Sources */,
 				0E7AE7D41AE16AFD0083A47A /* main.m in Sources */,
+				66021B2C40868A5D1B03FF37 /* MMXMessage+RPSLS.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

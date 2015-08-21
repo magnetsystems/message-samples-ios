@@ -22,10 +22,9 @@
 #import "RPSLSUser.h"
 #import "RPSLSUserStats.h"
 #import "RPSLSUtils.h"
-#import "MMXInboundMessage+RPSLS.h"
-#import <MMX/MMX.h>
+#import "MMXMessage+RPSLS.h"
 
-@interface GameViewController () <MMXClientDelegate>
+@interface GameViewController ()
 
 @property (nonatomic, strong, readwrite) NSString * gameID;
 @property (nonatomic, strong, readwrite) RPSLSUser * opponent;
@@ -57,11 +56,28 @@
 	[super viewWillAppear:animated];
 	self.timer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(handleTimer) userInfo:nil repeats:YES];
 	[self layoutButtons];
-	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMessage:)
+                                                 name:MMXDidReceiveMessageNotification
+                                               object:nil];
 }
 
-- (void)didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning];
+- (void)didReceiveMessage:(NSNotification *)notification {
+    MMXMessage *message = notification.userInfo[MagnetMessageKey];
+    switch (message.messageType) {
+
+        case MMXMessageTypeDefault:{
+            /*
+             *  Checking the incoming message and sending a confirmation if necessary.
+             */
+            if ([message isTimelyMessage]) {
+                [self handleMessage:message];
+            }
+            break;
+        }
+        default:break;
+    };
 }
 
 - (void)dismissView {
@@ -71,13 +87,13 @@
 #pragma mark - Status
 
 - (void)postAvailabilityStatusAs:(BOOL)available {
-	
-	/*
+
+    /*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-	[[MMXClient sharedClient].pubsubManager publishPubSubMessage:[RPSLSUtils availablilityMessage:available] success:nil failure:^(NSError *error) {
-		[[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
-	}];
+    [[RPSLSUtils availablePlayersChannel] publish:[RPSLSUtils availablilityMessage:available].messageContent success:nil failure:^(NSError *error) {
+        [[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
+    }];
 }
 
 - (void)handleTimer {
@@ -95,75 +111,38 @@
 /*
  *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
  */
-- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-	if (connectionStatus == MMXConnectionStatusDisconnected) {
-		[self.navigationController popToRootViewControllerAnimated:YES];
-	}
-}
-
-- (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {
-	
-	/*
-	 *  Checking the incoming message and sending a confirmation if necessary.
-	 */
-	if ([message isTimelyMessage]) {
-		[self handleMessage:message];
-	}
-	if (receiptRequested) {
-		
-		/*
-		 *  Sending delivery confirmation.
-		 */
-		[[MMXClient sharedClient] sendDeliveryConfirmationForMessage:message];
-	}
-}
-
-- (void)client:(MMXClient *)client didReceiveError:(NSError *)error severity:(MMXErrorSeverity)severity messageID:(NSString *)messageID {
-	/*
-	 *  Could be checking to see if something went wrong when sending my choice.
-	 */
-}
-
-- (void)client:(MMXClient *)client didDeliverMessage:(NSString *)messageID recipient:(id<MMXAddressable>)recipient {
-
-	/*
-	 *  Logging info.
-	 */
-	[[MMXLogger sharedLogger] info:@"Message %@ was delivered",messageID];
-}
+//- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
+//	if (connectionStatus == MMXConnectionStatusDisconnected) {
+//		[self.navigationController popToRootViewControllerAnimated:YES];
+//	}
+//}
 
 #pragma mark - Messages
 
 - (void)sendMyChoice:(RPSLSValue)choice {
-	
-	/*
-	 *  Composing a new MMXOutboundMessage. Most of the relevant data for our usecase is being placed in the MMXOutboundMessage metaData property.
-	 *	In other usecases it may make more sense to serialize the data and use the messageContent property.
-	 */
-	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:@[[MMXUserID userIDWithUsername:self.opponent.username]]
-													 withContent:[NSString stringWithFormat:@"I chose %@",[RPSLSEngine valueToString:choice]]
-														metaData:@{kMessageKey_Username	:[RPSLSUser me].username,
-																   kMessageKey_Timestamp:[RPSLSUtils timestamp],
-																   kMessageKey_Choice	:[RPSLSEngine valueToString:choice],
-																   kMessageKey_Type		:kMessageTypeValue_Choice,
-																   kMessageKey_GameID	:self.gameID,
-																   kMessageKey_Wins		:[@([RPSLSUser me].stats.wins) stringValue],
-																   kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
-																   kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]}];
-	
-	/*
-	 *  Creating MMXMessageOptions object. Using defaults.
-	 */
-	MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
-	
-	/*
-	 *  Sending my message.
-	 */
-	[[MMXClient sharedClient] sendMessage:message withOptions:options];
-	
+
+    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
+            kMessageKey_Timestamp : [RPSLSUtils timestamp],
+            kMessageKey_Choice : [RPSLSEngine valueToString:choice],
+            kMessageKey_Type : kMessageTypeValue_Choice,
+            kMessageKey_GameID : self.gameID,
+            kMessageKey_Wins : [@([RPSLSUser me].stats.wins) stringValue],
+            kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
+            kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]};
+
+    MMXUser *user = [[MMXUser alloc] init];
+    user.username = self.opponent.username;
+
+    MMXMessage *message = [MMXMessage messageToRecipients:[NSSet setWithArray:@[user]] messageContent:messageContent];
+
+    [message sendWithSuccess:^{
+
+    } failure:^(NSError *error) {
+
+    }];
 }
 
-- (void)handleMessage:(MMXInboundMessage *)message {
+- (void)handleMessage:(MMXMessage *)message {
 	
 	RPSLSMessageType type = [self typeForMessage:message];
 	switch (type) {
@@ -174,28 +153,28 @@
 		case RPSLSMessageTypeAccept:
 			break;
 		case RPSLSMessageTypeChoice:
-			[self opponentMadeChoice:[RPSLSEngine stringToValue:message.metaData[kMessageKey_Choice]]];
+			[self opponentMadeChoice:[RPSLSEngine stringToValue:message.messageContent[kMessageKey_Choice]]];
 			break;
 		default:
 			break;
 	}
 }
 
-- (RPSLSMessageType)typeForMessage:(MMXInboundMessage *)message {
+- (RPSLSMessageType)typeForMessage:(MMXMessage *)message {
 	
 	/*
 	 *  Extracting information from the MMXInboundMessage metaData property.
 	 */
-	if (message == nil || message.metaData == nil || message.metaData[kMessageKey_Type] == nil || [message.metaData[kMessageKey_Type] isEqualToString:@""]) {
+	if (message == nil || message.messageContent == nil || message.messageContent[kMessageKey_Type] == nil || [message.messageContent[kMessageKey_Type] isEqualToString:@""]) {
 		return RPSLSMessageTypeUnknown;
 	}
-	if ([message.metaData[kMessageKey_Type] isEqualToString:kMessageTypeValue_Invite]) {
+	if ([message.messageContent[kMessageKey_Type] isEqualToString:kMessageTypeValue_Invite]) {
 		return RPSLSMessageTypeInvite;
 	}
-	if ([message.metaData[kMessageKey_Type] isEqualToString:kMessageTypeValue_Accept]) {
+	if ([message.messageContent[kMessageKey_Type] isEqualToString:kMessageTypeValue_Accept]) {
 		return RPSLSMessageTypeAccept;
 	}
-	if ([message.metaData[kMessageKey_Type] isEqualToString:kMessageTypeValue_Choice]) {
+	if ([message.messageContent[kMessageKey_Type] isEqualToString:kMessageTypeValue_Choice]) {
 		return RPSLSMessageTypeChoice;
 	}
 	return 0;

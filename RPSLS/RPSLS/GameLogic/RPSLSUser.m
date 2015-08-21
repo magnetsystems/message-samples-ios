@@ -29,17 +29,17 @@
 	return user;
 }
 
-+ (instancetype)playerFromInvite:(MMXInboundMessage *)message {
-	if (message.metaData) {
++ (instancetype)playerFromInvite:(MMXMessage *)message {
+	if (message.messageContent) {
 		RPSLSUser * user = [[RPSLSUser alloc] init];
 
 		/*
 		 *  Extracting info from the MMXInboundMessage metaData to populate the RPSLSUser objects
 		 */
-		user.username = message.metaData[kMessageKey_Username] ?: @"Unknown";
+		user.username = message.messageContent[kMessageKey_Username] ?: @"Unknown";
 		user.timestamp = message.timestamp;
-		user.stats = [RPSLSUserStats statsFromMetaData:message.metaData];
-		user.isAvailable = [message.metaData[kMessageKey_UserAvailablity] isEqualToString:kPostStatus_Available] ? YES : NO;
+		user.stats = [RPSLSUserStats statsFromMetaData:message.messageContent];
+		user.isAvailable = [message.messageContent[kMessageKey_UserAvailablity] isEqualToString:kPostStatus_Available] ? YES : NO;
 		return user;
 	}
 	return nil;
@@ -52,17 +52,17 @@
 	return user;
 }
 
-+ (instancetype)availablePlayerFromPubSubMessage:(MMXPubSubMessage *)message {
-	if (message.metaData) {
++ (instancetype)availablePlayerFromMessage:(MMXMessage *)message {
+	if (message.messageContent) {
 		RPSLSUser * user = [[RPSLSUser alloc] init];
 		
 		/*
 		 *  Extracting info from the MMXInboundMessage metaData to populate the RPSLSUser objects
 		 */
-		user.username = message.metaData[kMessageKey_Username] ?: @"Unknown";
+		user.username = message.messageContent[kMessageKey_Username] ?: @"Unknown";
 		user.timestamp = message.timestamp;
-		user.stats = [RPSLSUserStats statsFromMetaData:message.metaData];
-		user.isAvailable = [message.metaData[kMessageKey_UserAvailablity] boolValue];
+		user.stats = [RPSLSUserStats statsFromMetaData:message.messageContent];
+		user.isAvailable = [message.messageContent[kMessageKey_UserAvailablity] boolValue];
 		return user;
 	}
 	return nil;
@@ -72,7 +72,7 @@
 	/*
 	 *  Checking the current username of the logged in user.
 	 */
-	return [MMXClient sharedClient].configuration.credential.user;
+	return [MMXUser currentUser].username;
 }
 
 - (NSString *)description {

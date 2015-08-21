@@ -39,7 +39,6 @@
  */
 @property (nonatomic, copy, readwrite) NSString *messageContent;
 
-- (NSXMLElement *)recipientsAsXML;
 - (NSXMLElement *)contentAsXMLForType:(NSString *)type;
 - (NSXMLElement *)metaDataAsXML;
 + (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message;

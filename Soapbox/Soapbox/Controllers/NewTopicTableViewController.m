@@ -19,9 +19,9 @@
 #import "NewTopicTableViewController.h"
 #import "NewTopicNameCell.h"
 #import "NewTopicTagCell.h"
-#import <MMX.h>
+#import <MMX/MMX.h>
 
-@interface NewTopicTableViewController () <MMXClientDelegate>
+@interface NewTopicTableViewController ()
 
 @property (nonatomic, copy) NSArray *tagsArray;
 
@@ -44,34 +44,16 @@
 	self.navigationItem.rightBarButtonItem = rightBarButtonItem;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	
-	/*
-	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
-	 *	I only care about client:didReceiveConnectionStatusChange:error: in this class.
-	 *	All MMXClientDelegate protocol methods are optional.
-	 */
-	[MMXClient sharedClient].delegate = self;
-
-	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
-}
-
 #pragma mark - MMXClientDelegate Callbacks
 
 /*
  *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
  */
-- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-	if (connectionStatus == MMXConnectionStatusDisconnected) {
-		[self.navigationController popToRootViewControllerAnimated:YES];
-	}
-}
+//- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
+//	if (connectionStatus == MMXConnectionStatusDisconnected) {
+//		[self.navigationController popToRootViewControllerAnimated:YES];
+//	}
+//}
 
 #pragma mark - Create Topic
 
@@ -92,31 +74,36 @@
 		/*
 		 *  Creating a new MMXTopic object. I could have also used MMXTopic topicWithName: as the values I passed in are same as the defaults.
 		 */
-		MMXTopic * topic = [MMXTopic topicWithName:topicName maxItemsToPersist:-1 permissionsLevel:MMXPublishPermissionsLevelAnyone];
+//		MMXTopic * topic = [MMXTopic topicWithName:topicName maxItemsToPersist:-1 permissionsLevel:MMXPublishPermissionsLevelAnyone];
+        MMXChannel *channel = [MMXChannel channelWithName:topicName summary:nil];
+        channel.isPublic = YES;
 		
 		/*
 		 *  Creating a new topic by passing my MMXTopic object.
 		 *	When a user creates a topic they are NOT automatically subscribed to it.
 		 */
-		[[MMXClient sharedClient].pubsubManager createTopic:topic success:^(BOOL success) {
-			NSArray * tagsArray = [self topicTags];
-			if (tagsArray.count) {
-				
-				/*
-				 *  Setting tags on the newly created topic.
-				 *	There are also APIs to get the list of existing tags, add tags and remove tags.
-				 */
-				[[MMXClient sharedClient].pubsubManager setTags:tagsArray topic:topic success:^(BOOL success) {
-					[self showSubscriptionDialog:topic description:@"Topic created successfully. Would you like to subscribe to this topic?"];
-				} failure:^(NSError *error) {
-					[self showSubscriptionDialog:topic description:@"Topic was created successfully but there was an error adding the tags. Would you like to subscribe to this topic?"];
-				}];
-			} else {
-				[self showAlertForSuccess:YES title:@"Topic Created" description:@"Topic created successfully."];
-			}
-		} failure:^(NSError *error) {
-			[self showAlertForSuccess:NO title:@"Topic Creation Failure" description:error.localizedFailureReason];
-		}];
+        [channel createWithSuccess:^{
+            NSArray * tagsArray = [self topicTags];
+            if (tagsArray.count) {
+                
+                /*
+                 *  Setting tags on the newly created topic.
+                 *	There are also APIs to get the list of existing tags, add tags and remove tags.
+                 */
+                __weak typeof(channel) weakChannel = channel;
+                [channel setTags:[NSSet setWithArray:tagsArray] success:^{
+                    typeof(weakChannel) strongChannel = weakChannel;
+                    [self showSubscriptionDialog:strongChannel description:@"Topic created successfully. Would you like to subscribe to this topic?"];
+                } failure:^(NSError *error) {
+                    typeof(weakChannel) strongChannel = weakChannel;
+                    [self showSubscriptionDialog:strongChannel description:@"Topic was created successfully but there was an error adding the tags. Would you like to subscribe to this topic?"];
+                }];
+            } else {
+                [self showAlertForSuccess:YES title:@"Topic Created" description:@"Topic created successfully."];
+            }
+        } failure:^(NSError *error) {
+            [self showAlertForSuccess:NO title:@"Topic Creation Failure" description:error.localizedFailureReason];
+        }];
 	}
 	
 }
@@ -135,7 +122,7 @@
 
 #pragma mark - Show UIAlertController
 
-- (void)showSubscriptionDialog:(MMXTopic *)topic description:(NSString *)description {
+- (void)showSubscriptionDialog:(MMXChannel *)channel description:(NSString *)description {
 
 	UIAlertController *alertController = [UIAlertController
 										  alertControllerWithTitle:@"Topic Created"
@@ -153,11 +140,13 @@
 									  *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
 									  *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
 									  */
-									 [[MMXClient sharedClient].pubsubManager subscribeToTopic:topic device:nil success:^(MMXTopicSubscription *subscription) {
-										 [self showAlertForSuccess:YES title:@"Subscribed to Topic" description:@"You have successfully subscribed to the topic."];
-									 } failure:^(NSError *error) {
-										 [self showAlertForSuccess:YES title:@"Subscription Failed" description:@"Please try again later."];
-									 }];
+                                     if (!channel.isSubscribed) {
+                                         [channel subscribeWithSuccess:^{
+                                             [self showAlertForSuccess:YES title:@"Subscribed to Topic" description:@"You have successfully subscribed to the topic."];
+                                         } failure:^(NSError *error) {
+                                             [self showAlertForSuccess:YES title:@"Subscription Failed" description:@"Please try again later."];
+                                         }];
+                                     }
 								 }];
 	UIAlertAction *doneAction = [UIAlertAction
 								 actionWithTitle:NSLocalizedString(@"NO", @"NO action")

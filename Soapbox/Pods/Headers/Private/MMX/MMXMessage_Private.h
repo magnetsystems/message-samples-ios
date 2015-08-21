@@ -1,1 +1,1 @@
-../../../MMX/Source/CoreMessaging/MMXMessage_Private.h
+../../../MMX/Source/Abstraction/MMXMessage_Private.h

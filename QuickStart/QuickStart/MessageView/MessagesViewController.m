@@ -21,7 +21,6 @@
 #import "MessageCell.h"
 #import "QuickStartUtils.h"
 #import "UIColor+QuickStart.h"
-#import <MagnetAbstraction.h>
 #import <MMX.h>
 @interface MessagesViewController ()
 
@@ -94,7 +93,7 @@ NSString * const kTextContent = @"textContent";
 	self.currentCredential = [NSURLCredential credentialWithUser:kDefaultUsername password:kDefaultUsername persistence:NSURLCredentialPersistenceNone];
 	MMXUser *user = [MMXUser new];
 	user.username = kDefaultUsername;
-	[user registerWithCredentials:self.currentCredential success:^{
+	[user registerWithCredential:self.currentCredential success:^{
 		[self logIn];
 	} failure:^(NSError *error) {
 		if (error.code == 409) {
@@ -106,7 +105,7 @@ NSString * const kTextContent = @"textContent";
 
 - (void)logIn {
 	if (self.currentCredential != nil) {
-		[MMXUser logInWithCredentials:self.currentCredential success:^(MMXUser *user) {
+		[MMXUser logInWithCredential:self.currentCredential success:^(MMXUser *user) {
 			self.currentRecipient = [self me];
 			[self showAlertWithTitle:@"Logged In" message:[NSString stringWithFormat:@"You are logged in as %@.\n\nTry sending a message below.",kDefaultUsername]];
 		} failure:^(NSError *error) {

@@ -17,6 +17,7 @@
 
 #import <Foundation/Foundation.h>
 @class MMXTopic;
+@class MMXUserID;
 
 @interface MMXPubSubMessage : NSObject
 
@@ -24,6 +25,11 @@
  *  Unique UUID for the message to allow tracking.
  */
 @property (nonatomic, copy, readonly)	NSString *messageID;
+
+/**
+ *  The MMXUserID for the user that posted the message.
+ */
+@property (nonatomic, copy, readonly)	MMXUserID *senderUserID;
 
 /**
  *  NSDictionary used to pass additional information that would be useful for displaying or consuming the message.

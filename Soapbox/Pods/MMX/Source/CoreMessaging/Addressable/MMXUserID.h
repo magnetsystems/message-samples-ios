@@ -17,11 +17,12 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXAddressable.h"
+#import "Mantle.h"
 
 /**
  *  The MMXUserID class is the primary way to identify a user, as well as a means to address a message to that user.
  */
-@interface MMXUserID : NSObject <MMXAddressable>
+@interface MMXUserID : MTLModel <MMXAddressable>
 
 /**
  *  The username associated with this object
@@ -38,7 +39,6 @@
 + (instancetype)userIDWithUsername:(NSString *)username;
 
 //MMXAddressable Protocol
-@property (nonatomic, readonly) NSString *address;
-@property (nonatomic, readonly) NSString *subAddress;
+@property (nonatomic, readonly) MMXInternalAddress *address;
 
 @end

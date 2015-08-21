@@ -61,7 +61,12 @@
 	if (metaData == nil) {
 		return YES;
 	}
-	return [NSJSONSerialization isValidJSONObject:metaData];
+	for (id value in [metaData allValues]) {
+		if (![value isKindOfClass:[NSString class]]) {
+			return NO;
+		}
+	}
+	return YES;
 }
 
 #pragma mark - Payload Conversion

@@ -30,6 +30,7 @@
 @class MMXMessageOptions;
 @class MMXConfiguration;
 @class CLLocation;
+@class MMXUserID;
 
 /**
  *  Values representing the connection status of the MMXClient.
@@ -130,6 +131,15 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
  *  @param messageID - The message ID of the message that led to the error
  */
 - (void)client:(MMXClient *)client didReceiveError:(NSError *)error severity:(MMXErrorSeverity)severity messageID:(NSString *)messageID;
+
+/**
+ *  This method is called when the server successfully receives a message after sending
+ *
+ *  @param client    - The client providing the message.
+ *  @param messageID - The message ID of the message that was received by the server
+ *  @param recipient - The MMXUserID of the user the message was addressed to.
+ */
+- (void)client:(MMXClient *)client didReceiveServerAckForMessageID:(NSString *)messageID recipient:(MMXUserID *)recipient;
 
 // PubSub
 /**
