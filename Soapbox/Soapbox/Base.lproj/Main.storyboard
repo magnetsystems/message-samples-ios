@@ -56,12 +56,24 @@
                                     <action selector="signInPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="HM0-ct-IlH"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O9t-bB-QAM">
+                                <rect key="frame" x="16" y="368" width="568" height="39"/>
+                                <color key="backgroundColor" red="0.99215686270000003" green="0.6705882353" blue="0.30980392159999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <state key="normal" title="Register">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="registerPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="MGL-g3-4EY"/>
+                                </connections>
+                            </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="757-hR-tcD">
                                 <rect key="frame" x="282" y="258" width="37" height="37"/>
                                 <color key="color" red="0.99215686270000003" green="0.6705882353" blue="0.30980392159999998" alpha="1" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If you do not have an account you will be registered on first log in." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JcW-RR-J2z">
-                                <rect key="frame" x="16" y="368" width="568" height="19"/>
+                                <rect key="frame" x="16" y="415" width="568" height="19"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="0.59860321972626251" green="0.59860321972626251" blue="0.59860321972626251" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -72,8 +84,11 @@
                             <constraint firstAttribute="centerX" secondItem="Bsd-VX-gB3" secondAttribute="centerX" id="1XU-Ar-UyM"/>
                             <constraint firstItem="JcW-RR-J2z" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="5pl-3f-4Gw"/>
                             <constraint firstItem="JcW-RR-J2z" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="6wx-Lm-wCI"/>
+                            <constraint firstItem="O9t-bB-QAM" firstAttribute="top" secondItem="JcW-RR-J2z" secondAttribute="bottom" constant="8" id="8Fn-tn-rNN"/>
                             <constraint firstItem="tsm-yG-wFd" firstAttribute="top" secondItem="Bsd-VX-gB3" secondAttribute="bottom" constant="8" id="EVp-Mq-8Jv"/>
                             <constraint firstItem="tsm-yG-wFd" firstAttribute="trailing" secondItem="W6h-MQ-IY8" secondAttribute="trailing" id="Fsx-lM-2Gx"/>
+                            <constraint firstItem="JcW-RR-J2z" firstAttribute="top" secondItem="O9t-bB-QAM" secondAttribute="bottom" constant="8" id="MV2-KO-zdF"/>
+                            <constraint firstItem="O9t-bB-QAM" firstAttribute="top" secondItem="GfD-5k-mPL" secondAttribute="bottom" constant="8" id="Pes-xk-Ka6"/>
                             <constraint firstItem="Bsd-VX-gB3" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="25" id="Pjj-bM-oN7"/>
                             <constraint firstItem="GfD-5k-mPL" firstAttribute="top" secondItem="757-hR-tcD" secondAttribute="bottom" constant="26" id="a3j-N4-APN"/>
                             <constraint firstItem="W6h-MQ-IY8" firstAttribute="trailing" secondItem="GfD-5k-mPL" secondAttribute="trailing" id="fsi-16-pbI"/>
@@ -81,12 +96,20 @@
                             <constraint firstItem="tsm-yG-wFd" firstAttribute="leading" secondItem="W6h-MQ-IY8" secondAttribute="leading" id="hU9-1s-QsN"/>
                             <constraint firstItem="tsm-yG-wFd" firstAttribute="centerX" secondItem="Bsd-VX-gB3" secondAttribute="centerX" id="jfq-Cb-DHk"/>
                             <constraint firstItem="W6h-MQ-IY8" firstAttribute="leading" secondItem="GfD-5k-mPL" secondAttribute="leading" id="l0T-kk-qOj"/>
+                            <constraint firstItem="O9t-bB-QAM" firstAttribute="width" secondItem="GfD-5k-mPL" secondAttribute="width" id="qT5-80-3si"/>
                             <constraint firstItem="tsm-yG-wFd" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="qk5-pX-Nks"/>
                             <constraint firstItem="W6h-MQ-IY8" firstAttribute="top" secondItem="tsm-yG-wFd" secondAttribute="bottom" constant="8" symbolic="YES" id="tY7-RU-Qsp"/>
                             <constraint firstAttribute="centerX" secondItem="757-hR-tcD" secondAttribute="centerX" constant="-0.5" id="umZ-O3-YNG"/>
+                            <constraint firstItem="O9t-bB-QAM" firstAttribute="centerX" secondItem="GfD-5k-mPL" secondAttribute="centerX" id="vBs-Tr-gR4"/>
                             <constraint firstItem="JcW-RR-J2z" firstAttribute="top" secondItem="GfD-5k-mPL" secondAttribute="bottom" constant="8" id="wkY-IU-FMa"/>
                             <constraint firstItem="GfD-5k-mPL" firstAttribute="top" secondItem="W6h-MQ-IY8" secondAttribute="bottom" constant="8" symbolic="YES" id="xOb-n4-KAy"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="wkY-IU-FMa"/>
+                                <exclude reference="8Fn-tn-rNN"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="757-hR-tcD" id="tCh-sk-8y6"/>

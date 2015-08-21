@@ -861,12 +861,12 @@ int const kReconnectionTimerInterval = 4;
 			MMXInvite *invite = [MMXInvite inviteFromMMXInternalMessage:inMessage];
 			[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInvitationNotification
 																object:nil
-															  userInfo:@{MagnetInviteKey:invite}];
+															  userInfo:@{MMXInviteKey:invite}];
 		} else if ([inMessage.mType isEqualToString:@"invitationResponse"]) {
 			MMXInviteResponse *inviteResponse = [MMXInviteResponse inviteResponseFromMMXInternalMessage:inMessage];
 				[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInvitationResponseNotification
 																	object:nil
-																  userInfo:@{MagnetInviteResponseKey:inviteResponse}];
+																  userInfo:@{MMXInviteResponseKey:inviteResponse}];
 
 		} else {
 			if ([self.delegate respondsToSelector:@selector(client:didReceiveMessage:deliveryReceiptRequested:)]) {

@@ -53,30 +53,4 @@
 	}
 }
 
-#pragma mark - NSCoding
-
-- (id)initWithCoder:(NSCoder *)coder {
-	self = [super init];
-	if (self) {
-		_username = [coder decodeObjectForKey:@"_username"];
-	}
-	
-	return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeObject:self.username forKey:@"_username"];
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-	MMXUserID *copy = [[[self class] allocWithZone:zone] init];
-	
-	if (copy != nil) {
-		copy.username = self.username;
-	}
-	
-	return copy;
-}
-
-
 @end
