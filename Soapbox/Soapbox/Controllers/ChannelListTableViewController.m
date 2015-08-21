@@ -67,6 +67,7 @@
 	 */
     MMXChannel *companyChannel = [MMXChannel channelWithName:@"company_announcements"
                                                      summary:@"The Company Announcements channel is designed to distribute information that should be available to all employees."];
+    companyChannel.isPublic = YES;
 
 	/*
 	 *  Creating a new channel by passing my MMXChannel object.
@@ -116,6 +117,7 @@
 	 *  Creating a new channel by passing my MMXChannel object.
 	 *	I am passing nil to success because there is not any business logic I need to execute upon success.
 	 */
+    lunchChannel.isPublic = YES;
     [lunchChannel createWithSuccess:nil failure:^(NSError *error) {
         NSLog(@"createChannel for channel %@ Error = %@", lunchChannel.name, error);
     }];
