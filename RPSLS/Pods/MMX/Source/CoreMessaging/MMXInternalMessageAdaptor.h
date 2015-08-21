@@ -17,13 +17,16 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXAddressable.h"
+#import "Mantle.h"
 
 @class CLLocation;
 @class MMXUserID;
 @class MMXEndpoint;
 @class MMXTopic;
+@class MMXUser;
+@class MMXChannel;
 
-@interface MMXInternalMessageAdaptor : NSObject <NSCoding>
+@interface MMXInternalMessageAdaptor : MTLModel
 
 //All Messages
 @property(nonatomic, strong, readonly) NSString *messageID;
@@ -51,4 +54,13 @@
               withContent:(NSString *)content
               messageType:(NSString *)messageType
                  metaData:(NSDictionary *)metaData;
+
++ (instancetype)inviteMessageToUser:(MMXUser *)recipient
+						 forChannel:(MMXChannel *)channel
+						textMessage:(NSString *)textMessage;
+
++ (instancetype)inviteResponseMessageToUser:(MMXUser *)recipient
+								 forChannel:(MMXChannel *)channel
+								textMessage:(NSString *)textMessage
+								   response:(BOOL)response;
 @end

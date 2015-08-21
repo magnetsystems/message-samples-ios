@@ -54,42 +54,6 @@
     return msg;
 }
 
-- (NSXMLElement *)recipientsAndSenderAsXML {
-	if (self.recipients == nil || self.recipients.count < 1) {
-		return nil;
-	}
-	NSXMLElement *metaDataElement = [[NSXMLElement alloc] initWithName:@"mmxmeta"];
-	
-	NSMutableArray *recipientArray = @[].mutableCopy;
-	for (id<MMXAddressable> recipient in self.recipients) {
-		MMXInternalAddress *address = recipient.address;
-		if (address) {
-			[recipientArray addObject:[address asDictionary]];
-		}
-	}
-	
-	MMXUserProfile *sender = [MMXClient sharedClient].currentProfile;
-	MMXInternalAddress *address;
-	if (sender) {
-		address = sender.address;
-	}
-	
-	NSError *error;
-	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"To":recipientArray,
-																 @"From":address ? [address asDictionary] : [NSNull null]}
-													   options:NSJSONWritingPrettyPrinted
-														 error:&error];
-	NSString *json = [[NSString alloc] initWithData:jsonData
-										   encoding:NSUTF8StringEncoding];
-	
-	[metaDataElement setStringValue:json];
-	
-	if (error == nil) {
-		return metaDataElement;
-	}
-	return nil;
-}
-
 - (NSXMLElement *)contentAsXMLForType:(NSString *)type {
 	return [MMXMessageUtils xmlFromContentString:self.messageContent andMessageType:type];
 }

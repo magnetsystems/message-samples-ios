@@ -17,11 +17,12 @@
 
 
 #import <Foundation/Foundation.h>
+#import "Mantle.h"
 @class MMXUser;
 @class MMXMessage;
 @class MMXInvite;
 
-@interface MMXChannel : NSObject
+@interface MMXChannel : MTLModel
 
 /**
  *  Is the topic public?
@@ -152,24 +153,34 @@
 - (void)unSubscribeWithSuccess:(void (^)(void))success
 					   failure:(void (^)(NSError * error))failure;
 
+
+/**
+ *  Get all channels the current user is subscribed to
+ *
+ *  @param success Block with a NSArray of channels
+ *  @param failure - Block with an NSError with details about the call failure.
+ */
++ (void)subscribedChannelsWithSuccess:(void (^)(NSArray *channels))success
+							  failure:(void (^)(NSError *error))failure;
+
 /**
  *  Get the subscribers for a channel
  *	Must be subscribed to the channel to use this API
  *
- *  @param success Block with a NSSet of the subscribers(MMXUser objects)
+ *  @param success Block with the total count of subscribers and a NSSet of the subscribers(MMXUser objects)
  *  @param failure Block with an NSError with details about the call failure.
  */
-- (void)subscribersWithSuccess:(void (^)(NSSet *subscribers))success
+- (void)subscribersWithSuccess:(void (^)(int, NSSet *))success
 					   failure:(void (^)(NSError *error))failure;
 
 /**
  *  Method to publish to a channel.
  *
- *  @param message MMXMessage with the content you want to publish
- *  @param success Block with the published message
- *  @param failure Block with an NSError with details about the call failure.
+ *  @param messageContent The content you want to publish
+ *  @param success		  Block with the published message
+ *  @param failure		  Block with an NSError with details about the call failure.
  */
-- (void)publish:(MMXMessage *)message
+- (void)publish:(NSDictionary *)messageContent
 		success:(void (^)(MMXMessage *message))success
 		failure:(void (^)(NSError *error))failure;
 
@@ -193,14 +204,16 @@
 /**
  *  Invite a user to the channel
  *
- *  @param user    The MMXUser object for the user you want to invite
- *  @param message An optional message telling the user why you want them to join the channel
- *  @param success Block with the MMXInvite object that was sent.
- *  @param failure Block with an NSError with details about the call failure.
+ *  @param user			The MMXUser object for the user you want to invite
+ *  @param textMessage	An optional message telling the user why you want them to join the channel
+ *  @param success		Block with the MMXInvite object that was sent.
+ *  @param failure		Block with an NSError with details about the call failure.
+ *
+ *  @return The messageID for the invite sent
  */
-- (void)inviteUser:(MMXUser *)user
-		   message:(NSString *)message
-		   success:(void (^)(MMXInvite *invite))success
-		   failure:(void (^)(NSError *error))failure;
+- (NSString *)inviteUser:(MMXUser *)user
+			 textMessage:(NSString *)textMessage
+				 success:(void (^)(MMXInvite *invite))success
+				 failure:(void (^)(NSError *error))failure;
 
 @end

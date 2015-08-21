@@ -18,6 +18,7 @@
 #import "MMXUser.h"
 #import "MagnetDelegate.h"
 #import "MMX_Private.h"
+#import "MMXAccountManager_Private.h"
 #import "NSString+XEP_0106.h"
 
 @implementation MMXUser
@@ -97,17 +98,17 @@
 	}];
 }
 
-+ (void)findByName:(NSString *)name
-			 limit:(int)limit
-		   success:(void (^)(int, NSSet *))success
-		   failure:(void (^)(NSError *))failure {
++ (void)findByDisplayName:(NSString *)displayName
+					limit:(int)limit
+				  success:(void (^)(int, NSSet *))success
+				  failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
 			failure([MagnetDelegate notNotLoggedInError]);
 		}
 		return;
 	}
-	MMXQuery *query = [MMXQuery queryForUserDisplayNameStartsWith:name
+	MMXQuery *query = [MMXQuery queryForUserDisplayNameStartsWith:displayName
 															 tags:nil
 															limit:limit];
 	[[MMXClient sharedClient].accountManager queryUsers:query
@@ -118,6 +119,26 @@
 		}
 		if (success) {
 			success(totalCount, [NSSet setWithArray:userArray]);
+		}
+	} failure:^(NSError *error) {
+		if (failure) {
+			failure(error);
+		}
+	}];
+}
+
++ (void)userForUsername:(NSString *)username
+				success:(void (^)(MMXUser *))success
+				failure:(void (^)(NSError *))failure {
+	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+		if (failure) {
+			failure([MagnetDelegate notNotLoggedInError]);
+		}
+		return;
+	}
+	[[MMXClient sharedClient].accountManager userForUserName:username success:^(MMXUser *user) {
+		if (success) {
+			success(user);
 		}
 	} failure:^(NSError *error) {
 		if (failure) {

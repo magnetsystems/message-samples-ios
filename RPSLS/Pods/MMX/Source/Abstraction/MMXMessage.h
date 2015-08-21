@@ -86,6 +86,8 @@
  *
  *  @param success - Block with the message ID for the sent message.
  *  @param failure - Block with an NSError with details about the call failure.
+ *
+ *  @return The messageID for the message sent
  */
 - (NSString *)sendWithSuccess:(void (^)(void))success
 					  failure:(void (^)(NSError *error))failure;
@@ -96,6 +98,8 @@
  *  @param content NSDictionary of content to send. Must contain only objects that are JSON serializable.
  *  @param success - Block with the message ID for the sent message.
  *  @param failure - Block with an NSError with details about the call failure.
+ *
+ *  @return The messageID for the message sent
  */
 - (NSString *)replyWithContent:(NSDictionary *)content
 				 success:(void (^)(void))success
@@ -114,5 +118,9 @@
 						  success:(void (^)(void))success
 						  failure:(void (^)(NSError * error))failure;
 
+/**
+ *  Send a delivery confimation message to the sender of the message.
+ */
+- (void)sendDeliveryConfirmation;
 
 @end

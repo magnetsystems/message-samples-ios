@@ -19,6 +19,7 @@
 #import "MagnetDelegate.h"
 #import "MMXMessage.h"
 #import "MMXChannel.h"
+#import "MMXInvite.h"
 #import "MMXUser.h"
 #import "MagnetConstants.h"
 #import "MMXMessageTypes.h"

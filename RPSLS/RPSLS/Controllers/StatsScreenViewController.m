@@ -88,7 +88,7 @@
 	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-    [[RPSLSUtils availablePlayersChannel] publish:[RPSLSUtils availablilityMessage:available] success:nil failure:^(NSError *error) {
+    [[RPSLSUtils availablePlayersChannel] publish:[RPSLSUtils availablilityMessage:available].messageContent success:nil failure:^(NSError *error) {
         [[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
     }];
 }

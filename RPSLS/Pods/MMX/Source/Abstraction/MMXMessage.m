@@ -134,6 +134,10 @@
 	return recipients.copy;
 }
 
+- (void)sendDeliveryConfirmation {
+	[[MMXClient sharedClient] sendDeliveryConfirmationForAddress:self.sender.address messageID:self.messageID toDeviceID:self.senderDeviceID];
+}
+
 #pragma mark - NSCoding
 
 - (id)initWithCoder:(NSCoder *)coder {

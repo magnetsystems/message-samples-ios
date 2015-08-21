@@ -27,6 +27,7 @@
 @property (nonatomic, readwrite) NSString *messageContent;
 @property (nonatomic, readwrite) NSDate *timestamp;
 @property (nonatomic, readwrite) MMXTopic * topic;
+@property (nonatomic, readwrite) MMXUserID *senderUserID;
 
 + (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message;
 + (NSArray *)pubSubMessagesFromXMPPMessage:(XMPPMessage *)xmppMessage;

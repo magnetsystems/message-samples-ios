@@ -39,6 +39,7 @@
 @property(nonatomic, strong, readwrite) MMXUserID *targetUserID;
 @property(nonatomic, strong, readwrite) MMXEndpoint *senderEndpoint;
 @property(nonatomic, readwrite) CLLocation *location;
+@property(nonatomic, readwrite) NSArray *recipients;
 
 @property (nonatomic, strong) MMXTopic * topic;
 
@@ -47,7 +48,7 @@
              messageType:(NSString *)messageType
                 metaData:(NSDictionary *)metaData;
 
-- (instancetype)initWithXMPPMessage:(XMPPMessage*)xmppMessage;
++ (instancetype)initWithXMPPMessage:(XMPPMessage*)xmppMessage;
 - (instancetype)initWithPubSubMessage:(XMPPMessage*)xmppMessage;
 
 + (NSArray *)pubsubMessagesFromFetchResponseIQ:(XMPPIQ *)iq
@@ -56,6 +57,13 @@
 
 - (NSXMLElement *)contentToXML;
 - (NSXMLElement *)metaDataToXML;
-- (NSXMLElement *)recipientsAndSenderAsXML;
++ (NSXMLElement *)xmlFromRecipients:(NSArray *)recipients senderAddress:(MMXInternalAddress *)address;
+
++ (NSString *)extractPayload:(NSArray *)payLoadElements;
++ (NSDictionary *)extractMetaData:(NSArray *)metaElements;
++ (NSDictionary *)extractMMXMetaData:(NSArray *)metaElements;
++ (MMXUserID *)extractSenderFromMMXMetaDict:(NSDictionary *)mmxMetaDict;
++ (NSArray *)extractRecipientsFromMMXMetaDict:(NSDictionary *)mmxMetaDict;
+
 
 @end

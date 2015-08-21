@@ -46,6 +46,7 @@ NSString * const MXcommandDeleteTopic = @"deletetopic";
 NSString * const MXcommandSubscribe = @"subscribe";
 NSString * const MXcommandUnsubscribe = @"unsubscribe";
 NSString * const MXcommandUnsubscribeForDevice = @"unsubscribeForDev";
+NSString * const MXcommandGetSubscribers = @"getSubscribers";
 NSString * const MXcommandRetract = @"retract";
 NSString * const MXcommandRetractAll = @"retractAll";
 NSString * const MXcommandGetSummary = @"getSummary";

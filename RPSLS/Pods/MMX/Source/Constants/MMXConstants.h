@@ -46,6 +46,7 @@ extern NSString  * const MXcommandDeleteTopic;
 extern NSString  * const MXcommandSubscribe;
 extern NSString  * const MXcommandUnsubscribe;
 extern NSString  * const MXcommandUnsubscribeForDevice;
+extern NSString  * const MXcommandGetSubscribers;
 extern NSString  * const MXcommandRetract;
 extern NSString  * const MXcommandRetractAll;
 extern NSString  * const MXcommandGetSummary;
