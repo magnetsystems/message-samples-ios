@@ -27,7 +27,9 @@
 }
 
 + (MMXChannel *)availablePlayersChannel {
-    return [MMXChannel channelWithName:kPostStatus_TopicName summary:nil];
+    MMXChannel *channel = [MMXChannel channelWithName:kPostStatus_TopicName summary:nil];
+    channel.isPublic = YES;
+    return channel;
 }
 
 + (MMXMessage *)availablilityMessage:(BOOL)available {

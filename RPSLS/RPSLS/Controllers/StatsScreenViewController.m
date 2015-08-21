@@ -233,7 +233,7 @@
     MMXChannel *availablePlayersChannel = [RPSLSUtils availablePlayersChannel];
     [availablePlayersChannel createWithSuccess:^{
 
-        [availablePlayersChannel subscribersWithSuccess:nil failure:^(NSError *subscribeError) {
+        [availablePlayersChannel subscribeWithSuccess:nil failure:^(NSError *subscribeError) {
             [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@", subscribeError.localizedFailureReason];
         }];
 
@@ -248,7 +248,7 @@
              *	I am passing nil to success because there is not any business logic I need to execute upon success.
              */
 
-            [availablePlayersChannel subscribersWithSuccess:nil failure:^(NSError *subscribeError) {
+            [availablePlayersChannel subscribeWithSuccess:nil failure:^(NSError *subscribeError) {
                 [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@", subscribeError.localizedFailureReason];
             }];
         }
