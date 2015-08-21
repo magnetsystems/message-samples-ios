@@ -40,4 +40,14 @@
  */
 + (void)teardown;
 
+/**
+ *  You must enable incoming messages. It is disabled by default.
+ */
++ (void)enableIncomingMessages;
+
+/**
+ *  Disable incoming messages.
+ */
++ (void)disableIncomingMessages;
+
 @end

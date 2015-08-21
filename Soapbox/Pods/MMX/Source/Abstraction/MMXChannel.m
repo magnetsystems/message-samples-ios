@@ -25,6 +25,8 @@
 #import "MagnetDelegate.h"
 #import "MMXInvite_Private.h"
 #import "MMXInternalMessageAdaptor.h"
+#import "MMXDataModel.h"
+#import "MMXPubSubMessage_Private.h"
 
 @implementation MMXChannel
 
@@ -277,17 +279,22 @@
 		success:(void (^)(MMXMessage *))success
 		failure:(void (^)(NSError *))failure {
 
-	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
-		}
-		
-		return;
-	}
+	NSString *messageID = [[MMXClient sharedClient] generateMessageID];
 	MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self asTopic] content:nil metaData:messageContent];
+	msg.messageID = messageID;
+	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+		if ([MMXUser currentUser]) {
+			[self saveForOfflineAsPubSub:msg];
+			return;
+		} else {
+			if (failure) {
+				failure([MMXChannel notNotLoggedInAndNoUserError]);
+			}
+			return;
+		}
+	}
 	[[MMXClient sharedClient].pubsubManager publishPubSubMessage:msg success:^(BOOL successful, NSString *messageID) {
 		if (success) {
-			//FIXME: not sure that this is the best way to handle this
 			MMXMessage *message = [MMXMessage messageToChannel:self.copy messageContent:messageContent];
 			message.messageID = messageID;
 			message.channel = self.copy;
@@ -352,7 +359,7 @@
 }
 
 - (NSString *)inviteUser:(MMXUser *)user
-			 textMessage:(NSString *)textMessage
+			 comments:(NSString *)comments
 				 success:(void (^)(MMXInvite *))success
 				 failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
@@ -361,11 +368,11 @@
 		}
 		return nil;
 	}
-	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteMessageToUser:user forChannel:self.copy textMessage:textMessage];
+	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteMessageToUser:user forChannel:self.copy comments:comments];
 	NSString *messageID = [[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^{
 		if (success) {
 			MMXInvite *invite = [MMXInvite new];
-			invite.textMessage = textMessage;
+			invite.comments = comments;
 			invite.channel = self.copy;
 			invite.sender = [MMXUser currentUser];
 			invite.timestamp = [NSDate date];
@@ -378,6 +385,20 @@
 	}];
 	return messageID;
 }
+
+#pragma mark - Offline
+
+- (void)saveForOfflineAsPubSub:(MMXPubSubMessage *)message {
+	[[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:[MMXUser currentUser].username];
+}
+
+#pragma mark - Errors
++ (NSError *)notNotLoggedInAndNoUserError {
+	NSError * error = [MMXClient errorWithTitle:@"Forbidden" message:@"You are not logged in and there is no current user." code:403];
+	return error;
+}
+
+
 
 #pragma mark - Conversion Helpers
 

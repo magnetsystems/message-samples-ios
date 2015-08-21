@@ -40,6 +40,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // Indicate that you are ready to receive messages now!
+    [MMX enableIncomingMessages];
 	
 	[self setupTableViewProperties];
 	
@@ -53,8 +56,25 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didDisconnect:)
+                                                 name:MMXDidDisconnectNotification
+                                               object:nil];
 
     [self fetchChannels];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)didDisconnect:(NSNotification *)notification {
+
+    // Indicate that you are not ready to receive messages now!
+    [MMX enableIncomingMessages];
+    
+    [self goToLoginScreen];
 }
 
 #pragma mark - Create Default Channels
@@ -148,17 +168,6 @@
         [self.refreshControl endRefreshing];
     }];
 }
-
-#pragma mark - MMXClientDelegate Callbacks
-
-///*
-// *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
-// */
-//- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-//	if (connectionStatus == MMXConnectionStatusDisconnected) {
-//		[self goToLoginScreen];
-//	}
-//}
 
 #pragma mark - Actions
 

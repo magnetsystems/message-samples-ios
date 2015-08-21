@@ -924,19 +924,14 @@ int const kReconnectionTimerInterval = 4;
 }
 
 - (void)xmppStream:(XMPPStream *)sender didFailToSendMessage:(XMPPMessage *)message error:(NSError *)error {
-	//FIXME: This is not correct behavior
 	if (error) {
 		[[MMXLogger sharedLogger] error:@"%@", error.localizedDescription];
 	}
     MMXInternalMessageAdaptor* outboundMessage = [MMXInternalMessageAdaptor initWithXMPPMessage:message];
-    MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
-    options.shouldRequestDeliveryReceipt = outboundMessage.deliveryReceiptRequested;
-    
-    [[MMXDataModel sharedDataModel] addOutboxEntryWithMessage:outboundMessage options:options username:[self currentJID].user];
-    
+
 	if ([self.delegate respondsToSelector:@selector(client:didFailToSendMessage:recipients:error:)]) {
 		dispatch_async(self.callbackQueue, ^{
-//			[self.delegate client:self didFailToSendMessage:outboundMessage.messageID recipients:outboundMessage.recipients error:error];
+			[self.delegate client:self didFailToSendMessage:outboundMessage.messageID recipients:outboundMessage.recipients error:error];
 		});
     }
 }

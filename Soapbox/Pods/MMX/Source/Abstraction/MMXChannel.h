@@ -17,7 +17,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "Mantle.h"
+#import <Mantle/Mantle.h>
 @class MMXUser;
 @class MMXMessage;
 @class MMXInvite;
@@ -205,14 +205,14 @@
  *  Invite a user to the channel
  *
  *  @param user			The MMXUser object for the user you want to invite
- *  @param textMessage	An optional message telling the user why you want them to join the channel
+ *  @param comments		An optional message telling the user why you want them to join the channel
  *  @param success		Block with the MMXInvite object that was sent.
  *  @param failure		Block with an NSError with details about the call failure.
  *
  *  @return The messageID for the invite sent
  */
 - (NSString *)inviteUser:(MMXUser *)user
-			 textMessage:(NSString *)textMessage
+				comments:(NSString *)comments
 				 success:(void (^)(MMXInvite *invite))success
 				 failure:(void (^)(NSError *error))failure;
 
