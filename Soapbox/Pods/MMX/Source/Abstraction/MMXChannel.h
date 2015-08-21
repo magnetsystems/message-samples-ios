@@ -191,14 +191,14 @@
  *  @param endDate       The latest date you would like messages until. Defaults to now.
  *  @param limit		 The max number of items you want returned.
  *  @param ascending	 The sort order(by date) for the messages returned.
- *  @param success		 NSArray of MMXMessages
+ *  @param success		 The total available messages and a NSArray of MMXMessages
  *  @param failure		 Block with an NSError with details about the call failure.
  */
 - (void)fetchMessagesBetweenStartDate:(NSDate *)startDate
 							  endDate:(NSDate *)endDate
 								limit:(int)limit
 							ascending:(BOOL)ascending
-							  success:(void (^)(NSArray *messages))success
+							  success:(void (^)(int totalCount, NSArray *messages))success
 							  failure:(void (^)(NSError *error))failure;
 
 /**

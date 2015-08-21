@@ -88,8 +88,8 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 		
 		MMXUserID *senderID = [MMXInternalMessageAdaptor extractSenderFromMMXMetaDict:mmxMetaDict];
 		if (senderID) {
-			msg.senderUserID = senderID.copy;
-			msg.senderEndpoint.userID = senderID.copy;
+			msg.senderUserID = senderID;
+			msg.senderEndpoint.userID = senderID;
 		}
 	}
 	NSArray* elements = [xmppMessage elementsForXmlns:MXnsDeliveryReceipt];

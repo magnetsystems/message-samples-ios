@@ -28,6 +28,7 @@
 #import "MMXAddressable.h"
 #import "MMXInternalMessageAdaptor.h"
 #import "MMXClient_Private.h"
+#import "MMXUserID_Private.h"
 
 typedef void(^MessageSuccessBlock)(void);
 typedef void(^MessageFailureBlock)(NSError *);
@@ -237,7 +238,10 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 			self.connectFailureBlock = nil;
 			self.logOutSuccessBlock = nil;
 			self.logOutFailureBlock = nil;
-		}
+			if (error) {
+				[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidDisconnectNotification object:nil userInfo:@{MMXDisconnectErrorKey:error}];
+			}
+			}
 			break;
 		case MMXConnectionStatusFailed: {
 			if (self.connectFailureBlock) {
@@ -266,18 +270,17 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 	MMXMessage *msg = [MMXMessage messageToRecipients:[self usersFromInboundRecipients:message.otherRecipients]
 									   messageContent:message.metaData];
 
-	MMXInternalAddress *address = message.senderUserID.address;
 	MMXUser *user = [MMXUser new];
 	msg.messageType = MMXMessageTypeDefault;
-	user.username = address.username;
-	user.displayName = address.displayName;
+	user.username = message.senderUserID.username;
+	user.displayName = message.senderUserID.displayName;
 	msg.sender = user;
 	msg.timestamp = message.timestamp;
 	msg.messageID = message.messageID;
 	msg.senderDeviceID = message.senderEndpoint.deviceID;
 	[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveMessageNotification
 														object:nil
-													  userInfo:@{MagnetMessageKey:msg}];
+													  userInfo:@{MMXMessageKey:msg}];
 }
 
 - (void)client:(MMXClient *)client didReceivePubSubMessage:(MMXPubSubMessage *)message {
@@ -289,7 +292,7 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 	msg.messageID = message.messageID;
 	[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveMessageNotification
 														object:nil
-													  userInfo:@{MagnetMessageKey:msg}];
+													  userInfo:@{MMXMessageKey:msg}];
 }
 
 - (void)client:(MMXClient *)client didReceiveServerAckForMessageID:(NSString *)messageID recipient:(MMXUserID *)recipient {
@@ -323,8 +326,8 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveDeliveryConfirmationNotification
 														object:nil
-													  userInfo:@{MagnetRecipientKey:user,
-																 MagnetMessageIDKey:messageID}];
+													  userInfo:@{MMXRecipientKey:user,
+																 MMXMessageIDKey:messageID}];
 }
 
 + (NSError *)notNotLoggedInError {

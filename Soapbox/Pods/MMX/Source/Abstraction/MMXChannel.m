@@ -238,16 +238,10 @@
 	[[MMXClient sharedClient].pubsubManager listSubscriptionsWithSuccess:^(NSArray *subscriptions) {
 		NSArray *topics = [MMXChannel topicsFromSubscriptions:subscriptions];
 		[[MMXClient sharedClient].pubsubManager summaryOfTopics:topics since:nil until:nil success:^(NSArray *summaries) {
-			[[MMXClient sharedClient].pubsubManager listSubscriptionsWithSuccess:^(NSArray *subscriptions) {
-				NSArray *channelArray = [MMXChannel channelsFromTopics:topics summaries:summaries subscriptions:subscriptions];
-				if (success) {
-					success(channelArray);
-				}
-			} failure:^(NSError *error) {
-				if (failure) {
-					failure(error);
-				}
-			}];
+			NSArray *channelArray = [MMXChannel channelsFromTopics:topics summaries:summaries subscriptions:subscriptions];
+			if (success) {
+				success(channelArray);
+			}
 		} failure:^(NSError *error) {
 			if (failure) {
 				failure(error);
@@ -310,7 +304,7 @@
 							  endDate:(NSDate *)endDate
 								limit:(int)limit
 							ascending:(BOOL)ascending
-							  success:(void (^)(NSArray *))success
+							  success:(void (^)(int totalCount, NSArray *messages))success
 							  failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
@@ -320,7 +314,11 @@
 		return;
 	}
 	MMXPubSubFetchRequest * fetch = [[MMXPubSubFetchRequest alloc] init];
-	fetch.topic = [MMXTopic topicWithName:self.name];
+	MMXTopic *topic = [MMXTopic topicWithName:self.name];
+	if (!self.isPublic) {
+		topic.nameSpace = self.ownerUsername;
+	}
+	fetch.topic = topic;
 	fetch.since = startDate;
 	fetch.until = endDate;
 	fetch.maxItems = limit;
@@ -331,11 +329,21 @@
 			MMXMessage *msg = [MMXMessage messageFromPubSubMessage:message];
 			[msgArray addObject:msg];
 		}
-		if (success) {
-			success(msgArray);
-		}
+		[[MMXClient sharedClient].pubsubManager summaryOfTopics:@[topic] since:startDate until:endDate success:^(NSArray *summaries) {
+			int count = 0;
+			if (summaries.count) {
+				MMXTopicSummary *sum = summaries[0];
+				count =  sum.numItemsPublished;
+			}
+			if (success) {
+				success(count, msgArray);
+			}
+		} failure:^(NSError *error) {
+			if (failure) {
+				failure(error);
+			}
+		}];
 	} failure:^(NSError *error) {
-		NSLog(@"Fail error = %@",error);
 		if (failure) {
 			failure(error);
 		}
@@ -387,22 +395,27 @@
 		MMXChannel *channel = [MMXChannel channelWithName:topic.topicName summary:topic.topicDescription];
 		channel.ownerUsername = topic.topicCreator.username;
 		channel.isPublic = !topic.inUserNameSpace;
-		[channelDict setObject:channel forKey:channel.name];
+		[channelDict setObject:channel forKey:[MMXChannel channelKeyFromTopic:topic]];
 	}
 	for (MMXTopicSummary *sum in summaries) {
-		MMXChannel *channel = channelDict[sum.topic.topicName];
+		MMXChannel *channel = channelDict[[MMXChannel channelKeyFromTopic:sum.topic]];
 		if (channel) {
 			channel.numberOfMessages = sum.numItemsPublished;
 			channel.lastTimeActive = sum.lastTimePublishedTo;
 		}
 	}
 	for (MMXTopicSubscription *sub in subscriptions) {
-		MMXChannel *channel = channelDict[sub.topic.topicName];
+		MMXChannel *channel = channelDict[[MMXChannel channelKeyFromTopic:sub.topic]];
 		if (channel) {
 			channel.isSubscribed = sub.isSubscribed;
 		}
 	}
 	return [channelDict allValues];
+}
+
++ (NSString *)channelKeyFromTopic:(MMXTopic *)topic {
+	NSString *topicKey = [NSString stringWithFormat:@"%@%@",topic.topicName,topic.nameSpace];
+	return topicKey;
 }
 
 - (MMXTopic *)asTopic {

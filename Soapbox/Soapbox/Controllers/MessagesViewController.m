@@ -78,7 +78,7 @@
 }
 
 - (void)didReceiveMessage:(NSNotification *)notification {
-    MMXMessage *message = notification.userInfo[MagnetMessageKey];
+    MMXMessage *message = notification.userInfo[MMXMessageKey];
     if (message.messageType == MMXMessageTypeChannel && [message.channel.name isEqualToString:self.channel.name]) {
 
 		NSMutableArray *tempMessageList = self.messageList.mutableCopy;
@@ -146,7 +146,7 @@
 //		[self showAlertWithTitle:@"Failed To Fetch Messages" message:error.localizedFailureReason];
 //	}];
     
-    [self.channel fetchMessagesBetweenStartDate:nil endDate:nil limit:25 ascending:NO success:^(NSArray *messages) {
+    [self.channel fetchMessagesBetweenStartDate:nil endDate:nil limit:25 ascending:NO success:^(int totalCount, NSArray *messages) {
         self.messageList = messages;
         [self.tableView reloadData];
     } failure:^(NSError *error) {

@@ -46,7 +46,15 @@
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage {
 	MMXMessage *msg = [MMXMessage new];
 	msg.channel = [MMXChannel channelWithName:pubSubMessage.topic.topicName summary:pubSubMessage.topic.topicDescription];
+	MMXInternalAddress *address = pubSubMessage.senderUserID.address;
+	MMXUser *sender = [MMXUser new];
+	sender.username = address.username;
+	sender.displayName = address.displayName;
+	msg.sender = sender;
+	msg.messageID = pubSubMessage.messageID;
 	msg.messageContent = pubSubMessage.metaData;
+	msg.timestamp = pubSubMessage.timestamp;
+	msg.messageType = MMXMessageTypeChannel;
 	return msg;
 }
 
