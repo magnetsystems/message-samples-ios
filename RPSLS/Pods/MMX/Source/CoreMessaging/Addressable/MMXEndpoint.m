@@ -18,6 +18,7 @@
 #import "MMXEndpoint_Private.h"
 #import "MMXUserID_Private.h"
 #import "NSString+XEP_0106.h"
+#import "MMXInternalAddress.h"
 
 @implementation MMXEndpoint
 
@@ -28,12 +29,11 @@
 	return endpoint;
 }
 
-- (NSString *)address {
-	return [self.userID.username jidEscapedString];
-}
-
-- (NSString *)subAddress {
-	return self.deviceID;
+- (MMXInternalAddress *)address {
+	MMXInternalAddress *address = [MMXInternalAddress new];
+	address.username = [self.userID.username jidEscapedString];
+	address.deviceID = self.deviceID.copy;
+	return address;
 }
 
 #pragma mark - NSCoding

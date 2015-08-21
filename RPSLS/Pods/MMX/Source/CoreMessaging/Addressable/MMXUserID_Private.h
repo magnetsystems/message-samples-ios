@@ -21,6 +21,10 @@
 
 @property (nonatomic, readwrite) NSString *username;
 
+@property (nonatomic, copy) NSString *displayName;
+
 + (NSString *)stripUsername:(NSString *)fullUser;
+
++ (instancetype)userIDFromAddress:(MMXInternalAddress *)address;
 
 @end

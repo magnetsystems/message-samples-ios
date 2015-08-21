@@ -15,21 +15,28 @@
  * permissions and limitations under the License.
  */
 
-#import "MMXInboundMessage+RPSLS.h"
-#import "RPSLSConstants.h"
+#import <Foundation/Foundation.h>
+#import "MagnetDelegate.h"
+#import "MMXMessage.h"
+#import "MMXChannel.h"
+#import "MMXUser.h"
+#import "MagnetConstants.h"
+#import "MMXMessageTypes.h"
+#import "MMXLogger.h"
+#import "MMXRemoteNotification.h"
 
-@implementation MMXInboundMessage (RPSLS)
+@interface MMX : NSObject
 
-- (BOOL)isTimelyMessage {
-	if (self.metaData != nil && self.metaData[kMessageKey_Timestamp] != nil) {
-		NSString * stamp = self.metaData[kMessageKey_Timestamp];
-		long long stampValue = [stamp longLongValue];
-		int secondsSinceSent = [[NSDate date] timeIntervalSince1970] - (stampValue / 1000);
-		if (secondsSinceSent <= 60) {
-			return YES;
-		}
-	}
-	return NO;
-}
+/**
+ *  Initialize MMX with a configuration
+ *
+ *  @param name The name of the configuration in your Configurations.plist file that you want to connect to.
+ */
++ (void)setupWithConfiguration:(NSString *)name;
+
+/**
+ *  Call when no longer need to use the MMX features or when the app goes to the background
+ */
++ (void)teardown;
 
 @end

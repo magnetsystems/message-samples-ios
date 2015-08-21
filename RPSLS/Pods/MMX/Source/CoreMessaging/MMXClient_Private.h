@@ -22,6 +22,7 @@
 @class XMPPIDTracker;
 @class XMPPIQ;
 @class XMPPJID;
+@class MMXUserProfile;
 
 typedef void (^IQCompletionBlock)(id obj, id <XMPPTrackingInfo> info);
 
@@ -36,6 +37,8 @@ extern int const kTempVersionMinor;
 @property (nonatomic, readwrite) BOOL anonymousConnection;
 @property (nonatomic, readwrite) NSString *deviceToken;
 @property (nonatomic, assign) MMXConnectionStatus connectionStatus;
+
+@property (nonatomic, strong) MMXUserProfile *currentProfile;
 
 - (XMPPJID *)currentJID;
 - (NSString *)generateMessageID;

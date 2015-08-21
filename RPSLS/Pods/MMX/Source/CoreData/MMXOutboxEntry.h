@@ -18,13 +18,13 @@
 #import "_MMXOutboxEntry.h"
 #import "MMXDataModel.h"
 
-@class MMXMessage;
+@class MMXInternalMessageAdaptor;
 
 @interface MMXOutboxEntry : _MMXOutboxEntry {}
 // Custom logic goes here.
 
 - (instancetype)outboxEntryWithType:(MMXOutboxEntryMessageType)outboxEntryMessageType
-                            message:(MMXMessage *)message
+                            message:(MMXInternalMessageAdaptor *)message
                             options:(MMXMessageOptions *)options
                            username:(NSString *)username;
 

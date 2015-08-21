@@ -23,8 +23,7 @@
 @interface RPSLSUtils : NSObject
 
 + (NSString *)timestamp;
-+ (MMXTopic *)availablePlayersTopic;
-+ (MMXPubSubMessage *)availablilityMessage:(BOOL)available;
-+ (NSString*)statusToString:(MMXConnectionStatus)status;
++ (MMXChannel *)availablePlayersChannel;
++ (MMXMessage *)availablilityMessage:(BOOL)available;
 
 @end

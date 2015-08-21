@@ -17,7 +17,7 @@
 
 
 #import "MMXOutboundMessage.h"
-@class MMXMessage;
+@class MMXInternalMessageAdaptor;
 @class NSXMLElement;
 
 @interface MMXOutboundMessage ()
@@ -39,9 +39,9 @@
  */
 @property (nonatomic, copy, readwrite) NSString *messageContent;
 
-- (NSXMLElement *)recipientsAsXML;
+- (NSXMLElement *)recipientsAndSenderAsXML;
 - (NSXMLElement *)contentAsXMLForType:(NSString *)type;
 - (NSXMLElement *)metaDataAsXML;
-+ (instancetype)initWithMessage:(MMXMessage *)message;
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message;
 
 @end

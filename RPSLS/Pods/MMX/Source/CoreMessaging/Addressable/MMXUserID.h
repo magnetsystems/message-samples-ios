@@ -38,7 +38,6 @@
 + (instancetype)userIDWithUsername:(NSString *)username;
 
 //MMXAddressable Protocol
-@property (nonatomic, readonly) NSString *address;
-@property (nonatomic, readonly) NSString *subAddress;
+@property (nonatomic, readonly) MMXInternalAddress *address;
 
 @end

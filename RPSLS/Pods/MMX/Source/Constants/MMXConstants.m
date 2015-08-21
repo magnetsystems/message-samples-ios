@@ -22,6 +22,7 @@ NSString * const MXnsAppReg = @"com.magnet:appreg";
 NSString * const MXnsDevice = @"com.magnet:dev";
 NSString * const MXnsMsgAck = @"com.magnet:msg:ack";
 NSString * const MXnsDataPayload = @"com.magnet:msg:payload";
+NSString * const MXnsServerSignal = @"com.magnet:msg:signal";
 NSString * const MXnsMsgState = @"com.magnet:msg:state";
 NSString * const MXnsDeliveryReceipt = @"urn:xmpp:receipts";
 NSString * const MXnsUser = @"com.magnet:user";
@@ -72,5 +73,9 @@ NSInteger  const kMaxPasswordLength = 32;
 NSUInteger const kMaxMessageSize = 2 * 100 * 1024;
 
 NSString * const kMMXXMPPProtocol = @"xmpp";
+
+NSString * const kAddressUsernameKey = @"userId";
+NSString * const kAddressDeviceIDKey = @"devId";
+NSString * const kAddressDisplayNameKey = @"displayName";
 
 @end

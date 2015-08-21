@@ -15,10 +15,21 @@
  * permissions and limitations under the License.
  */
 
-#import "MMXInboundMessage.h"
+#import "MMX.h"
+#import "MagnetDelegate.h"
+#import "MMX_Private.h"
 
-@interface MMXInboundMessage (RPSLS)
+@implementation MMX
 
-- (BOOL)isTimelyMessage;
++ (void)setupWithConfiguration:(NSString *)name {
+	[[MagnetDelegate sharedDelegate] startMMXClientWithConfiguration:name];
+}
+
++ (void)teardown {
+	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated ||
+		[MMXClient sharedClient].connectionStatus == MMXConnectionStatusConnected) {
+		[[MMXClient sharedClient] disconnect];
+	}
+}
 
 @end

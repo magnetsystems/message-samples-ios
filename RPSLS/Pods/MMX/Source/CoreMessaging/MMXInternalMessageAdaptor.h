@@ -23,7 +23,7 @@
 @class MMXEndpoint;
 @class MMXTopic;
 
-@interface MMXMessage : NSObject <NSCoding>
+@interface MMXInternalMessageAdaptor : NSObject <NSCoding>
 
 //All Messages
 @property(nonatomic, strong, readonly) NSString *messageID;
@@ -32,8 +32,10 @@
 
 //Inbound Messages
 @property(nonatomic, strong, readonly) MMXUserID *senderUserID;
-@property(nonatomic, strong, readonly) MMXUserID *targetUserID;
+@property(nonatomic, strong, readonly) NSString *senderDisplayName;
 @property(nonatomic, strong, readonly) MMXEndpoint *senderEndpoint;
+@property(nonatomic, strong, readonly) MMXUserID *targetUserID;
+@property(nonatomic, strong, readonly) NSString *targetDisplayName;
 @property(nonatomic, strong, readonly) NSDate *timestamp;
 
 //Outbound Messages
