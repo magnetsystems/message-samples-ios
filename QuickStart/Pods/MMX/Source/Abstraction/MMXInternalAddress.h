@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Mantle/Mantle.h>
 
-@interface MMXInternalAddress : NSObject
+@interface MMXInternalAddress : MTLModel
 
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *deviceID;

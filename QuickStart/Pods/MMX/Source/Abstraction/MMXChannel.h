@@ -17,7 +17,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "Mantle.h"
+#import <Mantle/Mantle.h>
 @class MMXUser;
 @class MMXMessage;
 @class MMXInvite;
@@ -191,28 +191,28 @@
  *  @param endDate       The latest date you would like messages until. Defaults to now.
  *  @param limit		 The max number of items you want returned.
  *  @param ascending	 The sort order(by date) for the messages returned.
- *  @param success		 NSArray of MMXMessages
+ *  @param success		 The total available messages and a NSArray of MMXMessages
  *  @param failure		 Block with an NSError with details about the call failure.
  */
 - (void)fetchMessagesBetweenStartDate:(NSDate *)startDate
 							  endDate:(NSDate *)endDate
 								limit:(int)limit
 							ascending:(BOOL)ascending
-							  success:(void (^)(NSArray *messages))success
+							  success:(void (^)(int totalCount, NSArray *messages))success
 							  failure:(void (^)(NSError *error))failure;
 
 /**
  *  Invite a user to the channel
  *
  *  @param user			The MMXUser object for the user you want to invite
- *  @param textMessage	An optional message telling the user why you want them to join the channel
+ *  @param comments		An optional message telling the user why you want them to join the channel
  *  @param success		Block with the MMXInvite object that was sent.
  *  @param failure		Block with an NSError with details about the call failure.
  *
  *  @return The messageID for the invite sent
  */
 - (NSString *)inviteUser:(MMXUser *)user
-			 textMessage:(NSString *)textMessage
+				comments:(NSString *)comments
 				 success:(void (^)(MMXInvite *invite))success
 				 failure:(void (^)(NSError *error))failure;
 

@@ -21,7 +21,7 @@
 #import "MessageCell.h"
 #import "QuickStartUtils.h"
 #import "UIColor+QuickStart.h"
-#import <MMX.h>
+#import <MMX/MMX.h>
 @interface MessagesViewController ()
 
 @property (nonatomic, copy) NSArray * messageList;
@@ -93,6 +93,8 @@ NSString * const kTextContent = @"textContent";
 	self.currentCredential = [NSURLCredential credentialWithUser:kDefaultUsername password:kDefaultUsername persistence:NSURLCredentialPersistenceNone];
 	MMXUser *user = [MMXUser new];
 	user.username = kDefaultUsername;
+    user.displayName = kDefaultUsername;
+    
 	[user registerWithCredential:self.currentCredential success:^{
 		[self logIn];
 	} failure:^(NSError *error) {
@@ -170,7 +172,7 @@ NSString * const kTextContent = @"textContent";
 - (void)didReceiveMessage:(NSNotification*) noti {
 	if (noti.userInfo) {
 		NSDictionary *notificationDict =  noti.userInfo;
-		MMXMessage *message = notificationDict[MagnetMessageKey];
+		MMXMessage *message = notificationDict[MMXMessageKey];
 		if (message) {
 			NSDictionary *messageDict = @{@"messageContent":message.messageContent[kTextContent] ?: @"Message content missing",
 										  @"timestampString":[[QuickStartUtils friendlyDateFormatter] stringFromDate:message.timestamp],

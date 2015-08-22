@@ -111,13 +111,6 @@
 				success:(void (^)(MMXUser *user))success
 				failure:(void (^)(NSError *error))failure;
 
-/**
- *  Set push token for this device
- *
- *  @param token returned in application:didRegisterForRemoteNotificationsWithDeviceToken:
- */
-- (void)addDeviceToken:(NSData *)token;
-
 //MMXAddressable Protocol
 @property (nonatomic, readonly) MMXInternalAddress *address;
 

@@ -152,11 +152,15 @@
         return;
     }
 	NSURLSessionConfiguration * config = [NSURLSessionConfiguration defaultSessionConfiguration];
-	
-	NSURLSession * session = [NSURLSession sessionWithConfiguration:config];
-	
-	NSString *usersURLString = [NSString stringWithFormat:@"http://%@:%li/mmxmgmt/api/v1/users",self.delegate.configuration.baseURL.host,(long)self.delegate.configuration.publicAPIPort];
-	
+
+	NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+
+	NSString *protocol = @"http";
+	if (self.delegate.configuration.shouldForceTLS) {
+		  protocol = @"https";
+	}
+	NSString *usersURLString = [NSString stringWithFormat:@"%@://%@:%li/mmxmgmt/api/v1/users",protocol, self.delegate.configuration.baseURL.host,(long)self.delegate.configuration.publicAPIPort];
+
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:usersURLString]];
 	
 	[request setValue:self.delegate.configuration.appID forHTTPHeaderField:@"X-mmx-app-id"];
@@ -887,6 +891,21 @@
 
 - (NSError *)connectionStatusError {
 	return [MMXClient errorWithTitle:@"Not currently connected." message:@"The feature you are trying to use requires an active connection." code:503];
+}
+
+#pragma mark - NSURLSessionDelegate methods
+
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler {
+
+    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+        if (self.delegate.configuration.shouldForceTLS && self.delegate.configuration.allowInvalidCertificates) {
+            NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+            completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+        }
+        else {
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+        }
+    }
 }
 
 @end
