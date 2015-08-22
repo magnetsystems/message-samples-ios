@@ -88,8 +88,8 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 		
 		MMXUserID *senderID = [MMXInternalMessageAdaptor extractSenderFromMMXMetaDict:mmxMetaDict];
 		if (senderID) {
-			msg.senderUserID = senderID.copy;
-			msg.senderEndpoint.userID = senderID.copy;
+			msg.senderUserID = senderID;
+			msg.senderEndpoint.userID = senderID;
 		}
 	}
 	NSArray* elements = [xmppMessage elementsForXmlns:MXnsDeliveryReceipt];
@@ -99,60 +99,6 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	}
 	msg.deliveryReceiptRequested = deliveryFlag;
     return msg;
-}
-
-- (instancetype)initWithPubSubMessage:(XMPPMessage *)xmppMessage {
-	if ((self = [super init])) {
-		XMPPJID* recipient = [xmppMessage to] ;
-		XMPPJID* sender =[xmppMessage from];
-		NSString * username = [sender usernameWithoutAppID];
-		_senderUserID = [MMXUserID userIDWithUsername:[username jidUnescapedString]];
-		_senderEndpoint = [MMXEndpoint endpointWithUsername:[username jidUnescapedString] deviceID:[sender resource]];
-		NSString *targetUsername = [[recipient usernameWithoutAppID] jidUnescapedString];
-		_targetUserID = [MMXUserID userIDWithUsername:targetUsername];
-		NSXMLElement *eventElement = [xmppMessage elementForName:@"event"];
-		NSXMLElement *itemsElement = [eventElement elementForName:@"items"];
-		NSXMLNode* node = [itemsElement attributeForName:@"node"];
-		
-		//Topic
-		_topic = [MMXTopic topicFromNode:[node stringValue]];
-		NSXMLElement *itemElement = [itemsElement elementForName:@"item"];
-		_messageID = [[itemElement attributeForName:@"id"] stringValue];
-		NSXMLElement *mmxElement = [itemElement elementForName:MXmmxElement xmlns:MXnsDataPayload];
-		
-		//payload
-		NSArray* payLoadElements = [mmxElement elementsForName:MXpayloadElement];
-		if (payLoadElements.count) {
-			NSXMLElement *payLoadElement = payLoadElements[0];
-			NSXMLNode* mtype = [payLoadElement attributeForName:MESSAGE_ATTRIBUE_MESSAGE_TYPE];
-			_mType = mtype ? [mtype stringValue] : nil;
-		}
-		_messageContent = [MMXInternalMessageAdaptor extractPayload:payLoadElements];
-		NSXMLNode* mtype = [[mmxElement elementForName:MXpayloadElement] attributeForName:MESSAGE_ATTRIBUE_MESSAGE_TYPE];
-		NSXMLNode* timestamp = [[mmxElement elementForName:MXpayloadElement] attributeForName:@"stamp"];
-		_mType = mtype ? [mtype stringValue] : nil;
-		if ([timestamp stringValue] && ![[timestamp stringValue] isEqualToString:@""]) {
-			_timestamp = [MMXUtils dateFromiso8601Format:[timestamp stringValue]];
-		}
-		
-		//meta
-		NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
-		_metaData = [MMXInternalMessageAdaptor extractMetaData:metaElements];
-		
-		NSArray* mmxMetaElements = [mmxElement elementsForName:MXmmxMetaElement];
-		if (mmxMetaElements) {
-			NSDictionary *mmxMetaDict = [MMXInternalMessageAdaptor extractMMXMetaData:mmxMetaElements];
-			
-			MMXUserID *senderID = [MMXInternalMessageAdaptor extractSenderFromMMXMetaDict:mmxMetaDict];
-			if (senderID) {
-				_senderUserID = senderID;
-				_senderEndpoint.userID = senderID;
-			}
-		}
-		
-		_deliveryReceiptRequested = NO;
-	}
-	return self;
 }
 
 - (instancetype)initWith:(NSArray *)recipients
@@ -182,12 +128,12 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 
 + (instancetype)inviteResponseMessageToUser:(MMXUser *)recipient
 								 forChannel:(MMXChannel *)channel
-								textMessage:(NSString *)textMessage
+								   comments:(NSString *)comments
 								   response:(BOOL)response {
 	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor new];
 	msg.mType = @"invitationResponse";
 	msg.recipients = @[recipient];
-	msg.metaData = @{@"text":textMessage ?: [NSNull null],
+	msg.metaData = @{@"text":comments ?: [NSNull null],
 					 @"channelIsPrivate":@(!channel.isPublic),
 					 @"channelName":channel.name,
 					 @"channelSummary":channel.summary ?: [NSNull null],
@@ -196,11 +142,11 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	return msg;
 }
 
-+ (instancetype)inviteMessageToUser:(MMXUser *)recipient forChannel:(MMXChannel *)channel textMessage:(NSString *)textMessage {
++ (instancetype)inviteMessageToUser:(MMXUser *)recipient forChannel:(MMXChannel *)channel comments:(NSString *)comments {
 	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor new];
 	msg.mType = @"invitation";
 	msg.recipients = @[recipient];
-	msg.metaData = @{@"text":textMessage ?: [NSNull null],
+	msg.metaData = @{@"text":comments ?: [NSNull null],
 					 @"channelIsPrivate":@(!channel.isPublic),
 					 @"channelName":channel.name,
 					 @"channelSummary":channel.summary ?: [NSNull null],
@@ -222,6 +168,8 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
         return nil;
     }
     for (NSDictionary * dict in jsonDictionary[@"items"]) {
+		MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor new];
+
         NSError * xmlError;
         NSString * payloadString = dict[@"payloadXML"];
         NSXMLElement *messageElement = [[NSXMLElement alloc] initWithXMLString:payloadString error:&xmlError];
@@ -239,11 +187,20 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 		NSDate * timestamp = [MMXUtils dateFromiso8601Format:stamp];
         NSString * messageID = dict[@"itemId"];
         if (!xmlError) {
-            MMXInternalMessageAdaptor * message =  [[MMXInternalMessageAdaptor alloc] initWith:nil withContent:content messageType:mTypeExtracted metaData:metaData ? metaData : @{}];
-            message.timestamp = timestamp;
-            message.messageID = messageID;
-            message.topic = topic;
-            [messageArray addObject:[MMXPubSubMessage initWithMessage:message]];
+			NSArray* mmxMetaElements = [messageElement elementsForName:MXmmxMetaElement];
+			if (mmxMetaElements) {
+				NSDictionary *mmxMetaDict = [MMXInternalMessageAdaptor extractMMXMetaData:mmxMetaElements];
+				
+				msg.senderUserID = [MMXInternalMessageAdaptor extractSenderFromMMXMetaDict:mmxMetaDict];
+			}
+
+			msg.messageContent = content;
+			msg.metaData = metaData;
+			msg.mType = mTypeExtracted;
+            msg.timestamp = timestamp;
+            msg.messageID = messageID;
+            msg.topic = topic;
+            [messageArray addObject:[MMXPubSubMessage initWithMessage:msg]];
         }
     }
     return messageArray.copy;

@@ -424,7 +424,7 @@ int const kReconnectionTimerInterval = 4;
 	
 	if (![MMXMessageUtils isValidMetaData:outboundMessage.metaData]) {
 		if ([self.delegate respondsToSelector:@selector(client:didFailToSendMessage:recipients:error:)]) {
-			NSError * error = [MMXClient errorWithTitle:@"Meta Data Not Valid" message:@"Meta Data dictionary must be JSON serializable." code:401];
+			NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
 			[self.delegate client:self didFailToSendMessage:outboundMessage.messageID recipients:outboundMessage.recipients error:error];
 		}
 		return NO;
@@ -765,7 +765,8 @@ int const kReconnectionTimerInterval = 4;
                 }];
             }
         } else {
-            [self updateConnectionStatus:MMXConnectionStatusAuthenticationFailure error:nil];
+			NSError *authError = [MMXClient errorWithTitle:@"Authentication Failure" message:@"Not Authorized. Please check your credentials and try again." code:401];
+            [self updateConnectionStatus:MMXConnectionStatusAuthenticationFailure error:authError];
         }
 }
 
@@ -860,12 +861,12 @@ int const kReconnectionTimerInterval = 4;
 			MMXInvite *invite = [MMXInvite inviteFromMMXInternalMessage:inMessage];
 			[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInvitationNotification
 																object:nil
-															  userInfo:@{MagnetInviteKey:invite}];
+															  userInfo:@{MMXInviteKey:invite}];
 		} else if ([inMessage.mType isEqualToString:@"invitationResponse"]) {
 			MMXInviteResponse *inviteResponse = [MMXInviteResponse inviteResponseFromMMXInternalMessage:inMessage];
 				[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInvitationResponseNotification
 																	object:nil
-																  userInfo:@{MagnetInviteResponseKey:inviteResponse}];
+																  userInfo:@{MMXInviteResponseKey:inviteResponse}];
 
 		} else {
 			if ([self.delegate respondsToSelector:@selector(client:didReceiveMessage:deliveryReceiptRequested:)]) {
@@ -923,19 +924,14 @@ int const kReconnectionTimerInterval = 4;
 }
 
 - (void)xmppStream:(XMPPStream *)sender didFailToSendMessage:(XMPPMessage *)message error:(NSError *)error {
-	//FIXME: This is not correct behavior
 	if (error) {
 		[[MMXLogger sharedLogger] error:@"%@", error.localizedDescription];
 	}
     MMXInternalMessageAdaptor* outboundMessage = [MMXInternalMessageAdaptor initWithXMPPMessage:message];
-    MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
-    options.shouldRequestDeliveryReceipt = outboundMessage.deliveryReceiptRequested;
-    
-    [[MMXDataModel sharedDataModel] addOutboxEntryWithMessage:outboundMessage options:options username:[self currentJID].user];
-    
+
 	if ([self.delegate respondsToSelector:@selector(client:didFailToSendMessage:recipients:error:)]) {
 		dispatch_async(self.callbackQueue, ^{
-//			[self.delegate client:self didFailToSendMessage:outboundMessage.messageID recipients:outboundMessage.recipients error:error];
+			[self.delegate client:self didFailToSendMessage:outboundMessage.messageID recipients:outboundMessage.recipients error:error];
 		});
     }
 }

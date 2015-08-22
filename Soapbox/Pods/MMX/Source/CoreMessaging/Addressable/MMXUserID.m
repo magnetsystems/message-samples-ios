@@ -17,12 +17,20 @@
 
 #import "MMXUserID_Private.h"
 #import "NSString+XEP_0106.h"
+#import "MMXUser.h"
 
 @implementation MMXUserID
 
 + (instancetype)userIDWithUsername:(NSString *)username {
 	MMXUserID * userID = [[MMXUserID alloc] init];
 	userID.username = username;
+	return userID;
+}
+
++ (instancetype)userIDFromMMXUser:(MMXUser *)user {
+	MMXUserID * userID = [[MMXUserID alloc] init];
+	userID.username = user.username;
+	userID.displayName = user.displayName;
 	return userID;
 }
 
@@ -39,6 +47,7 @@
 - (MMXInternalAddress *)address {
 	MMXInternalAddress *address = [MMXInternalAddress new];
 	address.username = [self.username jidEscapedString];
+	address.displayName = self.displayName;
 	return address;
 }
 

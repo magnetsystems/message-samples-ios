@@ -29,7 +29,7 @@
 /**
  *  A custom message from the sender
  */
-@property (nonatomic, copy, readonly) NSString *textMessage;
+@property (nonatomic, copy, readonly) NSString *comments;
 
 /**
  *  The user that sent the invite
@@ -44,22 +44,22 @@
 /**
  *  Accept the invite to the channel and start receiving message published to the channel.
  *
- *  @param textMessage	Optional custom message
- *  @param success		Block called if operation is successful.
- *  @param failure		Block with an NSError with details about the call failure.
+ *  @param comments	Optional custom message
+ *  @param success	Block called if operation is successful.
+ *  @param failure	Block with an NSError with details about the call failure.
  */
-- (void)acceptWithMessage:(NSString *)textMessage
+- (void)acceptWithMessage:(NSString *)comments
 				  success:(void (^)(void))success
 				  failure:(void (^)(NSError *error))failure;
 
 /**
  *  Decline the invite to the channel.
  *
- *  @param textMessage	Optional custom message
- *  @param success		Block called if operation is successful.
- *  @param failure		Block with an NSError with details about the call failure.
+ *  @param comments	Optional custom message
+ *  @param success	Block called if operation is successful.
+ *  @param failure	Block with an NSError with details about the call failure.
  */
-- (void)declineWithMessage:(NSString *)textMessage
+- (void)declineWithMessage:(NSString *)comments
 				   success:(void (^)(void))success
 				   failure:(void (^)(NSError *error))failure;
 

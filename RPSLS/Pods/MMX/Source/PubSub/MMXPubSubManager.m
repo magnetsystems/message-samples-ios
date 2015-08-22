@@ -987,7 +987,7 @@
 	if (![MMXMessageUtils isValidMetaData:message.metaData]) {
 		if (failure) {
 			dispatch_async(self.callbackQueue, ^{
-				failure([MMXClient errorWithTitle:@"Meta Data Not Valid" message:@"Meta Data dictionary must be JSON serializable." code:401]);
+				failure([MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401]);
 			});
 		}
 		

@@ -93,59 +93,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - MMXClientDelegate Callbacks
-
-/*
- *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
- */
-//- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-//	if (connectionStatus == MMXConnectionStatusDisconnected) {
-//		[self.navigationController popToRootViewControllerAnimated:YES];
-//	}
-//}
-//
-///*
-// *  Monitoring for new messages that may be received while the user is viewing the previously fetched messages.
-// */
-//- (void)client:(MMXClient *)client didReceivePubSubMessage:(MMXPubSubMessage *)message {
-//	if ([message.topic isEqual:self.topic]) {
-//
-//		NSMutableArray *tempMessageList = self.messageList.mutableCopy;
-//		[tempMessageList insertObject:message atIndex:0];
-//		self.messageList = tempMessageList;
-//
-//		[self.tableView reloadData];
-//	}
-//}
-
 #pragma mark - Fetch Messages
 
 - (void)fetchMessages {
 
-//	/*
-//	 *  Creating a MMXPubSubFetchRequest
-//	 *	By setting ascending to YES it will the most recent result up to 25 total (based on the value set for maxItems)
-//	 */
-//	MMXPubSubFetchRequest * request = [MMXPubSubFetchRequest requestWithTopic:self.topic];
-//	request.ascending = YES;
-//	request.maxItems = 25;
-//
-//	/*
-//	 *  Passing my MMXPubSubFetchRequest to the fetchItems API. It will return a NSArray of MMXPubSubMessages
-//	 */
-//	[[MMXClient sharedClient].pubsubManager fetchItems:request success:^(NSArray *messages) {
-//		self.messageList = [[messages reverseObjectEnumerator] allObjects];;
-//		[self.tableView reloadData];
-//	} failure:^(NSError *error) {
-//
-//		/*
-//		 *  Logging an error.
-//		 */
-//		[[MMXLogger sharedLogger] error:@"MessagesViewController fetchMessages Error = %@",error.localizedFailureReason];
-//
-//		[self showAlertWithTitle:@"Failed To Fetch Messages" message:error.localizedFailureReason];
-//	}];
-    
     [self.channel fetchMessagesBetweenStartDate:nil endDate:nil limit:25 ascending:NO success:^(int totalCount, NSArray *messages) {
         self.messageList = messages;
         [self.tableView reloadData];

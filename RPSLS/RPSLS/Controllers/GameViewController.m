@@ -33,6 +33,8 @@
 @property (nonatomic, strong) NSArray * buttonArray;
 @property (nonatomic, strong) NSTimer * timer;
 
+- (void)goToLoginScreen;
+
 @end
 
 @implementation GameViewController
@@ -61,10 +63,15 @@
                                              selector:@selector(didReceiveMessage:)
                                                  name:MMXDidReceiveMessageNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didDisconnect:)
+                                                 name:MMXDidDisconnectNotification
+                                               object:nil];
+    
 }
 
 - (void)didReceiveMessage:(NSNotification *)notification {
-    MMXMessage *message = notification.userInfo[MagnetMessageKey];
+    MMXMessage *message = notification.userInfo[MMXMessageKey];
     switch (message.messageType) {
 
         case MMXMessageTypeDefault:{
@@ -78,6 +85,14 @@
         }
         default:break;
     };
+}
+
+- (void)didDisconnect:(NSNotification *)notification {
+    
+    // Indicate that you are not ready to receive messages now!
+    [MMX disableIncomingMessages];
+    
+    [self goToLoginScreen];
 }
 
 - (void)dismissView {
@@ -454,6 +469,12 @@
 + (UIFont *)regularFontForSize:(int)fontSize {
 	UIFont * font = [UIFont fontWithName:@"Helvetica" size:fontSize];
 	return font;
+}
+
+#pragma mark - Private implementation
+
+- (void)goToLoginScreen {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

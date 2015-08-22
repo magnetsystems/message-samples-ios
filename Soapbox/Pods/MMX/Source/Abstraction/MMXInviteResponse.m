@@ -17,7 +17,7 @@
 
 + (instancetype)inviteResponseFromMMXInternalMessage:(MMXInternalMessageAdaptor *)message {
 	MMXInviteResponse *response = [MMXInviteResponse new];
-	response.textMessage = message.metaData[@"inviteResponseText"];
+	response.comments = message.metaData[@"inviteResponseText"];
 	MMXInternalAddress *address = message.senderUserID.address;
 	MMXUser *user = [MMXUser new];
 	user.username = address.username;

@@ -102,7 +102,8 @@
     }
     NSDictionary * options = @{@"maxItems":@(self.maxItemsToBePersisted),
                                @"description":self.topicDescription ? self.topicDescription :[NSNull null],
-                               @"publisherType":[self publisherType]
+							   @"publisherType":[self publisherType],
+							   @"subscribeOnCreate":@(YES)
                                };
     return @{@"topicName":self.topicName,
              @"isPersonal":@([self inUserNameSpace]),

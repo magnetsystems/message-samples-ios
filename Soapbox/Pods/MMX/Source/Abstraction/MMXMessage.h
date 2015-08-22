@@ -18,10 +18,11 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXMessageTypes.h"
+#import <Mantle/Mantle.h>
 @class MMXUser;
 @class MMXChannel;
 
-@interface MMXMessage : NSObject
+@interface MMXMessage : MTLModel
 
 /**
  *  Type of message. See MMXMessageTypes

@@ -20,6 +20,7 @@
 #import "MMXMessage.h"
 #import "MMXChannel.h"
 #import "MMXInvite.h"
+#import "MMXInviteResponse.h"
 #import "MMXUser.h"
 #import "MagnetConstants.h"
 #import "MMXMessageTypes.h"
@@ -39,5 +40,22 @@
  *  Call when no longer need to use the MMX features or when the app goes to the background
  */
 + (void)teardown;
+
+/**
+ *  You must enable incoming messages. It is disabled by default.
+ */
++ (void)enableIncomingMessages;
+
+/**
+ *  Disable incoming messages.
+ */
++ (void)disableIncomingMessages;
+
+/**
+ *  Updates the device token.
+ *
+ *  @param deviceToken - Returned in AppDelegate application:didRegisterForRemoteNotificationsWithDeviceToken:
+ */
++ (void)setRemoteNotificationDeviceToken:(NSData *)deviceToken;
 
 @end

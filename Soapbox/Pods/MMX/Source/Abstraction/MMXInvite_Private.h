@@ -22,7 +22,7 @@
 
 @property (nonatomic, readwrite) NSDate *timestamp;
 
-@property (nonatomic, readwrite) NSString *textMessage;
+@property (nonatomic, readwrite) NSString *comments;
 
 @property (nonatomic, readwrite) MMXUser *sender;
 

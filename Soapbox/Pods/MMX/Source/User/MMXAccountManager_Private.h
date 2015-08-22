@@ -50,7 +50,7 @@
 
 @end
 
-@interface MMXAccountManager ()
+@interface MMXAccountManager () <NSURLSessionDelegate>
 
 @property (nonatomic, weak) id<MMXAccountManagerDelegate> delegate;
 

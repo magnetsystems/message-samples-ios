@@ -30,6 +30,8 @@
 @property (nonatomic, copy) NSArray * availablePlayersList;
 @property (nonatomic, assign) BOOL inGame;
 
+- (void)goToLoginScreen;
+
 @end
 
 @implementation AvailablePlayersTableViewController
@@ -61,10 +63,14 @@
                                              selector:@selector(didReceiveMessage:)
                                                  name:MMXDidReceiveMessageNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didDisconnect:)
+                                                 name:MMXDidDisconnectNotification
+                                               object:nil];
 }
 
 - (void)didReceiveMessage:(NSNotification *)notification {
-    MMXMessage *message = notification.userInfo[MagnetMessageKey];
+    MMXMessage *message = notification.userInfo[MMXMessageKey];
     switch (message.messageType) {
 
         case MMXMessageTypeDefault:{
@@ -86,6 +92,14 @@
             break;
         }
     };
+}
+
+- (void)didDisconnect:(NSNotification *)notification {
+    
+    // Indicate that you are not ready to receive messages now!
+    [MMX disableIncomingMessages];
+    
+    [self goToLoginScreen];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -118,7 +132,7 @@
                                                    endDate:now
                                                      limit:100
                                                  ascending:NO
-                                                   success:^(NSArray *messages) {
+                                                   success:^(int totalCount, NSArray *messages) {
 
                                                        [self refreshAvailablePlayersWithMessages:messages];
 
@@ -359,6 +373,12 @@
 
 - (void)resigningActive {
 	[self postAvailabilityStatusAs:NO];
+}
+
+#pragma mark - Private implementation
+
+- (void)goToLoginScreen {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 

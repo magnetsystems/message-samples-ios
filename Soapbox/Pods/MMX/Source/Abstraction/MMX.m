@@ -32,4 +32,12 @@
 	}
 }
 
++ (void)enableIncomingMessages {
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
+}
+
++ (void)disableIncomingMessages {
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
+}
+
 @end

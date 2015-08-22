@@ -20,7 +20,7 @@
 /**
  *  A custom message from the sender
  */
-@property (nonatomic, readonly) NSString *textMessage;
+@property (nonatomic, readonly) NSString *comments;
 
 /**
  *  The user that sent the response

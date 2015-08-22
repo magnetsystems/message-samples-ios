@@ -32,4 +32,16 @@
 	}
 }
 
++ (void)enableIncomingMessages {
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
+}
+
++ (void)disableIncomingMessages {
+	[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
+}
+
++ (void)setRemoteNotificationDeviceToken:(NSData *)deviceToken {
+	[[MMXClient sharedClient] updateRemoteNotificationDeviceToken:deviceToken];
+}
+
 @end

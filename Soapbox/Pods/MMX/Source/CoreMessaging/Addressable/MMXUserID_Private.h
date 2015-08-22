@@ -16,6 +16,7 @@
  */
 
 #import "MMXUserID.h"
+@class MMXUser;
 
 @interface MMXUserID ()
 
@@ -26,5 +27,6 @@
 + (NSString *)stripUsername:(NSString *)fullUser;
 
 + (instancetype)userIDFromAddress:(MMXInternalAddress *)address;
++ (instancetype)userIDFromMMXUser:(MMXUser *)user;
 
 @end
