@@ -25,10 +25,10 @@
 @implementation MMXInvite
 
 
-- (void)acceptWithMessage:(NSString *)textMessage
+- (void)acceptWithMessage:(NSString *)comments
 				  success:(void (^)(void))success
 				  failure:(void (^)(NSError *))failure {
-	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteResponseMessageToUser:self.sender forChannel:self.channel textMessage:textMessage response:YES];
+	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteResponseMessageToUser:self.sender forChannel:self.channel comments:comments response:YES];
 	[[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^{
 	} failure:^(NSError *error) {
 	}];
@@ -43,10 +43,10 @@
 	}];
 }
 
-- (void)declineWithMessage:(NSString *)textMessage
+- (void)declineWithMessage:(NSString *)comments
 				   success:(void (^)(void))success
 				   failure:(void (^)(NSError *))failure {
-	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteResponseMessageToUser:self.sender forChannel:self.channel textMessage:textMessage response:NO];
+	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteResponseMessageToUser:self.sender forChannel:self.channel comments:comments response:NO];
 	[[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^{
 		if (success) {
 			success();
@@ -60,7 +60,7 @@
 
 + (instancetype)inviteFromMMXInternalMessage:(MMXInternalMessageAdaptor *)message {
 	MMXInvite *invite = [MMXInvite new];
-	invite.textMessage = message.metaData[@"text"];
+	invite.comments = message.metaData[@"text"];
 	MMXInternalAddress *address = message.senderUserID.address;
 	MMXUser *user = [MMXUser new];
 	user.username = address.username;

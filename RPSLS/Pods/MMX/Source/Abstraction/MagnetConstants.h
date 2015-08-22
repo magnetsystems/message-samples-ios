@@ -20,12 +20,14 @@
 @interface MagnetConstants : NSObject
 
 extern NSString * const MMXDidReceiveMessageNotification;
-extern NSString * const MagnetMessageKey;
+extern NSString * const MMXMessageKey;
 extern NSString * const MMXDidReceiveDeliveryConfirmationNotification;
-extern NSString * const MagnetRecipientKey;
-extern NSString * const MagnetMessageIDKey;
+extern NSString * const MMXRecipientKey;
+extern NSString * const MMXMessageIDKey;
 extern NSString * const MMXDidReceiveChannelInvitationNotification;
-extern NSString * const MagnetInviteKey;
+extern NSString * const MMXInviteKey;
 extern NSString * const MMXDidReceiveChannelInvitationResponseNotification;
-extern NSString * const MagnetInviteResponseKey;
+extern NSString * const MMXInviteResponseKey;
+extern NSString * const MMXDidDisconnectNotification;
+extern NSString * const MMXDisconnectErrorKey;
 @end

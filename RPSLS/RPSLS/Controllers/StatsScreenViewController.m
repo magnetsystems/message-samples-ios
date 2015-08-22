@@ -33,16 +33,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *tiesLabel;
 @property (nonatomic, assign) BOOL inGame;
 
+- (void)goToLoginScreen;
+
 @end
 
 @implementation StatsScreenViewController
 
 
 #pragma mark - Lifecycle
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
@@ -53,6 +51,9 @@
 	self.winsLabel.text = [NSString stringWithFormat:@"Wins: %lu",(unsigned long)[RPSLSUser me].stats.wins];
 	self.lossesLabel.text = [NSString stringWithFormat:@"Losses: %lu",(unsigned long)[RPSLSUser me].stats.losses];
 	self.tiesLabel.text = [NSString stringWithFormat:@"Ties: %lu",(unsigned long)[RPSLSUser me].stats.ties];
+    
+    // Indicate that you are ready to receive messages now!
+    [MMX enableIncomingMessages];
 
 	[self setupDefaultTopic];
 	
@@ -61,12 +62,16 @@
                                              selector:@selector(didReceiveMessage:)
                                                  name:MMXDidReceiveMessageNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didDisconnect:)
+                                                 name:MMXDidDisconnectNotification
+                                               object:nil];
 
 	[self postAvailabilityStatusAs:YES];
 }
 
 - (void)didReceiveMessage:(NSNotification *)notification {
-    MMXMessage *message = notification.userInfo[MagnetMessageKey];
+    MMXMessage *message = notification.userInfo[MMXMessageKey];
     // Do something with the message
     /*
 	 *  Checking the incoming message and sending a confirmation if necessary.
@@ -74,6 +79,14 @@
     if ([message isTimelyMessage]) {
         [self handleMessage:message];
     }
+}
+
+- (void)didDisconnect:(NSNotification *)notification {
+    
+    // Indicate that you are not ready to receive messages now!
+    [MMX disableIncomingMessages];
+    
+    [self goToLoginScreen];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -170,14 +183,6 @@
 	}
 	return 0;
 }
-
-#pragma mark - MMXClientDelegate Callbacks
-
-//- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-//	if (connectionStatus == MMXConnectionStatusDisconnected) {
-//		[self.navigationController popToRootViewControllerAnimated:YES];
-//	}
-//}
 
 #pragma mark - UIAlertController
 
@@ -280,6 +285,12 @@
 
 - (void)resigningActive {
 	[self postAvailabilityStatusAs:NO];
+}
+
+#pragma mark - Private implementation
+
+- (void)goToLoginScreen {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
