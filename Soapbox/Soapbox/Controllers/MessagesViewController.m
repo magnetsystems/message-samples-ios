@@ -171,7 +171,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	PubSubCell *cell = (PubSubCell *)[tableView dequeueReusableCellWithIdentifier:@"PubSubCell" forIndexPath:indexPath];
 	MMXMessage * message = self.messageList[indexPath.row];
-	NSString * senderName = message.messageContent[@"username"];
+	NSString *senderName = message.sender.username;
 	UIColor *color = [UIColor soapboxLightGray];
 	if (senderName && ![senderName isEqualToString:@""]) {
 		color = [self colorForName:senderName];
