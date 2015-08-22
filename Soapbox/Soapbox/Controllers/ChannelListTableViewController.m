@@ -72,7 +72,7 @@
 - (void)didDisconnect:(NSNotification *)notification {
 
     // Indicate that you are not ready to receive messages now!
-    [MMX enableIncomingMessages];
+    [MMX disableIncomingMessages];
     
     [self goToLoginScreen];
 }

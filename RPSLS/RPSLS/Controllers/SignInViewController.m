@@ -53,6 +53,8 @@
                                                               persistence:NSURLCredentialPersistenceNone];
         
         MMXUser *user = [[MMXUser alloc] init];
+        user.displayName = self.usernameTextField.text;
+        
         [user registerWithCredential:credential success:^{
             [self logInWithCredential:credential];
         } failure:^(NSError *error) {
