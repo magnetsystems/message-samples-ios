@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-#import "MTLModel.h"
+#import <Mantle/Mantle.h>
 @class MMXUser;
 @class MMXChannel;
 

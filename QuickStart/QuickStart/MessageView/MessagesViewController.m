@@ -77,6 +77,9 @@ NSString * const kTextContent = @"textContent";
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+    
+    // Indicate that you are ready to receive messages now!
+    [MMX enableIncomingMessages];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -110,6 +113,7 @@ NSString * const kTextContent = @"textContent";
 		[MMXUser logInWithCredential:self.currentCredential success:^(MMXUser *user) {
 			self.currentRecipient = [self me];
 			[self showAlertWithTitle:@"Logged In" message:[NSString stringWithFormat:@"You are logged in as %@.\n\nTry sending a message below.",kDefaultUsername]];
+            self.textInputbar.textView.text = @"Hello World";
 		} failure:^(NSError *error) {
 			[self showAlertWithTitle:@"Authentication Failure!" message:@"Something went wrong while trying to authenticate. Please check your server settings and configuration then try again."];
 			NSLog(@"logInWithCredentials Failure = %@",error);
@@ -324,7 +328,6 @@ NSString * const kTextContent = @"textContent";
 	self.navigationItem.titleView = imageView;
 	self.textInputbar.autoHideRightButton = NO;
 	self.textInputbar.backgroundColor = myColor;
-	self.textInputbar.textView.text = @"Hello World";
 }
 
 @end

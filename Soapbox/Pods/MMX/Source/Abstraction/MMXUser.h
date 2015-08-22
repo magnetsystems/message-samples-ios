@@ -96,9 +96,9 @@
  *  @param failure		Block with an NSError with details about the call failure.
  */
 + (void)findByDisplayName:(NSString *)displayName
-					limit:(int)limit
-				  success:(void (^)(int totalCount, NSSet *users))success
-				  failure:(void (^)(NSError *error))failure;
+                    limit:(int)limit
+                  success:(void (^)(int totalCount, NSArray *users))success
+                  failure:(void (^)(NSError *error))failure;
 
 /**
  *  Method for getting the full user object from a username
@@ -110,13 +110,6 @@
 + (void)userForUsername:(NSString *)username
 				success:(void (^)(MMXUser *user))success
 				failure:(void (^)(NSError *error))failure;
-
-/**
- *  Set push token for this device
- *
- *  @param token returned in application:didRegisterForRemoteNotificationsWithDeviceToken:
- */
-- (void)addDeviceToken:(NSData *)token;
 
 //MMXAddressable Protocol
 @property (nonatomic, readonly) MMXInternalAddress *address;

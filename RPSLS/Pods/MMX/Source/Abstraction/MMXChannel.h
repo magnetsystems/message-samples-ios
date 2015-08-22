@@ -170,7 +170,7 @@
  *  @param success Block with the total count of subscribers and a NSSet of the subscribers(MMXUser objects)
  *  @param failure Block with an NSError with details about the call failure.
  */
-- (void)subscribersWithSuccess:(void (^)(int, NSSet *))success
+- (void)subscribersWithSuccess:(void (^)(int totalCount, NSArray *subscribers))success
 					   failure:(void (^)(NSError *error))failure;
 
 /**
