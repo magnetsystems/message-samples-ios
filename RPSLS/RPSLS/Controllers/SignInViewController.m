@@ -26,6 +26,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *signInButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
+- (BOOL)validateUsername:(NSString *)username password:(NSString *)password;
+
 @end
 
 @implementation SignInViewController
@@ -42,8 +44,23 @@
 #pragma mark - Actions
 
 - (IBAction)signInPressed:(id)sender {
-    [self setInputsEnabled:NO];
-    if (self.usernameTextField.text.length >= 5 && self.passwordTextField.text.length >= 5) {
+
+    if ([self validateUsername:self.usernameTextField.text password:self.passwordTextField.text]) {
+        
+        /*
+         *  Creating a new NSURLCredential.
+         */
+        NSURLCredential *credential = [NSURLCredential credentialWithUser:self.usernameTextField.text
+                                                                 password:self.passwordTextField.text
+                                                              persistence:NSURLCredentialPersistenceNone];
+        
+        [self logInWithCredential:credential];
+    }
+}
+
+- (IBAction)registerPressed:(id)sender {
+    
+    if ([self validateUsername:self.usernameTextField.text password:self.passwordTextField.text]) {
         
         /*
          *  Creating a new NSURLCredential.
@@ -58,21 +75,9 @@
         [user registerWithCredential:credential success:^{
             [self logInWithCredential:credential];
         } failure:^(NSError *error) {
-            // If the user is already registered, try logging in.
-            if (error.code == 409) {
-                [self logInWithCredential:credential];
-            } else {
-                if ([error.localizedFailureReason isEqualToString:@"userId is taken"]) {
-                    [self showAlertWithTitle:@"Error Logging In" message:@"There was an error when trying to log in. Make sure you are using the correct username and password. If this is your first time logging the username you are trying to use may already be taken."];
-                } else {
-                    [self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
-                }
-                [self setInputsEnabled:YES];
-            }
+            [self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
+            [self setInputsEnabled:YES];
         }];
-    } else {
-        [self showAlertWithTitle:@"Error" message:@"Username and password must be at least 5 charaters in length."];
-        [self setInputsEnabled:YES];
     }
 }
 
@@ -118,6 +123,25 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	self.navigationController.navigationBarHidden = NO;
+}
+
+#pragma mark - Validate username and password
+
+- (BOOL)validateUsername:(NSString *)username password:(NSString *)password {
+    
+    [self setInputsEnabled:NO];
+    if (self.usernameTextField.text.length >= 5 && self.passwordTextField.text.length >= 5) {
+        
+        return YES;
+        
+    } else {
+        [self showAlertWithTitle:@"Error" message:@"Username and password must be at least 5 charaters in length."];
+        [self setInputsEnabled:YES];
+        
+        return NO;
+    }
+    
+    return NO;
 }
 
 @end

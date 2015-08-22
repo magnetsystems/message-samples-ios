@@ -71,7 +71,8 @@
         [user registerWithCredential:credential success:^{
             [self logInWithCredential:credential];
         } failure:^(NSError *error) {
-            
+            [self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
+            [self setInputsEnabled:YES];
         }];
     }
 }

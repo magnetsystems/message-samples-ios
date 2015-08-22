@@ -226,7 +226,7 @@
                                     <action selector="signInPressed:" destination="OfE-zq-hkR" eventType="touchUpInside" id="pzh-BD-DwP"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If you do not have an account you will be registered on first log in." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YE2-Ex-cFl">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If you do not have an account you will be registered on first log in." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YE2-Ex-cFl">
                                 <rect key="frame" x="16" y="377" width="568" height="19"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="0.59860321969999997" green="0.59860321969999997" blue="0.59860321969999997" alpha="1" colorSpace="calibratedRGB"/>
@@ -242,9 +242,22 @@
                                     <constraint firstAttribute="width" constant="240" id="nQA-3B-tXT"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bFr-O4-FAE">
+                                <rect key="frame" x="16" y="377" width="568" height="39"/>
+                                <color key="backgroundColor" red="0.99215686270000003" green="0.6705882353" blue="0.30980392159999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <state key="normal" title="Register">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="registerPressed:" destination="OfE-zq-hkR" eventType="touchUpInside" id="Xce-tp-5Sb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.035294117647058823" green="0.16862745098039217" blue="0.20784313725490194" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="fKs-b8-JKM" firstAttribute="width" secondItem="bFr-O4-FAE" secondAttribute="width" id="8K2-VX-u6z"/>
                             <constraint firstItem="2oP-Br-cyE" firstAttribute="centerX" secondItem="Wo0-Wq-CoO" secondAttribute="centerX" id="CoF-AR-DC5"/>
                             <constraint firstItem="CGL-SH-6gy" firstAttribute="top" secondItem="YE2-Ex-cFl" secondAttribute="bottom" constant="204" id="E6u-76-dSX"/>
                             <constraint firstItem="2oP-Br-cyE" firstAttribute="leading" secondItem="2rT-m0-oiR" secondAttribute="leading" id="F17-4g-ki6"/>
@@ -252,6 +265,7 @@
                             <constraint firstItem="YE2-Ex-cFl" firstAttribute="leading" secondItem="iMk-zP-Al8" secondAttribute="leadingMargin" id="MoF-67-47X"/>
                             <constraint firstItem="Wo0-Wq-CoO" firstAttribute="top" secondItem="Zt3-Tl-UPY" secondAttribute="bottom" id="ROl-mF-Cy1"/>
                             <constraint firstItem="fKs-b8-JKM" firstAttribute="trailing" secondItem="YE2-Ex-cFl" secondAttribute="trailing" id="SGC-dv-laZ"/>
+                            <constraint firstItem="bFr-O4-FAE" firstAttribute="top" secondItem="fKs-b8-JKM" secondAttribute="bottom" constant="8" id="WBc-D6-OR7"/>
                             <constraint firstItem="2oP-Br-cyE" firstAttribute="trailing" secondItem="2rT-m0-oiR" secondAttribute="trailing" id="WaZ-dp-JtB"/>
                             <constraint firstItem="fKs-b8-JKM" firstAttribute="leading" secondItem="YE2-Ex-cFl" secondAttribute="leading" id="YLp-If-b5N"/>
                             <constraint firstItem="2rT-m0-oiR" firstAttribute="top" secondItem="2oP-Br-cyE" secondAttribute="bottom" constant="8" symbolic="YES" id="Zfb-LV-VJ2"/>
@@ -262,6 +276,7 @@
                             <constraint firstItem="YE2-Ex-cFl" firstAttribute="top" secondItem="fKs-b8-JKM" secondAttribute="bottom" constant="8" symbolic="YES" id="mTP-ah-LzY"/>
                             <constraint firstItem="Sxj-S7-xb3" firstAttribute="top" secondItem="Wo0-Wq-CoO" secondAttribute="bottom" constant="20" id="nqi-XX-sC1"/>
                             <constraint firstItem="fKs-b8-JKM" firstAttribute="trailing" secondItem="2rT-m0-oiR" secondAttribute="trailing" id="nuF-85-tHP"/>
+                            <constraint firstItem="fKs-b8-JKM" firstAttribute="centerX" secondItem="bFr-O4-FAE" secondAttribute="centerX" id="qNv-aI-fwN"/>
                             <constraint firstItem="YE2-Ex-cFl" firstAttribute="top" secondItem="fKs-b8-JKM" secondAttribute="bottom" constant="8" id="un3-xU-FZG"/>
                         </constraints>
                         <variation key="default">
