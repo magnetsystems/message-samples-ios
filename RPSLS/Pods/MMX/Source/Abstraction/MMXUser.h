@@ -96,9 +96,9 @@
  *  @param failure		Block with an NSError with details about the call failure.
  */
 + (void)findByDisplayName:(NSString *)displayName
-					limit:(int)limit
-				  success:(void (^)(int totalCount, NSSet *users))success
-				  failure:(void (^)(NSError *error))failure;
+                    limit:(int)limit
+                  success:(void (^)(int totalCount, NSArray *users))success
+                  failure:(void (^)(NSError *error))failure;
 
 /**
  *  Method for getting the full user object from a username

@@ -166,7 +166,7 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 								success:(void (^)(void))success
 								failure:(void (^)(NSError *error))failure {
 
-	NSString *messageID = [[MMXClient sharedClient] sendMMXMessage:message withOptions:nil];
+	NSString *messageID = [[MMXClient sharedClient] sendMMXMessage:message withOptions:nil shouldValidate:NO];
 	if (messageID) {
 		if (success || failure) {
 			NSMutableDictionary *blockDict = [NSMutableDictionary dictionary];

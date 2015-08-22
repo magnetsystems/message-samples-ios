@@ -339,13 +339,15 @@ int const kReconnectionTimerInterval = 4;
 									withContent:outboundMessage.messageContent
 									messageType:nil
 									   metaData:outboundMessage.metaData];
-	return [self sendMMXMessage:message withOptions:options];
+	return [self sendMMXMessage:message withOptions:options shouldValidate:YES];
 }
+
 - (NSString *)sendMMXMessage:(MMXInternalMessageAdaptor *)outboundMessage
-				 withOptions:(MMXMessageOptions *)options {
+				 withOptions:(MMXMessageOptions *)options
+			  shouldValidate:(BOOL)validate {
 	
 
-	if (![self validateAndRespondToErrorsForOutboundMessage:outboundMessage]) {
+	if (validate && ![self validateAndRespondToErrorsForOutboundMessage:outboundMessage]) {
 		return nil;
 	}
 

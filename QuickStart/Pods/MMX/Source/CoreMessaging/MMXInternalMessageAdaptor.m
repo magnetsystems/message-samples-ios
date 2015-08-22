@@ -133,7 +133,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor new];
 	msg.mType = @"invitationResponse";
 	msg.recipients = @[recipient];
-	msg.metaData = @{@"text":comments ?: [NSNull null],
+	msg.metaData = @{@"inviteResponseText":comments ?: [NSNull null],
 					 @"channelIsPrivate":@(!channel.isPublic),
 					 @"channelName":channel.name,
 					 @"channelSummary":channel.summary ?: [NSNull null],

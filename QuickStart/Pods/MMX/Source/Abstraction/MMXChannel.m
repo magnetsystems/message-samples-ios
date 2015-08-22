@@ -256,8 +256,8 @@
 	}];
 }
 
-- (void)subscribersWithSuccess:(void (^)(int, NSSet *))success
-					   failure:(void (^)(NSError *))failure {
+- (void)subscribersWithSuccess:(void (^)(int totalCount, NSArray *subscribers))success
+                       failure:(void (^)(NSError *error))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
 			failure([MagnetDelegate notNotLoggedInError]);
@@ -266,7 +266,7 @@
 	}
 	[[MMXClient sharedClient].pubsubManager subscribersForTopic:[self asTopic] limit:-1 success:^(int totalCount, NSArray *subscriptions) {
 		if (success) {
-			success(totalCount,[NSSet setWithArray:subscriptions]);
+			success(totalCount, subscriptions);
 		}
 	} failure:^(NSError *error) {
 		if (failure) {

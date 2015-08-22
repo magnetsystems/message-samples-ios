@@ -99,9 +99,9 @@
 }
 
 + (void)findByDisplayName:(NSString *)displayName
-					limit:(int)limit
-				  success:(void (^)(int, NSSet *))success
-				  failure:(void (^)(NSError *))failure {
+                    limit:(int)limit
+                  success:(void (^)(int totalCount, NSArray *users))success
+                  failure:(void (^)(NSError *error))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
 			failure([MagnetDelegate notNotLoggedInError]);
@@ -118,7 +118,7 @@
 			[userArray addObject:[MMXUser userFromMMXUserProfile:profile]];
 		}
 		if (success) {
-			success(totalCount, [NSSet setWithArray:userArray]);
+			success(totalCount, userArray);
 		}
 	} failure:^(NSError *error) {
 		if (failure) {

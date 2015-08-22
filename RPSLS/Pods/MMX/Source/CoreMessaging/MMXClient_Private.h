@@ -48,7 +48,8 @@ extern int const kTempVersionMinor;
 + (BOOL)validateCharacterSet:(NSString *)string;
 + (NSError *)errorWithTitle:(NSString *)title message:(NSString *)message code:(int)code;
 - (NSString *)sendMMXMessage:(MMXInternalMessageAdaptor *)outboundMessage
-				 withOptions:(MMXMessageOptions *)options;
+				 withOptions:(MMXMessageOptions *)options
+			  shouldValidate:(BOOL)validate;
 
 - (NSString *)sendDeliveryConfirmationForAddress:(MMXInternalAddress *)address
 									   messageID:(NSString *)messageID

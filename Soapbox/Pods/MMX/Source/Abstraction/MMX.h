@@ -20,6 +20,7 @@
 #import "MMXMessage.h"
 #import "MMXChannel.h"
 #import "MMXInvite.h"
+#import "MMXInviteResponse.h"
 #import "MMXUser.h"
 #import "MagnetConstants.h"
 #import "MMXMessageTypes.h"
@@ -49,5 +50,12 @@
  *  Disable incoming messages.
  */
 + (void)disableIncomingMessages;
+
+/**
+ *  Updates the device token.
+ *
+ *  @param deviceToken - Returned in AppDelegate application:didRegisterForRemoteNotificationsWithDeviceToken:
+ */
++ (void)setRemoteNotificationDeviceToken:(NSData *)deviceToken;
 
 @end
