@@ -113,7 +113,7 @@
     NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
             kMessageKey_Timestamp : [RPSLSUtils timestamp],
             kMessageKey_Type : kMessageTypeValue_Accept,
-            kMessageKey_Result : @(accept),
+            kMessageKey_Result : [@(accept) stringValue],
             kMessageKey_GameID : invite.messageContent[kMessageKey_GameID],
             kMessageKey_Wins : [@([RPSLSUser me].stats.wins) stringValue],
             kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
