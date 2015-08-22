@@ -36,7 +36,7 @@
     // content:@"Letting other players know if I'm available"
     return [MMXMessage messageToChannel:[self availablePlayersChannel]
                          messageContent:@{kMessageKey_Username : [RPSLSUser me].username,
-                                 kMessageKey_UserAvailablity : @(available),
+                                 kMessageKey_UserAvailablity : [@(available) stringValue],
                                  kMessageKey_Timestamp : [RPSLSUtils timestamp],
                                  kMessageKey_Type : kMessageTypeValue_Availability,
                                  kMessageKey_Wins : [@([RPSLSUser me].stats.wins) stringValue],
