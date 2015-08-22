@@ -24,6 +24,10 @@
 #import "MMXClient_Private.h"
 #import "MMXChannel_Private.h"
 #import "MMXPubSubMessage_Private.h"
+#import "MMXDataModel.h"
+#import "MMXInternalMessageAdaptor_Private.h"
+#import "MMXUserID_Private.h"
+#import "MMXMessageOptions.h"
 
 @implementation MMXMessage
 
@@ -46,14 +50,20 @@
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage {
 	MMXMessage *msg = [MMXMessage new];
 	msg.channel = [MMXChannel channelWithName:pubSubMessage.topic.topicName summary:pubSubMessage.topic.topicDescription];
+	MMXInternalAddress *address = pubSubMessage.senderUserID.address;
+	MMXUser *sender = [MMXUser new];
+	sender.username = address.username;
+	sender.displayName = address.displayName;
+	msg.sender = sender;
+	msg.messageID = pubSubMessage.messageID;
 	msg.messageContent = pubSubMessage.metaData;
+	msg.timestamp = pubSubMessage.timestamp;
+	msg.messageType = MMXMessageTypeChannel;
 	return msg;
 }
 
 - (NSString *)sendWithSuccess:(void (^)(void))success
 					  failure:(void (^)(NSError *))failure {
-	//FIXME: Handle case that user is not logged in
-	//FIXME: Make sure that the content is JSON serializable
 	if (![MMXMessageUtils isValidMetaData:self.messageContent]) {
 		NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
 		if (failure) {
@@ -63,9 +73,20 @@
 	}
 	if (self.channel) {
 		NSString *messageID = [[MMXClient sharedClient] generateMessageID];
-		self.messageID = messageID;
 		MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self.channel asTopic] content:nil metaData:self.messageContent];
 		msg.messageID = messageID;
+		self.messageID = messageID;
+		if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+			if ([MMXUser currentUser]) {
+				[self saveForOfflineAsPubSub:msg];
+				return messageID;
+			} else {
+				if (failure) {
+					failure([MMXMessage notNotLoggedInAndNoUserError]);
+				}
+				return nil;
+			}
+		}
 		[[MMXClient sharedClient].pubsubManager publishPubSubMessage:msg success:^(BOOL successful, NSString *messageID) {
 			if (success) {
 				success();
@@ -77,7 +98,20 @@
 		}];
 		return messageID;
 	} else {
-		NSString * messageID = [[MagnetDelegate sharedDelegate] sendMessage:self.copy success:^(void) {
+		NSString *messageID = [[MMXClient sharedClient] generateMessageID];
+		self.messageID = messageID;
+		if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+			if ([MMXUser currentUser]) {
+				[self saveForOfflineAsInAppMessage];
+				return messageID;
+			} else {
+				if (failure) {
+					failure([MMXMessage notNotLoggedInAndNoUserError]);
+				}
+				return nil;
+			}
+		}
+		[[MagnetDelegate sharedDelegate] sendMessage:self.copy success:^(void) {
 			if (success) {
 				success();
 			}
@@ -126,6 +160,29 @@
 	return messageID;
 }
 
+#pragma mark - Offline
+
+- (void)saveForOfflineAsPubSub:(MMXPubSubMessage *)message {
+	[[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:[MMXUser currentUser].username];
+}
+
+- (void)saveForOfflineAsInAppMessage {
+	MMXInternalMessageAdaptor *message = [MMXInternalMessageAdaptor new];
+	message.senderUserID = [MMXUserID userIDFromMMXUser:self.sender];
+	message.messageID = self.messageID;
+	message.metaData = self.messageContent;
+	message.recipients = [self.recipients allObjects];
+	
+	[[MMXDataModel sharedDataModel] addOutboxEntryWithMessage:message options:[MMXMessageOptions new] username:[MMXUser currentUser].username];
+}
+
+#pragma mark - Errors
++ (NSError *)notNotLoggedInAndNoUserError {
+	NSError * error = [MMXClient errorWithTitle:@"Forbidden" message:@"You are not logged in and there is no current user." code:403];
+	return error;
+}
+
+
 #pragma mark - Helpers
 - (NSArray *)replyAllArray {
 	NSMutableArray *recipients = [NSMutableArray arrayWithCapacity:self.recipients.count + 1];
@@ -136,46 +193,6 @@
 
 - (void)sendDeliveryConfirmation {
 	[[MMXClient sharedClient] sendDeliveryConfirmationForAddress:self.sender.address messageID:self.messageID toDeviceID:self.senderDeviceID];
-}
-
-#pragma mark - NSCoding
-
-- (id)initWithCoder:(NSCoder *)coder {
-	self = [super init];
-	if (self) {
-		_messageID = [coder decodeObjectForKey:@"_messageID"];
-		_timestamp = [coder decodeObjectForKey:@"_timestamp"];
-		_sender = [coder decodeObjectForKey:@"_sender"];
-		_channel = [coder decodeObjectForKey:@"_channel"];
-		_recipients = [coder decodeObjectForKey:@"_recipients"];
-		_messageContent = [coder decodeObjectForKey:@"_messageContent"];
-	}
-	
-	return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeObject:self.messageID forKey:@"_messageID"];
-	[coder encodeObject:self.timestamp forKey:@"_timestamp"];
-	[coder encodeObject:self.sender forKey:@"_sender"];
-	[coder encodeObject:self.channel forKey:@"_channel"];
-	[coder encodeObject:self.recipients forKey:@"_recipients"];
-	[coder encodeObject:self.messageContent forKey:@"_messageContent"];
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-	MMXMessage *copy = [[[self class] allocWithZone:zone] init];
-	
-	if (copy != nil) {
-		copy.messageID = self.messageID;
-		copy.timestamp = self.timestamp;
-		copy.sender = self.sender;
-		copy.channel = self.channel;
-		copy.recipients = self.recipients;
-		copy.messageContent = self.messageContent;
-	}
-	
-	return copy;
 }
 
 @end

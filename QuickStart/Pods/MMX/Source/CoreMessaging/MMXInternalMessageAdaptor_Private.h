@@ -49,7 +49,6 @@
                 metaData:(NSDictionary *)metaData;
 
 + (instancetype)initWithXMPPMessage:(XMPPMessage*)xmppMessage;
-- (instancetype)initWithPubSubMessage:(XMPPMessage*)xmppMessage;
 
 + (NSArray *)pubsubMessagesFromFetchResponseIQ:(XMPPIQ *)iq
                                          topic:(MMXTopic *)topic
