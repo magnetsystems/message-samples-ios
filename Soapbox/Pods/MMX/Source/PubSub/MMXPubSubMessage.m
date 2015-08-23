@@ -17,7 +17,7 @@
 
 #import "XMPPIQ.h"
 #import "MMXPubSubMessage_Private.h"
-#import "MMXMessage_Private.h"
+#import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXConstants.h"
 #import "MMXPubSubManager.h"
 #import "MMXClient.h"
@@ -31,13 +31,14 @@
 //messageType = @"TEXTMSG"
 @implementation MMXPubSubMessage
 
-+ (instancetype)initWithMessage:(MMXMessage *)message {
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message {
     MMXPubSubMessage * msg = [[MMXPubSubMessage alloc] init];
 	msg.messageID = message.messageID;
 	msg.messageContent = message.messageContent;
 	msg.topic = message.topic;
 	msg.metaData = message.metaData;
 	msg.timestamp = message.timestamp;
+	msg.senderUserID = message.senderUserID;
     return msg;
 }
 
@@ -71,13 +72,22 @@
 		NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
 		msg.metaData = [MMXMessageUtils extractMetaData:metaElements];
 		msg.topic = topic.copy;
+		
+		NSArray* mmxMetaElements = [mmxElement elementsForName:MXmmxMetaElement];
+		if (mmxMetaElements) {
+			NSDictionary *mmxMetaDict = [MMXInternalMessageAdaptor extractMMXMetaData:mmxMetaElements];
+			MMXUserID *senderID = [MMXInternalMessageAdaptor extractSenderFromMMXMetaDict:mmxMetaDict];
+			if (senderID) {
+				msg.senderUserID = senderID;
+			}
+		}
 		[messageArray addObject:msg];
 	}
 	return messageArray.copy;
 }
 
-- (MMXMessage *)asMMXMessage {
-	MMXMessage * message = [[MMXMessage alloc] init];
+- (MMXInternalMessageAdaptor *)asMMXMessage {
+	MMXInternalMessageAdaptor * message = [[MMXInternalMessageAdaptor alloc] init];
 	message.messageID = self.messageID;
 	message.messageContent = self.messageContent;
 	message.topic = self.topic;
@@ -105,6 +115,13 @@
         NSXMLElement *meta = [MMXUtils metaDataToXML:self.metaData];
         [mmxElement addChild:meta];
     }
+	
+	MMXUserProfile *sender = [MMXClient sharedClient].currentProfile;
+	if (sender && sender.address) {
+		NSXMLElement *mmxMeta = [MMXInternalMessageAdaptor xmlFromRecipients:nil senderAddress:sender.address];
+		[mmxElement addChild:mmxMeta];
+	}
+	
     NSXMLElement *itemElement = [[NSXMLElement alloc] initWithName:@"item"];
     [itemElement addAttributeWithName:@"id" stringValue:itemID];
     [itemElement addChild:mmxElement];

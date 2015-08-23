@@ -16,12 +16,12 @@
  */
 
 #import "MMXGeoLocationMessage.h"
-@class MMXMessage;
+@class MMXInternalMessageAdaptor;
 
 @interface MMXGeoLocationMessage ()
 
-@property (nonatomic, strong) MMXMessage * mmxMessage;
+@property (nonatomic, strong) MMXInternalMessageAdaptor * mmxMessage;
 
-+ (instancetype)initWithMessage:(MMXMessage *)message;
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message;
 
 @end

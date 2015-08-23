@@ -16,7 +16,7 @@
  */
 
 #import "MMXOutboxEntry.h"
-#import "MMXMessage.h"
+#import "MMXInternalMessageAdaptor.h"
 #import "MMXMessageOptions.h"
 #import "MMXKeyedArchiver.h"
 
@@ -27,7 +27,7 @@
 @implementation MMXOutboxEntry
 
 - (instancetype)outboxEntryWithType:(MMXOutboxEntryMessageType)outboxEntryMessageType
-                            message:(MMXMessage *)message
+                            message:(MMXInternalMessageAdaptor *)message
                             options:(MMXMessageOptions *)options
                            username:(NSString *)username {
 

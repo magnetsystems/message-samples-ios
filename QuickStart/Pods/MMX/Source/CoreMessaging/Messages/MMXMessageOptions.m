@@ -21,22 +21,4 @@
 
 #pragma mark - NSCoding
 
-- (id)initWithCoder:(NSCoder *)coder {
-    self = [super init];
-    if (self) {
-        self.shouldRequestDeliveryReceipt = [coder decodeBoolForKey:@"self.shouldRequestDeliveryReceipt"];
-    }
-
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)coder {
-    [coder encodeBool:self.shouldRequestDeliveryReceipt forKey:@"self.shouldRequestDeliveryReceipt"];
-}
-
-//Not currently used. Server needs to add ability to not require an ack
-//- (void)setOptimizeForPerformanceFromMessageType:(NSString *)messageType {
-//    self.optimizeForPerformance = [messageType isEqualToString:@"normal"];
-//}
-
 @end

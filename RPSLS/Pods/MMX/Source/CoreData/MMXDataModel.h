@@ -17,7 +17,7 @@
  
 #import <Foundation/Foundation.h>
 
-@class MMXMessage;
+@class MMXInternalMessageAdaptor;
 @class MMXMessageOptions;
 @class MMXOutboxEntry;
 @class XMPPIQ;
@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, MMXOutboxEntryMessageType){
  @param username The username of the sender.
 
 */
-- (MMXOutboxEntry *)addOutboxEntryWithMessage:(MMXMessage *)message
+- (MMXOutboxEntry *)addOutboxEntryWithMessage:(MMXInternalMessageAdaptor *)message
                                  options:(MMXMessageOptions *)options
                                 username:(NSString *)username;
 
@@ -77,7 +77,7 @@ typedef NS_ENUM(NSUInteger, MMXOutboxEntryMessageType){
  @return The extracted message.
 
 */
-- (MMXMessage *)extractMessageFromOutboxEntry:(MMXOutboxEntry *)outboxEntry;
+- (MMXInternalMessageAdaptor *)extractMessageFromOutboxEntry:(MMXOutboxEntry *)outboxEntry;
 
 /**
  Extract message options from an outbox entry.

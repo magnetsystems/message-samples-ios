@@ -20,14 +20,13 @@
 #import "MessageTextView.h"
 #import "PubSubCell.h"
 #import "UIColor+Soapbox.h"
-#import <MMX.h>
+#import "Announcement.h"
+#import <MMX/MMX.h>
 
-@interface MessagesViewController () <MMXClientDelegate>
+@interface MessagesViewController ()
 
-@property (nonatomic, strong) MMXTopic * topic;
 @property (nonatomic, copy) NSArray * messageList;
 @property (nonatomic, copy) NSArray * colorArray;
-@property (nonatomic, assign) BOOL isSubscribed;
 
 @end
 
@@ -46,8 +45,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	if (self.topic == nil) {
-		[self topicMissing];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMessage:)
+                                                 name:MMXDidReceiveMessageNotification
+                                               object:nil];
+
+	if (self.channel == nil) {
+        [self channelMissing];
 		return;
 	}
 	
@@ -56,7 +61,7 @@
 	/*
 	 *  Extracting the MMXTopic topicName property and setting it as the title of the view.
 	 */
-	self.title = self.topic.topicName;
+	self.title = self.channel.name;
 	self.messageList = @[];
 	[self.tableView registerClass:[PubSubCell class] forCellReuseIdentifier:@"PubSubCell"];
 	UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showOptions)];
@@ -72,109 +77,68 @@
 	[self fetchMessages];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	
-	/*
-	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
-	 *	I only care about client:didReceiveConnectionStatusChange:error:  and client:didReceivePubSubMessage: in this class.
-	 *	All MMXClientDelegate protocol methods are optional.
-	 */
-	[MMXClient sharedClient].delegate = self;
+- (void)didReceiveMessage:(NSNotification *)notification {
+    MMXMessage *message = notification.userInfo[MMXMessageKey];
+    if (message.messageType == MMXMessageTypeChannel && [message.channel.name isEqualToString:self.channel.name]) {
 
-	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - MMXClientDelegate Callbacks
-
-/*
- *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
- */
-- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-	if (connectionStatus == MMXConnectionStatusDisconnected) {
-		[self.navigationController popToRootViewControllerAnimated:YES];
-	}
-}
-
-/*
- *  Monitoring for new messages that may be received while the user is viewing the previously fetched messages.
- */
-- (void)client:(MMXClient *)client didReceivePubSubMessage:(MMXPubSubMessage *)message {
-	if ([message.topic isEqual:self.topic]) {
-		
 		NSMutableArray *tempMessageList = self.messageList.mutableCopy;
 		[tempMessageList insertObject:message atIndex:0];
 		self.messageList = tempMessageList;
-		
+
 		[self.tableView reloadData];
 	}
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Fetch Messages
 
 - (void)fetchMessages {
 
-	/*
-	 *  Creating a MMXPubSubFetchRequest
-	 *	By setting ascending to YES it will the most recent result up to 25 total (based on the value set for maxItems)
-	 */
-	MMXPubSubFetchRequest * request = [MMXPubSubFetchRequest requestWithTopic:self.topic];
-	request.ascending = YES;
-	request.maxItems = 25;
-	
-	/*
-	 *  Passing my MMXPubSubFetchRequest to the fetchItems API. It will return a NSArray of MMXPubSubMessages
-	 */
-	[[MMXClient sharedClient].pubsubManager fetchItems:request success:^(NSArray *messages) {
-		self.messageList = [[messages reverseObjectEnumerator] allObjects];;
-		[self.tableView reloadData];
-	} failure:^(NSError *error) {
-		
-		/*
-		 *  Logging an error.
-		 */
-		[[MMXLogger sharedLogger] error:@"MessagesViewController fetchMessages Error = %@",error.localizedFailureReason];
-
-		[self showAlertWithTitle:@"Failed To Fetch Messages" message:error.localizedFailureReason];
-	}];
+    [self.channel fetchMessagesBetweenStartDate:nil endDate:nil limit:25 ascending:NO success:^(int totalCount, NSArray *messages) {
+        self.messageList = messages;
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        /*
+         *  Logging an error.
+         */
+        [[MMXLogger sharedLogger] error:@"MessagesViewController fetchMessages Error = %@",error.localizedFailureReason];
+        
+        [self showAlertWithTitle:@"Failed To Fetch Messages" message:error.localizedFailureReason];
+    }];
 }
 
 #pragma mark - Subscribe/Unsubscribe
 
-- (void)subscribeToTopic {
-	if (self.topic) {
+- (void)subscribeToChannel {
+	if (self.channel) {
 		/*
 		 *  Subscribing to a MMXTopic
 		 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
 		 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
 		 */
-		[[MMXClient sharedClient].pubsubManager subscribeToTopic:self.topic device:nil success:^(MMXTopicSubscription *subscription) {
-			[self showAlertWithTitle:@"Successfully Subscribed" message:@"You have successfully subscribed to the topic."];
-			self.isSubscribed = YES;
-		} failure:^(NSError *error) {
-			[self showAlertWithTitle:@"Failed Subscribe" message:error.localizedFailureReason];
-		}];
+        [self.channel subscribeWithSuccess:^{
+            [self showAlertWithTitle:@"Successfully Subscribed" message:@"You have successfully subscribed to the topic."];
+        } failure:^(NSError *error) {
+            [self showAlertWithTitle:@"Failed Subscribe" message:error.localizedFailureReason];
+        }];
 	}
 }
 
-- (void)unSubscribeFromTopic {
-	if (self.topic) {
+- (void)unSubscribeToChannel {
+	if (self.channel) {
 		/*
 		 *  Subscribing to a MMXTopic
 		 *	By passing nil to the subscriptionID parameter all devices for the user will unsubscribed from this topic.
 		 *	If the user only wants to be unsubscribed for a specific device pass the subscriptionID for that subscription.
 		 */
-		[[MMXClient sharedClient].pubsubManager unsubscribeFromTopic:self.topic subscriptionID:nil success:^(BOOL success) {
-			[self showAlertWithTitle:@"Successfully Unsubscribed" message:@"You have successfully unsubscribed from the topic."];
-			self.isSubscribed = NO;
-		} failure:^(NSError *error) {
-			[self showAlertWithTitle:@"Failed Unsubscribe" message:error.localizedFailureReason];
-		}];
+		[self.channel unSubscribeWithSuccess:^{
+            [self showAlertWithTitle:@"Successfully Unsubscribed" message:@"You have successfully unsubscribed from the topic."];
+        } failure:^(NSError *error) {
+            [self showAlertWithTitle:@"Failed Unsubscribe" message:error.localizedFailureReason];
+        }];
 	}
 }
 
@@ -188,17 +152,16 @@
 	 *  By default the PubSub is anonymous and MMXPubSubMessage does not include the sender's username.
 	 *	We are passing the username of the sender in the metaData of the message to be able to show the sender as part of our app functionality.
 	 */
-	MMXPubSubMessage * message = [MMXPubSubMessage pubSubMessageToTopic:self.topic
-																content:self.textView.text
-															   metaData:@{@"username":[MMXClient sharedClient].configuration.credential.user}];
-	
-	/*
+    Announcement *announcement = [Announcement announcementWithContent:self.textView.text];
+    NSDictionary *messageContent = [MTLJSONAdapter JSONDictionaryFromModel:announcement];
+    MMXMessage *messageToSend = [MMXMessage messageToChannel:self.channel messageContent:messageContent];
+    /*
 	 *  Publishing our message. In this case I do not need to do anything on success. I will receive the MMXClientDelegate callback client:didReceivePubSubMessage:
 	 *	I can then treat the message that was sent the same way as any other message I receive.
 	 */
-	[[MMXClient sharedClient].pubsubManager publishPubSubMessage:message success:nil failure:^(NSError *error) {
-		[self showAlertWithTitle:@"Failed to Publish" message:error ? error.localizedFailureReason : @"An unknown error occured when trying to send your message."];
-	}];
+    [self.channel publish:messageToSend.messageContent success:nil failure:^(NSError *error) {
+        [self showAlertWithTitle:@"Failed to Publish" message:error ? error.localizedFailureReason : @"An unknown error occured when trying to send your message."];
+    }];
 	
 	[super didPressRightButton:sender];
 }
@@ -207,8 +170,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	PubSubCell *cell = (PubSubCell *)[tableView dequeueReusableCellWithIdentifier:@"PubSubCell" forIndexPath:indexPath];
-	MMXPubSubMessage * message = self.messageList[indexPath.row];
-	NSString * senderName = message.metaData[@"username"];
+	MMXMessage * message = self.messageList[indexPath.row];
+	NSString *senderName = message.sender.username;
 	UIColor *color = [UIColor soapboxLightGray];
 	if (senderName && ![senderName isEqualToString:@""]) {
 		color = [self colorForName:senderName];
@@ -217,7 +180,7 @@
 	/*
 	 *  Checking the current username against the username of the poster.
 	 */
-	BOOL isCurrentUser = [senderName isEqualToString:[MMXClient sharedClient].configuration.credential.user];
+	BOOL isCurrentUser = [senderName isEqualToString:[MMXUser currentUser].username];
 	if (isCurrentUser) {
 		color = [UIColor soapboxChatCurrentUser];
 	}
@@ -240,11 +203,6 @@
 
 #pragma mark - Helpers
 
-- (void)setTopic:(MMXTopic *)topic isSubscribed:(BOOL)isSubscribed {
-	self.topic = topic;
-	self.isSubscribed = isSubscribed;
-}
-
 - (UIColor *)colorForName:(NSString *)name {
 	int index = (int)([name hash] % self.colorArray.count);
 	return self.colorArray[index];
@@ -259,14 +217,14 @@
 										  preferredStyle:UIAlertControllerStyleActionSheet];
 	
 	UIAlertAction *subAction = [UIAlertAction
-								actionWithTitle:self.isSubscribed ? @"Unsubscribe" : @"Subscribe"
-								style:self.isSubscribed ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault
+								actionWithTitle:self.channel.isSubscribed ? @"Unsubscribe" : @"Subscribe"
+								style:self.channel.isSubscribed ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault
 								handler:^(UIAlertAction *action)
 								{
-									if (self.isSubscribed) {
-										[self unSubscribeFromTopic];
+									if (self.channel.isSubscribed) {
+										[self unSubscribeToChannel];
 									} else {
-										[self subscribeToTopic];
+										[self subscribeToChannel];
 									}
 								}];
 	[alertController addAction:subAction];
@@ -296,7 +254,7 @@
 	[self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (void)topicMissing {
+- (void)channelMissing {
 	UIAlertController *alertController = [UIAlertController
 										  alertControllerWithTitle:@"Topic Missing"
 										  message:@"Unfortunately something went wrong and this topic was not loaded correctly."

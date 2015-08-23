@@ -17,6 +17,7 @@
 
 
 #import <Foundation/Foundation.h>
+#import <Mantle/Mantle.h>
 @class MMXUserID;
 @class MMXEndpoint;
 
@@ -24,7 +25,7 @@
  *  The MMXInboundMessage represents an incoming message. 
  *	It contains the data provided by the sender, a timestamp for when it was sent, a unique ID and the necessary information to reply to the sender.
  */
-@interface MMXInboundMessage : NSObject
+@interface MMXInboundMessage : MTLModel
 
 /**
  *  Unique UUID for the message to allow tracking.

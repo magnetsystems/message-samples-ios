@@ -18,6 +18,7 @@
 #import "MMXEndpoint_Private.h"
 #import "MMXUserID_Private.h"
 #import "NSString+XEP_0106.h"
+#import "MMXInternalAddress.h"
 
 @implementation MMXEndpoint
 
@@ -28,41 +29,12 @@
 	return endpoint;
 }
 
-- (NSString *)address {
-	return [self.userID.username jidEscapedString];
+- (MMXInternalAddress *)address {
+	MMXInternalAddress *address = [MMXInternalAddress new];
+	address.username = [self.userID.username jidEscapedString];
+	address.displayName = self.userID.displayName;
+	address.deviceID = self.deviceID;
+	return address;
 }
-
-- (NSString *)subAddress {
-	return self.deviceID;
-}
-
-#pragma mark - NSCoding
-
-- (id)initWithCoder:(NSCoder *)coder {
-	self = [super init];
-	if (self) {
-		_userID = [coder decodeObjectForKey:@"_userID"];
-		_deviceID = [coder decodeObjectForKey:@"_deviceID"];
-	}
-	
-	return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeObject:self.userID forKey:@"_userID"];
-	[coder encodeObject:self.deviceID forKey:@"_deviceID"];
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-	MMXEndpoint *copy = [[[self class] allocWithZone:zone] init];
-	
-	if (copy != nil) {
-		copy.userID = self.userID;
-		copy.deviceID = self.deviceID;
-	}
-	
-	return copy;
-}
-
 
 @end

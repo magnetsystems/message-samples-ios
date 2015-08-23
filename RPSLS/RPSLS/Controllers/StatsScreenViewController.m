@@ -23,10 +23,9 @@
 #import "RPSLSUtils.h"
 #import "GameViewController.h"
 #import "AvailablePlayersTableViewController.h"
-#import "MMXInboundMessage+RPSLS.h"
-#import <MMX/MMX.h>
+#import "MMXMessage+RPSLS.h"
 
-@interface StatsScreenViewController () <MMXClientDelegate, UIPopoverPresentationControllerDelegate>
+@interface StatsScreenViewController () <UIPopoverPresentationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *connectedLabel;
 @property (weak, nonatomic) IBOutlet UILabel *winsLabel;
@@ -34,16 +33,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *tiesLabel;
 @property (nonatomic, assign) BOOL inGame;
 
+- (void)goToLoginScreen;
+
 @end
 
 @implementation StatsScreenViewController
 
 
 #pragma mark - Lifecycle
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
@@ -54,33 +51,42 @@
 	self.winsLabel.text = [NSString stringWithFormat:@"Wins: %lu",(unsigned long)[RPSLSUser me].stats.wins];
 	self.lossesLabel.text = [NSString stringWithFormat:@"Losses: %lu",(unsigned long)[RPSLSUser me].stats.losses];
 	self.tiesLabel.text = [NSString stringWithFormat:@"Ties: %lu",(unsigned long)[RPSLSUser me].stats.ties];
-
-	/*
-	 *  Setting myself as the delegate to receive the MMXClientDelegate callbacks in this class.
-	 *	I only care about client:didReceiveConnectionStatusChange:error: and client:didReceiveUserAutoRegistrationResult:error: in this class.
-	 *	All MMXClientDelegate protocol methods are optional.
-	 */
-	[MMXClient sharedClient].delegate = self;
-	
-	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
+    
+    // Indicate that you are ready to receive messages now!
+    [MMX enableIncomingMessages];
 
 	[self setupDefaultTopic];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resigningActive) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMessage:)
+                                                 name:MMXDidReceiveMessageNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didDisconnect:)
+                                                 name:MMXDidDisconnectNotification
+                                               object:nil];
 
-	/*
-	 *  Checking current MMXConnectionStatus
+	[self postAvailabilityStatusAs:YES];
+}
+
+- (void)didReceiveMessage:(NSNotification *)notification {
+    MMXMessage *message = notification.userInfo[MMXMessageKey];
+    // Do something with the message
+    /*
+	 *  Checking the incoming message and sending a confirmation if necessary.
 	 */
-	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+    if ([message isTimelyMessage]) {
+        [self handleMessage:message];
+    }
+}
 
-		/*
-		 *  Calling connectWithCredentials will try to create a new session using the NSURLCredential object we set on our MMXConfiguration.
-		 *	Since shouldAutoCreateUser is set as YES it create a new user with the provided credentials if the user does not already exist.
-		 */
-		[[MMXClient sharedClient] connectWithCredentials];
-	} else {
-		[self postAvailabilityStatusAs:YES];
-	}
+- (void)didDisconnect:(NSNotification *)notification {
+    
+    // Indicate that you are not ready to receive messages now!
+    [MMX disableIncomingMessages];
+    
+    [self goToLoginScreen];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -95,69 +101,59 @@
 	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-	[[MMXClient sharedClient].pubsubManager publishPubSubMessage:[RPSLSUtils availablilityMessage:available] success:nil failure:^(NSError *error) {
-		[[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
-	}];
+    [[RPSLSUtils availablePlayersChannel] publish:[RPSLSUtils availablilityMessage:available].messageContent success:nil failure:^(NSError *error) {
+        [[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
+    }];
 }
 
 #pragma mark - Invite Message
 
-- (void)replyToInvite:(MMXInboundMessage *)invite accept:(BOOL)accept {
-	
-	/*
-	 *  Creating new MMXOutboundMessage. Taking the MMXUserID from the MMXInboundMessage senderUserID property
-	 */
-	MMXOutboundMessage * message = [MMXOutboundMessage messageTo:@[invite.senderUserID]
-													 withContent:@"This is an invite reply message"
-														metaData:@{kMessageKey_Username	:[RPSLSUser me].username,
-																   kMessageKey_Timestamp:[RPSLSUtils timestamp],
-																   kMessageKey_Type		:kMessageTypeValue_Accept,
-																   kMessageKey_Result	:@(accept),
-																   kMessageKey_GameID	:invite.metaData[kMessageKey_GameID],
-																   kMessageKey_Wins		:[@([RPSLSUser me].stats.wins) stringValue],
-																   kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
-																   kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]}];
-	
-	/*
-	 *  Creating MMXMessageOptions object. Using defaults.
-	 */
-	MMXMessageOptions * options = [[MMXMessageOptions alloc] init];
-	
-	/*
-	 *  Sending my message.
-	 */
-	[[MMXClient sharedClient] sendMessage:message withOptions:options];
-	
-	if (accept) {
+- (void)replyToInvite:(MMXMessage *)invite accept:(BOOL)accept {
+
+    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
+            kMessageKey_Timestamp : [RPSLSUtils timestamp],
+            kMessageKey_Type : kMessageTypeValue_Accept,
+            kMessageKey_Result : [@(accept) stringValue],
+            kMessageKey_GameID : invite.messageContent[kMessageKey_GameID],
+            kMessageKey_Wins : [@([RPSLSUser me].stats.wins) stringValue],
+            kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
+            kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]};
+
+    [invite replyWithContent:messageContent success:^{
+
+    } failure:^(NSError *error) {
+
+    }];
+
+    if (accept) {
 		self.inGame = YES;
 		[self startGame:invite];
 	}
 }
 
-- (void)startGame:(MMXInboundMessage *)message {
+- (void)startGame:(MMXMessage *)message {
 	RPSLSUser * user = [RPSLSUser playerFromInvite:message];
 	GameViewController* game = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:NSStringFromClass([GameViewController class])];
-	[game setupGameWithID:message.metaData[kMessageKey_GameID] opponent:user];
+	[game setupGameWithID:message.messageContent[kMessageKey_GameID] opponent:user];
 	
 	/*
 	 *  Setting GameViewController as the delegate to receive the MMXClientDelegate callbacks.
 	 */
-	[MMXClient sharedClient].delegate = (id<MMXClientDelegate>)game;
 	[self presentViewController:game animated:YES completion:nil];
 }
 
 #pragma mark - Message Logic
 
-- (void)handleMessage:(MMXInboundMessage *)message {
+- (void)handleMessage:(MMXMessage *)message {
 	RPSLSMessageType type = [self typeForMessage:message];
 	switch (type) {
   case RPSLSMessageTypeUnknown:
 			break;
   case RPSLSMessageTypeInvite:
-			[self showInviteAlertForUser:message.metaData[kMessageKey_Username] invite:message];
+			[self showInviteAlertForUser:message.messageContent[kMessageKey_Username] invite:message];
 			break;
   case RPSLSMessageTypeAccept:
-			if ([message.metaData[kMessageKey_Result] boolValue]) {
+			if ([message.messageContent[kMessageKey_Result] boolValue]) {
 				[self startGame:message];
 			}
 			break;
@@ -168,54 +164,29 @@
 	}
 }
 
-- (RPSLSMessageType)typeForMessage:(MMXInboundMessage *)message {
+- (RPSLSMessageType)typeForMessage:(MMXMessage *)message {
 
 	/*
 	 *  Extracting information from the MMXInboundMessage metaData property.
 	 */
-	if (message == nil || message.metaData == nil || message.metaData[kMessageKey_Type] == nil || [message.metaData[kMessageKey_Type] isEqualToString:@""]) {
+	if (message == nil || message.messageContent == nil || message.messageContent[kMessageKey_Type] == nil || [message.messageContent[kMessageKey_Type] isEqualToString:@""]) {
 		return RPSLSMessageTypeUnknown;
 	}
-	if ([message.metaData[kMessageKey_Type] isEqualToString:kMessageTypeValue_Invite]) {
+	if ([message.messageContent[kMessageKey_Type] isEqualToString:kMessageTypeValue_Invite]) {
 		return RPSLSMessageTypeInvite;
 	}
-	if ([message.metaData[kMessageKey_Type] isEqualToString:kMessageTypeValue_Accept]) {
+	if ([message.messageContent[kMessageKey_Type] isEqualToString:kMessageTypeValue_Accept]) {
 		return RPSLSMessageTypeAccept;
 	}
-	if ([message.metaData[kMessageKey_Type] isEqualToString:kMessageTypeValue_Choice]) {
+	if ([message.messageContent[kMessageKey_Type] isEqualToString:kMessageTypeValue_Choice]) {
 		return RPSLSMessageTypeChoice;
 	}
 	return 0;
 }
 
-#pragma mark - MMXClientDelegate Callbacks
-
-- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-	if (connectionStatus == MMXConnectionStatusDisconnected) {
-		[self.navigationController popToRootViewControllerAnimated:YES];
-	}
-}
-
-- (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {
-	/*
-	 *  Checking the incoming message and sending a confirmation if necessary.
-	 */
-	if ([message isTimelyMessage]) {
-		[self handleMessage:message];
-	}
-	if (receiptRequested) {
-		
-		/*
-		 *  Sending delivery confirmation.
-		 */
-		[[MMXClient sharedClient] sendDeliveryConfirmationForMessage:message];
-	}
-}
-
-
 #pragma mark - UIAlertController
 
-- (void)showInviteAlertForUser:(NSString *)username invite:(MMXInboundMessage *)invite {
+- (void)showInviteAlertForUser:(NSString *)username invite:(MMXMessage *)invite {
 	UIAlertController *alertController = [UIAlertController
 										  alertControllerWithTitle:@"Invitation"
 										  message:[NSString stringWithFormat:@"You received an invitation from %@",username]
@@ -260,51 +231,33 @@
 #pragma mark - Setup Default Topic
 
 - (void)setupDefaultTopic {
-	/*
-	 *  If we get a status other than MMXConnectionStatusAuthenticated we are trying to reconnect
-	 */
-	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated) {
-		self.connectedLabel.text = [NSString stringWithFormat:@"Connected as %@",[RPSLSUser me].username];
-		[self postAvailabilityStatusAs:YES];
-		/*
-		 *  Creating a new topic by passing my MMXTopic object.
-		 *	When a user creates a topic they are NOT automatically subscribed to it.
-		 */
-		[[MMXClient sharedClient].pubsubManager createTopic:[RPSLSUtils availablePlayersTopic] success:^(BOOL success) {
-			
-			/*
-			 *  Subscribing to a MMXTopic
-			 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
-			 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
-			 *	I am passing nil to success because there is not any business logic I need to execute upon success.
-			 */
-			[[MMXClient sharedClient].pubsubManager subscribeToTopic:[RPSLSUtils availablePlayersTopic] device:nil success:nil failure:^(NSError *error) {
-				
-				/*
-				 *  Logging an error.
-				 */
-				[[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
-			}];
-		} failure:^(NSError *error) {
-			//The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
-			if (error.code == 409) {
-				
-				/*
-				 *  Subscribing to a MMXTopic
-				 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
-				 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
-				 *	I am passing nil to success because there is not any business logic I need to execute upon success.
-				 */
-				[[MMXClient sharedClient].pubsubManager subscribeToTopic:[RPSLSUtils availablePlayersTopic] device:nil success:nil failure:^(NSError *error) {
-					
-					/*
-					 *  Logging an error.
-					 */
-					[[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@",error.localizedFailureReason];
-				}];
-			}
-		}];
-	}
+
+    self.connectedLabel.text = [NSString stringWithFormat:@"Connected as %@",[RPSLSUser me].username];
+    [self postAvailabilityStatusAs:YES];
+
+    MMXChannel *availablePlayersChannel = [RPSLSUtils availablePlayersChannel];
+    [availablePlayersChannel createWithSuccess:^{
+
+        [availablePlayersChannel subscribeWithSuccess:nil failure:^(NSError *subscribeError) {
+            [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@", subscribeError.localizedFailureReason];
+        }];
+
+    } failure:^(NSError *error) {
+        //The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
+        if (error.code == 409) {
+
+            /*
+             *  Subscribing to a MMXTopic
+             *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
+             *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
+             *	I am passing nil to success because there is not any business logic I need to execute upon success.
+             */
+
+            [availablePlayersChannel subscribeWithSuccess:nil failure:^(NSError *subscribeError) {
+                [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@", subscribeError.localizedFailureReason];
+            }];
+        }
+    }];
 }
 
 #pragma mark - Segues/Popover
@@ -332,6 +285,12 @@
 
 - (void)resigningActive {
 	[self postAvailabilityStatusAs:NO];
+}
+
+#pragma mark - Private implementation
+
+- (void)goToLoginScreen {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

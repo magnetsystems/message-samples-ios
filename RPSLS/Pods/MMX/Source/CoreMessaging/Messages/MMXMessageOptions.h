@@ -16,12 +16,13 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <Mantle/Mantle.h>
 
 /**
  *  The MMXMessageOptions class represents the different options that can be set when sending a message. 
  *	While currently very limited, over time this class will include more options.
  */
-@interface MMXMessageOptions : NSObject <NSCoding>
+@interface MMXMessageOptions : MTLModel
 
 /**
  * If this property is set to YES the receiver is notified that they should send a delivery receipt.
