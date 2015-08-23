@@ -16,7 +16,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "MagnetDelegate.h"
 #import "MMXMessage.h"
 #import "MMXChannel.h"
 #import "MMXInvite.h"

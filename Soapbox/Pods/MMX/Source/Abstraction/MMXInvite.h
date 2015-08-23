@@ -48,9 +48,9 @@
  *  @param success	Block called if operation is successful.
  *  @param failure	Block with an NSError with details about the call failure.
  */
-- (void)acceptWithMessage:(NSString *)comments
-				  success:(void (^)(void))success
-				  failure:(void (^)(NSError *error))failure;
+- (void)acceptWithComments:(NSString *)comments
+                   success:(void (^)(void))success
+                   failure:(void (^)(NSError *error))failure;
 
 /**
  *  Decline the invite to the channel.
@@ -59,9 +59,9 @@
  *  @param success	Block called if operation is successful.
  *  @param failure	Block with an NSError with details about the call failure.
  */
-- (void)declineWithMessage:(NSString *)comments
-				   success:(void (^)(void))success
-				   failure:(void (^)(NSError *error))failure;
+- (void)declineWithComments:(NSString *)comments
+                    success:(void (^)(void))success
+                    failure:(void (^)(NSError *error))failure;
 
 
 @end
