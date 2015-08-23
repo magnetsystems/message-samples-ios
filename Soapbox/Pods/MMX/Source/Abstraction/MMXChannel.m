@@ -435,7 +435,7 @@
 }
 
 + (NSString *)channelKeyFromTopic:(MMXTopic *)topic {
-	NSString *topicKey = [NSString stringWithFormat:@"%@%@",topic.topicName,topic.nameSpace];
+    NSString *topicKey = [[NSString stringWithFormat:@"%@%@", topic.topicName, topic.nameSpace] lowercaseString];
 	return topicKey;
 }
 
