@@ -34,15 +34,16 @@
 
 + (MMXMessage *)availablilityMessage:(BOOL)available {
     // content:@"Letting other players know if I'm available"
+    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
+            kMessageKey_UserAvailablity : available ? @"true" : @"false",
+            kMessageKey_Timestamp : [RPSLSUtils timestamp],
+            kMessageKey_Type : kMessageTypeValue_Availability,
+            kMessageKey_Wins : [@([RPSLSUser me].stats.wins) stringValue],
+            kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
+            kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]
+    };
     return [MMXMessage messageToChannel:[self availablePlayersChannel]
-                         messageContent:@{kMessageKey_Username : [RPSLSUser me].username,
-                                 kMessageKey_UserAvailablity : [@(available) stringValue],
-                                 kMessageKey_Timestamp : [RPSLSUtils timestamp],
-                                 kMessageKey_Type : kMessageTypeValue_Availability,
-                                 kMessageKey_Wins : [@([RPSLSUser me].stats.wins) stringValue],
-                                 kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
-                                 kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]
-                         }
+                         messageContent:messageContent
     ];
 }
 

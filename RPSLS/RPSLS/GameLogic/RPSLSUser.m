@@ -39,7 +39,7 @@
 		user.username = message.messageContent[kMessageKey_Username] ?: @"Unknown";
 		user.timestamp = message.timestamp;
 		user.stats = [RPSLSUserStats statsFromMetaData:message.messageContent];
-		user.isAvailable = [message.messageContent[kMessageKey_UserAvailablity] isEqualToString:kPostStatus_Available] ? YES : NO;
+		user.isAvailable = [message.messageContent[kMessageKey_UserAvailablity] isEqualToString:@"true"];
 		return user;
 	}
 	return nil;
@@ -62,8 +62,8 @@
 		user.username = message.messageContent[kMessageKey_Username] ?: @"Unknown";
 		user.timestamp = message.timestamp;
 		user.stats = [RPSLSUserStats statsFromMetaData:message.messageContent];
-		user.isAvailable = [message.messageContent[kMessageKey_UserAvailablity] boolValue];
-		return user;
+		user.isAvailable = [message.messageContent[kMessageKey_UserAvailablity] isEqualToString:@"true"];
+        return user;
 	}
 	return nil;
 }
