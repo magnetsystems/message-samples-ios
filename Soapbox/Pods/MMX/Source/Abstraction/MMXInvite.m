@@ -25,9 +25,9 @@
 @implementation MMXInvite
 
 
-- (void)acceptWithMessage:(NSString *)comments
-				  success:(void (^)(void))success
-				  failure:(void (^)(NSError *))failure {
+- (void)acceptWithComments:(NSString *)comments
+                   success:(void (^)(void))success
+                   failure:(void (^)(NSError *error))failure {
 	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteResponseMessageToUser:self.sender forChannel:self.channel comments:comments response:YES];
 	[[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^{
 	} failure:^(NSError *error) {
@@ -43,9 +43,9 @@
 	}];
 }
 
-- (void)declineWithMessage:(NSString *)comments
-				   success:(void (^)(void))success
-				   failure:(void (^)(NSError *))failure {
+- (void)declineWithComments:(NSString *)comments
+                    success:(void (^)(void))success
+                    failure:(void (^)(NSError *error))failure {
 	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteResponseMessageToUser:self.sender forChannel:self.channel comments:comments response:NO];
 	[[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^{
 		if (success) {

@@ -32,17 +32,17 @@
 /**
  *  Unique UUID for the message to allow tracking.
  */
-@property(nonatomic, copy, readonly) NSString *messageID;
+@property(nonatomic, readonly) NSString *messageID;
 
 /**
  *  The timestamp for when the message was originally sent.
  */
-@property(nonatomic, strong, readonly) NSDate *timestamp;
+@property(nonatomic, readonly) NSDate *timestamp;
 
 /**
  *  The MMXUserID for the user that sent the message.
  */
-@property(nonatomic, strong, readonly) MMXUser *sender;
+@property(nonatomic, readonly) MMXUser *sender;
 
 /**
  *  The channel the message was published to. See MMXChannel.h for more details.
@@ -52,13 +52,13 @@
 /**
  *  The list of users the message was sent to.
  */
-@property(nonatomic, copy, readonly) NSSet *recipients;
+@property(nonatomic, readonly) NSSet *recipients;
 
 /**
  *  The content you want to send.
  *	NSDictionary can only contain objects that are JSON serializable.
  */
-@property(nonatomic, copy, readonly) NSDictionary *messageContent;
+@property(nonatomic, readonly) NSDictionary *messageContent;
 
 /**
  *  Initializer for creating a new MMXMessage object

@@ -861,12 +861,12 @@ int const kReconnectionTimerInterval = 4;
 		}
 		if ([inMessage.mType isEqualToString:@"invitation"]) {
 			MMXInvite *invite = [MMXInvite inviteFromMMXInternalMessage:inMessage];
-			[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInvitationNotification
+			[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInviteNotification
 																object:nil
 															  userInfo:@{MMXInviteKey:invite}];
 		} else if ([inMessage.mType isEqualToString:@"invitationResponse"]) {
 			MMXInviteResponse *inviteResponse = [MMXInviteResponse inviteResponseFromMMXInternalMessage:inMessage];
-				[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInvitationResponseNotification
+				[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInviteResponseNotification
 																	object:nil
 																  userInfo:@{MMXInviteResponseKey:inviteResponse}];
 
