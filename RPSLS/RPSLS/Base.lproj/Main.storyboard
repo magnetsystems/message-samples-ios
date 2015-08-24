@@ -111,12 +111,12 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nmU-7T-2Cw">
-                                            <rect key="frame" x="8" y="8" width="584" height="24"/>
+                                            <rect key="frame" x="8" y="22" width="584" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vek-Hj-CaR">
+                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vek-Hj-CaR">
                                             <rect key="frame" x="8" y="40" width="584" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -135,9 +135,11 @@
                                         <constraint firstItem="BOr-ud-J7g" firstAttribute="top" secondItem="O1G-eE-dbU" secondAttribute="topMargin" id="9YC-F6-U1v"/>
                                         <constraint firstItem="BOr-ud-J7g" firstAttribute="leading" secondItem="O1G-eE-dbU" secondAttribute="leadingMargin" id="Bnc-nb-Orx"/>
                                         <constraint firstAttribute="centerY" secondItem="BOr-ud-J7g" secondAttribute="centerY" constant="14" id="Ges-ah-2jc"/>
+                                        <constraint firstAttribute="centerY" secondItem="vek-Hj-CaR" secondAttribute="centerY" constant="-15.25" id="MWK-nJ-5lJ"/>
                                         <constraint firstAttribute="centerY" secondItem="BOr-ud-J7g" secondAttribute="centerY" id="WVt-i0-fAt"/>
                                         <constraint firstItem="nmU-7T-2Cw" firstAttribute="trailing" secondItem="O1G-eE-dbU" secondAttribute="trailingMargin" id="eXQ-Vf-GZa"/>
                                         <constraint firstItem="BOr-ud-J7g" firstAttribute="trailing" secondItem="O1G-eE-dbU" secondAttribute="trailingMargin" id="gnY-SI-GxX"/>
+                                        <constraint firstAttribute="centerY" secondItem="nmU-7T-2Cw" secondAttribute="centerY" constant="-0.25" id="nX3-2s-n9a"/>
                                         <constraint firstItem="vek-Hj-CaR" firstAttribute="leading" secondItem="BOr-ud-J7g" secondAttribute="leading" id="vNI-ol-x1d"/>
                                         <constraint firstItem="nmU-7T-2Cw" firstAttribute="top" secondItem="O1G-eE-dbU" secondAttribute="topMargin" id="xhc-al-AhK"/>
                                         <constraint firstItem="nmU-7T-2Cw" firstAttribute="leading" secondItem="O1G-eE-dbU" secondAttribute="leadingMargin" id="zuC-Fs-ax0"/>
@@ -146,6 +148,8 @@
                                         <mask key="constraints">
                                             <exclude reference="9YC-F6-U1v"/>
                                             <exclude reference="Ges-ah-2jc"/>
+                                            <exclude reference="xhc-al-AhK"/>
+                                            <exclude reference="1an-1V-s8c"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
