@@ -153,7 +153,7 @@
 			[self showInviteAlertForUser:message.messageContent[kMessageKey_Username] invite:message];
 			break;
   case RPSLSMessageTypeAccept:
-			if ([message.messageContent[kMessageKey_Result] isEqualToString:@"true"]) {
+			if ([RPSLSUtils isTrue:message.messageContent[kMessageKey_Result]]) {
 				[self startGame:message];
 			}
 			break;

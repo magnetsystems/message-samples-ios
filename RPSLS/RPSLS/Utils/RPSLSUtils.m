@@ -47,4 +47,17 @@
     ];
 }
 
++ (BOOL)isTrue:(id)value {
+    if ([value isKindOfClass:[NSString class]]) {
+        if ([value isEqualToString:@"true"]) {
+            return YES;
+        }
+    } else if ([value isKindOfClass:[NSNumber class]]) {
+        if ([value boolValue]) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
 @end
