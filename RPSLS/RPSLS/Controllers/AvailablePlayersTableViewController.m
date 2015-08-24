@@ -58,7 +58,6 @@
     [self postAvailabilityStatusAs:YES];
 	
 	[self collectListOfAvailablePlayers];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resigningActive) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveMessage:)
                                                  name:MMXDidReceiveMessageNotification
@@ -67,7 +66,18 @@
                                              selector:@selector(didDisconnect:)
                                                  name:MMXDidDisconnectNotification
                                                object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleResignActive)
+												 name: UIApplicationWillResignActiveNotification
+											   object: nil];
+	
 }
+
+- (void)handleResignActive {
+	[self postAvailabilityStatusAs:NO];
+	[self goToLoginScreen];
+}
+
 
 - (void)didReceiveMessage:(NSNotification *)notification {
     MMXMessage *message = notification.userInfo[MMXMessageKey];
@@ -371,14 +381,10 @@
 	return [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
 }
 
-- (void)resigningActive {
-	[self postAvailabilityStatusAs:NO];
-}
-
 #pragma mark - Private implementation
 
 - (void)goToLoginScreen {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+	[self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 

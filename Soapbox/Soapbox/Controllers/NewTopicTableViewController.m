@@ -42,6 +42,20 @@
 	
 	UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(createTopic)];
 	self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleResignActive)
+												 name: UIApplicationWillResignActiveNotification
+											   object: nil];
+	
+}
+
+- (void)handleResignActive {
+	[self goToLoginScreen];
+}
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - MMXClientDelegate Callbacks
@@ -55,26 +69,25 @@
 //	}
 //}
 
-#pragma mark - Create Topic
+#pragma mark - Create Channel
 
 - (void)createTopic {
 	
-	//Extracting the topic name from the cell
+	//Extracting the channel name from the cell
 	NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:0];
 	NewTopicNameCell * cell = (NewTopicNameCell *)[self.tableView cellForRowAtIndexPath:path];
 	NSString * topicName = cell.topicName;
 	
 	//Doing some local validation
 	if (topicName == nil || [topicName isEqualToString:@""]) {
-		[self showAlertForSuccess:NO title:@"Invalid Topic Name" description:@"Please check that you have entered a valid topic name. The field cannot be blank."];
+		[self showAlertForSuccess:NO title:@"Invalid Channel Name" description:@"Please check that you have entered a valid topic name. The field cannot be blank."];
 	} else if ([topicName rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@" "]].location != NSNotFound) {
-		[self showAlertForSuccess:NO title:@"Invalid Topic Name" description:@"Topic name cannot contain spaces."];
+		[self showAlertForSuccess:NO title:@"Invalid Channel Name" description:@"Channel name cannot contain spaces."];
 	} else {
 		
 		/*
-		 *  Creating a new MMXTopic object. I could have also used MMXTopic topicWithName: as the values I passed in are same as the defaults.
+		 *  Creating a new MMXChannel object.
 		 */
-//		MMXTopic * topic = [MMXTopic topicWithName:topicName maxItemsToPersist:-1 permissionsLevel:MMXPublishPermissionsLevelAnyone];
         MMXChannel *channel = [MMXChannel channelWithName:topicName summary:nil];
         channel.isPublic = YES;
 		
@@ -90,19 +103,16 @@
                  *  Setting tags on the newly created topic.
                  *	There are also APIs to get the list of existing tags, add tags and remove tags.
                  */
-                __weak typeof(channel) weakChannel = channel;
                 [channel setTags:[NSSet setWithArray:tagsArray] success:^{
-                    typeof(weakChannel) strongChannel = weakChannel;
-                    [self showSubscriptionDialog:strongChannel description:@"Topic created successfully. Would you like to subscribe to this topic?"];
+					[self showAlertForSuccess:YES title:@"Channel Created" description:@"Channel created successfully."];
                 } failure:^(NSError *error) {
-                    typeof(weakChannel) strongChannel = weakChannel;
-                    [self showSubscriptionDialog:strongChannel description:@"Topic was created successfully but there was an error adding the tags. Would you like to subscribe to this topic?"];
+					[self showAlertForSuccess:NO title:@"Channel created but tags not added." description:error.localizedFailureReason];
                 }];
             } else {
-                [self showAlertForSuccess:YES title:@"Topic Created" description:@"Topic created successfully."];
+                [self showAlertForSuccess:YES title:@"Channel Created" description:@"Channel created successfully."];
             }
         } failure:^(NSError *error) {
-            [self showAlertForSuccess:NO title:@"Topic Creation Failure" description:error.localizedFailureReason];
+            [self showAlertForSuccess:NO title:@"Channel Creation Failure" description:error.localizedFailureReason];
         }];
 	}
 	
@@ -125,7 +135,7 @@
 - (void)showSubscriptionDialog:(MMXChannel *)channel description:(NSString *)description {
 
 	UIAlertController *alertController = [UIAlertController
-										  alertControllerWithTitle:@"Topic Created"
+										  alertControllerWithTitle:@"Channel Created"
 										  message:description
 										  preferredStyle:UIAlertControllerStyleAlert];
 	
@@ -136,13 +146,13 @@
 								 handler:^(UIAlertAction *action) {
 
 									 /*
-									  *  Subscribing to a MMXTopic
-									  *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
+									  *  Subscribing to a MMXChannel
+									  *	By passing nil to the device parameter all device for the user will receive future messages published to this channel.
 									  *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
 									  */
                                      if (!channel.isSubscribed) {
                                          [channel subscribeWithSuccess:^{
-                                             [self showAlertForSuccess:YES title:@"Subscribed to Topic" description:@"You have successfully subscribed to the topic."];
+                                             [self showAlertForSuccess:YES title:@"Subscribed to Channel" description:@"You have successfully subscribed to the channel."];
                                          } failure:^(NSError *error) {
                                              [self showAlertForSuccess:YES title:@"Subscription Failed" description:@"Please try again later."];
                                          }];
@@ -172,7 +182,7 @@
 								 style:UIAlertActionStyleDefault
 								 handler:^(UIAlertAction *action) {
 									 if (success) {
-										 [self.navigationController popToRootViewControllerAnimated:YES];
+										 [self.navigationController popViewControllerAnimated:YES];
 									 }
 								 }];
 	[alertController addAction:doneAction];
@@ -196,7 +206,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	if (section == 0) {
-		return @"Topic Name";
+		return @"Channel Name";
 	} else if (section == 1) {
 		return @"Tags";
 	}
@@ -231,5 +241,12 @@
 		return [cell updateSelection];
 	}
 }
+
+#pragma mark - Private implementation
+
+- (void)goToLoginScreen {
+	[self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 
 @end

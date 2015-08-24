@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *signInButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) NSURLCredential * currentCredential;
 
 - (BOOL)validateUsername:(NSString *)username password:(NSString *)password;
 
@@ -50,11 +51,11 @@
         /*
          *  Creating a new NSURLCredential.
          */
-        NSURLCredential *credential = [NSURLCredential credentialWithUser:self.usernameTextField.text
+        self.currentCredential = [NSURLCredential credentialWithUser:self.usernameTextField.text
                                                                  password:self.passwordTextField.text
                                                               persistence:NSURLCredentialPersistenceNone];
         
-        [self logInWithCredential:credential];
+        [self logInWithCredential:self.currentCredential];
     }
 }
 

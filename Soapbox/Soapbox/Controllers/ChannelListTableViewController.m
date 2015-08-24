@@ -40,7 +40,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+	
     // Indicate that you are ready to receive messages now!
     [MMX enableIncomingMessages];
 	
@@ -56,13 +56,24 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-    
+	
+	self.navigationController.navigationBarHidden = NO;
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didDisconnect:)
                                                  name:MMXDidDisconnectNotification
                                                object:nil];
 
     [self fetchChannels];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleResignActive)
+												 name: UIApplicationWillResignActiveNotification
+											   object: nil];
+	
+}
+
+- (void)handleResignActive {
+	[self goToLoginScreen];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -342,7 +353,7 @@
 #pragma mark - Private implementation
 
 - (void)goToLoginScreen {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+	[self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

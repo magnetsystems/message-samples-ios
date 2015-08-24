@@ -46,10 +46,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didReceiveMessage:)
-                                                 name:MMXDidReceiveMessageNotification
-                                               object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(didReceiveMessage:)
+												 name:MMXDidReceiveMessageNotification
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleResignActive)
+												 name: UIApplicationWillResignActiveNotification
+											   object: nil];
+	
 
 	if (self.channel == nil) {
         [self channelMissing];
@@ -76,6 +82,11 @@
 	
 	[self fetchMessages];
 }
+
+- (void)handleResignActive {
+	[self goToLoginScreen];
+}
+
 
 - (void)didReceiveMessage:(NSNotification *)notification {
     MMXMessage *message = notification.userInfo[MMXMessageKey];
@@ -257,7 +268,7 @@
 
 - (void)channelMissing {
 	UIAlertController *alertController = [UIAlertController
-										  alertControllerWithTitle:@"Topic Missing"
+										  alertControllerWithTitle:@"Channel Missing"
 										  message:@"Unfortunately something went wrong and this topic was not loaded correctly."
 										  preferredStyle:UIAlertControllerStyleAlert];
 	
@@ -270,6 +281,12 @@
 								   }];
 	[alertController addAction:cancelAction];
 	[self presentViewController:alertController animated:YES completion:nil];
+}
+
+#pragma mark - Private implementation
+
+- (void)goToLoginScreen {
+	[self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

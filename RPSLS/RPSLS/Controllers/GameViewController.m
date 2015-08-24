@@ -68,7 +68,17 @@
                                                  name:MMXDidDisconnectNotification
                                                object:nil];
     
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleResignActive)
+												 name: UIApplicationWillResignActiveNotification
+											   object: nil];
+	
 }
+
+- (void)handleResignActive {
+	[self goToLoginScreen];
+}
+
 
 - (void)didReceiveMessage:(NSNotification *)notification {
     MMXMessage *message = notification.userInfo[MMXMessageKey];
@@ -93,6 +103,10 @@
     [MMX disableIncomingMessages];
     
     [self goToLoginScreen];
+}
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)dismissView {
@@ -474,7 +488,7 @@
 #pragma mark - Private implementation
 
 - (void)goToLoginScreen {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+	[self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

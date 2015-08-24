@@ -73,13 +73,19 @@ NSString * const kTextContent = @"textContent";
 
 	//Calling connectWithCredentials will try to create a new session using the NSURLCredential object we set on our MMXConfiguration.
 	//Since shouldAutoCreateUser is set as YES it creates a new user with the provided credentials if the user does not already exist.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleReturnToForeground)
+												 name: UIApplicationWillEnterForegroundNotification
+											   object: nil];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-    
-    // Indicate that you are ready to receive messages now!
-    [MMX enableIncomingMessages];
+}
+
+- (void)handleReturnToForeground {
+	[self logIn];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -112,6 +118,9 @@ NSString * const kTextContent = @"textContent";
 	if (self.currentCredential != nil) {
 		[MMXUser logInWithCredential:self.currentCredential success:^(MMXUser *user) {
 			self.currentRecipient = [self me];
+			// Indicate that you are ready to receive messages now!
+			[MMX enableIncomingMessages];
+
 			[self showAlertWithTitle:@"Logged In" message:[NSString stringWithFormat:@"You are logged in as %@.\n\nTry sending a message below.",kDefaultUsername]];
             self.textInputbar.textView.text = @"Hello World";
 		} failure:^(NSError *error) {
@@ -314,6 +323,10 @@ NSString * const kTextContent = @"textContent";
 								   }];
 	[alertController addAction:cancelAction];
 	[self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Appearance

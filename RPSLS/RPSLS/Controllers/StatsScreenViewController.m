@@ -66,6 +66,10 @@
                                              selector:@selector(didDisconnect:)
                                                  name:MMXDidDisconnectNotification
                                                object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleResignActive)
+												 name: UIApplicationWillResignActiveNotification
+											   object: nil];
 
 	[self postAvailabilityStatusAs:YES];
 }
@@ -92,6 +96,10 @@
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:(BOOL)animated];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)handleResignActive {
+	[self goToLoginScreen];
 }
 
 #pragma mark - Availability
@@ -290,7 +298,8 @@
 #pragma mark - Private implementation
 
 - (void)goToLoginScreen {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+	[self.navigationController popToRootViewControllerAnimated:YES];
+//	[self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
