@@ -52,7 +52,7 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (1.3.16):
+  - MMX (1.5.0):
     - CocoaAsyncSocket (= 7.4.1)
     - Magnet-XMPPFramework (= 3.6.10)
     - Mantle (= 1.5.4)
@@ -60,17 +60,17 @@ PODS:
   - SlackTextViewController (1.5.2)
 
 DEPENDENCIES:
-  - MMX (from `https://github.com/magnetsystems/message-ios.git`, branch `api_simplification`)
+  - MMX (from `https://github.com/magnetsystems/message-ios.git`, branch `develop`)
   - SlackTextViewController (= 1.5.2)
 
 EXTERNAL SOURCES:
   MMX:
-    :branch: api_simplification
+    :branch: develop
     :git: https://github.com/magnetsystems/message-ios.git
 
 CHECKOUT OPTIONS:
   MMX:
-    :commit: 3e1341eb0e5dbcade98fe6655b3f2bbdd055b6c1
+    :commit: c3c8c7f2e414c08fcfe12ae8ac7864e75f7a23d7
     :git: https://github.com/magnetsystems/message-ios.git
 
 SPEC CHECKSUMS:
@@ -79,7 +79,7 @@ SPEC CHECKSUMS:
   Magnet-XMPPFramework: 004ab3dbc139338e97a5012a796485b0fcff6891
   Mantle: 60acd0cd363e27d945bda0a6b8e90577112d28f3
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: dcf9667d4181d767d5508b892080bed196c09e95
+  MMX: 7255f8b2808c72c7536588fdc37b58da1ef9c27f
   SlackTextViewController: ab240cda4c7fe1f70f6c6cf64578f3fea495ce99
 
 COCOAPODS: 0.38.2

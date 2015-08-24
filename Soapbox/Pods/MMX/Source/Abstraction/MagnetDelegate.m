@@ -21,7 +21,7 @@
 #import "MMXUser.h"
 #import "MMXMessageTypes.h"
 #import "MMX_Private.h"
-#import "MMXChannel.h"
+#import "MMXChannel_Private.h"
 #import "MMXLogInOperation.h"
 #import "MMXConnectionOperation.h"
 #import "MMXClient_Private.h"
@@ -29,6 +29,7 @@
 #import "MMXInternalMessageAdaptor.h"
 #import "MMXClient_Private.h"
 #import "MMXUserID_Private.h"
+#import "MMXTopic_Private.h"
 
 typedef void(^MessageSuccessBlock)(void);
 typedef void(^MessageFailureBlock)(NSError *);
@@ -289,7 +290,14 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 - (void)client:(MMXClient *)client didReceivePubSubMessage:(MMXPubSubMessage *)message {
 	MMXMessage *msg = [MMXMessage new];
 	msg.messageType = MMXMessageTypeChannel;
-	msg.channel = [MMXChannel channelWithName:message.topic.topicName summary:nil];
+	MMXChannel *channel = [MMXChannel channelWithName:message.topic.topicName summary:nil];
+	if (message.topic.inUserNameSpace) {
+		channel.isPublic = NO;
+		channel.ownerUsername = message.topic.nameSpace;
+	} else {
+		channel.isPublic = YES;
+	}
+	msg.channel = channel;
 	msg.messageContent = message.metaData;
 	msg.timestamp = message.timestamp;
 	msg.messageID = message.messageID;

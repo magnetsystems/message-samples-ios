@@ -90,8 +90,7 @@
 
 - (void)didReceiveMessage:(NSNotification *)notification {
     MMXMessage *message = notification.userInfo[MMXMessageKey];
-    // FIXME: Implement isEqual: for MMXChannel
-    if (message.messageType == MMXMessageTypeChannel && [message.channel.name.lowercaseString isEqualToString:self.channel.name.lowercaseString]) {
+    if (message.messageType == MMXMessageTypeChannel && [message.channel isEqual:self.channel]) {
 
 		NSMutableArray *tempMessageList = self.messageList.mutableCopy;
 		[tempMessageList insertObject:message atIndex:0];

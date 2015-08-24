@@ -452,4 +452,38 @@
 	return newTopic;
 }
 
+#pragma mark - Equality
+
+- (BOOL)isEqual:(id)other {
+	if (other == self)
+		return YES;
+	if (!other || ![[other class] isEqual:[self class]])
+		return NO;
+	
+	return [self isEqualToChannel:other];
+}
+
+- (BOOL)isEqualToChannel:(MMXChannel *)channel{
+	if (self == channel)
+		return YES;
+	if (channel == nil)
+		return NO;
+	if (![self.name.lowercaseString isEqualToString:channel.name.lowercaseString])
+		return NO;
+	if (self.isPublic != channel.isPublic)
+		return NO;
+	if (!self.isPublic && !channel.isPublic && ![self.ownerUsername isEqualToString:channel.ownerUsername])
+			return NO;
+	return YES;
+}
+
+- (NSUInteger)hash {
+	NSUInteger hash = [self.name hash];
+	if (!self.isPublic) {
+		hash = hash * 31u + [self.ownerUsername hash];
+	}
+	return hash;
+}
+
+
 @end
