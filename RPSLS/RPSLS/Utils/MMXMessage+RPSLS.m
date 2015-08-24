@@ -26,7 +26,7 @@
         NSString * stamp = self.messageContent[kMessageKey_Timestamp];
         long long stampValue = [stamp longLongValue];
         NSTimeInterval secondsSinceSent = [[NSDate date] timeIntervalSince1970] - (stampValue / 1000);
-        if (secondsSinceSent <= 60) {
+        if (secondsSinceSent <= 300) {
             return YES;
         }
     }
