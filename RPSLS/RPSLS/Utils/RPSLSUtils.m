@@ -23,7 +23,7 @@
 @implementation RPSLSUtils
 
 + (NSString *)timestamp {
-    return [@([[NSDate date] timeIntervalSince1970] * 1000) stringValue];
+    return [NSString stringWithFormat:@"%llu",(long long)[[NSDate date] timeIntervalSince1970] * 1000];
 }
 
 + (MMXChannel *)availablePlayersChannel {
