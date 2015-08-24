@@ -25,5 +25,6 @@
 + (NSString *)timestamp;
 + (MMXChannel *)availablePlayersChannel;
 + (MMXMessage *)availablilityMessage:(BOOL)available;
++ (BOOL)isTrue:(id)value;
 
 @end

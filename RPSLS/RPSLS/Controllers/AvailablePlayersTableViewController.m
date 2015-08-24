@@ -272,10 +272,10 @@
 			}
 			break;
 		case RPSLSMessageTypeAccept:
-			if ([message.messageContent[kMessageKey_Result] isEqualToString:@"true"]) {
-				self.inGame = YES;
-				[self startGame:message];
-			}
+            if ([RPSLSUtils isTrue:message.messageContent[kMessageKey_Result]]) {
+                self.inGame = YES;
+                [self startGame:message];
+            }
 			break;
 		case RPSLSMessageTypeChoice:
 			break;

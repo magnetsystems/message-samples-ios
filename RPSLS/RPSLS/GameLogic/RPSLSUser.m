@@ -18,6 +18,7 @@
 #import "RPSLSUser.h"
 #import "RPSLSConstants.h"
 #import "RPSLSUserStats.h"
+#import "RPSLSUtils.h"
 #import <MMX/MMX.h>
 
 @implementation RPSLSUser
@@ -39,7 +40,7 @@
 		user.username = message.messageContent[kMessageKey_Username] ?: @"Unknown";
 		user.timestamp = message.timestamp;
 		user.stats = [RPSLSUserStats statsFromMetaData:message.messageContent];
-		user.isAvailable = [message.messageContent[kMessageKey_UserAvailablity] isEqualToString:@"true"];
+        user.isAvailable = [RPSLSUtils isTrue:message.messageContent[kMessageKey_UserAvailablity]];
 		return user;
 	}
 	return nil;
@@ -62,7 +63,7 @@
 		user.username = message.messageContent[kMessageKey_Username] ?: @"Unknown";
 		user.timestamp = message.timestamp;
 		user.stats = [RPSLSUserStats statsFromMetaData:message.messageContent];
-		user.isAvailable = [message.messageContent[kMessageKey_UserAvailablity] isEqualToString:@"true"];
+		user.isAvailable = [RPSLSUtils isTrue:message.messageContent[kMessageKey_UserAvailablity]];
         return user;
 	}
 	return nil;
