@@ -113,7 +113,7 @@
     NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
             kMessageKey_Timestamp : [RPSLSUtils timestamp],
             kMessageKey_Type : kMessageTypeValue_Accept,
-            kMessageKey_Result : [@(accept) stringValue],
+            kMessageKey_Result : accept ? @"true" : @"false",
             kMessageKey_GameID : invite.messageContent[kMessageKey_GameID],
             kMessageKey_Wins : [@([RPSLSUser me].stats.wins) stringValue],
             kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
@@ -153,7 +153,7 @@
 			[self showInviteAlertForUser:message.messageContent[kMessageKey_Username] invite:message];
 			break;
   case RPSLSMessageTypeAccept:
-			if ([message.messageContent[kMessageKey_Result] boolValue]) {
+			if ([message.messageContent[kMessageKey_Result] isEqualToString:@"true"]) {
 				[self startGame:message];
 			}
 			break;
