@@ -22,6 +22,7 @@ extern NSString  * const MXnsAppReg;
 extern NSString  * const MXnsDevice;
 extern NSString  * const MXnsMsgAck;
 extern NSString  * const MXnsDataPayload;
+extern NSString  * const MXnsServerSignal;
 extern NSString  * const MXnsMsgState;
 extern NSString  * const MXnsDeliveryReceipt;
 extern NSString  * const MXnsUser;
@@ -45,6 +46,7 @@ extern NSString  * const MXcommandDeleteTopic;
 extern NSString  * const MXcommandSubscribe;
 extern NSString  * const MXcommandUnsubscribe;
 extern NSString  * const MXcommandUnsubscribeForDevice;
+extern NSString  * const MXcommandGetSubscribers;
 extern NSString  * const MXcommandRetract;
 extern NSString  * const MXcommandRetractAll;
 extern NSString  * const MXcommandGetSummary;
@@ -66,6 +68,10 @@ extern NSInteger  const MXDevRegSuccess;
 extern NSInteger  const MXDevUnregSuccess;
 
 extern NSString * const kMMXXMPPProtocol;
+
+extern NSString * const kAddressUsernameKey;
+extern NSString * const kAddressDeviceIDKey;
+extern NSString * const kAddressDisplayNameKey;
 
 extern NSInteger const kMinUsernameLength;
 extern NSInteger const kMaxUsernameLength;

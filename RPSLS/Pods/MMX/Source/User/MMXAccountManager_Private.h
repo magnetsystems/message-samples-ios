@@ -24,6 +24,7 @@
 @class XMPPIQ;
 @class MMXConfiguration;
 @class MMXDeviceManager;
+@class MMXUser;
 
 @protocol MMXAccountManagerDelegate <NSObject>
 
@@ -49,7 +50,7 @@
 
 @end
 
-@interface MMXAccountManager ()
+@interface MMXAccountManager () <NSURLSessionDelegate>
 
 @property (nonatomic, weak) id<MMXAccountManagerDelegate> delegate;
 
@@ -61,6 +62,10 @@
 			 failure:(void (^)(NSError * error))failure;
 
 - (void)registerAnonymousWithSuccess:(void (^)(BOOL success))success
-                             failure:(void (^)(NSError * error))failure;
+							 failure:(void (^)(NSError * error))failure;
+
+- (void)userForUserName:(NSString *)username
+				success:(void (^)(MMXUser *))success
+				failure:(void (^)(NSError * error))failure;
 
 @end

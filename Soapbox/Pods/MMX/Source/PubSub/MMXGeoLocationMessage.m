@@ -16,7 +16,7 @@
  */
 
 #import "MMXGeoLocationMessage_Private.h"
-#import "MMXMessage_Private.h"
+#import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXUserID_Private.h"
 #import "MMXTopic_Private.h"
 #import "NSString+XEP_0106.h"
@@ -25,7 +25,7 @@
 
 @implementation MMXGeoLocationMessage
 
-+ (instancetype)initWithMessage:(MMXMessage *)message {
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message {
     MMXGeoLocationMessage *msg = [[MMXGeoLocationMessage alloc] init];
     msg.mmxMessage = message;
     return msg;

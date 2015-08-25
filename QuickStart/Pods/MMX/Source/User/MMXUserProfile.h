@@ -16,12 +16,13 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "MMXAddressable.h"
 @class MMXUserID;
 
 /**
  *  MMXUserProfile is used to hold additional information about a user.
  */
-@interface MMXUserProfile : NSObject <NSCoding>
+@interface MMXUserProfile : NSObject <NSCoding, MMXAddressable>
 
 /**
  *  The MMXUserID for the user.
@@ -39,5 +40,8 @@
  *  The email for the user.
  */
 @property  (nonatomic, readwrite) NSString *email;
+
+//MMXAddressable Protocol
+@property (nonatomic, readonly) MMXInternalAddress *address;
 
 @end

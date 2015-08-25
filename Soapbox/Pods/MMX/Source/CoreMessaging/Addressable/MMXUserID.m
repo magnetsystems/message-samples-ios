@@ -17,6 +17,7 @@
 
 #import "MMXUserID_Private.h"
 #import "NSString+XEP_0106.h"
+#import "MMXUser.h"
 
 @implementation MMXUserID
 
@@ -26,12 +27,28 @@
 	return userID;
 }
 
-- (NSString *)address {
-	return [self.username jidEscapedString];
++ (instancetype)userIDFromMMXUser:(MMXUser *)user {
+	MMXUserID * userID = [[MMXUserID alloc] init];
+	userID.username = user.username;
+	userID.displayName = user.displayName;
+	return userID;
 }
 
-- (NSString *)subAddress {
++ (instancetype)userIDFromAddress:(MMXInternalAddress *)address {
+	MMXUserID * userID = [[MMXUserID alloc] init];
+	if (address.username && ![address.username isEqualToString:@""]) {
+		userID.username = address.username;
+		userID.displayName = address.displayName;
+		return userID;
+	}
 	return nil;
+}
+
+- (MMXInternalAddress *)address {
+	MMXInternalAddress *address = [MMXInternalAddress new];
+	address.username = [self.username jidEscapedString];
+	address.displayName = self.displayName;
+	return address;
 }
 
 + (NSString *)stripUsername:(NSString *)fullUser {
@@ -44,31 +61,5 @@
 		return fullUser;
 	}
 }
-
-#pragma mark - NSCoding
-
-- (id)initWithCoder:(NSCoder *)coder {
-	self = [super init];
-	if (self) {
-		_username = [coder decodeObjectForKey:@"_username"];
-	}
-	
-	return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeObject:self.username forKey:@"_username"];
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-	MMXUserID *copy = [[[self class] allocWithZone:zone] init];
-	
-	if (copy != nil) {
-		copy.username = self.username;
-	}
-	
-	return copy;
-}
-
 
 @end

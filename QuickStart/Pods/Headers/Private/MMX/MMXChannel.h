@@ -1,0 +1,1 @@
+../../../MMX/Source/Abstraction/MMXChannel.h

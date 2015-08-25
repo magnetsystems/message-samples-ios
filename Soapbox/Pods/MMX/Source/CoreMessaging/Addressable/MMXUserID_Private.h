@@ -16,11 +16,17 @@
  */
 
 #import "MMXUserID.h"
+@class MMXUser;
 
 @interface MMXUserID ()
 
 @property (nonatomic, readwrite) NSString *username;
 
+@property (nonatomic, copy) NSString *displayName;
+
 + (NSString *)stripUsername:(NSString *)fullUser;
+
++ (instancetype)userIDFromAddress:(MMXInternalAddress *)address;
++ (instancetype)userIDFromMMXUser:(MMXUser *)user;
 
 @end

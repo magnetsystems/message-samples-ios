@@ -17,14 +17,14 @@
 
 
 #import <UIKit/UIKit.h>
-@class MMXPubSubMessage;
+@class MMXMessage;
 
 @interface PubSubCell : UITableViewCell
 
-- (void)setMessage:(MMXPubSubMessage *)message
+- (void)setMessage:(MMXMessage *)message
 	 isCurrentUser:(BOOL)isCurrentUser
 			 color:(UIColor *)color;
 
-+ (CGFloat)estimatedHeightForMessage:(MMXPubSubMessage *)message cellWidth:(float)width;
++ (CGFloat)estimatedHeightForMessage:(MMXMessage *)message cellWidth:(float)width;
 
 @end

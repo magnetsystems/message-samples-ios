@@ -21,15 +21,15 @@
 #import "MessageCell.h"
 #import "QuickStartUtils.h"
 #import "UIColor+QuickStart.h"
-#import <MMX.h>
-
-@interface MessagesViewController () <MMXClientDelegate>
+#import <MMX/MMX.h>
+@interface MessagesViewController ()
 
 @property (nonatomic, copy) NSArray * messageList;
 @property (nonatomic, copy) NSArray * colorArray;
 @property (nonatomic, assign) BOOL isSubscribed;
 
-@property (nonatomic, strong) MMXUserID * currentRecipient;
+@property (nonatomic, strong) MMXUser * currentRecipient;
+@property (nonatomic, strong) NSURLCredential * currentCredential;
 
 @end
 
@@ -37,6 +37,7 @@ NSString * const kDefaultUsername = @"QuickstartUser1";
 NSString * const kEchoBotUsername = @"echo_bot";
 NSString * const kAmazingBotUsername = @"amazing_bot";
 NSString * const kMeString = @"Me";
+NSString * const kTextContent = @"textContent";
 
 @implementation MessagesViewController
 
@@ -53,12 +54,12 @@ NSString * const kMeString = @"Me";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMessage:) name:MMXDidReceiveMessageNotification object:nil];
 	
 	[self setupUI];
 
 	[self setupClient];
-	
-	self.currentRecipient = [self me];
 	
 	self.messageList = @[];
 	[self.tableView registerClass:[MessageCell class] forCellReuseIdentifier:@"MessageCell"];
@@ -72,11 +73,19 @@ NSString * const kMeString = @"Me";
 
 	//Calling connectWithCredentials will try to create a new session using the NSURLCredential object we set on our MMXConfiguration.
 	//Since shouldAutoCreateUser is set as YES it creates a new user with the provided credentials if the user does not already exist.
-	[[MMXClient sharedClient] connectWithCredentials];
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(handleReturnToForeground)
+												 name: UIApplicationWillEnterForegroundNotification
+											   object: nil];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+}
+
+- (void)handleReturnToForeground {
+	[self logIn];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -88,91 +97,63 @@ NSString * const kMeString = @"Me";
 
 
 - (void)setupClient {
-	//Create configuration
-	MMXConfiguration * config = [MMXConfiguration configurationWithName:@"default"];
-	
-	//Initialize MMXClient with configuration and delegate
-	[MMXClient sharedClient].configuration = config;
-	[MMXClient sharedClient].delegate = self;
-	
-	//If you want to create a user automatically when logging in for the first time
-	[MMXClient sharedClient].shouldAutoCreateUser = YES;
-	
+
 	//Creating a new NSURLCredential and setting it as the credential propery on our MMXConfiguration.
-	[MMXClient sharedClient].configuration.credential = [NSURLCredential credentialWithUser:kDefaultUsername password:kDefaultUsername persistence:NSURLCredentialPersistenceNone];
-}
-
-#pragma mark - MMXClientDelegate Callbacks
-
-//Monitoring the connection status change to handle accordingly.
-- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-	switch (connectionStatus) {
-		case MMXConnectionStatusAuthenticated:
-			[self showAlertWithTitle:@"Logged In" message:[NSString stringWithFormat:@"You are logged in as %@.\n\nTry sending a message below.",[MMXClient sharedClient].configuration.credential.user]];
-			break;
-		case MMXConnectionStatusFailed:
-			[self showAlertWithTitle:@"Failed!" message:@"Something went wrong while trying to authenticate. Please check your server settings and configuration then try again."];
-			break;
-		case MMXConnectionStatusDisconnected:
-			[self showReconnect];
-			break;
-		case MMXConnectionStatusAuthenticationFailure:
-			[self showAlertWithTitle:@"Authentication Failure!" message:@"Something went wrong while trying to authenticate. Please check your server settings and configuration then try again."];
-			break;
-		case MMXConnectionStatusConnected:
-			[self showAlertWithTitle:@"Connected" message:@"You are connected as an anonymous user."];
-			break;
-		case MMXConnectionStatusNotConnected:
-			[self showAlertWithTitle:@"Not Connected" message:@"You are not currently connected."];
-			break;
-		default:
-			break;
-	}
-}
-
-//Updating the UI when receiving a message
-- (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {
-	
-	NSDictionary *messageDict = @{@"messageContent":message.messageContent,
-								  @"timestampString":[[QuickStartUtils friendlyDateFormatter] stringFromDate:message.timestamp],
-								  @"senderUsername":message.senderUserID.username,
-								  @"isOutboundMessage":@(NO)};
-	
-	NSMutableArray *tempMessageList = self.messageList.mutableCopy;
-	[tempMessageList insertObject:messageDict atIndex:0];
-	self.messageList = tempMessageList.copy;
-	
-	[self.tableView reloadData];
-}
-
-//Monitoring for registration errors to alert the user and allow them to try again.
-- (void)client:(MMXClient *)client didReceiveUserAutoRegistrationResult:(BOOL)success error:(NSError *)error {
-	if	(error) {
-		if ([error.localizedFailureReason isEqualToString:@"userId is taken"]) {
-			[self showAlertWithTitle:@"Error Logging In" message:@"There was an error when trying to log in. Make sure you are using the correct username and password. If this is your first time logging the username you are trying to use may already be taken."];
-		} else {
-			[self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
+	self.currentCredential = [NSURLCredential credentialWithUser:kDefaultUsername password:kDefaultUsername persistence:NSURLCredentialPersistenceNone];
+	MMXUser *user = [MMXUser new];
+	user.username = kDefaultUsername;
+    user.displayName = kDefaultUsername;
+    
+	[user registerWithCredential:self.currentCredential success:^{
+		[self logIn];
+	} failure:^(NSError *error) {
+		if (error.code == 409) {
+			//Already registered
+			[self logIn];
 		}
+	}];
+}
+
+- (void)logIn {
+	if (self.currentCredential != nil) {
+		[MMXUser logInWithCredential:self.currentCredential success:^(MMXUser *user) {
+			self.currentRecipient = [self me];
+			// Indicate that you are ready to receive messages now!
+			[MMX enableIncomingMessages];
+
+			[self showAlertWithTitle:@"Logged In" message:[NSString stringWithFormat:@"You are logged in as %@.\n\nTry sending a message below.",kDefaultUsername]];
+            self.textInputbar.textView.text = @"Hello World";
+		} failure:^(NSError *error) {
+			[self showAlertWithTitle:@"Authentication Failure!" message:@"Something went wrong while trying to authenticate. Please check your server settings and configuration then try again."];
+			NSLog(@"logInWithCredentials Failure = %@",error);
+		}];
 	}
 }
+
+/*
+ 
+ */
 
 #pragma mark - Helpers
 
 //Created convenience method to get my MMXUserID
-- (MMXUserID *)me {
-	MMXUserID * userID = [MMXUserID userIDWithUsername:[MMXClient sharedClient].configuration.credential.user];
-	return userID;
+- (MMXUser *)me {
+	MMXUser *me = [MMXUser new];
+	me.username = kDefaultUsername;
+	return me;
 }
 
 //Added methods to get the MMUserIDs for the bots
-- (MMXUserID *)echoBot {
-	MMXUserID * userID = [MMXUserID userIDWithUsername:kEchoBotUsername];
-	return userID;
+- (MMXUser *)echoBot {
+	MMXUser * user = [MMXUser new];
+	user.username = kEchoBotUsername;
+	return user;
 }
 
-- (MMXUserID *)amazingBot {
-	MMXUserID * userID = [MMXUserID userIDWithUsername:kAmazingBotUsername];
-	return userID;
+- (MMXUser *)amazingBot {
+	MMXUser * user = [MMXUser new];
+	user.username = kAmazingBotUsername;
+	return user;
 }
 
 #pragma mark - Send Message
@@ -181,16 +162,11 @@ NSString * const kMeString = @"Me";
 - (void)didPressRightButton:(id)sender {
 	[self.textView refreshFirstResponder];
 	
-	if ([MMXClient sharedClient].connectionStatus == MMXConnectionStatusAuthenticated) {
-		//Creating a MMXOutboundMessage with the contents of the text box
-		MMXOutboundMessage * msg = [MMXOutboundMessage messageTo:@[self.currentRecipient]
-													 withContent:self.textView.text.copy
-														metaData:nil];
+	if (/* DISABLES CODE */ (YES)) {
+		MMXMessage *msg = [MMXMessage messageToRecipients:[NSSet setWithArray:@[self.currentRecipient]] messageContent:@{kTextContent:self.textView.text}];
+		[msg sendWithSuccess:nil failure:nil];
 		
-		//Sending the message
-		[[MMXClient sharedClient] sendMessage:msg];
-		
-		NSDictionary *messageDict = @{@"messageContent":msg.messageContent,
+		NSDictionary *messageDict = @{@"messageContent":self.textView.text,
 									  @"timestampString":[[QuickStartUtils friendlyDateFormatter] stringFromDate:[NSDate date]],
 									  @"senderUsername":kMeString,
 									  @"isOutboundMessage":@(YES)};
@@ -203,10 +179,27 @@ NSString * const kMeString = @"Me";
 	} else {
 		[self showAlertWithTitle:@"Not Connected" message:@"Sending a message requires that you be connected. Please check your server settings and configuration then try again."];
 	}
-	
 	[super didPressRightButton:sender];
 }
 
+- (void)didReceiveMessage:(NSNotification*) noti {
+	if (noti.userInfo) {
+		NSDictionary *notificationDict =  noti.userInfo;
+		MMXMessage *message = notificationDict[MMXMessageKey];
+		if (message) {
+			NSDictionary *messageDict = @{@"messageContent":message.messageContent[kTextContent] ?: @"Message content missing",
+										  @"timestampString":[[QuickStartUtils friendlyDateFormatter] stringFromDate:message.timestamp],
+										  @"senderUsername":message.sender.username,
+										  @"isOutboundMessage":@(NO)};
+			
+			NSMutableArray *tempMessageList = self.messageList.mutableCopy;
+			[tempMessageList insertObject:messageDict atIndex:0];
+			self.messageList = tempMessageList.copy;
+			
+			[self.tableView reloadData];
+		}
+	}
+}
 #pragma mark - TableView
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -245,31 +238,25 @@ NSString * const kMeString = @"Me";
 										  preferredStyle:UIAlertControllerStyleAlert];
 	
 	UIAlertAction *meAction = [UIAlertAction
-									  actionWithTitle:[self me].username
+									  actionWithTitle:kDefaultUsername
 									  style:UIAlertActionStyleDefault
 									  handler:^(UIAlertAction *action)
 									  {
-										  dispatch_async(dispatch_get_main_queue(), ^{
 											  self.currentRecipient = [self me];
-										  });
 									  }];
 	UIAlertAction *echoAction = [UIAlertAction
 									  actionWithTitle:[self echoBot].username
 									  style:UIAlertActionStyleDefault
 									  handler:^(UIAlertAction *action)
 									  {
-										  dispatch_async(dispatch_get_main_queue(), ^{
 											  self.currentRecipient = [self echoBot];
-										  });
 									  }];
 	UIAlertAction *amazingAction = [UIAlertAction
 									actionWithTitle:[self amazingBot].username
 									style:UIAlertActionStyleDefault
 									handler:^(UIAlertAction *action)
 									{
-										dispatch_async(dispatch_get_main_queue(), ^{
 											self.currentRecipient = [self amazingBot];
-										});
 									}];
 	UIAlertAction *cancelAction = [UIAlertAction
 									actionWithTitle:@"Cancel"
@@ -316,7 +303,7 @@ NSString * const kMeString = @"Me";
 								style:UIAlertActionStyleDefault
 								handler:^(UIAlertAction *action)
 								{
-									[[MMXClient sharedClient] connectWithCredentials];
+									[self logIn];
 								}];
 	[alertController addAction:reconnectAction];
 	[self presentViewController:alertController animated:YES completion:nil];
@@ -338,6 +325,10 @@ NSString * const kMeString = @"Me";
 	[self presentViewController:alertController animated:YES completion:nil];
 }
 
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - Appearance
 
 - (void)setupUI {
@@ -350,7 +341,6 @@ NSString * const kMeString = @"Me";
 	self.navigationItem.titleView = imageView;
 	self.textInputbar.autoHideRightButton = NO;
 	self.textInputbar.backgroundColor = myColor;
-	self.textInputbar.textView.text = @"Hello World";
 }
 
 @end

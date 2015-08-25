@@ -17,13 +17,13 @@
 
 
 #import "MMXInboundMessage_Private.h"
-#import "MMXMessage_Private.h"
+#import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXUserID_Private.h"
 #import "MMXEndpoint_Private.h"
 
 @implementation MMXInboundMessage
 
-+ (instancetype)initWithMessage:(MMXMessage *)message {
++ (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message {
 	MMXInboundMessage * msg = [[MMXInboundMessage alloc] init];
 	msg.messageID		= message.messageID;
 	msg.timestamp		= message.timestamp;
@@ -38,8 +38,11 @@
 + (NSArray *)removeUser:(MMXUserID *)userID fromRecipients:(NSArray *)recipients {
 	NSMutableArray *otherRecipients = @[].mutableCopy;
 	for (id<MMXAddressable> recipient in recipients) {
-		if (![[recipient address] isEqualToString:[userID address]]) {
-			[otherRecipients addObject:recipient];
+		MMXInternalAddress *address = recipient.address;
+		if (address) {
+			if (![address.username isEqualToString:userID.username]) {
+				[otherRecipients addObject:recipient];
+			}
 		}
 	}
 	return otherRecipients.copy;
