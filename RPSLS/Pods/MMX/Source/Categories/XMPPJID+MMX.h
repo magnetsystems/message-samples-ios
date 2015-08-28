@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-#import "XMPPJID.h"
+#import <MMXXMPPFramework/XMPPJID.h>
 
 @interface XMPPJID (MMX)
 

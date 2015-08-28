@@ -59,4 +59,8 @@ typedef NS_ENUM(NSInteger, MMXTopicType){
 					success:(void (^)(int totalCount,NSArray * subscriptions))success
 					failure:(void (^)(NSError * error))failure;
 
+- (void)queryTopicsWithDictionary:(NSDictionary *)queryDict
+						  success:(void (^)(int, NSArray * topics))success
+						  failure:(void (^)(NSError *))failure;
+
 @end

@@ -16,7 +16,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <MMX.h>
+#import <MMX/MMX.h>
 @class MMXTopic;
 @class MMXPubSubMessage;
 

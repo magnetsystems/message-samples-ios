@@ -19,6 +19,8 @@
 #import "MMXUtils.h"
 #import "MMXConstants.h"
 #import "NSXMLElement+XMPP.h"
+#import "DDXML.h"
+
 #if TARGET_OS_IPHONE
 	#import <UIKit/UIKit.h>
 #else
@@ -91,12 +93,12 @@
 + (NSXMLElement *)contentToXML:(NSString *)content type:(NSString *)type{
     NSXMLElement *payloadElement = [[NSXMLElement alloc] initWithName:MXpayloadElement];
 
-    NSXMLNode* mtypeAttribute = [self buildAttributeNodeWith:@"mtype" attributeValue:type];
+    NSXMLNode* mtypeAttribute = [MMXUtils buildAttributeNodeWith:@"mtype" attributeValue:type];
 
 
     NSString* offsetValue = [NSString stringWithFormat:@"%d/%d/%d", 0, (int)content.length, (int)content.length];
-    NSXMLNode* chunkAttribute = [self buildAttributeNodeWith:@"chunk" attributeValue:offsetValue];
-    NSXMLNode* stampAttribute = [self buildAttributeNodeWith:@"stamp"
+    NSXMLNode* chunkAttribute = [MMXUtils buildAttributeNodeWith:@"chunk" attributeValue:offsetValue];
+    NSXMLNode* stampAttribute = [MMXUtils buildAttributeNodeWith:@"stamp"
                                                           attributeValue:[self iso8601FormatTimeStamp]];
 
     [payloadElement addAttribute:mtypeAttribute];

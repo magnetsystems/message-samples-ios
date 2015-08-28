@@ -16,10 +16,10 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "DDXML.h"
 
 @class NSXMLElement;
 @class DDXMLElement;
+@class DDXMLNode;
 
 @interface MMXUtils : NSObject
 
@@ -38,7 +38,7 @@
 
 + (NSXMLElement *)metaDataToXML:(NSDictionary *)metaData;
 
-+ (NSXMLNode *)buildAttributeNodeWith:(NSString *)name
++ (DDXMLNode *)buildAttributeNodeWith:(NSString *)name
 					   attributeValue:(NSString *)attributeValue;
 
 + (NSDateFormatter *)dateFormatter8601;
