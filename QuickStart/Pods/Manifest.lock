@@ -5,35 +5,6 @@ PODS:
   - CocoaLumberjack/Core (1.9.2)
   - CocoaLumberjack/Extensions (1.9.2):
     - CocoaLumberjack/Core
-  - Magnet-XMPPFramework (3.6.10):
-    - Magnet-XMPPFramework/Core (= 3.6.10)
-    - Magnet-XMPPFramework/CoreDataStorage (= 3.6.10)
-    - Magnet-XMPPFramework/Reconnect (= 3.6.10)
-    - Magnet-XMPPFramework/Roster (= 3.6.10)
-    - Magnet-XMPPFramework/XEP-0060 (= 3.6.10)
-    - Magnet-XMPPFramework/XEP-0082 (= 3.6.10)
-    - Magnet-XMPPFramework/XEP-0106 (= 3.6.10)
-    - Magnet-XMPPFramework/XEP-0203 (= 3.6.10)
-  - Magnet-XMPPFramework/Core (3.6.10):
-    - CocoaAsyncSocket (~> 7.4.1)
-    - CocoaLumberjack (~> 1.9)
-  - Magnet-XMPPFramework/CoreDataStorage (3.6.10):
-    - Magnet-XMPPFramework/Core
-  - Magnet-XMPPFramework/Reconnect (3.6.10):
-    - Magnet-XMPPFramework/Core
-  - Magnet-XMPPFramework/Roster (3.6.10):
-    - Magnet-XMPPFramework/Core
-    - Magnet-XMPPFramework/CoreDataStorage
-    - Magnet-XMPPFramework/XEP-0203
-  - Magnet-XMPPFramework/XEP-0060 (3.6.10):
-    - Magnet-XMPPFramework/Core
-  - Magnet-XMPPFramework/XEP-0082 (3.6.10):
-    - Magnet-XMPPFramework/Core
-  - Magnet-XMPPFramework/XEP-0106 (3.6.10):
-    - Magnet-XMPPFramework/Core
-  - Magnet-XMPPFramework/XEP-0203 (3.6.10):
-    - Magnet-XMPPFramework/Core
-    - Magnet-XMPPFramework/XEP-0082
   - Mantle (1.5.4):
     - Mantle/extobjc (= 1.5.4)
   - Mantle/extobjc (1.5.4)
@@ -52,34 +23,54 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (1.5.0):
+  - MMX (1.5.8):
     - CocoaAsyncSocket (= 7.4.1)
-    - Magnet-XMPPFramework (= 3.6.10)
+    - CocoaLumberjack (= 1.9.2)
     - Mantle (= 1.5.4)
     - MDMCoreData (= 1.5.0)
+    - MMXXMPPFramework (= 3.6.11)
+  - MMXXMPPFramework (3.6.11):
+    - MMXXMPPFramework/Core (= 3.6.11)
+    - MMXXMPPFramework/CoreDataStorage (= 3.6.11)
+    - MMXXMPPFramework/Reconnect (= 3.6.11)
+    - MMXXMPPFramework/Roster (= 3.6.11)
+    - MMXXMPPFramework/XEP-0060 (= 3.6.11)
+    - MMXXMPPFramework/XEP-0082 (= 3.6.11)
+    - MMXXMPPFramework/XEP-0106 (= 3.6.11)
+    - MMXXMPPFramework/XEP-0203 (= 3.6.11)
+  - MMXXMPPFramework/Core (3.6.11):
+    - CocoaAsyncSocket (~> 7.4.1)
+    - CocoaLumberjack (~> 1.9)
+  - MMXXMPPFramework/CoreDataStorage (3.6.11):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/Reconnect (3.6.11):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/Roster (3.6.11):
+    - MMXXMPPFramework/Core
+    - MMXXMPPFramework/CoreDataStorage
+    - MMXXMPPFramework/XEP-0203
+  - MMXXMPPFramework/XEP-0060 (3.6.11):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/XEP-0082 (3.6.11):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/XEP-0106 (3.6.11):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/XEP-0203 (3.6.11):
+    - MMXXMPPFramework/Core
+    - MMXXMPPFramework/XEP-0082
   - SlackTextViewController (1.5.2)
 
 DEPENDENCIES:
-  - MMX (from `https://github.com/magnetsystems/message-ios.git`, branch `develop`)
+  - MMX
   - SlackTextViewController (= 1.5.2)
-
-EXTERNAL SOURCES:
-  MMX:
-    :branch: develop
-    :git: https://github.com/magnetsystems/message-ios.git
-
-CHECKOUT OPTIONS:
-  MMX:
-    :commit: bf240e65b62039171cef02a0eb43f331a5c8ce6f
-    :git: https://github.com/magnetsystems/message-ios.git
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 628fca2e88ef06f7cf6817309aa405f325d9a6fa
-  Magnet-XMPPFramework: 004ab3dbc139338e97a5012a796485b0fcff6891
   Mantle: 60acd0cd363e27d945bda0a6b8e90577112d28f3
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: 7255f8b2808c72c7536588fdc37b58da1ef9c27f
+  MMX: 2b9960ef1597950e8aa14cb530eace373fa1a41a
+  MMXXMPPFramework: ebb0f3515d686bd90f67d91ba47e361fecc16358
   SlackTextViewController: ab240cda4c7fe1f70f6c6cf64578f3fea495ce99
 
 COCOAPODS: 0.38.2

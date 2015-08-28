@@ -1,0 +1,1 @@
+../../../MMXXMPPFramework/Extensions/Roster/MemoryStorage/XMPPRosterMemoryStorage.h

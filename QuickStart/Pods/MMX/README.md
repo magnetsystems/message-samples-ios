@@ -15,7 +15,7 @@ The Magnet Message iOS SDK has these prerequisites:
 
 ## Releases
 
-Current release: 1.3.15
+Current release: 1.5.7
 
 ## Setup
 
@@ -26,7 +26,7 @@ Current release: 1.3.15
 #### Podfile
 
 ```ruby
-pod "MMX", "~> 1.3.15"
+pod "MMX", "~> 1.5.7"
 ```
 
 

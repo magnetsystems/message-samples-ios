@@ -16,7 +16,7 @@
  */
 
 #import "AppDelegate.h"
-#import <MMX.h>
+#import <MMX/MMX.h>
 
 @interface AppDelegate ()
 

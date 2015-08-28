@@ -16,7 +16,6 @@
  */
 
 #import "MMXClient.h"
-#import "XMPPIDTracker.h"
 
 @class XMPPStream;
 @class XMPPIDTracker;
@@ -24,6 +23,8 @@
 @class XMPPJID;
 @class MMXUserProfile;
 @class MMXInternalMessageAdaptor;
+
+@protocol XMPPTrackingInfo;
 
 typedef void (^IQCompletionBlock)(id obj, id <XMPPTrackingInfo> info);
 

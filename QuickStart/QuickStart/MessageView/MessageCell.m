@@ -18,7 +18,7 @@
 
 #import "MessageCell.h"
 #import "QuickStartUtils.h"
-#import <MMX.h>
+#import <MMX/MMX.h>
 
 @interface MessageCell ()
 

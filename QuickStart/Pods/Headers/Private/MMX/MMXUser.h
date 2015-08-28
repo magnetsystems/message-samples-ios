@@ -1,1 +1,1 @@
-../../../MMX/Source/Abstraction/MMXUser.h
+../../../MMX/Source/Public/MMXUser.h

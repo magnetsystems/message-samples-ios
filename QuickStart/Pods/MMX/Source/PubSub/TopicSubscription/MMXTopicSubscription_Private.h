@@ -16,9 +16,8 @@
  */
 
 #import "MMXTopicSubscription.h"
-#import "DDXML.h"
 
-@class NSXMLElement;
+@class DDXMLElement;
 @class MMXTopic;
 @class XMPPJID;
 
@@ -29,7 +28,7 @@
 @property (nonatomic, strong) XMPPJID *jid;
 @property (nonatomic, assign) BOOL isSubscribed;
 
-+ (instancetype)subscriptionFromNSXMLElement:(NSXMLElement *)element;
++ (instancetype)subscriptionFromNSXMLElement:(DDXMLElement *)element;
 
 @end
 

@@ -1,1 +1,1 @@
-../../../MMX/Source/Logging/MMXLogger.h
+../../../MMX/Source/Public/MMXLogger.h

@@ -264,7 +264,7 @@ Please see README.txt for full license terms for Magnet Message.
    limitations under the License.
 
 
-## Magnet-XMPPFramework
+## MMXXMPPFramework
 
 GCDAsyncSocket: (Public Domain)
 

@@ -18,7 +18,7 @@
 #import "MMXTopicSubscribersResponse.h"
 #import "DDXML.h"
 #import "MMXConstants.h"
-#import "MagnetConstants.h"
+#import "MMXNotificationConstants.h"
 #import "XMPP.h"
 #import "MMXUser.h"
 

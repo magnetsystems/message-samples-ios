@@ -1,1 +1,0 @@
-../../../Magnet-XMPPFramework/Core/XMPPPresence.h

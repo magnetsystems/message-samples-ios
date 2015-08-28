@@ -17,7 +17,8 @@
 
 
 #import <Foundation/Foundation.h>
-#import "DDXML.h"
+
+@class DDXMLElement;
 
 @interface MMXMessageUtils : NSObject
 
@@ -25,7 +26,7 @@
 + (NSString *)extractPayload:(NSArray *)payLoadElements;
 + (BOOL)isValidMetaData:(NSDictionary *)metaData;
 + (NSDictionary *)extractMetaData:(NSArray *)metaElements;
-+ (NSXMLElement *)xmlFromContentString:(NSString *)contentString andMessageType:(NSString *)type;
-+ (NSXMLElement *)xmlFromMetaDataDict:(NSDictionary *)metaData;
++ (DDXMLElement *)xmlFromContentString:(NSString *)contentString andMessageType:(NSString *)type;
++ (DDXMLElement *)xmlFromMetaDataDict:(NSDictionary *)metaData;
 
 @end

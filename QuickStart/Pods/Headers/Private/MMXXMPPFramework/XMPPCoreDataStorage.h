@@ -1,0 +1,1 @@
+../../../MMXXMPPFramework/Extensions/CoreDataStorage/XMPPCoreDataStorage.h

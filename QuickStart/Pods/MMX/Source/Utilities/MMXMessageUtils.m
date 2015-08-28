@@ -19,6 +19,7 @@
 #import "MMXMessageUtils.h"
 #import "MMXConstants.h"
 #import "MMXUtils.h"
+#import "DDXML.h"
 
 @implementation MMXMessageUtils
 

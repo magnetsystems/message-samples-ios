@@ -17,18 +17,21 @@
 
 #import "MagnetDelegate.h"
 #import "MMXMessage_Private.h"
-#import "MagnetConstants.h"
+#import "MMXNotificationConstants.h"
 #import "MMXUser.h"
 #import "MMXMessageTypes.h"
 #import "MMX_Private.h"
-#import "MMXChannel.h"
+#import "MMXChannel_Private.h"
 #import "MMXLogInOperation.h"
 #import "MMXConnectionOperation.h"
 #import "MMXClient_Private.h"
 #import "MMXAddressable.h"
 #import "MMXInternalMessageAdaptor.h"
+#import "MMXInboundMessage_Private.h"
 #import "MMXClient_Private.h"
 #import "MMXUserID_Private.h"
+#import "MMXTopic_Private.h"
+#import "MMXOutboundMessage_Private.h"
 
 typedef void(^MessageSuccessBlock)(void);
 typedef void(^MessageFailureBlock)(NSError *);
@@ -71,8 +74,13 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 
 - (void)startMMXClientWithConfiguration:(NSString *)name {
 	//You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Console
+	
 	NSString *pathAndFileName = [[NSBundle bundleForClass:[self class]] pathForResource:@"Configurations" ofType:@"plist"];
-	NSAssert([[NSFileManager defaultManager] fileExistsAtPath:pathAndFileName], @"You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface");
+	BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:pathAndFileName];
+	if (!exists) {
+		NSAssert(exists, @"You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface");
+	}
+	
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated &&
 		[MMXClient sharedClient].connectionStatus != MMXConnectionStatusConnected) {
 		[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
@@ -147,6 +155,7 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 				  failure:(void (^)(NSError *error))failure {
 	//FIXME: Needs to properly handle failure and success blocks
 	MMXOutboundMessage *msg = [MMXOutboundMessage messageTo:[message.recipients allObjects] withContent:nil metaData:message.messageContent];
+	msg.messageID = message.messageID;
 	NSString *messageID = [[MMXClient sharedClient] sendMessage:msg];
 	
 	if (success || failure) {
@@ -270,11 +279,15 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 
 - (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested {
 
-	MMXMessage *msg = [MMXMessage messageToRecipients:[self usersFromInboundRecipients:message.otherRecipients]
+	NSMutableArray *recipients = [NSMutableArray arrayWithArray:message.otherRecipients ?: @[]];
+	if (message.targetUserID) {
+		[recipients addObject:message.targetUserID];
+	}
+	MMXMessage *msg = [MMXMessage messageToRecipients:[self usersFromInboundRecipients:recipients.copy]
 									   messageContent:message.metaData];
 
-	MMXUser *user = [MMXUser new];
 	msg.messageType = MMXMessageTypeDefault;
+	MMXUser *user = [MMXUser new];
 	user.username = message.senderUserID.username;
 	user.displayName = message.senderUserID.displayName;
 	msg.sender = user;
@@ -289,7 +302,14 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 - (void)client:(MMXClient *)client didReceivePubSubMessage:(MMXPubSubMessage *)message {
 	MMXMessage *msg = [MMXMessage new];
 	msg.messageType = MMXMessageTypeChannel;
-	msg.channel = [MMXChannel channelWithName:message.topic.topicName summary:nil];
+	MMXChannel *channel = [MMXChannel channelWithName:message.topic.topicName summary:nil];
+	if (message.topic.inUserNameSpace) {
+		channel.isPublic = NO;
+		channel.ownerUsername = message.topic.nameSpace;
+	} else {
+		channel.isPublic = YES;
+	}
+	msg.channel = channel;
 	msg.messageContent = message.metaData;
 	msg.timestamp = message.timestamp;
 	msg.messageID = message.messageID;

@@ -31,6 +31,7 @@
 	msg.messageContent	= message.messageContent;
 	msg.otherRecipients	= [MMXInboundMessage removeUser:message.targetUserID fromRecipients:message.recipients];
 	msg.senderUserID	= message.senderUserID;
+	msg.targetUserID	= message.targetUserID;
 	msg.senderEndpoint	= message.senderEndpoint;
 	return msg;
 }
