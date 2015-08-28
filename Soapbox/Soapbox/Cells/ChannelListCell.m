@@ -18,7 +18,7 @@
 
 #import "ChannelListCell.h"
 #import "UIColor+Soapbox.h"
-#import <MMX.h>
+#import <MMX/MMX.h>
 
 @interface ChannelListCell () <UISearchBarDelegate>
 
