@@ -1,1 +1,0 @@
-../../../Magnet-XMPPFramework/Authentication/XMPPSASLAuthentication.h

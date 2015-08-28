@@ -41,7 +41,7 @@
 
 #import "MMXInvite_Private.h"
 #import "MMXInviteResponse_Private.h"
-#import "MagnetConstants.h"
+#import "MMXNotificationConstants.h"
 
 #import "MMXUtils.h"
 #import "MMXMessageUtils.h"
@@ -49,6 +49,7 @@
 #import "XMPP.h"
 #import "XMPPJID+MMX.h"
 #import "XMPPReconnect.h"
+#import "XMPPIDTracker.h"
 #import "MMXConfiguration.h"
 #import "NSString+XEP_0106.h"
 
@@ -339,6 +340,7 @@ int const kReconnectionTimerInterval = 4;
 									withContent:outboundMessage.messageContent
 									messageType:nil
 									   metaData:outboundMessage.metaData];
+	message.messageID = outboundMessage.messageID;
 	return [self sendMMXMessage:message withOptions:options shouldValidate:YES];
 }
 

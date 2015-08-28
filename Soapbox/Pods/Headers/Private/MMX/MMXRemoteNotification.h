@@ -1,1 +1,1 @@
-../../../MMX/Source/Notifications/MMXRemoteNotification.h
+../../../MMX/Source/Public/MMXRemoteNotification.h

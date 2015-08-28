@@ -1,1 +1,1 @@
-../../../MMX/Source/Abstraction/MMXMessageTypes.h
+../../../MMX/Source/Public/MMXMessageTypes.h

@@ -1,1 +1,1 @@
-../../../MMX/Source/Abstraction/MMXInviteResponse.h
+../../../MMX/Source/Public/MMXInviteResponse.h
