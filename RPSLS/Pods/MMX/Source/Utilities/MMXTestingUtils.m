@@ -32,7 +32,7 @@
 }
 
 + (NSString *)randomInvalidCharacter {
-    NSString *characters = @"`~@#$%^&*()+={}[]|<>?:;'";
+    NSString *characters = @"`~#$%^&*()+={}[]|<>?:;'";
     return [NSString stringWithFormat:@"%C", [characters characterAtIndex: arc4random_uniform((int)[characters length])]];
 }
 

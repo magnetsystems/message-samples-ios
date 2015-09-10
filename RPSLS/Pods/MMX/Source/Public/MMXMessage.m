@@ -52,8 +52,10 @@
 	msg.channel = [MMXChannel channelWithName:pubSubMessage.topic.topicName summary:pubSubMessage.topic.topicDescription];
 	MMXInternalAddress *address = pubSubMessage.senderUserID.address;
 	MMXUser *sender = [MMXUser new];
-	sender.username = address.username;
-	sender.displayName = address.displayName;
+	//Converting to MMXUserID will handle any exscaping needed
+	MMXUserID *userID = [MMXUserID userIDFromAddress:address];
+	sender.username = userID.username;
+	sender.displayName = userID.displayName;
 	msg.sender = sender;
 	msg.messageID = pubSubMessage.messageID;
 	msg.messageContent = pubSubMessage.metaData;
@@ -66,6 +68,13 @@
 					  failure:(void (^)(NSError *))failure {
 	if (![MMXMessageUtils isValidMetaData:self.messageContent]) {
 		NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
+		if (failure) {
+			failure(error);
+		}
+		return nil;
+	}
+	if ([MMXUser currentUser] == nil) {
+		NSError * error = [MMXClient errorWithTitle:@"Not Logged In" message:@"You must be logged in to send a message." code:401];
 		if (failure) {
 			failure(error);
 		}
@@ -88,6 +97,8 @@
 			}
 		}
 		[[MMXClient sharedClient].pubsubManager publishPubSubMessage:msg success:^(BOOL successful, NSString *messageID) {
+			self.sender = [MMXUser currentUser];
+			self.timestamp = [NSDate date];
 			if (success) {
 				success();
 			}
@@ -112,6 +123,8 @@
 			}
 		}
 		[[MagnetDelegate sharedDelegate] sendMessage:self.copy success:^(void) {
+			self.sender = [MMXUser currentUser];
+			self.timestamp = [NSDate date];
 			if (success) {
 				success();
 			}

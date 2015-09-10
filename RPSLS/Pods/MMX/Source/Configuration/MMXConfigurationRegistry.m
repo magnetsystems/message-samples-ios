@@ -27,11 +27,27 @@
     dispatch_once(&onceToken, ^{
         [[MMXLogger sharedLogger] verbose:@"Reading settings from Configurations.plist"];
 
-        NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"Configurations" ofType:@"plist"];
-        _sharedConfiguration = [NSDictionary dictionaryWithContentsOfFile:path];
+        _sharedConfiguration = [NSDictionary dictionaryWithContentsOfFile:[MMXConfigurationRegistry pathForConfiguration]];
     });
 
     return _sharedConfiguration;
+}
+
++(NSString *)pathForConfiguration{
+    NSString *filename = @"Configurations";
+    
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:filename ofType:@"plist"];
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    if (!exists) {
+        //Try to fallover to mainBundle
+        path = [[NSBundle mainBundle] pathForResource:filename ofType:@"plist"];
+
+        exists = [[NSFileManager defaultManager] fileExistsAtPath:path];
+        if (!exists) {
+            NSAssert(exists, @"You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface");
+        }
+    }
+    return path;
 }
 
 @end
