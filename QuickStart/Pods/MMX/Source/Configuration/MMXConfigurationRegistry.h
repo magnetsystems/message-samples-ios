@@ -25,5 +25,6 @@
 
 */
 + (NSDictionary *)sharedConfigurationRegistry;
++ (NSString *)pathForConfiguration;
 
 @end

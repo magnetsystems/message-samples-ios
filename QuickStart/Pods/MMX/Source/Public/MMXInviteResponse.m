@@ -18,7 +18,7 @@
 #import "MMXInviteResponse_Private.h"
 #import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXUser.h"
-#import "MMXUserID.h"
+#import "MMXUserID_Private.h"
 #import "MMXInvite_Private.h"
 
 @implementation MMXInviteResponse
@@ -28,8 +28,10 @@
 	response.comments = message.metaData[@"inviteResponseText"];
 	MMXInternalAddress *address = message.senderUserID.address;
 	MMXUser *user = [MMXUser new];
-	user.username = address.username;
-	user.displayName = address.displayName;
+	//Converting to MMXUserID will handle any exscaping needed
+	MMXUserID *userID = [MMXUserID userIDFromAddress:address];
+	user.username = userID.username;
+	user.displayName = userID.displayName;
 	response.sender = user;
 	response.channel = [MMXInvite channelFromMessageMetaData:message.metaData];
 	response.timestamp = message.timestamp;

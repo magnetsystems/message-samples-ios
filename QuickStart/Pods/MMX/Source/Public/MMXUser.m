@@ -32,7 +32,7 @@
 					   failure:(void (^)(NSError *))failure {
 	[[MMXClient sharedClient].accountManager createAccountForUsername:credential.user
 														  displayName:self.displayName
-																email:self.email password:credential.password
+																email:nil password:credential.password
 															  success:^(MMXUserProfile *userProfile) {
 		if (success) {
 			success();
@@ -178,7 +178,6 @@
 	MMXUser *user = [MMXUser new];
 	user.username = profile.userID.username;
 	user.displayName = profile.displayName;
-	user.email = profile.email;
 	return user;
 }
 

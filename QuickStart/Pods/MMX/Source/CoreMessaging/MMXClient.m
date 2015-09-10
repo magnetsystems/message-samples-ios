@@ -830,8 +830,15 @@ int const kReconnectionTimerInterval = 4;
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)xmppMessage {
     if ([xmppMessage isErrorMessage]) {
-        if ([self.delegate respondsToSelector:@selector(client:didReceiveError:severity:messageID:)]) {
-            MMXInternalMessageAdaptor * message = [MMXInternalMessageAdaptor initWithXMPPMessage:xmppMessage];
+		MMXInternalMessageAdaptor * message = [MMXInternalMessageAdaptor initWithXMPPMessage:xmppMessage];
+		if ([message.messageContent containsString:@"recipient_unavailable"]) {
+			if ([self.delegate respondsToSelector:@selector(client:didFailToSendMessage:recipients:error:)]) {
+				dispatch_async(self.callbackQueue, ^{
+					NSError *error = [MMXClient errorWithTitle:@"Invalid User" message:@"The user you are trying to send a message to does not exist or does not have a valid device associated with them." code:500];
+					[self.delegate client:self didFailToSendMessage:message.messageID recipients:message.recipients error:error];
+				});
+			}
+		} else if ([self.delegate respondsToSelector:@selector(client:didReceiveError:severity:messageID:)]) {
 			if ([message.mType isEqualToString:@"mmxerror"]) {
 				[self handleErrorMessage:message];
 			} else {

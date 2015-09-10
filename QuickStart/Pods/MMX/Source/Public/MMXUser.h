@@ -33,11 +33,6 @@
 @property  (nonatomic, copy) NSString *displayName;
 
 /**
- *  The email for the user.
- */
-@property  (nonatomic, copy) NSString *email;
-
-/**
  *  Get the currently logged in user
  *
  *  @return MMXUser object for the current user.

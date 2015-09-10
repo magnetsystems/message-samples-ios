@@ -170,7 +170,7 @@
 	request.HTTPMethod = @"POST";
 		
 	NSError *error;
-	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{ @"username": [username jidEscapedString],
+	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{ @"username": username,
 																  @"password": password,
 																  @"name": displayName ?: [NSNull null],
 																  @"email": email ?: [NSNull null]}
