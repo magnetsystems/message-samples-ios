@@ -125,20 +125,23 @@
 #pragma mark - Validate username and password
 
 - (BOOL)validateUsername:(NSString *)username password:(NSString *)password {
-    
-    [self setInputsEnabled:NO];
-    if (self.usernameTextField.text.length >= 5 && self.passwordTextField.text.length >= 5) {
-        
-        return YES;
-        
-    } else {
-        [self showAlertWithTitle:@"Error" message:@"Username and password must be at least 5 charaters in length."];
-        [self setInputsEnabled:YES];
-        
-        return NO;
-    }
-    
-    return NO;
+	
+	[self setInputsEnabled:NO];
+	if (self.usernameTextField.text.length < 5) {
+		[self showAlertWithTitle:@"Error" message:@"Username must be at least 5 charaters in length."];
+		[self setInputsEnabled:YES];
+		
+		return NO;
+	} else if (self.passwordTextField.text.length < 1) {
+		[self showAlertWithTitle:@"Error" message:@"You must provide a password"];
+		[self setInputsEnabled:YES];
+		
+		return NO;
+	} else {
+		return YES;
+	}
+	
+	return NO;
 }
 
 @end

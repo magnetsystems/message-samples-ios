@@ -52,10 +52,10 @@
 + (instancetype)topicFromQueryResult:(NSDictionary *)topicDict {
     MMXTopic * topic = [[MMXTopic alloc] init];
     topic.topicName = topicDict[@"topicName"];
-	if (topicDict[@"userId"] && [topicDict[@"userId"] isKindOfClass:[NSNull class]]) {
+	if (topicDict[@"userId"] && ![topicDict[@"userId"] isKindOfClass:[NSNull class]]) {
 		topic.nameSpace = topicDict[@"userId"];
 	}
-	if (topicDict[@"creator"] && [topicDict[@"creator"] isKindOfClass:[NSNull class]]) {
+	if (topicDict[@"creator"] && ![topicDict[@"creator"] isKindOfClass:[NSNull class]]) {
 		NSString * username = [MMXUserID stripUsername:topicDict[@"creator"]];
 		if ([MMXUtils objectIsValidString:username]) {
 			topic.topicCreator = [MMXUserID userIDWithUsername:[username jidUnescapedString]];

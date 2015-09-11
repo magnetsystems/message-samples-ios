@@ -8,6 +8,7 @@
 
 #import "MMXInternalAddress.h"
 #import "MMXConstants.h"
+#import "NSString+XEP_0106.h"
 
 @implementation MMXInternalAddress
 
@@ -16,7 +17,7 @@
 	if (self.username == nil) {
 		return nil;
 	}
-	[dict setObject:self.username.copy forKey:kAddressUsernameKey];
+	[dict setObject:[self.username.copy jidUnescapedString] forKey:kAddressUsernameKey];
 	if (self.deviceID) {
 		[dict setObject:self.deviceID.copy forKey:kAddressDeviceIDKey];
 	}
