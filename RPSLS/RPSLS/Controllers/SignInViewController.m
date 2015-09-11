@@ -131,8 +131,8 @@
 - (BOOL)validateUsername:(NSString *)username password:(NSString *)password {
     
     [self setInputsEnabled:NO];
-    if (self.usernameTextField.text.length < 3) {
-		[self showAlertWithTitle:@"Error" message:@"Username must be at least 3 charaters in length."];
+    if (self.usernameTextField.text.length < 5) {
+		[self showAlertWithTitle:@"Error" message:@"Username must be at least 5 charaters in length."];
 		[self setInputsEnabled:YES];
 		
 		return NO;
