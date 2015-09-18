@@ -38,6 +38,11 @@ typedef NS_ENUM(NSInteger, MMXPublishPermissionsLevel){
 @property (nonatomic, copy)   NSString * topicDescription;
 
 /**
+ *  The date the topic was created.
+ */
+@property (nonatomic, readonly) NSDate * creationDate;
+
+/**
  *  The MMXUserID of the creator of the topic.
  *	This infomation is only available when obtaining the MMXTopic object from an API request.
  *	The creator will not be known if using one of the initializers.

@@ -33,7 +33,7 @@
 			NSData* jsonData = [jsonContent dataUsingEncoding:NSUTF8StringEncoding];
 			NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
 			if (jsonDictionary[@"totalCount"]) {
-				_totalCount = [jsonDictionary[@"subscriptionId"] intValue];
+				_totalCount = [jsonDictionary[@"totalCount"] intValue];
 			}
 			if (jsonDictionary[@"subscribers"]) {
 				NSArray *tempSubArray = jsonDictionary[@"subscribers"];

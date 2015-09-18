@@ -41,8 +41,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-    // Indicate that you are ready to receive messages now!
-    [MMX enableIncomingMessages];
+    // Indicate that you are ready to receive and send messages now!
+    [MMX start];
 	
 	[self setupTableViewProperties];
 	
@@ -82,8 +82,8 @@
 
 - (void)didDisconnect:(NSNotification *)notification {
 
-    // Indicate that you are not ready to receive messages now!
-    [MMX disableIncomingMessages];
+    // Indicate that you are not ready to send and receive messages now!
+    [MMX stop];
     
     [self goToLoginScreen];
 }
@@ -96,60 +96,52 @@
 	 *  Creating a new MMXChannel object.
 	 *	I am setting a summary to potentially display to future users as part of channel discovery.
 	 */
-    MMXChannel *companyChannel = [MMXChannel channelWithName:@"company_announcements"
-                                                     summary:@"The Company Announcements channel is designed to distribute information that should be available to all employees."];
-    companyChannel.isPublic = YES;
-
+	NSString *channelName = @"company_announcements";
+	NSString *channelSummary = @"The Company Announcements channel is designed to distribute information that should be available to all employees.";
+	
 	/*
 	 *  Creating a new channel by passing my MMXChannel object.
 	 *	When a user creates a channel they are automatically subscribed to it.
 	 */
-    [companyChannel createWithSuccess:^{
-        
+	[MMXChannel createWithName:channelName summary:channelSummary isPublic:YES success:^(MMXChannel *channel) {
+		
 		// Fetching channels again to make sure that the company_announcements channel show up under subscribed.
 		[self fetchChannels];
     } failure:^(NSError *error) {
         //The error code for "duplicate channel" is 409. This means the channel already exists and I can continue to subscribe.
         if (error.code == 409) {
-            
-            /*
-             *  Subscribing to a MMXChannel
-             */
-            [companyChannel subscribeWithSuccess:^{
-                // Fetching channels again to make sure that the company_announcements channel show up under subscribed.
-                [self fetchChannels];
-            } failure:^(NSError *subscribeError) {
-                /*
-                 *  Logging an error.
-                 */
-                [[MMXLogger sharedLogger] error:@"ChannelListTableViewController setupChannels Error = %@", subscribeError.localizedFailureReason];
-            }];
+            [MMXChannel channelForChannelName:channelName success:^(MMXChannel *channel) {
+				[channel subscribeWithSuccess:^{
+					// Fetching channels again to make sure that the company_announcements channel show up under subscribed.
+					[self fetchChannels];
+				} failure:^(NSError *subscribeError) {
+					/*
+					 *  Logging an error.
+					 */
+					[[MMXLogger sharedLogger] error:@"ChannelListTableViewController setupChannels subscribeWithSuccess Error = %@", subscribeError.localizedFailureReason];
+				}];
+			} failure:^(NSError *error) {
+				/*
+				 *  Logging an error.
+				 */
+				[[MMXLogger sharedLogger] error:@"ChannelListTableViewController setupChannels channelForChannelName Error = %@", error.localizedFailureReason];
+			}];
         }
     }];
 
-    /*
-     *  Creating a new MMXChannel object.
-     *	I am setting a summary to potentially display to future users as part of channel discovery.
-     */
-    MMXChannel *lunchChannel = [MMXChannel channelWithName:@"lunch_buddies"
-                                                   summary:@"Lunch Buddies is a channel for finding other people to go to lunch with."];
-	
-	/*
-	 *  Creating a new channel by passing my MMXChannel object.
-	 *	I am passing nil to success because there is not any business logic I need to execute upon success.
-	 */
-    lunchChannel.isPublic = YES;
-    [lunchChannel createWithSuccess:nil failure:^(NSError *error) {
-        NSLog(@"createChannel for channel %@ Error = %@", lunchChannel.name, error);
-    }];
+	NSString *lunchChannelName = @"lunch_buddies";
+	NSString *lunchChannelSummary = @"Lunch Buddies is a channel for finding other people to go to lunch with.";
+	[MMXChannel createWithName:lunchChannelName summary:lunchChannelSummary isPublic:YES success:^(MMXChannel *channel) {
+	} failure:^(NSError *error) {
+		NSLog(@"createChannel for channel %@ Error = %@", lunchChannelName, error);
+	}];
 }
 
 #pragma mark - Fetch all Channels
 
 - (void)fetchChannels {
     [self.refreshControl beginRefreshing];
-
-    [MMXChannel channelsStartingWith:@"" limit:100 success:^(int totalCount, NSArray *channels) {
+	[MMXChannel allPublicChannelsWithLimit:100 offset:0 success:^(int totalCount, NSArray *channels) {
 
         NSPredicate *subscribedPredicate = [NSPredicate predicateWithFormat:@"isSubscribed == YES"];
         NSPredicate *notSubscribedPredicate = [NSPredicate predicateWithFormat:@"isSubscribed == NO"];

@@ -51,6 +51,11 @@ typedef NS_ENUM(NSInteger, MMXCompoundPredicateType){
 @property (nonatomic, assign) int limit;
 
 /**
+ *  The offset into the results list. Used for pagination.
+ */
+@property (nonatomic, assign) int offset;
+
+/**
  *  Creates a MMXQuery with a MMXUserQueryFilter where displayName = value passed for displayName
  *	The MMXUserQueryFilter predicateOperatorType is set to MMXBeginsWithPredicateOperatorType
  *

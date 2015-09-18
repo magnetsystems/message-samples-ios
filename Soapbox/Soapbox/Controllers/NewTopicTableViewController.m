@@ -58,17 +58,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - MMXClientDelegate Callbacks
-
-/*
- *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
- */
-//- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-//	if (connectionStatus == MMXConnectionStatusDisconnected) {
-//		[self.navigationController popToRootViewControllerAnimated:YES];
-//	}
-//}
-
 #pragma mark - Create Channel
 
 - (void)createTopic {
@@ -86,21 +75,15 @@
 	} else {
 		
 		/*
-		 *  Creating a new MMXChannel object.
+		 *  Creating a new channel.
+		 *	When a user creates a topic they are automatically subscribed to it.
 		 */
-        MMXChannel *channel = [MMXChannel channelWithName:topicName summary:nil];
-        channel.isPublic = YES;
-		
-		/*
-		 *  Creating a new topic by passing my MMXTopic object.
-		 *	When a user creates a topic they are NOT automatically subscribed to it.
-		 */
-        [channel createWithSuccess:^{
+		[MMXChannel createWithName:topicName summary:topicName isPublic:YES success:^(MMXChannel *channel) {
             NSArray * tagsArray = [self topicTags];
             if (tagsArray.count) {
                 
                 /*
-                 *  Setting tags on the newly created topic.
+                 *  Setting tags on the newly created channel.
                  *	There are also APIs to get the list of existing tags, add tags and remove tags.
                  */
                 [channel setTags:[NSSet setWithArray:tagsArray] success:^{
