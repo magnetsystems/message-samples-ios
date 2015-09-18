@@ -242,7 +242,7 @@
     self.connectedLabel.text = [NSString stringWithFormat:@"Connected as %@",[RPSLSUser me].username];
     [self postAvailabilityStatusAs:YES];
 
-	[MMXChannel createChannelWithName:kPostStatus_TopicName summary:kPostStatus_TopicName isPublic:YES success:nil failure:^(NSError *error) {
+	[MMXChannel createWithName:kPostStatus_TopicName summary:kPostStatus_TopicName isPublic:YES success:nil failure:^(NSError *error) {
 		//The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
 		if (error.code == 409) {
 			
