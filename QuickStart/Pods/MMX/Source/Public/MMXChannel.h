@@ -95,12 +95,14 @@
  *  Get a channel object by name
  *
  *  @param channelName	The exact name of the channel you are searching for.
+ *  @param isPublic		Set to YES if it is a public channel. Will only return private channels created by the logged in user.
  *  @param success		Block with the channel with the name specified if it exists.
  *  @param failure		Block with an NSError with details about the call failure.
  */
-+ (void)channelForChannelName:(NSString *)channelName
-					  success:(void (^)(MMXChannel *channel))success
-					  failure:(void (^)(NSError *error))failure;
++ (void)channelForName:(NSString *)channelName
+			  isPublic:(BOOL)isPublic
+			   success:(void (^)(MMXChannel *channel))success
+			   failure:(void (^)(NSError *error))failure;
 
 /**
  * @deprecated This method is deprecated starting in version 1.9
