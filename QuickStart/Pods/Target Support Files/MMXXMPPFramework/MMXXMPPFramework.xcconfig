@@ -1,3 +1,4 @@
+MMXXMPPFRAMEWORK_ENABLE_BITCODE = NO
 MMXXMPPFRAMEWORK_HEADER_SEARCH_PATHS = $(SDKROOT)/usr/include/libxml2 $(SDKROOT)/usr/include/libresolv $(SDKROOT)/usr/include/libiconv
 MMXXMPPFRAMEWORK_LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/MMXXMPPFramework/Vendor/libidn" "$(PODS_ROOT)/MMXXMPPFramework/Vendor/libidn"
 MMXXMPPFRAMEWORK_OTHER_LDFLAGS = -l"iconv" -l"idn" -l"resolv" -l"xml2" -framework "CoreData"

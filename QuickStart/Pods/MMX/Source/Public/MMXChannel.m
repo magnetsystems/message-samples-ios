@@ -186,6 +186,10 @@
 		return;
 	}
 	[[MMXClient sharedClient].pubsubManager createTopic:[self asTopic] success:^(BOOL successful) {
+		MMXUser *creator = [MMXUser currentUser];
+		if (creator) {
+			self.ownerUsername = creator.username;
+		}
 		if (success) {
 			success();
 		}

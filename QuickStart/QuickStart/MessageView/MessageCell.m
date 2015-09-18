@@ -104,11 +104,6 @@ const float kMessageCellLabelOffsetPercentage = 0.02;
 	label.font = font;
 	label.numberOfLines = 0;
 	
-	/**
-	 *  MagnetNote: MMXPubSubMessage
-	 *
-	 *  Extract message content from MMXPubSubMessage messageContent property
-	 */
 	label.text = messageContent;
 	
 	NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
