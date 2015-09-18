@@ -110,7 +110,7 @@
     } failure:^(NSError *error) {
         //The error code for "duplicate channel" is 409. This means the channel already exists and I can continue to subscribe.
         if (error.code == 409) {
-            [MMXChannel channelForChannelName:channelName success:^(MMXChannel *channel) {
+			[MMXChannel channelForName:channelName isPublic:YES success:^(MMXChannel *channel) {
 				[channel subscribeWithSuccess:^{
 					// Fetching channels again to make sure that the company_announcements channel show up under subscribed.
 					[self fetchChannels];
@@ -124,7 +124,7 @@
 				/*
 				 *  Logging an error.
 				 */
-				[[MMXLogger sharedLogger] error:@"ChannelListTableViewController setupChannels channelForChannelName Error = %@", error.localizedFailureReason];
+				[[MMXLogger sharedLogger] error:@"ChannelListTableViewController setupChannels channelForName Error = %@", error.localizedFailureReason];
 			}];
         }
     }];

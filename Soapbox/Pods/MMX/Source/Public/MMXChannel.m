@@ -62,7 +62,7 @@
 	NSDictionary *queryDict = @{@"operator" : @"AND",
 								@"limit" : @(limit),
 								@"offset" : @(offset),
-								@"type":@"global",
+								@"type": @"global",
 								@"tags" : [NSNull null],
 								@"topicName": @{
 										@"match": @"PREFIX",
@@ -93,9 +93,10 @@
 }
 
 
-+ (void)channelForChannelName:(NSString *)channelName
-					  success:(void (^)(MMXChannel *))success
-					  failure:(void (^)(NSError *))failure {
++ (void)channelForName:(NSString *)channelName
+			  isPublic:(BOOL)isPublic
+			   success:(void (^)(MMXChannel *))success
+			   failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
 			failure([MagnetDelegate notNotLoggedInError]);
@@ -114,6 +115,7 @@
 	NSDictionary *queryDict = @{@"operator" : @"AND",
 								@"limit" : @(-1),
 								@"tags" : [NSNull null],
+								@"type":isPublic ? @"global" : @"personal",
 								@"topicName": @{
 										@"match": @"EXACT",
 										@"value": channelName}};
@@ -380,35 +382,15 @@
 	}
 	MMXChannel *channel = [MMXChannel channelWithName:name summary:summary isPublic:isPublic];
 	[[MMXClient sharedClient].pubsubManager createTopic:[channel asTopic] success:^(BOOL successful) {
-		if (channel.isPublic) {
-			[MMXChannel channelForChannelName:channel.name success:^(MMXChannel *channel) {
-				if (success) {
-					success(channel);
-				}
-			} failure:^(NSError *error) {
-				if (failure) {
-					failure(error);
-				}
-			}];
-		} else {
-			NSDictionary *queryDict = @{@"operator" : @"AND",
-										@"limit" : @(1),
-										@"offset" : @(0),
-										@"type":@"personal",
-										@"tags" : [NSNull null],
-										@"topicName": @{
-												@"match": @"PREFIX",
-												@"value": @""}};
-			[MMXChannel findChannelsWithDictionary:queryDict success:^(int count, NSArray *channels) {
-				if (success) {
-					success(channels[0]);
-				}
-			} failure:^(NSError * error) {
-				if (failure) {
-					failure(error);
-				}
-			}];
-		}
+		[MMXChannel channelForName:channel.name isPublic:isPublic success:^(MMXChannel *channel) {
+			if (success) {
+				success(channel);
+			}
+		} failure:^(NSError *error) {
+			if (failure) {
+				failure(error);
+			}
+		}];
 	} failure:^(NSError *error) {
 		if (failure) {
 			failure(error);
