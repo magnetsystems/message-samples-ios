@@ -1,0 +1,6 @@
+framework module MDMCoreData {
+  umbrella header "MDMCoreData-umbrella.h"
+
+  export *
+  module * { export * }
+}

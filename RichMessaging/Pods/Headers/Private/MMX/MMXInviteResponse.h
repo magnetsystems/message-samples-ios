@@ -1,0 +1,1 @@
+../../../MMX/Source/Public/MMXInviteResponse.h
