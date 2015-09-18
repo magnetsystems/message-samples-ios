@@ -1,0 +1,1 @@
+../../../MMXXMPPFramework/Authentication/Anonymous/XMPPAnonymousAuthentication.h

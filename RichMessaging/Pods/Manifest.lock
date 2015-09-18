@@ -1,0 +1,123 @@
+PODS:
+  - AFAmazonS3Manager (3.2.1):
+    - AFNetworking/NSURLConnection (~> 2.4)
+  - AFNetworking/NSURLConnection (2.6.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.6.0)
+  - AFNetworking/Security (2.6.0)
+  - AFNetworking/Serialization (2.6.0)
+  - Bolts (1.2.2):
+    - Bolts/AppLinks (= 1.2.2)
+    - Bolts/Tasks (= 1.2.2)
+  - Bolts/AppLinks (1.2.2):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.2.2)
+  - CocoaAsyncSocket (7.4.1)
+  - CocoaLumberjack (1.9.2):
+    - CocoaLumberjack/Extensions (= 1.9.2)
+  - CocoaLumberjack/Core (1.9.2)
+  - CocoaLumberjack/Extensions (1.9.2):
+    - CocoaLumberjack/Core
+  - FBSDKCoreKit (4.6.0):
+    - Bolts (~> 1.1)
+    - FBSDKCoreKit/arc (= 4.6.0)
+    - FBSDKCoreKit/no-arc (= 4.6.0)
+  - FBSDKCoreKit/arc (4.6.0):
+    - Bolts (~> 1.1)
+  - FBSDKCoreKit/no-arc (4.6.0):
+    - Bolts (~> 1.1)
+    - FBSDKCoreKit/arc
+  - FBSDKLoginKit (4.6.0):
+    - FBSDKCoreKit
+  - JSQMessagesViewController (7.2.0):
+    - JSQSystemSoundPlayer (~> 2.0.1)
+  - JSQSystemSoundPlayer (2.0.1)
+  - Mantle (1.5.4):
+    - Mantle/extobjc (= 1.5.4)
+  - Mantle/extobjc (1.5.4)
+  - MDMCoreData (1.5.0):
+    - MDMCoreData/MDMCoreDataCore (= 1.5.0)
+    - MDMCoreData/MDMFetchedResultsCollectionDataSource (= 1.5.0)
+    - MDMCoreData/MDMFetchedResultsTableDataSource (= 1.5.0)
+    - MDMCoreData/MDMPersistenceController (= 1.5.0)
+    - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (= 1.5.0)
+  - MDMCoreData/MDMCoreDataCore (1.5.0)
+  - MDMCoreData/MDMFetchedResultsCollectionDataSource (1.5.0):
+    - MDMCoreData/MDMCoreDataCore
+  - MDMCoreData/MDMFetchedResultsTableDataSource (1.5.0):
+    - MDMCoreData/MDMCoreDataCore
+  - MDMCoreData/MDMPersistenceController (1.5.0):
+    - MDMCoreData/MDMCoreDataCore
+  - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
+    - MDMCoreData/MDMCoreDataCore
+  - MMX (1.8.3):
+    - CocoaAsyncSocket (= 7.4.1)
+    - CocoaLumberjack (= 1.9.2)
+    - Mantle (= 1.5.4)
+    - MDMCoreData (= 1.5.0)
+    - MMXXMPPFramework (= 3.6.12)
+  - MMXXMPPFramework (3.6.12):
+    - MMXXMPPFramework/Core (= 3.6.12)
+    - MMXXMPPFramework/CoreDataStorage (= 3.6.12)
+    - MMXXMPPFramework/Reconnect (= 3.6.12)
+    - MMXXMPPFramework/Roster (= 3.6.12)
+    - MMXXMPPFramework/XEP-0060 (= 3.6.12)
+    - MMXXMPPFramework/XEP-0082 (= 3.6.12)
+    - MMXXMPPFramework/XEP-0106 (= 3.6.12)
+    - MMXXMPPFramework/XEP-0203 (= 3.6.12)
+  - MMXXMPPFramework/Core (3.6.12):
+    - CocoaAsyncSocket (~> 7.4.1)
+    - CocoaLumberjack (~> 1.9)
+  - MMXXMPPFramework/CoreDataStorage (3.6.12):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/Reconnect (3.6.12):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/Roster (3.6.12):
+    - MMXXMPPFramework/Core
+    - MMXXMPPFramework/CoreDataStorage
+    - MMXXMPPFramework/XEP-0203
+  - MMXXMPPFramework/XEP-0060 (3.6.12):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/XEP-0082 (3.6.12):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/XEP-0106 (3.6.12):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/XEP-0203 (3.6.12):
+    - MMXXMPPFramework/Core
+    - MMXXMPPFramework/XEP-0082
+
+DEPENDENCIES:
+  - AFAmazonS3Manager (~> 3.2)
+  - FBSDKLoginKit
+  - JSQMessagesViewController (from `https://github.com/jessesquires/JSQMessagesViewController.git`,
+    branch `develop`)
+  - MMX
+
+EXTERNAL SOURCES:
+  JSQMessagesViewController:
+    :branch: develop
+    :git: https://github.com/jessesquires/JSQMessagesViewController.git
+
+CHECKOUT OPTIONS:
+  JSQMessagesViewController:
+    :commit: 8ba29137e82e209688906df635576a5b26aa0789
+    :git: https://github.com/jessesquires/JSQMessagesViewController.git
+
+SPEC CHECKSUMS:
+  AFAmazonS3Manager: 688f9238511bb86011159d0155fcda09838b0e0d
+  AFNetworking: 79f7eb1a0fcfa7beb409332b2ca49afe9ce53b05
+  Bolts: 20a2bd788273360cb1e31530dc19b8544eef2544
+  CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
+  CocoaLumberjack: 628fca2e88ef06f7cf6817309aa405f325d9a6fa
+  FBSDKCoreKit: 9954492d90c5fd65ae831395697a1660360d61f1
+  FBSDKLoginKit: 3d07febbfa884b9878cacba54f705bb41f07d4b6
+  JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
+  JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
+  Mantle: 60acd0cd363e27d945bda0a6b8e90577112d28f3
+  MDMCoreData: 402f754cda90865026a209243f1667824e775649
+  MMX: 1b11a2bce2a91cc29c200b80077b223c88bce443
+  MMXXMPPFramework: 20ad9c176eac51ff190c361204876c6583347878
+
+COCOAPODS: 0.38.2

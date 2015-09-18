@@ -1,0 +1,1 @@
+../../../MMX/Source/CoreMessaging/Addressable/MMXEndpoint.h

@@ -1,0 +1,6 @@
+framework module AFAmazonS3Manager {
+  umbrella header "AFAmazonS3Manager-umbrella.h"
+
+  export *
+  module * { export * }
+}

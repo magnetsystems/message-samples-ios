@@ -1,0 +1,1 @@
+../../../MMXXMPPFramework/Authentication/Deprecated-Digest/XMPPDeprecatedDigestAuthentication.h
