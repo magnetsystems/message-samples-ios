@@ -53,7 +53,7 @@
 	self.tiesLabel.text = [NSString stringWithFormat:@"Ties: %lu",(unsigned long)[RPSLSUser me].stats.ties];
     
     // Indicate that you are ready to receive messages now!
-    [MMX enableIncomingMessages];
+    [MMX start];
 
 	[self setupDefaultTopic];
 	
@@ -88,7 +88,7 @@
 - (void)didDisconnect:(NSNotification *)notification {
     
     // Indicate that you are not ready to receive messages now!
-    [MMX disableIncomingMessages];
+    [MMX start];
     
     [self goToLoginScreen];
 }
@@ -105,13 +105,16 @@
 #pragma mark - Availability
 
 - (void)postAvailabilityStatusAs:(BOOL)available {
-
 	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-    [[RPSLSUtils availablePlayersChannel] publish:[RPSLSUtils availablilityMessage:available].messageContent success:nil failure:^(NSError *error) {
-        [[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
-    }];
+	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
+		[channel publish:[RPSLSUtils availablilityMessageContent:available] success:nil failure:^(NSError *error) {
+			[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
+		}];
+	} failure:^(NSError *error) {
+		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
+	}];
 }
 
 #pragma mark - Invite Message
@@ -143,10 +146,6 @@
 	RPSLSUser * user = [RPSLSUser playerFromInvite:message];
 	GameViewController* game = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:NSStringFromClass([GameViewController class])];
 	[game setupGameWithID:message.messageContent[kMessageKey_GameID] opponent:user];
-	
-	/*
-	 *  Setting GameViewController as the delegate to receive the MMXClientDelegate callbacks.
-	 */
 	[self presentViewController:game animated:YES completion:nil];
 }
 
@@ -243,29 +242,24 @@
     self.connectedLabel.text = [NSString stringWithFormat:@"Connected as %@",[RPSLSUser me].username];
     [self postAvailabilityStatusAs:YES];
 
-    MMXChannel *availablePlayersChannel = [RPSLSUtils availablePlayersChannel];
-    [availablePlayersChannel createWithSuccess:^{
-
-        [availablePlayersChannel subscribeWithSuccess:nil failure:^(NSError *subscribeError) {
-            [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@", subscribeError.localizedFailureReason];
-        }];
-
-    } failure:^(NSError *error) {
-        //The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
-        if (error.code == 409) {
-
-            /*
-             *  Subscribing to a MMXTopic
-             *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
-             *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
-             *	I am passing nil to success because there is not any business logic I need to execute upon success.
-             */
-
-            [availablePlayersChannel subscribeWithSuccess:nil failure:^(NSError *subscribeError) {
-                [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@", subscribeError.localizedFailureReason];
-            }];
-        }
-    }];
+	[MMXChannel createWithName:kPostStatus_ChannelName summary:kPostStatus_ChannelName isPublic:YES success:nil failure:^(NSError *error) {
+		//The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
+		if (error.code == 409) {
+			
+			/*
+			 *  Subscribing to a MMXChannel
+			 *	By passing nil to the device parameter all device for the user will receive future MMXMessages published to this topic.
+			 *	I am passing nil to success because there is not any business logic I need to execute upon success.
+			 */
+			[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
+				[channel subscribeWithSuccess:nil failure:^(NSError *subscribeError) {
+					[[MMXLogger sharedLogger] error:@"setupDefaultTopic subscribeWithSuccess Error = %@", subscribeError.localizedFailureReason];
+				}];
+			} failure:^(NSError *error) {
+				[[MMXLogger sharedLogger] error:@"setupDefaultTopic channelForName Error = %@", error.localizedFailureReason];
+			}];
+		}
+	}];
 }
 
 #pragma mark - Segues/Popover
@@ -299,7 +293,6 @@
 
 - (void)goToLoginScreen {
 	[self.navigationController popToRootViewControllerAnimated:YES];
-//	[self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

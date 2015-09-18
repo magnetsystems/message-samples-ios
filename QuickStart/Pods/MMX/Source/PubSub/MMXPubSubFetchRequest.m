@@ -29,7 +29,7 @@
 }
 
 - (NSDictionary *)dictionaryRepresentation {
-    return @{@"userId": [NSNull null],
+	return @{@"userId": self.topic.inUserNameSpace ? self.topic.nameSpace : [NSNull null],
              @"topicName":self.topic.topicName,
              @"options":[self options]
                  };
@@ -40,7 +40,8 @@
              @"since": self.since ? [MMXUtils stringIniso8601Format:self.since] : [NSNull null],
              @"until": self.until ? [MMXUtils stringIniso8601Format:self.until] : [NSNull null],
              @"ascending": @(self.ascending),
-             @"maxItems": self.maxItems ? @(self.maxItems) : @(-1)};
+             @"maxItems": self.maxItems ? @(self.maxItems) : @(-1),
+			 @"offset": self.offset ? @(self.offset) : @(0)};
 }
 
 @end

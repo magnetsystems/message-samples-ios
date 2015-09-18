@@ -21,6 +21,7 @@
 
 @property (nonatomic, assign)   BOOL isCollection;
 @property (nonatomic, readonly)	BOOL inUserNameSpace;
+@property (nonatomic, readwrite) NSDate * creationDate;
 
 @property (nonatomic, readonly) NSString * identifier;
 @property (nonatomic, copy)		NSString * nameSpace;

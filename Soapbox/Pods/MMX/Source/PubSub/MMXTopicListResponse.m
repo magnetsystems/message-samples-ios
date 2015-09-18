@@ -21,6 +21,9 @@
 #import "DDXML.h"
 #import "MMXConstants.h"
 #import "XMPP.h"
+#import "MMXUtils.h"
+#import "MMXUserID_Private.h"
+#import "NSString+XEP_0106.h"
 
 @implementation MMXTopicListResponse
 
@@ -42,6 +45,15 @@
                             MMXTopic * topic = [[MMXTopic alloc] init];
 							if (dict[@"userId"] && [MMXUtils objectIsValidString:dict[@"userId"]]) {
 								topic.nameSpace = dict[@"userId"];
+							}
+							if (dict[@"creationDate"] && ![dict[@"creationDate"] isKindOfClass:[NSNull class]]) {
+								topic.creationDate = [MMXUtils dateFromiso8601Format:dict[@"creationDate"]];
+							}
+							if (dict[@"creator"] && ![dict[@"creator"] isKindOfClass:[NSNull class]]) {
+								NSString * username = [MMXUserID stripUsername:dict[@"creator"]];
+								if ([MMXUtils objectIsValidString:username]) {
+									topic.topicCreator = [MMXUserID userIDWithUsername:[username jidUnescapedString]];
+								}
 							}
                             topic.topicName = dict[@"topicName"];
                             topic.isCollection = [dict[@"isCollection"] boolValue];

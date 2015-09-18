@@ -55,6 +55,9 @@
 	if (topicDict[@"userId"] && ![topicDict[@"userId"] isKindOfClass:[NSNull class]]) {
 		topic.nameSpace = topicDict[@"userId"];
 	}
+	if (topicDict[@"creationDate"] && ![topicDict[@"creationDate"] isKindOfClass:[NSNull class]]) {
+		topic.creationDate = [MMXUtils dateFromiso8601Format:topicDict[@"creationDate"]];
+	}
 	if (topicDict[@"creator"] && ![topicDict[@"creator"] isKindOfClass:[NSNull class]]) {
 		NSString * username = [MMXUserID stripUsername:topicDict[@"creator"]];
 		if ([MMXUtils objectIsValidString:username]) {

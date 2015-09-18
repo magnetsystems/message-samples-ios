@@ -65,7 +65,7 @@
 	self.textInputbar.autoHideRightButton = NO;
 	
 	/*
-	 *  Extracting the MMXTopic topicName property and setting it as the title of the view.
+	 *  Extracting the MMXChannel name property and setting it as the title of the view.
 	 */
 	self.title = self.channel.name;
 	self.messageList = @[];
@@ -108,7 +108,7 @@
 
 - (void)fetchMessages {
 
-    [self.channel fetchMessagesBetweenStartDate:nil endDate:nil limit:25 ascending:NO success:^(int totalCount, NSArray *messages) {
+	[self.channel messagesBetweenStartDate:nil endDate:nil limit:25 offset:0 ascending:NO success:^(int totalCount, NSArray *messages) {
         self.messageList = messages;
         [self.tableView reloadData];
     } failure:^(NSError *error) {
@@ -126,12 +126,10 @@
 - (void)subscribeToChannel {
 	if (self.channel) {
 		/*
-		 *  Subscribing to a MMXTopic
-		 *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
-		 *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
+		 *  Subscribing to a MMXChannel
 		 */
         [self.channel subscribeWithSuccess:^{
-            [self showAlertWithTitle:@"Successfully Subscribed" message:@"You have successfully subscribed to the topic."];
+            [self showAlertWithTitle:@"Successfully Subscribed" message:@"You have successfully subscribed to the channel."];
         } failure:^(NSError *error) {
             [self showAlertWithTitle:@"Failed Subscribe" message:error.localizedFailureReason];
         }];
@@ -141,12 +139,10 @@
 - (void)unSubscribeToChannel {
 	if (self.channel) {
 		/*
-		 *  Subscribing to a MMXTopic
-		 *	By passing nil to the subscriptionID parameter all devices for the user will unsubscribed from this topic.
-		 *	If the user only wants to be unsubscribed for a specific device pass the subscriptionID for that subscription.
+		 *  Unsubscribing to a MMXChannel
 		 */
 		[self.channel unSubscribeWithSuccess:^{
-            [self showAlertWithTitle:@"Successfully Unsubscribed" message:@"You have successfully unsubscribed from the topic."];
+            [self showAlertWithTitle:@"Successfully Unsubscribed" message:@"You have successfully unsubscribed from the channel."];
         } failure:^(NSError *error) {
             [self showAlertWithTitle:@"Failed Unsubscribe" message:error.localizedFailureReason];
         }];
@@ -158,16 +154,11 @@
 - (void)didPressRightButton:(id)sender {
 	[self.textView refreshFirstResponder];
 	
-	/*
-	 *  Creating a new MMXPubSubMessage. The topic cannot be nil.
-	 *  By default the PubSub is anonymous and MMXPubSubMessage does not include the sender's username.
-	 *	We are passing the username of the sender in the metaData of the message to be able to show the sender as part of our app functionality.
-	 */
     Announcement *announcement = [Announcement announcementWithContent:self.textView.text];
     NSDictionary *messageContent = [MTLJSONAdapter JSONDictionaryFromModel:announcement];
     MMXMessage *messageToSend = [MMXMessage messageToChannel:self.channel messageContent:messageContent];
     /*
-	 *  Publishing our message. In this case I do not need to do anything on success. I will receive the MMXClientDelegate callback client:didReceivePubSubMessage:
+	 *  Publishing our message. In this case I do not need to do anything on success. I will receive the MMXDidReceiveMessageNotification notification
 	 *	I can then treat the message that was sent the same way as any other message I receive.
 	 */
     [self.channel publish:messageToSend.messageContent success:nil failure:^(NSError *error) {

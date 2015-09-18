@@ -96,7 +96,7 @@
             /*
              *  Checking to see if the message is from the availability topic and ignoring all others
              */
-            if ([message.channel.name isEqualToString:kPostStatus_TopicName]) {
+            if ([message.channel.name isEqualToString:kPostStatus_ChannelName]) {
                 [self updateListWithMessage:message];
             }
             break;
@@ -107,7 +107,7 @@
 - (void)didDisconnect:(NSNotification *)notification {
     
     // Indicate that you are not ready to receive messages now!
-    [MMX disableIncomingMessages];
+    [MMX stop];
     
     [self goToLoginScreen];
 }
@@ -123,37 +123,41 @@
 	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-    [[RPSLSUtils availablePlayersChannel] publish:[RPSLSUtils availablilityMessage:available].messageContent success:nil failure:^(NSError *error) {
-        [[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
-    }];
+	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
+		[channel publish:[RPSLSUtils availablilityMessageContent:available] success:nil failure:^(NSError *error) {
+			[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
+		}];
+	} failure:^(NSError *error) {
+		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
+	}];
 }
 
 #pragma mark - Request Available Players
 
 - (void)collectListOfAvailablePlayers {
 	
-	/*
-	 *  Passing my MMXPubSubFetchRequest to the fetchItems API. It will return a NSArray of MMXPubSubMessages
-	 */
-    MMXChannel *availablePlayersChannel = [RPSLSUtils availablePlayersChannel];
-    NSDate *now = [NSDate date];
-
-    [availablePlayersChannel fetchMessagesBetweenStartDate:[NSDate dateWithTimeIntervalSinceNow:kAvailableTimeFrame]
-                                                   endDate:now
-                                                     limit:100
-                                                 ascending:NO
-                                                   success:^(int totalCount, NSArray *messages) {
-
-                                                       [self refreshAvailablePlayersWithMessages:messages];
-
-                                                   } failure:^(NSError *error) {
-
-                /*
-		         *  Logging an error.
-		         */
-                [[MMXLogger sharedLogger] error:@"collectListOfAvailablePlayers error = %@",error];
-
-            }];
+	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
+		NSDate *now = [NSDate date];
+		[channel messagesBetweenStartDate:[NSDate dateWithTimeIntervalSinceNow:kAvailableTimeFrame]
+								  endDate:now
+									limit:100
+								   offset:0
+								ascending:NO
+								  success:^(int totalCount, NSArray *messages) {
+									  
+									  [self refreshAvailablePlayersWithMessages:messages];
+									  
+								  } failure:^(NSError *error) {
+									  
+									  /*
+									   *  Logging an error.
+									   */
+									  [[MMXLogger sharedLogger] error:@"collectListOfAvailablePlayers error = %@",error];
+									  
+								  }];
+	} failure:^(NSError *error) {
+		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
+	}];
 }
 
 #pragma mark - Available Players
