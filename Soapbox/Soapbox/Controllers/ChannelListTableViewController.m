@@ -102,22 +102,12 @@
 
 	/*
 	 *  Creating a new channel by passing my MMXChannel object.
-	 *	When a user creates a channel they are NOT automatically subscribed to it.
+	 *	When a user creates a channel they are automatically subscribed to it.
 	 */
     [companyChannel createWithSuccess:^{
         
-        /*
-         *  Subscribe the current user to the newly created channel.
-         */
-        [companyChannel subscribeWithSuccess:^{
-            // Fetching channels again to make sure that the company_announcements channel show up under subscribed.
-            [self fetchChannels];
-        } failure:^(NSError *error) {
-            /*
-             *  Logging an error.
-             */
-            [[MMXLogger sharedLogger] error:@"ChannelListTableViewController setupChannels Error = %@", error.localizedFailureReason];
-        }];
+		// Fetching channels again to make sure that the company_announcements channel show up under subscribed.
+		[self fetchChannels];
     } failure:^(NSError *error) {
         //The error code for "duplicate channel" is 409. This means the channel already exists and I can continue to subscribe.
         if (error.code == 409) {
