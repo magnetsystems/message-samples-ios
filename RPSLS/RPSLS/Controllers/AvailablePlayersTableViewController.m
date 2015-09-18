@@ -96,7 +96,7 @@
             /*
              *  Checking to see if the message is from the availability topic and ignoring all others
              */
-            if ([message.channel.name isEqualToString:kPostStatus_TopicName]) {
+            if ([message.channel.name isEqualToString:kPostStatus_ChannelName]) {
                 [self updateListWithMessage:message];
             }
             break;
@@ -123,12 +123,12 @@
 	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-	[MMXChannel channelForChannelName:kPostStatus_TopicName success:^(MMXChannel *channel) {
+	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
 		[channel publish:[RPSLSUtils availablilityMessageContent:available] success:nil failure:^(NSError *error) {
-			[[MMXLogger sharedLogger] error:@"channelForChannelName error= %@",error];
+			[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
 		}];
 	} failure:^(NSError *error) {
-		[[MMXLogger sharedLogger] error:@"channelForChannelName error= %@",error];
+		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
 	}];
 }
 
@@ -136,7 +136,7 @@
 
 - (void)collectListOfAvailablePlayers {
 	
-	[MMXChannel channelForChannelName:kPostStatus_TopicName success:^(MMXChannel *channel) {
+	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
 		NSDate *now = [NSDate date];
 		[channel messagesBetweenStartDate:[NSDate dateWithTimeIntervalSinceNow:kAvailableTimeFrame]
 								  endDate:now
@@ -156,7 +156,7 @@
 									  
 								  }];
 	} failure:^(NSError *error) {
-		[[MMXLogger sharedLogger] error:@"channelForChannelName error= %@",error];
+		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
 	}];
 }
 

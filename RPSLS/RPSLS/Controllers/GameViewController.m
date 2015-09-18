@@ -119,12 +119,12 @@
 	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-	[MMXChannel channelForChannelName:kPostStatus_TopicName success:^(MMXChannel *channel) {
+	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
 		[channel publish:[RPSLSUtils availablilityMessageContent:available] success:nil failure:^(NSError *error) {
-			[[MMXLogger sharedLogger] error:@"channelForChannelName error= %@",error];
+			[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
 		}];
 	} failure:^(NSError *error) {
-		[[MMXLogger sharedLogger] error:@"channelForChannelName error= %@",error];
+		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
 	}];
 }
 

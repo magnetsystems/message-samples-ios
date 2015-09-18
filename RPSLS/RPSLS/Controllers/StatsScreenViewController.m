@@ -108,12 +108,12 @@
 	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-	[MMXChannel channelForChannelName:kPostStatus_TopicName success:^(MMXChannel *channel) {
+	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
 		[channel publish:[RPSLSUtils availablilityMessageContent:available] success:nil failure:^(NSError *error) {
-			[[MMXLogger sharedLogger] error:@"channelForChannelName error= %@",error];
+			[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
 		}];
 	} failure:^(NSError *error) {
-		[[MMXLogger sharedLogger] error:@"channelForChannelName error= %@",error];
+		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
 	}];
 }
 
@@ -242,7 +242,7 @@
     self.connectedLabel.text = [NSString stringWithFormat:@"Connected as %@",[RPSLSUser me].username];
     [self postAvailabilityStatusAs:YES];
 
-	[MMXChannel createWithName:kPostStatus_TopicName summary:kPostStatus_TopicName isPublic:YES success:nil failure:^(NSError *error) {
+	[MMXChannel createWithName:kPostStatus_ChannelName summary:kPostStatus_ChannelName isPublic:YES success:nil failure:^(NSError *error) {
 		//The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
 		if (error.code == 409) {
 			
@@ -251,12 +251,12 @@
 			 *	By passing nil to the device parameter all device for the user will receive future MMXMessages published to this topic.
 			 *	I am passing nil to success because there is not any business logic I need to execute upon success.
 			 */
-			[MMXChannel channelForChannelName:kPostStatus_TopicName success:^(MMXChannel *channel) {
+			[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
 				[channel subscribeWithSuccess:nil failure:^(NSError *subscribeError) {
-					[[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@", subscribeError.localizedFailureReason];
+					[[MMXLogger sharedLogger] error:@"setupDefaultTopic subscribeWithSuccess Error = %@", subscribeError.localizedFailureReason];
 				}];
 			} failure:^(NSError *error) {
-				[[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics channelForChannelName Error = %@", error.localizedFailureReason];
+				[[MMXLogger sharedLogger] error:@"setupDefaultTopic channelForName Error = %@", error.localizedFailureReason];
 			}];
 		}
 	}];

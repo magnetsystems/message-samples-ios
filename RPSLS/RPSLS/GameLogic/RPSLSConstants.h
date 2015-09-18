@@ -22,7 +22,7 @@
 extern NSString * const kPostStatus_Available;
 extern NSString * const kPostStatus_NotAvailable;
 
-extern NSString * const kPostStatus_TopicName;
+extern NSString * const kPostStatus_ChannelName;
 
 extern NSString * const kMessageKey_Username;
 extern NSString * const kMessageKey_Wins;
