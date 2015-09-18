@@ -83,6 +83,7 @@
 	return @{
 			 @"operator": [self operatorAsString],
 			 @"limit":self.limit ? @(self.limit) : @20,
+			 @"offset":self.offset ? @(self.offset) : @0,
 			 @"tags":(self.tags && self.tags.count) ? @{@"match": @"EXACT",
 														@"values":self.tags} : [NSNull null]
 			 }.mutableCopy;

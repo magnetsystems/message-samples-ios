@@ -26,13 +26,7 @@
     return [NSString stringWithFormat:@"%llu",(long long)[[NSDate date] timeIntervalSince1970] * 1000];
 }
 
-+ (MMXChannel *)availablePlayersChannel {
-    MMXChannel *channel = [MMXChannel channelWithName:kPostStatus_TopicName summary:nil];
-    channel.isPublic = YES;
-    return channel;
-}
-
-+ (MMXMessage *)availablilityMessage:(BOOL)available {
++ (NSDictionary *)availablilityMessageContent:(BOOL)available {
     // content:@"Letting other players know if I'm available"
     NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
             kMessageKey_UserAvailablity : available ? @"true" : @"false",
@@ -42,9 +36,7 @@
             kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
             kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]
     };
-    return [MMXMessage messageToChannel:[self availablePlayersChannel]
-                         messageContent:messageContent
-    ];
+	return messageContent;
 }
 
 + (BOOL)isTrue:(id)value {

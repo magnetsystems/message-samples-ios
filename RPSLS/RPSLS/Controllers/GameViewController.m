@@ -100,7 +100,7 @@
 - (void)didDisconnect:(NSNotification *)notification {
     
     // Indicate that you are not ready to receive messages now!
-    [MMX disableIncomingMessages];
+    [MMX stop];
     
     [self goToLoginScreen];
 }
@@ -116,13 +116,16 @@
 #pragma mark - Status
 
 - (void)postAvailabilityStatusAs:(BOOL)available {
-
-    /*
+	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-    [[RPSLSUtils availablePlayersChannel] publish:[RPSLSUtils availablilityMessage:available].messageContent success:nil failure:^(NSError *error) {
-        [[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
-    }];
+	[MMXChannel channelForChannelName:kPostStatus_TopicName success:^(MMXChannel *channel) {
+		[channel publish:[RPSLSUtils availablilityMessageContent:available] success:nil failure:^(NSError *error) {
+			[[MMXLogger sharedLogger] error:@"channelForChannelName error= %@",error];
+		}];
+	} failure:^(NSError *error) {
+		[[MMXLogger sharedLogger] error:@"channelForChannelName error= %@",error];
+	}];
 }
 
 - (void)handleTimer {

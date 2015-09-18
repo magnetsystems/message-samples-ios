@@ -26,8 +26,12 @@
 @property (nonatomic, readwrite) NSDate *lastTimeActive;
 @property (nonatomic, readwrite) NSSet *tags;
 @property (nonatomic, readwrite) BOOL isSubscribed;
+@property (nonatomic, readwrite) NSDate * creationDate;
 
 - (MMXTopic *)asTopic;
 
++ (instancetype)channelWithName:(NSString *)name
+						summary:(NSString *)summary
+					   isPublic:(BOOL)isPublic;
 
 @end
