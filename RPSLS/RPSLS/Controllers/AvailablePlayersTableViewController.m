@@ -132,9 +132,6 @@
 
 - (void)collectListOfAvailablePlayers {
 	
-	/*
-	 *  Passing my MMXPubSubFetchRequest to the fetchItems API. It will return a NSArray of MMXPubSubMessages
-	 */
     MMXChannel *availablePlayersChannel = [RPSLSUtils availablePlayersChannel];
     NSDate *now = [NSDate date];
 

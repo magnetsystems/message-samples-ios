@@ -135,17 +135,6 @@
 	}
 }
 
-#pragma mark - MMXClientDelegate Callbacks
-
-/*
- *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
- */
-//- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-//	if (connectionStatus == MMXConnectionStatusDisconnected) {
-//		[self.navigationController popToRootViewControllerAnimated:YES];
-//	}
-//}
-
 #pragma mark - Messages
 
 - (void)sendMyChoice:(RPSLSValue)choice {

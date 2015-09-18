@@ -143,10 +143,6 @@
 	RPSLSUser * user = [RPSLSUser playerFromInvite:message];
 	GameViewController* game = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:NSStringFromClass([GameViewController class])];
 	[game setupGameWithID:message.messageContent[kMessageKey_GameID] opponent:user];
-	
-	/*
-	 *  Setting GameViewController as the delegate to receive the MMXClientDelegate callbacks.
-	 */
 	[self presentViewController:game animated:YES completion:nil];
 }
 
@@ -246,18 +242,13 @@
     MMXChannel *availablePlayersChannel = [RPSLSUtils availablePlayersChannel];
     [availablePlayersChannel createWithSuccess:^{
 
-        [availablePlayersChannel subscribeWithSuccess:nil failure:^(NSError *subscribeError) {
-            [[MMXLogger sharedLogger] error:@"TopicListTableViewController setupTopics Error = %@", subscribeError.localizedFailureReason];
-        }];
-
     } failure:^(NSError *error) {
         //The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
         if (error.code == 409) {
 
             /*
-             *  Subscribing to a MMXTopic
-             *	By passing nil to the device parameter all device for the user will receive future MMXPubSubMessages published to this topic.
-             *	If the user only wants to be subscribed on the current device, pass the MMXEndpoint for the device.
+             *  Subscribing to a MMXChannel
+             *	By passing nil to the device parameter all device for the user will receive future MMXMessages published to this topic.
              *	I am passing nil to success because there is not any business logic I need to execute upon success.
              */
 
@@ -299,7 +290,6 @@
 
 - (void)goToLoginScreen {
 	[self.navigationController popToRootViewControllerAnimated:YES];
-//	[self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
