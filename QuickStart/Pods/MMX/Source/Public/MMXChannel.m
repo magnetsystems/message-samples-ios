@@ -365,11 +365,11 @@
 	}];
 }
 
-+ (void)createChannelWithName:(NSString *)name
-					  summary:(NSString *)summary
-					 isPublic:(BOOL)isPublic
-					  success:(void (^)(MMXChannel *channel))success
-					  failure:(void (^)(NSError *))failure {
++ (void)createWithName:(NSString *)name
+			   summary:(NSString *)summary
+			  isPublic:(BOOL)isPublic
+			   success:(void (^)(MMXChannel *channel))success
+			   failure:(void (^)(NSError *))failure {
 	
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {

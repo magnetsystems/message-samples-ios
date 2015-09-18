@@ -193,11 +193,11 @@
  *  @param success	Block called if operation is successful.
  *  @param failure	Block with an NSError with details about the call failure.
  */
-+ (void)createChannelWithName:(NSString *)name
-					  summary:(NSString *)summary
-					 isPublic:(BOOL)isPublic
-					  success:(void (^)(MMXChannel *channel))success
-					  failure:(void (^)(NSError *))failure;
++ (void)createWithName:(NSString *)name
+			   summary:(NSString *)summary
+			  isPublic:(BOOL)isPublic
+			   success:(void (^)(MMXChannel *channel))success
+			   failure:(void (^)(NSError *))failure;
 /**
  *  Method to delete an existing new channel.
  *	Current user must be the owner of the channel to delete it.
