@@ -117,7 +117,7 @@ NSString * const kTextContent = @"textContent";
 		[MMXUser logInWithCredential:self.currentCredential success:^(MMXUser *user) {
 			self.currentRecipient = [self me];
 			// Indicate that you are ready to receive messages now!
-			[MMX enableIncomingMessages];
+			[MMX start];
 
 			[self showAlertWithTitle:@"Logged In" message:[NSString stringWithFormat:@"You are logged in as %@.\n\nTry sending a message below.",kDefaultUsername]];
             self.textInputbar.textView.text = @"Hello World";

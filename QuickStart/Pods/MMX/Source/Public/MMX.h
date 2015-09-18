@@ -41,14 +41,26 @@
 + (void)teardown;
 
 /**
+ * @deprecated This method is deprecated starting in version 1.9
+ * @note Please use @code start @code instead.
+ */
++ (void)enableIncomingMessages  __attribute__((deprecated));
+
+/**
+ * @deprecated This method is deprecated starting in version 1.9
+ * @note Please use @code stop @code instead.
+ */
++ (void)disableIncomingMessages  __attribute__((deprecated));
+
+/**
  *  You must enable incoming messages. It is disabled by default.
  */
-+ (void)enableIncomingMessages;
++ (void)start;
 
 /**
  *  Disable incoming messages.
  */
-+ (void)disableIncomingMessages;
++ (void)stop;
 
 /**
  *  Updates the device token.

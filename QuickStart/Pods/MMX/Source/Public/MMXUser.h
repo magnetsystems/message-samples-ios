@@ -23,24 +23,26 @@
 
 /**
  *  Unique username the user.
+ *  The valid character set is alphanumeric plus period, dash, underscore and "at".   .-_@
  */
 @property(nonatomic, copy) NSString *username;
 
 /**
  *  The name you want to have publicly displayed for the user.
- *  The valid character set is alphanumeric plus period, dash and underscore. .-_
+ *  The valid character set is alphanumeric plus period, dash, underscore and "at".   .-_@
  */
 @property  (nonatomic, copy) NSString *displayName;
 
 /**
  *  Get the currently logged in user
  *
- *  @return MMXUser object for the current user.
+ *  @return MMXUser object for the currently logged in user.
  */
 + (MMXUser *)currentUser;
 
 /**
- *  Method to register a new user with Magnet Message
+ *  Method to register a new user with Magnet Message.
+ *	If the displayName is not set it will default to the same value as the username.
  *
  *  @param credential - NSURLCredential object containing the user's username and password.
  *  @param success 	  - Block called if operation is successful.
@@ -61,7 +63,6 @@
 					success:(void (^)(MMXUser *user))success
 					failure:(void (^)(NSError * error))failure;
 
-
 /**
  *  Log out the currently logged in user.
  *
@@ -70,6 +71,17 @@
  */
 + (void)logOutWithSuccess:(void (^)(void))success
 				  failure:(void (^)(NSError *error))failure;
+
+/**
+ *  Method to change the user's displayName if the user is currently logged in.
+ *
+ *  @param displayName	- NSString object with the new value for the user's displayName.
+ *  @param success		- Block called if operation is successful.
+ *  @param failure		- Block with an NSError with details about the call failure.
+ */
+- (void)changeDisplayName:(NSString *)displayName
+				  success:(void (^)(void))success
+				  failure:(void (^)(NSError * error))failure;
 
 /**
  *  Method to change the user's password if the user is currently logged in.
@@ -83,17 +95,43 @@
 							 failure:(void (^)(NSError * error))failure;
 
 /**
- *  Method used to discover existing users by displayName
+ * @deprecated This method is deprecated starting in version 1.9
+ * @note Please use @code findByDisplayName:limit:offset:success:failure: @code instead.
+ */
++ (void)findByDisplayName:(NSString *)displayName
+					limit:(int)limit
+				  success:(void (^)(int totalCount, NSArray *users))success
+				  failure:(void (^)(NSError *error))failure __attribute__((deprecated));
+
+/**
+ *  Method used to discover existing users by displayName.
+ *	You cannot pass an empty string.
+ *  The valid character set is alphanumeric plus period, dash, underscore and "at". .-_@
  *
  *  @param displayName	The start of the displayName for the user you are searching for.
  *  @param limit		The max number of results you want returned. Defaults to 20.
- *  @param success		Block with the number of users that match the query and a NSSet of MMXUsers that match the criteria.
+ *  @param offset		The offset into the results list. Used for pagination.
+ *  @param success		Block with the number of users that match the query and a NSArray of MMXUsers that match the criteria.
  *  @param failure		Block with an NSError with details about the call failure.
  */
 + (void)findByDisplayName:(NSString *)displayName
-                    limit:(int)limit
-                  success:(void (^)(int totalCount, NSArray *users))success
-                  failure:(void (^)(NSError *error))failure;
+					limit:(int)limit
+				   offset:(int)offset
+				  success:(void (^)(int totalCount, NSArray *users))success
+				  failure:(void (^)(NSError *error))failure;
+
+/**
+ *  Method used to discover all existing users.
+ *
+ *  @param limit	The max number of results you want returned. Defaults to 20.
+ *  @param offset	The offset into the results list. Used for pagination.
+ *  @param success	Block with the number of users that match the query and a NSArray of MMXUsers that match the criteria.
+ *  @param failure	Block with an NSError with details about the call failure.
+ */
++ (void)allUsersWithLimit:(int)limit
+				   offset:(int)offset
+				  success:(void (^)(int totalCount, NSArray *users))success
+				  failure:(void (^)(NSError *error))failure;
 
 /**
  *  Method for getting the full user object from a username
@@ -105,6 +143,7 @@
 + (void)userForUsername:(NSString *)username
 				success:(void (^)(MMXUser *user))success
 				failure:(void (^)(NSError *error))failure;
+
 
 //MMXAddressable Protocol
 @property (nonatomic, readonly) MMXInternalAddress *address;
