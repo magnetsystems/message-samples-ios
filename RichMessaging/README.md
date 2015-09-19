@@ -1,4 +1,4 @@
-Rich Messaging
+# Rich Messaging
 
 We created a simple iOS chat app to demonstrate how rich content such as images, videos, and geographical location can be delivered and received using Magnet Message. Images and videos are uploaded to Amazon S3, and the URL to the file is delivered to the recipient. This app also demonstrates Facebook integration with Magnet Message. 
 
