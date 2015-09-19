@@ -146,22 +146,10 @@ class ProductsViewController: UIViewController {
                 } else {
                     print("WishList already exists!")
                     MMXChannel.channelForName(channelName, isPublic: false, success: { (channel) -> Void in
-                        print(channel)
+                        self.wishList = channel
+                        self.fetchWishListItems()
                     }, failure: { (error) -> Void in
                         print(error)
-                    })
-                    MMXChannel.allPrivateChannelsWithLimit(100, offset: 0, success: { (totalCount, records) -> Void in
-                        let channels = records as! [MMXChannel]
-                        print("Private \(channels)")
-                    }, failure: { (error) -> Void in
-                        print("Could not get private channels: \(error)")
-                    })
-                    
-                    MMXChannel.allPublicChannelsWithLimit(100, offset: 0, success: { (totalCount, records) -> Void in
-                        let channels = records as! [MMXChannel]
-                        print("Public \(channels)")
-                    }, failure: { (error) -> Void in
-                            print("Could not get private channels: \(error)")
                     })
                 }
         }

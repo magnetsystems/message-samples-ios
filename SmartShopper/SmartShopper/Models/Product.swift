@@ -64,7 +64,7 @@ extension Product {
     init(dictionary: [String: String]) {
         self.id = Int(dictionary["itemId"]!)!
         self.name = dictionary["name"]!
-        self.salePrice = Double(dictionary["itemId"]!)!
+        self.salePrice = Double(dictionary["salePrice"]!)!
         if let thumb = dictionary["thumbnailImage"] {
             self.thumbnailImage = NSURL(string: thumb)
         }

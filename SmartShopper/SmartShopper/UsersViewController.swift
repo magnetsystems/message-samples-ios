@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import MMX
+import JGProgressHUD
 
 class UsersViewController: UITableViewController {
     
@@ -38,7 +39,7 @@ class UsersViewController: UITableViewController {
     
     // MARK: Private implementation
     func fetchUsers() {
-        MMXUser.findByDisplayName("s", limit: 20, offset:0, success: { (totalCount, records) -> Void in
+        MMXUser.allUsersWithLimit(20, offset:0, success: { (totalCount, records) -> Void in
             self.users = records as! [MMXUser]
             self.tableView.reloadData()
         }) { (error) -> Void in
@@ -50,6 +51,7 @@ class UsersViewController: UITableViewController {
         
         let message = MMXMessage(toRecipients: selectedUsers, messageContent: product?.toDictionary())
         message.sendWithSuccess( {
+            JGProgressHUD.showText("Success!", view: self.navigationController?.view)
             print("Shared product successfully!")
             self.navigationController?.popViewControllerAnimated(true)
         }) { (error) -> Void in
