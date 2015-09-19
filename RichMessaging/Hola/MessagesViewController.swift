@@ -38,7 +38,7 @@ class MessagesViewController : JSQMessagesViewController, UIActionSheetDelegate 
 		}
         // 8. Receive the message
         // Indicate that you are ready to receive messages now!
-        MMX.enableIncomingMessages()
+        MMX.start()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didReceiveMessage:", name: MMXDidReceiveMessageNotification, object: nil)
     }

@@ -31,7 +31,7 @@ class RecipientListTableViewController: UITableViewController {
 	
 	// MARK: - Get Recipients
 	func updateRecipientList() {
-		MMXUser.findByDisplayName("%", limit: 100, success: { (availableCount, userList) -> Void in
+        MMXUser.allUsersWithLimit(100, offset: 0, success: { (availableCount, userList) -> Void in
 			self.availableRecipients = userList as! [MMXUser]
 			self.tableView.reloadData()
 			}, failure: { (error) -> Void in

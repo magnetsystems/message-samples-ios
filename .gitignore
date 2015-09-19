@@ -18,10 +18,10 @@ DerivedData
 *.xcuserstate
 build-*/
 *.framework
-*.bundle
+#*.bundle
 .idea/
 Documentation/
-*Configurations.plist
+#*Configurations.plist
 
 # CocoaPods
 #
