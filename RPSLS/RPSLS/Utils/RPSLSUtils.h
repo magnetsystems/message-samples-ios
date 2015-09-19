@@ -23,8 +23,7 @@
 @interface RPSLSUtils : NSObject
 
 + (NSString *)timestamp;
-+ (MMXChannel *)availablePlayersChannel;
-+ (MMXMessage *)availablilityMessage:(BOOL)available;
++ (NSDictionary *)availablilityMessageContent:(BOOL)available;
 + (BOOL)isTrue:(id)value;
 
 @end

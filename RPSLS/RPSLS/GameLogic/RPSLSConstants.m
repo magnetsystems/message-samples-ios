@@ -22,7 +22,7 @@
 NSString * const kPostStatus_Available = @"AVAILABLE";
 NSString * const kPostStatus_NotAvailable = @"NOTAVAILABLE";
 
-NSString * const kPostStatus_TopicName = @"availableplayers";
+NSString * const kPostStatus_ChannelName = @"availableplayers";
 
 NSString * const kMessageKey_Username = @"username";
 NSString * const kMessageKey_Wins = @"wins";

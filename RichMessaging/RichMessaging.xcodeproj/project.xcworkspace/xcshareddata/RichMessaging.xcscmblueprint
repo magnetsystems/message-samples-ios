@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "A3A123845B3379656EE841C7D77BFC9721330072",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "FD7C47C81A15C6C56077BB08CA175361E86C4D1B" : 0,
+    "A3A123845B3379656EE841C7D77BFC9721330072" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "E593A6A2-9A93-4DA8-906C-03CD0A49368F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "FD7C47C81A15C6C56077BB08CA175361E86C4D1B" : "",
+    "A3A123845B3379656EE841C7D77BFC9721330072" : "RichMessaging\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "RichMessaging",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "RichMessaging.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/priteshshah1983\/Hola.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A3A123845B3379656EE841C7D77BFC9721330072"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/magnetsystems\/message-samples-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "FD7C47C81A15C6C56077BB08CA175361E86C4D1B"
+    }
+  ]
+}

@@ -100,7 +100,7 @@
 - (void)didDisconnect:(NSNotification *)notification {
     
     // Indicate that you are not ready to receive messages now!
-    [MMX disableIncomingMessages];
+    [MMX stop];
     
     [self goToLoginScreen];
 }
@@ -116,13 +116,16 @@
 #pragma mark - Status
 
 - (void)postAvailabilityStatusAs:(BOOL)available {
-
-    /*
+	/*
 	 *  Publishing our availability message. In this case I do not need to do anything on success.
 	 */
-    [[RPSLSUtils availablePlayersChannel] publish:[RPSLSUtils availablilityMessage:available].messageContent success:nil failure:^(NSError *error) {
-        [[MMXLogger sharedLogger] error:@"postAvailability error= %@",error];
-    }];
+	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
+		[channel publish:[RPSLSUtils availablilityMessageContent:available] success:nil failure:^(NSError *error) {
+			[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
+		}];
+	} failure:^(NSError *error) {
+		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
+	}];
 }
 
 - (void)handleTimer {
@@ -134,17 +137,6 @@
 		[self showOptions:@"Waiting on your opponent. Do you want to keep playing?"];
 	}
 }
-
-#pragma mark - MMXClientDelegate Callbacks
-
-/*
- *  Monitoring the connection status to kick the user back to the Sign In screen if the connection is lost
- */
-//- (void)client:(MMXClient *)client didReceiveConnectionStatusChange:(MMXConnectionStatus)connectionStatus error:(NSError *)error {
-//	if (connectionStatus == MMXConnectionStatusDisconnected) {
-//		[self.navigationController popToRootViewControllerAnimated:YES];
-//	}
-//}
 
 #pragma mark - Messages
 

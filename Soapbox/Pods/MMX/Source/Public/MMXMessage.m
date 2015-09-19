@@ -18,7 +18,6 @@
 #import "MMXMessage_Private.h"
 #import "MagnetDelegate.h"
 #import "MMXUser.h"
-#import "MMXChannel.h"
 #import "MMX_Private.h"
 #import "MMXMessageUtils.h"
 #import "MMXClient_Private.h"
@@ -28,6 +27,7 @@
 #import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXUserID_Private.h"
 #import "MMXMessageOptions.h"
+#import "MMXTopic_Private.h"
 
 @implementation MMXMessage
 
@@ -49,7 +49,13 @@
 
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage {
 	MMXMessage *msg = [MMXMessage new];
-	msg.channel = [MMXChannel channelWithName:pubSubMessage.topic.topicName summary:pubSubMessage.topic.topicDescription];
+	msg.channel = [MMXChannel channelWithName:pubSubMessage.topic.topicName summary:pubSubMessage.topic.topicDescription isPublic:pubSubMessage.topic.inUserNameSpace];
+	if (pubSubMessage.topic.inUserNameSpace) {
+		msg.channel.isPublic = NO;
+		msg.channel.ownerUsername = pubSubMessage.topic.nameSpace;
+	} else {
+		msg.channel.isPublic = YES;
+	}
 	MMXInternalAddress *address = pubSubMessage.senderUserID.address;
 	MMXUser *sender = [MMXUser new];
 	//Converting to MMXUserID will handle any exscaping needed

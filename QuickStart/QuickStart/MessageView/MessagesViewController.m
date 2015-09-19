@@ -71,8 +71,6 @@ NSString * const kTextContent = @"textContent";
 						[UIColor quickstartChatPerson5],
 						[UIColor quickstartChatPerson6]];
 
-	//Calling connectWithCredentials will try to create a new session using the NSURLCredential object we set on our MMXConfiguration.
-	//Since shouldAutoCreateUser is set as YES it creates a new user with the provided credentials if the user does not already exist.
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(handleReturnToForeground)
 												 name: UIApplicationWillEnterForegroundNotification
@@ -98,7 +96,7 @@ NSString * const kTextContent = @"textContent";
 
 - (void)setupClient {
 
-	//Creating a new NSURLCredential and setting it as the credential propery on our MMXConfiguration.
+	//Creating a new NSURLCredential
 	self.currentCredential = [NSURLCredential credentialWithUser:kDefaultUsername password:kDefaultUsername persistence:NSURLCredentialPersistenceNone];
 	MMXUser *user = [MMXUser new];
 	user.username = kDefaultUsername;
@@ -119,7 +117,7 @@ NSString * const kTextContent = @"textContent";
 		[MMXUser logInWithCredential:self.currentCredential success:^(MMXUser *user) {
 			self.currentRecipient = [self me];
 			// Indicate that you are ready to receive messages now!
-			[MMX enableIncomingMessages];
+			[MMX start];
 
 			[self showAlertWithTitle:@"Logged In" message:[NSString stringWithFormat:@"You are logged in as %@.\n\nTry sending a message below.",kDefaultUsername]];
             self.textInputbar.textView.text = @"Hello World";
@@ -136,14 +134,14 @@ NSString * const kTextContent = @"textContent";
 
 #pragma mark - Helpers
 
-//Created convenience method to get my MMXUserID
+//Created convenience method to get my MMXUser
 - (MMXUser *)me {
 	MMXUser *me = [MMXUser new];
 	me.username = kDefaultUsername;
 	return me;
 }
 
-//Added methods to get the MMUserIDs for the bots
+//Added methods to get the MMXUser for the bots
 - (MMXUser *)echoBot {
 	MMXUser * user = [MMXUser new];
 	user.username = kEchoBotUsername;

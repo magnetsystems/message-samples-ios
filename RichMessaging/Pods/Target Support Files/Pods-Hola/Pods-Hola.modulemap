@@ -1,0 +1,6 @@
+framework module Pods_Hola {
+  umbrella header "Pods-Hola-umbrella.h"
+
+  export *
+  module * { export * }
+}

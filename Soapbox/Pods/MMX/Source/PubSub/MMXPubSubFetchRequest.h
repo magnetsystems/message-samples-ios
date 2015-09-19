@@ -57,6 +57,13 @@
 @property (nonatomic, assign)   int maxItems;
 
 /**
+ *  The offset into the results list. Used for pagination.
+ *	Defaults to 0.
+ *	Optional.
+ */
+@property (nonatomic, assign)   int offset;
+
+/**
  *  Convenience initializer for a MMXPubSubFetchRequest
  *
  *  @param topic - The MMXTopic object for the topic from which you want to fetch previously posted items.
