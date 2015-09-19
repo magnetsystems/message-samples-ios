@@ -27,7 +27,7 @@ Game on!
 
 
 <hr>
-## [Soapbox](SoapBox)
+## [Soapbox](Soapbox)
 <img style="margin:10px" src="http://www.threetwelvecreative.com/Portals/207686/images/Stick-Figures-With-Megaphone-800.jpg"
  alt="soapbox logo" width="250" align="right"  title="soapbox"/>
 
