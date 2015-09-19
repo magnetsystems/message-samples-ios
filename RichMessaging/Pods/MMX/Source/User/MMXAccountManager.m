@@ -656,9 +656,7 @@
 		return;
 	}
 	NSError *error;
-	NSMutableDictionary *userQueryDict = [userQuery dictionaryRepresentation].mutableCopy;
-//	[userQueryDict setObject:@{@"match":@"PREFIX",@"value":@"%"} forKey:@"displayName"];
-	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:userQueryDict xmlns:MXnsUser commandStringValue:@"search" error:&error];
+	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:[userQuery dictionaryRepresentation] xmlns:MXnsUser commandStringValue:@"search" error:&error];
 	
 	XMPPIQ *queryIQ = [[XMPPIQ alloc] initWithType:@"get" child:mmxElement];
 	[queryIQ addAttributeWithName:@"id" stringValue:[[NSUUID UUID] UUIDString]];

@@ -52,7 +52,7 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (1.8.3):
+  - MMX (1.9.1):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (= 1.9.2)
     - Mantle (= 1.5.4)
@@ -102,7 +102,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   JSQMessagesViewController:
-    :commit: 8ba29137e82e209688906df635576a5b26aa0789
+    :commit: 25a58853b2f60c00f1f2e905b44d90e7ee7a13d0
     :git: https://github.com/jessesquires/JSQMessagesViewController.git
 
 SPEC CHECKSUMS:
@@ -117,7 +117,7 @@ SPEC CHECKSUMS:
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   Mantle: 60acd0cd363e27d945bda0a6b8e90577112d28f3
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: 1b11a2bce2a91cc29c200b80077b223c88bce443
+  MMX: 97a54627972377cc12711d5870363061f079b698
   MMXXMPPFramework: 20ad9c176eac51ff190c361204876c6583347878
 
 COCOAPODS: 0.38.2

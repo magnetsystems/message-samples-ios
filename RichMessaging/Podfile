@@ -3,7 +3,7 @@ platform :ios, '8.0'
 
 use_frameworks!
 
-target 'Hola' do
+target 'RichMessaging' do
 
 pod 'MMX'
 #pod 'JSQMessagesViewController', '~> 7.1'
@@ -14,7 +14,7 @@ pod 'AFAmazonS3Manager', '~> 3.2'
 
 end
 
-target 'HolaTests' do
+target 'RichMessagingTests' do
 
 end
 

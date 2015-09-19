@@ -640,10 +640,12 @@
 
 - (XMPPIQ *)subscribersForTopicIQ:(MMXTopic *)topic
 							limit:(int)limit
+						   offset:(int)offset
 							error:(NSError**)error {
 	NSDictionary * topicDictionary = @{@"userId":topic.inUserNameSpace ? topic.nameSpace : [NSNull null],
 									   @"topicName":topic.topicName,
-									   @"limit":@(limit)};
+									   @"limit":@(limit),
+									   @"offset":@(offset)};
 	
 	NSError * parsingError;
 	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:topicDictionary xmlns:MXnsPubSub commandStringValue:MXcommandGetSubscribers error:&parsingError];
@@ -660,6 +662,7 @@
 
 - (void)subscribersForTopic:(MMXTopic *)topic
 					  limit:(int)limit
+					 offset:(int)offset
 					success:(void (^)(int,NSArray *))success
 					failure:(void (^)(NSError *))failure {
 	[[MMXLogger sharedLogger] verbose:@"MMXPubSubManager subscribersForTopic. Topic = %@", topic.topicName];
@@ -672,7 +675,7 @@
 		return;
 	}
 	NSError * parsingError;
-	XMPPIQ *topicIQ = [self subscribersForTopicIQ:topic limit:limit error:&parsingError];
+	XMPPIQ *topicIQ = [self subscribersForTopicIQ:topic limit:limit offset:offset error:&parsingError];
 	if (!parsingError) {
 		[self.delegate sendIQ:topicIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
 			XMPPIQ * iq = (XMPPIQ *)obj;

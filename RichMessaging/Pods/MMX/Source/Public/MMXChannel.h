@@ -45,6 +45,11 @@
 @property (nonatomic, readonly) NSString *ownerUsername;
 
 /**
+ *  The date the channel was created.
+ */
+@property (nonatomic, readonly) NSDate * creationDate;
+
+/**
  *  The total number of messages that have been posted to the channel.
  */
 @property (nonatomic, readonly) int numberOfMessages;
@@ -61,37 +66,88 @@
 
 
 /**
- *  Create a new channel object
+ *  Method used to get existing channels.
  *
- *  @param name    The name you want the channel to have
- *  @param summary A summary or description of the channel
- *
- *  @return A new MMXChannel object
+ *  @param limit	The max number of items you want returned.
+ *  @param offset	The offset into the results list. Used for pagination.
+ *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
+ *  @param failure  Block with an NSError with details about the call failure.
  */
-+ (instancetype)channelWithName:(NSString *)name
-						summary:(NSString *)summary;
++ (void)allPublicChannelsWithLimit:(int)limit
+							offset:(int)offset
+						   success:(void (^)(int totalCount, NSArray *channels))success
+						   failure:(void (^)(NSError *))failure;
 
 /**
- *  Method used to discover existing channels by name
+ *  Method used to get private channels created by the current user.
  *
- *  @param name     The exact name of the channel you are searching for.
  *  @param limit	The max number of items you want returned.
- *  @param success  Block with the number of channels that match the query and a NSSet of MMXChannels that match the criteria.
+ *  @param offset	The offset into the results list. Used for pagination.
+ *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
  *  @param failure  Block with an NSError with details about the call failure.
+ */
++ (void)allPrivateChannelsWithLimit:(int)limit
+							 offset:(int)offset
+							success:(void (^)(int totalCount, NSArray *channels))success
+							failure:(void (^)(NSError *))failure;
+
+/**
+ *  Get a channel object by name
+ *
+ *  @param channelName	The exact name of the channel you are searching for.
+ *  @param isPublic		Set to YES if it is a public channel. Will only return private channels created by the logged in user.
+ *  @param success		Block with the channel with the name specified if it exists.
+ *  @param failure		Block with an NSError with details about the call failure.
+ */
++ (void)channelForName:(NSString *)channelName
+			  isPublic:(BOOL)isPublic
+			   success:(void (^)(MMXChannel *channel))success
+			   failure:(void (^)(NSError *error))failure;
+
+/**
+ * @deprecated This method is deprecated starting in version 1.9
+ * @note Please use @code channelsStartingWith:limit:offset:success:failure: @code instead.
  */
 + (void)channelsStartingWith:(NSString *)name
 					   limit:(int)limit
 					 success:(void (^)(int totalCount, NSArray *channels))success
+					 failure:(void (^)(NSError *error))failure __attribute__((deprecated));
+
+/**
+ *  Method used to discover existing channels by name
+ *
+ *  @param name     The begining of the channel name you are searching for.
+ *  @param limit	The max number of items you want returned.
+ *  @param offset	The offset into the results list. Used for pagination.
+ *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
+ *  @param failure  Block with an NSError with details about the call failure.
+ */
++ (void)channelsStartingWith:(NSString *)name
+					   limit:(int)limit
+					  offset:(int)offset
+					 success:(void (^)(int totalCount, NSArray *channels))success
 					 failure:(void (^)(NSError *error))failure;
+
+/**
+ * @deprecated This method is deprecated starting in version 1.9
+ * @note Please use @code findByTags:success:failure: @code instead.
+ */
++ (void)findByTags:(NSSet *)tags
+		   success:(void (^)(int totalCount, NSArray *channels))success
+		   failure:(void (^)(NSError *error))failure __attribute__((deprecated));
 
 /**
  *  Method used to discover existing channels that have any of the tags provided
  *
  *  @param tags		A set of unique tags
+ *  @param limit	The max number of items you want returned.
+ *  @param offset	The offset into the results list. Used for pagination.
  *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
  *  @param failure  Block with a NSError with details about the call failure.
  */
 + (void)findByTags:(NSSet *)tags
+			 limit:(int)limit
+			offset:(int)offset
 		   success:(void (^)(int totalCount, NSArray *channels))success
 		   failure:(void (^)(NSError *error))failure;
 
@@ -117,17 +173,36 @@
 		failure:(void (^)(NSError *error))failure;
 
 /**
- *  Method to create a new channel.
- *
- *  @param success - Block called if operation is successful.
- *  @param failure - Block with an NSError with details about the call failure.
+ * @deprecated This method is deprecated starting in version 1.9
+ * @note Please use @code findByDisplayName:limit:offset:success:failure: @code instead.
  */
-- (void)createWithSuccess:(void (^)(void))success
-				  failure:(void (^)(NSError * error))failure;
++ (instancetype)channelWithName:(NSString *)name
+						summary:(NSString *)summary  __attribute__((deprecated));
 
 /**
+ * @deprecated This method is deprecated starting in version 1.9
+ * @note Please use @code findByDisplayName:limit:offset:success:failure: @code instead.
+ */
+- (void)createWithSuccess:(void (^)(void))success
+				  failure:(void (^)(NSError * error))failure  __attribute__((deprecated));
+
+/**
+ *  Method to create a new channel.
+ *
+ *  @param name		The name you want for the new channel(must be unique. Cannot have spaces.
+ *  @param summary	The summary you want for the channel. (Used to give other users a better idea about the purpose of the channel).
+ *  @param isPublic	Set to YES if you want the channel to be discoverable by other users.
+ *  @param success	Block called if operation is successful.
+ *  @param failure	Block with an NSError with details about the call failure.
+ */
++ (void)createWithName:(NSString *)name
+			   summary:(NSString *)summary
+			  isPublic:(BOOL)isPublic
+			   success:(void (^)(MMXChannel *channel))success
+			   failure:(void (^)(NSError *))failure;
+/**
  *  Method to delete an existing new channel.
- * Current user must be the owner of the channel to delete it.
+ *	Current user must be the owner of the channel to delete it.
  *
  *  @param success - Block called if operation is successful.
  *  @param failure - Block with an NSError with details about the call failure.
@@ -164,14 +239,25 @@
 							  failure:(void (^)(NSError *error))failure;
 
 /**
+ * @deprecated This method is deprecated starting in version 1.9
+ * @note Please use @code subscribersWithSuccess:failure: @code instead.
+ */
+- (void)subscribersWithSuccess:(void (^)(int totalCount, NSArray *subscribers))success
+					   failure:(void (^)(NSError *error))failure __attribute__((deprecated));
+
+/**
  *  Get the subscribers for a channel
  *	Must be subscribed to the channel to use this API
  *
- *  @param success Block with the total count of subscribers and a NSSet of the subscribers(MMXUser objects)
- *  @param failure Block with an NSError with details about the call failure.
+ *  @param limit	The max number of items you want returned.
+ *  @param offset	The offset into the results list. Used for pagination.
+ *  @param success	Block with the total count of subscribers and a NSSet of the subscribers(MMXUser objects)
+ *  @param failure	Block with an NSError with details about the call failure.
  */
-- (void)subscribersWithSuccess:(void (^)(int totalCount, NSArray *subscribers))success
-					   failure:(void (^)(NSError *error))failure;
+- (void)subscribersWithLimit:(int)limit
+					  offset:(int)offset
+					 success:(void (^)(int totalCount, NSArray *subscribers))success
+					 failure:(void (^)(NSError *error))failure;
 
 /**
  *  Method to publish to a channel.
@@ -185,21 +271,34 @@
 		failure:(void (^)(NSError *error))failure;
 
 /**
- *  Fetch previous items posted to this channel.
- *
- *  @param startDate     The earliest date you would like messages from.
- *  @param endDate       The latest date you would like messages until. Defaults to now.
- *  @param limit		 The max number of items you want returned.
- *  @param ascending	 The sort order(by date) for the messages returned.
- *  @param success		 The total available messages and a NSArray of MMXMessages
- *  @param failure		 Block with an NSError with details about the call failure.
+ * @deprecated This method is deprecated starting in version 1.9
+ * @note Please use @code messagesBetweenStartDate:endDate:limit:offset:ascending:success:failure: @code instead.
  */
 - (void)fetchMessagesBetweenStartDate:(NSDate *)startDate
 							  endDate:(NSDate *)endDate
 								limit:(int)limit
 							ascending:(BOOL)ascending
 							  success:(void (^)(int totalCount, NSArray *messages))success
-							  failure:(void (^)(NSError *error))failure;
+							  failure:(void (^)(NSError *error))failure __attribute__((deprecated));
+
+/**
+ *  Get messages previous posted to this channel.
+ *
+ *  @param startDate    The earliest date you would like messages from.
+ *  @param endDate      The latest date you would like messages until. Defaults to now.
+ *  @param limit		The max number of items you want returned.
+ *  @param offset		The offset into the results list. Used for pagination.
+ *  @param ascending	The sort order(by date) for the messages returned.
+ *  @param success		The total available messages and a NSArray of MMXMessages
+ *  @param failure		Block with an NSError with details about the call failure.
+ */
+- (void)messagesBetweenStartDate:(NSDate *)startDate
+						 endDate:(NSDate *)endDate
+						   limit:(int)limit
+						  offset:(int)offset
+					   ascending:(BOOL)ascending
+						 success:(void (^)(int totalCount, NSArray *messages))success
+						 failure:(void (^)(NSError *error))failure;
 
 /**
  *  Invite a user to the channel

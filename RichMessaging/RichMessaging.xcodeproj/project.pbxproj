@@ -22,7 +22,7 @@
 		216394401BA755760011479D /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163943F1BA755760011479D /* DownloadManager.swift */; settings = {ASSET_TAGS = (); }; };
 		216394C21BA786530011479D /* small.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 216394C11BA786530011479D /* small.mp4 */; settings = {ASSET_TAGS = (); }; };
 		216394C61BA78F080011479D /* goldengate.png in Resources */ = {isa = PBXBuildFile; fileRef = 216394C51BA78F080011479D /* goldengate.png */; settings = {ASSET_TAGS = (); }; };
-		4675465921226237025A1A7C /* Pods_Hola.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5872CF73FFBB4ACC65DD63BC /* Pods_Hola.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		CB92D89339630C8165B6F697 /* Pods_RichMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F05B22F1217579B497EB310 /* Pods_RichMessaging.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,8 +58,11 @@
 		2163943F1BA755760011479D /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		216394C11BA786530011479D /* small.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = small.mp4; sourceTree = "<group>"; };
 		216394C51BA78F080011479D /* goldengate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = goldengate.png; sourceTree = "<group>"; };
+		22585820BACC3B2F45D1A328 /* Pods-RichMessaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichMessaging.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RichMessaging/Pods-RichMessaging.debug.xcconfig"; sourceTree = "<group>"; };
 		3743644F6CE315CCF1424614 /* Pods-Hola.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hola.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Hola/Pods-Hola.debug.xcconfig"; sourceTree = "<group>"; };
 		5872CF73FFBB4ACC65DD63BC /* Pods_Hola.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hola.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B1633AB82B2A6A038830A63 /* Pods-RichMessaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RichMessaging.release.xcconfig"; path = "Pods/Target Support Files/Pods-RichMessaging/Pods-RichMessaging.release.xcconfig"; sourceTree = "<group>"; };
+		8F05B22F1217579B497EB310 /* Pods_RichMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RichMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4675465921226237025A1A7C /* Pods_Hola.framework in Frameworks */,
+				CB92D89339630C8165B6F697 /* Pods_RichMessaging.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				5872CF73FFBB4ACC65DD63BC /* Pods_Hola.framework */,
+				8F05B22F1217579B497EB310 /* Pods_RichMessaging.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -165,6 +169,8 @@
 			children = (
 				3743644F6CE315CCF1424614 /* Pods-Hola.debug.xcconfig */,
 				1896012D781E745E7581637D /* Pods-Hola.release.xcconfig */,
+				22585820BACC3B2F45D1A328 /* Pods-RichMessaging.debug.xcconfig */,
+				5B1633AB82B2A6A038830A63 /* Pods-RichMessaging.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -285,7 +291,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Hola/Pods-Hola-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RichMessaging/Pods-RichMessaging-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		1543BD0A86DEAA1F199A594D /* Check Pods Manifest.lock */ = {
@@ -315,7 +321,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Hola/Pods-Hola-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RichMessaging/Pods-RichMessaging-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -458,7 +464,7 @@
 		};
 		215219CC1B9F696500F5B3A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3743644F6CE315CCF1424614 /* Pods-Hola.debug.xcconfig */;
+			baseConfigurationReference = 22585820BACC3B2F45D1A328 /* Pods-RichMessaging.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -473,7 +479,7 @@
 		};
 		215219CD1B9F696500F5B3A3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1896012D781E745E7581637D /* Pods-Hola.release.xcconfig */;
+			baseConfigurationReference = 5B1633AB82B2A6A038830A63 /* Pods-RichMessaging.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
