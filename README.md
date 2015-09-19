@@ -59,7 +59,16 @@ Quickstart auto-creates a user and allows you to send a message to yourself by d
 
 Feature highlights: -- quick account provisioning -- addressing and sending a message -- receiving a message and accessing its content.
 
+## Rich messaging
+RichMessaging iOS chat app to demonstrate how rich content such as images, videos, and geographical location can be delivered and received using Magnet Message. Images and videos are uploaded to Amazon S3, and the URL to the file is delivered to the recipient. This app also demonstrates Facebook integration with Magnet Message.
 
+### Feature highlights
+* Login with Facebook 
+* Obtain a list of users to chat with
+* One to one chat with a user
+* Send and receive text, pictures, videos, or a map pointing out your current location
+* Upload images and video (via Amazon S3) to be viewed by your recipient
+* Obtain your current geographical location, and send the coordinates to your receipient to be viewed as a map
 
 ## Feedback
 
