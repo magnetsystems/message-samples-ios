@@ -73,6 +73,10 @@ RichMessaging iOS chat app to demonstrate how rich content such as images, video
 * Upload images and video (via Amazon S3) to be viewed by your recipient
 * Obtain your current geographical location, and send the coordinates to your receipient to be viewed as a map
 
+<hr>
+## [Smart Shopper](SmartShopper)
+Smart Shopper allows a user to search for contextually relevant products, share them with friends or add them to your Wish List. It uses the [Weather Underground APIs](http://theweatherapi.com/) to retrieve the current weather and searches for a relevant product using the [Walmart Labs APIs](http://github.com/walmartlabs/getting-started). It uses [Magnet Message](https://www.magnet.com/developer/magnet-message/) APIs to implement **Share a Product** and **Wish List** features.
+
 ## Feedback
 
 We are constantly adding features and welcome feedback. 
