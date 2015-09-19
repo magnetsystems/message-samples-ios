@@ -127,6 +127,8 @@ class ProductsViewController: UIViewController {
         let message = userInfo[MMXMessageKey] as! MMXMessage
         let product = Product(dictionary: message.messageContent as! [String: String])
         
+        print("\(message.sender.username) has shared the product: \(product.name)")
+        
         // Schedule local notification
         let notification = UILocalNotification()
         notification.fireDate = NSDate(timeIntervalSinceNow: 5)
