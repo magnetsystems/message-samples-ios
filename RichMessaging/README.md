@@ -30,3 +30,5 @@ All users of this app will be able to see and communicate with each other. If yo
 2. From the User Select screen, select a user to chat with. You can select your own username to send messages to yourself.
 3. Click "Message Screen" button on the right top corner
 4. From the Rich Messaging screen, try sending all the different types of rich content.
+
+## Android Version of the app is here : https://github.com/magnetsystems/message-samples-android/tree/develop/RichMessaging
