@@ -10,10 +10,7 @@
 #import <AFAmazonS3Manager/AFAmazonS3Manager.h>
 #import <AFAmazonS3Manager/AFAmazonS3ResponseSerializer.h>
 #import <MMX/MMXMessage_Private.h>
-
-NSString  * const kS3_AccessKeyID = @"AKIAIWMA562AYOZWE63Q";
-NSString  * const kS3_Secret = @"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";
-NSString  * const kS3_Bucket = @"richmessagebucket";
+#import "Constants.h"
 
 @implementation MMXMessage (S3FileAttachment)
 
