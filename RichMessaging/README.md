@@ -27,5 +27,6 @@ All users of this app will be able to see and communicate with each other. If yo
 ## How To Use
 
 1. From the Login screen, log in with Facebook (make sure you have added the Facebook user as tester in "Roles" tab of Facebook developer console).
-2. From the User Select screen, select a user to chat with. You can select your own username to send messages to yourself. 
-3. From the Rich Messaging screen, try sending all the different types of rich content.
+2. From the User Select screen, select a user to chat with. You can select your own username to send messages to yourself.
+3. Click "Message Screen" button on the right top corner
+4. From the Rich Messaging screen, try sending all the different types of rich content.
