@@ -17,7 +17,8 @@ We created a simple iOS chat app to demonstrate how rich content such as images,
 
 ## Installation
 
-Since this app uses Facebook for iOS, you will need to follow the instructions on the [Facebook Developer Getting Started](https://developers.facebook.com/docs/ios/getting-started/) page to configure the Rich Messaging app to use your own Facebook developer account. In summary, you will need to create a Facebook app, import your own `facebook_app_id` into the Rich Messaging app, and set up the Development Key Hash for your development machine at Facebook.
+Since this app uses Facebook for iOS, you will need to follow the instructions on the [Facebook Developer Getting Started](https://developers.facebook.com/docs/ios/getting-started/) page to configure the Rich Messaging app to use your own Facebook developer account. In summary, you will need to create a Facebook app, import your own `facebook_app_id` into the Info.plist, and set up the Development Key Hash for your development machine at Facebook.
+![Info.plist configuration](config_info_plist.png)
 
 All users of this app will be able to see and communicate with each other. If you would like to try this sample out privately, it is recommended that you create your own Magnet Message app by following the instructions at [Creating Your First App](https://docs.magnet.com/message/ios/creating-your-first-app-ios/). Once you obtain a `.plist` file, you can import it into the Rich Messaging app.
 
