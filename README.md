@@ -5,7 +5,7 @@
 
 [Magnet Message](https://www.magnet.com/developer/magnet-message/) is a powerful, open source mobile messaging framework enabling real-time user engagement for your mobile apps. Send relevant and targeted communications to customers or employees. These sample iOS apps serve as introductory sample code - get familiar with our API, extend our samples and get coding today.
 
-## Rock Paper Scissors Lizard Spock
+## [Rock Paper Scissors Lizard Spock](RPSLS)
 <img style="margin:10px" src="https://www.magnet.com/wp-content/uploads/2015/04/spock.png"
  alt="RPSLS logo" width="200"  align="right" title="RPSLS"/>
 
@@ -27,7 +27,7 @@ Game on!
 
 
 <hr>
-## Soapbox
+## [Soapbox](SoapBox)
 <img style="margin:10px" src="http://www.threetwelvecreative.com/Portals/207686/images/Stick-Figures-With-Megaphone-800.jpg"
  alt="soapbox logo" width="250" align="right"  title="soapbox"/>
 
@@ -45,7 +45,7 @@ Feature highlights: -- quick account provisioning -- retrieve all topics using t
 
 
 <hr>
-## Quickstart
+## [Quickstart](QuickStart)
 
 Quickstart was created to have a simple app that could demonstrate the most basic messaging features including logging in and sending and receiving a message.
 
@@ -60,7 +60,7 @@ Quickstart auto-creates a user and allows you to send a message to yourself by d
 Feature highlights: -- quick account provisioning -- addressing and sending a message -- receiving a message and accessing its content.
 
 <hr>
-## Rich messaging
+## [Rich messaging](RichMessaging)
 <img style="margin:10px" src="https://raw.githubusercontent.com/magnetsystems/message-samples-android/develop/RichMessaging/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
  alt="RichMessaging logo" width="160" align="right"  title="RichMessaging"/>
 RichMessaging iOS chat app to demonstrate how rich content such as images, videos, and geographical location can be delivered and received using Magnet Message. Images and videos are uploaded to Amazon S3, and the URL to the file is delivered to the recipient. This app also demonstrates Facebook integration with Magnet Message.
