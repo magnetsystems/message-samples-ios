@@ -21,7 +21,7 @@ build-*/
 #*.bundle
 .idea/
 Documentation/
-*Configurations.plist
+#*Configurations.plist
 
 # CocoaPods
 #
