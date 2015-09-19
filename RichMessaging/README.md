@@ -17,7 +17,7 @@ We created a simple iOS chat app to demonstrate how rich content such as images,
 
 ![Video Walkthrough](demo.gif)
 
-## Installation
+## Installation and customization
 
 Since this app uses Facebook for iOS, you will need to follow the instructions on the [Facebook Developer Getting Started](https://developers.facebook.com/docs/ios/getting-started/) page to configure the Rich Messaging app to use your own Facebook developer account. In summary, you will need to create a Facebook app, import your own `facebook_app_id` into the Info.plist, and set up the Development Key Hash for your development machine at Facebook.
 ![Info.plist configuration](config_info_plist.png)
