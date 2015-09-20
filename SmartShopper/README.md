@@ -7,6 +7,8 @@ Smart Shopper allows a user to search for contextually relevant products, share 
 * [Weather Underground](http://theweatherapi.com/)
 * [Walmart Labs](http://github.com/walmartlabs/getting-started)
 
+**Note:** This project requires Xcode 7.
+
 ## Magnet Message Sample code
 
 * Register/Login
