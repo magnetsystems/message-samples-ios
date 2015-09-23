@@ -35,58 +35,51 @@ class UITestQuickStart: XCTestCase {
         super.tearDown()
     }
     
-    func launchClearScreen() {
+    // clears the default hello world from send message text field
+    private func launchClearScreen() {
         print("running clear screen function");
         app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element.pressForDuration(1.0)
         app.menuItems["Select All"].tap()
         app.menuItems["Cut"].tap()
     }
     
-    func test1SendMessageQuickstart() {
-        print("running first test")
-        launchClearScreen()
+    // send message and assert message sent
+    private func sendMessage(message: String) {
         XCTAssert(app.buttons["Send"].exists)
-        app.navigationBars["MessagesView"].buttons["Share"].tap()
-        XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].exists)
-        app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].tap()
-        app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element.typeText("test1")
+        app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element.typeText(message)
         app.toolbars.buttons["Send"].tap()
-        XCTAssertEqual(app.staticTexts["test1"].exists, true)
+        XCTAssertEqual(app.staticTexts[message].exists, true)
         sleep(3)
     }
     
+    func test1SendMessageQuickstart() {
+        launchClearScreen()
+        app.navigationBars["MessagesView"].buttons["Share"].tap()
+        XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].exists)
+        app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].tap()
+        sendMessage("test1")
+    }
+    
     func test2SendMessageEchoBot() {
-        
         launchClearScreen()
         app.navigationBars["MessagesView"].buttons["Share"].tap()
         XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["echo_bot"].exists)
         app.alerts["Send Messages To:"].collectionViews.buttons["echo_bot"].tap()
-        app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element.typeText("test2")
-        app.toolbars.buttons["Send"].tap()
-        XCTAssertEqual(app.staticTexts["test2"].exists, true)
-        sleep(3)
+        sendMessage("test2")
     }
     
     func test3SendMessageAmazingBot() {
-        
         launchClearScreen()
         app.navigationBars["MessagesView"].buttons["Share"].tap()
         XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["amazing_bot"].exists)
         app.alerts["Send Messages To:"].collectionViews.buttons["amazing_bot"].tap()
-        app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element.typeText("test3")
-        app.toolbars.buttons["Send"].tap()
-        XCTAssertEqual(app.staticTexts["test3"].exists, true)
-        sleep(3)
+        sendMessage("test3")
     }
     
     func test4SendMessageReservedCharacters() {
-        
         launchClearScreen()
         XCTAssert(app.buttons["Send"].exists)
-        app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element.typeText("!@#$%^&*_.")
-        app.toolbars.buttons["Send"].tap()
-        XCTAssertEqual(app.staticTexts["!@#$%^&*_."].exists, true)
-        sleep(3)
+        sendMessage("!@#$%^&*_.")
     }
     
 }
