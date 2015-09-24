@@ -19,7 +19,7 @@
 		0EBBD5F11B1D1E1E0082709B /* UIColor+QuickStart.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBBD5EC1B1D1E1E0082709B /* UIColor+QuickStart.m */; };
 		0EBBD5F31B1D1E340082709B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0EBBD5F21B1D1E340082709B /* LaunchScreen.storyboard */; };
 		AA489D801BB0B9EF00BE7F5F /* QuickStartUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA489D7F1BB0B9EF00BE7F5F /* QuickStartUITests.swift */; };
-		AA489D881BB0BB3C00BE7F5F /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA489D871BB0BB3C00BE7F5F /* Configurations.plist */; settings = {ASSET_TAGS = (); }; };
+		AAE447A01BB45BBF00F9135C /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = AAE4479F1BB45BBF00F9135C /* Configurations.plist */; settings = {ASSET_TAGS = (); }; };
 		EA4FCC46B6C08172A92BE0AF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84DA70DF1FA8D8DE9E21836B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -68,7 +68,7 @@
 		AA489D7D1BB0B9EF00BE7F5F /* QuickStartUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickStartUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA489D7F1BB0B9EF00BE7F5F /* QuickStartUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickStartUITests.swift; sourceTree = "<group>"; };
 		AA489D811BB0B9EF00BE7F5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AA489D871BB0BB3C00BE7F5F /* Configurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Configurations.plist; path = ../../../../Downloads/Configurations.plist; sourceTree = "<group>"; };
+		AAE4479F1BB45BBF00F9135C /* Configurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Configurations.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +137,7 @@
 		0E5078C91B1CF88E002A2F28 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				AA489D871BB0BB3C00BE7F5F /* Configurations.plist */,
+				AAE4479F1BB45BBF00F9135C /* Configurations.plist */,
 				0E5078CA1B1CF88E002A2F28 /* Info.plist */,
 				0E5078CB1B1CF88E002A2F28 /* main.m */,
 			);
@@ -322,7 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0EBBD5F31B1D1E340082709B /* LaunchScreen.storyboard in Resources */,
-				AA489D881BB0BB3C00BE7F5F /* Configurations.plist in Resources */,
+				AAE447A01BB45BBF00F9135C /* Configurations.plist in Resources */,
 				0E5078D51B1CF88E002A2F28 /* Main.storyboard in Resources */,
 				0E5078D71B1CF88E002A2F28 /* Images.xcassets in Resources */,
 			);
@@ -635,6 +635,7 @@
 				AA489D851BB0B9EF00BE7F5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
