@@ -34,10 +34,10 @@
 
 	//You need to change the bundle Identifier to match the one your push certificate is set up to work with.
 	//Code to register for notifications
-	UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge |
-																						 UIUserNotificationTypeSound |
-																						 UIUserNotificationTypeAlert) categories:nil];
-	[application registerUserNotificationSettings:settings];
+//	UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge |
+//																						 UIUserNotificationTypeSound |
+//																						 UIUserNotificationTypeAlert) categories:nil];
+//	[application registerUserNotificationSettings:settings];
 	return YES;
 }
 
