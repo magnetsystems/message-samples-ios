@@ -10,6 +10,7 @@ import XCTest
 import Foundation
 
 class UITestQuickStart: XCTestCase {
+    let expectedNumberOfMessages: UInt = 2
     let app = XCUIApplication()
     
     override func setUp() {
@@ -49,8 +50,10 @@ class UITestQuickStart: XCTestCase {
         app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element.typeText(message)
         app.toolbars.buttons["Send"].tap()
         XCTAssertEqual(app.staticTexts[message].exists, true)
+        XCTAssertEqual(app.tables.cells.staticTexts[message].exists, true)
         sleep(3)
     }
+    
     
     func test1SendMessageQuickstart() {
         launchClearScreen()
@@ -58,6 +61,7 @@ class UITestQuickStart: XCTestCase {
         XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].exists)
         app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].tap()
         sendMessage("test1")
+        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
     }
     
     func test2SendMessageEchoBot() {
@@ -66,6 +70,7 @@ class UITestQuickStart: XCTestCase {
         XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["echo_bot"].exists)
         app.alerts["Send Messages To:"].collectionViews.buttons["echo_bot"].tap()
         sendMessage("test2")
+        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
     }
     
     func test3SendMessageAmazingBot() {
@@ -74,12 +79,13 @@ class UITestQuickStart: XCTestCase {
         XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["amazing_bot"].exists)
         app.alerts["Send Messages To:"].collectionViews.buttons["amazing_bot"].tap()
         sendMessage("test3")
+        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
     }
     
     func test4SendMessageReservedCharacters() {
         launchClearScreen()
         XCTAssert(app.buttons["Send"].exists)
         sendMessage("!@#$%^&*_.")
+        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
     }
-    
 }
