@@ -28,10 +28,18 @@
 		0EBEC9081B436020000DD49A /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EBEC9071B436020000DD49A /* Configurations.plist */; };
 		170A1378E9AEB55FCE9C85C0 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74904CBC54923F60562BB705 /* libPods.a */; };
 		660217D3FC6316094652C506 /* Announcement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602170402AA3E62FBC304C6 /* Announcement.m */; };
+		AAEC5B411BB623B800F95493 /* SoapboxSignInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEC5B401BB623B800F95493 /* SoapboxSignInTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		0E3615091AFBFD2C0097E421 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0E3614E71AFBFD2C0097E421 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0E3614EE1AFBFD2C0097E421;
+			remoteInfo = Soapbox;
+		};
+		AAEC5B431BB623B800F95493 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0E3614E71AFBFD2C0097E421 /* Project object */;
 			proxyType = 1;
@@ -81,6 +89,9 @@
 		660216BA41C0FBACFA728FB9 /* Announcement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Announcement.h; sourceTree = "<group>"; };
 		6602170402AA3E62FBC304C6 /* Announcement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Announcement.m; sourceTree = "<group>"; };
 		74904CBC54923F60562BB705 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAEC5B3E1BB623B800F95493 /* SoapboxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoapboxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAEC5B401BB623B800F95493 /* SoapboxSignInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoapboxSignInTests.swift; sourceTree = "<group>"; };
+		AAEC5B421BB623B800F95493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +104,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		0E3615051AFBFD2C0097E421 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAEC5B3B1BB623B800F95493 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -151,6 +169,7 @@
 			children = (
 				0E3614F11AFBFD2C0097E421 /* Soapbox */,
 				0E36150B1AFBFD2C0097E421 /* SoapboxTests */,
+				AAEC5B3F1BB623B800F95493 /* SoapboxUITests */,
 				0E3614F01AFBFD2C0097E421 /* Products */,
 				FEED71E22718889AB787884E /* Pods */,
 				8415ECB4B9C62BEF24E9DB7D /* Frameworks */,
@@ -162,6 +181,7 @@
 			children = (
 				0E3614EF1AFBFD2C0097E421 /* Soapbox.app */,
 				0E3615081AFBFD2C0097E421 /* SoapboxTests.xctest */,
+				AAEC5B3E1BB623B800F95493 /* SoapboxUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -227,6 +247,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AAEC5B3F1BB623B800F95493 /* SoapboxUITests */ = {
+			isa = PBXGroup;
+			children = (
+				AAEC5B401BB623B800F95493 /* SoapboxSignInTests.swift */,
+				AAEC5B421BB623B800F95493 /* Info.plist */,
+			);
+			path = SoapboxUITests;
+			sourceTree = "<group>";
+		};
 		FEED71E22718889AB787884E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +305,24 @@
 			productReference = 0E3615081AFBFD2C0097E421 /* SoapboxTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		AAEC5B3D1BB623B800F95493 /* SoapboxUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAEC5B471BB623B800F95493 /* Build configuration list for PBXNativeTarget "SoapboxUITests" */;
+			buildPhases = (
+				AAEC5B3A1BB623B800F95493 /* Sources */,
+				AAEC5B3B1BB623B800F95493 /* Frameworks */,
+				AAEC5B3C1BB623B800F95493 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AAEC5B441BB623B800F95493 /* PBXTargetDependency */,
+			);
+			name = SoapboxUITests;
+			productName = SoapboxUITests;
+			productReference = AAEC5B3E1BB623B800F95493 /* SoapboxUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -290,6 +337,10 @@
 					};
 					0E3615071AFBFD2C0097E421 = {
 						CreatedOnToolsVersion = 6.3;
+						TestTargetID = 0E3614EE1AFBFD2C0097E421;
+					};
+					AAEC5B3D1BB623B800F95493 = {
+						CreatedOnToolsVersion = 7.0;
 						TestTargetID = 0E3614EE1AFBFD2C0097E421;
 					};
 				};
@@ -309,6 +360,7 @@
 			targets = (
 				0E3614EE1AFBFD2C0097E421 /* Soapbox */,
 				0E3615071AFBFD2C0097E421 /* SoapboxTests */,
+				AAEC5B3D1BB623B800F95493 /* SoapboxUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -327,6 +379,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		0E3615061AFBFD2C0097E421 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAEC5B3C1BB623B800F95493 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -398,6 +457,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAEC5B3A1BB623B800F95493 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAEC5B411BB623B800F95493 /* SoapboxSignInTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -405,6 +472,11 @@
 			isa = PBXTargetDependency;
 			target = 0E3614EE1AFBFD2C0097E421 /* Soapbox */;
 			targetProxy = 0E3615091AFBFD2C0097E421 /* PBXContainerItemProxy */;
+		};
+		AAEC5B441BB623B800F95493 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0E3614EE1AFBFD2C0097E421 /* Soapbox */;
+			targetProxy = AAEC5B431BB623B800F95493 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -557,6 +629,34 @@
 			};
 			name = Release;
 		};
+		AAEC5B451BB623B800F95493 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = SoapboxUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.gulko.SoapboxUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_TARGET_NAME = Soapbox;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		AAEC5B461BB623B800F95493 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SoapboxUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.gulko.SoapboxUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Soapbox;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -586,6 +686,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		AAEC5B471BB623B800F95493 /* Build configuration list for PBXNativeTarget "SoapboxUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAEC5B451BB623B800F95493 /* Debug */,
+				AAEC5B461BB623B800F95493 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

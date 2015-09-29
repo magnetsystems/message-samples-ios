@@ -128,7 +128,7 @@
 	
 	[self setInputsEnabled:NO];
 	if (self.usernameTextField.text.length < 5) {
-		[self showAlertWithTitle:@"Error" message:@"Username must be at least 5 charaters in length."];
+		[self showAlertWithTitle:@"Error" message:@"Username must be at least 5 characters in length."];
 		[self setInputsEnabled:YES];
 		
 		return NO;
