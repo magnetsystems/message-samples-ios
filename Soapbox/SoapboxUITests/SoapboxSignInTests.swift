@@ -13,16 +13,13 @@ class SoapboxUITests: XCTestCase {
         
     override func setUp() {
         super.setUp()
-        
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        
+       
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
+        
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
         XCUIApplication().launch()
         sleep(5)
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
     
     override func tearDown() {
@@ -42,71 +39,84 @@ class SoapboxUITests: XCTestCase {
     }
     
     // alert function
-    private func confirmAlert(message: String, error: String) {
-        
-        if app.alerts.collectionViews.buttons[message].exists {
-            XCTAssertEqual(app.staticTexts[error].exists, true)
-            app.alerts.collectionViews.buttons["OK"].tap()
-            //XCTAssert(app.alerts["Error"]).exists, true
+    private func confirmAlert(title: String, message: String) {
+        if app.alerts.collectionViews.buttons["OK"].exists {
+            XCTAssertEqual(app.staticTexts[title].exists, true)
+            XCTAssertEqual(app.staticTexts[message].exists, true)
         }
     }
+    
+    // clears the username and password text field
+    private func clearScreen(user:String, password:String) {
+        if(app.textFields[user]).exists {
+            app.textFields["Username"].pressForDuration(1.5)
+            app.keys["Delete"].tap()
+        }
         
+        if app.secureTextFields[password].exists {
+            app.secureTextFields["Password"].pressForDuration(1.5)
+            app.keys["Delete"].tap()
+        }
+    }
 
-        
-//        let errorAlert = app.alerts["Error"]
-//        errorAlert.staticTexts["Error"].tap()
-//        errorAlert.staticTexts["Not Authorized. Please check your credentials and try again."].tap()
-//        errorAlert.collectionViews.buttons["OK"].tap()
-//    }
     
-    
-    
+    // tests
     func test1signInNonExistingUser() {
         signIn("nonexistinguser", password: "password")
         app.buttons["Sign In"].tap()
-        sleep(5)
-        //need alert function for failure case
+        confirmAlert("Error", message: "Not Authorized. Please check your credentials and try again.")
+        app.alerts.collectionViews.buttons["OK"].tap()
     }
     
     func test2registerExistingUser() {
         signIn("serveruser", password: "password")
         app.buttons["Register"].tap()
-        // need alert function for failure case
+        confirmAlert("Error Registering User", message: "You have tried to create a duplicate entry.")
+        app.alerts.collectionViews.buttons["OK"].tap()
     }
     
     func test3registerEmptyUserName() {
         signIn("", password: "password")
         app.buttons["Register"].tap()
-        // need alert function for failure case
+        confirmAlert("Error", message: "Username must be at least 5 characters in length.")
+        app.alerts.collectionViews.buttons["OK"].tap()
     }
     
     func test4registerEmptyPassword() {
         signIn("newuser", password: "")
         app.buttons["Register"].tap()
-        // need alert function for failure case
+        confirmAlert("Error", message: "You must provide a password")
+        app.alerts.collectionViews.buttons["OK"].tap()
     }
-    
+
     func test5signInEmptyUsername() {
         signIn("", password: "password")
         app.buttons["Sign In"].tap()
-        // need alert function for failure case
+        confirmAlert("Error", message: "Username must be at least 5 characters in length.")
+        app.alerts.collectionViews.buttons["OK"].tap()
     }
     
     func test6signInEmptyPassword() {
         signIn("newuser", password: "")
         app.buttons["Sign In"].tap()
-        // need alert function for failure case
+        confirmAlert("Error", message: "You must provide a password")
+        app.alerts.collectionViews.buttons["OK"].tap()
     }
+//    
+//    func test7registerUser() {
+//        signIn("newuser", password: "password")
+//        app.buttons["Register"].tap()
+//        // need assert registration was successful
+//    }
+//}
+//    
+//    func test8signInUser() {
+//        launchApp()
+//        signIn("newuser", password: "password")
+//        app.buttons["Sign In"].tap()
+//        XCTAssertEqual(app.buttons["Sign In"].exists, false)
+//        app.buttons["Sign Out"].tap()
+//        sleep(3)
+//    }
     
-    func test7registerUser() {
-        signIn("newuser", password: "password")
-        app.buttons["Register"].tap()
-        // need assert registration was successful
-    }
-    
-    func test8signInUser() {
-        signIn("newuser", password: "password")
-        app.buttons["Sign In"].tap()
-        // need assert sign in was successful
-    }
 }
