@@ -17,10 +17,11 @@
 
 
 #import <Foundation/Foundation.h>
+#import <Mantle/Mantle.h>
 
 @class MMXTopic;
 
-@interface MMXTopicSubscription : NSObject
+@interface MMXTopicSubscription : MTLModel
 
 /**
  *  The MMXTopic object for the topic subscribed to.

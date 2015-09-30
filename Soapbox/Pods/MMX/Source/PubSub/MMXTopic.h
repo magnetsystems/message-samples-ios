@@ -16,9 +16,11 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <Mantle/Mantle.h>
+
 @class MMXUserID;
 
-@interface MMXTopic : NSObject <NSCoding>
+@interface MMXTopic : MTLModel
 
 typedef NS_ENUM(NSInteger, MMXPublishPermissionsLevel){
     MMXPublishPermissionsLevelOwner = 0,
