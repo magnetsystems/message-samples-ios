@@ -897,6 +897,83 @@
     }
 }
 
+#pragma mark - Topics from topic names
+
+- (XMPPIQ *)topicsFromTopicNamesIQ:(NSArray *)topicsArray
+							 error:(NSError**)error {
+	
+	NSError * parsingError;
+	NSXMLElement *mmxElement = [MMXUtils mmxElementFromValidJSONObject:topicsArray xmlns:MXnsPubSub commandStringValue:MXcommandGetTopics error:&parsingError];
+	if (parsingError) {
+		*error = parsingError;
+		return nil;
+	} else {
+		XMPPIQ *topicIQ = [[XMPPIQ alloc] initWithType:@"get" child:mmxElement];
+		[topicIQ addAttributeWithName:@"from" stringValue: [[self.delegate currentJID] full]];
+		[topicIQ addAttributeWithName:@"id" stringValue:[self.delegate generateMessageID]];
+		return topicIQ;
+	}
+}
+
+- (void)topicsFromTopicSubscriptions:(NSArray *)topics
+							 success:(void (^)(NSArray *))success
+							 failure:(void (^)(NSError *))failure {
+	
+	[[MMXLogger sharedLogger] verbose:@"MMXPubSubManager summaryOfTopics. topics = %@", topics];
+	if (![self hasActiveConnection]) {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure([self connectionStatusError]);
+			});
+		}
+		return;
+	}
+	NSError * parsingError;
+	NSMutableArray * topicArray = @[].mutableCopy;
+	for (MMXTopicSubscription * sub in topics) {
+		[topicArray addObject:@{@"userId":sub.topic.inUserNameSpace ? sub.topic.nameSpace : [NSNull null],
+								@"topicName":sub.topic.topicName}];
+	}
+
+	XMPPIQ *topicIQ = [self topicsFromTopicNamesIQ:topicArray.copy error:&parsingError];
+	if (!parsingError) {
+		[self.delegate sendIQ:topicIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
+			XMPPIQ * iq = (XMPPIQ *)obj;
+			if ([iq isErrorIQ]) {
+				if (failure) {
+					dispatch_async(self.callbackQueue, ^{
+						failure([iq errorWithTitle:@"Topic from Failure."]);
+					});
+				}
+			} else {
+				MMXTopicListResponse *response = [[MMXTopicListResponse alloc] initWithIQ:iq];
+				if (!response.error) {
+					if (success) {
+						dispatch_async(self.callbackQueue, ^{
+							success(response.topics);
+						});
+					}
+				} else {
+					if (failure) {
+						dispatch_async(self.callbackQueue, ^{
+							failure(response.error);
+						});
+					}
+				}
+			}
+			NSString* iqId = [iq elementID];
+			[self.delegate stopTrackingIQWithID:iqId];
+		}];
+	} else {
+		if (failure) {
+			dispatch_async(self.callbackQueue, ^{
+				failure(parsingError);
+			});
+		}
+	}
+ 
+}
+
 #pragma mark - Summary of Topics
 
 - (XMPPIQ *)topicSummariesIQ:(NSDictionary *)dict
