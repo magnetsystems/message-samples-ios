@@ -1,6 +1,6 @@
 PODS:
-  - Alamofire (2.0.1)
-  - AlamofireImage (1.0.0):
+  - Alamofire (2.0.2)
+  - AlamofireImage (1.1.2):
     - Alamofire (~> 2.0)
   - Argo (2.0.0)
   - CocoaAsyncSocket (7.4.1)
@@ -28,7 +28,7 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (1.9.1):
+  - MMX (1.10.1):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (= 1.9.2)
     - Mantle (= 1.5.4)
@@ -69,18 +69,18 @@ DEPENDENCIES:
   - AlamofireImage (~> 1.0)
   - Argo
   - JGProgressHUD
-  - MMX
+  - MMX (= 1.10.1)
 
 SPEC CHECKSUMS:
-  Alamofire: 1d8e208d616fbbfd2391b15eae766d07c96cdc49
-  AlamofireImage: 0d181ae145f879ee2ebd204074eacbc659276ab3
+  Alamofire: 8edbab00802a752bb5240cc2abe70e7e881488ad
+  AlamofireImage: dc3d3de5d095fd9545b144ba8f6da5bfc539512a
   Argo: 43133aa1612b249bbadd24aca94605aa0f13690d
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 628fca2e88ef06f7cf6817309aa405f325d9a6fa
   JGProgressHUD: a58f62d3afac173d201250c3ba628fe44bd67017
   Mantle: 60acd0cd363e27d945bda0a6b8e90577112d28f3
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: 97a54627972377cc12711d5870363061f079b698
+  MMX: 29eaf7b3e25d7d0abfac7dfc4c41554670c52b24
   MMXXMPPFramework: 20ad9c176eac51ff190c361204876c6583347878
 
 COCOAPODS: 0.38.2
