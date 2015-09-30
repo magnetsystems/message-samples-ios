@@ -13,13 +13,10 @@ class SoapboxUITests: XCTestCase {
         
     override func setUp() {
         super.setUp()
-       
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-        
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        XCUIApplication().launch()
-        sleep(5)
+        app.launch()
     }
     
     override func tearDown() {
@@ -46,21 +43,7 @@ class SoapboxUITests: XCTestCase {
         }
     }
     
-    // clears the username and password text field
-    private func clearScreen(user:String, password:String) {
-        if(app.textFields[user]).exists {
-            app.textFields["Username"].pressForDuration(1.5)
-            app.keys["Delete"].tap()
-        }
-        
-        if app.secureTextFields[password].exists {
-            app.secureTextFields["Password"].pressForDuration(1.5)
-            app.keys["Delete"].tap()
-        }
-    }
-
-    
-    // tests
+    // sign in and registraiton tests
     func test1signInNonExistingUser() {
         signIn("nonexistinguser", password: "password")
         app.buttons["Sign In"].tap()
@@ -102,21 +85,24 @@ class SoapboxUITests: XCTestCase {
         confirmAlert("Error", message: "You must provide a password")
         app.alerts.collectionViews.buttons["OK"].tap()
     }
-//    
-//    func test7registerUser() {
-//        signIn("newuser", password: "password")
-//        app.buttons["Register"].tap()
-//        // need assert registration was successful
-//    }
-//}
-//    
-//    func test8signInUser() {
-//        launchApp()
-//        signIn("newuser", password: "password")
-//        app.buttons["Sign In"].tap()
-//        XCTAssertEqual(app.buttons["Sign In"].exists, false)
-//        app.buttons["Sign Out"].tap()
-//        sleep(3)
-//    }
     
+    func test7registerUser() {
+        signIn("newuser", password: "password")
+        app.buttons["Register"].tap()
+        XCTAssertEqual(app.buttons["Sign In"].exists, false)
+        app.buttons["Sign Out"].tap()
+        confirmAlert("Sign Out", message: "Continue to sign out?")
+        app.buttons["OK"].tap()
+        XCTAssertEqual(app.buttons["Sign In"].exists, true)
+    }
+
+    func test8signInUser() {
+        signIn("newuser", password: "password")
+        app.buttons["Sign In"].tap()
+        XCTAssertEqual(app.buttons["Sign In"].exists, false)
+        app.buttons["Sign Out"].tap()
+        confirmAlert("Sign Out", message: "Continue to sign out?")
+        app.buttons["OK"].tap()
+        XCTAssertEqual(app.buttons["Sign In"].exists, true)
+    }
 }
