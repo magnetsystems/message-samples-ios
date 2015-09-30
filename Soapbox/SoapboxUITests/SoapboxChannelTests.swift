@@ -14,7 +14,7 @@ class SoapboxChannelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
+        continueAfterFailure = true
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
         //app.launch()
     }
@@ -46,25 +46,21 @@ class SoapboxChannelTests: XCTestCase {
         if app.alerts.collectionViews.buttons["OK"].exists {
             XCTAssertEqual(app.staticTexts[title].exists, true)
             XCTAssertEqual(app.staticTexts[message].exists, true)
+            app.buttons["OK"].tap()
         }
     }
     
-    
+    // choose channel function
     private func chooseChannel(channelName:String) {
         app.tables.staticTexts[channelName].tap()
         XCTAssertEqual(app.navigationBars[channelName].staticTexts[channelName].exists, true)
     }
-
-    private func subscribeChannel(channel:String) {
-        app.navigationBars[channel].buttons["Share"].tap()
-        app.sheets.collectionViews.buttons["Subscribe"].tap()
-    }
     
-    private func unsubscribeChannel(channel:String) {
+    // subscribe or unsubscribe to channel function
+    private func subscribeToChannel(channel:String, button:String) {
         app.navigationBars[channel].buttons["Share"].tap()
-        app.sheets.collectionViews.buttons["Unsubscribe"].tap()
+        app.sheets.collectionViews.buttons[button].tap()
     }
-
 
     
     // channel tests
@@ -73,7 +69,6 @@ class SoapboxChannelTests: XCTestCase {
     }
     
     func test2registerUser() {
-        app.launch()
         signIn("soapboxuser1", password: "password")
         app.buttons["Register"].tap()
         XCTAssertEqual(app.tables.staticTexts["company_announcements"].exists, true)
@@ -82,17 +77,15 @@ class SoapboxChannelTests: XCTestCase {
     
     func test3subscribeChannel() {
         chooseChannel("lunch_buddies")
-        subscribeChannel("lunch_buddies")
+        subscribeToChannel("lunch_buddies", button: "Subscribe")
         confirmAlert("Successfully Subscribed", message: "You have successfully subscribed to the channel.")
-        app.buttons["OK"].tap()
         app.navigationBars["lunch_buddies"].buttons["Channels"].tap()
     }
     
     func test4unsubscribeChannel() {
         chooseChannel("lunch_buddies")
-        unsubscribeChannel("lunch_buddies")
+        subscribeToChannel("lunch_buddies", button: "Unsubscribe")
         confirmAlert("Successfully Unsubscribed", message: "You have successfully unsubscribed from the channel.")
-        app.buttons["OK"].tap()
         app.navigationBars["lunch_buddies"].buttons["Channels"].tap()
     }
 }
