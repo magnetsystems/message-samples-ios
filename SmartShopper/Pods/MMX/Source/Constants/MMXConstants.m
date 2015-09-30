@@ -50,6 +50,7 @@ NSString * const MXcommandGetSubscribers = @"getSubscribers";
 NSString * const MXcommandRetract = @"retract";
 NSString * const MXcommandRetractAll = @"retractAll";
 NSString * const MXcommandGetSummary = @"getSummary";
+NSString * const MXcommandGetTopics = @"getTopics";
 NSString * const MXcommandQuery = @"query";
 NSString * const MXcommandQueryTopic = @"queryTopic";
 NSString * const MXcommandGetTags = @"getTags";

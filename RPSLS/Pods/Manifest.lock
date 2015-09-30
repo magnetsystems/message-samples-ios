@@ -23,7 +23,7 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (1.8.8):
+  - MMX (1.10.1):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (= 1.9.2)
     - Mantle (= 1.5.4)
@@ -60,14 +60,14 @@ PODS:
     - MMXXMPPFramework/XEP-0082
 
 DEPENDENCIES:
-  - MMX (= 1.8.8)
+  - MMX (= 1.10.1)
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 628fca2e88ef06f7cf6817309aa405f325d9a6fa
   Mantle: 60acd0cd363e27d945bda0a6b8e90577112d28f3
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: a627e15a27b13bcfaf1dda79d580cd14b9fbca18
+  MMX: 29eaf7b3e25d7d0abfac7dfc4c41554670c52b24
   MMXXMPPFramework: 20ad9c176eac51ff190c361204876c6583347878
 
 COCOAPODS: 0.38.2

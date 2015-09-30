@@ -38,30 +38,56 @@ extension UIImageView {
         case FlipFromLeft(NSTimeInterval)
         case FlipFromRight(NSTimeInterval)
         case FlipFromTop(NSTimeInterval)
+        case Custom(
+            duration: NSTimeInterval,
+            animationOptions: UIViewAnimationOptions,
+            animations: (UIImageView, Image) -> Void,
+            completion: (Bool -> Void)?
+        )
 
         private var duration: NSTimeInterval {
             switch self {
-            case None:                         return 0.0
-            case CrossDissolve(let duration):  return duration
-            case CurlDown(let duration):       return duration
-            case CurlUp(let duration):         return duration
-            case FlipFromBottom(let duration): return duration
-            case FlipFromLeft(let duration):   return duration
-            case FlipFromRight(let duration):  return duration
-            case FlipFromTop(let duration):    return duration
+            case None:                          return 0.0
+            case CrossDissolve(let duration):   return duration
+            case CurlDown(let duration):        return duration
+            case CurlUp(let duration):          return duration
+            case FlipFromBottom(let duration):  return duration
+            case FlipFromLeft(let duration):    return duration
+            case FlipFromRight(let duration):   return duration
+            case FlipFromTop(let duration):     return duration
+            case Custom(let duration, _, _, _): return duration
             }
         }
 
         private var animationOptions: UIViewAnimationOptions {
             switch self {
-            case None:           return .TransitionNone
-            case CrossDissolve:  return .TransitionCrossDissolve
-            case CurlDown:       return .TransitionCurlDown
-            case CurlUp:         return .TransitionCurlUp
-            case FlipFromBottom: return .TransitionFlipFromBottom
-            case FlipFromLeft:   return .TransitionFlipFromLeft
-            case FlipFromRight:  return .TransitionFlipFromRight
-            case FlipFromTop:    return .TransitionFlipFromTop
+            case None:                                  return .TransitionNone
+            case CrossDissolve:                         return .TransitionCrossDissolve
+            case CurlDown:                              return .TransitionCurlDown
+            case CurlUp:                                return .TransitionCurlUp
+            case FlipFromBottom:                        return .TransitionFlipFromBottom
+            case FlipFromLeft:                          return .TransitionFlipFromLeft
+            case FlipFromRight:                         return .TransitionFlipFromRight
+            case FlipFromTop:                           return .TransitionFlipFromTop
+            case Custom(_, let animationOptions, _, _): return animationOptions
+            }
+        }
+
+        private var animations: ((UIImageView, Image) -> Void) {
+            switch self {
+            case Custom(_, _, let animations, _):
+                return animations
+            default:
+                return { $0.image = $1 }
+            }
+        }
+
+        private var completion: (Bool -> Void)? {
+            switch self {
+            case Custom(_, _, _, let completion):
+                return completion
+            default:
+                return nil
             }
         }
     }
@@ -204,11 +230,52 @@ extension UIImageView {
         If the image is cached locally, the image is set immediately. Otherwise the specified placehoder image will be
         set immediately, and then the remote image will be set once the image request is finished.
 
-        If a `completion` closure is specified, it is the responsibility of the closure to set the image of the image 
-        view before returning. If no `completion` closure is specified, the default behavior of setting the image is 
-        applied.
+        The `completion` closure is called after the image download and filtering are complete, but before the start of
+        the image transition. Please note it is no longer the responsibility of the `completion` closure to set the
+        image. It will be set automatically. If you require a second notification after the image transition completes,
+        use a `.Custom` image transition with a `completion` closure. The `.Custom` `completion` closure is called when
+        the image transition is finished.
 
         - parameter URL:              The URL used for the image request.
+        - parameter placeholderImage: The image to be set initially until the image request finished. If `nil`, the
+                                      image view will not change its image until the image request finishes.
+        - parameter filter:           The image filter applied to the image after the image request is finished.
+        - parameter imageTransition:  The image transition animation applied to the image when set.
+        - parameter completion:       A closure to be executed when the image request finishes. The closure has no
+                                      return value and takes three arguments: the original request, the response from
+                                      the server and the result containing either the image or the error that occurred.
+                                      If the image was returned from the image cache, the response will be `nil`.
+    */
+    public func af_setImageWithURL(
+        URL: NSURL,
+        placeholderImage: UIImage?,
+        filter: ImageFilter?,
+        imageTransition: ImageTransition,
+        completion: ((NSURLRequest?, NSHTTPURLResponse?, Result<UIImage>) -> Void)?)
+    {
+        af_setImageWithURLRequest(
+            URLRequestWithURL(URL),
+            placeholderImage: placeholderImage,
+            filter: filter,
+            imageTransition: imageTransition,
+            completion: completion
+        )
+    }
+
+    /**
+        Asynchronously downloads an image from the specified URL, applies the specified image filter to the downloaded
+        image and sets it once finished while executing the image transition.
+
+        If the image is cached locally, the image is set immediately. Otherwise the specified placehoder image will be
+        set immediately, and then the remote image will be set once the image request is finished.
+
+        The `completion` closure is called after the image download and filtering are complete, but before the start of 
+        the image transition. Please note it is no longer the responsibility of the `completion` closure to set the 
+        image. It will be set automatically. If you require a second notification after the image transition completes, 
+        use a `.Custom` image transition with a `completion` closure. The `.Custom` `completion` closure is called when 
+        the image transition is finished.
+
+        - parameter URLRequest:       The URL request.
         - parameter placeholderImage: The image to be set initially until the image request finished. If `nil`, the
                                       image view will not change its image until the image request finishes.
         - parameter filter:           The image filter applied to the image after the image request is finished.
@@ -225,6 +292,8 @@ extension UIImageView {
         imageTransition: ImageTransition,
         completion: ((NSURLRequest?, NSHTTPURLResponse?, Result<UIImage>) -> Void)?)
     {
+        guard !isURLRequestURLEqualToActiveRequestURL(URLRequest) else { return }
+
         af_cancelImageRequest()
 
         let imageDownloader = UIImageView.af_sharedImageDownloader
@@ -232,12 +301,8 @@ extension UIImageView {
 
         // Use the image from the image cache if it exists
         if let image = imageCache?.imageForRequest(URLRequest.URLRequest, withAdditionalIdentifier: filter?.identifier) {
-            if let completion = completion {
-                completion(URLRequest.URLRequest, nil, .Success(image))
-            } else {
-                self.image = image
-            }
-
+            completion?(URLRequest.URLRequest, nil, .Success(image))
+            self.image = image
             return
         }
 
@@ -252,37 +317,24 @@ extension UIImageView {
             filter: filter,
             completion: { [weak self] request, response, result in
                 guard let strongSelf = self else { return }
-
-                // Ignore the event if the response request does not match the current request
-                guard let
-                    currentRequest = strongSelf.af_activeRequest?.task.currentRequest
-                    where currentRequest.URLString == request?.URLString else
-                {
-                    return
-                }
+                guard strongSelf.isURLRequestURLEqualToActiveRequestURL(request) else { return }
 
                 strongSelf.af_activeRequest = nil
 
-                guard completion == nil else {
-                    completion?(request, response, result)
-                    return
-                }
-
                 if let image = result.value {
-                    switch imageTransition {
-                    case .None:
-                        strongSelf.image = image
-                    default:
-                        UIView.transitionWithView(
-                            strongSelf,
-                            duration: imageTransition.duration,
-                            options: imageTransition.animationOptions,
-                            animations: {
-                                strongSelf.image = image
-                            },
-                            completion: nil
-                        )
-                    }
+                    completion?(request, response, result)
+
+                    UIView.transitionWithView(
+                        strongSelf,
+                        duration: imageTransition.duration,
+                        options: imageTransition.animationOptions,
+                        animations: {
+                            imageTransition.animations(strongSelf, image)
+                        },
+                        completion: imageTransition.completion
+                    )
+                } else {
+                    completion?(request, response, result)
                 }
             }
         )
@@ -306,5 +358,16 @@ extension UIImageView {
         mutableURLRequest.addValue("image/*", forHTTPHeaderField: "Accept")
 
         return mutableURLRequest
+    }
+
+    private func isURLRequestURLEqualToActiveRequestURL(URLRequest: URLRequestConvertible?) -> Bool {
+        if let
+            currentRequest = af_activeRequest?.task.originalRequest
+            where currentRequest.URLString == URLRequest?.URLRequest.URLString
+        {
+            return true
+        }
+
+        return false
     }
 }

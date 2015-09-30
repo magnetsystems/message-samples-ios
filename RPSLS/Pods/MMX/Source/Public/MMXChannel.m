@@ -381,6 +381,7 @@
 		return;
 	}
 	MMXChannel *channel = [MMXChannel channelWithName:name summary:summary isPublic:isPublic];
+	channel.ownerUsername = [MMXUser currentUser].username;
 	[[MMXClient sharedClient].pubsubManager createTopic:[channel asTopic] success:^(BOOL successful) {
 		[MMXChannel channelForName:channel.name isPublic:isPublic success:^(MMXChannel *channel) {
 			if (success) {
@@ -470,12 +471,17 @@
 		return;
 	}
 	[[MMXClient sharedClient].pubsubManager listSubscriptionsWithSuccess:^(NSArray *subscriptions) {
-		NSArray *topics = [MMXChannel topicsFromSubscriptions:subscriptions];
-		[[MMXClient sharedClient].pubsubManager summaryOfTopics:topics since:nil until:nil success:^(NSArray *summaries) {
-			NSArray *channelArray = [MMXChannel channelsFromTopics:topics summaries:summaries subscriptions:subscriptions];
-			if (success) {
-				success(channelArray);
-			}
+		[[MMXClient sharedClient].pubsubManager topicsFromTopicSubscriptions:subscriptions success:^(NSArray * topics) {
+			[[MMXClient sharedClient].pubsubManager summaryOfTopics:topics since:nil until:nil success:^(NSArray *summaries) {
+				NSArray *channelArray = [MMXChannel channelsFromTopics:topics summaries:summaries subscriptions:subscriptions];
+				if (success) {
+					success(channelArray);
+				}
+			} failure:^(NSError *error) {
+				if (failure) {
+					failure(error);
+				}
+			}];
 		} failure:^(NSError *error) {
 			if (failure) {
 				failure(error);
@@ -628,7 +634,7 @@
 	}
 	if (nil == self.ownerUsername || [self.ownerUsername isEqualToString:@""]) {
 		if (failure) {
-			NSError * error = [MMXClient errorWithTitle:@"Invalid Channel Invite" message:@"It looks like you are trying to send an invite from an invalid channel. Please user the channelForChannelName:success:failure API to get the valid channel object." code:500];
+			NSError * error = [MMXClient errorWithTitle:@"Invalid Channel Invite" message:@"It looks like you are trying to send an invite from an invalid channel. Please user the channelForName:isPublic:success:failure API to get the valid channel object." code:500];
 			failure(error);
 		}
 		return nil;
@@ -717,14 +723,19 @@
 	MMXTopic *newTopic = [MMXTopic topicWithName:self.name];
 	newTopic.topicDescription = self.summary;
 	if (!self.isPublic) {
-		MMXUser *currentUser = [MMXUser currentUser];
-		if (currentUser) {
-			newTopic.nameSpace = currentUser.username;
+		if (self.ownerUsername) {
+			newTopic.nameSpace = self.ownerUsername;
 		} else {
 			return nil;
 		}
 	}
 	return newTopic;
+}
+
+#pragma mark - Override Getters
+
+- (NSDate *)lastTimeActive {
+	return _lastTimeActive ?: self.creationDate;
 }
 
 #pragma mark - Equality
