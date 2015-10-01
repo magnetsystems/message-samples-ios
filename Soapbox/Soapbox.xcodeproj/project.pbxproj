@@ -28,6 +28,7 @@
 		0EBEC9081B436020000DD49A /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EBEC9071B436020000DD49A /* Configurations.plist */; };
 		170A1378E9AEB55FCE9C85C0 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74904CBC54923F60562BB705 /* libPods.a */; };
 		660217D3FC6316094652C506 /* Announcement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602170402AA3E62FBC304C6 /* Announcement.m */; };
+		AA78F7171BBC62D500312E18 /* SoapboxChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA78F7141BBC62D500312E18 /* SoapboxChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
 		AAEC5B411BB623B800F95493 /* SoapboxSignInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEC5B401BB623B800F95493 /* SoapboxSignInTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +90,7 @@
 		660216BA41C0FBACFA728FB9 /* Announcement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Announcement.h; sourceTree = "<group>"; };
 		6602170402AA3E62FBC304C6 /* Announcement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Announcement.m; sourceTree = "<group>"; };
 		74904CBC54923F60562BB705 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA78F7141BBC62D500312E18 /* SoapboxChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoapboxChannelTests.swift; sourceTree = "<group>"; };
 		AAEC5B3E1BB623B800F95493 /* SoapboxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoapboxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAEC5B401BB623B800F95493 /* SoapboxSignInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoapboxSignInTests.swift; sourceTree = "<group>"; };
 		AAEC5B421BB623B800F95493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 			children = (
 				AAEC5B401BB623B800F95493 /* SoapboxSignInTests.swift */,
 				AAEC5B421BB623B800F95493 /* Info.plist */,
+				AA78F7141BBC62D500312E18 /* SoapboxChannelTests.swift */,
 			);
 			path = SoapboxUITests;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 		0E3614E71AFBFD2C0097E421 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Magnet Systems, Inc.";
 				TargetAttributes = {
@@ -461,6 +465,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA78F7171BBC62D500312E18 /* SoapboxChannelTests.swift in Sources */,
 				AAEC5B411BB623B800F95493 /* SoapboxSignInTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -578,11 +583,13 @@
 			baseConfigurationReference = 58C7AD9B3133B3475F5B9A10 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Soapbox/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.magnet.iOS.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -591,6 +598,7 @@
 			baseConfigurationReference = 454FD38601BAF73A50999AB4 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Soapbox/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -603,6 +611,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -612,6 +621,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.magnet.iOS.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Soapbox.app/Soapbox";
 			};
 			name = Debug;
@@ -620,6 +630,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = SoapboxTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -694,6 +705,7 @@
 				AAEC5B461BB623B800F95493 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

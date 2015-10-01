@@ -431,6 +431,7 @@
 		return;
 	}
 	[[MMXClient sharedClient].pubsubManager subscribeToTopic:[self asTopic] device:nil success:^(MMXTopicSubscription *subscription) {
+		self.isSubscribed = YES;
 		if (success) {
 			success();
 		}
@@ -452,6 +453,7 @@
 		return;
 	}
 	[[MMXClient sharedClient].pubsubManager unsubscribeFromTopic:[self asTopic] subscriptionID:nil success:^(BOOL successful) {
+		self.isSubscribed = NO;
 		if (success) {
 			success();
 		}
