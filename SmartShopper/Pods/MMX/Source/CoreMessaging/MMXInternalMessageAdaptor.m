@@ -136,7 +136,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	msg.mType = @"invitationResponse";
 	msg.recipients = @[recipient];
 	msg.metaData = @{@"inviteResponseText":comments ?: [NSNull null],
-					 @"channelIsPrivate":@(!channel.isPublic),
+					 @"channelIsPublic":@(channel.isPublic),
 					 @"channelName":channel.name,
 					 @"channelSummary":channel.summary ?: [NSNull null],
 					 @"channelCreatorUsername":channel.ownerUsername ?: [NSNull null],
@@ -150,12 +150,11 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	msg.mType = @"invitation";
 	msg.recipients = @[recipient];
 	msg.metaData = @{@"text":comments ?: [NSNull null],
-					 @"channelIsPrivate":@(!channel.isPublic),
+					 @"channelIsPublic":@(channel.isPublic),
 					 @"channelName":channel.name,
 					 @"channelSummary":channel.summary ?: [NSNull null],
 					 @"channelCreatorUsername":channel.ownerUsername ?: [NSNull null],
-					 @"channelCreationDate":channel.creationDate ? [MMXUtils stringIniso8601Format:channel.creationDate] : [NSNull null],
-};
+					 @"channelCreationDate":channel.creationDate ? [MMXUtils stringIniso8601Format:channel.creationDate] : [NSNull null]};
 	return msg;
 }
 
