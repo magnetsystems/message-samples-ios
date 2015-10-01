@@ -168,19 +168,19 @@
 	
 	if (range.location != NSNotFound) {
 		if (error != NULL) {
-			*error = [MMXUtils mmxErrorWithTitle:@"Invalid Topic Name" message:@"Topic name cannot contain the / character." code:500];
+			*error = [MMXUtils mmxErrorWithTitle:@"Invalid Name" message:@"Name cannot contain the / character." code:500];
 		}
 		return NO;
 	}
 	if (![MMXUtils validateAgainstDefaultCharacterSet:self.topicName allowSpaces:NO]) {
 		if (error != NULL) {
-			*error = [MMXUtils mmxErrorWithTitle:@"Invalid Topic Name" message:@"The topic name contains invalid characters." code:500];
+			*error = [MMXUtils mmxErrorWithTitle:@"Invalid Name" message:@"The name contains invalid characters." code:500];
 		}
 		return NO;
 	}
 	if (self.topicName.length > 50 || self.topicName.length < 1) {
 		if (error != NULL) {
-			*error = [MMXUtils mmxErrorWithTitle:@"Invalid Topic Name" message:@"Topic name cannot contain more than 64 characters or less than 1." code:500];
+			*error = [MMXUtils mmxErrorWithTitle:@"Invalid Name" message:@"Name cannot contain more than 50 characters or less than 1." code:500];
 		}
 		return NO;
 	}

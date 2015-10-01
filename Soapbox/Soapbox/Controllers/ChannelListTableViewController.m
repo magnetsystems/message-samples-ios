@@ -30,6 +30,7 @@
 @property (nonatomic, copy) NSArray *filteredUnSubscribedChannelsList;
 
 @property (nonatomic, strong) UISearchController *searchController;
+//@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 - (void)goToLoginScreen;
 @end
@@ -40,6 +41,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.refreshControl = [[UIRefreshControl alloc]init];
+    [self.tableView addSubview:self.refreshControl];
+    [self.refreshControl addTarget:self action:@selector(fetchChannels) forControlEvents:UIControlEventValueChanged];
 	
     // Indicate that you are ready to receive and send messages now!
     [MMX start];
@@ -140,7 +145,6 @@
 #pragma mark - Fetch all Channels
 
 - (void)fetchChannels {
-    [self.refreshControl beginRefreshing];
 	[MMXChannel allPublicChannelsWithLimit:100 offset:0 success:^(int totalCount, NSArray *channels) {
 
         NSPredicate *subscribedPredicate = [NSPredicate predicateWithFormat:@"isSubscribed == YES"];
@@ -149,8 +153,13 @@
         self.subscribedChannelsList = [channels filteredArrayUsingPredicate:subscribedPredicate];
         self.unSubscribedChannelsList = [channels filteredArrayUsingPredicate:notSubscribedPredicate];
 
+        if (self.refreshControl.isRefreshing) {
+            [self.refreshControl endRefreshing];
+        }
+
         [self.tableView reloadData];
-        [self.refreshControl endRefreshing];
+        
+        
 
     } failure:^(NSError *error) {
         /*
@@ -158,7 +167,10 @@
          */
         [[MMXLogger sharedLogger] error:@"ChannelListTableViewController fetchChannels Error = %@", error.localizedFailureReason];
 
-        [self.refreshControl endRefreshing];
+        if (self.refreshControl.isRefreshing) {
+            [self.refreshControl endRefreshing];
+        }
+
     }];
 }
 
