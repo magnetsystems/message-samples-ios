@@ -50,6 +50,7 @@ extern NSString  * const MXcommandGetSubscribers;
 extern NSString  * const MXcommandRetract;
 extern NSString  * const MXcommandRetractAll;
 extern NSString  * const MXcommandGetSummary;
+extern NSString  * const MXcommandGetTopics;
 extern NSString  * const MXcommandQuery;
 extern NSString  * const MXcommandQueryTopic;
 extern NSString  * const MXcommandGetTags;
