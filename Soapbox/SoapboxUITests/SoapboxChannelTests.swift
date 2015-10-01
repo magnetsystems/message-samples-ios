@@ -27,7 +27,6 @@ class SoapboxChannelTests: XCTestCase {
     private func runApp() {
         app.launch()
         sleep(2)
-        XCTAssertEqual(app.images["soapbox_splash_image"].exists, true)
     }
     
     // sign in function
@@ -50,22 +49,46 @@ class SoapboxChannelTests: XCTestCase {
         }
     }
     
-    // choose channel function
+    // choose channel
     private func chooseChannel(channelName:String) {
         app.tables.staticTexts[channelName].tap()
         XCTAssertEqual(app.navigationBars[channelName].staticTexts[channelName].exists, true)
     }
     
-    // subscribe or unsubscribe to channel function
-    private func subscribeToChannel(channel:String, button:String) {
+    // subscribe to channel
+    private func subscribeChannel(channel:String) {
         app.navigationBars[channel].buttons["Share"].tap()
-        app.sheets.collectionViews.buttons[button].tap()
+        app.sheets.collectionViews.buttons["Subscribe"].tap()
     }
-
+    
+    // unsubscribe to channel
+    private func unsubscribeChannel(channel:String) {
+        app.navigationBars[channel].buttons["Share"].tap()
+        app.sheets.collectionViews.buttons["Unsubscribe"].tap()
+    }
+    
+    // send message to channel
+    private func sendMessage(text:String) {
+        let textView = app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element
+        textView.tap()
+        textView.typeText(text)
+    }
+    
+    // create channel
+    private func createChannel(channelName:String) {
+        app.navigationBars["Channels"].buttons["Add"].tap()
+        
+        let textField = app.tables.childrenMatchingType(.Cell).elementBoundByIndex(0).childrenMatchingType(.TextField).element
+        textField.tap()
+        textField.typeText(channelName)
+        app.navigationBars["New Channel"].buttons["Save"].tap()
+    }
+    
     
     // channel tests
     func test1launchSoapbox() {
         app.launch()
+        XCTAssertEqual(app.images["soapbox_splash_image"].exists, true)
     }
     
     func test2registerUser() {
@@ -77,15 +100,52 @@ class SoapboxChannelTests: XCTestCase {
     
     func test3subscribeChannel() {
         chooseChannel("lunch_buddies")
-        subscribeToChannel("lunch_buddies", button: "Subscribe")
+        subscribeChannel("lunch_buddies")
         confirmAlert("Successfully Subscribed", message: "You have successfully subscribed to the channel.")
+    }
+    
+    func test4sendMessageChannel() {
+        sendMessage("message to lunch_buddies channel")
+        app.toolbars.buttons["Send"].tap()
         app.navigationBars["lunch_buddies"].buttons["Channels"].tap()
     }
     
-    func test4unsubscribeChannel() {
+    func test5unsubscribeChannel() {
         chooseChannel("lunch_buddies")
-        subscribeToChannel("lunch_buddies", button: "Unsubscribe")
+        unsubscribeChannel("lunch_buddies")
         confirmAlert("Successfully Unsubscribed", message: "You have successfully unsubscribed from the channel.")
         app.navigationBars["lunch_buddies"].buttons["Channels"].tap()
     }
+    
+    func test6createNewChannel() {
+        createChannel("test_channel")
+        confirmAlert("Channel Created", message: "Channel created successfully.")
+    }
+    
+    func test7createEmptyChannelName() {
+        createChannel("")
+        confirmAlert("Invalid Channel Name", message: "Please check that you have entered a valid topic name. The field cannot be blank.")
+    }
+
+    func test8createDuplicateChannel() {
+        createChannel("test_channel")
+        confirmAlert("Channel Creation Failure", message: "Topic already exists: test_channel")
+    }
+    
+    func test9createChannelMaxCharacters() {
+        createChannel("11111111111111111111111111111111111111111111111111")
+        confirmAlert("Channel Creation Failure", message: "Topic name cannot contain more than 50 characters or less than 1.")
+    }
+    
+    func test10createChannelInvalidCharacters() {
+        createChannel("&*@_")
+        confirmAlert("Channel Creation Failure", message: "the topic name contains invalid characters.")
+    }
+    
+    func test11createChannelSlashCharacter() {
+        createChannel("test/channel")
+        confirmAlert("Chanel Creation Failure", message: "Topic name cannot contain the / character.")
+    }
 }
+
+//app.navigationBars["lunch_buddies"].buttons["Channels"].tap()
