@@ -43,6 +43,7 @@ class SoapboxChannelTests: XCTestCase {
     // alert function
     private func confirmAlert(title: String, message: String) {
         if app.alerts.collectionViews.buttons["OK"].exists {
+            sleep(2)
             XCTAssertEqual(app.staticTexts[title].exists, true)
             XCTAssertEqual(app.staticTexts[message].exists, true)
             app.buttons["OK"].tap()
@@ -77,25 +78,37 @@ class SoapboxChannelTests: XCTestCase {
     // create channel
     private func createChannel(channelName:String) {
         app.navigationBars["Channels"].buttons["Add"].tap()
-        
         let textField = app.tables.childrenMatchingType(.Cell).elementBoundByIndex(0).childrenMatchingType(.TextField).element
         textField.tap()
         textField.typeText(channelName)
         app.navigationBars["New Channel"].buttons["Save"].tap()
+        sleep(2)
     }
+    
+    // wait for element
+    private func evaluateElemenExist(element:AnyObject) {
+        let exists = NSPredicate(format: "exists == 1")
+        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
     
     
     // channel tests
     func test01launchSoapbox() {
         app.launch()
-        XCTAssertEqual(app.images["soapbox_splash_image"].exists, true)
+        let appImage = app.images["soapbox_splash_image"]
+        evaluateElemenExist(appImage)
     }
     
     func test02registerUser() {
-        signIn("soapboxuser1", password: "password")
+        let signoutButton = app.buttons["Sign Out"]
+        let channel = app.tables.staticTexts["company_announcements"]
+        
+        signIn("soapboxuser", password: "password")
         app.buttons["Register"].tap()
-        XCTAssertEqual(app.tables.staticTexts["company_announcements"].exists, true)
-        XCTAssertEqual(app.tables.staticTexts["lunch_buddies"].exists, true)
+        evaluateElemenExist(signoutButton)
+        evaluateElemenExist(channel)
     }
     
     func test03subscribeChannel() {
@@ -123,26 +136,38 @@ class SoapboxChannelTests: XCTestCase {
     }
     
     func test07createEmptyChannelName() {
+        let NewChannel = app.navigationBars["New Channel"]
+        
         createChannel("")
         confirmAlert("Invalid Channel Name", message: "Please check that you have entered a valid topic name. The field cannot be blank.")
+        evaluateElemenExist(NewChannel)
         app.navigationBars["New Channel"].buttons["Channels"].tap()
     }
 
     func test08createDuplicateChannel() {
+        let NewChannel = app.navigationBars["New Channel"]
+        
         createChannel("test_channel")
         confirmAlert("Channel Creation Failure", message: "Topic already exists: test_channel")
+        evaluateElemenExist(NewChannel)
         app.navigationBars["New Channel"].buttons["Channels"].tap()
     }
     
     func test09createChannelMaxCharacters() {
+        let NewChannel = app.navigationBars["New Channel"]
+        
         createChannel("123456789012345678901234567890123456789012345678901")
         confirmAlert("Channel Creation Failure", message: "Name cannot contain more than 50 characters or less than 1.")
+        evaluateElemenExist(NewChannel)
         app.navigationBars["New Channel"].buttons["Channels"].tap()
     }
     
     func test10createChannelInvalidCharacters() {
+        let NewChannel = app.navigationBars["New Channel"]
+        
         createChannel("&*@_")
         confirmAlert("Channel Creation Failure", message: "The name contains invalid characters.")
+        evaluateElemenExist(NewChannel)
         app.navigationBars["New Channel"].buttons["Channels"].tap()
     }
     

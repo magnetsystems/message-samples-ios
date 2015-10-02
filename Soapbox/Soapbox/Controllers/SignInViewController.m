@@ -34,6 +34,16 @@
 
 #pragma mark - Lifecycle
 
+- (void)viewDidLoad {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismisKeyboard:)];
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)dismisKeyboard:(UITapGestureRecognizer *)sender
+{
+    [self.view endEditing:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	self.navigationController.navigationBarHidden = YES;

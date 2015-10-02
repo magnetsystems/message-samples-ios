@@ -24,7 +24,7 @@ class SoapboxUITests: XCTestCase {
         super.tearDown()
     }
     
-    // sign in function
+    // sign in
     private func signIn(user:String, password:String) {
         let usernameTextField = app.textFields["Username"]
         usernameTextField.tap()
@@ -35,9 +35,17 @@ class SoapboxUITests: XCTestCase {
         passwordSecureTextField.typeText(password)
     }
     
-    // alert function
+    // wait for element
+    private func evaluateElemenExist(element:AnyObject) {
+        let exists = NSPredicate(format: "exists == 1")
+        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
+    
+    // confirm alert
     private func confirmAlert(title: String, message: String) {
         if app.alerts.collectionViews.buttons["OK"].exists {
+            sleep(2)
             XCTAssertEqual(app.staticTexts[title].exists, true)
             XCTAssertEqual(app.staticTexts[message].exists, true)
         }
@@ -87,22 +95,28 @@ class SoapboxUITests: XCTestCase {
     }
     
     func test7registerUser() {
+        let signoutButton = app.buttons["Sign Out"]
+        let signinButton = app.buttons["Sign In"]
+        
         signIn("newuser", password: "password")
         app.buttons["Register"].tap()
-        XCTAssertEqual(app.buttons["Sign In"].exists, false)
+        evaluateElemenExist(signoutButton)
         app.buttons["Sign Out"].tap()
         confirmAlert("Sign Out", message: "Continue to sign out?")
         app.buttons["OK"].tap()
-        XCTAssertEqual(app.buttons["Sign In"].exists, true)
+        evaluateElemenExist(signinButton)
     }
-
+    
     func test8signInUser() {
+        let signoutButton = app.buttons["Sign Out"]
+        let signinButton = app.buttons["Sign In"]
+        
         signIn("newuser", password: "password")
         app.buttons["Sign In"].tap()
-        XCTAssertEqual(app.buttons["Sign In"].exists, false)
+        evaluateElemenExist(signoutButton)
         app.buttons["Sign Out"].tap()
         confirmAlert("Sign Out", message: "Continue to sign out?")
         app.buttons["OK"].tap()
-        XCTAssertEqual(app.buttons["Sign In"].exists, true)
+        evaluateElemenExist(signinButton)
     }
 }
