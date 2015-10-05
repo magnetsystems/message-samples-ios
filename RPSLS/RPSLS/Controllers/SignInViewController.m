@@ -35,6 +35,16 @@
 
 #pragma mark - Lifecycle
 
+- (void)viewDidLoad {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismisKeyboard:)];
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)dismisKeyboard:(UITapGestureRecognizer *)sender
+{
+    [self.view endEditing:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	self.navigationController.navigationBarHidden = YES;
@@ -132,7 +142,7 @@
     
     [self setInputsEnabled:NO];
     if (self.usernameTextField.text.length < 5) {
-		[self showAlertWithTitle:@"Error" message:@"Username must be at least 5 charaters in length."];
+		[self showAlertWithTitle:@"Error" message:@"Username must be at least 5 characters in length."];
 		[self setInputsEnabled:YES];
 		
 		return NO;
