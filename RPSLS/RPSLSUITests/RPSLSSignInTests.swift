@@ -17,7 +17,8 @@ class RPSLSUITests: XCTestCase {
         continueAfterFailure = false
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
         app.launch()
-    
+        
+        // added condition to look for notification alert and confirm
         if XCUIApplication().alerts.collectionViews.buttons["OK"].exists {
             app.alerts.collectionViews.buttons["OK"].tap()
         }
@@ -64,7 +65,7 @@ class RPSLSUITests: XCTestCase {
         let signinButton = app.buttons["Sign In"]
         
         evaluateElementExist(signinButton)
-        app.textFields["Username"].tap()
+        app.textFields["Username"].tap() // get app focus by tapping username if notification was confirmed
         signIn("nonexistinguser", password: "password")
         app.buttons["Sign In"].tap()
         confirmAlert("Error", message: "Not Authorized. Please check your credentials and try again.")
