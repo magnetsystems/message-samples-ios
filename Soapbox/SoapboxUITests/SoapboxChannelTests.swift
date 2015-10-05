@@ -29,7 +29,7 @@ class SoapboxChannelTests: XCTestCase {
         sleep(2)
     }
     
-    // sign in function
+    // sign in
     private func signIn(user:String, password:String) {
         let usernameTextField = app.textFields["Username"]
         usernameTextField.tap()
@@ -40,20 +40,24 @@ class SoapboxChannelTests: XCTestCase {
         passwordSecureTextField.typeText(password)
     }
     
-    // alert function
+    // confirm alert
     private func confirmAlert(title: String, message: String) {
         if app.alerts.collectionViews.buttons["OK"].exists {
-            sleep(2)
-            XCTAssertEqual(app.staticTexts[title].exists, true)
-            XCTAssertEqual(app.staticTexts[message].exists, true)
+            let title = app.staticTexts[title]
+            let message = app.staticTexts[message]
+            
+            evaluateElementExist(title)
+            evaluateElementExist(message)
             app.buttons["OK"].tap()
         }
     }
     
     // choose channel
     private func chooseChannel(channelName:String) {
+        let channelTitle = app.navigationBars[channelName].staticTexts[channelName]
+        
         app.tables.staticTexts[channelName].tap()
-        XCTAssertEqual(app.navigationBars[channelName].staticTexts[channelName].exists, true)
+        evaluateElementExist(channelTitle)
     }
     
     // subscribe to channel
@@ -69,36 +73,38 @@ class SoapboxChannelTests: XCTestCase {
     }
     
     // send message to channel
-    private func sendMessage(text:String) {
+    private func sendMessage(message:String) {
         let textView = app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element
+        
         textView.tap()
-        textView.typeText(text)
+        textView.typeText(message)
+        app.toolbars.buttons["Send"].tap()
     }
     
     // create channel
     private func createChannel(channelName:String) {
-        app.navigationBars["Channels"].buttons["Add"].tap()
+        let alert = app.buttons["OK"]
         let textField = app.tables.childrenMatchingType(.Cell).elementBoundByIndex(0).childrenMatchingType(.TextField).element
+        
+        app.navigationBars["Channels"].buttons["Add"].tap()
         textField.tap()
         textField.typeText(channelName)
         app.navigationBars["New Channel"].buttons["Save"].tap()
-        sleep(2)
+        evaluateElementExist(alert)
     }
     
     // wait for element
-    private func evaluateElemenExist(element:AnyObject) {
+    private func evaluateElementExist(element:AnyObject) {
         let exists = NSPredicate(format: "exists == 1")
         expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectationsWithTimeout(30, handler: nil)
     }
-
-    
     
     // channel tests
     func test01launchSoapbox() {
         app.launch()
         let appImage = app.images["soapbox_splash_image"]
-        evaluateElemenExist(appImage)
+        evaluateElementExist(appImage)
     }
     
     func test02registerUser() {
@@ -107,8 +113,8 @@ class SoapboxChannelTests: XCTestCase {
         
         signIn("soapboxuser", password: "password")
         app.buttons["Register"].tap()
-        evaluateElemenExist(signoutButton)
-        evaluateElemenExist(channel)
+        evaluateElementExist(signoutButton)
+        evaluateElementExist(channel)
     }
     
     func test03subscribeChannel() {
@@ -118,57 +124,75 @@ class SoapboxChannelTests: XCTestCase {
     }
     
     func test04sendMessageChannel() {
-        sendMessage("message to lunch_buddies channel")
-        app.toolbars.buttons["Send"].tap()
+        //let expectedNumberOfMessages: UInt = 2
+        let mainTitleChannel = app.navigationBars["Channels"]
+        
+        sendMessage("test message lunch buddies")
+        //XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
         app.navigationBars["lunch_buddies"].buttons["Channels"].tap()
+        evaluateElementExist(mainTitleChannel)
     }
     
     func test05unsubscribeChannel() {
+        let mainTitleChannel = app.navigationBars["Channels"]
+        
         chooseChannel("lunch_buddies")
         unsubscribeChannel("lunch_buddies")
         confirmAlert("Successfully Unsubscribed", message: "You have successfully unsubscribed from the channel.")
         app.navigationBars["lunch_buddies"].buttons["Channels"].tap()
+        evaluateElementExist(mainTitleChannel)
     }
     
     func test06createNewChannel() {
+        let mainTitleChannel = app.navigationBars["Channels"]
+        
         createChannel("test_channel")
         confirmAlert("Channel Created", message: "Channel created successfully.")
+        evaluateElementExist(mainTitleChannel)
     }
     
     func test07createEmptyChannelName() {
         let NewChannel = app.navigationBars["New Channel"]
+        let mainTitleChannel = app.navigationBars["Channels"]
         
         createChannel("")
         confirmAlert("Invalid Channel Name", message: "Please check that you have entered a valid topic name. The field cannot be blank.")
-        evaluateElemenExist(NewChannel)
+        evaluateElementExist(NewChannel)
         app.navigationBars["New Channel"].buttons["Channels"].tap()
+        evaluateElementExist(mainTitleChannel)
     }
 
     func test08createDuplicateChannel() {
         let NewChannel = app.navigationBars["New Channel"]
+        let mainTitleChannel = app.navigationBars["Channels"]
         
         createChannel("test_channel")
         confirmAlert("Channel Creation Failure", message: "Topic already exists: test_channel")
-        evaluateElemenExist(NewChannel)
+        evaluateElementExist(NewChannel)
         app.navigationBars["New Channel"].buttons["Channels"].tap()
+        evaluateElementExist(mainTitleChannel)
     }
     
     func test09createChannelMaxCharacters() {
         let NewChannel = app.navigationBars["New Channel"]
+        let mainChannelTitle = app.navigationBars["Channels"]
         
         createChannel("123456789012345678901234567890123456789012345678901")
         confirmAlert("Channel Creation Failure", message: "Name cannot contain more than 50 characters or less than 1.")
-        evaluateElemenExist(NewChannel)
+        evaluateElementExist(NewChannel)
         app.navigationBars["New Channel"].buttons["Channels"].tap()
+        evaluateElementExist(mainChannelTitle)
     }
     
     func test10createChannelInvalidCharacters() {
         let NewChannel = app.navigationBars["New Channel"]
+        let mainChannelTitle = app.navigationBars["Channels"]
         
         createChannel("&*@_")
         confirmAlert("Channel Creation Failure", message: "The name contains invalid characters.")
-        evaluateElemenExist(NewChannel)
+        evaluateElementExist(NewChannel)
         app.navigationBars["New Channel"].buttons["Channels"].tap()
+        evaluateElementExist(mainChannelTitle)
     }
     
     func test11createChannelSlashCharacter() {

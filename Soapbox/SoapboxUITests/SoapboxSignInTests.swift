@@ -36,18 +36,21 @@ class SoapboxUITests: XCTestCase {
     }
     
     // wait for element
-    private func evaluateElemenExist(element:AnyObject) {
+    private func evaluateElementExist(element:AnyObject) {
         let exists = NSPredicate(format: "exists == 1")
         expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectationsWithTimeout(30, handler: nil)
     }
     
     // confirm alert
     private func confirmAlert(title: String, message: String) {
         if app.alerts.collectionViews.buttons["OK"].exists {
-            sleep(2)
-            XCTAssertEqual(app.staticTexts[title].exists, true)
-            XCTAssertEqual(app.staticTexts[message].exists, true)
+            let title = app.staticTexts[title]
+            let message = app.staticTexts[message]
+            
+            evaluateElementExist(title)
+            evaluateElementExist(message)
+            app.buttons["OK"].tap()
         }
     }
     
@@ -56,42 +59,36 @@ class SoapboxUITests: XCTestCase {
         signIn("nonexistinguser", password: "password")
         app.buttons["Sign In"].tap()
         confirmAlert("Error", message: "Not Authorized. Please check your credentials and try again.")
-        app.alerts.collectionViews.buttons["OK"].tap()
     }
     
     func test2registerExistingUser() {
         signIn("serveruser", password: "password")
         app.buttons["Register"].tap()
         confirmAlert("Error Registering User", message: "You have tried to create a duplicate entry.")
-        app.alerts.collectionViews.buttons["OK"].tap()
     }
     
     func test3registerEmptyUserName() {
         signIn("", password: "password")
         app.buttons["Register"].tap()
         confirmAlert("Error", message: "Username must be at least 5 characters in length.")
-        app.alerts.collectionViews.buttons["OK"].tap()
     }
     
     func test4registerEmptyPassword() {
         signIn("newuser", password: "")
         app.buttons["Register"].tap()
         confirmAlert("Error", message: "You must provide a password")
-        app.alerts.collectionViews.buttons["OK"].tap()
     }
 
     func test5signInEmptyUsername() {
         signIn("", password: "password")
         app.buttons["Sign In"].tap()
         confirmAlert("Error", message: "Username must be at least 5 characters in length.")
-        app.alerts.collectionViews.buttons["OK"].tap()
     }
     
     func test6signInEmptyPassword() {
         signIn("newuser", password: "")
         app.buttons["Sign In"].tap()
         confirmAlert("Error", message: "You must provide a password")
-        app.alerts.collectionViews.buttons["OK"].tap()
     }
     
     func test7registerUser() {
@@ -100,11 +97,10 @@ class SoapboxUITests: XCTestCase {
         
         signIn("newuser", password: "password")
         app.buttons["Register"].tap()
-        evaluateElemenExist(signoutButton)
+        evaluateElementExist(signoutButton)
         app.buttons["Sign Out"].tap()
         confirmAlert("Sign Out", message: "Continue to sign out?")
-        app.buttons["OK"].tap()
-        evaluateElemenExist(signinButton)
+        evaluateElementExist(signinButton)
     }
     
     func test8signInUser() {
@@ -113,10 +109,9 @@ class SoapboxUITests: XCTestCase {
         
         signIn("newuser", password: "password")
         app.buttons["Sign In"].tap()
-        evaluateElemenExist(signoutButton)
+        evaluateElementExist(signoutButton)
         app.buttons["Sign Out"].tap()
         confirmAlert("Sign Out", message: "Continue to sign out?")
-        app.buttons["OK"].tap()
-        evaluateElemenExist(signinButton)
+        evaluateElementExist(signinButton)
     }
 }
