@@ -109,7 +109,7 @@ class RPSLSSignInTests: XCTestCase {
     func test6signInEmptyPassword() {
         signIn("newuser", password: "")
         app.buttons["Sign In"].tap()
-        confirmAlert("Error!", message: "You must provide a password")
+        confirmAlert("Error", message: "You must provide a password")
     }
     
     func test7registerUser() {
