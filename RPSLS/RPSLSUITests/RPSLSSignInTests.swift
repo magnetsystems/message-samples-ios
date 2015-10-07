@@ -68,7 +68,7 @@ class RPSLSSignInTests: XCTestCase {
         app.textFields["Username"].tap() // get app focus by tapping username if notification was confirmed
         signIn("nonexistinguser", password: "password")
         app.buttons["Sign In"].tap()
-        confirmAlert("Error", message: "Not Authorized. Please check your credentials and try again.")
+        confirmAlert("Error!", message: "Not Authorized. Please check your credentials and try again.")
     }
     
     func test2registerExistingUser() {
@@ -98,7 +98,7 @@ class RPSLSSignInTests: XCTestCase {
     func test6signInEmptyPassword() {
         signIn("newuser", password: "")
         app.buttons["Sign In"].tap()
-        confirmAlert("Error", message: "You must provide a password")
+        confirmAlert("Error!", message: "You must provide a password")
     }
     
     func test7registerUser() {
