@@ -14,7 +14,7 @@ class RPSLSGameTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = true
+        continueAfterFailure = false
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
         //app.launch()
     }
@@ -25,8 +25,12 @@ class RPSLSGameTests: XCTestCase {
     }
     
     private func runApp() {
+        let appImage = app.images["splash"]
+        
         app.launch()
         sleep(2)
+        evaluateElementExist(appImage)
+        
     }
     
     // sign in
@@ -43,11 +47,10 @@ class RPSLSGameTests: XCTestCase {
     // alert confirmation
     private func alertConfirmation(message:String) {
         let findOpponentButton = app.buttons["Find Opponent"]
-        let alertButton = app.buttons[message]
         let availablePlayers = app.navigationBars["Available Players"].staticTexts["Available Players"]
         
-        evaluateElementExist(alertButton)
         app.buttons[message].tap()
+        XCTAssertEqual(app.buttons[message].exists, false)
         evaluateElementExist(availablePlayers)
         app.navigationBars["Available Players"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
         evaluateElementExist(findOpponentButton)
@@ -64,34 +67,36 @@ class RPSLSGameTests: XCTestCase {
     
     // game choice
     private func gameChoice(choice:String) {
-        let choiceConfirmation = app.staticTexts["You chose..."]
-        let spock = app.buttons["spock"]
         let rock = app.buttons["rock"]
-        let paper = app.buttons["paper"]
-        let scissors = app.buttons["scissors"]
-        let lizard = app.buttons["lizard"]
         
-        evaluateElementExist(spock)
         evaluateElementExist(rock)
-        evaluateElementExist(paper)
-        evaluateElementExist(scissors)
-        evaluateElementExist(lizard)
         app.buttons[choice].tap()
-        evaluateElementExist(choiceConfirmation)
+        sleep(5)
+        XCTAssertEqual(app.staticTexts["You chose..."].exists, true)
+        XCTAssertNotEqual(app.buttons[choice].exists, false)
     }
     
-    // wait for element
+    // wait for element exist
     private func evaluateElementExist(element:AnyObject) {
         let exists = NSPredicate(format: "exists == 1")
+        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(30, handler: nil)
+    }
+    
+    // wait for element not exist
+    private func evaluateElementNotExist(element:AnyObject) {
+        let exists = NSPredicate(format: "exists == 0")
         expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
         waitForExpectationsWithTimeout(30, handler: nil)
     }
 
     // rpsls game tests
     func test01launchRPSLS() {
-        app.launch()
-        let appImage = app.images["splash"]
-        evaluateElementExist(appImage)
+        let signinButton = app.buttons["Sign In"]
+        
+        runApp()
+        evaluateElementExist(signinButton)
+
     }
     
     func test02registerPlayer() {
