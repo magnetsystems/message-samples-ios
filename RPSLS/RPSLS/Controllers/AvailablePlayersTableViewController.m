@@ -181,7 +181,9 @@
 	self.availablePlayersList = filtered;
 	
 	[self.tableView reloadData];
-	[self.refreshControl endRefreshing];
+    if (self.refreshControl.isRefreshing) {
+        [self.refreshControl endRefreshing];
+    }
 }
 
 - (void)updateListWithMessage:(MMXMessage *)message {

@@ -8,9 +8,9 @@
 
 import XCTest
 
-class RPSLSUITests: XCTestCase {
+class RPSLSSignInTests: XCTestCase {
     let app = XCUIApplication()
-
+    
     override func setUp() {
         super.setUp()
         // In UI tests it is usually best to stop immediately when a failure occurs.
@@ -104,18 +104,18 @@ class RPSLSUITests: XCTestCase {
     func test7registerUser() {
         let findOpponentButton = app.buttons["Find Opponent"]
         
-        signIn("newuser", password: "password")
+        signIn("rpslsuser", password: "password")
         app.buttons["Register"].tap()
         evaluateElementExist(findOpponentButton)
-        XCTAssertEqual(app.staticTexts["Connected as newuser"].exists, true)
+        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true)
     }
     
     func test8signInUser() {
         let findOpponentButton = app.buttons["Find Opponent"]
         
-        signIn("newuser", password: "password")
+        signIn("rpslsuser", password: "password")
         app.buttons["Sign In"].tap()
         evaluateElementExist(findOpponentButton)
-        XCTAssertEqual(app.staticTexts["Connected as newuser"].exists, true)
+        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true)
     }
 }
