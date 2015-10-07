@@ -32,6 +32,7 @@
 @property (nonatomic, assign) RPSLSValue opponentChoice;
 @property (nonatomic, strong) NSArray * buttonArray;
 @property (nonatomic, strong) NSTimer * timer;
+@property (strong, nonatomic) IBOutlet UILabel *hiddenChoiceLabel;
 
 - (void)goToLoginScreen;
 
@@ -52,6 +53,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	[self postAvailabilityStatusAs:NO];
+    self.hiddenChoiceLabel.text = @"";
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -237,6 +239,7 @@
 #pragma mark - Choice Logic
 
 - (void)opponentMadeChoice:(RPSLSValue)choice {
+    self.hiddenChoiceLabel.text = [RPSLSEngine valueToString:choice];
 	self.opponentChoice = choice;
 	[self.timer invalidate];
 	if (self.myChoice >= 0) {

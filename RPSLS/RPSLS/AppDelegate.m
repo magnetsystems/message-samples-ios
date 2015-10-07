@@ -30,23 +30,23 @@
 	NSAssert([[NSFileManager defaultManager] fileExistsAtPath:pathAndFileName], @"You must include your Configurations.plist file in the project. You can download this file on the Settings page of the Magnet Message Web Interface");
 	//You need to change the bundle Identifier to match the one your push certificate is set up to work with.
 	//Code to register for notifications
-	UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge |
-																						 UIUserNotificationTypeSound |
-																						 UIUserNotificationTypeAlert) categories:nil];
-	[application registerUserNotificationSettings:settings];
+//	UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge |
+//																						 UIUserNotificationTypeSound |
+//																						 UIUserNotificationTypeAlert) categories:nil];
+//	[application registerUserNotificationSettings:settings];
 
     [MMX setupWithConfiguration:@"default"];
 
 	return YES;
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-//	[[MMXClient sharedClient] updateRemoteNotificationDeviceToken:deviceToken];
-}
+//- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+////	[[MMXClient sharedClient] updateRemoteNotificationDeviceToken:deviceToken];
+//}
 
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-	NSLog(@"Please make sure you have followed the steps outlined on the following page to set up push notifications and use it with Magnet Message:\nhttps://docs.magnet.com/message/ios/set-up-apns/");
-}
+//- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+//	NSLog(@"Please make sure you have followed the steps outlined on the following page to set up push notifications and use it with Magnet Message:\nhttps://docs.magnet.com/message/ios/set-up-apns/");
+//}
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
