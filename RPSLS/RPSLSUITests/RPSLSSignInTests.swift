@@ -8,15 +8,19 @@
 
 import XCTest
 
-class RPSLSUITests: XCTestCase {
+class RPSLSSignInTests: XCTestCase {
     let app = XCUIApplication()
-
+    
     override func setUp() {
         super.setUp()
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
+        let appImage = app.images["splash"]
+        
         app.launch()
+        sleep(2)
+        evaluateElementExist(appImage)
         
         // added condition to look for notification alert and confirm
         if XCUIApplication().alerts.collectionViews.buttons["OK"].exists {
@@ -41,9 +45,16 @@ class RPSLSUITests: XCTestCase {
         passwordSecureTextField.typeText(password)
     }
     
-    // wait for element
+    // wait for element exist
     private func evaluateElementExist(element:AnyObject) {
         let exists = NSPredicate(format: "exists == 1")
+        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(30, handler: nil)
+    }
+    
+    // wait for element not exist
+    private func evaluateElementNotExist(element:AnyObject) {
+        let exists = NSPredicate(format: "exists == 0")
         expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
         waitForExpectationsWithTimeout(30, handler: nil)
     }
@@ -51,11 +62,11 @@ class RPSLSUITests: XCTestCase {
     // confirm alert
     private func confirmAlert(title: String, message: String) {
         if app.alerts.collectionViews.buttons["OK"].exists {
-            let title = app.staticTexts[title]
-            let message = app.staticTexts[message]
-            
-            evaluateElementExist(title)
-            evaluateElementExist(message)
+            let button = app.buttons["OK"]
+
+            evaluateElementExist(button)
+            XCTAssertEqual(app.staticTexts[title].exists, true)
+            XCTAssertEqual(app.staticTexts[message].exists, true)
             app.buttons["OK"].tap()
         }
     }
@@ -98,24 +109,26 @@ class RPSLSUITests: XCTestCase {
     func test6signInEmptyPassword() {
         signIn("newuser", password: "")
         app.buttons["Sign In"].tap()
-        confirmAlert("Error", message: "You must provide a password")
+        confirmAlert("Error!", message: "You must provide a password")
     }
     
     func test7registerUser() {
-        let findOpponentButton = app.buttons["Find Opponent"]
+        let signinButton = app.buttons["Sign In"]
         
-        signIn("newuser", password: "password")
+        signIn("rpslsuser", password: "password")
         app.buttons["Register"].tap()
-        evaluateElementExist(findOpponentButton)
-        XCTAssertEqual(app.staticTexts["Connected as newuser"].exists, true)
+        sleep(5)
+        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true)
+        evaluateElementNotExist(signinButton)
     }
     
     func test8signInUser() {
-        let findOpponentButton = app.buttons["Find Opponent"]
+        let signinButton = app.buttons["Sign In"]
         
-        signIn("newuser", password: "password")
+        signIn("rpslsuser", password: "password")
         app.buttons["Sign In"].tap()
-        evaluateElementExist(findOpponentButton)
-        XCTAssertEqual(app.staticTexts["Connected as newuser"].exists, true)
+        sleep(5)
+        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true)
+        evaluateElementNotExist(signinButton)
     }
 }

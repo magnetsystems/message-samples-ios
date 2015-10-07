@@ -26,6 +26,7 @@
 		0E9A44361B15206400EC2859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A44351B15206400EC2859 /* LaunchScreen.storyboard */; };
 		66021B2C40868A5D1B03FF37 /* MMXMessage+RPSLS.m in Sources */ = {isa = PBXBuildFile; fileRef = 66021FC50C537BCB1E5EB983 /* MMXMessage+RPSLS.m */; };
 		AA1D03371BC30F0400D31E65 /* RPSLSSignInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D03361BC30F0400D31E65 /* RPSLSSignInTests.swift */; };
+		AAE1F1C21BC44AB400A855BB /* RPSLSGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE1F1C01BC44AB400A855BB /* RPSLSGameTests.swift */; settings = {ASSET_TAGS = (); }; };
 		BD8AAD43633225AC0980C00C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FC0CF76613AE210C93702B0 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +80,7 @@
 		AA1D03341BC30F0400D31E65 /* RPSLSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RPSLSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA1D03361BC30F0400D31E65 /* RPSLSSignInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPSLSSignInTests.swift; sourceTree = "<group>"; };
 		AA1D03381BC30F0400D31E65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAE1F1C01BC44AB400A855BB /* RPSLSGameTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RPSLSGameTests.swift; sourceTree = "<group>"; };
 		B55DA8AAAAB09F4F5E965943 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -214,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				AA1D03361BC30F0400D31E65 /* RPSLSSignInTests.swift */,
+				AAE1F1C01BC44AB400A855BB /* RPSLSGameTests.swift */,
 				AA1D03381BC30F0400D31E65 /* Info.plist */,
 			);
 			path = RPSLSUITests;
@@ -273,6 +276,7 @@
 		0E7AE7C61AE16AFD0083A47A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Magnet Systems, Inc.";
 				TargetAttributes = {
@@ -384,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAE1F1C21BC44AB400A855BB /* RPSLSGameTests.swift in Sources */,
 				AA1D03371BC30F0400D31E65 /* RPSLSSignInTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -496,11 +501,13 @@
 			baseConfigurationReference = 5C98BB9CC0F11C9B09999F64 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = RPSLS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.magnet.iOS.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -509,6 +516,7 @@
 			baseConfigurationReference = B55DA8AAAAB09F4F5E965943 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = RPSLS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -573,6 +581,7 @@
 				AA1D033C1BC30F0400D31E65 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
