@@ -72,7 +72,7 @@ class RPSLSGameTests: XCTestCase {
         evaluateElementExist(rock)
         app.buttons[choice].tap()
         sleep(5)
-        XCTAssertEqual(app.staticTexts["You chose..."].exists, true)
+        //XCTAssertEqual(app.staticTexts["You chose..."].exists, true)
         XCTAssertNotEqual(app.buttons[choice].exists, false)
     }
     
@@ -133,9 +133,36 @@ class RPSLSGameTests: XCTestCase {
         gameChoice("lizard")
         alertConfirmation("OK")
     }
+    
     func test07chooseSpock() {
         choosePlayer("player_bot")
         gameChoice("spock")
         alertConfirmation("OK")
     }
+    
+//    func test08() {
+//        //app.staticTexts[spockStaticText].tap()
+//        let findOpponentButton = app.buttons["Find Opponent"]
+//        
+//        evaluateElementExist(findOpponentButton)
+//        app.buttons["Find Opponent"].tap()
+//        app.tables.staticTexts["player_bot"].tap()
+//        sleep(3)
+//        
+//        if app.staticTexts["SPOCK"].exists {
+//            gameChoice("rock")
+//        }
+//        else if app.staticTexts["ROCK"].exists {
+//            gameChoice("rock")
+//        }
+//        else if app.staticTexts["PAPER"].exists {
+//            gameChoice("rock")
+//        }
+//        else if app.staticTexts["LIZARD"].exists {
+//            gameChoice("rock")
+//        }
+//        else if app.staticTexts["SCISSORS"].exists {
+//            gameChoice("rock")
+//        }
+//    }
 }
