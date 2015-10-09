@@ -26,10 +26,12 @@ class RPSLSGameTests: XCTestCase {
     
     private func runApp() {
         let appImage = app.images["splash"]
+        let signinButton = app.buttons["Sign In"]
         
         app.launch()
         sleep(2)
         evaluateElementExist(appImage)
+        evaluateElementExist(signinButton)
     }
     
     // sign in
@@ -67,11 +69,12 @@ class RPSLSGameTests: XCTestCase {
     // game choice
     private func gameChoice(choice:String) {
         let rock = app.buttons["rock"]
+        let okButton = app.buttons["OK"]
         
         evaluateElementExist(rock)
         app.buttons[choice].tap()
-        sleep(5)
-        //XCTAssertEqual(app.staticTexts["You chose..."].exists, true)
+        evaluateElementExist(okButton)
+        //sleep(5)
         XCTAssertNotEqual(app.buttons[choice].exists, false)
     }
     
@@ -107,13 +110,16 @@ class RPSLSGameTests: XCTestCase {
         signIn(user, password: "password")
         app.buttons["Register"].tap()
         evaluateElementExist(findOpponentButton)
-        XCTAssertEqual(app.staticTexts["Connected as " + user].exists, true)
+        XCTAssertEqual(app.staticTexts["Connected as " + user].exists, true, "did not connect as " + user)
     }
     
     func test03tieGame() {
+        let okButton = app.buttons["OK"]
+        
         choosePlayer("player_bot")
         waitIdentifier("player_bot") // identifier has been added to story board
         
+        // game logic tie
         if app.staticTexts["ROCK"].exists {
             gameChoice("rock")}
         else if app.staticTexts["PAPER"].exists {
@@ -125,14 +131,19 @@ class RPSLSGameTests: XCTestCase {
         else if app.staticTexts["SPOCK"].exists {
             gameChoice("spock")}
         
+        evaluateElementExist(okButton)
+        XCTAssertEqual(app.staticTexts["Tie!"].exists, true, "confirmation did not report a tie")
         alertConfirmation("OK")
-        app.staticTexts["Ties: 1"].tap()
+        XCTAssertEqual(app.staticTexts["Ties: 1"].exists, true, "stats did not report tie as 1")
     }
     
     func test04winGame() {
+        let okButton = app.buttons["OK"]
+
         choosePlayer("player_bot")
         waitIdentifier("player_bot") // identifier has been added to story board
         
+        //game logic for win
         if app.staticTexts["ROCK"].exists {
             gameChoice("paper")}
         else if app.staticTexts["PAPER"].exists {
@@ -144,14 +155,19 @@ class RPSLSGameTests: XCTestCase {
         else if app.staticTexts["SPOCK"].exists {
             gameChoice("lizard")}
         
+        evaluateElementExist(okButton)
+        XCTAssertEqual(app.staticTexts["Winner!"].exists, true, "confirmation did not report a winner")
         alertConfirmation("OK")
-        XCTAssertEqual(app.staticTexts["Wins: 1"].exists, true)
+        XCTAssertEqual(app.staticTexts["Wins: 1"].exists, true, "stats did not report win as 1")
     }
 
     func test05loseGame() {
+        let okButton = app.buttons["OK"]
+        
         choosePlayer("player_bot")
         waitIdentifier("player_bot") // identifier has been added to story board
         
+        // game logic for loss
         if app.staticTexts["ROCK"].exists {
             gameChoice("scissors")}
         else if app.staticTexts["PAPER"].exists {
@@ -163,7 +179,9 @@ class RPSLSGameTests: XCTestCase {
         else if app.staticTexts["SPOCK"].exists {
             gameChoice("rock")}
         
+        evaluateElementExist(okButton)
+        XCTAssertEqual(app.staticTexts["Loser!"].exists, true, "confirmation did not report a loser")
         alertConfirmation("OK")
-        XCTAssertEqual(app.staticTexts["Losses: 1"].exists, true)
-    }    
+        XCTAssertEqual(app.staticTexts["Losses: 1"].exists, true, "stats did not report loss as 1")
+    }
 }
