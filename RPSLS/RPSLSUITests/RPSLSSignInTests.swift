@@ -10,17 +10,19 @@ import XCTest
 
 class RPSLSSignInTests: XCTestCase {
     let app = XCUIApplication()
-    
+
     override func setUp() {
         super.setUp()
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
         let appImage = app.images["splash"]
+        let signinButton = app.buttons["Sign In"]
         
         app.launch()
         sleep(2)
         evaluateElementExist(appImage)
+        evaluateElementExist(signinButton)
         
         // added condition to look for notification alert and confirm
         if XCUIApplication().alerts.collectionViews.buttons["OK"].exists {
@@ -65,17 +67,14 @@ class RPSLSSignInTests: XCTestCase {
             let button = app.buttons["OK"]
 
             evaluateElementExist(button)
-            XCTAssertEqual(app.staticTexts[title].exists, true)
-            XCTAssertEqual(app.staticTexts[message].exists, true)
+            XCTAssertEqual(app.staticTexts[title].exists, true, "did not get the expected title on failure")
+            XCTAssertEqual(app.staticTexts[message].exists, true, "did not get the expected message on failure")
             app.buttons["OK"].tap()
         }
     }
     
     // sign in and registration tests
     func test1signInNonExistingUser() {
-        let signinButton = app.buttons["Sign In"]
-        
-        evaluateElementExist(signinButton)
         app.textFields["Username"].tap() // get app focus by tapping username if notification was confirmed
         signIn("nonexistinguser", password: "password")
         app.buttons["Sign In"].tap()
@@ -113,22 +112,20 @@ class RPSLSSignInTests: XCTestCase {
     }
     
     func test7registerUser() {
-        let signinButton = app.buttons["Sign In"]
+        let signInButton = app.buttons["Sign In"]
         
         signIn("rpslsuser", password: "password")
         app.buttons["Register"].tap()
-        sleep(5)
-        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true)
-        evaluateElementNotExist(signinButton)
+        evaluateElementNotExist(signInButton)
+        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true, "failed register user")
     }
     
     func test8signInUser() {
-        let signinButton = app.buttons["Sign In"]
-        
+        let signInButton = app.buttons["Sign In"]
+
         signIn("rpslsuser", password: "password")
         app.buttons["Sign In"].tap()
-        sleep(5)
-        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true)
-        evaluateElementNotExist(signinButton)
+        evaluateElementNotExist(signInButton)
+        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true, "failed sign in user")
     }
 }
