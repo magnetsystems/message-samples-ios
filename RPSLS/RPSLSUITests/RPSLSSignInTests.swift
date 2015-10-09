@@ -112,20 +112,20 @@ class RPSLSSignInTests: XCTestCase {
     }
     
     func test7registerUser() {
-        let findOpponentButton = app.buttons["Find Opponent"]
+        let signInButton = app.buttons["Sign In"]
         
         signIn("rpslsuser", password: "password")
         app.buttons["Register"].tap()
-        evaluateElementExist(findOpponentButton)
+        evaluateElementNotExist(signInButton)
         XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true, "failed register user")
     }
     
     func test8signInUser() {
-        let findOpponentButton = app.buttons["Find Opponent"]
-        
+        let signInButton = app.buttons["Sign In"]
+
         signIn("rpslsuser", password: "password")
         app.buttons["Sign In"].tap()
-        evaluateElementExist(findOpponentButton)
+        evaluateElementNotExist(signInButton)
         XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true, "failed sign in user")
     }
 }
