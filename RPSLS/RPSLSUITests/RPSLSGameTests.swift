@@ -99,6 +99,7 @@ class RPSLSGameTests: XCTestCase {
         let signinButton = app.buttons["Sign In"]
         
         runApp()
+        sleep(30)
         evaluateElementExist(signinButton)
     }
     
