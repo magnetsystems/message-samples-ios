@@ -30,7 +30,6 @@ class RPSLSGameTests: XCTestCase {
         app.launch()
         sleep(2)
         evaluateElementExist(appImage)
-        
     }
     
     // sign in
@@ -83,20 +82,21 @@ class RPSLSGameTests: XCTestCase {
         waitForExpectationsWithTimeout(30, handler: nil)
     }
     
-    // wait for element not exist
-    private func evaluateElementNotExist(element:AnyObject) {
-        let exists = NSPredicate(format: "exists == 0")
-        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
-        waitForExpectationsWithTimeout(30, handler: nil)
+    // wait for identifier (this is added as identifier "player_bot" in story board)
+    private func waitIdentifier(identifier:String) {
+        let object = app.staticTexts.elementMatchingType(.Any, identifier: identifier)
+        let testPredicate = NSPredicate(format: "label != ''")
+        self.expectationForPredicate(testPredicate, evaluatedWithObject: object, handler: nil)
+        self.waitForExpectationsWithTimeout(30, handler: nil)
     }
 
+    
     // rpsls game tests
     func test01launchRPSLS() {
         let signinButton = app.buttons["Sign In"]
         
         runApp()
         evaluateElementExist(signinButton)
-
     }
     
     func test02registerPlayer() {
@@ -110,59 +110,60 @@ class RPSLSGameTests: XCTestCase {
         XCTAssertEqual(app.staticTexts["Connected as " + user].exists, true)
     }
     
-    func test03chooseRock() {
+    func test03tieGame() {
         choosePlayer("player_bot")
-        gameChoice("rock")
+        waitIdentifier("player_bot") // identifier has been added to story board
+        
+        if app.staticTexts["ROCK"].exists {
+            gameChoice("rock")}
+        else if app.staticTexts["PAPER"].exists {
+            gameChoice("paper")}
+        else if app.staticTexts["SCISSORS"].exists {
+            gameChoice("scissors")}
+        else if app.staticTexts["LIZARD"].exists {
+            gameChoice("lizard")}
+        else if app.staticTexts["SPOCK"].exists {
+            gameChoice("spock")}
+        
         alertConfirmation("OK")
+        app.staticTexts["Ties: 1"].tap()
     }
     
-    func test04choosePaper() {
+    func test04winGame() {
         choosePlayer("player_bot")
-        gameChoice("paper")
+        waitIdentifier("player_bot") // identifier has been added to story board
+        
+        if app.staticTexts["ROCK"].exists {
+            gameChoice("paper")}
+        else if app.staticTexts["PAPER"].exists {
+            gameChoice("scissors")}
+        else if app.staticTexts["SCISSORS"].exists {
+            gameChoice("spock")}
+        else if app.staticTexts["LIZARD"].exists {
+            gameChoice("scissors")}
+        else if app.staticTexts["SPOCK"].exists {
+            gameChoice("lizard")}
+        
         alertConfirmation("OK")
+        XCTAssertEqual(app.staticTexts["Wins: 1"].exists, true)
     }
-    
-    func test05chooseScissors() {
+
+    func test05loseGame() {
         choosePlayer("player_bot")
-        gameChoice("scissors")
+        waitIdentifier("player_bot") // identifier has been added to story board
+        
+        if app.staticTexts["ROCK"].exists {
+            gameChoice("scissors")}
+        else if app.staticTexts["PAPER"].exists {
+            gameChoice("rock")}
+        else if app.staticTexts["SCISSORS"].exists {
+            gameChoice("paper")}
+        else if app.staticTexts["LIZARD"].exists {
+            gameChoice("paper")}
+        else if app.staticTexts["SPOCK"].exists {
+            gameChoice("rock")}
+        
         alertConfirmation("OK")
-    }
-    
-    func test06chooseLizard() {
-        choosePlayer("player_bot")
-        gameChoice("lizard")
-        alertConfirmation("OK")
-    }
-    
-    func test07chooseSpock() {
-        choosePlayer("player_bot")
-        gameChoice("spock")
-        alertConfirmation("OK")
-    }
-    
-//    func test08() {
-//        //app.staticTexts[spockStaticText].tap()
-//        let findOpponentButton = app.buttons["Find Opponent"]
-//        
-//        evaluateElementExist(findOpponentButton)
-//        app.buttons["Find Opponent"].tap()
-//        app.tables.staticTexts["player_bot"].tap()
-//        sleep(3)
-//        
-//        if app.staticTexts["SPOCK"].exists {
-//            gameChoice("rock")
-//        }
-//        else if app.staticTexts["ROCK"].exists {
-//            gameChoice("rock")
-//        }
-//        else if app.staticTexts["PAPER"].exists {
-//            gameChoice("rock")
-//        }
-//        else if app.staticTexts["LIZARD"].exists {
-//            gameChoice("rock")
-//        }
-//        else if app.staticTexts["SCISSORS"].exists {
-//            gameChoice("rock")
-//        }
-//    }
+        XCTAssertEqual(app.staticTexts["Losses: 1"].exists, true)
+    }    
 }

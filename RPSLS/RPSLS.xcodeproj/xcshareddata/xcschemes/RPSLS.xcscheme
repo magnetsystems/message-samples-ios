@@ -51,11 +51,6 @@
                BlueprintName = "RPSLSUITests"
                ReferencedContainer = "container:RPSLS.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "RPSLSGameTests">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
