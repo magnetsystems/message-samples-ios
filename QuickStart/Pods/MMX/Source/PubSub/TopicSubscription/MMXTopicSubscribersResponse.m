@@ -16,11 +16,10 @@
  */
 
 #import "MMXTopicSubscribersResponse.h"
-#import "DDXML.h"
 #import "MMXConstants.h"
 #import "MMXNotificationConstants.h"
-#import "XMPP.h"
-#import "MMXUser.h"
+@import MMXXMPPFramework;
+@import MagnetMobileServer;
 
 @implementation MMXTopicSubscribersResponse
 
@@ -39,9 +38,8 @@
 				NSArray *tempSubArray = jsonDictionary[@"subscribers"];
 				NSMutableArray *finalSubArray = [NSMutableArray arrayWithCapacity:tempSubArray.count];
 				for (NSDictionary *userDict in tempSubArray) {
-					MMXUser *user = [MMXUser new];
-					user.username = userDict[kAddressUsernameKey];
-					user.displayName = userDict[kAddressDisplayNameKey];
+					MMUser *user = [MMUser new];
+					user.userName = userDict[kAddressUsernameKey];
 					[finalSubArray addObject:user];
 				}
 				_subscribers = finalSubArray.copy;

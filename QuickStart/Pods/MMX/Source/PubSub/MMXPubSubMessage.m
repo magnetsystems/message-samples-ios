@@ -21,12 +21,13 @@
 #import "MMXConstants.h"
 #import "MMXPubSubManager.h"
 #import "MMXClient.h"
-#import "MMXAccountManager_Private.h"
 #import "MMXTopic_Private.h"
 #import "MMXUtils.h"
 #import "MMXMessageUtils.h"
 #import "MMXUserProfile_Private.h"
 #import "XMPPFramework.h"
+#import "MMUser+Addressable.h"
+@import MagnetMobileServer;
 
 //messageType = @"TEXTMSG"
 @implementation MMXPubSubMessage
@@ -116,7 +117,7 @@
         [mmxElement addChild:meta];
     }
 	
-	MMXUserProfile *sender = [MMXClient sharedClient].currentProfile;
+	MMUser *sender = [MMUser currentUser];
 	if (sender && sender.address) {
 		NSXMLElement *mmxMeta = [MMXInternalMessageAdaptor xmlFromRecipients:nil senderAddress:sender.address];
 		[mmxElement addChild:mmxMeta];

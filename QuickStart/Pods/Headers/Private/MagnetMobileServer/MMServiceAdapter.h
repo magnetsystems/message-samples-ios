@@ -1,0 +1,1 @@
+../../../MagnetMobileServer/MagnetMobileServer/MMServiceAdapter.h
