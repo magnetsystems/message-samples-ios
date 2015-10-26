@@ -1,0 +1,1 @@
+../../../MagnetMobileServer/MagnetMobileServer/Internal/Logging/Remote/MMLogEventsCollectionService.h

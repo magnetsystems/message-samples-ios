@@ -78,7 +78,7 @@
 		 *  Creating a new channel.
 		 *	When a user creates a topic they are automatically subscribed to it.
 		 */
-		[MMXChannel createWithName:topicName summary:topicName isPublic:YES success:^(MMXChannel *channel) {
+		[MMXChannel createWithName:topicName summary:topicName isPublic:YES publishPermissions:MMXPublishPermissionsSubscribers success:^(MMXChannel *channel) {
             NSArray * tagsArray = [self topicTags];
             if (tagsArray.count) {
                 

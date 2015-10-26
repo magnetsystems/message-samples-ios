@@ -16,7 +16,6 @@
  */
 
 #import "AppDelegate.h"
-@import MMX;
 @import MagnetMax;
 
 @interface AppDelegate ()

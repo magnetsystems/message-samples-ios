@@ -66,7 +66,7 @@ const float kPubSubCellLabelOffsetPercentage = 0.02;
 	 *  Extract username from MMXPubSubMessage metaData property
 	 *  By default the PubSub is anonymous and MMXPubSubMessage does not include the sender's username
 	 */
-	NSString *senderUserName = self.message.sender.username;
+	NSString *senderUserName = self.message.sender.userName;
 	if (self.isCurrentUser) {
 		senderUserName = @"Me";
 	} else if (senderUserName == nil || [senderUserName isEqualToString:@""]) {

@@ -19,16 +19,16 @@
 		0E2573161B05003D00916A9C /* ChannelListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2573071B05003D00916A9C /* ChannelListTableViewController.m */; };
 		0E2573171B05003D00916A9C /* SoapboxUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E25730A1B05003D00916A9C /* SoapboxUtils.m */; };
 		0E2573181B05003D00916A9C /* UIColor+Soapbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E25730C1B05003D00916A9C /* UIColor+Soapbox.m */; };
+		0E336D7B1BDEDAE800BB0CA0 /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E336D7A1BDEDAE800BB0CA0 /* MagnetMax.plist */; settings = {ASSET_TAGS = (); }; };
 		0E3614F51AFBFD2C0097E421 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3614F41AFBFD2C0097E421 /* main.m */; };
 		0E3614F81AFBFD2C0097E421 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3614F71AFBFD2C0097E421 /* AppDelegate.m */; };
 		0E3614FE1AFBFD2C0097E421 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E3614FC1AFBFD2C0097E421 /* Main.storyboard */; };
 		0E3615001AFBFD2C0097E421 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E3614FF1AFBFD2C0097E421 /* Images.xcassets */; };
 		0E9A44341B151F8100EC2859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A44331B151F8100EC2859 /* LaunchScreen.storyboard */; };
-		0EBEC9081B436020000DD49A /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EBEC9071B436020000DD49A /* Configurations.plist */; };
-		170A1378E9AEB55FCE9C85C0 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74904CBC54923F60562BB705 /* libPods.a */; };
 		660217D3FC6316094652C506 /* Announcement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6602170402AA3E62FBC304C6 /* Announcement.m */; };
 		AA78F7171BBC62D500312E18 /* SoapboxChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA78F7141BBC62D500312E18 /* SoapboxChannelTests.swift */; settings = {ASSET_TAGS = (); }; };
 		AAEC5B411BB623B800F95493 /* SoapboxSignInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEC5B401BB623B800F95493 /* SoapboxSignInTests.swift */; };
+		E86F86A8408C30216A69D919 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E6478ADA0EF08F40FB0815A /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +65,7 @@
 		0E25730A1B05003D00916A9C /* SoapboxUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoapboxUtils.m; sourceTree = "<group>"; };
 		0E25730B1B05003D00916A9C /* UIColor+Soapbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Soapbox.h"; sourceTree = "<group>"; };
 		0E25730C1B05003D00916A9C /* UIColor+Soapbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Soapbox.m"; sourceTree = "<group>"; };
+		0E336D7A1BDEDAE800BB0CA0 /* MagnetMax.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MagnetMax.plist; sourceTree = "<group>"; };
 		0E3614EF1AFBFD2C0097E421 /* Soapbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soapbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E3614F31AFBFD2C0097E421 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0E3614F41AFBFD2C0097E421 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -73,12 +74,11 @@
 		0E3614FD1AFBFD2C0097E421 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0E3614FF1AFBFD2C0097E421 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0E9A44331B151F8100EC2859 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		0EBEC9071B436020000DD49A /* Configurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Configurations.plist; sourceTree = "<group>"; };
+		1E6478ADA0EF08F40FB0815A /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		454FD38601BAF73A50999AB4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		58C7AD9B3133B3475F5B9A10 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		660216BA41C0FBACFA728FB9 /* Announcement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Announcement.h; sourceTree = "<group>"; };
 		6602170402AA3E62FBC304C6 /* Announcement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Announcement.m; sourceTree = "<group>"; };
-		74904CBC54923F60562BB705 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA78F7141BBC62D500312E18 /* SoapboxChannelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoapboxChannelTests.swift; sourceTree = "<group>"; };
 		AAEC5B3E1BB623B800F95493 /* SoapboxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoapboxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAEC5B401BB623B800F95493 /* SoapboxSignInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoapboxSignInTests.swift; sourceTree = "<group>"; };
@@ -90,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				170A1378E9AEB55FCE9C85C0 /* libPods.a in Frameworks */,
+				E86F86A8408C30216A69D919 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,7 +188,7 @@
 		0E3614F21AFBFD2C0097E421 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				0EBEC9071B436020000DD49A /* Configurations.plist */,
+				0E336D7A1BDEDAE800BB0CA0 /* MagnetMax.plist */,
 				0E3614F31AFBFD2C0097E421 /* Info.plist */,
 				0E3614F41AFBFD2C0097E421 /* main.m */,
 			);
@@ -207,7 +207,7 @@
 		8415ECB4B9C62BEF24E9DB7D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				74904CBC54923F60562BB705 /* libPods.a */,
+				1E6478ADA0EF08F40FB0815A /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -243,6 +243,7 @@
 				0E3614EC1AFBFD2C0097E421 /* Frameworks */,
 				0E3614ED1AFBFD2C0097E421 /* Resources */,
 				02F19B0EB2182E7A0D3B6DA3 /* Copy Pods Resources */,
+				0B41D5CA228E23D5038B47A0 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -315,8 +316,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0E3614FE1AFBFD2C0097E421 /* Main.storyboard in Resources */,
+				0E336D7B1BDEDAE800BB0CA0 /* MagnetMax.plist in Resources */,
 				0E3615001AFBFD2C0097E421 /* Images.xcassets in Resources */,
-				0EBEC9081B436020000DD49A /* Configurations.plist in Resources */,
 				0E9A44341B151F8100EC2859 /* LaunchScreen.storyboard in Resources */,
 				0E2573111B05003D00916A9C /* ChannelListCell.xib in Resources */,
 			);
@@ -345,6 +346,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		0B41D5CA228E23D5038B47A0 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		356D997FA2F60E4EB5408317 /* Check Pods Manifest.lock */ = {

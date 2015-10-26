@@ -17,8 +17,7 @@
  
 /* A lot of code below is taken from AFNetworkActivityLogger.m */
 
-#import <CocoaLumberjack/DDTTYLogger.h>
-#import <CocoaLumberjack/DDFileLogger.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
 #import "MMXLogger.h"
 #import <objc/runtime.h>
 
@@ -150,27 +149,27 @@ static DDFileLogger *fileLogger;
 - (void)setupLogging {
     switch (self.level) {
         case MMXLoggerLevelOff:{
-            ddLogLevel = LOG_LEVEL_OFF;
+            ddLogLevel = DDLogLevelOff;
             break;
         }
         case MMXLoggerLevelVerbose: {
-            ddLogLevel = LOG_LEVEL_VERBOSE;
+            ddLogLevel = DDLogLevelVerbose;
             break;
         }
         case MMXLoggerLevelDebug:{
-            ddLogLevel = LOG_LEVEL_DEBUG;
+            ddLogLevel = DDLogLevelDebug;
             break;
         }
         case MMXLoggerLevelInfo:{
-            ddLogLevel = LOG_LEVEL_INFO;
+            ddLogLevel = DDLogLevelInfo;
             break;
         }
         case MMXLoggerLevelWarn:{
-            ddLogLevel = LOG_LEVEL_WARN;
+            ddLogLevel = DDLogLevelWarning;
             break;
         }
         case MMXLoggerLevelError:{
-            ddLogLevel = LOG_LEVEL_ERROR;
+            ddLogLevel = DDLogLevelError;
             break;
         }
     }

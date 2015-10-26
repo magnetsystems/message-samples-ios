@@ -28,6 +28,10 @@ extern NSString * const MMXDidReceiveChannelInviteNotification;
 extern NSString * const MMXInviteKey;
 extern NSString * const MMXDidReceiveChannelInviteResponseNotification;
 extern NSString * const MMXInviteResponseKey;
+extern NSString * const MMXMessageSendErrorNotification;
+extern NSString * const MMXMessageSendErrorNSErrorKey;
+extern NSString * const MMXMessageSendErrorMessageIDKey;
+extern NSString * const MMXMessageSendErrorRecipientsKey;
 extern NSString * const MMXDidDisconnectNotification;
 extern NSString * const MMXDisconnectErrorKey;
 @end

@@ -18,10 +18,11 @@
 #import "MMXInvite_Private.h"
 #import "MMXInternalMessageAdaptor.h"
 #import "MMXChannel_Private.h"
+#import "MMXTopic_Private.h"
 #import "MMXUserID_Private.h"
-#import "MMXUser.h"
 #import "MagnetDelegate.h"
 #import "MMXUtils.h"
+@import MagnetMobileServer;
 
 @implementation MMXInvite
 
@@ -30,7 +31,7 @@
                    success:(void (^)(void))success
                    failure:(void (^)(NSError *error))failure {
 	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteResponseMessageToUser:self.sender forChannel:self.channel comments:comments response:YES];
-	[[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^{
+	[[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^(NSSet *invalidUsers){
 	} failure:^(NSError *error) {
 	}];
 	[self.channel subscribeWithSuccess:^{
@@ -48,7 +49,7 @@
                     success:(void (^)(void))success
                     failure:(void (^)(NSError *error))failure {
 	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteResponseMessageToUser:self.sender forChannel:self.channel comments:comments response:NO];
-	[[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^{
+	[[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^(NSSet *invalidUsers){
 		if (success) {
 			success();
 		}
@@ -63,11 +64,10 @@
 	MMXInvite *invite = [MMXInvite new];
 	invite.comments = message.metaData[@"text"];
 	MMXInternalAddress *address = message.senderUserID.address;
-	MMXUser *user = [MMXUser new];
+	MMUser *user = [MMUser new];
 	//Converting to MMXUserID will handle any exscaping needed
 	MMXUserID *userID = [MMXUserID userIDFromAddress:address];
-	user.username = userID.username;
-	user.displayName = userID.displayName;
+	user.userName = userID.username;
 	invite.sender = user;
 	invite.channel = [MMXInvite channelFromMessageMetaData:message.metaData];
 	invite.timestamp = message.timestamp;
@@ -77,13 +77,16 @@
 + (MMXChannel *)channelFromMessageMetaData:(NSDictionary *)metaData {
 	if (metaData) {
 		NSString *summary = [MMXUtils objectIsValidString:metaData[@"channelSummary"]] ? metaData[@"channelSummary"] : @"";
-		MMXChannel *channel = [MMXChannel channelWithName:metaData[@"channelName"] summary:summary isPublic:[metaData[@"channelIsPublic"] boolValue]];
+		MMXChannel *channel = [MMXChannel channelWithName:metaData[@"channelName"]
+												  summary:summary
+												 isPublic:[metaData[@"channelIsPublic"] boolValue]
+									   publishPermissions:[MMXTopic publishPermissionsFromString:metaData[@"channelPublishPermissions"]]];
 		if ([MMXUtils objectIsValidString:metaData[@"channelCreationDate"]]) {
 			NSDate *channelCreationDate = [MMXUtils dateFromiso8601Format:metaData[@"channelCreationDate"]];
 			channel.creationDate = channelCreationDate;
 		}
-		NSString * ownerUsername = [MMXUtils objectIsValidString:metaData[@"channelCreatorUsername"]] ? metaData[@"channelCreatorUsername"] : @"";
-		channel.ownerUsername = ownerUsername;
+		NSString * ownerUserID = [MMXUtils objectIsValidString:metaData[@"channelCreatorUsername"]] ? metaData[@"channelCreatorUsername"] : @"";
+		channel.ownerUserID = ownerUserID;
 		return channel;
 	}
 	return nil;

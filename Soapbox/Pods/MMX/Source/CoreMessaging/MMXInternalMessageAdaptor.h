@@ -17,16 +17,15 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXAddressable.h"
-#import <Mantle/Mantle.h>
+@import MagnetMobileServer;
 
 @class CLLocation;
 @class MMXUserID;
 @class MMXEndpoint;
 @class MMXTopic;
-@class MMXUser;
 @class MMXChannel;
 
-@interface MMXInternalMessageAdaptor : MTLModel
+@interface MMXInternalMessageAdaptor : MMModel
 
 //All Messages
 @property(nonatomic, strong, readonly) NSString *messageID;
@@ -55,11 +54,11 @@
               messageType:(NSString *)messageType
                  metaData:(NSDictionary *)metaData;
 
-+ (instancetype)inviteMessageToUser:(MMXUser *)recipient
++ (instancetype)inviteMessageToUser:(MMUser *)recipient
 						 forChannel:(MMXChannel *)channel
 						   comments:(NSString *)comments;
 
-+ (instancetype)inviteResponseMessageToUser:(MMXUser *)recipient
++ (instancetype)inviteResponseMessageToUser:(MMUser *)recipient
 								 forChannel:(MMXChannel *)channel
 								   comments:(NSString *)comments
 								   response:(BOOL)response;

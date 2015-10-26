@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Mantle/Mantle.h>
+@import MagnetMobileServer;
 
-@interface MMXInternalAddress : MTLModel
+@interface MMXInternalAddress : MMModel
 
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *deviceID;

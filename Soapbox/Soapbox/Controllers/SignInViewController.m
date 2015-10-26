@@ -56,13 +56,7 @@
 - (IBAction)signInPressed:(id)sender {
 	
     if ([self validateUsername:self.usernameTextField.text password:self.passwordTextField.text]) {
-        /*
-         *  Creating a new NSURLCredential.
-         */
-        NSURLCredential *credential = [NSURLCredential credentialWithUser:self.usernameTextField.text
-                                                                 password:self.passwordTextField.text
-                                                              persistence:NSURLCredentialPersistenceNone];
-        [self logInWithCredential:credential];
+        [self logInWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
     }
 }
 
@@ -72,33 +66,38 @@
         /*
          *  Creating a new NSURLCredential.
          */
-        NSURLCredential *credential = [NSURLCredential credentialWithUser:self.usernameTextField.text
-                                                                 password:self.passwordTextField.text
-                                                              persistence:NSURLCredentialPersistenceNone];
-        
-        MMXUser *user = [[MMXUser alloc] init];
-        user.displayName = self.usernameTextField.text;
-        
-        [user registerWithCredential:credential success:^{
-            [self logInWithCredential:credential];
-        } failure:^(NSError *error) {
-            [self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
-            [self setInputsEnabled:YES];
-        }];
+		MMUser *newUser = [MMUser new];
+		newUser.userName = self.usernameTextField.text;
+		newUser.password = self.passwordTextField.text;
+		newUser.firstName = self.usernameTextField.text;
+		newUser.roles = @[@"user"];
+		
+		[newUser register:^(MMUser * user) {
+			[self logInWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
+		} failure:^(NSError * error) {
+			[self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
+			[self setInputsEnabled:YES];
+		}];
+
     }
 }
 
-- (void)logInWithCredential:(NSURLCredential *)credential {
-    [MMXUser logInWithCredential:credential success:^(MMXUser *user) {
-        [self performSegueWithIdentifier:@"ShowChannelList" sender:nil];
-    } failure:^(NSError *error) {
-        NSString *errorMessage;
-        if (error) {
-            errorMessage = error.localizedFailureReason ?: error.localizedDescription;
-        }
-        [self showAlertWithTitle:@"Error" message:(errorMessage && ![errorMessage isEqualToString:@""]) ? errorMessage : @"An unknown error occurred. Please try logging in again"];
-        [self setInputsEnabled:YES];
-    }];
+- (void)logInWithUsername:(NSString *)username password:(NSString *)password {
+	
+	NSURLCredential *credential = [NSURLCredential credentialWithUser:username
+															 password:password
+														  persistence:NSURLCredentialPersistenceNone];
+
+	[MMUser login:credential success:^{
+		[self performSegueWithIdentifier:@"ShowChannelList" sender:nil];
+	} failure:^(NSError * error) {
+		NSString *errorMessage;
+		if (error) {
+			errorMessage = error.localizedFailureReason ?: error.localizedDescription;
+		}
+		[self showAlertWithTitle:@"Error" message:(errorMessage && ![errorMessage isEqualToString:@""]) ? errorMessage : @"An unknown error occurred. Please try logging in again"];
+		[self setInputsEnabled:YES];
+	}];
 }
 
 #pragma mark - Enable/Disable UI Elements
