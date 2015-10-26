@@ -11,7 +11,6 @@
 		0E5078CF1B1CF88E002A2F28 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E5078CE1B1CF88E002A2F28 /* AppDelegate.m */; };
 		0E5078D51B1CF88E002A2F28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E5078D31B1CF88E002A2F28 /* Main.storyboard */; };
 		0E5078D71B1CF88E002A2F28 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E5078D61B1CF88E002A2F28 /* Images.xcassets */; };
-		0E5078E61B1CF88E002A2F28 /* QuickStartTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E5078E51B1CF88E002A2F28 /* QuickStartTests.m */; };
 		0EBBD5ED1B1D1E1E0082709B /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBBD5E31B1D1E1E0082709B /* MessageCell.m */; };
 		0EBBD5EE1B1D1E1E0082709B /* MessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBBD5E51B1D1E1E0082709B /* MessagesViewController.m */; };
 		0EBBD5EF1B1D1E1E0082709B /* MessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBBD5E71B1D1E1E0082709B /* MessageTextView.m */; };
@@ -24,13 +23,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0E5078E01B1CF88E002A2F28 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0E5078BE1B1CF88E002A2F28 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0E5078C51B1CF88E002A2F28;
-			remoteInfo = QuickStart;
-		};
 		AA489D821BB0B9EF00BE7F5F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0E5078BE1B1CF88E002A2F28 /* Project object */;
@@ -48,9 +40,6 @@
 		0E5078CE1B1CF88E002A2F28 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0E5078D41B1CF88E002A2F28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0E5078D61B1CF88E002A2F28 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		0E5078DF1B1CF88E002A2F28 /* QuickStartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickStartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0E5078E41B1CF88E002A2F28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0E5078E51B1CF88E002A2F28 /* QuickStartTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QuickStartTests.m; sourceTree = "<group>"; };
 		0EBBD5E21B1D1E1E0082709B /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
 		0EBBD5E31B1D1E1E0082709B /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
 		0EBBD5E41B1D1E1E0082709B /* MessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagesViewController.h; sourceTree = "<group>"; };
@@ -80,13 +69,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0E5078DC1B1CF88E002A2F28 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		AA489D7A1BB0B9EF00BE7F5F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -101,7 +83,6 @@
 			isa = PBXGroup;
 			children = (
 				0E5078C81B1CF88E002A2F28 /* QuickStart */,
-				0E5078E21B1CF88E002A2F28 /* QuickStartTests */,
 				AA489D7E1BB0B9EF00BE7F5F /* QuickStartUITests */,
 				0E5078C71B1CF88E002A2F28 /* Products */,
 				C53691A94FCD39F696206F7C /* Pods */,
@@ -113,7 +94,6 @@
 			isa = PBXGroup;
 			children = (
 				0E5078C61B1CF88E002A2F28 /* QuickStart.app */,
-				0E5078DF1B1CF88E002A2F28 /* QuickStartTests.xctest */,
 				AA489D7D1BB0B9EF00BE7F5F /* QuickStartUITests.xctest */,
 			);
 			name = Products;
@@ -140,23 +120,6 @@
 				AAE4479F1BB45BBF00F9135C /* Configurations.plist */,
 				0E5078CA1B1CF88E002A2F28 /* Info.plist */,
 				0E5078CB1B1CF88E002A2F28 /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		0E5078E21B1CF88E002A2F28 /* QuickStartTests */ = {
-			isa = PBXGroup;
-			children = (
-				0E5078E51B1CF88E002A2F28 /* QuickStartTests.m */,
-				0E5078E31B1CF88E002A2F28 /* Supporting Files */,
-			);
-			path = QuickStartTests;
-			sourceTree = "<group>";
-		};
-		0E5078E31B1CF88E002A2F28 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				0E5078E41B1CF88E002A2F28 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -233,24 +196,6 @@
 			productReference = 0E5078C61B1CF88E002A2F28 /* QuickStart.app */;
 			productType = "com.apple.product-type.application";
 		};
-		0E5078DE1B1CF88E002A2F28 /* QuickStartTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0E5078EC1B1CF88E002A2F28 /* Build configuration list for PBXNativeTarget "QuickStartTests" */;
-			buildPhases = (
-				0E5078DB1B1CF88E002A2F28 /* Sources */,
-				0E5078DC1B1CF88E002A2F28 /* Frameworks */,
-				0E5078DD1B1CF88E002A2F28 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				0E5078E11B1CF88E002A2F28 /* PBXTargetDependency */,
-			);
-			name = QuickStartTests;
-			productName = QuickStartTests;
-			productReference = 0E5078DF1B1CF88E002A2F28 /* QuickStartTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		AA489D7C1BB0B9EF00BE7F5F /* QuickStartUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AA489D861BB0B9EF00BE7F5F /* Build configuration list for PBXNativeTarget "QuickStartUITests" */;
@@ -286,10 +231,6 @@
 							};
 						};
 					};
-					0E5078DE1B1CF88E002A2F28 = {
-						CreatedOnToolsVersion = 6.3.2;
-						TestTargetID = 0E5078C51B1CF88E002A2F28;
-					};
 					AA489D7C1BB0B9EF00BE7F5F = {
 						CreatedOnToolsVersion = 7.0;
 						TestTargetID = 0E5078C51B1CF88E002A2F28;
@@ -310,7 +251,6 @@
 			projectRoot = "";
 			targets = (
 				0E5078C51B1CF88E002A2F28 /* QuickStart */,
-				0E5078DE1B1CF88E002A2F28 /* QuickStartTests */,
 				AA489D7C1BB0B9EF00BE7F5F /* QuickStartUITests */,
 			);
 		};
@@ -325,13 +265,6 @@
 				AAE447A01BB45BBF00F9135C /* Configurations.plist in Resources */,
 				0E5078D51B1CF88E002A2F28 /* Main.storyboard in Resources */,
 				0E5078D71B1CF88E002A2F28 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0E5078DD1B1CF88E002A2F28 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,14 +325,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0E5078DB1B1CF88E002A2F28 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0E5078E61B1CF88E002A2F28 /* QuickStartTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		AA489D791BB0B9EF00BE7F5F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -411,11 +336,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0E5078E11B1CF88E002A2F28 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0E5078C51B1CF88E002A2F28 /* QuickStart */;
-			targetProxy = 0E5078E01B1CF88E002A2F28 /* PBXContainerItemProxy */;
-		};
 		AA489D831BB0B9EF00BE7F5F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0E5078C51B1CF88E002A2F28 /* QuickStart */;
@@ -540,36 +460,6 @@
 			};
 			name = Release;
 		};
-		0E5078ED1B1CF88E002A2F28 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = QuickStartTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.magnet.iOS.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuickStart.app/QuickStart";
-			};
-			name = Debug;
-		};
-		0E5078EE1B1CF88E002A2F28 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = QuickStartTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.magnet.iOS.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuickStart.app/QuickStart";
-			};
-			name = Release;
-		};
 		AA489D841BB0B9EF00BE7F5F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -615,15 +505,6 @@
 			buildConfigurations = (
 				0E5078EA1B1CF88E002A2F28 /* Debug */,
 				0E5078EB1B1CF88E002A2F28 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		0E5078EC1B1CF88E002A2F28 /* Build configuration list for PBXNativeTarget "QuickStartTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0E5078ED1B1CF88E002A2F28 /* Debug */,
-				0E5078EE1B1CF88E002A2F28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

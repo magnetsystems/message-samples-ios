@@ -23,7 +23,6 @@
 		0E3614F81AFBFD2C0097E421 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3614F71AFBFD2C0097E421 /* AppDelegate.m */; };
 		0E3614FE1AFBFD2C0097E421 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E3614FC1AFBFD2C0097E421 /* Main.storyboard */; };
 		0E3615001AFBFD2C0097E421 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E3614FF1AFBFD2C0097E421 /* Images.xcassets */; };
-		0E36150F1AFBFD2C0097E421 /* SoapboxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E36150E1AFBFD2C0097E421 /* SoapboxTests.m */; };
 		0E9A44341B151F8100EC2859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A44331B151F8100EC2859 /* LaunchScreen.storyboard */; };
 		0EBEC9081B436020000DD49A /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EBEC9071B436020000DD49A /* Configurations.plist */; };
 		170A1378E9AEB55FCE9C85C0 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74904CBC54923F60562BB705 /* libPods.a */; };
@@ -33,13 +32,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0E3615091AFBFD2C0097E421 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0E3614E71AFBFD2C0097E421 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0E3614EE1AFBFD2C0097E421;
-			remoteInfo = Soapbox;
-		};
 		AAEC5B431BB623B800F95493 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0E3614E71AFBFD2C0097E421 /* Project object */;
@@ -80,9 +72,6 @@
 		0E3614F71AFBFD2C0097E421 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0E3614FD1AFBFD2C0097E421 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0E3614FF1AFBFD2C0097E421 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		0E3615081AFBFD2C0097E421 /* SoapboxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoapboxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0E36150D1AFBFD2C0097E421 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0E36150E1AFBFD2C0097E421 /* SoapboxTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoapboxTests.m; sourceTree = "<group>"; };
 		0E9A44331B151F8100EC2859 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0EBEC9071B436020000DD49A /* Configurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Configurations.plist; sourceTree = "<group>"; };
 		454FD38601BAF73A50999AB4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -102,13 +91,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				170A1378E9AEB55FCE9C85C0 /* libPods.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0E3615051AFBFD2C0097E421 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,7 +152,6 @@
 			isa = PBXGroup;
 			children = (
 				0E3614F11AFBFD2C0097E421 /* Soapbox */,
-				0E36150B1AFBFD2C0097E421 /* SoapboxTests */,
 				AAEC5B3F1BB623B800F95493 /* SoapboxUITests */,
 				0E3614F01AFBFD2C0097E421 /* Products */,
 				FEED71E22718889AB787884E /* Pods */,
@@ -182,7 +163,6 @@
 			isa = PBXGroup;
 			children = (
 				0E3614EF1AFBFD2C0097E421 /* Soapbox.app */,
-				0E3615081AFBFD2C0097E421 /* SoapboxTests.xctest */,
 				AAEC5B3E1BB623B800F95493 /* SoapboxUITests.xctest */,
 			);
 			name = Products;
@@ -211,23 +191,6 @@
 				0EBEC9071B436020000DD49A /* Configurations.plist */,
 				0E3614F31AFBFD2C0097E421 /* Info.plist */,
 				0E3614F41AFBFD2C0097E421 /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		0E36150B1AFBFD2C0097E421 /* SoapboxTests */ = {
-			isa = PBXGroup;
-			children = (
-				0E36150E1AFBFD2C0097E421 /* SoapboxTests.m */,
-				0E36150C1AFBFD2C0097E421 /* Supporting Files */,
-			);
-			path = SoapboxTests;
-			sourceTree = "<group>";
-		};
-		0E36150C1AFBFD2C0097E421 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				0E36150D1AFBFD2C0097E421 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -290,24 +253,6 @@
 			productReference = 0E3614EF1AFBFD2C0097E421 /* Soapbox.app */;
 			productType = "com.apple.product-type.application";
 		};
-		0E3615071AFBFD2C0097E421 /* SoapboxTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0E3615151AFBFD2C0097E421 /* Build configuration list for PBXNativeTarget "SoapboxTests" */;
-			buildPhases = (
-				0E3615041AFBFD2C0097E421 /* Sources */,
-				0E3615051AFBFD2C0097E421 /* Frameworks */,
-				0E3615061AFBFD2C0097E421 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				0E36150A1AFBFD2C0097E421 /* PBXTargetDependency */,
-			);
-			name = SoapboxTests;
-			productName = SoapboxTests;
-			productReference = 0E3615081AFBFD2C0097E421 /* SoapboxTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		AAEC5B3D1BB623B800F95493 /* SoapboxUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AAEC5B471BB623B800F95493 /* Build configuration list for PBXNativeTarget "SoapboxUITests" */;
@@ -339,10 +284,6 @@
 					0E3614EE1AFBFD2C0097E421 = {
 						CreatedOnToolsVersion = 6.3;
 					};
-					0E3615071AFBFD2C0097E421 = {
-						CreatedOnToolsVersion = 6.3;
-						TestTargetID = 0E3614EE1AFBFD2C0097E421;
-					};
 					AAEC5B3D1BB623B800F95493 = {
 						CreatedOnToolsVersion = 7.0;
 						TestTargetID = 0E3614EE1AFBFD2C0097E421;
@@ -363,7 +304,6 @@
 			projectRoot = "";
 			targets = (
 				0E3614EE1AFBFD2C0097E421 /* Soapbox */,
-				0E3615071AFBFD2C0097E421 /* SoapboxTests */,
 				AAEC5B3D1BB623B800F95493 /* SoapboxUITests */,
 			);
 		};
@@ -379,13 +319,6 @@
 				0EBEC9081B436020000DD49A /* Configurations.plist in Resources */,
 				0E9A44341B151F8100EC2859 /* LaunchScreen.storyboard in Resources */,
 				0E2573111B05003D00916A9C /* ChannelListCell.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0E3615061AFBFD2C0097E421 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,14 +386,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0E3615041AFBFD2C0097E421 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0E36150F1AFBFD2C0097E421 /* SoapboxTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		AAEC5B3A1BB623B800F95493 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -473,11 +398,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0E36150A1AFBFD2C0097E421 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0E3614EE1AFBFD2C0097E421 /* Soapbox */;
-			targetProxy = 0E3615091AFBFD2C0097E421 /* PBXContainerItemProxy */;
-		};
 		AAEC5B441BB623B800F95493 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0E3614EE1AFBFD2C0097E421 /* Soapbox */;
@@ -607,39 +527,6 @@
 			};
 			name = Release;
 		};
-		0E3615161AFBFD2C0097E421 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = SoapboxTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.magnet.iOS.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Soapbox.app/Soapbox";
-			};
-			name = Debug;
-		};
-		0E3615171AFBFD2C0097E421 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = SoapboxTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.magnet.iOS.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Soapbox.app/Soapbox";
-			};
-			name = Release;
-		};
 		AAEC5B451BB623B800F95493 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -685,15 +572,6 @@
 			buildConfigurations = (
 				0E3615131AFBFD2C0097E421 /* Debug */,
 				0E3615141AFBFD2C0097E421 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		0E3615151AFBFD2C0097E421 /* Build configuration list for PBXNativeTarget "SoapboxTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0E3615161AFBFD2C0097E421 /* Debug */,
-				0E3615171AFBFD2C0097E421 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

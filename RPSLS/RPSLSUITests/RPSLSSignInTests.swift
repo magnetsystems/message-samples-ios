@@ -1,29 +1,41 @@
 //
-//  SoapboxUITests.swift
-//  SoapboxUITests
+//  RPSLSUITests.swift
+//  RPSLSUITests
 //
-//  Created by Daniel Gulko on 9/25/15.
+//  Created by Daniel Gulko on 10/5/15.
 //  Copyright © 2015 Magnet Systems, Inc. All rights reserved.
 //
 
 import XCTest
 
-class SoapboxUITests: XCTestCase {
+class RPSLSSignInTests: XCTestCase {
     let app = XCUIApplication()
-        
+
     override func setUp() {
         super.setUp()
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
+        let appImage = app.images["splash"]
+        let signinButton = app.buttons["Sign In"]
+        
         app.launch()
+        sleep(2)
+        evaluateElementExist(appImage)
+        evaluateElementExist(signinButton)
+        
+        // added condition to look for notification alert and confirm
+        if XCUIApplication().alerts.collectionViews.buttons["OK"].exists {
+            app.alerts.collectionViews.buttons["OK"].tap()
+        }
+
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+
     // sign in
     private func signIn(user:String, password:String) {
         let usernameTextField = app.textFields["Username"]
@@ -35,9 +47,16 @@ class SoapboxUITests: XCTestCase {
         passwordSecureTextField.typeText(password)
     }
     
-    // wait for element
+    // wait for element exist
     private func evaluateElementExist(element:AnyObject) {
         let exists = NSPredicate(format: "exists == 1")
+        expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
+        waitForExpectationsWithTimeout(30, handler: nil)
+    }
+    
+    // wait for element not exist
+    private func evaluateElementNotExist(element:AnyObject) {
+        let exists = NSPredicate(format: "exists == 0")
         expectationForPredicate(exists, evaluatedWithObject: element, handler: nil)
         waitForExpectationsWithTimeout(30, handler: nil)
     }
@@ -45,17 +64,18 @@ class SoapboxUITests: XCTestCase {
     // confirm alert
     private func confirmAlert(title: String, message: String) {
         if app.alerts.collectionViews.buttons["OK"].exists {
-            let title = app.staticTexts[title]
-            let message = app.staticTexts[message]
-            
-            evaluateElementExist(title)
-            evaluateElementExist(message)
+            let button = app.buttons["OK"]
+
+            evaluateElementExist(button)
+            XCTAssertEqual(app.staticTexts[title].exists, true, "did not get the expected title on failure")
+            XCTAssertEqual(app.staticTexts[message].exists, true, "did not get the expected message on failure")
             app.buttons["OK"].tap()
         }
     }
     
-    // sign in and registraiton tests
+    // sign in and registration tests
     func test1signInNonExistingUser() {
+        app.textFields["Username"].tap() // get app focus by tapping username if notification was confirmed
         signIn("nonexistinguser", password: "password")
         app.buttons["Sign In"].tap()
         confirmAlert("Error", message: "Not Authorized. Please check your credentials and try again.")
@@ -78,7 +98,7 @@ class SoapboxUITests: XCTestCase {
         app.buttons["Register"].tap()
         confirmAlert("Error", message: "You must provide a password")
     }
-
+    
     func test5signInEmptyUsername() {
         signIn("", password: "password")
         app.buttons["Sign In"].tap()
@@ -92,26 +112,20 @@ class SoapboxUITests: XCTestCase {
     }
     
     func test7registerUser() {
-        let signoutButton = app.buttons["Sign Out"]
-        let signinButton = app.buttons["Sign In"]
+        let signInButton = app.buttons["Sign In"]
         
-        signIn("newuser", password: "password")
+        signIn("rpslsuser", password: "password")
         app.buttons["Register"].tap()
-        evaluateElementExist(signoutButton)
-        app.buttons["Sign Out"].tap()
-        confirmAlert("Sign Out", message: "Continue to sign out?")
-        evaluateElementExist(signinButton)
+        evaluateElementNotExist(signInButton)
+        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true, "failed register user")
     }
     
     func test8signInUser() {
-        let signoutButton = app.buttons["Sign Out"]
-        let signinButton = app.buttons["Sign In"]
-        
-        signIn("newuser", password: "password")
+        let signInButton = app.buttons["Sign In"]
+
+        signIn("rpslsuser", password: "password")
         app.buttons["Sign In"].tap()
-        evaluateElementExist(signoutButton)
-        app.buttons["Sign Out"].tap()
-        confirmAlert("Sign Out", message: "Continue to sign out?")
-        evaluateElementExist(signinButton)
+        evaluateElementNotExist(signInButton)
+        XCTAssertEqual(app.staticTexts["Connected as rpslsuser"].exists, true, "failed sign in user")
     }
 }
