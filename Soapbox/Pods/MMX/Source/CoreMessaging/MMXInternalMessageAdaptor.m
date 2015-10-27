@@ -29,7 +29,6 @@
 #import "MMXUtils.h"
 
 #import "MMXChannel.h"
-#import "MMXUser.h"
 
 #import "NSXMLElement+XMPP.h"
 #import "XMPPJID+MMX.h"
@@ -128,7 +127,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
     return [[MMXInternalMessageAdaptor alloc] initWith:recipients withContent:content messageType:messageType metaData:metaData];
 }
 
-+ (instancetype)inviteResponseMessageToUser:(MMXUser *)recipient
++ (instancetype)inviteResponseMessageToUser:(MMUser *)recipient
 								 forChannel:(MMXChannel *)channel
 								   comments:(NSString *)comments
 								   response:(BOOL)response {
@@ -137,23 +136,25 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	msg.recipients = @[recipient];
 	msg.metaData = @{@"inviteResponseText":comments ?: [NSNull null],
 					 @"channelIsPublic":@(channel.isPublic),
+					 @"channelPublishPermissions":[MMXTopic publishPermissionsAsString:channel.publishPermissions],
 					 @"channelName":channel.name,
 					 @"channelSummary":channel.summary ?: [NSNull null],
-					 @"channelCreatorUsername":channel.ownerUsername ?: [NSNull null],
+					 @"channelCreatorUsername":channel.ownerUserID ?: [NSNull null],
 					 @"channelCreationDate":channel.creationDate ? [MMXUtils stringIniso8601Format:channel.creationDate] : [NSNull null],
 					 @"inviteIsAccepted":@(response)};
 	return msg;
 }
 
-+ (instancetype)inviteMessageToUser:(MMXUser *)recipient forChannel:(MMXChannel *)channel comments:(NSString *)comments {
++ (instancetype)inviteMessageToUser:(MMUser *)recipient forChannel:(MMXChannel *)channel comments:(NSString *)comments {
 	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor new];
 	msg.mType = @"invitation";
 	msg.recipients = @[recipient];
 	msg.metaData = @{@"text":comments ?: [NSNull null],
 					 @"channelIsPublic":@(channel.isPublic),
+					 @"channelPublishPermissions":[MMXTopic publishPermissionsAsString:channel.publishPermissions],
 					 @"channelName":channel.name,
 					 @"channelSummary":channel.summary ?: [NSNull null],
-					 @"channelCreatorUsername":channel.ownerUsername ?: [NSNull null],
+					 @"channelCreatorUsername":channel.ownerUserID ?: [NSNull null],
 					 @"channelCreationDate":channel.creationDate ? [MMXUtils stringIniso8601Format:channel.creationDate] : [NSNull null]};
 	return msg;
 }

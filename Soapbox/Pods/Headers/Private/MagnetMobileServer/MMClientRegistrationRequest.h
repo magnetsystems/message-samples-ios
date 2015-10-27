@@ -1,0 +1,1 @@
+../../../MagnetMobileServer/MagnetMobileServer/MMClientRegistrationRequest.h

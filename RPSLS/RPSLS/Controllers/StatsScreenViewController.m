@@ -47,7 +47,7 @@
 	[self.navigationItem setHidesBackButton:YES animated:YES];
 
 	self.inGame = NO;
-	self.connectedLabel.text = [NSString stringWithFormat:@"Connecting as %@",[RPSLSUser me].username];
+	self.connectedLabel.text = [NSString stringWithFormat:@"Connecting as %@",[RPSLSUser me].messageUserObject.userName];
 	self.winsLabel.text = [NSString stringWithFormat:@"Wins: %lu",(unsigned long)[RPSLSUser me].stats.wins];
 	self.lossesLabel.text = [NSString stringWithFormat:@"Losses: %lu",(unsigned long)[RPSLSUser me].stats.losses];
 	self.tiesLabel.text = [NSString stringWithFormat:@"Ties: %lu",(unsigned long)[RPSLSUser me].stats.ties];
@@ -121,7 +121,7 @@
 
 - (void)replyToInvite:(MMXMessage *)invite accept:(BOOL)accept {
 
-    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
+    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].messageUserObject.userName,
             kMessageKey_Timestamp : [RPSLSUtils timestamp],
             kMessageKey_Type : kMessageTypeValue_Accept,
             kMessageKey_Result : accept ? @"true" : @"false",
@@ -130,11 +130,9 @@
             kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
             kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]};
 
-    [invite replyWithContent:messageContent success:^{
-
-    } failure:^(NSError *error) {
-
-    }];
+    [invite replyWithContent:messageContent success:^(NSSet *invalidUsers) {
+	} failure:^(NSError *error) {
+	}];
 
     if (accept) {
 		self.inGame = YES;
@@ -239,10 +237,10 @@
 
 - (void)setupDefaultTopic {
 
-    self.connectedLabel.text = [NSString stringWithFormat:@"Connected as %@",[RPSLSUser me].username];
+    self.connectedLabel.text = [NSString stringWithFormat:@"Connected as %@",[RPSLSUser me].messageUserObject.userName];
     [self postAvailabilityStatusAs:YES];
 
-	[MMXChannel createWithName:kPostStatus_ChannelName summary:kPostStatus_ChannelName isPublic:YES success:nil failure:^(NSError *error) {
+	[MMXChannel createWithName:kPostStatus_ChannelName summary:kPostStatus_ChannelName isPublic:YES publishPermissions:MMXPublishPermissionsAnyone success:nil failure:^(NSError *error) {
 		//The error code for "duplicate topic" is 409. This means the topic already exists and I can continue to subscribe.
 		if (error.code == 409) {
 			

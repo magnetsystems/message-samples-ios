@@ -16,7 +16,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <MMX/MMX.h>
+@import MMX;
 
 @interface MMXMessage (RPSLS)
 

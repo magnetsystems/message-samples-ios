@@ -60,7 +60,7 @@ NSString * const MXcommandFetch = @"fetch";
 NSString * const MXctype = @"ctype";
 NSString * const MXctypeJSON = @"application/json";
 
-NSString * const kMMXDeviceUUID = @"kMMXDeviceUUID";
+NSString * const kMMXDeviceUUID = @"kMMDeviceUUIDKey";
 NSString * const kMMXAnonPassword = @"kMMXAnonPassword";
 
 NSString * const MMXErrorDomain = @"MMXErrorDomain";

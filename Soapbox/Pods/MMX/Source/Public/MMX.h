@@ -20,37 +20,16 @@
 #import "MMXChannel.h"
 #import "MMXInvite.h"
 #import "MMXInviteResponse.h"
-#import "MMXUser.h"
 #import "MMXNotificationConstants.h"
 #import "MMXMessageTypes.h"
 #import "MMXLogger.h"
 #import "MMXRemoteNotification.h"
 
-@interface MMX : NSObject
+#import <MagnetMobileServer/MagnetMobileServer-Swift.h>
 
-/**
- *  Initialize MMX with a configuration
- *
- *  @param name The name of the configuration in your Configurations.plist file that you want to connect to.
- */
-+ (void)setupWithConfiguration:(NSString *)name;
+@interface MMX : NSObject <MMModule>
 
-/**
- *  Call when no longer need to use the MMX features or when the app goes to the background
- */
-+ (void)teardown;
-
-/**
- * @deprecated This method is deprecated starting in version 1.9
- * @note Please use @code start @code instead.
- */
-+ (void)enableIncomingMessages  __attribute__((deprecated));
-
-/**
- * @deprecated This method is deprecated starting in version 1.9
- * @note Please use @code stop @code instead.
- */
-+ (void)disableIncomingMessages  __attribute__((deprecated));
++ (id <MMModule> __nonnull)sharedInstance;
 
 /**
  *  You must enable incoming messages. It is disabled by default.
@@ -61,12 +40,5 @@
  *  Disable incoming messages.
  */
 + (void)stop;
-
-/**
- *  Updates the device token.
- *
- *  @param deviceToken - Returned in AppDelegate application:didRegisterForRemoteNotificationsWithDeviceToken:
- */
-+ (void)setRemoteNotificationDeviceToken:(NSData *)deviceToken;
 
 @end

@@ -17,12 +17,12 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXAddressable.h"
-#import <Mantle/Mantle.h>
+@import MagnetMobileServer;
 
 /**
  *  The MMXUserID class is the primary way to identify a user, as well as a means to address a message to that user.
  */
-@interface MMXUserID : MTLModel <MMXAddressable>
+@interface MMXUserID : MMModel <MMXAddressable>
 
 /**
  *  The username associated with this object

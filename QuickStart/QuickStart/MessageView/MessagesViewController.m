@@ -21,14 +21,16 @@
 #import "MessageCell.h"
 #import "QuickStartUtils.h"
 #import "UIColor+QuickStart.h"
-#import <MMX/MMX.h>
+@import MMX;
+@import MagnetMax;
+
 @interface MessagesViewController ()
 
 @property (nonatomic, copy) NSArray * messageList;
 @property (nonatomic, copy) NSArray * colorArray;
 @property (nonatomic, assign) BOOL isSubscribed;
 
-@property (nonatomic, strong) MMXUser * currentRecipient;
+@property (nonatomic, strong) MMUser * currentRecipient;
 @property (nonatomic, strong) NSURLCredential * currentCredential;
 
 @end
@@ -59,7 +61,7 @@ NSString * const kTextContent = @"textContent";
 	
 	[self setupUI];
 
-	[self setupClient];
+	[self setupMessaging];
 	
 	self.messageList = @[];
 	[self.tableView registerClass:[MessageCell class] forCellReuseIdentifier:@"MessageCell"];
@@ -83,7 +85,7 @@ NSString * const kTextContent = @"textContent";
 }
 
 - (void)handleReturnToForeground {
-	[self logIn];
+	[self logInAndInitialize];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -94,38 +96,46 @@ NSString * const kTextContent = @"textContent";
 #pragma mark - MMXClient Setup
 
 
-- (void)setupClient {
+- (void)setupMessaging {
 
 	//Creating a new NSURLCredential
 	self.currentCredential = [NSURLCredential credentialWithUser:kDefaultUsername password:kDefaultUsername persistence:NSURLCredentialPersistenceNone];
-	MMXUser *user = [MMXUser new];
-	user.username = kDefaultUsername;
-    user.displayName = kDefaultUsername;
-    
-	[user registerWithCredential:self.currentCredential success:^{
-		[self logIn];
-	} failure:^(NSError *error) {
+	MMUser *newUser = [MMUser new];
+	newUser.userName = kDefaultUsername;
+	newUser.password = kDefaultUsername;
+	newUser.firstName = kDefaultUsername;
+	newUser.lastName = kDefaultUsername;
+	newUser.roles = @[@"user"];
+
+	[newUser register:^(MMUser * user) {
+		[self logInAndInitialize];
+	} failure:^(NSError * error) {
 		if (error.code == 409) {
 			//Already registered
-			[self logIn];
+			[self logInAndInitialize];
 		}
 	}];
 }
 
-- (void)logIn {
-	if (self.currentCredential != nil) {
-		[MMXUser logInWithCredential:self.currentCredential success:^(MMXUser *user) {
+- (void)logInAndInitialize {
+	[MMUser login:self.currentCredential success:^{
+		[MagnetMax initModule:[MMX sharedInstance] success:^{
+			
 			self.currentRecipient = [self me];
+
 			// Indicate that you are ready to receive messages now!
 			[MMX start];
-
+			
 			[self showAlertWithTitle:@"Logged In" message:[NSString stringWithFormat:@"You are logged in as %@.\n\nTry sending a message below.",kDefaultUsername]];
-            self.textInputbar.textView.text = @"Hello World";
-		} failure:^(NSError *error) {
-			[self showAlertWithTitle:@"Authentication Failure!" message:@"Something went wrong while trying to authenticate. Please check your server settings and configuration then try again."];
-			NSLog(@"logInWithCredentials Failure = %@",error);
+			
+			self.textInputbar.textView.text = @"Hello World";
+
+		} failure:^(NSError * error) {
+			[self showAlertWithTitle:@"MagnetMax initModule Error" message:error.localizedDescription];
 		}];
-	}
+	} failure:^(NSError * error) {
+		[self showAlertWithTitle:@"Login Error" message:error.localizedDescription];
+	}];
 }
 
 /*
@@ -134,24 +144,18 @@ NSString * const kTextContent = @"textContent";
 
 #pragma mark - Helpers
 
-//Created convenience method to get my MMXUser
-- (MMXUser *)me {
-	MMXUser *me = [MMXUser new];
-	me.username = kDefaultUsername;
-	return me;
+//Created convenience method to get my MMUser
+- (MMUser *)me {
+	return [MMUser currentUser];
 }
 
-//Added methods to get the MMXUser for the bots
-- (MMXUser *)echoBot {
-	MMXUser * user = [MMXUser new];
-	user.username = kEchoBotUsername;
-	return user;
+//Added methods to get the MMUser for the bots
+- (MMUser *)echoBot {
+	return [MMUser currentUser];
 }
 
-- (MMXUser *)amazingBot {
-	MMXUser * user = [MMXUser new];
-	user.username = kAmazingBotUsername;
-	return user;
+- (MMUser *)amazingBot {
+	return [MMUser currentUser];
 }
 
 #pragma mark - Send Message
@@ -160,23 +164,22 @@ NSString * const kTextContent = @"textContent";
 - (void)didPressRightButton:(id)sender {
 	[self.textView refreshFirstResponder];
 	
-	if (/* DISABLES CODE */ (YES)) {
-		MMXMessage *msg = [MMXMessage messageToRecipients:[NSSet setWithArray:@[self.currentRecipient]] messageContent:@{kTextContent:self.textView.text}];
-		[msg sendWithSuccess:nil failure:nil];
-		
-		NSDictionary *messageDict = @{@"messageContent":self.textView.text,
-									  @"timestampString":[[QuickStartUtils friendlyDateFormatter] stringFromDate:[NSDate date]],
-									  @"senderUsername":kMeString,
-									  @"isOutboundMessage":@(YES)};
-		
-		NSMutableArray *tempMessageList = self.messageList.mutableCopy;
-		[tempMessageList insertObject:messageDict atIndex:0];
-		self.messageList = tempMessageList.copy;
-		
-		[self.tableView reloadData];
-	} else {
-		[self showAlertWithTitle:@"Not Connected" message:@"Sending a message requires that you be connected. Please check your server settings and configuration then try again."];
-	}
+	MMXMessage *msg = [MMXMessage messageToRecipients:[NSSet setWithArray:@[self.currentRecipient]] messageContent:@{kTextContent:self.textView.text}];
+	[msg sendWithSuccess:nil failure:^(NSError *error) {
+		[self showAlertWithTitle:@"Message Send Error" message:error.localizedDescription];
+	}];
+	
+	NSDictionary *messageDict = @{@"messageContent":self.textView.text,
+								  @"timestampString":[[QuickStartUtils friendlyDateFormatter] stringFromDate:[NSDate date]],
+								  @"senderUsername":kMeString,
+								  @"isOutboundMessage":@(YES)};
+	
+	NSMutableArray *tempMessageList = self.messageList.mutableCopy;
+	[tempMessageList insertObject:messageDict atIndex:0];
+	self.messageList = tempMessageList.copy;
+	
+	[self.tableView reloadData];
+
 	[super didPressRightButton:sender];
 }
 
@@ -187,7 +190,7 @@ NSString * const kTextContent = @"textContent";
 		if (message) {
 			NSDictionary *messageDict = @{@"messageContent":message.messageContent[kTextContent] ?: @"Message content missing",
 										  @"timestampString":[[QuickStartUtils friendlyDateFormatter] stringFromDate:message.timestamp],
-										  @"senderUsername":message.sender.username,
+										  @"senderUsername":message.sender.firstName,
 										  @"isOutboundMessage":@(NO)};
 			
 			NSMutableArray *tempMessageList = self.messageList.mutableCopy;
@@ -243,14 +246,14 @@ NSString * const kTextContent = @"textContent";
 											  self.currentRecipient = [self me];
 									  }];
 	UIAlertAction *echoAction = [UIAlertAction
-									  actionWithTitle:[self echoBot].username
+									  actionWithTitle:[self echoBot].firstName
 									  style:UIAlertActionStyleDefault
 									  handler:^(UIAlertAction *action)
 									  {
 											  self.currentRecipient = [self echoBot];
 									  }];
 	UIAlertAction *amazingAction = [UIAlertAction
-									actionWithTitle:[self amazingBot].username
+									actionWithTitle:[self amazingBot].firstName
 									style:UIAlertActionStyleDefault
 									handler:^(UIAlertAction *action)
 									{
@@ -289,23 +292,6 @@ NSString * const kTextContent = @"textContent";
 }
 
 #pragma mark - UIAlertController
-
-- (void)showReconnect {
-	UIAlertController *alertController = [UIAlertController
-										  alertControllerWithTitle:@"Connection Lost"
-										  message:nil
-										  preferredStyle:UIAlertControllerStyleAlert];
-	
-	UIAlertAction *reconnectAction = [UIAlertAction
-								actionWithTitle:@"Reconnect"
-								style:UIAlertActionStyleDefault
-								handler:^(UIAlertAction *action)
-								{
-									[self logIn];
-								}];
-	[alertController addAction:reconnectAction];
-	[self presentViewController:alertController animated:YES completion:nil];
-}
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {
 	UIAlertController *alertController = [UIAlertController

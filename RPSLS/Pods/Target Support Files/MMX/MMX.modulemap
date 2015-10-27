@@ -1,0 +1,6 @@
+framework module MMX {
+  umbrella header "MMX-umbrella.h"
+
+  export *
+  module * { export * }
+}

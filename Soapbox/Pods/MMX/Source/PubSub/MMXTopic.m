@@ -28,7 +28,7 @@
     if (self = [super init]) {
         _nameSpace = @"*";
         _isCollection = NO;
-        _publishPermissionsLevel = MMXPublishPermissionsLevelAnyone;
+        _publishPermissions = MMXPublishPermissionsAnyone;
         _maxItemsToBePersisted = -1;
     }
     return self;
@@ -42,10 +42,10 @@
 
 + (instancetype)topicWithName:(NSString *)name
 			maxItemsToPersist:(int)maxItems
-			 permissionsLevel:(MMXPublishPermissionsLevel)level {
+		   publishPermissions:(MMXPublishPermissions)publishPermissions {
 	MMXTopic * topic = [MMXTopic topicWithName:name];
 	topic.maxItemsToBePersisted = maxItems;
-	topic.publishPermissionsLevel = level;
+	topic.publishPermissions = publishPermissions;
 	return topic;
 }
 
@@ -105,7 +105,7 @@
     }
     NSDictionary * options = @{@"maxItems":@(self.maxItemsToBePersisted),
                                @"description":self.topicDescription ? self.topicDescription :[NSNull null],
-							   @"publisherType":[self publisherType],
+							   @"publisherType":[MMXTopic publishPermissionsAsString:self.publishPermissions],
 							   @"subscribeOnCreate":@(YES)
                                };
     return @{@"topicName":self.topicName,
@@ -138,21 +138,31 @@
 
 #pragma mark - Helper Methods
 
-- (NSString *)publisherType {
-    switch (self.publishPermissionsLevel) {
-        case MMXPublishPermissionsLevelAnyone:
-            return @"anyone";
-            break;
-        case MMXPublishPermissionsLevelSubscribers:
-            return @"subscribers";
-            break;
-        case MMXPublishPermissionsLevelOwner:
-            return @"owner";
-            break;
-        default:
-            return @"anyone";
-            break;
-    }
++ (NSString *)publishPermissionsAsString:(MMXPublishPermissions)publishPermissions {
+	switch (publishPermissions) {
+		case MMXPublishPermissionsAnyone:
+			return @"anyone";
+			break;
+		case MMXPublishPermissionsSubscribers:
+			return @"subscribers";
+			break;
+		case MMXPublishPermissionsOwnerOnly:
+			return @"owner";
+			break;
+		default:
+			return @"anyone";
+			break;
+	}
+}
+
++ (MMXPublishPermissions)publishPermissionsFromString:(NSString *)publishPermissionsString {
+	if ([publishPermissionsString isEqualToString:@"owner"]) {
+		return MMXPublishPermissionsOwnerOnly;
+	} else if ([publishPermissionsString isEqualToString:@"subscribers"]) {
+		return MMXPublishPermissionsSubscribers;
+	} else {
+		return MMXPublishPermissionsAnyone;
+	}
 }
 
 - (NSString *)nameSpace {
@@ -226,7 +236,7 @@
         self.topicDescription = [coder decodeObjectForKey:@"self.topicDescription"];
         self.nameSpace = [coder decodeObjectForKey:@"self.nameSpace"];
         self.maxItemsToBePersisted = [coder decodeIntForKey:@"self.maxItemsToBePersisted"];
-        self.publishPermissionsLevel = (MMXPublishPermissionsLevel) [coder decodeIntForKey:@"self.publishPermissionsLevel"];
+        self.publishPermissions = (MMXPublishPermissions) [coder decodeIntForKey:@"self.publishPermissions"];
         self.isCollection = [coder decodeBoolForKey:@"self.isCollection"];
     }
 
@@ -238,7 +248,7 @@
     [coder encodeObject:self.topicDescription forKey:@"self.topicDescription"];
     [coder encodeObject:self.nameSpace forKey:@"self.nameSpace"];
     [coder encodeInt:self.maxItemsToBePersisted forKey:@"self.maxItemsToBePersisted"];
-    [coder encodeInt:self.publishPermissionsLevel forKey:@"self.publishPermissionsLevel"];
+    [coder encodeInt:self.publishPermissions forKey:@"self.publishPermissions"];
     [coder encodeBool:self.isCollection forKey:@"self.isCollection"];
 }
 
@@ -256,7 +266,7 @@
 		copy.topicDescription = self.topicDescription;
 		copy.nameSpace = self.nameSpace;
 		copy.maxItemsToBePersisted = self.maxItemsToBePersisted;
-		copy.publishPermissionsLevel = self.publishPermissionsLevel;
+		copy.publishPermissions = self.publishPermissions;
 		copy.isCollection = self.isCollection;
 	}
 	return copy;

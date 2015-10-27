@@ -1,1 +1,0 @@
-../../../MMX/Source/CoreMessaging/MMXMessageStateQueryResponse.h

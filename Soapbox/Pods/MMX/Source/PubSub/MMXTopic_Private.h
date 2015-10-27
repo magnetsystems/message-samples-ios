@@ -36,4 +36,8 @@
 - (NSDictionary *)dictionaryRepresentationForDeletion;
 - (NSDictionary *)dictionaryForTopicSummary;
 
+//Converts enum to string
++ (NSString *)publishPermissionsAsString:(MMXPublishPermissions)publishPermissions;
++ (MMXPublishPermissions)publishPermissionsFromString:(NSString *)publishPermissionsString;
+
 @end

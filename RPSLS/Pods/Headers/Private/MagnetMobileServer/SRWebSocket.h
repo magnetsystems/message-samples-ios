@@ -1,0 +1,1 @@
+../../../MagnetMobileServer/MagnetMobileServer/Internal/SocketRocket/SRWebSocket.h
