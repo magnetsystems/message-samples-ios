@@ -41,6 +41,7 @@
 	channel.name = name;
 	channel.summary = summary;
 	channel.isPublic = isPublic;
+	channel.publishPermissions = publishPermissions;
 	return channel;
 }
 

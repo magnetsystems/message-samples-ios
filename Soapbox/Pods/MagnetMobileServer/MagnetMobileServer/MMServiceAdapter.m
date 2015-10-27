@@ -180,13 +180,15 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
         // Cant use jsonError here as the response statusCode is 401
 //        if (!jsonError) {
         NSURL *authorizeUrl = [NSURL URLWithString:errorDictionary[@"authorize_uri"]];
+        NSDictionary *userInfo = nil;
         if (authorizeUrl) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveAuthenticationChallengeNotification
-                                                                object:nil
-                                                              userInfo:@{
-                                                                      MMServiceAdapterDidReceiveAuthenticationChallengeURLKey : authorizeUrl,
-                                                              }];
+            userInfo = @{
+                         MMServiceAdapterDidReceiveAuthenticationChallengeURLKey : authorizeUrl,
+                         };
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveAuthenticationChallengeNotification
+                                                            object:nil
+                                                          userInfo:userInfo];
     }
 }
 
@@ -462,7 +464,7 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
     MMServiceMethod *method = metaData[selectorString];
 
     
-    NSURLRequest *unusedRequest = [[NSURLRequest alloc] init];
+    NSMutableURLRequest *unusedRequest = [[NSMutableURLRequest alloc] init];
     MMCall *call = [[MMCall alloc] initWithCallID:correlationId serviceAdapter:self serviceMethod:method request:unusedRequest underlyingOperation:operation];
 
     return call;

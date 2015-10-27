@@ -99,8 +99,7 @@
 
 
 + (instancetype)resourceNodeTransformerForClass:(Class)clazz {
-
-    return (MMValueTransformer *) [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:clazz];
+    return (MMValueTransformer *) [MTLJSONAdapter dictionaryTransformerWithModelClass:clazz];
 }
 
 + (instancetype)listTransformerForType:(MMServiceIOType)type clazz:(Class)clazz {

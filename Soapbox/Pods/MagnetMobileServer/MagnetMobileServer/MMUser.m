@@ -8,11 +8,13 @@
 @implementation MMUser
 
 + (NSDictionary *)attributeMappings {
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                                      @"userID": @"userIdentifier",
-    }];
-    [dictionary addEntriesFromDictionary:[super attributeMappings]];
-    return dictionary;
+    NSDictionary *dictionary = @{
+                                 @"userID": @"userIdentifier",
+                                 };
+    NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
+    [attributeMappings addEntriesFromDictionary:dictionary];
+    
+    return attributeMappings;
 }
 
 + (NSDictionary *)listAttributeTypes {

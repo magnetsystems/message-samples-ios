@@ -5,7 +5,7 @@
 #ifndef _MAGNETMAX_
 #define _MAGNETMAX_
 
-#import <MagnetMobileServer/MagnetMobileServer.h>
-#import <MMX/MMX.h>
+@import MagnetMobileServer;
+@import MMX;
 
 #endif /* _MAGNETMAX_ */

@@ -26,13 +26,13 @@ public class MMCall: GroupOperation {
      * Should the mock implementation be used?
      */
     public var useMock: Bool = false
-    var underlyingOperation: Operation! = nil
+    var underlyingOperation: NSOperation? = nil
     private var cacheOptions: MMCacheOptions? = nil
     private var reliableCallOptions: MMReliableCallOptions? = nil
     
     // MARK: Initialization
     
-    public init(callID: String, serviceAdapter: MMServiceAdapter, serviceMethod: MMServiceMethod, request: NSMutableURLRequest, underlyingOperation: Operation) {
+    public init(callID: String, serviceAdapter: MMServiceAdapter, serviceMethod: MMServiceMethod, request: NSMutableURLRequest, underlyingOperation: NSOperation?) {
         self.callID = callID
         self.serviceAdapter = serviceAdapter
         self.serviceMethod = serviceMethod
@@ -95,6 +95,8 @@ public class MMCall: GroupOperation {
                 // Mark the request as cacheable
                 NSURLProtocol.setProperty(maxCacheAge, forKey: MMURLProtocol.cacheAgeKey, inRequest: request)
             }
+            
+            request.setValue(serviceAdapter.bearerAuthorization(), forHTTPHeaderField: "Authorization")
             
             var reliableCall: MMReliableCall?
             
@@ -199,13 +201,13 @@ public class MMCall: GroupOperation {
                     case .Date:
                         typealias SuccessBlock = @convention(block) (NSDate) -> ()
                         let successBlock = unsafeBitCast(self.successBlock, SuccessBlock.self)
-                        let value = MMValueTransformer.urlTransformer().transformedValue(response)
+                        let value = MMValueTransformer.dateTransformer().transformedValue(responseString)
                         successBlock(value as! NSDate)
                         
                     case .Uri:
                         typealias SuccessBlock = @convention(block) (NSURL) -> ()
                         let successBlock = unsafeBitCast(self.successBlock, SuccessBlock.self)
-                        let value = MMValueTransformer.dateTransformer().transformedValue(responseString)
+                        let value = MMValueTransformer.urlTransformer().transformedValue(responseString)
                         successBlock(value as! NSURL)
                         
                     case .MagnetNode, .Array:
@@ -270,30 +272,35 @@ public class MMCall: GroupOperation {
         
         if isReliable {
             let reachabilityCondition = MMReachabilityCondition()
-            underlyingOperation.addCondition(reachabilityCondition)
+            (underlyingOperation as! Operation).addCondition(reachabilityCondition)
         }
         
-        addOperation(underlyingOperation)
+        if let op = underlyingOperation {
+            addOperation(op)
+        }
         
         super.execute()
     }
     
     public func addCondition(condition: MMCondition) {
-        print("condition.dynamicType = \(condition.dynamicType)")
-//        let operationCondition = OperationConditionImplementer<condition.dynamicType>(condition: condition)
-//        addCondition(operationCondition as MMCondition)
+//        print("condition.dynamicType = \(condition.dynamicType)")
+        let operationCondition = OperationConditionImplementer(condition: condition)
+        addCondition(operationCondition)
     }
 }
 
-struct OperationConditionImplementer<T: MMCondition>: OperationCondition {
-    let condition: T
+struct OperationConditionImplementer/*<T: MMCondition>*/: OperationCondition {
+//    let condition: T
+    let condition: MMCondition
     
     static var name: String {
-        return "Silent<\(T.name)>"
+//        return "Silent<\(T.name)>"
+        return "OperationConditionImplementer"
     }
     
     static var isMutuallyExclusive: Bool {
-        return T.isMutuallyExclusive
+//        return T.isMutuallyExclusive
+        return false
     }
     
     func dependencyForOperation(operation: Operation) -> NSOperation? {
@@ -309,7 +316,7 @@ struct OperationConditionImplementer<T: MMCondition>: OperationCondition {
             }
         }
     }
-    init(condition: T) {
+    init(condition: /*T*/MMCondition) {
         self.condition = condition
     }
 }

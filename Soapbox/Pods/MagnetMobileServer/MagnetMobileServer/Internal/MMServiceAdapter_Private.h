@@ -41,9 +41,6 @@ typedef NS_ENUM(NSUInteger, MMCATTokenRequestStatus){
 
 @property (readwrite, nonatomic, copy) AFNetworkReachabilityStatusBlock networkReachabilityStatusBlock;
 
-
-- (NSString *)bearerAuthorization;
-
 - (BOOL)isSchemeHTTP;
 
 @end

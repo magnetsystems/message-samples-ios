@@ -87,7 +87,7 @@
         executeApiCommand.payload = requestPayload;
         mmcpRequest.commands = @[executeApiCommand];
 
-        NSDictionary *JSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:mmcpRequest];
+        NSDictionary *JSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:mmcpRequest error:NULL];
 
         NSError *serializationError;
         NSData *data = [NSJSONSerialization dataWithJSONObject:JSONDictionary options:0 error:&serializationError];

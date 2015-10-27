@@ -26,6 +26,7 @@ import MMX
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "appTokenReceived:", name: MMServiceAdapterDidReceiveCATTokenNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenReceived:", name: MMServiceAdapterDidReceiveHATTokenNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenInvalidated:", name: MMServiceAdapterDidInvalidateHATTokenNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenInvalidated:", name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
     }
     
     @objc static private func configurationReceived(notification: NSNotification) {
@@ -82,6 +83,7 @@ import MMX
     
     static private func deinitModule(module: MMModule) {
         modules = modules.filter {$0 !== module}
+        module.shouldDeInitialize?()
     }
     
     static private var moduleQueue: dispatch_queue_t = {

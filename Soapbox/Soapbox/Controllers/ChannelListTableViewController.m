@@ -19,7 +19,7 @@
 #import "ChannelListTableViewController.h"
 #import "ChannelListCell.h"
 #import "MessagesViewController.h"
-#import <MMX/MMX.h>
+@import MMX;
 
 @interface ChannelListTableViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 

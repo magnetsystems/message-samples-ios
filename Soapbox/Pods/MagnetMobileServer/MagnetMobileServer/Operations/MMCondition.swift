@@ -6,18 +6,6 @@ import Foundation
 
 @objc public protocol MMCondition {
     /**
-        The name of the condition. This is used in userInfo dictionaries of `.ConditionFailed`
-        errors as the value of the `OperationConditionKey` key.
-    */
-    static var name: String { get }
-    
-    /**
-        Specifies whether multiple instances of the conditionalized operation may
-        be executing simultaneously.
-    */
-    static var isMutuallyExclusive: Bool { get }
-    
-    /**
         Some conditions may have the ability to satisfy the condition if another
         operation is executed first. Use this method to return an operation that
         (for example) asks for permission to perform the operation

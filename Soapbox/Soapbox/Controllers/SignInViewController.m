@@ -17,7 +17,8 @@
 
 
 #import "SignInViewController.h"
-#import <MMX/MMX.h>
+@import MagnetMax;
+@import MMX;
 
 @interface SignInViewController ()
 
@@ -63,14 +64,13 @@
 - (IBAction)registerPressed:(id)sender {
     
     if ([self validateUsername:self.usernameTextField.text password:self.passwordTextField.text]) {
-        /*
-         *  Creating a new NSURLCredential.
-         */
+		/*
+		 *  Creating a new MMUser.
+		 */
 		MMUser *newUser = [MMUser new];
 		newUser.userName = self.usernameTextField.text;
 		newUser.password = self.passwordTextField.text;
 		newUser.firstName = self.usernameTextField.text;
-		newUser.roles = @[@"user"];
 		
 		[newUser register:^(MMUser * user) {
 			[self logInWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
@@ -84,12 +84,22 @@
 
 - (void)logInWithUsername:(NSString *)username password:(NSString *)password {
 	
+	/*
+	 *  Creating a new NSURLCredential.
+	 */
 	NSURLCredential *credential = [NSURLCredential credentialWithUser:username
 															 password:password
 														  persistence:NSURLCredentialPersistenceNone];
 
+	//Log in the user
 	[MMUser login:credential success:^{
-		[self performSegueWithIdentifier:@"ShowChannelList" sender:nil];
+		//Initialize MMX
+		[MagnetMax initModule:[MMX sharedInstance] success:^{
+			//We will wait to call [MMX start] until we get to the next ViewController where I am better set up to receive messages.
+			[self performSegueWithIdentifier:@"ShowChannelList" sender:nil];
+		} failure:^(NSError * error) {
+			NSLog(@"initModule error = %@", error.localizedDescription);
+		}];
 	} failure:^(NSError * error) {
 		NSString *errorMessage;
 		if (error) {

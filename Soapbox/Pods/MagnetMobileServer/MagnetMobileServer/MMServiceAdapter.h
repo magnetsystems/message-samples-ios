@@ -110,6 +110,8 @@ The timeout interval, in seconds, for created requests. The default timeout inte
                        clientSecret:(NSString *)clientSecret
                              client:(id<MMClientFacade>)client;
 
+- (NSString *)bearerAuthorization;
+
 - (MMCall *)registerUser:(MMUser *)user
                  success:(void (^)(MMUser *registeredUser))success
                  failure:(void (^)(NSError *error))failure;

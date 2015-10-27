@@ -127,7 +127,7 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 - (NSString *)sendMessage:(MMXMessage *)message
 				  success:(void (^)(NSSet *invalidUsers))success
 				  failure:(void (^)(NSError *error))failure {
-	//FIXME: Needs to properly handle failure and success blocks
+
 	MMXOutboundMessage *msg = [MMXOutboundMessage messageTo:[message.recipients allObjects] withContent:nil metaData:message.messageContent];
 	msg.messageID = message.messageID;
 	
