@@ -15,11 +15,11 @@
  * permissions and limitations under the License.
  */
 
-#import <Mantle/Mantle.h>
-@class MMXUser;
+@import MagnetMobileServer;
+@class MMUser;
 @class MMXChannel;
 
-@interface MMXInvite : MTLModel
+@interface MMXInvite : MMModel
 
 /**
  *  Time the invite was sent
@@ -34,7 +34,7 @@
 /**
  *  The user that sent the invite
  */
-@property (nonatomic, readonly) MMXUser *sender;
+@property (nonatomic, readonly) MMUser *sender;
 
 /**
  *  The channel the invite is for.

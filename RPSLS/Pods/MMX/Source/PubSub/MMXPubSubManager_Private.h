@@ -25,6 +25,8 @@
 
 @property (nonatomic, strong) MMXConfiguration *configuration;
 @property (nonatomic, assign) MMXConnectionStatus connectionStatus;
+@property (nonatomic, copy) NSString *username;
+@property (nonatomic, copy) NSString *appID;
 
 - (void)sendIQ:(XMPPIQ *)iq completion:(IQCompletionBlock)completion;
 

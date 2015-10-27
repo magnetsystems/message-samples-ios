@@ -16,13 +16,13 @@
  */
 
 #import "MMXAsyncOperation.h"
-@class MMXUser;
+@class MMUser;
 
 @interface MMXLogInOperation : MMXAsyncOperation
 
 @property (nonatomic, strong) NSURLCredential *creds;
 
-@property (nonatomic, strong) void (^logInSuccessBlock)(MMXUser *);
+@property (nonatomic, strong) void (^logInSuccessBlock)(MMUser *);
 
 @property (nonatomic, strong) void (^logInFailureBlock)(NSError *);
 

@@ -1,1 +1,0 @@
-../../../MMXXMPPFramework/Core/XMPPInternal.h

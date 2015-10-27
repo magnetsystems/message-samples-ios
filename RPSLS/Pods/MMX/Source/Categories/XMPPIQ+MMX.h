@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-#import <MMXXMPPFramework/XMPPIQ.h>
+@import MMXXMPPFramework;
 
 @interface XMPPIQ (MMX)
 

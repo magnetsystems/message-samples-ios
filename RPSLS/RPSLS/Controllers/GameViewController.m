@@ -144,7 +144,7 @@
 
 - (void)sendMyChoice:(RPSLSValue)choice {
 
-    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
+    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].messageUserObject.userName,
             kMessageKey_Timestamp : [RPSLSUtils timestamp],
             kMessageKey_Choice : [RPSLSEngine valueToString:choice],
             kMessageKey_Type : kMessageTypeValue_Choice,
@@ -153,16 +153,14 @@
             kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
             kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]};
 
-    MMXUser *user = [[MMXUser alloc] init];
-    user.username = self.opponent.username;
-
-    MMXMessage *message = [MMXMessage messageToRecipients:[NSSet setWithArray:@[user]] messageContent:messageContent];
-
-    [message sendWithSuccess:^{
-
-    } failure:^(NSError *error) {
-
-    }];
+	[MMUser usersWithUserNames:@[self.opponent.username] success:^(NSArray *users) {
+		MMXMessage *message = [MMXMessage messageToRecipients:[NSSet setWithArray:@[users.firstObject]] messageContent:messageContent];
+		
+		[message sendWithSuccess:^(NSSet *invalidUsers) {
+		} failure:^(NSError *error) {
+		}];
+	} failure:^(NSError * error) {
+	}];
 }
 
 - (void)handleMessage:(MMXMessage *)message {

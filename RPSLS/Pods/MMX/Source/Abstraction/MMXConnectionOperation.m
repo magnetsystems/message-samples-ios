@@ -22,17 +22,17 @@
 
 
 - (void)execute {
-	[[MagnetDelegate sharedDelegate] connectWithSuccess:^{
-		if (self.connectSuccessBlock) {
-			self.connectSuccessBlock();
-		}
-		[self finish];
-	} failure:^(NSError *error) {
-		if (self.connectFailureBlock) {
-			self.connectFailureBlock(error);
-		}
-		[self finish];
-	}];
+//	[[MagnetDelegate sharedDelegate] connectWithSuccess:^{
+//		if (self.connectSuccessBlock) {
+//			self.connectSuccessBlock();
+//		}
+//		[self finish];
+//	} failure:^(NSError *error) {
+//		if (self.connectFailureBlock) {
+//			self.connectFailureBlock(error);
+//		}
+//		[self finish];
+//	}];
 }
 
 @end

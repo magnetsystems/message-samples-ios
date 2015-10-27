@@ -16,13 +16,13 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <Mantle/Mantle.h>
+@import MagnetMobileServer;
 
 /**
  *  The MMXMessageOptions class represents the different options that can be set when sending a message. 
  *	While currently very limited, over time this class will include more options.
  */
-@interface MMXMessageOptions : MTLModel
+@interface MMXMessageOptions : MMModel
 
 /**
  * If this property is set to YES the receiver is notified that they should send a delivery receipt.

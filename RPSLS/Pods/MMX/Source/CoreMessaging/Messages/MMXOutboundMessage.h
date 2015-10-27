@@ -18,13 +18,13 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXAddressable.h"
-#import <Mantle/Mantle.h>
+@import MagnetMobileServer;
 
 /**
  *  The MMXOutboundMessage represents an outbound message.
  *	It contains the data provided you provide, a unique ID and the necessary information to address the message.
  */
-@interface MMXOutboundMessage : MTLModel
+@interface MMXOutboundMessage : MMModel
 
 /**
  *  NSArray of MMXAddressable objects to whom you want to send the message.
