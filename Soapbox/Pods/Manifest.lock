@@ -65,10 +65,10 @@ PODS:
     - AFOAuth2Manager (~> 2.2.1)
     - CocoaLumberjack (~> 2.0.3)
     - libextobjc (~> 0.4)
-    - Mantle (~> 2.0)
-  - Mantle (2.0.5):
-    - Mantle/extobjc (= 2.0.5)
-  - Mantle/extobjc (2.0.5)
+    - Mantle (= 2.0.6)
+  - Mantle (2.0.6):
+    - Mantle/extobjc (= 2.0.6)
+  - Mantle/extobjc (2.0.6)
   - MDMCoreData (1.5.0):
     - MDMCoreData/MDMCoreDataCore (= 1.5.0)
     - MDMCoreData/MDMFetchedResultsCollectionDataSource (= 1.5.0)
@@ -132,8 +132,8 @@ SPEC CHECKSUMS:
   CocoaLumberjack: f58d8a19629f4d8379ae14bb3534def24161430e
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
   MagnetMax: 26604f57907dbb344e3fec7da47572bbecba0538
-  MagnetMobileServer: 33664a222500e94965b9e2f0e684bf18847ac2d0
-  Mantle: 1912395033f601de5adc8ee91e48f46e4c7051ad
+  MagnetMobileServer: d5ddd380bc734a7eefca453ff9e3dad6ad742b41
+  Mantle: 8478c5a914248b9fc144a314be3fa8aac7f4b766
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
   MMX: 7161a6a28dd1cbb466c016dc34c1a11e5e00196d
   MMXXMPPFramework: af652c05a32674c3d0d8631f52f8a3171f42e859

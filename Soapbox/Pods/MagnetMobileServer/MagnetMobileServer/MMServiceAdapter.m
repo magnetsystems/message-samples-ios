@@ -627,7 +627,7 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
         myDevice.os = MMOsTypeIOS;
         myDevice.osVersion = [[UIDevice currentDevice] systemVersion];
         myDevice.pushAuthority = MMPushAuthorityTypeAPNS;
-        myDevice.deviceId = [MMServiceAdapter deviceUUID];
+        myDevice.deviceID = [MMServiceAdapter deviceUUID];
         myDevice.label = [[UIDevice currentDevice] name];
         
         _currentDevice = myDevice;
