@@ -4,6 +4,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class Operation;
 @class OperationQueue;
 @class AFSecurityPolicy;
 
@@ -41,7 +42,7 @@
 */
 - (id<MMRequestOperationManager>)initWithBaseURL:(NSURL *)url;
 
-- (NSOperation *)requestOperationWithRequest:(NSURLRequest *)request
+- (Operation *)requestOperationWithRequest:(NSURLRequest *)request
                                      success:(void (^)(NSURLResponse *response, id responseObject))success
                                      failure:(void (^)(NSError *error))failure;
 

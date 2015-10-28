@@ -20,9 +20,9 @@
 
 + (instancetype)dateTransformer {
     // Cast to id is required to suppress the warning
-    id transformer = [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSString *str, BOOL __unused *success, NSError __unused **error) {
         return [[self dateFormatter] dateFromString:str];
-    } reverseBlock:^(NSDate *date) {
+    } reverseBlock:^(NSDate *date, BOOL __unused *success, NSError __unused **error) {
         return [[self dateFormatter] stringFromDate:date];
     }];
     return transformer;
@@ -34,9 +34,9 @@
 
 + (instancetype)dataTransformer {
     // Cast to id is required to suppress the warning
-    id transformer = [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSString *str, BOOL __unused *success, NSError __unused **error) {
         return [[NSData alloc] initWithBase64EncodedString:str options:(NSDataBase64DecodingOptions) kNilOptions];
-    } reverseBlock:^(NSData *value) {
+    } reverseBlock:^(NSData *value, BOOL __unused *success, NSError __unused **error) {
         return [value base64EncodedStringWithOptions:(NSDataBase64EncodingOptions) kNilOptions];
     }];
     return transformer;
@@ -44,13 +44,13 @@
 
 + (instancetype)unicharTransformer {
     // Cast to id is required to suppress the warning
-    id transformer = [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSString *str, BOOL __unused *success, NSError __unused **error) {
         unichar val = 0;
         if (str.length > 0) {
             val = [str characterAtIndex:0];
         }
         return @(val);
-    } reverseBlock:^(NSNumber *value) {
+    } reverseBlock:^(NSNumber *value, BOOL __unused *success, NSError __unused **error) {
         return [NSString stringWithFormat:@"%C", [value unsignedShortValue]];
     }];
     return transformer;
@@ -58,9 +58,9 @@
 
 + (instancetype)floatTransformer {
     // Cast to id is required to suppress the warning
-    id transformer = [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSNumber *jsonValue) {
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSNumber *jsonValue, BOOL __unused *success, NSError __unused **error) {
         return [NSString stringWithFormat:@"%f", [jsonValue floatValue]];
-    } reverseBlock:^(NSNumber *value) {
+    } reverseBlock:^(NSNumber *value, BOOL __unused *success, NSError __unused **error) {
         return [NSString stringWithFormat:@"%f", [value floatValue]];
     }];
     return transformer;
@@ -68,9 +68,9 @@
 
 + (instancetype)doubleTransformer {
     // Cast to id is required to suppress the warning
-    id transformer = [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSNumber *jsonValue) {
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSNumber *jsonValue, BOOL __unused *success, NSError __unused **error) {
         return [NSString stringWithFormat:@"%f", [jsonValue doubleValue]];
-    } reverseBlock:^(NSNumber *value) {
+    } reverseBlock:^(NSNumber *value, BOOL __unused *success, NSError __unused **error) {
         return [NSString stringWithFormat:@"%f", [value doubleValue]];
     }];
     return transformer;
@@ -78,10 +78,10 @@
 
 + (instancetype)longLongTransformer {
     // Cast to id is required to suppress the warning
-    id transformer = [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSNumber *jsonValue) {
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSNumber *jsonValue, BOOL __unused *success, NSError __unused **error) {
         long long longLongNumber = [[jsonValue description] longLongValue];
         return [NSString stringWithFormat:@"%lli", longLongNumber];
-    } reverseBlock:^(NSNumber *value) {
+    } reverseBlock:^(NSNumber *value, BOOL __unused *success, NSError __unused **error) {
         long long longLongNumber = [[value description] longLongValue];
         return [NSString stringWithFormat:@"%lli", longLongNumber];
     }];
@@ -99,13 +99,12 @@
 
 
 + (instancetype)resourceNodeTransformerForClass:(Class)clazz {
-
-    return (MMValueTransformer *) [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:clazz];
+    return (MMValueTransformer *) [MTLJSONAdapter dictionaryTransformerWithModelClass:clazz];
 }
 
 + (instancetype)listTransformerForType:(MMServiceIOType)type clazz:(Class)clazz {
     // Cast to id is required to suppress the warning
-    id transformer = [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSArray *values) {
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSArray *values, BOOL __unused *success, NSError __unused **error) {
         NSMutableArray *mutableArray;
         if (values) {
             mutableArray = [NSMutableArray arrayWithCapacity:values.count];
@@ -120,7 +119,7 @@
         }
 
         return [mutableArray copy];
-    } reverseBlock:^(NSArray *values) {
+    } reverseBlock:^(NSArray *values, BOOL __unused *success, NSError __unused **error) {
         NSMutableArray *mutableArray;
         if (values) {
             mutableArray = [NSMutableArray arrayWithCapacity:values.count];
@@ -140,7 +139,7 @@
 
 + (instancetype)mapTransformerForType:(MMServiceIOType)type clazz:(Class)clazz {
     // Cast to id is required to suppress the warning
-    id transformer = [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSDictionary *values) {
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSDictionary *values, BOOL __unused *success, NSError __unused **error) {
         NSMutableDictionary *mutableDictionary;
         if (values) {
             mutableDictionary = [NSMutableDictionary dictionaryWithCapacity:values.count];
@@ -155,7 +154,7 @@
         }];
 
         return [mutableDictionary copy];
-    } reverseBlock:^(NSDictionary *values) {
+    } reverseBlock:^(NSDictionary *values, BOOL __unused *success, NSError __unused **error) {
         NSMutableDictionary *mutableDictionary;
         if (values) {
             mutableDictionary = [NSMutableDictionary dictionaryWithCapacity:values.count];
@@ -176,9 +175,9 @@
 
 + (instancetype)bigDecimalTransformer {
     // Cast to id is required to suppress the warning
-    id transformer = [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *jsonValue) {
+    id transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSString *jsonValue, BOOL __unused *success, NSError __unused **error) {
         return [NSDecimalNumber decimalNumberWithString:jsonValue];
-    } reverseBlock:^(NSDecimalNumber *value) {
+    } reverseBlock:^(NSDecimalNumber *value, BOOL __unused *success, NSError __unused **error) {
         return [value stringValue];
     }];
     return transformer;

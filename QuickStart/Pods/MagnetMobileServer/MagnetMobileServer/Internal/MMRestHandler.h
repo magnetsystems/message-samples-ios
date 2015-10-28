@@ -10,11 +10,15 @@
 
 @interface MMRestHandler : NSObject
 
-+ (NSURLRequest *)requestWithInvocation:(NSInvocation *)anInvocation
-                          serviceMethod:(MMServiceMethod *)method
-                         serviceAdapter:(MMServiceAdapter *)adapter
-                                useMock:(BOOL)useMock
-                               useCache:(BOOL)useCache
-                               cacheAge:(NSTimeInterval)cacheAge;
++ (NSMutableURLRequest *)requestWithInvocation:(NSInvocation *)anInvocation
+                                 serviceMethod:(MMServiceMethod *)method
+                                serviceAdapter:(MMServiceAdapter *)adapter;
+
++ (NSMutableURLRequest *)requestWithInvocation:(NSInvocation *)anInvocation
+                                 serviceMethod:(MMServiceMethod *)method
+                                serviceAdapter:(MMServiceAdapter *)adapter
+                                       useMock:(BOOL)useMock
+                                      useCache:(BOOL)useCache
+                                      cacheAge:(NSTimeInterval)cacheAge;
 
 @end

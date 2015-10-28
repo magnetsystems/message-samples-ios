@@ -21,7 +21,7 @@ import Foundation
     subsequent operations (still within the outer `GroupOperation`) that will all
     be executed before the rest of the operations in the initial chain of operations.
 */
-class GroupOperation: Operation {
+public class GroupOperation: Operation {
     private let internalQueue = OperationQueue()
     private let startingOperation = NSBlockOperation(block: {})
     private let finishingOperation = NSBlockOperation(block: {})
@@ -44,7 +44,7 @@ class GroupOperation: Operation {
         }
     }
     
-    override func cancel() {
+    override public func cancel() {
         internalQueue.cancelAllOperations()
         super.cancel()
     }

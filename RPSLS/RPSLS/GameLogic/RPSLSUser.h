@@ -26,7 +26,6 @@
 @property (nonatomic, strong) RPSLSUserStats * stats;
 @property (nonatomic, strong) MMUser * messageUserObject;
 @property (nonatomic, strong) NSDate * timestamp;
-@property (nonatomic, copy) NSString * username;
 @property (nonatomic, assign) BOOL isAvailable;
 
 + (instancetype)userWithUserObject:(MMUser *)userObject

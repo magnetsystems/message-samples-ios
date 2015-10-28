@@ -1,1 +1,1 @@
-../../../MagnetMobileServer/MagnetMobileServer/Internal/MMValueTransformer.h
+../../../MagnetMobileServer/MagnetMobileServer/MMValueTransformer.h

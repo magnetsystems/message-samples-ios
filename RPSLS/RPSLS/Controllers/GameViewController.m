@@ -23,6 +23,7 @@
 #import "RPSLSUserStats.h"
 #import "RPSLSUtils.h"
 #import "MMXMessage+RPSLS.h"
+@import MagnetMobileServer;
 
 @interface GameViewController ()
 
@@ -153,14 +154,11 @@
             kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
             kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]};
 
-	[MMUser usersWithUserNames:@[self.opponent.username] success:^(NSArray *users) {
-		MMXMessage *message = [MMXMessage messageToRecipients:[NSSet setWithArray:@[users.firstObject]] messageContent:messageContent];
+		MMXMessage *message = [MMXMessage messageToRecipients:[NSSet setWithArray:@[self.opponent.messageUserObject]] messageContent:messageContent];
 		
 		[message sendWithSuccess:^(NSSet *invalidUsers) {
 		} failure:^(NSError *error) {
 		}];
-	} failure:^(NSError * error) {
-	}];
 }
 
 - (void)handleMessage:(MMXMessage *)message {

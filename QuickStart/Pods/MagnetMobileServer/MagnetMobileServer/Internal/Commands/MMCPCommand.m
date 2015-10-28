@@ -46,7 +46,7 @@
 }
 
 + (NSValueTransformer *)payloadJSONTransformer {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:MMCPHTTPPayload.class];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:MMCPHTTPPayload.class];
 }
 
 @end

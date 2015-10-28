@@ -73,7 +73,11 @@
 		[newUser register:^(MMUser * user) {
 			[self logInWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
 		} failure:^(NSError * error) {
-			[self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
+			NSString *errorMessage = error.localizedFailureReason ?: error.localizedDescription;
+			if (error.code == 409) {
+				errorMessage = @"User already exists.";
+			}
+			[self showAlertWithTitle:@"Error Registering User" message:errorMessage];
 			[self setInputsEnabled:YES];
 		}];
 		
@@ -96,7 +100,12 @@
 			//We will wait to call [MMX start] until we get to the next ViewController where I am better set up to receive messages.
 			[self performSegueWithIdentifier:@"ShowStatsScreen" sender:nil];
 		} failure:^(NSError * error) {
-			NSLog(@"initModule error = %@", error.localizedDescription);
+			if ([error.localizedDescription isEqualToString:@"Authentication Failure"]) {
+				[self showAlertWithTitle:@"Error" message:error.localizedDescription];
+				[self setInputsEnabled:YES];
+			} else {
+				NSLog(@"initModule error = %@", error.localizedDescription);
+			}
 		}];
 	} failure:^(NSError * error) {
 		NSString *errorMessage;

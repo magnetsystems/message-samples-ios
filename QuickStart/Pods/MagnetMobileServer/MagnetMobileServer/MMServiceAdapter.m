@@ -15,7 +15,6 @@
 #import "MMDeviceService.h"
 #import "MMUser.h"
 #import "MMUserService.h"
-#import "MMCall_Private.h"
 #import "MMUserInfoService.h"
 #import <AFNetworking/AFHTTPSessionManager.h>
 #import <MagnetMobileServer/MagnetMobileServer-Swift.h>
@@ -181,13 +180,15 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
         // Cant use jsonError here as the response statusCode is 401
 //        if (!jsonError) {
         NSURL *authorizeUrl = [NSURL URLWithString:errorDictionary[@"authorize_uri"]];
+        NSDictionary *userInfo = nil;
         if (authorizeUrl) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveAuthenticationChallengeNotification
-                                                                object:nil
-                                                              userInfo:@{
-                                                                      MMServiceAdapterDidReceiveAuthenticationChallengeURLKey : authorizeUrl,
-                                                              }];
+            userInfo = @{
+                         MMServiceAdapterDidReceiveAuthenticationChallengeURLKey : authorizeUrl,
+                         };
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveAuthenticationChallengeNotification
+                                                            object:nil
+                                                          userInfo:userInfo];
     }
 }
 
@@ -457,11 +458,14 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
                                                                             }
                                                                         }];
 
-    MMCall *call = [[MMCall alloc] init];
-    call.serviceAdapter = self;
     NSString *correlationId = [[NSUUID UUID] UUIDString];
-    call.callId = correlationId;
-    call.underlyingOperation = operation;
+    NSDictionary *metaData = [[MMUserService class] metaData];
+    NSString *selectorString = NSStringFromSelector(@selector(login:username:password:client_id:scope:remember_me:mMSDEVICEID:authorization:success:failure:));
+    MMServiceMethod *method = metaData[selectorString];
+
+    
+    NSMutableURLRequest *unusedRequest = [[NSMutableURLRequest alloc] init];
+    MMCall *call = [[MMCall alloc] initWithCallID:correlationId serviceAdapter:self serviceMethod:method request:unusedRequest underlyingOperation:operation];
 
     return call;
 }
@@ -623,7 +627,7 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
         myDevice.os = MMOsTypeIOS;
         myDevice.osVersion = [[UIDevice currentDevice] systemVersion];
         myDevice.pushAuthority = MMPushAuthorityTypeAPNS;
-        myDevice.deviceId = [MMServiceAdapter deviceUUID];
+        myDevice.deviceID = [MMServiceAdapter deviceUUID];
         myDevice.label = [[UIDevice currentDevice] name];
         
         _currentDevice = myDevice;

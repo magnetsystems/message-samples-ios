@@ -38,7 +38,7 @@
 #pragma mark - MTLJSONSerializing
 
 + (NSDictionary *)attributeMappings {
-    return nil;
+    return [NSDictionary mtl_identityPropertyMapWithModel:self];
 }
 
 + (NSDictionary *)listAttributeTypes {

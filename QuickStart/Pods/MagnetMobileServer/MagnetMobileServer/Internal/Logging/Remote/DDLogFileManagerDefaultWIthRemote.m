@@ -1,12 +1,11 @@
-//
-// Created by Jim Liu on 8/3/15.
-// Copyright (c) 2015 Magnet Systems, Inc. All rights reserved.
-//
+/**
+ * Copyright (c) 2012-2015 Magnet Systems, Inc. All rights reserved.
+ */
 
 #import "DDLogFileManagerDefaultWIthRemote.h"
 #import "MMLogEventsCollectionService.h"
 #import "MMData.h"
-#import "MMCall.h"
+#import <MagnetMobileServer/MagnetMobileServer-Swift.h>
 
 
 @implementation DDLogFileManagerDefaultWIthRemote

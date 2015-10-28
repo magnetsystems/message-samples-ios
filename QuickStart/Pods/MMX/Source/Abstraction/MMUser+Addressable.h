@@ -6,7 +6,6 @@
 //
 //
 
-#import <MagnetMobileServer/MagnetMobileServer.h>
 #import "MMXAddressable.h"
 
 @interface MMUser (Addressable) <MMXAddressable>

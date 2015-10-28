@@ -9,8 +9,15 @@ import MMX
 
 @objc public class MagnetMax: NSObject {
     
+    /// The service adapter with the current configuration.
     static var serviceAdapter: MMServiceAdapter?
     
+    /**
+        Configure MagnetMax with specified configuration.
+     
+        - Parameters:
+            - configuration: The configuration to be used.
+    */
     static public func configure(configuration: MMServiceAdapterConfiguration) {
         registerObservers()
         serviceAdapter = MMServiceAdapter(configuration: configuration)
@@ -21,13 +28,21 @@ import MMX
         //        initModule(MMX.sharedInstance())
     }
     
+    /// Registers observers for various NSNotifications.
     static private func registerObservers() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "configurationReceived:", name: MMServiceAdapterDidReceiveConfigurationNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "appTokenReceived:", name: MMServiceAdapterDidReceiveCATTokenNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenReceived:", name: MMServiceAdapterDidReceiveHATTokenNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenInvalidated:", name: MMServiceAdapterDidInvalidateHATTokenNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenInvalidated:", name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
     }
     
+    /**
+        Acts as the configuration receiver.
+     
+        - Parameters:
+            - notification: The notification that was received.
+    */
     @objc static private func configurationReceived(notification: NSNotification) {
         configuration = notification.userInfo
         for module in modules {
@@ -37,6 +52,12 @@ import MMX
         }
     }
     
+    /**
+        Acts as the appToken receiver.
+     
+        - Parameters:
+            - notification: The notification that was received.
+    */
     @objc static private func appTokenReceived(notification: NSNotification) {
         let userInfo = notification.userInfo as! [String: String]
         appID = userInfo["appID"]
@@ -49,6 +70,12 @@ import MMX
         }
     }
     
+    /**
+        Acts as the userToken receiver.
+     
+        - Parameters:
+            - notification: The notification that was received.
+    */
     @objc static private func userTokenReceived(notification: NSNotification) {
         let userInfo = notification.userInfo as! [String: String]
         userID = userInfo["userID"]
@@ -61,17 +88,38 @@ import MMX
         }
     }
     
+    /**
+        Acts as the userToken invalidated event receiver.
+     
+        - Parameters:
+            - notification: The notification that was received.
+    */
     @objc static private func userTokenInvalidated(notification: NSNotification) {
-        let userInfo = notification.userInfo as! [String: String]
-        userID = userInfo["userID"]
-        deviceID = userInfo["deviceID"]
-        for module in modules {
-            if userID != nil && deviceID != nil {
+        
+        if let userInfo = notification.userInfo as? [String: String] {
+            userID = userInfo["userID"]
+            deviceID = userInfo["deviceID"]
+            for module in modules {
+                if userID != nil && deviceID != nil {
+                    module.didInvalidateUserToken?()
+                }
+            }
+        } else {
+            for module in modules {
                 module.didInvalidateUserToken?()
             }
         }
+        
     }
     
+    /**
+        Initialize a module.
+     
+        - Parameters:
+            - module: The module to be initialized.
+            - success: A block object to be executed when the initialization finishes successfully. This block has no return value and takes no arguments.
+            - failure: A block object to be executed when the initialization finishes with an error. This block has no return value and takes one argument: the error object.
+    */
     static public func initModule(module: MMModule, success: (() -> Void), failure: ((error: NSError) -> Void)) {
         dispatch_sync(moduleQueue) {
             self.success = success
@@ -80,23 +128,40 @@ import MMX
         }
     }
     
+    /**
+        Deinitialize a module.
+     
+        - Parameters:
+            - module: The module to be deinitialized.
+    */
     static private func deinitModule(module: MMModule) {
         modules = modules.filter {$0 !== module}
+        module.shouldDeInitialize?()
     }
     
+    /// A queue to synchronize module initialization.
     static private var moduleQueue: dispatch_queue_t = {
         return dispatch_queue_create("com.magnet.iOS.moduleQueue", nil)
         }()
     
+    /// The current configuration.
     static private var configuration: [NSObject: AnyObject]?
+    /// The current AppID.
     static private var appID: String?
+    /// The current deviceID.
     static private var deviceID: String?
+    /// The current appToken.
     static private var appToken: String?
+    /// The userID of the currently logged-in user.
     static private var userID: String?
+    /// The token of the currently logged-in user.
     static private var userToken: String?
+    /// A block object to be executed when the initialization finishes successfully. This block has no return value and takes no arguments.
     static private var success: (() -> Void)!
+    /// A block object to be executed when the initialization finishes with an error. This block has no return value and takes one argument: the error object.
     static private var failure: ((error: NSError) -> Void)!
     
+    /// The currently registered modules.
     static var modules: [MMModule] = [] {
         didSet {
             let module = modules.last

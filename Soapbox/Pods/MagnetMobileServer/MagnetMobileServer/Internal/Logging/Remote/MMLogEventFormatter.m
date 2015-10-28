@@ -1,7 +1,6 @@
-//
-// Created by Jim Liu on 7/16/15.
-// Copyright (c) 2015 Magnet Systems, Inc. All rights reserved.
-//
+/**
+ * Copyright (c) 2012-2015 Magnet Systems, Inc. All rights reserved.
+ */
 
 #import "MMLogEventFormatter.h"
 #import "MMLogEvent.h"

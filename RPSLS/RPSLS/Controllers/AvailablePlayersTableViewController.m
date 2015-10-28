@@ -24,6 +24,7 @@
 #import "GameViewController.h"
 #import "AvailablePlayersTableViewCell.h"
 #import "MMXMessage+RPSLS.h"
+@import MagnetMobileServer;
 
 @interface AvailablePlayersTableViewController ()
 
@@ -204,7 +205,7 @@
 	if (![user isEqual:[RPSLSUser me]]) {
 		if (!user.isAvailable) {
 			
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username != %@",user.username];
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"messageUserObject != %@",user.messageUserObject];
 			NSMutableArray *filtered  = [self.availablePlayersList filteredArrayUsingPredicate:predicate].mutableCopy;
 			self.availablePlayersList = filtered.copy;
 			

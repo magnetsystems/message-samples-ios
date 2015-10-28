@@ -101,7 +101,7 @@
 	 *  Creating a new MMXChannel object.
 	 *	I am setting a summary to potentially display to future users as part of channel discovery.
 	 */
-	NSString *channelName = @"company_announcements";
+	NSString *channelName = @"company_announcements2";
 	NSString *channelSummary = @"The Company Announcements channel is designed to distribute information that should be available to all employees.";
 	
 	/*
@@ -133,7 +133,7 @@
         }
     }];
 
-	NSString *lunchChannelName = @"lunch_buddies";
+	NSString *lunchChannelName = @"lunch_buddies2";
 	NSString *lunchChannelSummary = @"Lunch Buddies is a channel for finding other people to go to lunch with.";
 	[MMXChannel createWithName:lunchChannelName summary:lunchChannelSummary isPublic:YES publishPermissions:MMXPublishPermissionsSubscribers success:^(MMXChannel *channel) {
 	} failure:^(NSError *error) {

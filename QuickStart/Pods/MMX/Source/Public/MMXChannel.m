@@ -41,6 +41,7 @@
 	channel.name = name;
 	channel.summary = summary;
 	channel.isPublic = isPublic;
+	channel.publishPermissions = publishPermissions;
 	return channel;
 }
 
@@ -488,7 +489,7 @@
 		if (usernames && usernames.count) {
 			[MMUser usersWithUserIDs:usernames success:^(NSArray *users) {
 				for (MMXPubSubMessage *pubMsg in messages) {
-					NSPredicate *usernamePredicate = [NSPredicate predicateWithFormat:@"userName = %@",pubMsg.senderUserID.username];
+					NSPredicate *usernamePredicate = [NSPredicate predicateWithFormat:@"userID == %@",pubMsg.senderUserID.username];
 					MMUser *sender = [users filteredArrayUsingPredicate:usernamePredicate].firstObject;
 					MMXMessage *channelMessage = [MMXMessage messageFromPubSubMessage:pubMsg sender:sender];
 					[channelMessageArray addObject:channelMessage];

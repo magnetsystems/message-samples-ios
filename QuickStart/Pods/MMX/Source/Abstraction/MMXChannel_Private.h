@@ -27,6 +27,7 @@
 @property (nonatomic, readwrite) NSSet *tags;
 @property (nonatomic, readwrite) BOOL isSubscribed;
 @property (nonatomic, readwrite) NSDate * creationDate;
+@property (nonatomic, readwrite) MMXPublishPermissions publishPermissions;
 
 - (MMXTopic *)asTopic;
 

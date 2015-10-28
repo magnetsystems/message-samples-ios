@@ -66,6 +66,7 @@
 	}
     topic.isCollection = [topicDict[@"isCollection"] boolValue];
     topic.topicDescription = topicDict[@"description"];
+	topic.publishPermissions = [MMXTopic publishPermissionsFromString:topicDict[@"publisherType"]];
     return topic;
 }
 
