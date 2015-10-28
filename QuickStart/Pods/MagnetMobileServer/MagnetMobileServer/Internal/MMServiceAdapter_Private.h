@@ -4,16 +4,13 @@
 
 #import <Foundation/Foundation.h>
 #import "MMServiceAdapter.h"
-#import "MMCall.h"
+#import <MagnetMobileServer/MagnetMobileServer-Swift.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @class AFOAuth2Manager;
 @class MMDeviceService;
 @class MMUserService;
 @class MMUserInfoService;
-
-@protocol MMRequestOperationManager;
-@class AFHTTPSessionManager;
 
 typedef void (^AFNetworkReachabilityStatusBlock)(AFNetworkReachabilityStatus status);
 
@@ -25,7 +22,6 @@ typedef NS_ENUM(NSUInteger, MMCATTokenRequestStatus){
 
 @interface MMServiceAdapter()
 
-@property(nonatomic, strong) id<MMRequestOperationManager> requestOperationManager;
 @property(nonatomic, assign) MMCATTokenRequestStatus currentCATTokenRequestStatus;
 @property(nonatomic, strong) NSError *applicationAuthenticationError;
 @property(nonatomic, strong) MMDeviceService *deviceService;
@@ -43,12 +39,7 @@ typedef NS_ENUM(NSUInteger, MMCATTokenRequestStatus){
 
 @property(nonatomic, readwrite) MMDevice *currentDevice;
 
-@property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
-
 @property (readwrite, nonatomic, copy) AFNetworkReachabilityStatusBlock networkReachabilityStatusBlock;
-
-
-- (NSString *)bearerAuthorization;
 
 - (BOOL)isSchemeHTTP;
 

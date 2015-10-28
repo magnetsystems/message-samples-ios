@@ -19,7 +19,7 @@
 #pragma mark -
 
 + (NSValueTransformer *)commandsJSONTransformer {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:MMCPCommand.class];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:MMCPCommand.class];
 }
 
 @end

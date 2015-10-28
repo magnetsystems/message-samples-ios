@@ -1,8 +1,6 @@
 #import <UIKit/UIKit.h>
 
 #import "MagnetMobileServer.h"
-#import "MMAsynchronousOperation.h"
-#import "MMCall.h"
 #import "MMClientApplication.h"
 #import "MMClientRegistrationRequest.h"
 #import "MMData.h"
@@ -33,6 +31,7 @@
 #import "MMUserInfoService.h"
 #import "MMUserRealm.h"
 #import "MMUserService.h"
+#import "MMValueTransformer.h"
 
 FOUNDATION_EXPORT double MagnetMobileServerVersionNumber;
 FOUNDATION_EXPORT const unsigned char MagnetMobileServerVersionString[];

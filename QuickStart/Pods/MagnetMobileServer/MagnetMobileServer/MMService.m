@@ -9,7 +9,6 @@
 #import "MMValueTransformer.h"
 #import "MMRequestOperationManager.h"
 #import "MMModel.h"
-#import "MMCall_Private.h"
 #import <AFNetworking/AFURLResponseSerialization.h>
 #import <libextobjc/extobjc.h>
 #import <MagnetMobileServer/MagnetMobileServer-Swift.h>
@@ -41,13 +40,24 @@
     if (!method) {
         [super forwardInvocation:anInvocation];
     } else {
-        MMCall *call = [[MMCall alloc] init];
-        call.name = [NSString stringWithFormat:@"%@ %@", MMStringFromRequestMethod(method.requestMethod), method.path];
-        call.invocation = anInvocation;
-        call.serviceMethod = method;
-        call.serviceAdapter = self.serviceAdapter;
+        
+        NSMutableURLRequest *request = [MMRestHandler requestWithInvocation:anInvocation
+                                                              serviceMethod:method
+                                                             serviceAdapter:self.serviceAdapter];
+        
+        typedef void(^FailureBlock)(NSError *);
+        NSUInteger numberOfArguments = [[anInvocation methodSignature] numberOfArguments];
+        
+        // Get success and failure blocks
+        __unsafe_unretained id success = nil;
+        __unsafe_unretained FailureBlock failure = nil;
+        [anInvocation getArgument:&success atIndex:(numberOfArguments - 2)]; // success block is always the second to last argument (penultimate)
+        [anInvocation getArgument:&failure atIndex:(numberOfArguments - 1)]; // failure block is always the last argument
+        id successBlock = [success copy];
+        FailureBlock failureBlock = [failure copy];
+        
         NSString *correlationId = [[NSUUID UUID] UUIDString];
-        call.callId = correlationId;
+        MMCall *call = [[MMCall alloc] initWithCallID:correlationId serviceAdapter:self.serviceAdapter serviceMethod:method request:request successBlock:successBlock failureBlock:failureBlock];
         [call addDependency:self.serviceAdapter.CATTokenOperation];
         [anInvocation retainArguments];
         [anInvocation setReturnValue:&call];

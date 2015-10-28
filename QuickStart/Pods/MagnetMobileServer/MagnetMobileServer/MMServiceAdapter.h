@@ -10,6 +10,8 @@
 @class MMCall;
 @class MMDevice;
 @protocol MMServiceAdapterConfiguration;
+@class AFHTTPSessionManager;
+@protocol MMRequestOperationManager;
 
 @protocol MMClientFacade <NSObject>
 
@@ -84,6 +86,10 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 
 @property(nonatomic, readonly) MMDevice *currentDevice;
 
+@property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
+
+@property(nonatomic, strong) id<MMRequestOperationManager> requestOperationManager;
+
 - (id)createService:(Class)serviceClass;
 
 + (NSString *)deviceUUID;
@@ -103,6 +109,8 @@ The timeout interval, in seconds, for created requests. The default timeout inte
                            clientID:(NSString *)clientID
                        clientSecret:(NSString *)clientSecret
                              client:(id<MMClientFacade>)client;
+
+- (NSString *)bearerAuthorization;
 
 - (MMCall *)registerUser:(MMUser *)user
                  success:(void (^)(MMUser *registeredUser))success

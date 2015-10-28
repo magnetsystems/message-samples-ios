@@ -22,12 +22,18 @@ static NSString *const kHTTPContentType = @"Content-Type";
 
 @implementation MMRestHandler
 
-+ (NSURLRequest *)requestWithInvocation:(NSInvocation *)anInvocation
-                          serviceMethod:(MMServiceMethod *)method
-                         serviceAdapter:(MMServiceAdapter *)adapter
-                                useMock:(BOOL)useMock
-                               useCache:(BOOL)useCache
-                               cacheAge:(NSTimeInterval)cacheAge {
++ (NSMutableURLRequest *)requestWithInvocation:(NSInvocation *)anInvocation
+                                 serviceMethod:(MMServiceMethod *)method
+                                serviceAdapter:(MMServiceAdapter *)adapter {
+    return [self requestWithInvocation:anInvocation serviceMethod:method serviceAdapter:adapter useMock:NO useCache:NO cacheAge:0];
+}
+
++ (NSMutableURLRequest *)requestWithInvocation:(NSInvocation *)anInvocation
+                                 serviceMethod:(MMServiceMethod *)method
+                                serviceAdapter:(MMServiceAdapter *)adapter
+                                       useMock:(BOOL)useMock
+                                      useCache:(BOOL)useCache
+                                      cacheAge:(NSTimeInterval)cacheAge {
 
     NSString *basePath = method.path;
     NSMutableDictionary *headers = [[NSMutableDictionary alloc] init];

@@ -6,20 +6,39 @@ import Foundation
 
 public extension MMUser {
     
+    /// The currently logged-in user or nil.
     static private var currentlyLoggedInUser: MMUser?
     
+    /**
+        Registers a new user.
+     
+        - Parameters:
+            - success: A block object to be executed when the registration finishes successfully. This block has no return value and takes one argument: the newly created user.
+            - failure: A block object to be executed when the registration finishes with an error. This block has no return value and takes one argument: the error object.
+    */
     public func register(success: ((user: MMUser) -> Void)?, failure: ((error: NSError) -> Void)?) {
-        MMCoreConfiguration.serviceAdapter.registerUser(self, success: { (user) -> Void in
+
+        assert(!userName.isEmpty && !password.isEmpty, "userName or password cannot be empty")
+        
+        MMCoreConfiguration.serviceAdapter.registerUser(self, success: { user -> Void in
             success?(user: user)
         }) { (error) -> Void in
             failure?(error: error)
         }.executeInBackground(nil)
     }
     
+    /**
+        Logs in as an user.
+     
+        - Parameters:
+            - credential: A credential object containing the user's userName and password.
+            - success: A block object to be executed when the login finishes successfully. This block has no return value and takes no arguments.
+            - failure: A block object to be executed when the login finishes with an error. This block has no return value and takes one argument: the error object.
+    */
     static public func login(credential: NSURLCredential, success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
         MMCoreConfiguration.serviceAdapter.loginWithUsername(credential.user, password: credential.password, success: { _ in
             // Get current user now
-            MMCoreConfiguration.serviceAdapter.getCurrentUserWithSuccess({ (user) -> Void in
+            MMCoreConfiguration.serviceAdapter.getCurrentUserWithSuccess({ user -> Void in
                 currentlyLoggedInUser = user
                 let userInfo = ["userID": user.userID, "deviceID": MMServiceAdapter.deviceUUID(), "token": MMCoreConfiguration.serviceAdapter.HATToken]
                 NSNotificationCenter.defaultCenter().postNotificationName(MMServiceAdapterDidReceiveHATTokenNotification, object: self, userInfo: userInfo)
@@ -33,6 +52,13 @@ public extension MMUser {
         }.executeInBackground(nil)
     }
     
+    /**
+        Logs out a currently logged-in user.
+     
+        - Parameters:
+            - success: A block object to be executed when the logout finishes successfully. This block has no return value and takes no arguments.
+            - failure: A block object to be executed when the logout finishes with an error. This block has no return value and takes one argument: the error object.
+    */
     static public func logout(success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
         if currentUser() == nil {
             success?()
@@ -46,10 +72,26 @@ public extension MMUser {
         }.executeInBackground(nil)
     }
     
+    /**
+        Get the currently logged-in user.
+     
+        - Returns: The currently logged-in user or nil.
+    */
     static public func currentUser() -> MMUser? {
         return currentlyLoggedInUser
     }
     
+    /**
+        Search for users based on some criteria.
+     
+        - Parameters:
+            - query: The DSL can be found here: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax
+            - take: The number of records to retrieve.
+            - skip: The offset to start from.
+            - sort: The sort criteria.
+            - success: A block object to be executed when the call finishes successfully. This block has no return value and takes one argument: the list of users that match the specified criteria.
+            - failure: A block object to be executed when the call finishes with an error. This block has no return value and takes one argument: the error object.
+    */
     static public func searchUsers(query: String, take: Int, skip: Int, sort: String, success: (([MMUser]) -> Void)?, failure: ((error: NSError) -> Void)?) {
         
         let userService = MMUserService()
@@ -60,6 +102,14 @@ public extension MMUser {
         }.executeInBackground(nil)
     }
     
+    /**
+        Get users with userNames.
+     
+        - Parameters:
+            - userNames: A list of userNames to fetch users for.
+            - success: A block object to be executed when the logout finishes successfully. This block has no return value and takes one argument: the list of users for the specified userNames.
+            - failure: A block object to be executed when the logout finishes with an error. This block has no return value and takes one argument: the error object.
+    */
     static public func usersWithUserNames(userNames:[String], success: (([MMUser]) -> Void)?, failure: ((error: NSError) -> Void)?) {
         
         let userService = MMUserService()
@@ -70,6 +120,14 @@ public extension MMUser {
         }.executeInBackground(nil)
     }
     
+    /**
+        Get users with userIDs.
+     
+        - Parameters:
+            - userNames: A list of userIDs to fetch users for.
+            - success: A block object to be executed when the logout finishes successfully. This block has no return value and takes one argument: the list of users for the specified userIDs.
+            - failure: A block object to be executed when the logout finishes with an error. This block has no return value and takes one argument: the error object.
+    */
     static public func usersWithUserIDs(userIDs:[String], success: (([MMUser]) -> Void)?, failure: ((error: NSError) -> Void)?) {
         
         let userService = MMUserService()

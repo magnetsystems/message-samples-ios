@@ -29,6 +29,8 @@
 #import "MMXTopic_Private.h"
 #import "MMXInternalAddress.h"
 #import "MMXConstants.h"
+#import "MMUser+Addressable.h"
+
 @import MagnetMobileServer;
 
 @implementation MMXMessage
@@ -243,10 +245,7 @@
 }
 
 - (void)sendDeliveryConfirmation {
-	MMXInternalAddress *address = [MMXInternalAddress new];
-	address.username = self.sender.userName;
-	address.deviceID = self.senderDeviceID;
-	[[MMXClient sharedClient] sendDeliveryConfirmationForAddress:address messageID:self.messageID toDeviceID:self.senderDeviceID];
+	[[MMXClient sharedClient] sendDeliveryConfirmationForAddress:self.sender.address messageID:self.messageID toDeviceID:self.senderDeviceID];
 }
 
 + (BOOL)validateMessageRecipients:(NSSet *)recipients content:(NSDictionary *)content error:(NSError **)error {

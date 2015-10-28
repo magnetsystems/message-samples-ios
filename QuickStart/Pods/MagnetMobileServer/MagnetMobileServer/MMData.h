@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2012-2014 Magnet Systems, Inc. All rights reserved.
  */
- 
-#import <Mantle/Mantle.h>
+
+@import Mantle;
 
 @interface MMData : MTLModel
 

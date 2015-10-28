@@ -17,7 +17,7 @@
  
 /* A lot of code below is taken from AFNetworkActivityLogger.m */
 
-#import <CocoaLumberjack/CocoaLumberjack.h>
+@import CocoaLumberjack;
 #import "MMXLogger.h"
 #import <objc/runtime.h>
 
