@@ -95,14 +95,21 @@ import MMX
             - notification: The notification that was received.
     */
     @objc static private func userTokenInvalidated(notification: NSNotification) {
-        let userInfo = notification.userInfo as! [String: String]
-        userID = userInfo["userID"]
-        deviceID = userInfo["deviceID"]
-        for module in modules {
-            if userID != nil && deviceID != nil {
+        
+        if let userInfo = notification.userInfo as? [String: String] {
+            userID = userInfo["userID"]
+            deviceID = userInfo["deviceID"]
+            for module in modules {
+                if userID != nil && deviceID != nil {
+                    module.didInvalidateUserToken?()
+                }
+            }
+        } else {
+            for module in modules {
                 module.didInvalidateUserToken?()
             }
         }
+        
     }
     
     /**

@@ -7,10 +7,14 @@
 @implementation MMDevice
 
 + (NSDictionary *)attributeMappings {
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
-    [dictionary addEntriesFromDictionary:[super attributeMappings]];
-    return dictionary;
+    NSDictionary *dictionary = @{
+                                 @"userID": @"userId",
+                                 @"deviceID": @"deviceId",
+                                 };
+    NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
+    [attributeMappings addEntriesFromDictionary:dictionary];
+    
+    return attributeMappings;
 }
 
 + (NSDictionary *)listAttributeTypes {

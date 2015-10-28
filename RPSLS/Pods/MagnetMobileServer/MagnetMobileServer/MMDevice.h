@@ -7,25 +7,54 @@
 #import "MMPushAuthorityType.h"
 #import "MMModel.h"
 
+/**
+ The MMDevice class is a local representation of a device in the MagnetMax platform. This class provides various device specific methods, like updating the device (APNs) token.
+ */
 @interface MMDevice : MMModel
 
+/**
+ The unique identifer for the device.
+ */
+@property (nonatomic, copy) NSString *deviceID;
 
-@property (nonatomic, strong) NSArray *tags;
+/**
+ The owner for the device.
+ */
+@property (nonatomic, copy) NSString *userID;
 
-@property (nonatomic, assign) MMOsType  os;
+/**
+ The tags associated with the device.
+ */
+@property (nonatomic, strong) NSArray <NSString *>*tags;
 
+/**
+ The OS for the device.
+ */
+@property (nonatomic, assign) MMOsType os;
+
+/**
+ The OS version for the device.
+ */
 @property (nonatomic, copy) NSString *osVersion;
 
+/**
+ The token for the device.
+ */
 @property (nonatomic, copy) NSString *deviceToken;
 
-@property (nonatomic, copy) NSString *userId;
+/**
+ The status for the device.
+ */
+@property (nonatomic, assign) MMDeviceStatus deviceStatus;
 
-@property (nonatomic, assign) MMDeviceStatus  deviceStatus;
-
+/**
+ The label for the device.
+ */
 @property (nonatomic, copy) NSString *label;
 
-@property (nonatomic, assign) MMPushAuthorityType  pushAuthority;
-
-@property (nonatomic, copy) NSString *deviceId;
+/**
+ The push authority for the device.
+ */
+@property (nonatomic, assign) MMPushAuthorityType pushAuthority;
 
 @end
