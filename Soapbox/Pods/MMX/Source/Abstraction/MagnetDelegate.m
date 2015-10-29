@@ -33,7 +33,7 @@
 #import "MMXOutboundMessage_Private.h"
 #import "MMXMessage_Private.h"
 #import "MMXConstants.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 typedef void(^MessageSuccessBlock)(NSSet *);
 typedef void(^MessageFailureBlock)(NSError *);

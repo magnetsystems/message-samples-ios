@@ -18,7 +18,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXMessageTypes.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 @class MMUser;
 @class MMXChannel;
 

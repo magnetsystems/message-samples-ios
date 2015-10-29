@@ -18,7 +18,7 @@
 #import <Foundation/Foundation.h>
 @class MMXMessage;
 @class MMXInternalMessageAdaptor;
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 @interface MagnetDelegate : NSObject<MMModule>
 

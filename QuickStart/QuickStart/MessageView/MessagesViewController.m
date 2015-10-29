@@ -31,6 +31,8 @@
 @property (nonatomic, assign) BOOL isSubscribed;
 
 @property (nonatomic, strong) MMUser * currentRecipient;
+@property (nonatomic, strong) MMUser * amazingBot;
+@property (nonatomic, strong) MMUser * echoBot;
 @property (nonatomic, strong) NSURLCredential * currentCredential;
 
 @end
@@ -95,7 +97,6 @@ NSString * const kTextContent = @"textContent";
 
 #pragma mark - MMXClient Setup
 
-
 - (void)setupMessaging {
 
 	//Creating a new NSURLCredential
@@ -110,7 +111,7 @@ NSString * const kTextContent = @"textContent";
 	[newUser register:^(MMUser * user) {
 		[self logInAndInitialize];
 	} failure:^(NSError * error) {
-		if (error.code == 409) {
+		if (error.code == -1011) {
 			//Already registered
 			[self logInAndInitialize];
 		}
@@ -121,7 +122,9 @@ NSString * const kTextContent = @"textContent";
 	[MMUser login:self.currentCredential success:^{
 		[MagnetMax initModule:[MMX sharedInstance] success:^{
 			
-			self.currentRecipient = [self me];
+			[self setupBots];
+			
+			self.currentRecipient = [MMUser currentUser];
 
 			// Indicate that you are ready to receive messages now!
 			[MMX start];
@@ -138,24 +141,22 @@ NSString * const kTextContent = @"textContent";
 	}];
 }
 
-/*
- 
- */
+#pragma mark - Bots Setup
 
-#pragma mark - Helpers
-
-//Created convenience method to get my MMUser
-- (MMUser *)me {
-	return [MMUser currentUser];
-}
-
-//Added methods to get the MMUser for the bots
-- (MMUser *)echoBot {
-	return [MMUser currentUser];
-}
-
-- (MMUser *)amazingBot {
-	return [MMUser currentUser];
+- (void)setupBots {
+	[MMUser usersWithUserNames:@[@"amazing_bot",@"echo_bot"] success:^(NSArray *users) {
+		if (users.count) {
+			for (MMUser *user in users) {
+				if ([user.userName isEqualToString:@"amazing_bot"]) {
+					self.amazingBot = user.copy;
+				} else if ([user.userName isEqualToString:@"echo_bot"]) {
+					self.echoBot = user.copy;
+				}
+			}
+		}
+	} failure:^(NSError * error) {
+		[[MMLogger sharedLogger] error:@"Failed to get users for Invite Response\n%@",error];
+	}];
 }
 
 #pragma mark - Send Message
@@ -239,38 +240,42 @@ NSString * const kTextContent = @"textContent";
 										  preferredStyle:UIAlertControllerStyleAlert];
 	
 	UIAlertAction *meAction = [UIAlertAction
-									  actionWithTitle:kDefaultUsername
+									  actionWithTitle:[MMUser currentUser].firstName
 									  style:UIAlertActionStyleDefault
 									  handler:^(UIAlertAction *action)
 									  {
-											  self.currentRecipient = [self me];
+											  self.currentRecipient = [MMUser currentUser];
 									  }];
-	UIAlertAction *echoAction = [UIAlertAction
-									  actionWithTitle:[self echoBot].firstName
-									  style:UIAlertActionStyleDefault
-									  handler:^(UIAlertAction *action)
-									  {
-											  self.currentRecipient = [self echoBot];
-									  }];
-	UIAlertAction *amazingAction = [UIAlertAction
-									actionWithTitle:[self amazingBot].firstName
-									style:UIAlertActionStyleDefault
-									handler:^(UIAlertAction *action)
-									{
-											self.currentRecipient = [self amazingBot];
-									}];
+	[alertController addAction:meAction];
+	if (self.echoBot) {
+		UIAlertAction *echoAction = [UIAlertAction
+									 actionWithTitle:self.echoBot.firstName
+									 style:UIAlertActionStyleDefault
+									 handler:^(UIAlertAction *action)
+									 {
+										 self.currentRecipient = self.echoBot.copy;
+									 }];
+		[alertController addAction:echoAction];
+	}
+	if (self.amazingBot) {
+		UIAlertAction *amazingAction = [UIAlertAction
+										actionWithTitle:self.amazingBot.firstName
+										style:UIAlertActionStyleDefault
+										handler:^(UIAlertAction *action)
+										{
+											self.currentRecipient = self.amazingBot.copy;
+										}];
+		[alertController addAction:amazingAction];
+
+	}
 	UIAlertAction *cancelAction = [UIAlertAction
 									actionWithTitle:@"Cancel"
 									style:UIAlertActionStyleCancel
 									handler:^(UIAlertAction *action)
 									{
 									}];
-	[alertController addAction:meAction];
-	[alertController addAction:echoAction];
-	[alertController addAction:amazingAction];
 	[alertController addAction:cancelAction];
 	[self presentViewController:alertController animated:YES completion:nil];
-
 }
 
 #pragma mark - Helpers

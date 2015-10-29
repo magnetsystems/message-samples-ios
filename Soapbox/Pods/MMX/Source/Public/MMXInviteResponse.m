@@ -19,7 +19,7 @@
 #import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXUserID_Private.h"
 #import "MMXInvite_Private.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 @implementation MMXInviteResponse
 
@@ -27,11 +27,6 @@
 	MMXInviteResponse *response = [MMXInviteResponse new];
 	response.comments = message.metaData[@"inviteResponseText"];
 	MMXInternalAddress *address = message.senderUserID.address;
-	MMUser *user = [MMUser new];
-	//Converting to MMXUserID will handle any exscaping needed
-	MMXUserID *userID = [MMXUserID userIDFromAddress:address];
-	user.userName = userID.username;
-	response.sender = user;
 	response.channel = [MMXInvite channelFromMessageMetaData:message.metaData];
 	response.timestamp = message.timestamp;
 	response.accepted = [message.metaData[@"inviteIsAccepted"] boolValue];

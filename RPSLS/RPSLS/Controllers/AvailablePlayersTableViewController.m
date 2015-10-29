@@ -244,7 +244,9 @@
     MMXMessage *message = [MMXMessage messageToRecipients:[NSSet setWithArray:@[user]] messageContent:messageContent];
 
     [message sendWithSuccess:^(NSSet *invalidUsers) {
+		NSLog(@"sendWithSuccess Success\nInvalid Users = %@",invalidUsers);
 	} failure:^(NSError *error) {
+		NSLog(@"sendWithSuccess Failure Error = %@",error);
 	}];
 }
 

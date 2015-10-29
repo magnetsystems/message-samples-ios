@@ -17,7 +17,7 @@
 
 
 #import <Foundation/Foundation.h>
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 @class MMXUserID;
 @class MMXEndpoint;
 

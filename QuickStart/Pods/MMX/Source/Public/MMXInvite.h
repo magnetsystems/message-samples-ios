@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 @class MMUser;
 @class MMXChannel;
 
