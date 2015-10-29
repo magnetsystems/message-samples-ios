@@ -9,6 +9,7 @@
 //#import "MMResourceNode.h"
 //#import "MMData.h"
 //#import "MMAssert.h"
+@import Mantle;
 
 @interface MMValueTransformer ()
 

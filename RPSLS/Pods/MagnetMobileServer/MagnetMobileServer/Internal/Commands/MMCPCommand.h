@@ -3,7 +3,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <Mantle/Mantle.h>
+@import Mantle;
 #import "MMCPPriority.h"
 
 @class MMCPHTTPPayload;

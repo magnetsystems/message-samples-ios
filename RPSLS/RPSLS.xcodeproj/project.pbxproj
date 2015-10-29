@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		09147CDD64C2B1FAFA435CCA /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3B0D5C0D4648DF0038F4179 /* Pods.framework */; };
-		0E1123AF1BE03CE200ADA084 /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E1123AE1BE03CE200ADA084 /* MagnetMax.plist */; settings = {ASSET_TAGS = (); }; };
+		0E1123AF1BE03CE200ADA084 /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E1123AE1BE03CE200ADA084 /* MagnetMax.plist */; };
 		0E44EF3F1B0556F40037A742 /* AvailablePlayersTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF261B0556F40037A742 /* AvailablePlayersTableViewCell.m */; };
 		0E44EF401B0556F40037A742 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF291B0556F40037A742 /* GameViewController.m */; };
 		0E44EF411B0556F40037A742 /* AvailablePlayersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF2B1B0556F40037A742 /* AvailablePlayersTableViewController.m */; };
@@ -27,7 +27,7 @@
 		0E9A44361B15206400EC2859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A44351B15206400EC2859 /* LaunchScreen.storyboard */; };
 		66021B2C40868A5D1B03FF37 /* MMXMessage+RPSLS.m in Sources */ = {isa = PBXBuildFile; fileRef = 66021FC50C537BCB1E5EB983 /* MMXMessage+RPSLS.m */; };
 		AA1D03371BC30F0400D31E65 /* RPSLSSignInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D03361BC30F0400D31E65 /* RPSLSSignInTests.swift */; };
-		AAE1F1C21BC44AB400A855BB /* RPSLSGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE1F1C01BC44AB400A855BB /* RPSLSGameTests.swift */; settings = {ASSET_TAGS = (); }; };
+		AAE1F1C21BC44AB400A855BB /* RPSLSGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE1F1C01BC44AB400A855BB /* RPSLSGameTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -451,6 +451,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -495,6 +496,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
