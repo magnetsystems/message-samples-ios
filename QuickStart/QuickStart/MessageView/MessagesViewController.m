@@ -111,7 +111,7 @@ NSString * const kTextContent = @"textContent";
 	[newUser register:^(MMUser * user) {
 		[self logInAndInitialize];
 	} failure:^(NSError * error) {
-		if (error.code == -1011) {
+		if (error.code == 409) {
 			//Already registered
 			[self logInAndInitialize];
 		}
