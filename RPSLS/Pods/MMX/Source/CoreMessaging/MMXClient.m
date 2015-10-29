@@ -921,19 +921,31 @@ int const kReconnectionTimerInterval = 4;
 													to:(XMPPJID *)to
 											 messageID:(NSString *)messageID {
 
-	NSArray *usernamesArray = [message.recipients valueForKey:@"username"];
+	NSMutableArray *usernamesArray = [NSMutableArray arrayWithArray:[message.recipients valueForKey:@"username"]];
+	BOOL recipientsContainSender = NO;
+	if ([usernamesArray containsObject:message.senderUserID.username]) {
+		recipientsContainSender = YES;
+	} else {
+		[usernamesArray addObject:message.senderUserID.username];
+	}
+	[usernamesArray addObject:message.senderUserID.username];
 	[MMUser usersWithUserIDs:usernamesArray success:^(NSArray *users) {
-		MMXMessage *msg = [MMXMessage messageToRecipients:[NSSet setWithArray:users]
-										   messageContent:message.metaData];
-		
-		msg.messageType = MMXMessageTypeDefault;
-		
 		MMUser *sender;
+		NSMutableArray *usersCopy = users.mutableCopy;
 		for (MMUser *user in users) {
 			if ([user.userID.lowercaseString isEqualToString:message.senderUserID.username.lowercaseString]) {
 				sender = user.copy;
 			}
 		}
+		if (!recipientsContainSender) {
+			[usersCopy removeObject:sender];
+		}
+
+		MMXMessage *msg = [MMXMessage messageToRecipients:[NSSet setWithArray:usersCopy]
+										   messageContent:message.metaData];
+		
+		msg.messageType = MMXMessageTypeDefault;
+		
 		msg.sender = sender;
 		msg.timestamp = message.timestamp;
 		msg.messageID = message.messageID;

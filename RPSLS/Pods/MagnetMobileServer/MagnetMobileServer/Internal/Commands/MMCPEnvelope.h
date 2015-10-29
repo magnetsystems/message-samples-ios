@@ -3,7 +3,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <Mantle/Mantle.h>
+@import Mantle;
 
 typedef NS_ENUM(NSInteger, MMCPOperationType){
     MMCPOperationTypeRequest = 0,
