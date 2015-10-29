@@ -920,7 +920,7 @@ int const kReconnectionTimerInterval = 4;
 												  from:(XMPPJID *)from
 													to:(XMPPJID *)to
 											 messageID:(NSString *)messageID {
-
+	
 	NSMutableArray *usernamesArray = [NSMutableArray arrayWithArray:[message.recipients valueForKey:@"username"]];
 	BOOL recipientsContainSender = NO;
 	if ([usernamesArray containsObject:message.senderUserID.username]) {
@@ -940,7 +940,7 @@ int const kReconnectionTimerInterval = 4;
 		if (!recipientsContainSender) {
 			[usersCopy removeObject:sender];
 		}
-
+		
 		MMXMessage *msg = [MMXMessage messageToRecipients:[NSSet setWithArray:usersCopy]
 										   messageContent:message.metaData];
 		
@@ -959,7 +959,7 @@ int const kReconnectionTimerInterval = 4;
 	} failure:^(NSError * error) {
 		[[MMLogger sharedLogger] error:@"Failed to get users for Inbound Message\n%@",error];
 	}];
-
+	
 }
 
 - (void)handleInviteMessageFromInternalMessageAdaptor:(MMXInternalMessageAdaptor *)message

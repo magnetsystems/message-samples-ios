@@ -1,1 +1,0 @@
-../../../MagnetMobileServer/MagnetMobileServer/MMPasswordResetMethod.h

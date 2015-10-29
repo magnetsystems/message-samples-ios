@@ -1,0 +1,1 @@
+../../../MagnetMaxCore/MagnetMax/Core/Internal/MMService_Private.h

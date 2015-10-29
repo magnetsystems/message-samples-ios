@@ -92,10 +92,9 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/MMX.framework"
   install_framework "Pods/MMXXMPPFramework.framework"
   install_framework "Pods/MagnetMax.framework"
-  install_framework "Pods/MagnetMobileServer.framework"
+  install_framework "Pods/MagnetMaxCore.framework"
   install_framework "Pods/Mantle.framework"
   install_framework "Pods/SlackTextViewController.framework"
-  install_framework "Pods/libextobjc.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/AFNetworking.framework"
@@ -106,8 +105,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/MMX.framework"
   install_framework "Pods/MMXXMPPFramework.framework"
   install_framework "Pods/MagnetMax.framework"
-  install_framework "Pods/MagnetMobileServer.framework"
+  install_framework "Pods/MagnetMaxCore.framework"
   install_framework "Pods/Mantle.framework"
   install_framework "Pods/SlackTextViewController.framework"
-  install_framework "Pods/libextobjc.framework"
 fi

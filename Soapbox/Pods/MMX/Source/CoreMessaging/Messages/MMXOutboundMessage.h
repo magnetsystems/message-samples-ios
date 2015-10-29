@@ -18,7 +18,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXAddressable.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 /**
  *  The MMXOutboundMessage represents an outbound message.

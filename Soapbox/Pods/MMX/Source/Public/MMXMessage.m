@@ -31,7 +31,7 @@
 #import "MMXConstants.h"
 #import "MMUser+Addressable.h"
 
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 @implementation MMXMessage
 

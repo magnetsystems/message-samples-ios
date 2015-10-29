@@ -1,6 +1,0 @@
-framework module MagnetMobileServer {
-  umbrella header "MagnetMobileServer-umbrella.h"
-
-  export *
-  module * { export * }
-}

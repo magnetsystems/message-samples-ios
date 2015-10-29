@@ -19,7 +19,7 @@
 #import "MMXConstants.h"
 #import "MMXNotificationConstants.h"
 @import MMXXMPPFramework;
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 @implementation MMXTopicSubscribersResponse
 

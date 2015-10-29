@@ -27,7 +27,7 @@
 #import "MMXUserProfile_Private.h"
 #import "XMPPFramework.h"
 #import "MMUser+Addressable.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 //messageType = @"TEXTMSG"
 @implementation MMXPubSubMessage

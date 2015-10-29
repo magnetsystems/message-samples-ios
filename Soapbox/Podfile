@@ -3,7 +3,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 source 'https://github.com/magnetsystems/iOS-Distribution.git'
 platform :ios, '8.0'
 use_frameworks!
-pod 'MagnetMax', '~> 3.0'
+pod 'MagnetMax', '~> 2.0'
 pod 'SlackTextViewController', '1.5.2', :inhibit_warnings => true
 
 post_install do |installer|

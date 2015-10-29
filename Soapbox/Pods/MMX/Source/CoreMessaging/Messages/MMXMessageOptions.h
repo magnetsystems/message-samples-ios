@@ -16,7 +16,7 @@
  */
 
 #import <Foundation/Foundation.h>
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 /**
  *  The MMXMessageOptions class represents the different options that can be set when sending a message. 

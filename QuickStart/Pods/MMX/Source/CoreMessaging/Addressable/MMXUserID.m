@@ -17,7 +17,7 @@
 
 #import "MMXUserID_Private.h"
 #import "NSString+XEP_0106.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 @implementation MMXUserID
 
