@@ -279,7 +279,8 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 					if (userDict[kAddressDisplayNameKey] && userDict[kAddressDisplayNameKey] != [NSNull null] && ![userDict[kAddressDisplayNameKey] isEqualToString:@""]) {
 						end.userID.displayName = userDict[kAddressDisplayNameKey];
 					}
-                    [recipientOutputArray addObject:end.userID];
+					//Changed to only add the userID since we do not currently support messaging to a specific device
+					[recipientOutputArray addObject:end.userID];
 				} else {
 					MMXUserID *user = [MMXUserID userIDWithUsername:userDict[kAddressUsernameKey]];
 					if (userDict[kAddressDisplayNameKey] && userDict[kAddressDisplayNameKey] != [NSNull null] && ![userDict[kAddressDisplayNameKey] isEqualToString:@""]) {

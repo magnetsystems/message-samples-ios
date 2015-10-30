@@ -852,7 +852,6 @@ int const kReconnectionTimerInterval = 4;
 			[self handleInviteResponseMessageFromInternalMessageAdaptor:inMessage from:from to:to messageID:msgId];
 		} else {
 			//User to User Message
-			
 			[self handleInboundMessageFromInternalMessageAdaptor:inMessage from:from to:to messageID:msgId];
 		}
 	} else if ([xmppMessage elementsForXmlns:MXnsServerSignal].count) {
@@ -929,7 +928,7 @@ int const kReconnectionTimerInterval = 4;
 	} else {
 		[usernamesArray addObject:message.senderUserID.username];
 	}
-	[usernamesArray addObject:message.senderUserID.username.copy];
+	[usernamesArray addObject:message.senderUserID.username];
 	[MMUser usersWithUserIDs:usernamesArray success:^(NSArray *users) {
 		MMUser *sender;
 		NSMutableArray *usersCopy = users.mutableCopy;
