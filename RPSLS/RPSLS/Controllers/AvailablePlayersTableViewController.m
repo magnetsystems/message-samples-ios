@@ -166,10 +166,12 @@
 									   *  Logging an error.
 									   */
 									  [[MMXLogger sharedLogger] error:@"collectListOfAvailablePlayers error = %@",error];
+									  [self refreshAvailablePlayersWithMessages:nil];
 									  
 								  }];
 	} failure:^(NSError *error) {
 		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
+		[self refreshAvailablePlayersWithMessages:nil];
 	}];
 }
 
@@ -185,18 +187,24 @@
 		[tempArray addObject:user];
 	}
 	
-	NSOrderedSet * set = [NSOrderedSet orderedSetWithArray:tempArray];
-	NSArray *unique = set.array;
-	NSLog(@"unique = %@",[unique valueForKey:@"messageUserObject"]);
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(isAvailable == YES) AND (messageUserObject != %@)",[RPSLSUser me].messageUserObject];
-	NSArray *filtered  = [unique filteredArrayUsingPredicate:predicate];
+	if (tempArray.count) {
+		NSOrderedSet * set = [NSOrderedSet orderedSetWithArray:tempArray];
+		NSArray *unique = set.array;
+		NSLog(@"unique = %@",[unique valueForKey:@"messageUserObject"]);
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(isAvailable == YES) AND (messageUserObject != %@)",[RPSLSUser me].messageUserObject];
+		NSArray *filtered  = [unique filteredArrayUsingPredicate:predicate];
+		
+		self.availablePlayersList = filtered;
+	} else {
+		self.availablePlayersList = @[];;
+	}
 	
-	self.availablePlayersList = filtered;
-	
-	[self.tableView reloadData];
-    if (self.refreshControl.isRefreshing) {
-        [self.refreshControl endRefreshing];
-    }
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.tableView reloadData];
+		if (self.refreshControl.isRefreshing) {
+			[self.refreshControl endRefreshing];
+		}
+	});
 }
 
 - (void)updateListWithMessage:(MMXMessage *)message {
