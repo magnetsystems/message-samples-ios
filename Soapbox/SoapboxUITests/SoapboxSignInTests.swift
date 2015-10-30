@@ -58,7 +58,7 @@ class SoapboxUITests: XCTestCase {
     func test1signInNonExistingUser() {
         signIn("nonexistinguser", password: "password")
         app.buttons["Sign In"].tap()
-        confirmAlert("Error", message: "Not Authorized. Please check your credentials and try again.")
+        confirmAlert("Error", message: "Request failed: unauthorized (401)")
     }
     
     func test2registerExistingUser() {

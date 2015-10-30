@@ -188,9 +188,9 @@ import MMX
             if userID != nil && deviceID != nil && userToken != nil {
                 module?.didReceiveUserToken?(userToken!, userID: userID!, deviceID: deviceID!)
             }
-            
-            success = nil
-            failure = nil
+            // FIXME: Don't nil out the configuration for now
+//            success = nil
+//            failure = nil
         }
     }
     
