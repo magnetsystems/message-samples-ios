@@ -37,7 +37,7 @@
 
 @end
 
-NSString * const kDefaultUsername = @"QuickstartUser2";
+NSString * const kDefaultUsername = @"QuickstartUser1";
 NSString * const kEchoBotUsername = @"echo_bot";
 NSString * const kAmazingBotUsername = @"amazing_bot";
 NSString * const kMeString = @"Me";

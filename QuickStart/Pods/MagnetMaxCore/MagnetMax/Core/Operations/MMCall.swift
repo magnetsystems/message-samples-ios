@@ -273,7 +273,9 @@ public class MMCall: GroupOperation {
         
         if isReliable {
             let reachabilityCondition = MMReachabilityCondition()
-            (underlyingOperation as! Operation).addCondition(reachabilityCondition)
+            if let op = underlyingOperation as? Operation {
+                op.addCondition(reachabilityCondition)
+            }
         }
         
         if let op = underlyingOperation {
