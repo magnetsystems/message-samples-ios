@@ -279,7 +279,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 					if (userDict[kAddressDisplayNameKey] && userDict[kAddressDisplayNameKey] != [NSNull null] && ![userDict[kAddressDisplayNameKey] isEqualToString:@""]) {
 						end.userID.displayName = userDict[kAddressDisplayNameKey];
 					}
-					[recipientOutputArray addObject:end];
+                    [recipientOutputArray addObject:end.userID];
 				} else {
 					MMXUserID *user = [MMXUserID userIDWithUsername:userDict[kAddressUsernameKey]];
 					if (userDict[kAddressDisplayNameKey] && userDict[kAddressDisplayNameKey] != [NSNull null] && ![userDict[kAddressDisplayNameKey] isEqualToString:@""]) {
@@ -362,9 +362,9 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	if (recipients.count >= 1) {
 		NSMutableArray *recipientArray = @[].mutableCopy;
 		for (id<MMXAddressable> recipient in recipients) {
-			MMXInternalAddress *address = recipient.address;
-			if (address) {
-				[recipientArray addObject:[address asDictionary]];
+			MMXInternalAddress *recipAddress = recipient.address;
+			if (recipAddress) {
+				[recipientArray addObject:[recipAddress asDictionary]];
 			}
 		}
 		[mmxMetaDict setObject:recipientArray forKey:@"To"];

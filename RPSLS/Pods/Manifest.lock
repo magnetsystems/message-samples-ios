@@ -21,50 +21,14 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (2.0.3):
     - CocoaLumberjack/Default
-  - libextobjc (0.4.1):
-    - libextobjc/EXTADT (= 0.4.1)
-    - libextobjc/EXTConcreteProtocol (= 0.4.1)
-    - libextobjc/EXTKeyPathCoding (= 0.4.1)
-    - libextobjc/EXTNil (= 0.4.1)
-    - libextobjc/EXTSafeCategory (= 0.4.1)
-    - libextobjc/EXTScope (= 0.4.1)
-    - libextobjc/EXTSelectorChecking (= 0.4.1)
-    - libextobjc/EXTSynthesize (= 0.4.1)
-    - libextobjc/NSInvocation+EXT (= 0.4.1)
-    - libextobjc/NSMethodSignature+EXT (= 0.4.1)
-    - libextobjc/RuntimeExtensions (= 0.4.1)
-    - libextobjc/UmbrellaHeader (= 0.4.1)
-  - libextobjc/EXTADT (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/EXTConcreteProtocol (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/EXTKeyPathCoding (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/EXTNil (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/EXTSafeCategory (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/EXTScope (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/EXTSelectorChecking (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/EXTSynthesize (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/NSInvocation+EXT (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/NSMethodSignature+EXT (0.4.1):
-    - libextobjc/RuntimeExtensions
-  - libextobjc/RuntimeExtensions (0.4.1)
-  - libextobjc/UmbrellaHeader (0.4.1)
-  - MagnetMax (3.0):
-    - MagnetMobileServer (~> 3.0)
-    - MMX (= 2.0)
-  - MagnetMobileServer (3.0.9):
+  - MagnetMax (2.0.0):
+    - MagnetMaxCore (~> 2.0.0)
+    - MMX (~> 2.0.0)
+  - MagnetMaxCore (2.0.0):
     - AFNetworking/NSURLConnection (= 2.6.1)
     - AFNetworking/NSURLSession (= 2.6.1)
     - AFOAuth2Manager (~> 2.2.1)
     - CocoaLumberjack (~> 2.0.3)
-    - libextobjc (~> 0.4)
     - Mantle (= 2.0.6)
   - Mantle (2.0.6):
     - Mantle/extobjc (= 2.0.6)
@@ -84,10 +48,10 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (2.0):
+  - MMX (2.0.0):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.0.2)
-    - MagnetMobileServer (~> 3.0)
+    - MagnetMaxCore (~> 2.0.0)
     - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.13)
   - MMXXMPPFramework (3.6.13):
@@ -121,19 +85,18 @@ PODS:
     - MMXXMPPFramework/XEP-0082
 
 DEPENDENCIES:
-  - MagnetMax (~> 3.0)
+  - MagnetMax (~> 2.0)
 
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: f58d8a19629f4d8379ae14bb3534def24161430e
-  libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
-  MagnetMax: 734d25407bb4c040189a258f8d89334a65ad0b8e
-  MagnetMobileServer: 1fd2bc3f82dd60808a5939b1d19053683eb7f743
+  MagnetMax: 1d7b77e0731cd927b7ccb513d2fce056d2191ac4
+  MagnetMaxCore: f8c157a619f89b8af8fb69bc76b3aac2fae5aeff
   Mantle: b02515dd223fa86771241c8c44d92212f479eff9
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: 545def3ff09dd98c8b22d42fd8e16171ffad222e
+  MMX: d753511bd9fb8cfe49b03211fbcb96d0ab215d3c
   MMXXMPPFramework: af652c05a32674c3d0d8631f52f8a3171f42e859
 
 COCOAPODS: 0.39.0

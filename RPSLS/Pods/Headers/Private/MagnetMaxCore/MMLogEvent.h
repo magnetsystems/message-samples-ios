@@ -1,0 +1,1 @@
+../../../MagnetMaxCore/MagnetMax/Core/MMLogEvent.h

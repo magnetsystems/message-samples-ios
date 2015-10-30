@@ -23,7 +23,7 @@
 #import "RPSLSUserStats.h"
 #import "RPSLSUtils.h"
 #import "MMXMessage+RPSLS.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 @interface GameViewController ()
 

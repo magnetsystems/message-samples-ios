@@ -28,7 +28,7 @@
 	//You must include your MagnetMax.plist file in the project. You can download this file on the Settings page of the MagnetMax Console
 	
 	NSString *configurationFile = [[NSBundle mainBundle] pathForResource:@"MagnetMax" ofType:@"plist"];
-	id <MMServiceAdapterConfiguration> configuration = [[MMServiceAdapterPropertyListConfiguration alloc] initWithContentsOfFile:configurationFile];
+	id <MMConfiguration> configuration = [[MMPropertyListConfiguration alloc] initWithContentsOfFile:configurationFile];
 	[MagnetMax configure:configuration];
 	
 	//You need to change the bundle Identifier to match the one your push certificate is set up to work with.

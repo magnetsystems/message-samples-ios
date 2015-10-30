@@ -24,7 +24,7 @@
 #import "GameViewController.h"
 #import "AvailablePlayersTableViewCell.h"
 #import "MMXMessage+RPSLS.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 @interface AvailablePlayersTableViewController ()
 
