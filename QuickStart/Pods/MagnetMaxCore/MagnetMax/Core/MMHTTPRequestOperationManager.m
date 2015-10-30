@@ -16,7 +16,6 @@
  */
 
 #import "MMHTTPRequestOperationManager.h"
-#import "MMURLSessionDataTaskOperation.h"
 #import <AFNetworking/AFHTTPSessionManager.h>
 #import <MagnetMaxCore/MagnetMaxCore-Swift.h>
 
@@ -45,10 +44,8 @@
 - (NSOperation *)requestOperationWithRequest:(NSURLRequest *)request
                                      success:(void (^)(NSURLResponse *response, id responseObject))success
                                      failure:(void (^)(NSURLResponse *response, NSError *error))failure {
-
-    MMURLSessionDataTaskOperation *operation = [[MMURLSessionDataTaskOperation alloc] initWithManager:self.manager
-                                                                                              request:request
-                                                                                    completionHandler:^(NSURLResponse *response, id responseObject, NSError *responseError) {
+    
+    NSURLSessionDataTask *task = [self.manager dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *responseError) {
         if (responseError) {
             if (failure) {
                 failure(response, responseError);
@@ -59,7 +56,8 @@
             }
         }
     }];
-
+    URLSessionTaskOperation *operation = [[URLSessionTaskOperation alloc] initWithTask:task];
+    
     return operation;
 }
 

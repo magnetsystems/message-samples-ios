@@ -18,9 +18,18 @@
 import Foundation
 
 @objc public protocol MMConfiguration : class {
+    /// The baseURL for the configuration.
     var baseURL: NSURL { get }
+    
+    /// The clientID for the configuration.
     var clientID: String { get }
+    
+    /// The clientSecret for the configuration.
     var clientSecret: String { get }
+    
+    /// The scope for the configuration.
     optional var scope: String { get }
+    
+    /// The additional key-value pairs associated with the configuration.
     optional var addtionalConfiguration: [String: String] { get }
 }

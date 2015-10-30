@@ -929,7 +929,7 @@ int const kReconnectionTimerInterval = 4;
 	} else {
 		[usernamesArray addObject:message.senderUserID.username];
 	}
-	[usernamesArray addObject:message.senderUserID.username];
+	[usernamesArray addObject:message.senderUserID.username.copy];
 	[MMUser usersWithUserIDs:usernamesArray success:^(NSArray *users) {
 		MMUser *sender;
 		NSMutableArray *usersCopy = users.mutableCopy;
