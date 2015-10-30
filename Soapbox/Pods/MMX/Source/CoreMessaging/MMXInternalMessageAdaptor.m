@@ -362,9 +362,9 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 	if (recipients.count >= 1) {
 		NSMutableArray *recipientArray = @[].mutableCopy;
 		for (id<MMXAddressable> recipient in recipients) {
-			MMXInternalAddress *address = recipient.address;
-			if (address) {
-				[recipientArray addObject:[address asDictionary]];
+			MMXInternalAddress *recipAddress = recipient.address;
+			if (recipAddress) {
+				[recipientArray addObject:[recipAddress asDictionary]];
 			}
 		}
 		[mmxMetaDict setObject:recipientArray forKey:@"To"];

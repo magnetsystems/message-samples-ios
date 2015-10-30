@@ -26,7 +26,6 @@
 + (instancetype)inviteResponseFromMMXInternalMessage:(MMXInternalMessageAdaptor *)message {
 	MMXInviteResponse *response = [MMXInviteResponse new];
 	response.comments = message.metaData[@"inviteResponseText"];
-	MMXInternalAddress *address = message.senderUserID.address;
 	response.channel = [MMXInvite channelFromMessageMetaData:message.metaData];
 	response.timestamp = message.timestamp;
 	response.accepted = [message.metaData[@"inviteIsAccepted"] boolValue];

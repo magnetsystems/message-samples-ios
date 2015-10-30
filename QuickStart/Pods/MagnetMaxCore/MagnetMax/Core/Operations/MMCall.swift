@@ -265,8 +265,9 @@ public class MMCall: GroupOperation {
                     case .Bytes: break
                     }
                 }
-                }) { error -> Void in
-                    self.failureBlock?(error)
+                }) { (response, error) -> Void in
+                    let wrappedError = NSError(domain: error.domain, code: (response as! NSHTTPURLResponse).statusCode, userInfo: error.userInfo)
+                    self.failureBlock?(wrappedError)
             }
         }
         

@@ -324,7 +324,7 @@ NSString *const kMMDeviceUUIDKey = @"kMMDeviceUUIDKey";
 		}
                                                                                           [self registerCurrentDeviceWithSuccess:nil failure:nil];
 
-	} failure:^(NSError *error) {
+	} failure:^(NSURLResponse *response, NSError *error) {
 		self.currentCATTokenRequestStatus = MMCATTokenRequestStatusFailed;
 		self.applicationAuthenticationError = error;
 	}];
