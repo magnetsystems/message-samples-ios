@@ -19,23 +19,50 @@ import Foundation
 
 public class MMPropertyListConfiguration: NSObject, MMConfiguration {
 
+    /// The baseURL for the configuration.
     public var baseURL: NSURL
+    
+    /// The clientID for the configuration.
     public var clientID: String = ""
+    
+    /// The clientSecret for the configuration.
     public var clientSecret: String = ""
     
+    /**
+        Initializes a new configuration with the provided dictionary.
+     
+        - Parameters:
+            - dictionary: A dictionary withe BaseURL, ClientID and ClientSecret keys.
+     
+        - Returns: A configuration object.
+     */
     public init(dictionary: NSDictionary?) {
         self.baseURL = NSURL(string: (dictionary?["BaseURL"] as! String))!
         self.clientID = dictionary?["ClientID"] as! String
         self.clientSecret = dictionary?["ClientSecret"] as! String
     }
     
-    // An URL that identifies a resource containing a string representation of a property list whose root object is a dictionary.
+    /**
+        Initializes a new configuration with the provided URL.
+    
+        - Parameters:
+            - url: A URL for the plist file.
+    
+        - Returns: A configuration object.
+    */
     public convenience init?(contentsOfURL url: NSURL) {
         let dictionary = NSDictionary(contentsOfURL: url)
         self.init(dictionary: dictionary)
     }
     
-    // An URL that identifies a resource containing a string representation of a property list whose root object is a dictionary.
+    /**
+        Initializes a new configuration with the provided file path.
+    
+        - Parameters:
+            - path: A file path for the plist file.
+    
+        - Returns: A configuration object.
+    */
     public convenience init?(contentsOfFile path: String) {
         let dictionary = NSDictionary(contentsOfFile: path)
         self.init(dictionary: dictionary)
