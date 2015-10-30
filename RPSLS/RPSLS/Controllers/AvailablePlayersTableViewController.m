@@ -190,7 +190,6 @@
 	if (tempArray.count) {
 		NSOrderedSet * set = [NSOrderedSet orderedSetWithArray:tempArray];
 		NSArray *unique = set.array;
-		NSLog(@"unique = %@",[unique valueForKey:@"messageUserObject"]);
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(isAvailable == YES) AND (messageUserObject != %@)",[RPSLSUser me].messageUserObject];
 		NSArray *filtered  = [unique filteredArrayUsingPredicate:predicate];
 		
