@@ -71,7 +71,7 @@ import Foundation
         }
         
         if let cachedResponse = response {
-            print("Cache hit: \(request)")
+//            print("Cache hit: \(request)")
             self.client!.URLProtocol(self, didReceiveResponse: cachedResponse.response, cacheStoragePolicy: .NotAllowed)
             self.client!.URLProtocol(self, didLoadData: cachedResponse.data)
             self.client!.URLProtocolDidFinishLoading(self)
@@ -85,11 +85,11 @@ import Foundation
                 } else {
                     self.response = response
                     self.data = data
+                    self.saveCachedResponse()
                     
                     self.client!.URLProtocol(self, didReceiveResponse: response!, cacheStoragePolicy: .NotAllowed)
                     self.client!.URLProtocol(self, didLoadData: data!)
                     self.client!.URLProtocolDidFinishLoading(self)
-                    self.saveCachedResponse()
                 }
                 
             });

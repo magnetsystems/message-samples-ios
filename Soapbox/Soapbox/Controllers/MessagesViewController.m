@@ -169,6 +169,9 @@
 				[self showAlertWithTitle:@"Failed to Publish" message:error ? error.localizedFailureReason : @"An unknown error occured when trying to send your message."];
 			}];
 		}
+		if (!self.channel.isSubscribed) {
+			[self showAlertWithTitle:@"Not Subscribed" message:@"You are not subscribed to this channel. You will not see the messages you publish show up here."];
+		}
 		
 		[super didPressRightButton:sender];
 	} else {
