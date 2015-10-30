@@ -52,6 +52,8 @@
 #import "MMXConfiguration.h"
 #import "NSString+XEP_0106.h"
 
+#import "MMUser+Addressable.h"
+
 #import <AssertMacros.h>
 
 @import CoreLocation;
@@ -404,7 +406,7 @@ int const kReconnectionTimerInterval = 4;
 
 	NSString * mType = @"chat";
     NSXMLElement *mmxElement = [[NSXMLElement alloc] initWithName:MXmmxElement xmlns:MXnsDataPayload];
-	[mmxElement addChild:[MMXInternalMessageAdaptor xmlFromRecipients:outboundMessage.recipients senderAddress:nil]];
+	[mmxElement addChild:[MMXInternalMessageAdaptor xmlFromRecipients:outboundMessage.recipients senderAddress:[MMUser currentUser].address]];
 	[mmxElement addChild:[outboundMessage contentToXML]];
 
     if (outboundMessage.metaData) {

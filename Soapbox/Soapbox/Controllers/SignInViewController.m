@@ -75,7 +75,7 @@
 		[newUser register:^(MMUser * user) {
 			[self logInWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
 		} failure:^(NSError * error) {
-			[self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
+			[self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason ?: error.localizedDescription];
 			[self setInputsEnabled:YES];
 		}];
 

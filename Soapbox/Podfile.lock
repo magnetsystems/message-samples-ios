@@ -95,7 +95,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: f58d8a19629f4d8379ae14bb3534def24161430e
   MagnetMax: 1d7b77e0731cd927b7ccb513d2fce056d2191ac4
-  MagnetMaxCore: 5fb46e7f8d0eb5472b141b6a2bead4bdf2b43b92
+  MagnetMaxCore: f8c157a619f89b8af8fb69bc76b3aac2fae5aeff
   Mantle: b02515dd223fa86771241c8c44d92212f479eff9
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
   MMX: d753511bd9fb8cfe49b03211fbcb96d0ab215d3c

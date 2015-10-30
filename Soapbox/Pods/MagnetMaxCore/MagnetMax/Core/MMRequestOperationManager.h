@@ -52,6 +52,6 @@
 
 - (Operation *)requestOperationWithRequest:(NSURLRequest *)request
                                      success:(void (^)(NSURLResponse *response, id responseObject))success
-                                     failure:(void (^)(NSError *error))failure;
+                                     failure:(void (^)(NSURLResponse *response, NSError *error))failure;
 
 @end

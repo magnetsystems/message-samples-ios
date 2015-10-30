@@ -63,7 +63,6 @@
 + (instancetype)inviteFromMMXInternalMessage:(MMXInternalMessageAdaptor *)message {
 	MMXInvite *invite = [MMXInvite new];
 	invite.comments = message.metaData[@"text"];
-	MMXInternalAddress *address = message.senderUserID.address;
 	invite.channel = [MMXInvite channelFromMessageMetaData:message.metaData];
 	invite.timestamp = message.timestamp;
 	return invite;
