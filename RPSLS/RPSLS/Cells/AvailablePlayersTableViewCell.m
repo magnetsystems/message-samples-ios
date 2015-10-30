@@ -18,7 +18,7 @@
 #import "AvailablePlayersTableViewCell.h"
 #import "RPSLSUser.h"
 #import "RPSLSUserStats.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 @interface AvailablePlayersTableViewCell ()
 

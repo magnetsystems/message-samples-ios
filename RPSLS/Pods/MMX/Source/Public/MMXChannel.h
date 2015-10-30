@@ -18,7 +18,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXPublishPermissionsEnum.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 @class MMUser;
 @class MMXMessage;
 @class MMXInvite;

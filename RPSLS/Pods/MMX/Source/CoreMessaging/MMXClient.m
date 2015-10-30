@@ -52,10 +52,12 @@
 #import "MMXConfiguration.h"
 #import "NSString+XEP_0106.h"
 
+#import "MMUser+Addressable.h"
+
 #import <AssertMacros.h>
 
 @import CoreLocation;
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 // Taken from https://github.com/AFNetworking/AFNetworking/blob/master/AFNetworking/AFSecurityPolicy.m
 static BOOL MMXServerTrustIsValid(SecTrustRef serverTrust) {
     BOOL isValid = NO;
@@ -404,7 +406,7 @@ int const kReconnectionTimerInterval = 4;
 
 	NSString * mType = @"chat";
     NSXMLElement *mmxElement = [[NSXMLElement alloc] initWithName:MXmmxElement xmlns:MXnsDataPayload];
-	[mmxElement addChild:[MMXInternalMessageAdaptor xmlFromRecipients:outboundMessage.recipients senderAddress:nil]];
+	[mmxElement addChild:[MMXInternalMessageAdaptor xmlFromRecipients:outboundMessage.recipients senderAddress:[MMUser currentUser].address]];
 	[mmxElement addChild:[outboundMessage contentToXML]];
 
     if (outboundMessage.metaData) {
@@ -850,6 +852,7 @@ int const kReconnectionTimerInterval = 4;
 			[self handleInviteResponseMessageFromInternalMessageAdaptor:inMessage from:from to:to messageID:msgId];
 		} else {
 			//User to User Message
+			
 			[self handleInboundMessageFromInternalMessageAdaptor:inMessage from:from to:to messageID:msgId];
 		}
 	} else if ([xmppMessage elementsForXmlns:MXnsServerSignal].count) {
@@ -914,8 +917,6 @@ int const kReconnectionTimerInterval = 4;
 
 #pragma mark - Message Handling
 
-//FIXME: Move all logic for inbound messages to be delivered to the developer here
-//Send server ack after successfully parsed message and notification to dev sent
 - (void)handleInboundMessageFromInternalMessageAdaptor:(MMXInternalMessageAdaptor *)message
 												  from:(XMPPJID *)from
 													to:(XMPPJID *)to
@@ -954,6 +955,7 @@ int const kReconnectionTimerInterval = 4;
 															object:nil
 														  userInfo:@{MMXMessageKey:msg}];
 		if (![message.mType isEqualToString:@"normal"]) {
+			//Send server ack after successfully parsed message and notification to dev sent
 			[self sendSDKAckMessageId:messageID sourceFrom:from sourceTo:to];
 		}
 	} failure:^(NSError * error) {
@@ -967,13 +969,14 @@ int const kReconnectionTimerInterval = 4;
 												   to:(XMPPJID *)to
 											messageID:(NSString *)messageID {
 	MMXInvite *invite = [MMXInvite inviteFromMMXInternalMessage:message];
-	[MMUser usersWithUserIDs:@[invite.sender.userName] success:^(NSArray *users) {
+	[MMUser usersWithUserIDs:@[message.senderUserID.username] success:^(NSArray *users) {
 		if (users.count) {
 			invite.sender = users.firstObject;
 		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInviteNotification
 															object:nil
 														  userInfo:@{MMXInviteKey:invite}];
+		//Send server ack after successfully parsed message and notification to dev sent
 		[self sendSDKAckMessageId:messageID sourceFrom:from sourceTo:to];
 	} failure:^(NSError * error) {
 		[[MMLogger sharedLogger] error:@"Failed to get users for Invite\n%@",error];
@@ -986,13 +989,14 @@ int const kReconnectionTimerInterval = 4;
 													messageID:(NSString *)messageID {
 
 	MMXInviteResponse *inviteResponse = [MMXInviteResponse inviteResponseFromMMXInternalMessage:message];
-	[MMUser usersWithUserIDs:@[inviteResponse.sender.userName] success:^(NSArray *users) {
+	[MMUser usersWithUserIDs:@[message.senderUserID.username] success:^(NSArray *users) {
 		if (users.count) {
 			inviteResponse.sender = users.firstObject;
 		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveChannelInviteResponseNotification
 															object:nil
 														  userInfo:@{MMXInviteResponseKey:inviteResponse}];
+		//Send server ack after successfully parsed message and notification to dev sent
 		[self sendSDKAckMessageId:messageID sourceFrom:from sourceTo:to];
 	} failure:^(NSError * error) {
 		[[MMLogger sharedLogger] error:@"Failed to get users for Invite Response\n%@",error];

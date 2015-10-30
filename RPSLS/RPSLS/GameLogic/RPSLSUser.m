@@ -19,7 +19,7 @@
 #import "RPSLSConstants.h"
 #import "RPSLSUserStats.h"
 #import "RPSLSUtils.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 @import MMX;
 
 @implementation RPSLSUser

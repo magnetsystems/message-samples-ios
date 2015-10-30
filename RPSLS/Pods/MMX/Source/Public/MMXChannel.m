@@ -29,7 +29,7 @@
 #import "MMXInternalMessageAdaptor.h"
 #import "MMXDataModel.h"
 #import "MMXPubSubMessage_Private.h"
-@import MagnetMobileServer;
+@import MagnetMaxCore;
 
 @implementation MMXChannel
 
