@@ -13,22 +13,22 @@ PODS:
   - AFOAuth2Manager (2.2.1):
     - AFNetworking/NSURLConnection (~> 2.2)
   - CocoaAsyncSocket (7.4.1)
-  - CocoaLumberjack (2.0.3):
-    - CocoaLumberjack/Default (= 2.0.3)
-    - CocoaLumberjack/Extensions (= 2.0.3)
-  - CocoaLumberjack/Core (2.0.3)
-  - CocoaLumberjack/Default (2.0.3):
+  - CocoaLumberjack (2.2.0):
+    - CocoaLumberjack/Default (= 2.2.0)
+    - CocoaLumberjack/Extensions (= 2.2.0)
+  - CocoaLumberjack/Core (2.2.0)
+  - CocoaLumberjack/Default (2.2.0):
     - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (2.0.3):
+  - CocoaLumberjack/Extensions (2.2.0):
     - CocoaLumberjack/Default
   - MagnetMax (2.0.0):
-    - MagnetMaxCore (~> 2.0.0)
-    - MMX (~> 2.0.0)
+    - MagnetMaxCore (~> 2.0)
+    - MMX (~> 2.0)
   - MagnetMaxCore (2.0.0):
-    - AFNetworking/NSURLConnection (= 2.6.1)
-    - AFNetworking/NSURLSession (= 2.6.1)
-    - AFOAuth2Manager (~> 2.2.1)
-    - CocoaLumberjack (~> 2.0.3)
+    - AFNetworking/NSURLConnection (~> 2.0)
+    - AFNetworking/NSURLSession (~> 2.0)
+    - AFOAuth2Manager (= 2.2.1)
+    - CocoaLumberjack (~> 2.2)
     - Mantle (= 2.0.6)
   - Mantle (2.0.6):
     - Mantle/extobjc (= 2.0.6)
@@ -50,8 +50,8 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MMX (2.0.0):
     - CocoaAsyncSocket (= 7.4.1)
-    - CocoaLumberjack (~> 2.0.2)
-    - MagnetMaxCore (~> 2.0.0)
+    - CocoaLumberjack (~> 2.2)
+    - MagnetMaxCore (~> 2.0)
     - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.13)
   - MMXXMPPFramework (3.6.13):
@@ -65,7 +65,7 @@ PODS:
     - MMXXMPPFramework/XEP-0203 (= 3.6.13)
   - MMXXMPPFramework/Core (3.6.13):
     - CocoaAsyncSocket (~> 7.4.1)
-    - CocoaLumberjack (~> 2.0.2)
+    - CocoaLumberjack (~> 2.2)
   - MMXXMPPFramework/CoreDataStorage (3.6.13):
     - MMXXMPPFramework/Core
   - MMXXMPPFramework/Reconnect (3.6.13):
@@ -91,12 +91,12 @@ SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
-  CocoaLumberjack: f58d8a19629f4d8379ae14bb3534def24161430e
-  MagnetMax: 1d7b77e0731cd927b7ccb513d2fce056d2191ac4
-  MagnetMaxCore: f8c157a619f89b8af8fb69bc76b3aac2fae5aeff
+  CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
+  MagnetMax: 0cd4f3987238652171a636bc3141560b1dd139ef
+  MagnetMaxCore: aa29401447843f220ee5110becc0e67eb957bcf7
   Mantle: b02515dd223fa86771241c8c44d92212f479eff9
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: d753511bd9fb8cfe49b03211fbcb96d0ab215d3c
-  MMXXMPPFramework: af652c05a32674c3d0d8631f52f8a3171f42e859
+  MMX: f9245afeb2902b565b778814b058779a31062745
+  MMXXMPPFramework: 5b056c9870b2e4ce977d085873506399f31fb68e
 
 COCOAPODS: 0.39.0
