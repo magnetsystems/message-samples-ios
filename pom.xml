@@ -50,7 +50,7 @@
                                     <arg value="-r" />
                                     <arg value="-y" />
                                     <arg value="${basedir}/target/ios-samples/soapbox-ios.zip" />
-                                    <arg value="SoapBox" />
+                                    <arg value="Soapbox" />
                                 </exec>
                                 <exec executable="zip" dir="${basedir}">
                                     <arg value="-r" />
