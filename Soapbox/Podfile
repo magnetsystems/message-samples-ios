@@ -1,11 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
-# Use Magnet’s internal repo
-source 'https://github.com/magnetsystems/iOS-Distribution.git'
+source 'https://github.com/magnetsystems/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 pod 'MagnetMax', '~> 2.0'
 pod 'SlackTextViewController', '1.5.2', :inhibit_warnings => true
-
-post_install do |installer|
-  `find Pods -regex 'Pods\\/Mantle\\/Mantle\\/Mantle\\.h' -print0 | xargs -0 sed -i '' 's/\\(<\\)Mantle\\/\\(.*\\)\\(>\\)/\\"\\2\\"/'`
-end
