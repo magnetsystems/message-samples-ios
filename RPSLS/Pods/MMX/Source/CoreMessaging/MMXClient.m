@@ -81,7 +81,6 @@ int const kReconnectionTimerInterval = 4;
 
 @property (nonatomic, readwrite) MMXPubSubManager * pubsubManager;
 @property (nonatomic, strong) XMPPReconnect * xmppReconnect;
-@property (nonatomic, assign) BOOL switchingUser;
 @property (nonatomic, assign) NSUInteger messageNumber;
 @property (nonatomic, assign) NSUInteger reconnectionTryCount;
 
@@ -150,7 +149,6 @@ int const kReconnectionTimerInterval = 4;
 			  appToken:(NSString *)appToken {
 	self.deviceID = deviceID;
 	self.accessToken = appToken;
-	[self updateConnectionStatus:MMXConnectionStatusAnonReady error:nil];
 }
 
 - (void)updateUsername:(NSString *)username deviceID:(NSString *)deviceID userToken:(NSString *)userToken {
@@ -176,7 +174,6 @@ int const kReconnectionTimerInterval = 4;
 	self.username = username;
 	self.deviceID = deviceID;
 	self.accessToken = userToken;
-	[self updateConnectionStatus:MMXConnectionStatusUserReady error:nil];
 }
 
 #pragma mark - Current User
@@ -269,23 +266,6 @@ int const kReconnectionTimerInterval = 4;
 		[self openStream];
 		return YES;
 	}
-}
-
-- (void)connectWithCredentials {
-	if (self.configuration.credential && [self.configuration.credential.user hasPrefix:@"_anon-"]) {
-		self.configuration.credential = nil;
-	}
-    if (![self hasValidCredentials]) {
-        return;
-    }
-    // If credential was not set, look for saved credential
-    if (!self.configuration.credential && self.configuration.shouldUseCredentialStorage) {
-        self.configuration.credential = [self savedCredential];
-    }
-    if (self.xmppStream && [self.xmppStream isConnected]) {
-        self.switchingUser = YES;
-    }
-    [self openStream];
 }
 
 - (void)authenticate {
@@ -793,9 +773,6 @@ int const kReconnectionTimerInterval = 4;
 			return;
 		}
 	}
-    if (!self.switchingUser) {
-        [self updateConnectionStatus:MMXConnectionStatusDisconnected error:error];
-    }
 }
 
 #pragma mark - XMPPStreamDelegate Message/IQ Methods

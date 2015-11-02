@@ -60,14 +60,6 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 	 */
 	MMXConnectionStatusFailed,
 	/**
-	 *  Some occured which caused the connection to fail.
-	 */
-	MMXConnectionStatusAnonReady,
-	/**
-	 *  Some occured which caused the connection to fail.
-	 */
-	MMXConnectionStatusUserReady,
-	/**
 	 *  An accidental disconnect occurred and the SDK will automatically try to reconnect.
 	 */
 	MMXConnectionStatusReconnecting,
@@ -229,11 +221,6 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 
 
 - (BOOL)connect;
-
-/**
- *  Creates a session as a named user using the NSURLCredential set as the credentials property of the configuration property.
- */
-- (void)connectWithCredentials;
 
 /**
  *  This closes the connection to the server. The device will still receive push notifications to be alerted to

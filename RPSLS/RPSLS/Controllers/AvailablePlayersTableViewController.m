@@ -24,7 +24,7 @@
 #import "GameViewController.h"
 #import "AvailablePlayersTableViewCell.h"
 #import "MMXMessage+RPSLS.h"
-@import MagnetMaxCore;
+@import MagnetMax;
 
 @interface AvailablePlayersTableViewController ()
 
@@ -77,7 +77,7 @@
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didDisconnect:)
-                                                 name:MMXDidDisconnectNotification
+                                                 name:MMUserDidReceiveAuthenticationChallengeNotification
                                                object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(handleResignActive)

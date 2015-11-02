@@ -23,7 +23,7 @@
 #import "RPSLSUserStats.h"
 #import "RPSLSUtils.h"
 #import "MMXMessage+RPSLS.h"
-@import MagnetMaxCore;
+@import MagnetMax;
 
 @interface GameViewController ()
 
@@ -68,7 +68,7 @@
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didDisconnect:)
-                                                 name:MMXDidDisconnectNotification
+                                                 name:MMUserDidReceiveAuthenticationChallengeNotification
                                                object:nil];
     
 	[[NSNotificationCenter defaultCenter] addObserver: self

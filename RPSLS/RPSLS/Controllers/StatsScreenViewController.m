@@ -24,6 +24,7 @@
 #import "GameViewController.h"
 #import "AvailablePlayersTableViewController.h"
 #import "MMXMessage+RPSLS.h"
+@import MagnetMax;
 
 @interface StatsScreenViewController () <UIPopoverPresentationControllerDelegate>
 
@@ -64,7 +65,7 @@
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didDisconnect:)
-                                                 name:MMXDidDisconnectNotification
+                                                 name:MMUserDidReceiveAuthenticationChallengeNotification
                                                object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(handleResignActive)
