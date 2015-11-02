@@ -88,7 +88,7 @@
 - (void)didDisconnect:(NSNotification *)notification {
     
     // Indicate that you are not ready to receive messages now!
-    [MMX start];
+    [MMX stop];
     
     [self goToLoginScreen];
 }
