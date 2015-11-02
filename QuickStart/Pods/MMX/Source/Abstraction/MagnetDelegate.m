@@ -210,7 +210,7 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 			self.logOutSuccessBlock = nil;
 			self.logOutFailureBlock = nil;
 			if (error) {
-				[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidDisconnectNotification object:nil userInfo:@{MMXDisconnectErrorKey:error}];
+//				[[NSNotificationCenter defaultCenter] postNotificationName:MMXDidDisconnectNotification object:nil userInfo:@{MMXDisconnectErrorKey:error}];
 			}
 			}
 			break;
@@ -229,12 +229,6 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 			}
 			break;
 		case MMXConnectionStatusReconnecting: {
-		}
-			break;
-		case MMXConnectionStatusAnonReady: {
-		}
-			break;
-		case MMXConnectionStatusUserReady: {
 		}
 			break;
 	}

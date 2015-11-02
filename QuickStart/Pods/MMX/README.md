@@ -26,7 +26,7 @@ Current release: 2.0.0
 #### Podfile
 
 ```ruby
-pod "MMX", "~> 2.0" 
+pod "MMX", "~> 2.0.0" 
 ```
 
 

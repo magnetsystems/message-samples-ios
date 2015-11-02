@@ -32,7 +32,5 @@ NSString * const MMXMessageSendErrorNotification = @"com.magnet.message.send.err
 NSString * const MMXMessageSendErrorNSErrorKey = @"com.magnet.message.send.error.key";
 NSString * const MMXMessageSendErrorMessageIDKey = @"com.magnet.message.send.message.id.key";
 NSString * const MMXMessageSendErrorRecipientsKey = @"com.magnet.message.send.recipients.key";
-NSString * const MMXDidDisconnectNotification = @"com.magnet.disconnect.receive";
-NSString * const MMXDisconnectErrorKey = @"com.magnet.disconnect.error.key";
 
 @end

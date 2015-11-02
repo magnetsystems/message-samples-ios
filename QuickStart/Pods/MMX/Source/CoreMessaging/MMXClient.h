@@ -60,14 +60,6 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 	 */
 	MMXConnectionStatusFailed,
 	/**
-	 *  Some occured which caused the connection to fail.
-	 */
-	MMXConnectionStatusAnonReady,
-	/**
-	 *  Some occured which caused the connection to fail.
-	 */
-	MMXConnectionStatusUserReady,
-	/**
 	 *  An accidental disconnect occurred and the SDK will automatically try to reconnect.
 	 */
 	MMXConnectionStatusReconnecting,
