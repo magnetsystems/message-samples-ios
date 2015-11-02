@@ -89,41 +89,6 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 	}
 }
 
-//- (void)connect {
-//	MMXConnectionOperation *op = [MMXConnectionOperation new];
-//	[self.internalQueue addOperation:op];
-//}
-
-//- (void)logInWithCredential:(NSURLCredential *)credential
-//					success:(void (^)(MMUser *))success
-//					failure:(void (^)(NSError *error))failure {
-//
-//	MMXLogInOperation *op = [MMXLogInOperation new];
-//	op.creds = credential.copy;
-//	op.logInSuccessBlock = success;
-//	op.logInFailureBlock = failure;
-//	[self.internalQueue addOperation:op];
-//
-//}
-//
-//- (void)privateLogInWithCredential:(NSURLCredential *)credential
-//						   success:(void (^)(MMUser *))success
-//						   failure:(void (^)(NSError *error))failure {
-//	
-//	[MMXClient sharedClient].configuration.credential = credential;
-//	self.logInSuccessBlock = success;
-//	self.logInFailureBlock = failure;
-//	[[MMXClient sharedClient] connectWithCredentials];
-//}
-
-
-//- (void)logOutWithSuccess:(void (^)(void))success
-//				  failure:(void (^)(NSError *error))failure {
-//	self.logOutSuccessBlock = success;
-//	self.logOutFailureBlock = failure;
-//	[[MMXClient sharedClient] disconnect];
-//}
-
 - (NSString *)sendMessage:(MMXMessage *)message
 				  success:(void (^)(NSSet *invalidUsers))success
 				  failure:(void (^)(NSError *error))failure {
