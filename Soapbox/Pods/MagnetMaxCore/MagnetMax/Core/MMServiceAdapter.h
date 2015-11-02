@@ -168,6 +168,11 @@ extern NSString *const MMServiceAdapterDidReceiveHATTokenNotification;
 extern NSString *const MMServiceAdapterDidInvalidateHATTokenNotification;
 
 /**
+ * Posted when an invalid set of clientID/clientSecret are used to configure MagnetMax.
+ */
+extern NSString *const MMServiceAdapterDidReceiveInvalidCATTokenNotification;
+
+/**
  * Posted when an OAuth Login Exception is received.
  */
 extern NSString *const MMServiceAdapterDidReceiveAuthenticationChallengeNotification;

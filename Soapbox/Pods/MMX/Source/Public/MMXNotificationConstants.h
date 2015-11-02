@@ -87,14 +87,4 @@ extern NSString * const MMXMessageSendErrorMessageIDKey;
  */
 extern NSString * const MMXMessageSendErrorRecipientsKey;
 
-/**
-	Notification when disconnect from the Messaging service
- */
-extern NSString * const MMXDidDisconnectNotification;
-
-/**
-	Key for NSError object within the userInfo dictionary of the MMXDidDisconnectNotification notification.
- */
-extern NSString * const MMXDisconnectErrorKey;
-
 @end

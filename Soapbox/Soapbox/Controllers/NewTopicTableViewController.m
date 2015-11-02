@@ -19,7 +19,7 @@
 #import "NewTopicTableViewController.h"
 #import "NewTopicNameCell.h"
 #import "NewTopicTagCell.h"
-#import <MMX/MMX.h>
+@import MagnetMax;
 
 @interface NewTopicTableViewController ()
 

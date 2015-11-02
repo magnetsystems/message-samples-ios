@@ -24,4 +24,14 @@
 
 + (NSDictionary *)metaData;
 
+/**
+ * Posted when an invalid set of clientID/clientSecret are used to configure MagnetMax. This event can be used to prompt the user to re-download the app. One possibility is that the keys were revoked.
+ */
+extern NSString *const MMApplicationDidReceiveAuthenticationChallengeNotification;
+
+/**
+ * Posted when an end-user needs to attempt login. This event can be used to prompt the user to login again.
+ */
+extern NSString *const MMUserDidReceiveAuthenticationChallengeNotification;
+
 @end

@@ -21,7 +21,6 @@
 #import "PubSubCell.h"
 #import "UIColor+Soapbox.h"
 #import "Announcement.h"
-@import MMX;
 @import MagnetMax;
 
 @interface MessagesViewController ()

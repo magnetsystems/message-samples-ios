@@ -18,7 +18,6 @@
 
 #import "SignInViewController.h"
 @import MagnetMax;
-@import MMX;
 
 @interface SignInViewController ()
 

@@ -19,7 +19,7 @@
 #import "ChannelListTableViewController.h"
 #import "ChannelListCell.h"
 #import "MessagesViewController.h"
-@import MMX;
+@import MagnetMax;
 
 @interface ChannelListTableViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 
@@ -66,7 +66,7 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didDisconnect:)
-                                                 name:MMXDidDisconnectNotification
+                                                 name:MMUserDidReceiveAuthenticationChallengeNotification
                                                object:nil];
 
     [self fetchChannels];

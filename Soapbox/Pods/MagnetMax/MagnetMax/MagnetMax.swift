@@ -47,7 +47,7 @@ import MMX
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "appTokenReceived:", name: MMServiceAdapterDidReceiveCATTokenNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenReceived:", name: MMServiceAdapterDidReceiveHATTokenNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenInvalidated:", name: MMServiceAdapterDidInvalidateHATTokenNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenInvalidated:", name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenExpired:", name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
     }
     
     /**
@@ -123,6 +123,17 @@ import MMX
             }
         }
         
+    }
+    
+    /**
+        Acts as the userToken expired event receiver.
+     
+        - Parameters:
+            - notification: The notification that was received.
+     */
+    @objc static private func userTokenExpired(notification: NSNotification) {
+        NSNotificationCenter.defaultCenter().postNotificationName(MMApplicationDidReceiveAuthenticationChallengeNotification, object: nil, userInfo: notification.userInfo)
+        userTokenInvalidated(notification)
     }
     
     /**
