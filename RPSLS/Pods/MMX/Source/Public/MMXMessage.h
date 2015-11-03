@@ -52,7 +52,7 @@
 /**
  *  The list of users the message was sent to.
  */
-@property(nonatomic, readonly) NSSet *recipients;
+@property(nonatomic, readonly) NSSet <MMUser *>*recipients;
 
 /**
  *  The content you want to send.
@@ -68,7 +68,7 @@
  *
  *  @return New MMXMessage
  */
-+ (instancetype)messageToRecipients:(NSSet *)recipients
++ (instancetype)messageToRecipients:(NSSet <MMUser *>*)recipients
 					 messageContent:(NSDictionary *)messageContent;
 
 /**
@@ -90,7 +90,7 @@
  *
  *  @return The messageID for the message sent
  */
-- (NSString *)sendWithSuccess:(void (^)(NSSet *invalidUsers))success
+- (NSString *)sendWithSuccess:(void (^)(NSSet <NSString *>*invalidUsers))success
 					  failure:(void (^)(NSError *error))failure;
 
 /**
@@ -103,7 +103,7 @@
  *  @return The messageID for the message sent
  */
 - (NSString *)replyWithContent:(NSDictionary *)content
-					   success:(void (^)(NSSet *invalidUsers))success
+					   success:(void (^)(NSSet <NSString *>*invalidUsers))success
 					   failure:(void (^)(NSError * error))failure;
 
 /**
@@ -116,7 +116,7 @@
  *  @return The messageID for the message sent
  */
 - (NSString *)replyAllWithContent:(NSDictionary *)content
-						  success:(void (^)(NSSet *invalidUsers))success
+						  success:(void (^)(NSSet <NSString *>*invalidUsers))success
 						  failure:(void (^)(NSError * error))failure;
 
 /**

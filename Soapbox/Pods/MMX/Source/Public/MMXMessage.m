@@ -35,7 +35,7 @@
 
 @implementation MMXMessage
 
-+ (instancetype)messageToRecipients:(NSSet *)recipients
++ (instancetype)messageToRecipients:(NSSet <MMUser *>*)recipients
 					 messageContent:(NSDictionary *)messageContent {
 	MMXMessage *msg = [MMXMessage new];
 	msg.recipients = recipients;
@@ -69,7 +69,7 @@
 	return msg;
 }
 
-- (NSString *)sendWithSuccess:(void (^)(NSSet *invalidUsers))success
+- (NSString *)sendWithSuccess:(void (^)(NSSet <NSString *>*invalidUsers))success
 					  failure:(void (^)(NSError *))failure {
 	if (![MMXMessageUtils isValidMetaData:self.messageContent]) {
 		NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
@@ -158,7 +158,7 @@
 }
 
 - (NSString *)replyWithContent:(NSDictionary *)content
-					   success:(void (^)(NSSet *invalidUsers))success
+					   success:(void (^)(NSSet <NSString *>*invalidUsers))success
 					   failure:(void (^)(NSError *))failure {
 	NSSet *recipients = [NSSet setWithObject:self.sender];
 	NSError *error;
@@ -184,7 +184,7 @@
 }
 
 - (NSString *)replyAllWithContent:(NSDictionary *)content
-						  success:(void (^)(NSSet *invalidUsers))success
+						  success:(void (^)(NSSet <NSString *>*invalidUsers))success
 						  failure:(void (^)(NSError *))failure {
 	NSMutableSet *newSet = [NSMutableSet setWithSet:self.recipients];
 	[newSet addObject:self.sender];

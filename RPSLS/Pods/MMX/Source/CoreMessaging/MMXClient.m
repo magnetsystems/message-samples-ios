@@ -137,7 +137,7 @@ int const kReconnectionTimerInterval = 4;
 		NSString *urlString = [NSString stringWithFormat:@"mmx://%@:%@",configurationDict[@"mmx-host"],configurationDict[@"mmx-port"]];
 		config.baseURL = [NSURL URLWithString:urlString];
 		config.shouldForceTLS = [configurationDict[@"tls-enabled"] boolValue];
-		config.allowInvalidCertificates = [configurationDict[@"security-policy"] isEqualToString:@"NONE"];
+		config.allowInvalidCertificates = [configurationDict[@"security-policy"] isEqualToString:@"NONE"] || [configurationDict[@"security-policy"] isEqualToString:@"RELAXED"];
 		self.appID = configurationDict[@"mmx-appId"];
 		self.configuration = config;
 	} else {

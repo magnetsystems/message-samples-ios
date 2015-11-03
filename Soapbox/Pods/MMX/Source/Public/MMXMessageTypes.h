@@ -16,7 +16,7 @@
  */
 
 /**
- *  Values representing the connection status of the MMXClient.
+ *  Values representing the types of messages received.
  */
 typedef NS_ENUM(NSUInteger, MMXMessageType){
 	/**

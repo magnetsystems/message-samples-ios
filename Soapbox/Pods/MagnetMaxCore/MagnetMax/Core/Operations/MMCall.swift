@@ -266,7 +266,7 @@ public class MMCall: GroupOperation {
                     }
                 }
                 }) { (response, error) -> Void in
-                    let wrappedError = NSError(domain: error.domain, code: (response as! NSHTTPURLResponse).statusCode, userInfo: error.userInfo)
+                    let wrappedError = NSError(domain: error.domain, code: (response as? NSHTTPURLResponse)?.statusCode ?? error.code, userInfo: error.userInfo)
                     self.failureBlock?(wrappedError)
             }
         }

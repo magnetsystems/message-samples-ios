@@ -86,7 +86,7 @@
  */
 + (void)allPublicChannelsWithLimit:(int)limit
 							offset:(int)offset
-						   success:(void (^)(int totalCount, NSArray *channels))success
+						   success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 						   failure:(void (^)(NSError *))failure;
 
 /**
@@ -99,7 +99,7 @@
  */
 + (void)allPrivateChannelsWithLimit:(int)limit
 							 offset:(int)offset
-							success:(void (^)(int totalCount, NSArray *channels))success
+							success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 							failure:(void (^)(NSError *))failure;
 
 /**
@@ -127,7 +127,7 @@
 + (void)channelsStartingWith:(NSString *)name
 					   limit:(int)limit
 					  offset:(int)offset
-					 success:(void (^)(int totalCount, NSArray *channels))success
+					 success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 					 failure:(void (^)(NSError *error))failure;
 
 /**
@@ -142,7 +142,7 @@
 + (void)findByTags:(NSSet *)tags
 			 limit:(int)limit
 			offset:(int)offset
-		   success:(void (^)(int totalCount, NSArray *channels))success
+		   success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 		   failure:(void (^)(NSError *error))failure;
 
 /**
@@ -217,7 +217,7 @@
  *  @param success Block with a NSArray of channels
  *  @param failure - Block with an NSError with details about the call failure.
  */
-+ (void)subscribedChannelsWithSuccess:(void (^)(NSArray *channels))success
++ (void)subscribedChannelsWithSuccess:(void (^)(NSArray <MMXChannel *>*channels))success
 							  failure:(void (^)(NSError *error))failure;
 
 /**
@@ -231,7 +231,7 @@
  */
 - (void)subscribersWithLimit:(int)limit
 					  offset:(int)offset
-					 success:(void (^)(int totalCount, NSArray *subscribers))success
+					 success:(void (^)(int totalCount, NSArray <MMUser *>*subscribers))success
 					 failure:(void (^)(NSError *error))failure;
 
 /**
@@ -261,7 +261,7 @@
 						   limit:(int)limit
 						  offset:(int)offset
 					   ascending:(BOOL)ascending
-						 success:(void (^)(int totalCount, NSArray *messages))success
+						 success:(void (^)(int totalCount, NSArray <MMXMessage *>*messages))success
 						 failure:(void (^)(NSError *error))failure;
 
 /**
