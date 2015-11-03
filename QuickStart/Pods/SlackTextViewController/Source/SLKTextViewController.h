@@ -18,8 +18,9 @@
 #import <UIKit/UIKit.h>
 
 #import "SLKTextInputbar.h"
-#import "SLKTypingIndicatorView.h"
 #import "SLKTextView.h"
+#import "SLKTypingIndicatorView.h"
+#import "SLKTypingIndicatorProtocol.h"
 
 #import "SLKTextView+SLKAdditions.h"
 #import "UIScrollView+SLKAdditions.h"
@@ -35,6 +36,8 @@ UIKIT_EXTERN NSString *const SLKKeyboardWillShowNotification;
 UIKIT_EXTERN NSString *const SLKKeyboardDidShowNotification;
 UIKIT_EXTERN NSString *const SLKKeyboardWillHideNotification;
 UIKIT_EXTERN NSString *const SLKKeyboardDidHideNotification;
+
+UIKIT_EXTERN NSString *const SLKTextInputbarDidMoveNotification;
 
 typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
     SLKKeyboardStatusDidHide,
@@ -58,13 +61,20 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The bottom toolbar containing a text view and buttons. */
 @property (nonatomic, readonly) SLKTextInputbar *textInputbar;
 
-/** The typing indicator used to display user names horizontally. */
+/** The default typing indicator used to display user names horizontally. */
 @property (nonatomic, readonly) SLKTypingIndicatorView *typingIndicatorView;
 
-/** A single tap gesture used to dismiss the keyboard. */
+/**
+ The custom typing indicator view. Default is kind of SLKTypingIndicatorView.
+ To customize the typing indicator view, you will need to call -registerClassForTypingIndicatorView: nside of any initialization method.
+ To interact with it directly, you will need to cast the return value of -typingIndicatorProxyView to the appropriate type.
+ */
+@property (nonatomic, readonly) UIView <SLKTypingIndicatorProtocol> *typingIndicatorProxyView;
+
+/** A single tap gesture used to dismiss the keyboard. SLKTextViewController is its delegate. */
 @property (nonatomic, readonly) UIGestureRecognizer *singleTapGesture;
 
-/** A vertical pan gesture used for bringing the keyboard from the bottom. */
+/** A vertical pan gesture used for bringing the keyboard from the bottom. SLKTextViewController is its delegate. */
 @property (nonatomic, readonly) UIPanGestureRecognizer *verticalPanGesture;
 
 /** YES if control's animation should have bouncy effects. Default is YES. */
@@ -77,13 +87,13 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, assign, getter = isKeyboardPanningEnabled) BOOL keyboardPanningEnabled;
 
 /** YES if an external keyboard has been detected (this value updates only when the text view becomes first responder). */
-@property (nonatomic, readonly) BOOL isExternalKeyboardDetected;
+@property (nonatomic, readonly, getter=isExternalKeyboardDetected) BOOL externalKeyboardDetected;
+
+/**  */
+@property (nonatomic, readonly, getter=isKeyboardUndocked) BOOL keyboardUndocked;
 
 /** YES if after right button press, the text view is cleared out. Default is YES. */
 @property (nonatomic, assign) BOOL shouldClearTextAtRightButtonPress;
-
-/** YES if the text input bar should still move up/down when other text inputs interacts with the keyboard. Default is NO. */
-@property (nonatomic, assign) BOOL shouldForceTextInputbarAdjustment DEPRECATED_MSG_ATTRIBUTE("Use -forceTextInputbarAdjustmentForResponder:");
 
 /** YES if the scrollView should scroll to bottom when the keyboard is shown. Default is NO.*/
 @property (nonatomic, assign) BOOL shouldScrollToBottomAfterKeyboardShows;
@@ -124,7 +134,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Initializes a collection view controller and configures the collection view with the provided layout.
  If you use the standard -init method, a table view with plain style will be created.
-
+ 
  @param layout The layout object to associate with the collection view. The layout controls how the collection view presents its cells and supplementary views.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
@@ -132,7 +142,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Initializes a text view controller to manage an arbitraty scroll view. The caller is responsible for configuration of the scroll view, including wiring the delegate.
-
+ 
  @param a UISCrollView to be used as the main content area.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
@@ -188,11 +198,18 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
  You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
-
+ 
  @param responder The current first responder object.
  @return YES so the text input bar still move up/down.
  */
 - (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder;
+
+/**
+ Verifies if the text input bar should still move up/down when it is first responder. Default is NO.
+ This is very useful when presenting the view controller in a custom modal presentation, when there keyboard events are being handled externally to reframe the presented view.
+ You SHOULD call super to inherit some conditionals.
+ */
+- (BOOL)ignoreTextInputbarAdjustment NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller that the keyboard changed status.
@@ -254,7 +271,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 - (BOOL)canPressRightButton;
 
-/** 
+/**
  Notifies the view controller when the user has pasted a supported media content (images and/or videos).
  You can override this method to perform additional tasks associated with image/video pasting. You don't need to call super since this method doesn't do anything.
  Only supported pastable medias configured in SLKTextView will be forwarded (take a look at SLKPastableMediaType).
@@ -267,9 +284,9 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  Verifies that the typing indicator view should be shown. Default is YES, if meeting some requierements.
  You can override this method to perform additional tasks. You SHOULD call super to inherit some conditionals.
  
- @return YES if the typing indicator view should be shown.
+ @return YES if the typing indicator view should be presented.
  */
-- (BOOL)canShowTypeIndicator;
+- (BOOL)canShowTypingIndicator;
 
 /**
  Notifies the view controller when the user has shaked the device for undoing text typing.
@@ -296,6 +313,24 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)didPressArrowKey:(id)sender NS_REQUIRES_SUPER;
 
 
+#pragma mark - Text Input Bar Adjustment
+///------------------------------------------------
+/// @name Text Input Bar Adjustment
+///------------------------------------------------
+
+/** YES if the text inputbar is hidden. Default is NO. */
+@property (nonatomic, getter=isTextInputbarHidden) BOOL textInputbarHidden;
+
+/**
+ Changes the visibility of the text input bar.
+ Calling this method with the animated parameter set to NO is equivalent to setting the value of the toolbarHidden property directly.
+ 
+ @param hidden Specify YES to hide the toolbar or NO to show it.
+ @param animated Specify YES if you want the toolbar to be animated on or off the screen.
+ */
+- (void)setTextInputbarHidden:(BOOL)hidden animated:(BOOL)animated;
+
+
 #pragma mark - Text Edition
 ///------------------------------------------------
 /// @name Text Edition
@@ -307,7 +342,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Re-uses the text layout for edition, displaying an accessory view on top of the text input bar with options (cancel & save).
  You can override this method to perform additional tasks. You MUST call super at some point in your implementation.
-
+ 
  @param text The string text to edit.
  */
 - (void)editText:(NSString *)text NS_REQUIRES_SUPER;
@@ -337,6 +372,9 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The table view used to display autocompletion results. */
 @property (nonatomic, readonly) UITableView *autoCompletionView;
 
+/** YES if the autocompletion mode is active. */
+@property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
+
 /** The recently found prefix symbol used as prefix for autocompletion mode. */
 @property (nonatomic, readonly, copy) NSString *foundPrefix;
 
@@ -346,32 +384,49 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /** The recently found word at the text view's caret position. */
 @property (nonatomic, readonly, copy) NSString *foundWord;
 
-/** YES if the autocompletion mode is active. */
-@property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
-
 /** An array containing all the registered prefix strings for autocompletion. */
 @property (nonatomic, readonly, copy) NSArray *registeredPrefixes;
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
  The prefix must be valid NSString (i.e: '@', '#', '\', and so on). This also checks if no repeated prefix is inserted.
+ You can also use longer prefixes.
  
  @param prefixes An array of prefix strings.
  */
 - (void)registerPrefixesForAutoCompletion:(NSArray *)prefixes;
 
 /**
+ Notifies the view controller either the autocompletion prefix or word have changed.
+ Use this method to modify your data source or fetch data asynchronously from an HTTP resource.
+ Once your data source is ready, make sure to call -showAutoCompletionView: to display the view accordingly.
+ You don't need call super since this method doesn't do anything.
+
+ @param prefix The detected prefix.
+ @param word The derected word.
+ */
+- (void)didChangeAutoCompletionPrefix:(NSString *)prefix andWord:(NSString *)word;
+
+/**
+ Use this method to programatically show/hide the autocompletion view.
+ Right before the view is shown, -reloadData is called. So avoid calling it manually.
+ 
+ @param show YES if the autocompletion view should be shown.
+ */
+- (void)showAutoCompletionView:(BOOL)show;
+
+/**
  Verifies that the autocompletion view should be shown. Default is NO.
- To enabled autocompletion, MUST override this method to perform additional tasks, before the autocompletion view is shown (i.e. populating the data source).
+ To enabled autocompletion, you MUST override this method to perform additional tasks, before the autocompletion view is shown (i.e. populating the data source).
  
  @return YES if the autocompletion view should be shown.
  */
-- (BOOL)canShowAutoCompletion;
+- (BOOL)canShowAutoCompletion DEPRECATED_MSG_ATTRIBUTE("Override -didChangeAutoCompletionPrefix:andWord: instead");
 
 /**
  Returns a custom height for the autocompletion view. Default is 0.0.
  You can override this method to return a custom height.
-
+ 
  @return The autocompletion view's height.
  */
 - (CGFloat)heightForAutoCompletionView;
@@ -379,7 +434,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 /**
  Returns the maximum height for the autocompletion view. Default is 140 pts.
  You can override this method to return a custom max height.
-
+ 
  @return The autocompletion view's max height.
  */
 - (CGFloat)maximumHeightForAutoCompletionView;
@@ -389,7 +444,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  */
 - (void)cancelAutoCompletion;
 
-/** 
+/**
  Accepts the autocompletion, replacing the detected word with a new string, keeping the prefix.
  This method is an abstraction of -acceptAutoCompletionWithString:keepPrefix:
  
@@ -415,11 +470,11 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  Returns the key to be associated with a given text to be cached. Default is nil.
  To enable text caching, you must override this method to return valid key.
  The text view will be populated automatically when the view controller is configured.
- You don't need call super since this method doesn't do anything.
+ You don't need to call super since this method doesn't do anything.
  
- @return The key for which to enable text caching.
+ @return The string key for which to enable text caching.
  */
-- (id)keyForTextCaching;
+- (NSString *)keyForTextCaching;
 
 /**
  Removes the current's vien controller cached text.
@@ -442,9 +497,18 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  Registers a class for customizing the behavior and appearance of the text view.
  You need to call this method inside of any initialization method.
  
- @param textViewClass A SLKTextView subclass.
+ @param aClass A SLKTextView subclass.
  */
-- (void)registerClassForTextView:(Class)textViewClass;
+- (void)registerClassForTextView:(Class)aClass;
+
+/**
+ Registers a class for customizing the behavior and appearance of the typing indicator view.
+ You need to call this method inside of any initialization method.
+ Make sure to conform to SLKTypingIndicatorProtocol and implement the required methods.
+ 
+ @param aClass A UIView subclass conforming to the SLKTypingIndicatorProtocol.
+ */
+- (void)registerClassForTypingIndicatorView:(Class)aClass;
 
 
 #pragma mark - Delegate Methods Requiring Super
@@ -457,6 +521,8 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** UIScrollViewDelegate */
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate NS_REQUIRES_SUPER;
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
 
 /** UIGestureRecognizerDelegate */
@@ -464,5 +530,23 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** UIAlertViewDelegate */
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex NS_REQUIRES_SUPER;
+
+
+#pragma mark - Life Cycle Methods Requiring Super
+///------------------------------------------------
+/// @name Life Cycle Methods Requiring Super
+///------------------------------------------------
+
+/**
+ Configures view hierarchy and layout constraints. If you override these methods, make sure to call super.
+ */
+- (void)loadView NS_REQUIRES_SUPER;
+- (void)viewDidLoad NS_REQUIRES_SUPER;
+- (void)viewWillAppear:(BOOL)animated NS_REQUIRES_SUPER;
+- (void)viewDidAppear:(BOOL)animated NS_REQUIRES_SUPER;
+- (void)viewWillDisappear:(BOOL)animated NS_REQUIRES_SUPER;
+- (void)viewDidDisappear:(BOOL)animated NS_REQUIRES_SUPER;
+- (void)viewWillLayoutSubviews NS_REQUIRES_SUPER;
+- (void)viewDidLayoutSubviews NS_REQUIRES_SUPER;
 
 @end

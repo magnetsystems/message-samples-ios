@@ -5,4 +5,4 @@ platform :ios, '8.0'
 use_frameworks!
 
 pod 'MagnetMax', '~> 2.0'
-pod 'SlackTextViewController', '1.5.2', :inhibit_warnings => true
+pod 'SlackTextViewController'
