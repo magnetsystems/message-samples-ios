@@ -149,6 +149,7 @@
 
 - (void)collectListOfAvailablePlayers {
 	
+	[self refreshAvailablePlayersWithMessages:nil];
 	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
 		NSDate *now = [NSDate date];
 		[channel messagesBetweenStartDate:[NSDate dateWithTimeIntervalSinceNow:kAvailableTimeFrame]
@@ -166,12 +167,10 @@
 									   *  Logging an error.
 									   */
 									  [[MMXLogger sharedLogger] error:@"collectListOfAvailablePlayers error = %@",error];
-									  [self refreshAvailablePlayersWithMessages:nil];
 									  
 								  }];
 	} failure:^(NSError *error) {
 		[[MMXLogger sharedLogger] error:@"channelForName error= %@",error];
-		[self refreshAvailablePlayersWithMessages:nil];
 	}];
 }
 
