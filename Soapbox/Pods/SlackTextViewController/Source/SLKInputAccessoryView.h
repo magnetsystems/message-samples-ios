@@ -16,15 +16,9 @@
 
 #import <UIKit/UIKit.h>
 
-/** @name UIResponder additional features used for SlackTextViewController. */
-@interface UIResponder (SLKAdditions)
+@interface SLKInputAccessoryView : UIView
 
-/**
- Returns the current first responder object.
- @discussion This is an experimental API. Use it at your own risk.
- 
- @return A UIResponder instance.
- */
-+ (instancetype)slk_currentFirstResponder;
+/* The system keyboard view used as reference. */
+@property (nonatomic, weak, readonly) UIView *keyboardViewProxy;
 
 @end

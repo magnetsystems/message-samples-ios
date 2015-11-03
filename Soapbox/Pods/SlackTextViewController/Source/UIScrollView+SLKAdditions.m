@@ -30,12 +30,12 @@
 
 - (BOOL)slk_isAtTop
 {
-    return CGRectGetMinY([self slk_visibleRect]) == CGRectGetMinY([self slk_topRect]);
+    return CGRectGetMinY([self slk_visibleRect]) <= CGRectGetMinY([self slk_topRect]);
 }
 
 - (BOOL)slk_isAtBottom
 {
-    return CGRectGetMaxY([self slk_visibleRect]) == CGRectGetMaxY([self slk_bottomRect]);
+    return CGRectGetMaxY([self slk_visibleRect]) >= CGRectGetMaxY([self slk_bottomRect]);
 }
 
 - (CGRect)slk_visibleRect

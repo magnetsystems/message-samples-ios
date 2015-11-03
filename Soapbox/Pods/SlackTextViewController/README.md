@@ -22,28 +22,32 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - Flexible UI built with Auto Layout
 - Customizable: provides left and right button, and toolbar outlets
 - Tap Gesture for dismissing the keyboard
-- [Panning Gesture](https://github.com/slackhq/SlackTextViewController#panning-gesture) for sliding down the keyboard
 - [External keyboard](https://github.com/slackhq/SlackTextViewController#external-keyboard) commands support
 - Undo/Redo (with keyboard commands and UIMenuController)
 - Text Appending APIs
 
-### Optional
+### Additional
 - [Autocomplete Mode](https://github.com/slackhq/SlackTextViewController#autocompletion) by registering any prefix key (`@`, `#`, `/`)
 - [Edit Mode](https://github.com/slackhq/SlackTextViewController#edit-mode)
 - [Typing Indicator](https://github.com/slackhq/SlackTextViewController#typing-indicator) display
 - [Shake Gesture](https://github.com/slackhq/SlackTextViewController#shake-gesture) for clearing text view
 - Multimedia Pasting (png, gif, mov, etc.)
 - [Inverted Mode](https://github.com/slackhq/SlackTextViewController#inverted-mode) for displaying cells upside-down (using CATransform) -- a necessary hack for some messaging apps. `YES` by default, so beware, your entire cells might be flipped!
+- Tap Gesture for dismissing the keyboard
+- [Panning Gesture](https://github.com/slackhq/SlackTextViewController#panning-gesture) for sliding down/up the keyboard
+- [Dynamic Type](https://github.com/slackhq/SlackTextViewController#dynamic-type) for adjusting automatically the text input bar height based on the font size.
 - Bouncy Animations
 
 ### Compatibility
+- Carthage & Cocoapods
 - Swift: [A sample project is available in a different branch] (https://github.com/slackhq/SlackTextViewController/tree/swift-example)
-- iOS 7 & 8
+- iOS 7, 8 & 9
 - iPhone & iPad
 - [Storyboard](https://github.com/slackhq/SlackTextViewController#storyboard)
 - UIPopOverController & UITabBarController
 - Container View Controller
 - Auto-Rotation
+- iPad Multitasking (iOS 9 only)
 - Localization
 
 ## Installation
@@ -103,6 +107,20 @@ By default, the number of lines is set to best fit each device dimensions:
 - iPad          (>=768pts): 8 lines
 
 On iPhone devices, in landscape orientation, the maximum number of lines is changed to fit the available space.
+
+
+###Inverted Mode
+
+Some layouts may require to show from bottom to top and new subviews are inserted from the bottom. To enable this, you must use the `inverted` flag property (default is YES). This will actually invert the entire ScrollView object. Make sure to apply the same transformation to every subview. In the case of UITableView, the best place for adjusting the transformation is in its data source methods like:
+
+````objc
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
+    cell.transform = self.tableView.transform;
+}
+````
+
 
 ###Autocompletion
 
@@ -227,7 +245,7 @@ You can also dismiss it by calling `[self.typingIndicatorView dismissIndicator];
 
 ###Panning Gesture
 
-Dismissing the keyboard with a panning gesture is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like.
+Dismissing the keyboard with a panning gesture is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like. You can extend the `verticalPanGesture` behaviors with the `UIGestureRecognizerDelegate` methods.
 
 ###Shake Gesture
 
@@ -237,22 +255,8 @@ A shake gesture to clear text is enabled by default with the `undoShakingEnabled
 
 You can optionally override `-willRequestUndo`, to implement your UI to ask the users if he would like to clean the text view's text. If there is not text entered, the method will not be called.
 
-If you don't override `-willRequestUndo` and `undoShakingEnabled` is set to `YES`, a system UIAlertView will prompt.
+If you don't override `-willRequestUndo` and `undoShakingEnabled` is set to `YES`, a system UIAlertView will 
 
-###Inverted Mode
-
-Some UITableView layouts may require that new messages enter from bottom to top. To enable this, you must use the `inverted` flag property. This will actually invert the UITableView or UICollectionView, so you will need to do a transform adjustment in your UITableViewDataSource method `-tableView:cellForRowAtIndexPath:` for the cells to show correctly.
-
-````objc
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:chatCellIdentifier];
-    
-    // Cells must inherit the table view's transform
-    // This is very important, since the main table view may be inverted
-    cell.transform = self.tableView.transform;
-}
-````
 
 ###External Keyboard
 
@@ -299,6 +303,13 @@ or the `UICollectionView` version:
     return [UICollectionViewFlowLayout new];
 }
 ```
+
+
+###Dynamic Type
+
+Dynamic Type is enabled by default with the `keyboardPanningEnabled` property. You can always disable it if you'd like.
+
+![Dynamic-Type](Screenshots/screenshot_dynamic-type.png)
 
 
 ##Sample Project

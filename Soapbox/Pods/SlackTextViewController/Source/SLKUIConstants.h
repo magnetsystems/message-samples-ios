@@ -17,35 +17,24 @@
 #define SLK_IS_LANDSCAPE         ([[UIApplication sharedApplication] statusBarOrientation] == UIDeviceOrientationLandscapeLeft || [[UIApplication sharedApplication] statusBarOrientation] == UIDeviceOrientationLandscapeRight)
 #define SLK_IS_IPAD              ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
 #define SLK_IS_IPHONE            ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-#define SLK_IS_IPHONE4           (SLK_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height < 568.0)
-#define SLK_IS_IPHONE5           (SLK_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 568.0)
-#define SLK_IS_IPHONE6           (SLK_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 667.0)
-#define SLK_IS_IPHONE6PLUS       (SLK_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 736.0 || [[UIScreen mainScreen] bounds].size.width == 736.0) // Both orientations
+#define SLK_IS_IPHONE4           (SLK_IS_IPHONE && SLKKeyWindowBounds().size.height < 568.0)
+#define SLK_IS_IPHONE5           (SLK_IS_IPHONE && SLKKeyWindowBounds().size.height == 568.0)
+#define SLK_IS_IPHONE6           (SLK_IS_IPHONE && SLKKeyWindowBounds().size.height == 667.0)
+#define SLK_IS_IPHONE6PLUS       (SLK_IS_IPHONE && SLKKeyWindowBounds().size.height == 736.0 || SLKKeyWindowBounds().size.width == 736.0) // Both orientations
 #define SLK_IS_IOS8_AND_HIGHER   ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
+#define SLK_IS_IOS9_AND_HIGHER   ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0)
 
-#define SLK_INPUT_ACCESSORY_DEBUG           DEBUG && 0  // Renders a translucent red area representing the keyboard accessory view
 #define SLK_KEYBOARD_NOTIFICATION_DEBUG     DEBUG && 0  // Logs every keyboard notification being sent
 
 #if __has_attribute(objc_designated_initializer)
-#define SLK_DESIGNATED_INITIALIZER __attribute__((objc_designated_initializer))
+    #define SLK_DESIGNATED_INITIALIZER __attribute__((objc_designated_initializer))
 #endif
 
 static NSString *SLKTextViewControllerDomain = @"com.slack.TextViewController";
 
-inline static CGFloat minimumKeyboardHeight()
+inline static CGRect SLKKeyWindowBounds()
 {
-    if (SLK_IS_IPAD) {
-        if (SLK_IS_LANDSCAPE) return 352.f;
-        else return 264.f;
-    }
-    if (SLK_IS_IPHONE6PLUS) {
-        if (SLK_IS_LANDSCAPE) return 162.f;
-        else return 226.f;
-    }
-    else {
-        if (SLK_IS_LANDSCAPE) return 162.f;
-        else return 216.f;
-    }
+    return [[UIApplication sharedApplication] keyWindow].bounds;
 }
 
 inline static CGRect SLKRectInvert(CGRect rect)

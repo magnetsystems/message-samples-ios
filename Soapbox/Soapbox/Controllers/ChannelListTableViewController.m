@@ -137,7 +137,9 @@
 	NSString *lunchChannelSummary = @"Lunch Buddies is a channel for finding other people to go to lunch with.";
 	[MMXChannel createWithName:lunchChannelName summary:lunchChannelSummary isPublic:YES publishPermissions:MMXPublishPermissionsSubscribers success:^(MMXChannel *channel) {
 	} failure:^(NSError *error) {
-		NSLog(@"createChannel for channel %@ Error = %@", lunchChannelName, error);
+		if (error.code != 409) {
+			NSLog(@"createChannel for channel %@ Error = %@", lunchChannelName, error);
+		}
 	}];
 }
 
@@ -278,8 +280,6 @@
 	
 	self.tableView.tableHeaderView = self.searchController.searchBar;
 	
-	self.tableView.estimatedRowHeight = 40.0;
-	self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

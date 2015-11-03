@@ -16,8 +16,14 @@
 
 #import <UIKit/UIKit.h>
 
-UIKIT_EXTERN NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
+/** @name UIResponder additional features used for SlackTextViewController. */
+@interface UIResponder (SLKAdditions)
 
-@interface SLKInputAccessoryView : UIView
+/**
+ Returns the current first responder object.
+ 
+ @return A UIResponder instance.
+ */
++ (instancetype)slk_currentFirstResponder;
 
 @end

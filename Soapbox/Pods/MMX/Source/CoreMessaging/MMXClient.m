@@ -399,10 +399,11 @@ int const kReconnectionTimerInterval = 4;
 	xmppMessage = [[XMPPMessage alloc] initWithType:mType to:toAddress];
 	[xmppMessage addAttributeWithName:@"from" stringValue: [[self currentJID] full]];
 	
-	if (options && options.shouldRequestDeliveryReceipt) {
+	//Always sending delivery receipt request because Android can't function without it
+//	if (options && options.shouldRequestDeliveryReceipt) {
 		NSXMLElement *deliveryReceiptElement = [[NSXMLElement alloc] initWithName:MXrequestElement xmlns:MXnsDeliveryReceipt];
 		[xmppMessage addChild:deliveryReceiptElement];
-	}
+//	}
 	
 	[xmppMessage addChild:mmxElement.copy];
 	[xmppMessage addAttributeWithName:@"id" stringValue:outboundMessage.messageID];
