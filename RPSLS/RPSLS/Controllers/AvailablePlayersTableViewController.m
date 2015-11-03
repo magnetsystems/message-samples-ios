@@ -151,9 +151,8 @@
 	
 	[self refreshAvailablePlayersWithMessages:nil];
 	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
-		NSDate *now = [NSDate date];
 		[channel messagesBetweenStartDate:[NSDate dateWithTimeIntervalSinceNow:kAvailableTimeFrame]
-								  endDate:now
+								  endDate:nil
 									limit:100
 								   offset:0
 								ascending:NO
