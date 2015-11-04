@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MMX
+import MagnetMax
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,10 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
-        // 2. Initialize Magnet Message SDK
-        MMX.setupWithConfiguration("default");
-        
+		
+        // Make sure to download a new MagnetMax.plist
+		//See https://docs.magnet.com/message/v2/ios-swift-v2/creating-your-first-ios-app-user-to-user-chat-v2/ to learn how
+		let configurationFile = NSBundle.mainBundle().pathForResource("MagnetMax", ofType: "plist")
+		let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)
+		MagnetMax.configure(configuration!)
+		
 		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 	

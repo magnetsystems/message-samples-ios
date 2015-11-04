@@ -17,14 +17,14 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXAddressable.h"
-#import <Mantle/Mantle.h>
+@import MagnetMaxCore;
 @class MMXUserID;
 
 /**
  *  The MMXEndpoint is a representation of a specific device for a user. 
  *	It is possible that a user could have multiple devices associated with them. The endpoint can be used to address a message to a device.
  */
-@interface MMXEndpoint : MTLModel <MMXAddressable>
+@interface MMXEndpoint : MMModel <MMXAddressable>
 
 /**
  *	The MMXUserID for the user the device is associated with.

@@ -17,12 +17,18 @@
 
 #import "MMX.h"
 #import "MagnetDelegate.h"
-#import "MMX_Private.h"
+#import "MMXClient_Private.h"
 
 @implementation MMX
 
-+ (void)setupWithConfiguration:(NSString *)name {
-	[[MagnetDelegate sharedDelegate] startMMXClientWithConfiguration:name];
++ (id <MMModule> __nonnull)sharedInstance {
+	
+	static MMX *_sharedInstance = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_sharedInstance = [[MMX alloc] init];
+	});
+	return _sharedInstance;
 }
 
 + (void)teardown {
@@ -30,14 +36,6 @@
 		[MMXClient sharedClient].connectionStatus == MMXConnectionStatusConnected) {
 		[[MMXClient sharedClient] disconnect];
 	}
-}
-
-+ (void)enableIncomingMessages {
-	[MMXClient sharedClient].shouldSuspendIncomingMessages = NO;
-}
-
-+ (void)disableIncomingMessages {
-	[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
 }
 
 + (void)start {
@@ -48,8 +46,29 @@
 	[MMXClient sharedClient].shouldSuspendIncomingMessages = YES;
 }
 
-+ (void)setRemoteNotificationDeviceToken:(NSData *)deviceToken {
-	[[MMXClient sharedClient] updateRemoteNotificationDeviceToken:deviceToken];
+#pragma mark - MMModule Protocol methods
+
+- (NSString *)name {
+    return @"MMX";
+}
+
+- (void)shouldInitializeWithConfiguration:(NSDictionary * __nonnull)configuration success:(void (^ __nonnull)(void))success failure:(void (^ __nonnull)(NSError * __nonnull))failure {
+    
+    return [[MagnetDelegate sharedDelegate] shouldInitializeWithConfiguration:configuration success:success failure:failure];
+}
+
+- (void)didReceiveAppToken:(NSString * __nonnull)appToken appID:(NSString * __nonnull)appID deviceID:(NSString * __nonnull)deviceID {
+    
+    return [[MagnetDelegate sharedDelegate] didReceiveAppToken:appToken appID:appID deviceID:deviceID];
+}
+
+- (void)didReceiveUserToken:(NSString * __nonnull)userToken userID:(NSString * __nonnull)userID deviceID:(NSString * __nonnull)deviceID {
+    
+    return [[MagnetDelegate sharedDelegate] didReceiveUserToken:userToken userID:userID deviceID:deviceID];
+}
+
+- (void)didInvalidateUserToken {
+	[[MagnetDelegate sharedDelegate] didInvalidateUserToken];
 }
 
 @end

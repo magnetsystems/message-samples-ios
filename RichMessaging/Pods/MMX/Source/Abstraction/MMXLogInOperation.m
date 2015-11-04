@@ -21,17 +21,17 @@
 @implementation MMXLogInOperation
 
 - (void)execute {
-	[[MagnetDelegate sharedDelegate] privateLogInWithCredential:self.creds success:^(MMXUser *user) {
-		if (self.logInSuccessBlock) {
-			self.logInSuccessBlock(user);
-		}
-		[self finish];
-	} failure:^(NSError *error) {
-		if (self.logInFailureBlock) {
-			self.logInFailureBlock(error);
-		}
-		[self finish];
-	}];
+//	[[MagnetDelegate sharedDelegate] privateLogInWithCredential:self.creds success:^(MMUser *user) {
+//		if (self.logInSuccessBlock) {
+//			self.logInSuccessBlock(user);
+//		}
+//		[self finish];
+//	} failure:^(NSError *error) {
+//		if (self.logInFailureBlock) {
+//			self.logInFailureBlock(error);
+//		}
+//		[self finish];
+//	}];
 }
 
 @end

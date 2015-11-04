@@ -26,7 +26,7 @@
 
 @property(nonatomic, readwrite) NSDate *timestamp;
 
-@property(nonatomic, readwrite) MMXUser *sender;
+@property(nonatomic, readwrite) MMUser *sender;
 
 @property(nonatomic, copy) NSString *senderDeviceID;
 
@@ -36,6 +36,7 @@
 
 @property(nonatomic, readwrite) NSDictionary *messageContent;
 
-+ (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage;
++ (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage
+								  sender:(MMUser *)sender;
 
 @end

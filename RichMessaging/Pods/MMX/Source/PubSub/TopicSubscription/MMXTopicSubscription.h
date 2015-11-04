@@ -17,11 +17,11 @@
 
 
 #import <Foundation/Foundation.h>
-#import <Mantle/Mantle.h>
+@import MagnetMaxCore;
 
 @class MMXTopic;
 
-@interface MMXTopicSubscription : MTLModel
+@interface MMXTopicSubscription : MMModel
 
 /**
  *  The MMXTopic object for the topic subscribed to.

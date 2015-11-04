@@ -15,11 +15,11 @@
  * permissions and limitations under the License.
  */
 
-#import <Mantle/Mantle.h>
-@class MMXUser;
+@import MagnetMaxCore;
+@class MMUser;
 @class MMXChannel;
 
-@interface MMXInviteResponse : MTLModel
+@interface MMXInviteResponse : MMModel
 
 /**
  *  Time the response was sent
@@ -34,7 +34,7 @@
 /**
  *  The user that sent the response
  */
-@property (nonatomic, readonly) MMXUser *sender;
+@property (nonatomic, readonly) MMUser *sender;
 
 /**
  *  The channel the invite is for.

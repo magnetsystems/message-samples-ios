@@ -13,7 +13,7 @@ import MMX
 class MessagesViewController : JSQMessagesViewController, UIActionSheetDelegate {
     
 	var messages = [JSQMessageData]()
-	var recipients = Set<MMXUser>()
+	var recipients = Set<MMUser>()
     var avatars = Dictionary<String, UIImage>()
     var outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     var incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
@@ -21,8 +21,8 @@ class MessagesViewController : JSQMessagesViewController, UIActionSheetDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        senderId = MMXUser.currentUser().username
-        senderDisplayName = MMXUser.currentUser().displayName
+        senderId = MMUser.currentUser()?.userName
+        senderDisplayName = MMUser.currentUser()?.firstName
         
         showLoadEarlierMessagesHeader = true
         
@@ -32,7 +32,7 @@ class MessagesViewController : JSQMessagesViewController, UIActionSheetDelegate 
         super.viewWillAppear(animated)
 		if recipients.count == 1 {
 			let user = recipients.first
-			navigationItem.title = user?.displayName
+			navigationItem.title = user?.firstName
 		} else {
 			navigationItem.title = "Group"
 		}
@@ -135,7 +135,7 @@ class MessagesViewController : JSQMessagesViewController, UIActionSheetDelegate 
             "message": text,
         ]
         let mmxMessage = MMXMessage(toRecipients: recipients, messageContent: messageContent)
-        mmxMessage.sendWithSuccess( { () -> Void in
+        mmxMessage.sendWithSuccess( { (invalidUsers) -> Void in
             let message = Message(message: mmxMessage)
             self.messages.append(message)
             self.finishSendingMessageAnimated(true)
@@ -332,14 +332,14 @@ class MessagesViewController : JSQMessagesViewController, UIActionSheetDelegate 
     }
     
     // MARK: Helper methods
-    
-    func currentRecipient() -> MMXUser {
-        let currentRecipient = MMXUser()
-        currentRecipient.username = "echo_bot"
-        
-        return currentRecipient
-    }
-    
+	
+//    func currentRecipient() -> MMUser {
+//        let currentRecipient = MMUser()
+//        currentRecipient.userName = "echo_bot"
+//        
+//        return currentRecipient
+//    }
+	
     func addLocationMediaMessageCompletion() {
         let ferryBuildingInSF = CLLocation(latitude: 37.795313, longitude: -122.393757)
 
@@ -351,7 +351,7 @@ class MessagesViewController : JSQMessagesViewController, UIActionSheetDelegate 
             "longitude": "\(ferryBuildingInSF.coordinate.longitude)"
         ]
         let mmxMessage = MMXMessage(toRecipients: recipients, messageContent: messageContent)
-        mmxMessage.sendWithSuccess( { () -> Void in
+        mmxMessage.sendWithSuccess( { (invalidUsers) -> Void in
             let message = Message(message: mmxMessage)
             let locationMediaItem = JSQLocationMediaItem()
             locationMediaItem.setLocation(ferryBuildingInSF) {
@@ -374,7 +374,7 @@ class MessagesViewController : JSQMessagesViewController, UIActionSheetDelegate 
         let imageName = "goldengate"
         let imageType = "png"
         let imagePath = NSBundle.mainBundle().pathForResource(imageName, ofType: imageType)
-        mmxMessage.sendWithFileAttachment(imagePath, saveToS3Path: "/magnet_test/\(MMXUser.currentUser().username)/\(imageName).\(imageType)", progress: { (progress) -> Void in
+        mmxMessage.sendWithFileAttachment(imagePath, saveToS3Path: "/magnet_test/\(MMUser.currentUser()?.userName)/\(imageName).\(imageType)", progress: { (progress) -> Void in
             //
         }, success: { (url) -> Void in
             let message = Message(message: mmxMessage)
@@ -399,7 +399,7 @@ class MessagesViewController : JSQMessagesViewController, UIActionSheetDelegate 
         let videoName = "small"
         let videoType = "mp4"
         let videoPath = NSBundle.mainBundle().pathForResource(videoName, ofType: videoType)
-        mmxMessage.sendWithFileAttachment(videoPath, saveToS3Path: "/magnet_test/\(MMXUser.currentUser().username)/\(videoName).\(videoType)", progress: { (progress) -> Void in
+        mmxMessage.sendWithFileAttachment(videoPath, saveToS3Path: "/magnet_test/\(MMUser.currentUser()?.userName)/\(videoName).\(videoType)", progress: { (progress) -> Void in
             //
             }, success: { (url) -> Void in
                 let message = Message(message: mmxMessage)
