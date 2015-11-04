@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E48A9CF1BE9A5C100B732DD /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E48A9CE1BE9A5C100B732DD /* MagnetMax.plist */; };
 		0EAA71741BA893FA009B5CB5 /* RecipientListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAA71731BA893FA009B5CB5 /* RecipientListTableViewController.swift */; };
 		215219B21B9F696500F5B3A3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215219B11B9F696500F5B3A3 /* AppDelegate.swift */; };
 		215219B41B9F696500F5B3A3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215219B31B9F696500F5B3A3 /* ViewController.swift */; };
@@ -14,7 +15,6 @@
 		215219B91B9F696500F5B3A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 215219B81B9F696500F5B3A3 /* Images.xcassets */; };
 		215219BC1B9F696500F5B3A3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 215219BA1B9F696500F5B3A3 /* LaunchScreen.xib */; };
 		215219C81B9F696500F5B3A3 /* HolaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215219C71B9F696500F5B3A3 /* HolaTests.swift */; };
-		215219D61B9F816B00F5B3A3 /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = 215219D51B9F816B00F5B3A3 /* Configurations.plist */; };
 		215219D81B9FB63C00F5B3A3 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215219D71B9FB63C00F5B3A3 /* MessagesViewController.swift */; };
 		21547F661BA0A89E00C353E9 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21547F651BA0A89E00C353E9 /* Message.swift */; };
 		21547F681BA2010800C353E9 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21547F671BA2010800C353E9 /* MessageType.swift */; };
@@ -36,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E48A9CE1BE9A5C100B732DD /* MagnetMax.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MagnetMax.plist; sourceTree = "<group>"; };
 		0EAA71731BA893FA009B5CB5 /* RecipientListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientListTableViewController.swift; sourceTree = "<group>"; };
 		1896012D781E745E7581637D /* Pods-Hola.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hola.release.xcconfig"; path = "Pods/Target Support Files/Pods-Hola/Pods-Hola.release.xcconfig"; sourceTree = "<group>"; };
 		215219AC1B9F696500F5B3A3 /* RichMessaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RichMessaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,7 +50,6 @@
 		215219C61B9F696500F5B3A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		215219C71B9F696500F5B3A3 /* HolaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolaTests.swift; sourceTree = "<group>"; };
 		215219D11B9F69F200F5B3A3 /* Hola-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hola-Bridging-Header.h"; sourceTree = "<group>"; };
-		215219D51B9F816B00F5B3A3 /* Configurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Configurations.plist; sourceTree = "<group>"; };
 		215219D71B9FB63C00F5B3A3 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		21547F651BA0A89E00C353E9 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		21547F671BA2010800C353E9 /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageType.swift; sourceTree = "<group>"; };
@@ -140,9 +140,9 @@
 		215219AF1B9F696500F5B3A3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0E48A9CE1BE9A5C100B732DD /* MagnetMax.plist */,
 				216394C51BA78F080011479D /* goldengate.png */,
 				216394C11BA786530011479D /* small.mp4 */,
-				215219D51B9F816B00F5B3A3 /* Configurations.plist */,
 				215219B01B9F696500F5B3A3 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -265,7 +265,7 @@
 				215219B71B9F696500F5B3A3 /* Main.storyboard in Resources */,
 				216394C61BA78F080011479D /* goldengate.png in Resources */,
 				216394C21BA786530011479D /* small.mp4 in Resources */,
-				215219D61B9F816B00F5B3A3 /* Configurations.plist in Resources */,
+				0E48A9CF1BE9A5C100B732DD /* MagnetMax.plist in Resources */,
 				215219BC1B9F696500F5B3A3 /* LaunchScreen.xib in Resources */,
 				215219B91B9F696500F5B3A3 /* Images.xcassets in Resources */,
 			);
