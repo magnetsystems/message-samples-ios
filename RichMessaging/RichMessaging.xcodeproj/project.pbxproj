@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0EAA71741BA893FA009B5CB5 /* RecipientListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAA71731BA893FA009B5CB5 /* RecipientListTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		0EAA71741BA893FA009B5CB5 /* RecipientListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EAA71731BA893FA009B5CB5 /* RecipientListTableViewController.swift */; };
 		215219B21B9F696500F5B3A3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215219B11B9F696500F5B3A3 /* AppDelegate.swift */; };
 		215219B41B9F696500F5B3A3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215219B31B9F696500F5B3A3 /* ViewController.swift */; };
 		215219B71B9F696500F5B3A3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 215219B51B9F696500F5B3A3 /* Main.storyboard */; };
@@ -19,10 +19,10 @@
 		21547F661BA0A89E00C353E9 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21547F651BA0A89E00C353E9 /* Message.swift */; };
 		21547F681BA2010800C353E9 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21547F671BA2010800C353E9 /* MessageType.swift */; };
 		21547F6B1BA2316900C353E9 /* MMXMessage+S3FileAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 21547F6A1BA2316900C353E9 /* MMXMessage+S3FileAttachment.m */; };
-		216394401BA755760011479D /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163943F1BA755760011479D /* DownloadManager.swift */; settings = {ASSET_TAGS = (); }; };
-		216394C21BA786530011479D /* small.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 216394C11BA786530011479D /* small.mp4 */; settings = {ASSET_TAGS = (); }; };
-		216394C61BA78F080011479D /* goldengate.png in Resources */ = {isa = PBXBuildFile; fileRef = 216394C51BA78F080011479D /* goldengate.png */; settings = {ASSET_TAGS = (); }; };
-		CB92D89339630C8165B6F697 /* Pods_RichMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F05B22F1217579B497EB310 /* Pods_RichMessaging.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		216394401BA755760011479D /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2163943F1BA755760011479D /* DownloadManager.swift */; };
+		216394C21BA786530011479D /* small.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 216394C11BA786530011479D /* small.mp4 */; };
+		216394C61BA78F080011479D /* goldengate.png in Resources */ = {isa = PBXBuildFile; fileRef = 216394C51BA78F080011479D /* goldengate.png */; };
+		CB92D89339630C8165B6F697 /* Pods_RichMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F05B22F1217579B497EB310 /* Pods_RichMessaging.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

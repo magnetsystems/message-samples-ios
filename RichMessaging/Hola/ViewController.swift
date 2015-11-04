@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MMX
+import MagnetMax
 import FBSDKCoreKit
 import FBSDKLoginKit
 
@@ -71,27 +71,37 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
 	}
 	
 	func registerAndLoginToMMX(name: String, email: String, userID: String) {
-		let user = MMXUser()
-		user.username = userID
-		user.displayName = name
-		let credential = NSURLCredential(user: user.username, password: userID, persistence: .None)
-		user.registerWithCredential(credential, success: { () -> Void in
-			MMXUser.logInWithCredential(credential, success: { (user) -> Void in
+		let user = MMUser()
+		user.userName = userID
+		user.firstName = name
+		user.password = userID
+		let credential = NSURLCredential(user: user.userName, password: user.password, persistence: .None)
+		user.register({ (user) -> Void in
+			MMUser.login(credential, success: { () -> Void in
+				MagnetMax.initModule(MMX.sharedInstance(), success: { () -> Void in
+					print("Init Success!!!!!!!!!!!")
 					self.performSegueWithIdentifier("showRecipientsSegue", sender: self)
 				}, failure: { (error) -> Void in
-					print("logInWithCredential error = \(error)")
+					print("initModule error = \(error)")
+				})
+			}, failure: { (error) -> Void in
+				print("logInWithCredential error = \(error)")
 			})
-			}) { (error) -> Void in
-				//If error is for user already exists login
-				if error.code == 409 {
-					MMXUser.logInWithCredential(credential, success: { (user) -> Void in
+		}) { (error) -> Void in
+			if error.code == 409 {
+				MMUser.login(credential, success: { () -> Void in
+					MagnetMax.initModule(MMX.sharedInstance(), success: { () -> Void in
+						print("Init Success!!!!!!!!!!!")
 						self.performSegueWithIdentifier("showRecipientsSegue", sender: self)
 						}, failure: { (error) -> Void in
-							print("logInWithCredential error = \(error)")
+							print("initModule error = \(error)")
 					})
-				} else {
-					print("logInWithCredential error = \(error)")
-				}
+					}, failure: { (error) -> Void in
+						print("logInWithCredential error = \(error)")
+				})
+			} else {
+				print("register error = \(error)")
+			}
 		}
 	}
 	

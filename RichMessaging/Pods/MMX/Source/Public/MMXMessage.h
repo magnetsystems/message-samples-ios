@@ -18,11 +18,11 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXMessageTypes.h"
-#import <Mantle/Mantle.h>
-@class MMXUser;
+@import MagnetMaxCore;
+@class MMUser;
 @class MMXChannel;
 
-@interface MMXMessage : MTLModel
+@interface MMXMessage : MMModel
 
 /**
  *  Type of message. See MMXMessageTypes
@@ -40,9 +40,9 @@
 @property(nonatomic, readonly) NSDate *timestamp;
 
 /**
- *  The MMXUserID for the user that sent the message.
+ *  The MMUser for the user that sent the message.
  */
-@property(nonatomic, readonly) MMXUser *sender;
+@property(nonatomic, readonly) MMUser *sender;
 
 /**
  *  The channel the message was published to. See MMXChannel.h for more details.
@@ -52,7 +52,7 @@
 /**
  *  The list of users the message was sent to.
  */
-@property(nonatomic, readonly) NSSet *recipients;
+@property(nonatomic, readonly) NSSet <MMUser *>*recipients;
 
 /**
  *  The content you want to send.
@@ -68,7 +68,7 @@
  *
  *  @return New MMXMessage
  */
-+ (instancetype)messageToRecipients:(NSSet *)recipients
++ (instancetype)messageToRecipients:(NSSet <MMUser *>*)recipients
 					 messageContent:(NSDictionary *)messageContent;
 
 /**
@@ -85,12 +85,12 @@
 /**
  *  Method to send the message
  *
- *  @param success - Block with the message ID for the sent message.
+ *  @param success - Block with the NSSet of usernames for any users that were not valid.
  *  @param failure - Block with an NSError with details about the call failure.
  *
  *  @return The messageID for the message sent
  */
-- (NSString *)sendWithSuccess:(void (^)(void))success
+- (NSString *)sendWithSuccess:(void (^)(NSSet <NSString *>*invalidUsers))success
 					  failure:(void (^)(NSError *error))failure;
 
 /**
@@ -103,8 +103,8 @@
  *  @return The messageID for the message sent
  */
 - (NSString *)replyWithContent:(NSDictionary *)content
-				 success:(void (^)(void))success
-				 failure:(void (^)(NSError * error))failure;
+					   success:(void (^)(NSSet <NSString *>*invalidUsers))success
+					   failure:(void (^)(NSError * error))failure;
 
 /**
  *  Method to send a message to all recipients of the received message including the sender
@@ -116,7 +116,7 @@
  *  @return The messageID for the message sent
  */
 - (NSString *)replyAllWithContent:(NSDictionary *)content
-						  success:(void (^)(void))success
+						  success:(void (^)(NSSet <NSString *>*invalidUsers))success
 						  failure:(void (^)(NSError * error))failure;
 
 /**

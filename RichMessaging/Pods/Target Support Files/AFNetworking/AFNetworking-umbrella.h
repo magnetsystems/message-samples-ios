@@ -3,6 +3,8 @@
 #import "AFURLConnectionOperation.h"
 #import "AFHTTPRequestOperation.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "AFHTTPSessionManager.h"
+#import "AFURLSessionManager.h"
 #import "AFNetworkReachabilityManager.h"
 #import "AFSecurityPolicy.h"
 #import "AFURLRequestSerialization.h"

@@ -17,12 +17,13 @@
 
 
 #import <Foundation/Foundation.h>
-#import <Mantle/Mantle.h>
-@class MMXUser;
+#import "MMXPublishPermissionsEnum.h"
+@import MagnetMaxCore;
+@class MMUser;
 @class MMXMessage;
 @class MMXInvite;
 
-@interface MMXChannel : MTLModel
+@interface MMXChannel : MMModel
 
 /**
  *  Is the topic public?
@@ -40,9 +41,19 @@
 @property (nonatomic, copy) NSString *summary;
 
 /**
- *  The owner/creator of the channel.
+ *  The required permissions needed to publish to this channel.
  */
-@property (nonatomic, readonly) NSString *ownerUsername;
+@property (nonatomic, readonly) MMXPublishPermissions publishPermissions;
+
+/**
+ *  BOOL letting you know if the current user can publish to the channel.
+ */
+@property (nonatomic, readonly) BOOL canPublish;
+
+/**
+ *  The userID for the owner/creator of the channel.
+ */
+@property (nonatomic, readonly) NSString *ownerUserID;
 
 /**
  *  The date the channel was created.
@@ -75,7 +86,7 @@
  */
 + (void)allPublicChannelsWithLimit:(int)limit
 							offset:(int)offset
-						   success:(void (^)(int totalCount, NSArray *channels))success
+						   success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 						   failure:(void (^)(NSError *))failure;
 
 /**
@@ -88,7 +99,7 @@
  */
 + (void)allPrivateChannelsWithLimit:(int)limit
 							 offset:(int)offset
-							success:(void (^)(int totalCount, NSArray *channels))success
+							success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 							failure:(void (^)(NSError *))failure;
 
 /**
@@ -105,15 +116,6 @@
 			   failure:(void (^)(NSError *error))failure;
 
 /**
- * @deprecated This method is deprecated starting in version 1.9
- * @note Please use @code channelsStartingWith:limit:offset:success:failure: @code instead.
- */
-+ (void)channelsStartingWith:(NSString *)name
-					   limit:(int)limit
-					 success:(void (^)(int totalCount, NSArray *channels))success
-					 failure:(void (^)(NSError *error))failure __attribute__((deprecated));
-
-/**
  *  Method used to discover existing channels by name
  *
  *  @param name     The begining of the channel name you are searching for.
@@ -125,16 +127,8 @@
 + (void)channelsStartingWith:(NSString *)name
 					   limit:(int)limit
 					  offset:(int)offset
-					 success:(void (^)(int totalCount, NSArray *channels))success
+					 success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 					 failure:(void (^)(NSError *error))failure;
-
-/**
- * @deprecated This method is deprecated starting in version 1.9
- * @note Please use @code findByTags:success:failure: @code instead.
- */
-+ (void)findByTags:(NSSet *)tags
-		   success:(void (^)(int totalCount, NSArray *channels))success
-		   failure:(void (^)(NSError *error))failure __attribute__((deprecated));
 
 /**
  *  Method used to discover existing channels that have any of the tags provided
@@ -148,7 +142,7 @@
 + (void)findByTags:(NSSet *)tags
 			 limit:(int)limit
 			offset:(int)offset
-		   success:(void (^)(int totalCount, NSArray *channels))success
+		   success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 		   failure:(void (^)(NSError *error))failure;
 
 /**
@@ -173,31 +167,19 @@
 		failure:(void (^)(NSError *error))failure;
 
 /**
- * @deprecated This method is deprecated starting in version 1.9
- * @note Please use @code findByDisplayName:limit:offset:success:failure: @code instead.
- */
-+ (instancetype)channelWithName:(NSString *)name
-						summary:(NSString *)summary  __attribute__((deprecated));
-
-/**
- * @deprecated This method is deprecated starting in version 1.9
- * @note Please use @code findByDisplayName:limit:offset:success:failure: @code instead.
- */
-- (void)createWithSuccess:(void (^)(void))success
-				  failure:(void (^)(NSError * error))failure  __attribute__((deprecated));
-
-/**
  *  Method to create a new channel.
  *
- *  @param name		The name you want for the new channel(must be unique. Cannot have spaces.
- *  @param summary	The summary you want for the channel. (Used to give other users a better idea about the purpose of the channel).
- *  @param isPublic	Set to YES if you want the channel to be discoverable by other users.
- *  @param success	Block called if operation is successful.
- *  @param failure	Block with an NSError with details about the call failure.
+ *  @param name					The name you want for the new channel must be unique. Cannot have spaces. The valid character set is alphanumeric plus period, dash and underscore. .-_
+ *  @param summary				The summary you want for the channel. (Used to give other users a better idea about the purpose of the channel).
+ *  @param isPublic				Set to YES if you want the channel to be discoverable by other users.
+ *  @param publishPermissions	Permissions level required to be able to post; Owner/Creator only, Subscribers, Anyone. Owner can always publish.
+ *  @param success				Block called if operation is successful.
+ *  @param failure				Block with an NSError with details about the call failure.
  */
 + (void)createWithName:(NSString *)name
 			   summary:(NSString *)summary
 			  isPublic:(BOOL)isPublic
+	publishPermissions:(MMXPublishPermissions)publishPermissions
 			   success:(void (^)(MMXChannel *channel))success
 			   failure:(void (^)(NSError *))failure;
 /**
@@ -235,15 +217,8 @@
  *  @param success Block with a NSArray of channels
  *  @param failure - Block with an NSError with details about the call failure.
  */
-+ (void)subscribedChannelsWithSuccess:(void (^)(NSArray *channels))success
++ (void)subscribedChannelsWithSuccess:(void (^)(NSArray <MMXChannel *>*channels))success
 							  failure:(void (^)(NSError *error))failure;
-
-/**
- * @deprecated This method is deprecated starting in version 1.9
- * @note Please use @code subscribersWithSuccess:failure: @code instead.
- */
-- (void)subscribersWithSuccess:(void (^)(int totalCount, NSArray *subscribers))success
-					   failure:(void (^)(NSError *error))failure __attribute__((deprecated));
 
 /**
  *  Get the subscribers for a channel
@@ -251,12 +226,12 @@
  *
  *  @param limit	The max number of items you want returned.
  *  @param offset	The offset into the results list. Used for pagination.
- *  @param success	Block with the total count of subscribers and a NSSet of the subscribers(MMXUser objects)
+ *  @param success	Block with the total count of subscribers and a NSSet of the subscribers(MMUser objects)
  *  @param failure	Block with an NSError with details about the call failure.
  */
 - (void)subscribersWithLimit:(int)limit
 					  offset:(int)offset
-					 success:(void (^)(int totalCount, NSArray *subscribers))success
+					 success:(void (^)(int totalCount, NSArray <MMUser *>*subscribers))success
 					 failure:(void (^)(NSError *error))failure;
 
 /**
@@ -269,17 +244,6 @@
 - (void)publish:(NSDictionary *)messageContent
 		success:(void (^)(MMXMessage *message))success
 		failure:(void (^)(NSError *error))failure;
-
-/**
- * @deprecated This method is deprecated starting in version 1.9
- * @note Please use @code messagesBetweenStartDate:endDate:limit:offset:ascending:success:failure: @code instead.
- */
-- (void)fetchMessagesBetweenStartDate:(NSDate *)startDate
-							  endDate:(NSDate *)endDate
-								limit:(int)limit
-							ascending:(BOOL)ascending
-							  success:(void (^)(int totalCount, NSArray *messages))success
-							  failure:(void (^)(NSError *error))failure __attribute__((deprecated));
 
 /**
  *  Get messages previous posted to this channel.
@@ -297,20 +261,20 @@
 						   limit:(int)limit
 						  offset:(int)offset
 					   ascending:(BOOL)ascending
-						 success:(void (^)(int totalCount, NSArray *messages))success
+						 success:(void (^)(int totalCount, NSArray <MMXMessage *>*messages))success
 						 failure:(void (^)(NSError *error))failure;
 
 /**
  *  Invite a user to the channel
  *
- *  @param user			The MMXUser object for the user you want to invite
+ *  @param user			The MMUser object for the user you want to invite
  *  @param comments		An optional message telling the user why you want them to join the channel
  *  @param success		Block with the MMXInvite object that was sent.
  *  @param failure		Block with an NSError with details about the call failure.
  *
  *  @return The messageID for the invite sent
  */
-- (NSString *)inviteUser:(MMXUser *)user
+- (NSString *)inviteUser:(MMUser *)user
 				comments:(NSString *)comments
 				 success:(void (^)(MMXInvite *invite))success
 				 failure:(void (^)(NSError *error))failure;
