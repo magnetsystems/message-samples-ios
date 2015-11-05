@@ -42,7 +42,11 @@
 }
 
 //- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-////	[[MMXClient sharedClient] updateRemoteNotificationDeviceToken:deviceToken];
+//	[MMDevice updateCurentDeviceToken:deviceToken success:^{
+//		NSLog(@"updateCurentDeviceToken Success!!!");
+//	} failure:^(NSError * error) {
+//		NSLog(@"updateCurentDeviceToken Error = %@",error);
+//
 //}
 
 //- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
