@@ -83,7 +83,7 @@ PODS:
   - MMXXMPPFramework/XEP-0203 (3.6.13):
     - MMXXMPPFramework/Core
     - MMXXMPPFramework/XEP-0082
-  - SlackTextViewController (1.7.1)
+  - SlackTextViewController (1.7.2)
 
 DEPENDENCIES:
   - MagnetMax (~> 2.0)
@@ -100,6 +100,6 @@ SPEC CHECKSUMS:
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
   MMX: 8f03a35bc30f13a67312c403a742f442814a676c
   MMXXMPPFramework: 5b056c9870b2e4ce977d085873506399f31fb68e
-  SlackTextViewController: 139ffc5b09276ff5ac1609ac78eafab702fc974e
+  SlackTextViewController: 1f4e8f68c156ef93de73fd422db2b8d5d5b0f4e7
 
 COCOAPODS: 0.39.0

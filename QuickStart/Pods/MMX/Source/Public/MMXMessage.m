@@ -36,7 +36,7 @@
 @implementation MMXMessage
 
 + (instancetype)messageToRecipients:(NSSet <MMUser *>*)recipients
-					 messageContent:(NSDictionary *)messageContent {
+					 messageContent:(NSDictionary <NSString *,NSString *>*)messageContent {
 	MMXMessage *msg = [MMXMessage new];
 	msg.recipients = recipients;
 	msg.messageContent = messageContent;
@@ -44,7 +44,7 @@
 };
 
 + (instancetype)messageToChannel:(MMXChannel *)channel
-				  messageContent:(NSDictionary *)messageContent {
+				  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent {
 	MMXMessage *msg = [MMXMessage new];
 	msg.channel = channel;
 	msg.messageContent = messageContent;
@@ -157,7 +157,7 @@
 	}
 }
 
-- (NSString *)replyWithContent:(NSDictionary *)content
+- (NSString *)replyWithContent:(NSDictionary <NSString *,NSString *>*)content
 					   success:(void (^)(NSSet <NSString *>*invalidUsers))success
 					   failure:(void (^)(NSError *))failure {
 	NSSet *recipients = [NSSet setWithObject:self.sender];
@@ -183,7 +183,7 @@
 	return messageID;
 }
 
-- (NSString *)replyAllWithContent:(NSDictionary *)content
+- (NSString *)replyAllWithContent:(NSDictionary <NSString *,NSString *>*)content
 						  success:(void (^)(NSSet <NSString *>*invalidUsers))success
 						  failure:(void (^)(NSError *))failure {
 	NSMutableSet *newSet = [NSMutableSet setWithSet:self.recipients];

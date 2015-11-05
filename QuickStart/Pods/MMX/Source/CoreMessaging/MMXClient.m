@@ -204,6 +204,8 @@ int const kReconnectionTimerInterval = 4;
 	[self.xmppReconnect activate:self.xmppStream];
 	self.xmppReconnect.reconnectTimerInterval = kReconnectionTimerInterval;
 	
+	[self updateConnectionStatus:MMXConnectionStatusConnecting error:nil];
+
 	NSMutableString *userWithAppId = [[NSMutableString alloc] initWithString:[self.username jidEscapedString]];
     [userWithAppId appendString:@"%"];
     [userWithAppId appendString:self.appID];
@@ -277,7 +279,11 @@ int const kReconnectionTimerInterval = 4;
         }
         [[MMXLogger sharedLogger] verbose:@"connection completed"];
     } else {
+		if (error == nil) {
+			error = [MMXClient errorWithTitle:@"Unknown Messaging Error" message:@"Unable to connect to the Messaging server" code:500];
+		}
         [[MMXLogger sharedLogger] verbose:@"Authentication Attempt Error:%@", error.description];
+		[self updateConnectionStatus:MMXConnectionStatusAuthenticationFailure error:error];
     }
 }
 
@@ -399,10 +405,11 @@ int const kReconnectionTimerInterval = 4;
 	xmppMessage = [[XMPPMessage alloc] initWithType:mType to:toAddress];
 	[xmppMessage addAttributeWithName:@"from" stringValue: [[self currentJID] full]];
 	
-	if (options && options.shouldRequestDeliveryReceipt) {
+	//Always sending delivery receipt request because Android can't function without it
+//	if (options && options.shouldRequestDeliveryReceipt) {
 		NSXMLElement *deliveryReceiptElement = [[NSXMLElement alloc] initWithName:MXrequestElement xmlns:MXnsDeliveryReceipt];
 		[xmppMessage addChild:deliveryReceiptElement];
-	}
+//	}
 	
 	[xmppMessage addChild:mmxElement.copy];
 	[xmppMessage addAttributeWithName:@"id" stringValue:outboundMessage.messageID];
@@ -736,6 +743,7 @@ int const kReconnectionTimerInterval = 4;
 }
 
 - (void)xmppStreamDidConnect:(XMPPStream *)sender {
+	[self updateConnectionStatus:MMXConnectionStatusConnected error:nil];
 	self.reconnectionTryCount = 0;
     [[MMXLogger sharedLogger] verbose:@"Successfully created TCP connection"];
     [self authenticate];
@@ -762,6 +770,7 @@ int const kReconnectionTimerInterval = 4;
 
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
 	if (error) {
+		[self updateConnectionStatus:MMXConnectionStatusDisconnected error:error];
 		[[MMXLogger sharedLogger] error:@"%@\ncode=%li", error.localizedDescription,(long)error.code];
 	}
 	if (self.connectionStatus == MMXConnectionStatusReconnecting) {

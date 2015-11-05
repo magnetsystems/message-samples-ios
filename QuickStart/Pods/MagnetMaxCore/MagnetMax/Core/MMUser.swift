@@ -33,9 +33,9 @@ public extension MMUser {
 
         assert(!userName.isEmpty && !password.isEmpty, "userName or password cannot be empty")
         
-        MMCoreConfiguration.serviceAdapter.registerUser(self, success: { user -> Void in
+        MMCoreConfiguration.serviceAdapter.registerUser(self, success: { user in
             success?(user: user)
-        }) { (error) -> Void in
+        }) { error in
             failure?(error: error)
         }.executeInBackground(nil)
     }
@@ -52,17 +52,36 @@ public extension MMUser {
         MMCoreConfiguration.serviceAdapter.loginWithUsername(credential.user, password: credential.password, success: { _ in
             // Get current user now
             MMCoreConfiguration.serviceAdapter.getCurrentUserWithSuccess({ user -> Void in
+                // Reset the state
+                userTokenExpired(nil)
+                
                 currentlyLoggedInUser = user
                 let userInfo = ["userID": user.userID, "deviceID": MMServiceAdapter.deviceUUID(), "token": MMCoreConfiguration.serviceAdapter.HATToken]
                 NSNotificationCenter.defaultCenter().postNotificationName(MMServiceAdapterDidReceiveHATTokenNotification, object: self, userInfo: userInfo)
+                
+                // Register for token expired notification
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenExpired:", name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
+                
                 success?()
-            }, failure: { (error) -> Void in
+            }, failure: { error in
                 failure?(error: error)
             }).executeInBackground(nil)
             
-        }) { (error) -> Void in
+        }) { error in
             failure?(error: error)
         }.executeInBackground(nil)
+    }
+    
+    /**
+        Acts as the userToken expired event receiver.
+     
+        - Parameters:
+            - notification: The notification that was received.
+     */
+    @objc static private func userTokenExpired(notification: NSNotification?) {
+        currentlyLoggedInUser = nil
+        // Unregister for token expired notification
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
     }
     
     /**
@@ -77,10 +96,12 @@ public extension MMUser {
             success?()
             return
         }
+        
+        userTokenExpired(nil)
+        
         MMCoreConfiguration.serviceAdapter.logoutWithSuccess({ _ in
-            currentlyLoggedInUser = nil
             success?()
-        }) { (error) -> Void in
+        }) { error in
             failure?(error: error)
         }.executeInBackground(nil)
     }
@@ -99,18 +120,18 @@ public extension MMUser {
      
         - Parameters:
             - query: The DSL can be found here: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax
-            - take: The number of records to retrieve.
-            - skip: The offset to start from.
+            - limit: The number of records to retrieve.
+            - offset: The offset to start from.
             - sort: The sort criteria.
             - success: A block object to be executed when the call finishes successfully. This block has no return value and takes one argument: the list of users that match the specified criteria.
             - failure: A block object to be executed when the call finishes with an error. This block has no return value and takes one argument: the error object.
     */
-    static public func searchUsers(query: String, take: Int, skip: Int, sort: String, success: (([MMUser]) -> Void)?, failure: ((error: NSError) -> Void)?) {
+    static public func searchUsers(query: String, limit take: Int, offset skip: Int, sort: String, success: (([MMUser]) -> Void)?, failure: ((error: NSError) -> Void)?) {
         
         let userService = MMUserService()
-        userService.searchUsers(query, take: Int32(take), skip: Int32(skip), sort: sort, success: { (users) -> Void in
+        userService.searchUsers(query, take: Int32(take), skip: Int32(skip), sort: sort, success: { users in
             success?(users)
-        }) { (error) -> Void in
+        }) { error in
             failure?(error: error)
         }.executeInBackground(nil)
     }
@@ -126,9 +147,9 @@ public extension MMUser {
     static public func usersWithUserNames(userNames:[String], success: (([MMUser]) -> Void)?, failure: ((error: NSError) -> Void)?) {
         
         let userService = MMUserService()
-        userService.getUsersByUserNames(userNames, success: { (users) -> Void in
+        userService.getUsersByUserNames(userNames, success: { users in
             success?(users)
-        }) { (error) -> Void in
+        }) { error in
             failure?(error: error)
         }.executeInBackground(nil)
     }
@@ -144,9 +165,9 @@ public extension MMUser {
     static public func usersWithUserIDs(userIDs:[String], success: (([MMUser]) -> Void)?, failure: ((error: NSError) -> Void)?) {
         
         let userService = MMUserService()
-        userService.getUsersByUserIds(userIDs, success: { (users) -> Void in
+        userService.getUsersByUserIds(userIDs, success: { users in
             success?(users)
-            }) { (error) -> Void in
+            }) { error in
                 failure?(error: error)
             }.executeInBackground(nil)
     }

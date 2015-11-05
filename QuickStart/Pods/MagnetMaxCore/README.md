@@ -24,7 +24,14 @@ Current release: 2.0.0
 #### Podfile
 
 ```ruby
-pod "MagnetMax", "~> 2.0"
+source 'https://github.com/CocoaPods/Specs'
+source 'https://github.com/magnetsystems/Specs'
+
+platform :ios, '8.0'
+
+use_frameworks!
+
+pod 'MagnetMax', '~> 2.0'
 ```
 
 
