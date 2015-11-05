@@ -334,12 +334,12 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-	self.searchController.active = NO;
 	if ([[segue identifier] isEqualToString:@"ChannelMessagesSegue"]) {
 		MessagesViewController *vc = [segue destinationViewController];
 		ChannelListCell *cell = (ChannelListCell *)sender;
 		vc.channel = cell.channel;
 	}
+	self.searchController.active = NO;
 }
 
 #pragma mark - Private implementation

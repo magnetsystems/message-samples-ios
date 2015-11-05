@@ -19,6 +19,7 @@
 @class MMUser;
 @class MMXChannel;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface MMXInviteResponse : MMModel
 
 /**
@@ -29,7 +30,7 @@
 /**
  *  A custom message from the sender
  */
-@property (nonatomic, readonly) NSString *comments;
+@property (nonatomic, readonly, nullable) NSString *comments;
 
 /**
  *  The user that sent the response
@@ -46,4 +47,5 @@
  */
 @property (nonatomic, readonly) BOOL accepted;
 
+NS_ASSUME_NONNULL_END
 @end

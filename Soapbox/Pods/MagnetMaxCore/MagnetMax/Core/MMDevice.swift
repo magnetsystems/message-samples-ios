@@ -29,7 +29,7 @@ public extension MMDevice {
     */
     static public func updateCurentDeviceToken(data: NSData, success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
         let currentDevice = MMCoreConfiguration.serviceAdapter.currentDevice
-        currentDevice.deviceToken = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
+        currentDevice.deviceToken = deviceToken(data)
         MMCoreConfiguration.serviceAdapter.registerCurrentDeviceWithSuccess({ _ -> Void in
             success?()
         }) { error -> Void in
@@ -45,5 +45,12 @@ public extension MMDevice {
     static public func currentDevice() -> MMDevice {
         return MMCoreConfiguration.serviceAdapter.currentDevice
     }
+    
+	// MARK: - Private methods
+	static private func deviceToken(data: NSData) -> String {
+		return String(data.description.characters.filter {
+			[" ", "<", ">"].contains($0) != true
+			})
+	}
 }
 

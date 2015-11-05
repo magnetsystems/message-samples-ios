@@ -19,6 +19,7 @@
 @class MMUser;
 @class MMXChannel;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface MMXInvite : MMModel
 
 /**
@@ -29,7 +30,7 @@
 /**
  *  A custom message from the sender
  */
-@property (nonatomic, copy, readonly) NSString *comments;
+@property (nonatomic, copy, readonly, nullable) NSString *comments;
 
 /**
  *  The user that sent the invite
@@ -48,9 +49,9 @@
  *  @param success	Block called if operation is successful.
  *  @param failure	Block with an NSError with details about the call failure.
  */
-- (void)acceptWithComments:(NSString *)comments
-                   success:(void (^)(void))success
-                   failure:(void (^)(NSError *error))failure;
+- (void)acceptWithComments:(nullable NSString *)comments
+                   success:(nullable void (^)(void))success
+                   failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Decline the invite to the channel.
@@ -60,8 +61,8 @@
  *  @param failure	Block with an NSError with details about the call failure.
  */
 - (void)declineWithComments:(NSString *)comments
-                    success:(void (^)(void))success
-                    failure:(void (^)(NSError *error))failure;
+                    success:(nullable void (^)(void))success
+                    failure:(nullable void (^)(NSError *error))failure;
 
-
+NS_ASSUME_NONNULL_END
 @end

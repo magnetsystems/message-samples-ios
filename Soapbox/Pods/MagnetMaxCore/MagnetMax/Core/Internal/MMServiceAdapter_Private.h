@@ -56,4 +56,8 @@ typedef NS_ENUM(NSUInteger, MMCATTokenRequestStatus){
 
 - (BOOL)isSchemeHTTP;
 
+- (BOOL)isCATTokenRequest:(NSURLRequest *)request;
+
+- (BOOL)isLogoutRequest:(NSURLRequest *)request;
+
 @end

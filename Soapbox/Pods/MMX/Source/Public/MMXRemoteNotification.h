@@ -17,7 +17,7 @@
 
 #import <Foundation/Foundation.h>
 
-
+NS_ASSUME_NONNULL_BEGIN
 @interface MMXRemoteNotification : NSObject
 
 /**
@@ -44,6 +44,7 @@
  *  @param userInfo    - The remote notification.
  *  @param completion  - Block with BOOL. Value should be YES.
  */
-+ (void)acknowledgeRemoteNotification:(NSDictionary *)userInfo completion:(void (^)(BOOL success))completion;
++ (void)acknowledgeRemoteNotification:(NSDictionary *)userInfo completion:(nullable void (^)(BOOL success))completion;
 
+NS_ASSUME_NONNULL_END
 @end

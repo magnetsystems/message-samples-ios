@@ -40,9 +40,13 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 	 */
     MMXConnectionStatusNotConnected = 0,
 	/**
-	 *  Connected to the server as an anonymous user.
+	 *  Attempting to connect to the messaging server.
 	 */
-    MMXConnectionStatusConnected,
+	MMXConnectionStatusConnecting,
+	/**
+	 *  Connected to the server and trying to authenticate.
+	 */
+	MMXConnectionStatusConnected,
 	/**
 	 *  No longer connected to the server.
 	 */

@@ -163,7 +163,7 @@
 	
 }
 
-+ (void)findByTags:(NSSet *)tags
++ (void)findByTags:(NSSet <NSString *>*)tags
 			 limit:(int)limit
 			offset:(int)offset
 		   success:(void (^)(int, NSArray <MMXChannel *>*))success
@@ -231,7 +231,7 @@
 	}];
 }
 
-- (void)tagsWithSuccess:(void (^)(NSSet *))success
+- (void)tagsWithSuccess:(void (^)(NSSet <NSString *>*))success
 				failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
@@ -250,7 +250,7 @@
 	}];
 }
 
-- (void)setTags:(NSSet *)tags
+- (void)setTags:(NSSet <NSString *>*)tags
 		success:(void (^)(void))success
 		failure:(void (^)(NSError *))failure {
 
@@ -426,7 +426,7 @@
 	}];
 }
 
-- (void)publish:(NSDictionary *)messageContent
+- (void)publish:(NSDictionary <NSString *,NSString *>*)messageContent
 		success:(void (^)(MMXMessage *))success
 		failure:(void (^)(NSError *))failure {
 
