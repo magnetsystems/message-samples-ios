@@ -22,6 +22,7 @@
 @class MMUser;
 @class MMXChannel;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface MMXMessage : MMModel
 
 /**
@@ -32,33 +33,33 @@
 /**
  *  Unique UUID for the message to allow tracking.
  */
-@property(nonatomic, readonly) NSString *messageID;
+@property(nonatomic, readonly, nullable) NSString *messageID;
 
 /**
  *  The timestamp for when the message was originally sent.
  */
-@property(nonatomic, readonly) NSDate *timestamp;
+@property(nonatomic, readonly, nullable) NSDate *timestamp;
 
 /**
  *  The MMUser for the user that sent the message.
  */
-@property(nonatomic, readonly) MMUser *sender;
+@property(nonatomic, readonly, nullable) MMUser *sender;
 
 /**
  *  The channel the message was published to. See MMXChannel.h for more details.
  */
-@property (nonatomic, readonly) MMXChannel *channel;
+@property (nonatomic, readonly, nullable) MMXChannel *channel;
 
 /**
  *  The list of users the message was sent to.
  */
-@property(nonatomic, readonly) NSSet <MMUser *>*recipients;
+@property(nonatomic, readonly, nullable) NSSet <MMUser *>*recipients;
 
 /**
  *  The content you want to send.
  *	NSDictionary can only contain objects that are JSON serializable.
  */
-@property(nonatomic, readonly) NSDictionary *messageContent;
+@property(nonatomic, readonly) NSDictionary <NSString *,NSString *>*messageContent;
 
 /**
  *  Initializer for creating a new MMXMessage object
@@ -69,7 +70,7 @@
  *  @return New MMXMessage
  */
 + (instancetype)messageToRecipients:(NSSet <MMUser *>*)recipients
-					 messageContent:(NSDictionary *)messageContent;
+					 messageContent:(NSDictionary <NSString *,NSString *>*)messageContent;
 
 /**
  *  Initializer for creating a new MMXMessage object
@@ -80,7 +81,7 @@
  *  @return New MMXMessage
  */
 + (instancetype)messageToChannel:(MMXChannel *)channel
-				  messageContent:(NSDictionary *)messageContent;
+				  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent;
 
 /**
  *  Method to send the message
@@ -90,8 +91,8 @@
  *
  *  @return The messageID for the message sent
  */
-- (NSString *)sendWithSuccess:(void (^)(NSSet <NSString *>*invalidUsers))success
-					  failure:(void (^)(NSError *error))failure;
+- (nullable NSString *)sendWithSuccess:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+					  failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to send a message in reply to the received message
@@ -102,9 +103,9 @@
  *
  *  @return The messageID for the message sent
  */
-- (NSString *)replyWithContent:(NSDictionary *)content
-					   success:(void (^)(NSSet <NSString *>*invalidUsers))success
-					   failure:(void (^)(NSError * error))failure;
+- (nullable NSString *)replyWithContent:(NSDictionary <NSString *,NSString *>*)content
+					   success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+					   failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to send a message to all recipients of the received message including the sender
@@ -115,13 +116,14 @@
  *
  *  @return The messageID for the message sent
  */
-- (NSString *)replyAllWithContent:(NSDictionary *)content
-						  success:(void (^)(NSSet <NSString *>*invalidUsers))success
-						  failure:(void (^)(NSError * error))failure;
+- (nullable NSString *)replyAllWithContent:(NSDictionary <NSString *,NSString *>*)content
+						  success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+						  failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Send a delivery confimation message to the sender of the message.
  */
 - (void)sendDeliveryConfirmation;
 
+NS_ASSUME_NONNULL_END
 @end

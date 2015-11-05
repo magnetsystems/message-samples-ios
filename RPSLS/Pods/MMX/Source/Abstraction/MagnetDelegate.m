@@ -155,6 +155,9 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 		case MMXConnectionStatusNotConnected: {
 			}
 			break;
+		case MMXConnectionStatusConnecting: {
+			}
+			break;
 		case MMXConnectionStatusConnected: {
 			if (self.connectSuccessBlock) {
 				self.connectSuccessBlock();
@@ -167,6 +170,12 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 			if (self.logOutSuccessBlock) {
 				self.logOutSuccessBlock();
 			}
+			if (self.maxInitFailureBlock) {
+				self.maxInitFailureBlock(error);
+			}
+			self.maxInitSuccessBlock = nil;
+			self.maxInitFailureBlock = nil;
+
 			if (self.connectFailureBlock) {
 				self.connectFailureBlock(error);
 			}
@@ -180,6 +189,12 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
 			}
 			break;
 		case MMXConnectionStatusFailed: {
+			if (self.maxInitFailureBlock) {
+				self.maxInitFailureBlock(error);
+			}
+			self.maxInitSuccessBlock = nil;
+			self.maxInitFailureBlock = nil;
+
 			if (self.connectFailureBlock) {
 				self.connectFailureBlock(error);
 			}
