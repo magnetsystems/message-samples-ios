@@ -64,7 +64,7 @@ class SoapboxUITests: XCTestCase {
     func test2registerExistingUser() {
         signIn("serveruser", password: "password")
         app.buttons["Register"].tap()
-        confirmAlert("Error Registering User", message: "You have tried to create a duplicate entry.")
+        confirmAlert("Error Registering User", message: "Request failed: conflict (409)")
     }
     
     func test3registerEmptyUserName() {
