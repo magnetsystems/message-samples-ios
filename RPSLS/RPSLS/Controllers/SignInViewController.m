@@ -68,7 +68,6 @@
 		MMUser *newUser = [MMUser new];
 		newUser.userName = self.usernameTextField.text;
 		newUser.password = self.passwordTextField.text;
-		newUser.firstName = self.usernameTextField.text;
 		
 		[newUser register:^(MMUser * user) {
 			[self logInWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
