@@ -67,8 +67,8 @@ class UITestQuickStart: XCTestCase {
     func test2SendMessageEchoBot() {
         launchClearScreen()
         app.navigationBars["MessagesView"].buttons["Share"].tap()
-        XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["echo_bot"].exists)
-        app.alerts["Send Messages To:"].collectionViews.buttons["echo_bot"].tap()
+        XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["Echo"].exists)
+        app.alerts["Send Messages To:"].collectionViews.buttons["Echo"].tap()
         sendMessage("test2")
         XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
     }
@@ -76,8 +76,8 @@ class UITestQuickStart: XCTestCase {
     func test3SendMessageAmazingBot() {
         launchClearScreen()
         app.navigationBars["MessagesView"].buttons["Share"].tap()
-        XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["amazing_bot"].exists)
-        app.alerts["Send Messages To:"].collectionViews.buttons["amazing_bot"].tap()
+        XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["Amazing"].exists)
+        app.alerts["Send Messages To:"].collectionViews.buttons["Amazing"].tap()
         sendMessage("test3")
         XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
     }
