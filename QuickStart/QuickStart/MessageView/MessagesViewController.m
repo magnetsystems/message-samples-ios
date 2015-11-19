@@ -104,6 +104,8 @@ NSString * const kTextContent = @"textContent";
 	MMUser *newUser = [MMUser new];
 	newUser.userName = kDefaultUsername;
 	newUser.password = kDefaultUsername;
+	newUser.firstName = kDefaultUsername;
+	newUser.lastName = kDefaultUsername;
 	newUser.roles = @[@"user"];
 
 	[newUser register:^(MMUser * user) {
