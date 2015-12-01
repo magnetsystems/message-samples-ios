@@ -79,7 +79,7 @@
                 <configuration>
                     <accessKey>${accessKey}</accessKey>
                     <secretKey>${secretKey}</secretKey>
-                    <bucketName>max-message-samples-v2.0</bucketName>
+                    <bucketName>${bucketName}</bucketName>
                     <source>${project.build.directory}/ios-samples</source>
                     <destination>ios-samples</destination>
                     <recursive>true</recursive>
