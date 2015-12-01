@@ -81,7 +81,7 @@
                     <secretKey>${secretKey}</secretKey>
                     <bucketName>${bucketName}</bucketName>
                     <source>${project.build.directory}/ios-samples</source>
-                    <destination>ios-samples</destination>
+                    <destination>${version}/ios-samples</destination>
                     <recursive>true</recursive>
                 </configuration>
             </plugin>
