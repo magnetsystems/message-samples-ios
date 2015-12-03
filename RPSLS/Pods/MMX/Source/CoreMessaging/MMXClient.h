@@ -253,6 +253,16 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 			  withOptions:(MMXMessageOptions *)options;
 
 /**
+ *  Sends a push message to a desired user or users.
+ *
+ *  @param message	- The MMXMessage to send.
+ *  @param options	- MMXMessageOptions object that sets the value for requesting a delivery receipt and performance optimization
+ *
+ *  @return - The UUID of the message for use in tracking.
+ */
+- (NSString *)sendPushMessage:(MMXOutboundMessage *)message success:(void (^)(NSSet * invalidDevices))success failure:(void (^)(NSError * error))failure;
+
+/**
  *  Optionally send delivery confirmation for inbound message when requested.
  *
  *  @param message - Pass in the message that you want to send a confirmation for.
@@ -271,7 +281,6 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 - (void)queryStateForMessages:(NSArray *)messageIDs
                       success:(void (^)(NSDictionary * response))success
                       failure:(void (^)(NSError * error))failure;
-
 
 /**
  *	Messages are queued if sent when the user is not connected.

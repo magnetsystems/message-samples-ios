@@ -15,25 +15,28 @@
  * permissions and limitations under the License.
  */
 
-#ifndef _MAGNETMAXCORE_
-    #define _MAGNETMAXCORE_
+#import <Foundation/Foundation.h>
+#import "MMAsynchronousOperation.h"
 
-    #import "MMEndPoint.h"
-    #import "MMServiceAdapter.h"
-    #import "MMService.h"
-    #import "MMServiceMethod.h"
-    #import "MMServiceMethodParameter.h"
-    #import "MMServiceMethodParameterType.h"
-    #import "MMHTTPUtilities.h"
-    #import "MMServiceIOType.h"
-    #import "MMEnumAttributeContainer.h"
-	#import "MMModel.h"
-	#import "MMUser.h"
-    #import "MMOAuthViewController.h"
-    #import "MMData.h"
-    #import "MMLogger.h"
-    #import "MMLogEvent.h"
-    #import "MMDevice.h"
-    #import "MMCall.h"
 
-#endif /* _MAGNETMAXCORE_ */
+@class MMCacheOptions;
+
+@class MMReliableCallOptions;
+
+@interface MMCall : MMAsynchronousOperation
+
+/**
+ * Should the mock implementation be used?
+ */
+@property(nonatomic, assign) BOOL useMock;
+
+/**
+ * A system-generated unique ID for this call.
+ */
+@property(nonatomic, readonly) NSString *callId;
+
+- (void)executeInBackground:(MMCacheOptions *)cacheOptions;
+
+- (void)executeEventually:(MMReliableCallOptions *)reliableCallOptions;
+
+@end

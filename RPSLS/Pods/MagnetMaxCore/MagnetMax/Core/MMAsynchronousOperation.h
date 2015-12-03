@@ -15,25 +15,13 @@
  * permissions and limitations under the License.
  */
 
-#ifndef _MAGNETMAXCORE_
-    #define _MAGNETMAXCORE_
+#import <Foundation/Foundation.h>
 
-    #import "MMEndPoint.h"
-    #import "MMServiceAdapter.h"
-    #import "MMService.h"
-    #import "MMServiceMethod.h"
-    #import "MMServiceMethodParameter.h"
-    #import "MMServiceMethodParameterType.h"
-    #import "MMHTTPUtilities.h"
-    #import "MMServiceIOType.h"
-    #import "MMEnumAttributeContainer.h"
-	#import "MMModel.h"
-	#import "MMUser.h"
-    #import "MMOAuthViewController.h"
-    #import "MMData.h"
-    #import "MMLogger.h"
-    #import "MMLogEvent.h"
-    #import "MMDevice.h"
-    #import "MMCall.h"
 
-#endif /* _MAGNETMAXCORE_ */
+@interface MMAsynchronousOperation : NSOperation
+
+- (void)execute;
+
+- (void)finish;
+
+@end

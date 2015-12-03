@@ -49,7 +49,20 @@ public extension MMUser {
             - failure: A block object to be executed when the login finishes with an error. This block has no return value and takes one argument: the error object.
     */
     static public func login(credential: NSURLCredential, success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
-        MMCoreConfiguration.serviceAdapter.loginWithUsername(credential.user, password: credential.password, success: { _ in
+        login(credential, rememberMe: false, success: success, failure: failure)
+    }
+    
+    /**
+        Logs in as an user.
+     
+        - Parameters:
+            - credential: A credential object containing the user's userName and password.
+            - rememberMe: A boolean indicating if the user should stay logged in across app restarts.
+            - success: A block object to be executed when the login finishes successfully. This block has no return value and takes no arguments.
+            - failure: A block object to be executed when the login finishes with an error. This block has no return value and takes one argument: the error object.
+     */
+    static public func login(credential: NSURLCredential, rememberMe: Bool, success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
+        MMCoreConfiguration.serviceAdapter.loginWithUsername(credential.user, password: credential.password, rememberMe: rememberMe, success: { _ in
             // Get current user now
             MMCoreConfiguration.serviceAdapter.getCurrentUserWithSuccess({ user -> Void in
                 // Reset the state
@@ -84,6 +97,12 @@ public extension MMUser {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
     }
     
+    /**
+        Logs out a currently logged-in user.
+    */
+    static public func logout() {
+        logout(nil, failure: nil)
+    }
     /**
         Logs out a currently logged-in user.
      
@@ -170,5 +189,16 @@ public extension MMUser {
             }) { error in
                 failure?(error: error)
             }.executeInBackground(nil)
+    }
+    
+    override public func isEqual(object: AnyObject?) -> Bool {
+        if let rhs = object as? MMUser {
+            return userID != nil && userID == rhs.userID
+        }
+        return false
+    }
+    
+    override var hash: Int {
+        return userID != nil ? userID.hashValue : ObjectIdentifier(self).hashValue
     }
 }

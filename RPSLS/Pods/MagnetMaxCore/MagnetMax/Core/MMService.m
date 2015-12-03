@@ -23,7 +23,7 @@
 #import "MMRequestOperationManager.h"
 #import "MMModel.h"
 #import <AFNetworking/AFURLResponseSerialization.h>
-#import <MagnetMaxCore/MagnetMaxCore-Swift.h>
+#import "MMCall_Private.h"
 
 NSString * const MMApplicationDidReceiveAuthenticationChallengeNotification = @"com.magnet.application.authentication.challenge.receive";
 NSString * const MMUserDidReceiveAuthenticationChallengeNotification = @"com.magnet.user.authentication.challenge.receive";
@@ -56,7 +56,7 @@ NSString * const MMUserDidReceiveAuthenticationChallengeNotification = @"com.mag
         [super forwardInvocation:anInvocation];
     } else {
         
-        NSMutableURLRequest *request = [MMRestHandler requestWithInvocation:anInvocation
+        NSMutableURLRequest __unused *request = [MMRestHandler requestWithInvocation:anInvocation
                                                               serviceMethod:method
                                                              serviceAdapter:self.serviceAdapter];
         
@@ -68,14 +68,22 @@ NSString * const MMUserDidReceiveAuthenticationChallengeNotification = @"com.mag
         __unsafe_unretained FailureBlock failure = nil;
         [anInvocation getArgument:&success atIndex:(numberOfArguments - 2)]; // success block is always the second to last argument (penultimate)
         [anInvocation getArgument:&failure atIndex:(numberOfArguments - 1)]; // failure block is always the last argument
-        id successBlock = [success copy];
-        FailureBlock failureBlock = [failure copy];
+        id __unused successBlock = [success copy];
+        FailureBlock __unused failureBlock = [failure copy];
         
+        MMCall *call = [[MMCall alloc] init];
+        call.name = [NSString stringWithFormat:@"%@ %@", MMStringFromRequestMethod(method.requestMethod), method.path];
+        call.invocation = anInvocation;
+        call.serviceMethod = method;
+        call.serviceAdapter = self.serviceAdapter;
         NSString *correlationId = [[NSUUID UUID] UUIDString];
-        MMCall *call = [[MMCall alloc] initWithCallID:correlationId serviceAdapter:self.serviceAdapter serviceMethod:method request:request successBlock:successBlock failureBlock:failureBlock];
-        [call addDependency:self.serviceAdapter.CATTokenOperation];
+        call.callId = correlationId;
+        if (self.serviceAdapter.CATTokenOperation) {
+            [call addDependency:self.serviceAdapter.CATTokenOperation];
+        }
         [anInvocation retainArguments];
         [anInvocation setReturnValue:&call];
+
     }
 }
 

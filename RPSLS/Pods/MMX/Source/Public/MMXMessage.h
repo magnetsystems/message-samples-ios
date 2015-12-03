@@ -59,7 +59,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  The content you want to send.
  *	NSDictionary can only contain objects that are JSON serializable.
  */
-@property(nonatomic, readonly) NSDictionary <NSString *,NSString *>*messageContent;
+@property(nonatomic, readonly) NSDictionary *messageContent;
+
+/**
+ *  The list of attachments associated with the message.
+ */
+@property(nonatomic, readonly, nullable) NSArray <MMAttachment *> *attachments;
 
 /**
  *  Initializer for creating a new MMXMessage object
@@ -92,7 +97,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return The messageID for the message sent
  */
 - (nullable NSString *)sendWithSuccess:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
-					  failure:(nullable void (^)(NSError *error))failure;
+                               failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to send a message in reply to the received message
@@ -104,8 +109,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return The messageID for the message sent
  */
 - (nullable NSString *)replyWithContent:(NSDictionary <NSString *,NSString *>*)content
-					   success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
-					   failure:(nullable void (^)(NSError *error))failure;
+                                success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+                                failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to send a message to all recipients of the received message including the sender
@@ -117,13 +122,27 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return The messageID for the message sent
  */
 - (nullable NSString *)replyAllWithContent:(NSDictionary <NSString *,NSString *>*)content
-						  success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
-						  failure:(nullable void (^)(NSError *error))failure;
+                                   success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+                                   failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Send a delivery confimation message to the sender of the message.
  */
 - (void)sendDeliveryConfirmation;
+
+/**
+ *  Add an attachment.
+ *
+ *  @param attachment The attachment to add to the message.
+ */
+- (void)addAttachment:(MMAttachment *)attachment;
+
+/**
+ *  Add attachments.
+ *
+ *  @param attachments The attachments to add to the message.
+ */
+- (void)addAttachments:(NSArray <MMAttachment *> *)attachments;
 
 NS_ASSUME_NONNULL_END
 @end

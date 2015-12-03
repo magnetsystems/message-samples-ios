@@ -18,11 +18,11 @@
 #import <Foundation/Foundation.h>
 #import "MMRequestOperationManager.h"
 
-@class AFHTTPSessionManager;
+@class MMHTTPSessionManager;
 
 
 @interface MMHTTPRequestOperationManager : NSObject <MMRequestOperationManager>
 
-@property(nonatomic, strong) AFHTTPSessionManager *manager;
+@property(nonatomic, strong) MMHTTPSessionManager *manager;
 
 @end

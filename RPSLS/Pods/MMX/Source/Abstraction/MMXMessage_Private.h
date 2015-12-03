@@ -36,6 +36,10 @@
 
 @property(nonatomic, readwrite) NSDictionary *messageContent;
 
+@property(nonatomic, strong) NSMutableArray<MMAttachment *> *mutableAttachments;
+
+@property(nonatomic, readwrite) NSArray<MMAttachment *> *attachments;
+
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage
 								  sender:(MMUser *)sender;
 
