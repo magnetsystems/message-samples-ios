@@ -19,7 +19,7 @@
 #import "MMLogEvent.h"
 #import "MMServiceMethod.h"
 #import "MMServiceMethodParameter.h"
-#import <MagnetMaxCore/MagnetMaxCore-Swift.h>
+#import "MMCall.h"
 
 @implementation MMLogEventsCollectionService
 

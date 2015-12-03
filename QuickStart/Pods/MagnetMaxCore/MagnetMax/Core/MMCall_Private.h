@@ -15,25 +15,25 @@
  * permissions and limitations under the License.
  */
 
-#ifndef _MAGNETMAXCORE_
-    #define _MAGNETMAXCORE_
+#import "MMCall.h"
 
-    #import "MMEndPoint.h"
-    #import "MMServiceAdapter.h"
-    #import "MMService.h"
-    #import "MMServiceMethod.h"
-    #import "MMServiceMethodParameter.h"
-    #import "MMServiceMethodParameterType.h"
-    #import "MMHTTPUtilities.h"
-    #import "MMServiceIOType.h"
-    #import "MMEnumAttributeContainer.h"
-	#import "MMModel.h"
-	#import "MMUser.h"
-    #import "MMOAuthViewController.h"
-    #import "MMData.h"
-    #import "MMLogger.h"
-    #import "MMLogEvent.h"
-    #import "MMDevice.h"
-    #import "MMCall.h"
+@class MMServiceMethod;
 
-#endif /* _MAGNETMAXCORE_ */
+@interface MMCall ()
+
+@property (nonatomic, strong) NSInvocation *invocation;
+
+@property (nonatomic, strong) MMServiceMethod *serviceMethod;
+
+@property (nonatomic, strong) MMServiceAdapter *serviceAdapter;
+
+@property(nonatomic, strong) NSOperation *underlyingOperation;
+
+@property(nonatomic, readwrite) NSString *callId;
+
+@property(nonatomic, strong) MMCacheOptions *cacheOptions;
+
+@property(nonatomic, strong) MMReliableCallOptions *reliableCallOptions;
+
+
+@end
