@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BaseURL</key>
+	<string>http://localhost:8443/api</string>
+	<key>ClientID</key>
+	<string>8f1853ec-c707-473d-86eb-eafb83225a64</string>
+	<key>ClientSecret</key>
+	<string>ZjZaIYkbD3hGIRYqbdXHLvstkmcUgsu5X71DDML5DJw</string>
+</dict>
+</plist>

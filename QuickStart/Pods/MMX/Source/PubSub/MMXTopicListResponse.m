@@ -56,6 +56,7 @@
 								}
 							}
                             topic.topicName = dict[@"topicName"];
+                            topic.topicDescription = dict[@"description"];
                             topic.isCollection = [dict[@"isCollection"] boolValue];
                             [topicArray addObject:topic];
                         }

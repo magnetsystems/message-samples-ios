@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import MMX
+import MagnetMax
 import JSQMessagesViewController
 
 class RecipientListTableViewController: UITableViewController {
 
-	var availableRecipients = [MMXUser]()
+	var availableRecipients = [MMUser]()
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,13 +30,21 @@ class RecipientListTableViewController: UITableViewController {
     }
 	
 	// MARK: - Get Recipients
+	//FIXME: Use new discovery APIs
 	func updateRecipientList() {
-        MMXUser.allUsersWithLimit(100, offset: 0, success: { (availableCount, userList) -> Void in
-			self.availableRecipients = userList as! [MMXUser]
+		MMUser.searchUsers("*:*", take: 100, skip: 0, sort: "firstName:asc", success: { (userList) -> Void in
+			self.availableRecipients = userList
 			self.tableView.reloadData()
-			}, failure: { (error) -> Void in
+
+			}) { (error) -> Void in
 				print("updateRecipientList error = \(error)")
-		})
+		}
+//        MMUser.allUsersWithLimit(100, offset: 0, success: { (availableCount, userList) -> Void in
+//			self.availableRecipients = userList as! [MMXUser]
+//			self.tableView.reloadData()
+//			}, failure: { (error) -> Void in
+//				print("updateRecipientList error = \(error)")
+//		})
 	}
 	
 	func goToMessageView() {
@@ -56,9 +64,9 @@ class RecipientListTableViewController: UITableViewController {
 		}
 	}
 	
-	func selectedUsers() -> [MMXUser] {
+	func selectedUsers() -> [MMUser] {
 		let selectedRows : [NSIndexPath] = tableView.indexPathsForSelectedRows!
-		var userArray = [MMXUser](count: selectedRows.count, repeatedValue: MMXUser.currentUser())
+		var userArray = [MMUser](count: selectedRows.count, repeatedValue: MMUser.currentUser()!)
 		var index = 0
 		for indexPath in selectedRows {
 			userArray[index] = availableRecipients[indexPath.row]
@@ -81,11 +89,11 @@ class RecipientListTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
 
         // Configure the cell...
-		let user = availableRecipients[indexPath.row] as MMXUser
-		if let displayName = user.displayName {
+		let user = availableRecipients[indexPath.row] as MMUser
+		if let displayName = user.firstName {
 			cell.textLabel?.text = displayName
 		} else {
-			cell.textLabel?.text = user.username
+			cell.textLabel?.text = user.userName
 		}
 		
         return cell

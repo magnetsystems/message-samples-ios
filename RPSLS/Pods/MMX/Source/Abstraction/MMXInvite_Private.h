@@ -24,7 +24,7 @@
 
 @property (nonatomic, readwrite) NSString *comments;
 
-@property (nonatomic, readwrite) MMXUser *sender;
+@property (nonatomic, readwrite) MMUser *sender;
 
 @property (nonatomic, readwrite) MMXChannel *channel;
 

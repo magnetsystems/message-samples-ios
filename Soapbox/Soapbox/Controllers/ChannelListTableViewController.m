@@ -19,7 +19,7 @@
 #import "ChannelListTableViewController.h"
 #import "ChannelListCell.h"
 #import "MessagesViewController.h"
-#import <MMX/MMX.h>
+@import MagnetMax;
 
 @interface ChannelListTableViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 
@@ -66,7 +66,7 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didDisconnect:)
-                                                 name:MMXDidDisconnectNotification
+                                                 name:MMUserDidReceiveAuthenticationChallengeNotification
                                                object:nil];
 
     [self fetchChannels];
@@ -108,8 +108,7 @@
 	 *  Creating a new channel by passing my MMXChannel object.
 	 *	When a user creates a channel they are automatically subscribed to it.
 	 */
-	[MMXChannel createWithName:channelName summary:channelSummary isPublic:YES success:^(MMXChannel *channel) {
-		
+	[MMXChannel createWithName:channelName summary:channelSummary isPublic:YES publishPermissions:MMXPublishPermissionsSubscribers success:^(MMXChannel *channel) {
 		// Fetching channels again to make sure that the company_announcements channel show up under subscribed.
 		[self fetchChannels];
     } failure:^(NSError *error) {
@@ -136,9 +135,11 @@
 
 	NSString *lunchChannelName = @"lunch_buddies";
 	NSString *lunchChannelSummary = @"Lunch Buddies is a channel for finding other people to go to lunch with.";
-	[MMXChannel createWithName:lunchChannelName summary:lunchChannelSummary isPublic:YES success:^(MMXChannel *channel) {
+	[MMXChannel createWithName:lunchChannelName summary:lunchChannelSummary isPublic:YES publishPermissions:MMXPublishPermissionsSubscribers success:^(MMXChannel *channel) {
 	} failure:^(NSError *error) {
-		NSLog(@"createChannel for channel %@ Error = %@", lunchChannelName, error);
+		if (error.code != 409) {
+			NSLog(@"createChannel for channel %@ Error = %@", lunchChannelName, error);
+		}
 	}];
 }
 
@@ -190,11 +191,10 @@
 									   /*
 										*  Ending our session.
 										*/
-                                       [MMXUser logOutWithSuccess:^{
-                                           [self goToLoginScreen];
-                                       } failure:^(NSError *error) {
-
-                                       }];
+									   [MMUser logout:^{
+										   [self goToLoginScreen];
+									   } failure:^(NSError * error) {
+									   }];
 
 								   }];
 	UIAlertAction *cancelAction = [UIAlertAction
@@ -280,8 +280,6 @@
 	
 	self.tableView.tableHeaderView = self.searchController.searchBar;
 	
-	self.tableView.estimatedRowHeight = 40.0;
-	self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -336,12 +334,12 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-	self.searchController.active = NO;
 	if ([[segue identifier] isEqualToString:@"ChannelMessagesSegue"]) {
 		MessagesViewController *vc = [segue destinationViewController];
 		ChannelListCell *cell = (ChannelListCell *)sender;
 		vc.channel = cell.channel;
 	}
+	self.searchController.active = NO;
 }
 
 #pragma mark - Private implementation

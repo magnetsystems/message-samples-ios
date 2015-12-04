@@ -39,7 +39,7 @@
 		NSMutableDictionary *content = self.messageContent.mutableCopy;
         content[@"url"] = response.URL.absoluteString;
         self.messageContent = content;
-        [self sendWithSuccess:^{
+        [self sendWithSuccess:^(NSSet *invalidUsers) {
 			if (success) {
 				success(response.URL);
 			}

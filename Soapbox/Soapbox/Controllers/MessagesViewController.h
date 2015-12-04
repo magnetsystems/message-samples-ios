@@ -21,6 +21,6 @@
 
 @interface MessagesViewController : SLKTextViewController
 
-@property (nonatomic, strong) MMXChannel *channel;
+@property (nonatomic, copy) MMXChannel *channel;
 
 @end

@@ -17,7 +17,7 @@
 
 #import "MMXUserID_Private.h"
 #import "NSString+XEP_0106.h"
-#import "MMXUser.h"
+@import MagnetMaxCore;
 
 @implementation MMXUserID
 
@@ -27,10 +27,9 @@
 	return userID;
 }
 
-+ (instancetype)userIDFromMMXUser:(MMXUser *)user {
++ (instancetype)userIDFromMMUser:(MMUser *)user {
 	MMXUserID * userID = [[MMXUserID alloc] init];
-	userID.username = user.username;
-	userID.displayName = user.displayName;
+	userID.username = user.userName;
 	return userID;
 }
 

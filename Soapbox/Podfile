@@ -1,4 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/magnetsystems/Specs.git'
 platform :ios, '8.0'
-pod 'MMX'
-pod 'SlackTextViewController', '1.5.2', :inhibit_warnings => true
+use_frameworks!
+pod 'MagnetMax', '~> 2.1'
+pod 'SlackTextViewController'

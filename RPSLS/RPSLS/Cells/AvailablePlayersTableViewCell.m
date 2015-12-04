@@ -18,6 +18,7 @@
 #import "AvailablePlayersTableViewCell.h"
 #import "RPSLSUser.h"
 #import "RPSLSUserStats.h"
+@import MagnetMaxCore;
 
 @interface AvailablePlayersTableViewCell ()
 
@@ -49,7 +50,7 @@
 
 - (void)setUserForCell:(RPSLSUser *)user {
 	self.user = user;
-	self.playerNameLabel.text = self.user.username;
+	self.playerNameLabel.text = self.user.messageUserObject.userName;
 	
 	self.statsLabel.text = [NSString stringWithFormat:@"W=%lu L=%lu T=%lu",(unsigned long)self.user.stats.wins,(unsigned long)self.user.stats.losses,(unsigned long)self.user.stats.ties];
 }

@@ -1,1 +1,0 @@
-../../../MMX/Source/Devices/MMXDeviceQueryResponse.h

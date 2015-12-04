@@ -19,27 +19,26 @@
 #import "RPSLSConstants.h"
 #import "RPSLSUserStats.h"
 #import "RPSLSUtils.h"
-#import <MMX/MMX.h>
+@import MagnetMaxCore;
+@import MMX;
 
 @implementation RPSLSUser
 
-+ (instancetype)userWithUsername:(NSString *)username stats:(RPSLSUserStats *)stats {
++ (instancetype)userWithUserObject:(MMUser *)userObject stats:(RPSLSUserStats *)stats {
 	RPSLSUser * user = [[RPSLSUser alloc] init];
-	user.username = username;
+	user.messageUserObject = userObject;
 	user.stats = stats;
 	return user;
 }
 
 + (instancetype)playerFromInvite:(MMXMessage *)message {
 	if (message.messageContent) {
-		RPSLSUser * user = [[RPSLSUser alloc] init];
+		RPSLSUser * user = [RPSLSUser userWithUserObject:message.sender stats:[RPSLSUserStats statsFromMetaData:message.messageContent]];
 
 		/*
 		 *  Extracting info from the MMXInboundMessage metaData to populate the RPSLSUser objects
 		 */
-		user.username = message.messageContent[kMessageKey_Username] ?: @"Unknown";
 		user.timestamp = message.timestamp;
-		user.stats = [RPSLSUserStats statsFromMetaData:message.messageContent];
         user.isAvailable = [RPSLSUtils isTrue:message.messageContent[kMessageKey_UserAvailablity]];
 		return user;
 	}
@@ -47,22 +46,18 @@
 }
 
 + (RPSLSUser *)me {
-	RPSLSUser * user = [[RPSLSUser alloc] init];
-	user.username = [self myUsername];
-	user.stats = [RPSLSUserStats myStats];
+	RPSLSUser * user = [RPSLSUser userWithUserObject:[MMUser currentUser] stats:[RPSLSUserStats myStats]];
 	return user;
 }
 
 + (instancetype)availablePlayerFromMessage:(MMXMessage *)message {
 	if (message.messageContent) {
-		RPSLSUser * user = [[RPSLSUser alloc] init];
-		
 		/*
 		 *  Extracting info from the MMXInboundMessage metaData to populate the RPSLSUser objects
 		 */
-		user.username = message.messageContent[kMessageKey_Username] ?: @"Unknown";
+
+		RPSLSUser * user = [RPSLSUser userWithUserObject:message.sender stats:[RPSLSUserStats statsFromMetaData:message.messageContent]];
 		user.timestamp = message.timestamp;
-		user.stats = [RPSLSUserStats statsFromMetaData:message.messageContent];
 		user.isAvailable = [RPSLSUtils isTrue:message.messageContent[kMessageKey_UserAvailablity]];
         return user;
 	}
@@ -73,11 +68,11 @@
 	/*
 	 *  Checking the current username of the logged in user.
 	 */
-	return [MMXUser currentUser].username;
+	return [MMUser currentUser].userName;
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"Username = %@ timestamp = %@",self.username, self.timestamp];
+	return [NSString stringWithFormat:@"Username = %@ timestamp = %@",self.messageUserObject.userName, self.timestamp];
 }
 
 #pragma mark - Equality
@@ -96,11 +91,11 @@
 	if (!user) {
 		return NO;
 	}	
-	return [self.username isEqualToString:user.username];
+	return [self.messageUserObject.userName isEqualToString:user.messageUserObject.userName];
 }
 
 - (NSUInteger)hash {
-	NSUInteger hash = [self.username hash];
+	NSUInteger hash = [self.messageUserObject.userName hash];
 	return hash;
 }
 

@@ -28,7 +28,7 @@
 
 + (NSDictionary *)availablilityMessageContent:(BOOL)available {
     // content:@"Letting other players know if I'm available"
-    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
+    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].messageUserObject.userName,
             kMessageKey_UserAvailablity : available ? @"true" : @"false",
             kMessageKey_Timestamp : [RPSLSUtils timestamp],
             kMessageKey_Type : kMessageTypeValue_Availability,

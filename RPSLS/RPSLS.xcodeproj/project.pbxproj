@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E327A201B4360720000D7A9 /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E327A1F1B4360720000D7A9 /* Configurations.plist */; };
+		09147CDD64C2B1FAFA435CCA /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3B0D5C0D4648DF0038F4179 /* Pods.framework */; };
+		0E1123AF1BE03CE200ADA084 /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0E1123AE1BE03CE200ADA084 /* MagnetMax.plist */; };
 		0E44EF3F1B0556F40037A742 /* AvailablePlayersTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF261B0556F40037A742 /* AvailablePlayersTableViewCell.m */; };
 		0E44EF401B0556F40037A742 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF291B0556F40037A742 /* GameViewController.m */; };
 		0E44EF411B0556F40037A742 /* AvailablePlayersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E44EF2B1B0556F40037A742 /* AvailablePlayersTableViewController.m */; };
@@ -26,8 +27,7 @@
 		0E9A44361B15206400EC2859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E9A44351B15206400EC2859 /* LaunchScreen.storyboard */; };
 		66021B2C40868A5D1B03FF37 /* MMXMessage+RPSLS.m in Sources */ = {isa = PBXBuildFile; fileRef = 66021FC50C537BCB1E5EB983 /* MMXMessage+RPSLS.m */; };
 		AA1D03371BC30F0400D31E65 /* RPSLSSignInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1D03361BC30F0400D31E65 /* RPSLSSignInTests.swift */; };
-		AAE1F1C21BC44AB400A855BB /* RPSLSGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE1F1C01BC44AB400A855BB /* RPSLSGameTests.swift */; settings = {ASSET_TAGS = (); }; };
-		BD8AAD43633225AC0980C00C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FC0CF76613AE210C93702B0 /* libPods.a */; };
+		AAE1F1C21BC44AB400A855BB /* RPSLSGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE1F1C01BC44AB400A855BB /* RPSLSGameTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,7 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0E327A1F1B4360720000D7A9 /* Configurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Configurations.plist; sourceTree = "<group>"; };
+		0E1123AE1BE03CE200ADA084 /* MagnetMax.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MagnetMax.plist; sourceTree = "<group>"; };
 		0E44EF251B0556F40037A742 /* AvailablePlayersTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvailablePlayersTableViewCell.h; sourceTree = "<group>"; };
 		0E44EF261B0556F40037A742 /* AvailablePlayersTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvailablePlayersTableViewCell.m; sourceTree = "<group>"; };
 		0E44EF281B0556F40037A742 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
@@ -73,7 +73,6 @@
 		0E7AE7DC1AE16AFD0083A47A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0E7AE7DE1AE16AFD0083A47A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0E9A44351B15206400EC2859 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		2FC0CF76613AE210C93702B0 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C98BB9CC0F11C9B09999F64 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		660215AA64BD43C8B3B9F994 /* MMXMessage+RPSLS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MMXMessage+RPSLS.h"; sourceTree = "<group>"; };
 		66021FC50C537BCB1E5EB983 /* MMXMessage+RPSLS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MMXMessage+RPSLS.m"; sourceTree = "<group>"; };
@@ -81,6 +80,7 @@
 		AA1D03361BC30F0400D31E65 /* RPSLSSignInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPSLSSignInTests.swift; sourceTree = "<group>"; };
 		AA1D03381BC30F0400D31E65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAE1F1C01BC44AB400A855BB /* RPSLSGameTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RPSLSGameTests.swift; sourceTree = "<group>"; };
+		B3B0D5C0D4648DF0038F4179 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B55DA8AAAAB09F4F5E965943 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,7 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BD8AAD43633225AC0980C00C /* libPods.a in Frameworks */,
+				09147CDD64C2B1FAFA435CCA /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,7 +196,7 @@
 		0E7AE7D11AE16AFD0083A47A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				0E327A1F1B4360720000D7A9 /* Configurations.plist */,
+				0E1123AE1BE03CE200ADA084 /* MagnetMax.plist */,
 				0E7AE7D21AE16AFD0083A47A /* Info.plist */,
 				0E7AE7D31AE16AFD0083A47A /* main.m */,
 			);
@@ -225,7 +225,7 @@
 		FCD7498D6B297010210D2A7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2FC0CF76613AE210C93702B0 /* libPods.a */,
+				B3B0D5C0D4648DF0038F4179 /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -242,6 +242,7 @@
 				0E7AE7CB1AE16AFD0083A47A /* Frameworks */,
 				0E7AE7CC1AE16AFD0083A47A /* Resources */,
 				A357C89CB6950A82E8A1DC35 /* Copy Pods Resources */,
+				49A86315497226B2FDE1976E /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -314,7 +315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0E9A44361B15206400EC2859 /* LaunchScreen.storyboard in Resources */,
-				0E327A201B4360720000D7A9 /* Configurations.plist in Resources */,
+				0E1123AF1BE03CE200ADA084 /* MagnetMax.plist in Resources */,
 				0E7AE7DD1AE16AFD0083A47A /* Main.storyboard in Resources */,
 				0E7AE7DF1AE16AFD0083A47A /* Images.xcassets in Resources */,
 			);
@@ -343,6 +344,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		49A86315497226B2FDE1976E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A357C89CB6950A82E8A1DC35 /* Copy Pods Resources */ = {
@@ -435,6 +451,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -479,6 +496,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

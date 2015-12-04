@@ -17,44 +17,59 @@
 
 #import "MMXChannel_Private.h"
 #import "MMXMessage_Private.h"
-#import "MMX_Private.h"
 #import "MMXTopic_Private.h"
-#import "MMXUser.h"
+#import "MMXTopicSummary.h"
+#import "MMXTopicSubscription.h"
+#import "MMXUserID.h"
 #import "MMXClient_Private.h"
 #import "MMXPubSubManager_Private.h"
+#import "MMXPubSubFetchRequest.h"
 #import "MagnetDelegate.h"
 #import "MMXInvite_Private.h"
 #import "MMXInternalMessageAdaptor.h"
 #import "MMXDataModel.h"
 #import "MMXPubSubMessage_Private.h"
+#import "MMXPubSubService.h"
+#import "MMXMessage.h"
+@import MagnetMaxCore;
+
+@interface MMXPublishPermissionsContainer : NSObject <MMEnumAttributeContainer>
+
+@end
+
+@implementation MMXPublishPermissionsContainer
+
++ (NSDictionary *)mappings {
+    return @{
+             @"anyone" : @(MMXPublishPermissionsAnyone),
+             @"owner" : @(MMXPublishPermissionsOwnerOnly),
+             @"subscribers" : @(MMXPublishPermissionsSubscribers),
+             };
+}
+
+@end
 
 @implementation MMXChannel
 
 + (instancetype)channelWithName:(NSString *)name
-						summary:(NSString *)summary {
-	MMXChannel *channel = [MMXChannel new];
-	channel.name = name;
-	channel.summary = summary;
-	return channel;
-}
-
-+ (instancetype)channelWithName:(NSString *)name
 						summary:(NSString *)summary
-					   isPublic:(BOOL)isPublic {
+					   isPublic:(BOOL)isPublic
+			 publishPermissions:(MMXPublishPermissions)publishPermissions {
 	MMXChannel *channel = [MMXChannel new];
 	channel.name = name;
 	channel.summary = summary;
 	channel.isPublic = isPublic;
+	channel.publishPermissions = publishPermissions;
 	return channel;
 }
 
 + (void)allPublicChannelsWithLimit:(int)limit
 							offset:(int)offset
-						   success:(void (^)(int totalCount, NSArray *channels))success
+						   success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 						   failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		return;
 	}
@@ -72,11 +87,11 @@
 
 + (void)allPrivateChannelsWithLimit:(int)limit
 							 offset:(int)offset
-							success:(void (^)(int totalCount, NSArray *channels))success
+							success:(void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
 							failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		return;
 	}
@@ -99,7 +114,7 @@
 			   failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		return;
 	}
@@ -137,40 +152,12 @@
 
 + (void)channelsStartingWith:(NSString *)name
 					   limit:(int)limit
-					 success:(void (^)(int, NSArray *))success
-					 failure:(void (^)(NSError *))failure {
-	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
-		}
-		return;
-	}
-	if (name == nil || [name isEqualToString:@""]) {
-		if (failure) {
-			failure([MMXClient errorWithTitle:@"Invalid Search Parameter"
-									  message:@"You must pass at least one valid character to this method."
-										 code:500]);
-		}
-		return;
-	}
-	
-	NSDictionary *queryDict = @{@"operator" : @"AND",
-								@"limit" : @(limit),
-								@"tags" : [NSNull null],
-								@"topicName": @{
-									@"match": @"PREFIX",
-									@"value": name}};
-	[MMXChannel findChannelsWithDictionary:queryDict success:success failure:failure];
-}
-
-+ (void)channelsStartingWith:(NSString *)name
-					   limit:(int)limit
 					  offset:(int)offset
-					 success:(void (^)(int, NSArray *))success
+					 success:(void (^)(int, NSArray <MMXChannel *>*))success
 					 failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		return;
 	}
@@ -194,52 +181,15 @@
 	
 }
 
-+ (void)findByTags:(NSSet *)tags
-		   success:(void (^)(int, NSArray *))success
-		   failure:(void (^)(NSError *))failure {
-	
-	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
-		}
-		return;
-	}
-	
-	if (tags.count < 1) {
-		if (failure) {
-			NSError * error = [MMXClient errorWithTitle:@"Tags Empty" message:@"You must specify at least one tag." code:400];
-			failure(error);
-		}
-		return;
-	}
-	
-	for (id tag in tags) {
-		if (![tag isKindOfClass:[NSString class]]) {
-			if (failure) {
-				NSError * error = [MMXClient errorWithTitle:@"Invalid Tags" message:@"Tags can only be strings." code:400];
-				failure(error);
-			}
-			return;
-		}
-	}
-	
-	NSDictionary *queryDict = @{@"operator" : @"AND",
-								@"limit" : @(-1),
-								@"tags": @{@"match": @"EXACT",
-										   @"values": [tags allObjects]}};
-	
-	[MMXChannel findChannelsWithDictionary:queryDict success:success failure:failure];
-}
-
-+ (void)findByTags:(NSSet *)tags
++ (void)findByTags:(NSSet <NSString *>*)tags
 			 limit:(int)limit
 			offset:(int)offset
-		   success:(void (^)(int, NSArray *))success
+		   success:(void (^)(int, NSArray <MMXChannel *>*))success
 		   failure:(void (^)(NSError *))failure {
 	
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		return;
 	}
@@ -299,11 +249,11 @@
 	}];
 }
 
-- (void)tagsWithSuccess:(void (^)(NSSet *))success
+- (void)tagsWithSuccess:(void (^)(NSSet <NSString *>*))success
 				failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		return;
 	}
@@ -318,13 +268,13 @@
 	}];
 }
 
-- (void)setTags:(NSSet *)tags
+- (void)setTags:(NSSet <NSString *>*)tags
 		success:(void (^)(void))success
 		failure:(void (^)(NSError *))failure {
 
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		
 		return;
@@ -342,47 +292,24 @@
 	}];
 }
 
-- (void)createWithSuccess:(void (^)(void))success
-				  failure:(void (^)(NSError *))failure {
-	
-	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
-		}
-		
-		return;
-	}
-	[[MMXClient sharedClient].pubsubManager createTopic:[self asTopic] success:^(BOOL successful) {
-		MMXUser *creator = [MMXUser currentUser];
-		if (creator) {
-			self.ownerUsername = creator.username;
-		}
-		if (success) {
-			success();
-		}
-	} failure:^(NSError *error) {
-		if (failure) {
-			failure(error);
-		}
-	}];
-}
-
 + (void)createWithName:(NSString *)name
 			   summary:(NSString *)summary
 			  isPublic:(BOOL)isPublic
+	publishPermissions:(MMXPublishPermissions)publishPermissions
 			   success:(void (^)(MMXChannel *channel))success
 			   failure:(void (^)(NSError *))failure {
 	
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		
 		return;
 	}
-	MMXChannel *channel = [MMXChannel channelWithName:name summary:summary isPublic:isPublic];
-	channel.ownerUsername = [MMXUser currentUser].username;
-	[[MMXClient sharedClient].pubsubManager createTopic:[channel asTopic] success:^(BOOL successful) {
+	MMXChannel *channel = [MMXChannel channelWithName:name summary:summary isPublic:isPublic publishPermissions:publishPermissions];
+	channel.ownerUserID = [MMUser currentUser].userID;
+	MMXTopic *topic = [channel asTopic];
+	[[MMXClient sharedClient].pubsubManager createTopic:topic success:^(BOOL successful) {
 		[MMXChannel channelForName:channel.name isPublic:isPublic success:^(MMXChannel *channel) {
 			if (success) {
 				success(channel);
@@ -399,12 +326,36 @@
 	}];
 }
 
++ (void)createWithName:(NSString *)name
+               summary:(nullable NSString *)summary
+              isPublic:(BOOL)isPublic
+    publishPermissions:(MMXPublishPermissions)publishPermissions
+           subscribers:(NSSet <MMUser *>*)subscribers
+               success:(nullable void (^)(MMXChannel *channel))success
+               failure:(nullable void (^)(NSError *error))failure {
+    
+    MMXChannel *channel = [MMXChannel channelWithName:name summary:summary isPublic:isPublic publishPermissions:publishPermissions];
+    channel.ownerUserID = [MMUser currentUser].userID;
+    channel.subscribers = [[subscribers valueForKey:@"userID"] allObjects];
+    MMXPubSubService *pubSubService = [[MMXPubSubService alloc] init];
+    MMCall *call = [pubSubService createChannel:channel success:^(NSString *response) {
+        if (success) {
+            success(channel);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+    [call executeInBackground:nil];
+}
+
 - (void)deleteWithSuccess:(void (^)(void))success
 				 failure:(void (^)(NSError *))failure {
 
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		
 		return;
@@ -425,12 +376,13 @@
 
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		
 		return;
 	}
 	[[MMXClient sharedClient].pubsubManager subscribeToTopic:[self asTopic] device:nil success:^(MMXTopicSubscription *subscription) {
+		self.isSubscribed = YES;
 		if (success) {
 			success();
 		}
@@ -446,12 +398,13 @@
 
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		
 		return;
 	}
 	[[MMXClient sharedClient].pubsubManager unsubscribeFromTopic:[self asTopic] subscriptionID:nil success:^(BOOL successful) {
+		self.isSubscribed = NO;
 		if (success) {
 			success();
 		}
@@ -462,11 +415,11 @@
 	}];
 }
 
-+ (void)subscribedChannelsWithSuccess:(void (^)(NSArray *))success
++ (void)subscribedChannelsWithSuccess:(void (^)(NSArray <MMXChannel *>*))success
 							  failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		return;
 	}
@@ -494,19 +447,13 @@
 	}];
 }
 
-- (void)subscribersWithSuccess:(void (^)(int totalCount, NSArray *subscribers))success
-					   failure:(void (^)(NSError *error))failure {
-
-	[self subscribersWithLimit:-1 offset:0 success:success failure:failure];
-}
-
 - (void)subscribersWithLimit:(int)limit
 					  offset:(int)offset
-					 success:(void (^)(int totalCount, NSArray *subscribers))success
+					 success:(void (^)(int totalCount, NSArray <MMUser *>*subscribers))success
 					 failure:(void (^)(NSError *error))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		return;
 	}
@@ -521,7 +468,7 @@
 	}];
 }
 
-- (void)publish:(NSDictionary *)messageContent
+- (void)publish:(NSDictionary <NSString *,NSString *>*)messageContent
 		success:(void (^)(MMXMessage *))success
 		failure:(void (^)(NSError *))failure {
 
@@ -529,7 +476,7 @@
 	MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self asTopic] content:nil metaData:messageContent];
 	msg.messageID = messageID;
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-		if ([MMXUser currentUser]) {
+		if ([MMUser currentUser]) {
 			[self saveForOfflineAsPubSub:msg];
 			return;
 		} else {
@@ -553,20 +500,22 @@
 	}];
 }
 
-- (void)fetchMessagesBetweenStartDate:(NSDate *)startDate
-							  endDate:(NSDate *)endDate
-								limit:(int)limit
-							ascending:(BOOL)ascending
-							  success:(void (^)(int totalCount, NSArray *messages))success
-							  failure:(void (^)(NSError *))failure {
-	
-	[self messagesBetweenStartDate:startDate
-						   endDate:endDate
-							 limit:limit
-							offset:0
-						 ascending:ascending
-						   success:success
-						   failure:failure];
+- (void)publishMessage:(MMXMessage *)message
+               success:(nullable void (^)())success
+               failure:(nullable void (^)(NSError *error))failure {
+
+    // Ignore the recipients
+    message.recipients = [NSSet set];
+    message.channel = self;
+    [message sendWithSuccess:^(NSSet<NSString *> * _Nonnull __unused invalidUsers) {
+        if (success) {
+            success();
+        }
+    } failure:^(NSError * _Nonnull error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
 }
 
 - (void)messagesBetweenStartDate:(NSDate *)startDate
@@ -574,11 +523,11 @@
 						   limit:(int)limit
 						  offset:(int)offset
 					   ascending:(BOOL)ascending
-						 success:(void (^)(int, NSArray *))success
+						 success:(void (^)(int, NSArray <MMXMessage *>*))success
 						 failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		
 		return;
@@ -586,7 +535,7 @@
 	MMXPubSubFetchRequest * fetch = [[MMXPubSubFetchRequest alloc] init];
 	MMXTopic *topic = [MMXTopic topicWithName:self.name];
 	if (!self.isPublic) {
-		topic.nameSpace = self.ownerUsername;
+		topic.nameSpace = self.ownerUserID;
 	}
 	fetch.topic = topic;
 	fetch.since = startDate;
@@ -595,44 +544,59 @@
 	fetch.offset = offset;
 	fetch.ascending = ascending;
 	[[MMXClient sharedClient].pubsubManager fetchItems:fetch success:^(NSArray *messages) {
-		NSMutableArray *msgArray = [[NSMutableArray alloc] initWithCapacity:messages.count];
-		for (MMXPubSubMessage *message in messages) {
-			MMXMessage *msg = [MMXMessage messageFromPubSubMessage:message];
-			[msgArray addObject:msg];
-		}
-		[[MMXClient sharedClient].pubsubManager summaryOfTopics:@[topic] since:startDate until:endDate success:^(NSArray *summaries) {
-			int count = 0;
-			if (summaries.count) {
-				MMXTopicSummary *sum = summaries[0];
-				count =  sum.numItemsPublished;
+		if (messages && messages.count) {
+			NSMutableArray *channelMessageArray = [[NSMutableArray alloc] initWithCapacity:messages.count];
+			NSArray *usernames = [[messages valueForKey:@"senderUserID"] valueForKey:@"username"];
+			if (usernames && usernames.count) {
+				[MMUser usersWithUserIDs:usernames success:^(NSArray *users) {
+					for (MMXPubSubMessage *pubMsg in messages) {
+						NSPredicate *usernamePredicate = [NSPredicate predicateWithFormat:@"userID == %@",pubMsg.senderUserID.username];
+						MMUser *sender = [users filteredArrayUsingPredicate:usernamePredicate].firstObject;
+						MMXMessage *channelMessage = [MMXMessage messageFromPubSubMessage:pubMsg sender:sender];
+						[channelMessageArray addObject:channelMessage];
+					}
+					[[MMXClient sharedClient].pubsubManager summaryOfTopics:@[topic] since:startDate until:endDate success:^(NSArray *summaries) {
+						int count = 0;
+						if (summaries.count) {
+							MMXTopicSummary *sum = summaries[0];
+							count =  sum.numItemsPublished;
+						}
+						if (success) {
+							success(count, channelMessageArray);
+						}
+					} failure:^(NSError *error) {
+						if (failure) {
+							failure(error);
+						}
+					}];
+				} failure:^(NSError * error) {
+					[[MMLogger sharedLogger] error:@"Failed to get users for MMXMessages from Channels\n%@",error];
+				}];
+				return;
 			}
+		} else {
 			if (success) {
-				success(count, msgArray);
+				success(0, @[]);
 			}
-		} failure:^(NSError *error) {
-			if (failure) {
-				failure(error);
-			}
-		}];
+		}
 	} failure:^(NSError *error) {
 		if (failure) {
 			failure(error);
 		}
 	}];
-
 }
 
-- (NSString *)inviteUser:(MMXUser *)user
+- (NSString *)inviteUser:(MMUser *)user
 				comments:(NSString *)comments
 				 success:(void (^)(MMXInvite *))success
 				 failure:(void (^)(NSError *))failure {
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if (failure) {
-			failure([MagnetDelegate notNotLoggedInError]);
+			failure([MagnetDelegate notLoggedInError]);
 		}
 		return nil;
 	}
-	if (nil == self.ownerUsername || [self.ownerUsername isEqualToString:@""]) {
+	if (nil == self.ownerUserID || [self.ownerUserID isEqualToString:@""]) {
 		if (failure) {
 			NSError * error = [MMXClient errorWithTitle:@"Invalid Channel Invite" message:@"It looks like you are trying to send an invite from an invalid channel. Please user the channelForName:isPublic:success:failure API to get the valid channel object." code:500];
 			failure(error);
@@ -640,14 +604,21 @@
 		return nil;
 	}
 	MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteMessageToUser:user forChannel:self.copy comments:comments];
-	NSString *messageID = [[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^{
-		if (success) {
-			MMXInvite *invite = [MMXInvite new];
-			invite.comments = comments;
-			invite.channel = self.copy;
-			invite.sender = [MMXUser currentUser];
-			invite.timestamp = [NSDate date];
-			success(invite);
+	NSString *messageID = [[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^(NSSet *invalidUsers){
+		if (invalidUsers.count == 1) {
+			if (failure) {
+				NSError *error = [MMXClient errorWithTitle:@"Invalid User" message:@"The user you are trying to send a message to does not exist or does not have a valid device associated with them." code:500];
+				failure(error);
+			}
+		} else {
+			if (success) {
+				MMXInvite *invite = [MMXInvite new];
+				invite.comments = comments;
+				invite.channel = self.copy;
+				invite.sender = [MMUser currentUser];
+				invite.timestamp = [NSDate date];
+				success(invite);
+			}
 		}
 	} failure:^(NSError *error) {
 		if (failure) {
@@ -660,7 +631,7 @@
 #pragma mark - Offline
 
 - (void)saveForOfflineAsPubSub:(MMXPubSubMessage *)message {
-	[[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:[MMXUser currentUser].username];
+	[[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:[MMUser currentUser].userName];
 }
 
 #pragma mark - Errors
@@ -684,8 +655,8 @@
 + (NSArray *)channelsFromTopics:(NSArray *)topics summaries:(NSArray *)summaries subscriptions:(NSArray *)subscriptions {
 	NSMutableDictionary *channelDict = [NSMutableDictionary dictionaryWithCapacity:topics.count];
 	for (MMXTopic *topic in topics) {
-		MMXChannel *channel = [MMXChannel channelWithName:topic.topicName summary:topic.topicDescription isPublic:!topic.inUserNameSpace];
-		channel.ownerUsername = topic.topicCreator.username;
+		MMXChannel *channel = [MMXChannel channelWithName:topic.topicName summary:topic.topicDescription isPublic:!topic.inUserNameSpace publishPermissions:topic.publishPermissions];
+		channel.ownerUserID = topic.topicCreator.username;
 		channel.isPublic = !topic.inUserNameSpace;
 		channel.creationDate = topic.creationDate;
 		[channelDict setObject:channel forKey:[MMXChannel channelKeyFromTopic:topic]];
@@ -722,9 +693,10 @@
 - (MMXTopic *)asTopic {
 	MMXTopic *newTopic = [MMXTopic topicWithName:self.name];
 	newTopic.topicDescription = self.summary;
+	newTopic.publishPermissions = self.publishPermissions;
 	if (!self.isPublic) {
-		if (self.ownerUsername) {
-			newTopic.nameSpace = self.ownerUsername;
+		if (self.ownerUserID) {
+			newTopic.nameSpace = self.ownerUserID;
 		} else {
 			return nil;
 		}
@@ -736,6 +708,23 @@
 
 - (NSDate *)lastTimeActive {
 	return _lastTimeActive ?: self.creationDate;
+}
+
+- (BOOL)canPublish {
+	switch (self.publishPermissions) {
+		case MMXPublishPermissionsAnyone:
+			return YES;
+		case MMXPublishPermissionsSubscribers:
+			return [self isOwner] || self.isSubscribed;
+		case MMXPublishPermissionsOwnerOnly:
+			return [self isOwner];
+		default:
+			break;
+	}
+}
+
+- (BOOL)isOwner {
+	return [[MMUser currentUser].userID.lowercaseString isEqualToString:self.ownerUserID.lowercaseString];
 }
 
 #pragma mark - Equality
@@ -758,7 +747,7 @@
 		return NO;
 	if (self.isPublic != channel.isPublic)
 		return NO;
-	if (!self.isPublic && !channel.isPublic && ![self.ownerUsername isEqualToString:channel.ownerUsername])
+	if (!self.isPublic && !channel.isPublic && ![self.ownerUserID.lowercaseString isEqualToString:channel.ownerUserID.lowercaseString])
 		return NO;
 	return YES;
 }
@@ -766,10 +755,59 @@
 - (NSUInteger)hash {
 	NSUInteger hash = [self.name hash];
 	if (!self.isPublic) {
-		hash = hash * 31u + [self.ownerUsername hash];
+		hash = hash * 31u + [self.ownerUserID hash];
 	}
 	return hash;
 }
 
+#pragma mark - MMModel methods
+
+- (BOOL)privateChannel {
+    return !self.isPublic;
+}
+
++ (NSDictionary *)attributeMappings {
+    NSDictionary *dictionary = @{
+                                 @"name": @"channelName",
+                                 @"privateChannel": @"privateChannel",
+                                 @"summary": @"description",
+                                 @"publishPermissions": @"publishPermission",
+                                 @"subscribers": @"subscribers",
+                                 };
+    //    NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
+    //    [attributeMappings addEntriesFromDictionary:dictionary];
+    
+    //    return attributeMappings;
+    return dictionary;
+}
+
++ (NSDictionary *)listAttributeTypes {
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
+                                                                                      }];
+    [dictionary addEntriesFromDictionary:[super listAttributeTypes]];
+    return dictionary;
+}
+
++ (NSDictionary *)mapAttributeTypes {
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
+                                                                                      }];
+    [dictionary addEntriesFromDictionary:[super mapAttributeTypes]];
+    return dictionary;
+}
+
++ (NSDictionary *)enumAttributeTypes {
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
+                                                                                      @"publishPermissions" : MMXPublishPermissionsContainer.class,
+                                                                                      }];
+    [dictionary addEntriesFromDictionary:[super enumAttributeTypes]];
+    return dictionary;
+}
+
++ (NSArray *)charAttributes {
+    NSMutableArray *array = [NSMutableArray arrayWithArray:@[
+                                                             ]];
+    [array addObjectsFromArray:[super charAttributes]];
+    return array;
+}
 
 @end

@@ -24,9 +24,11 @@
 #import "GameViewController.h"
 #import "AvailablePlayersTableViewCell.h"
 #import "MMXMessage+RPSLS.h"
+@import MagnetMax;
 
 @interface AvailablePlayersTableViewController ()
 
+@property (nonatomic, strong) RPSLSUser * playerBotUser;
 @property (nonatomic, copy) NSArray * availablePlayersList;
 @property (nonatomic, assign) BOOL inGame;
 
@@ -46,6 +48,7 @@
 	UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
  	[refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
  	[self setRefreshControl:refreshControl];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -57,14 +60,24 @@
 
     [self postAvailabilityStatusAs:YES];
 	
-	[self collectListOfAvailablePlayers];
+	[MMUser usersWithUserNames:@[@"player_bot"] success:^(NSArray *users) {
+		if (users && users.count) {
+			RPSLSUser * user = [RPSLSUser userWithUserObject:users.firstObject stats:[RPSLSUserStats new]];
+			user.isAvailable = YES;
+			self.playerBotUser = user;
+		}
+		[self collectListOfAvailablePlayers];
+	} failure:^(NSError * error) {
+		[self collectListOfAvailablePlayers];
+	}];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveMessage:)
                                                  name:MMXDidReceiveMessageNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didDisconnect:)
-                                                 name:MMXDidDisconnectNotification
+                                                 name:MMUserDidReceiveAuthenticationChallengeNotification
                                                object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(handleResignActive)
@@ -136,10 +149,10 @@
 
 - (void)collectListOfAvailablePlayers {
 	
+	[self refreshAvailablePlayersWithMessages:nil];
 	[MMXChannel channelForName:kPostStatus_ChannelName isPublic:YES success:^(MMXChannel *channel) {
-		NSDate *now = [NSDate date];
 		[channel messagesBetweenStartDate:[NSDate dateWithTimeIntervalSinceNow:kAvailableTimeFrame]
-								  endDate:now
+								  endDate:nil
 									limit:100
 								   offset:0
 								ascending:NO
@@ -163,27 +176,32 @@
 #pragma mark - Available Players
 
 - (void)refreshAvailablePlayersWithMessages:(NSArray *)messages {
-	RPSLSUserStats *stats = [RPSLSUserStats new];
-	
-	RPSLSUser * user = [RPSLSUser userWithUsername:@"player_bot" stats:stats];
-	user.isAvailable = YES;
-	NSMutableArray *tempArray = @[user].mutableCopy;
+	NSMutableArray *tempArray = [NSMutableArray array];
+	if (self.playerBotUser) {
+		[tempArray addObject:self.playerBotUser];
+	}
 	for (MMXMessage *msg in messages) {
 		RPSLSUser * user = [RPSLSUser availablePlayerFromMessage:msg];
 		[tempArray addObject:user];
 	}
 	
-	NSOrderedSet * set = [NSOrderedSet orderedSetWithArray:tempArray];
-	NSArray *unique = set.array;
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(isAvailable == YES) AND (username != %@)",[RPSLSUser me].username];
-	NSArray *filtered  = [unique filteredArrayUsingPredicate:predicate];
+	if (tempArray.count) {
+		NSOrderedSet * set = [NSOrderedSet orderedSetWithArray:tempArray];
+		NSArray *unique = set.array;
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(isAvailable == YES) AND (messageUserObject != %@)",[RPSLSUser me].messageUserObject];
+		NSArray *filtered  = [unique filteredArrayUsingPredicate:predicate];
+		
+		self.availablePlayersList = filtered;
+	} else {
+		self.availablePlayersList = @[];;
+	}
 	
-	self.availablePlayersList = filtered;
-	
-	[self.tableView reloadData];
-    if (self.refreshControl.isRefreshing) {
-        [self.refreshControl endRefreshing];
-    }
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.tableView reloadData];
+		if (self.refreshControl.isRefreshing) {
+			[self.refreshControl endRefreshing];
+		}
+	});
 }
 
 - (void)updateListWithMessage:(MMXMessage *)message {
@@ -192,7 +210,7 @@
 	if (![user isEqual:[RPSLSUser me]]) {
 		if (!user.isAvailable) {
 			
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username != %@",user.username];
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"messageUserObject != %@",user.messageUserObject];
 			NSMutableArray *filtered  = [self.availablePlayersList filteredArrayUsingPredicate:predicate].mutableCopy;
 			self.availablePlayersList = filtered.copy;
 			
@@ -218,9 +236,9 @@
 
 #pragma mark - Invite
 
-- (void)sendInviteTo:(NSString *)username {
+- (void)sendInviteTo:(MMUser *)user {
 
-    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].username,
+    NSDictionary *messageContent = @{kMessageKey_Username : [RPSLSUser me].messageUserObject.userName,
             kMessageKey_Timestamp : [RPSLSUtils timestamp],
             kMessageKey_Type : kMessageTypeValue_Invite,
             kMessageKey_GameID : [AvailablePlayersTableViewController newGameID],
@@ -228,34 +246,29 @@
             kMessageKey_Losses : [@([RPSLSUser me].stats.losses) stringValue],
             kMessageKey_Ties : [@([RPSLSUser me].stats.ties) stringValue]};
 
-    MMXUser *user = [[MMXUser alloc] init];
-    user.username = username;
-
     MMXMessage *message = [MMXMessage messageToRecipients:[NSSet setWithArray:@[user]] messageContent:messageContent];
 
-    [message sendWithSuccess:^{
-
-    } failure:^(NSError *error) {
-
-    }];
+    [message sendWithSuccess:^(NSSet *invalidUsers) {
+		NSLog(@"sendWithSuccess Success\nInvalid Users = %@",invalidUsers);
+	} failure:^(NSError *error) {
+		NSLog(@"sendWithSuccess Failure Error = %@",error);
+	}];
 }
 
 - (void)replyToInvite:(MMXMessage *)invite accept:(BOOL)accept {
 
-    NSDictionary *messageContent = @{kMessageKey_Username	:[RPSLSUser me].username,
-            kMessageKey_Timestamp:[RPSLSUtils timestamp],
-            kMessageKey_Type		:kMessageTypeValue_Accept,
-            kMessageKey_Result	: accept ? @"true" : @"false",
-            kMessageKey_GameID	:invite.messageContent[kMessageKey_GameID],
-            kMessageKey_Wins		:[@([RPSLSUser me].stats.wins) stringValue],
-            kMessageKey_Losses	:[@([RPSLSUser me].stats.losses) stringValue],
-            kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]};
+    NSDictionary *messageContent = @{kMessageKey_Username	:[RPSLSUser me].messageUserObject.userName,
+									 kMessageKey_Timestamp	:[RPSLSUtils timestamp],
+									 kMessageKey_Type		:kMessageTypeValue_Accept,
+									 kMessageKey_Result		: accept ? @"true" : @"false",
+									 kMessageKey_GameID		:invite.messageContent[kMessageKey_GameID],
+									 kMessageKey_Wins		:[@([RPSLSUser me].stats.wins) stringValue],
+									 kMessageKey_Losses		:[@([RPSLSUser me].stats.losses) stringValue],
+									 kMessageKey_Ties		:[@([RPSLSUser me].stats.ties) stringValue]};
 
-    [invite replyWithContent:messageContent success:^{
-
-    } failure:^(NSError *error) {
-
-    }];
+    [invite replyWithContent:messageContent success:^(NSSet *invalidUsers) {
+	} failure:^(NSError *error) {
+	}];
 
     if (accept) {
         self.inGame = YES;
@@ -355,7 +368,7 @@
 	AvailablePlayersTableViewCell *cell = (AvailablePlayersTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
 	[cell showSent];
 	[cell setSelected:NO];
-	[self sendInviteTo:user.username];
+	[self sendInviteTo:user.messageUserObject];
 }
 
 #pragma mark - TableViewDataSource

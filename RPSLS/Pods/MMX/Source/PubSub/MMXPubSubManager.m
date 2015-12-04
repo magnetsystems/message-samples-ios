@@ -686,16 +686,26 @@
 					});
 				}
 			} else {
-				MMXTopicSubscribersResponse *response = [[MMXTopicSubscribersResponse alloc] initWithIQ:iq];
-				NSString* iqId = [iq elementID];
-				[self.delegate stopTrackingIQWithID:iqId];
-				if (response) {
-					if (success) {
-						dispatch_async(self.callbackQueue, ^{
-							success(response.totalCount,response.subscribers);
-						});
-					}
-				} else {
+                MMXTopicSubscribersResponse *response = [[MMXTopicSubscribersResponse alloc] initWithIQ:iq];
+                NSString* iqId = [iq elementID];
+                [self.delegate stopTrackingIQWithID:iqId];
+                if (response) {
+                    [MMUser usersWithUserIDs:response.subscribers success:^(NSArray *users) {
+                        if (success) {
+                            dispatch_async(self.callbackQueue, ^{
+                                success(response.totalCount, users);
+                            });
+                        }
+                    } failure:^(NSError * _Nonnull error) {
+                        [[MMLogger sharedLogger] error:@"Failed to get users for subscribers\n%@",error];
+                        if (failure) {
+                            dispatch_async(self.callbackQueue, ^{
+                                failure(error);
+                            });
+                        }
+                        
+                    }];
+                } else {
 					if (failure) {
 						dispatch_async(self.callbackQueue, ^{
 							failure([MMXClient errorWithTitle:@"Subscribers Error" message:@"An unknown error occured" code:500]);
@@ -1096,7 +1106,7 @@
 				if (message.timestamp == nil) {
 					message.timestamp = [NSDate date];
 				}
-				[[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:self.delegate.configuration.credential.user];
+				[[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:self.delegate.username];
 			}
 			dispatch_async(self.callbackQueue, ^{
 				failure([MMXClient errorWithTitle:@"Not currently connected." message:errorMessage code:503]);
@@ -1105,7 +1115,7 @@
         return;
     }
 	NSString *itemID = [self.delegate generateMessageID];
-    XMPPIQ *publishIQ = [message pubsubIQForAppID:self.delegate.configuration.appID
+    XMPPIQ *publishIQ = [message pubsubIQForAppID:self.delegate.appID
 									   currentJID:[self.delegate currentJID]
 										   itemID:itemID];
     [self.delegate sendIQ:publishIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
@@ -1372,7 +1382,7 @@
             [itemElement addAttributeWithName:@"id" stringValue:messageID];
             [itemElement addChild:mmxElement];
             NSXMLElement *publishElement = [[NSXMLElement alloc] initWithName:@"publish"];
-            [publishElement addAttributeWithName:@"node" stringValue:[NSString stringWithFormat:@"/%@/%@/com.magnet.geoloc", self.delegate.configuration.appID, [[self.delegate currentJID] usernameWithoutAppID]]];
+            [publishElement addAttributeWithName:@"node" stringValue:[NSString stringWithFormat:@"/%@/%@/com.magnet.geoloc", self.delegate.appID, [[self.delegate currentJID] usernameWithoutAppID]]];
             [publishElement addChild:itemElement];
             NSXMLElement *pubsubElement = [[NSXMLElement alloc] initWithName:@"pubsub" xmlns:@"http://jabber.org/protocol/pubsub"];
             [pubsubElement addChild:publishElement];
@@ -1592,21 +1602,21 @@
 - (NSString *)validFullUsernameForCurrentUser {
     if ([self.delegate currentJID] && ![[[self.delegate currentJID] user] isEqualToString:@""]) {
         return [[self.delegate currentJID] user];
-    } else if (self.delegate.configuration.credential.user && ![self.delegate.configuration.credential.user isEqualToString:@""]) {
+    } else if (self.delegate.username && ![self.delegate.username isEqualToString:@""]) {
         NSMutableString *username = [[NSMutableString alloc] init];
-        [username appendString:self.delegate.configuration.credential.user];
+        [username appendString:self.delegate.username];
         [username appendString:@"%"];
-        [username appendString:self.delegate.configuration.appID];
+        [username appendString:self.delegate.appID];
         return username.copy;
     }
     return nil;
 }
 
 - (BOOL)hasNecessaryConfigurationAndCredentialToSend {
-    if (!self.delegate.configuration || !self.delegate.configuration.appID || [self.delegate.configuration.appID isEqualToString:@""]) {
+    if (!self.delegate.configuration || !self.delegate.appID || [self.delegate.appID isEqualToString:@""]) {
         return NO;
     }
-    if (!self.delegate.configuration.credential.user || [self.delegate.configuration.credential.user isEqualToString:@""]) {
+    if (!self.delegate.username || [self.delegate.username isEqualToString:@""]) {
         return NO;
     }
     return YES;

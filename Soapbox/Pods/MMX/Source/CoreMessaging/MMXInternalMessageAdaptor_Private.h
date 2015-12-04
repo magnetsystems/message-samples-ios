@@ -27,9 +27,9 @@
 
 @property (nonatomic) BOOL deliveryReceiptRequested;
 
-@property (nonatomic, strong, readwrite) NSString*messageID;
-@property (nonatomic, strong, readwrite) NSDictionary* metaData;
-@property (nonatomic, strong, readwrite) NSDate *timestamp;
+@property (nonatomic, strong, readwrite) NSString *messageID;
+@property (nonatomic, strong, readwrite) NSDictionary *metaData;
+@property (nonatomic, strong, readwrite) NSDate* timestamp;
 
 @property (nonatomic, strong) NSString* contentType;
 

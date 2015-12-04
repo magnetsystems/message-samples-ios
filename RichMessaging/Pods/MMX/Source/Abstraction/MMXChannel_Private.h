@@ -21,17 +21,19 @@
 @interface MMXChannel ()
 
 @property (nonatomic, readwrite) NSString *name;
-@property (nonatomic, readwrite) NSString *ownerUsername;
+@property (nonatomic, readwrite) NSString *ownerUserID;
 @property (nonatomic, readwrite) int numberOfMessages;
 @property (nonatomic, readwrite) NSDate *lastTimeActive;
 @property (nonatomic, readwrite) NSSet *tags;
 @property (nonatomic, readwrite) BOOL isSubscribed;
 @property (nonatomic, readwrite) NSDate * creationDate;
+@property (nonatomic, readwrite) MMXPublishPermissions publishPermissions;
 
 - (MMXTopic *)asTopic;
 
 + (instancetype)channelWithName:(NSString *)name
 						summary:(NSString *)summary
-					   isPublic:(BOOL)isPublic;
+					   isPublic:(BOOL)isPublic
+			 publishPermissions:(MMXPublishPermissions)publishPermissions;
 
 @end

@@ -22,6 +22,7 @@ NSString * const MXnsAppReg = @"com.magnet:appreg";
 NSString * const MXnsDevice = @"com.magnet:dev";
 NSString * const MXnsMsgAck = @"com.magnet:msg:ack";
 NSString * const MXnsDataPayload = @"com.magnet:msg:payload";
+NSString * const MXnsPushPayload = @"com.magnet:msg:push";
 NSString * const MXnsServerSignal = @"com.magnet:msg:signal";
 NSString * const MXnsMsgState = @"com.magnet:msg:state";
 NSString * const MXnsDeliveryReceipt = @"urn:xmpp:receipts";
@@ -47,6 +48,7 @@ NSString * const MXcommandSubscribe = @"subscribe";
 NSString * const MXcommandUnsubscribe = @"unsubscribe";
 NSString * const MXcommandUnsubscribeForDevice = @"unsubscribeForDev";
 NSString * const MXcommandGetSubscribers = @"getSubscribers";
+NSString * const MXcommandNotify = @"notify";
 NSString * const MXcommandRetract = @"retract";
 NSString * const MXcommandRetractAll = @"retractAll";
 NSString * const MXcommandGetSummary = @"getSummary";
@@ -60,7 +62,7 @@ NSString * const MXcommandFetch = @"fetch";
 NSString * const MXctype = @"ctype";
 NSString * const MXctypeJSON = @"application/json";
 
-NSString * const kMMXDeviceUUID = @"kMMXDeviceUUID";
+NSString * const kMMXDeviceUUID = @"kMMDeviceUUIDKey";
 NSString * const kMMXAnonPassword = @"kMMXAnonPassword";
 
 NSString * const MMXErrorDomain = @"MMXErrorDomain";

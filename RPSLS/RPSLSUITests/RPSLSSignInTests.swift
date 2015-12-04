@@ -78,13 +78,13 @@ class RPSLSSignInTests: XCTestCase {
         app.textFields["Username"].tap() // get app focus by tapping username if notification was confirmed
         signIn("nonexistinguser", password: "password")
         app.buttons["Sign In"].tap()
-        confirmAlert("Error", message: "Not Authorized. Please check your credentials and try again.")
+        confirmAlert("Error", message: "Request failed: unauthorized (401)")
     }
     
     func test2registerExistingUser() {
-        signIn("serveruser", password: "password")
+        signIn("player_bot", password: "password")
         app.buttons["Register"].tap()
-        confirmAlert("Error Registering User", message: "You have tried to create a duplicate entry.")
+        confirmAlert("Error Registering User", message: "User already exists.")
     }
     
     func test3registerEmptyUserName() {

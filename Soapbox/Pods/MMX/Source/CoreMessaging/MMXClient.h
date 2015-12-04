@@ -20,8 +20,7 @@
 #import "MMXAddressable.h"
 
 @class MMXClient;
-@class MMXAccountManager;
-@class MMXDeviceManager;
+@class MMXUserID;
 @class MMXPubSubManager;
 @class MMXInboundMessage;
 @class MMXOutboundMessage;
@@ -29,8 +28,8 @@
 @class MMXTopic;
 @class MMXMessageOptions;
 @class MMXConfiguration;
+@class MMXInternalMessageAdaptor;
 @class CLLocation;
-@class MMXUserID;
 
 /**
  *  Values representing the connection status of the MMXClient.
@@ -41,9 +40,13 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 	 */
     MMXConnectionStatusNotConnected = 0,
 	/**
-	 *  Connected to the server as an anonymous user.
+	 *  Attempting to connect to the messaging server.
 	 */
-    MMXConnectionStatusConnected,
+	MMXConnectionStatusConnecting,
+	/**
+	 *  Connected to the server and trying to authenticate.
+	 */
+	MMXConnectionStatusConnected,
 	/**
 	 *  No longer connected to the server.
 	 */
@@ -120,7 +123,7 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
  *  @param message          - The MMXInboundMessage object that was received.
  *  @param receiptRequested - BOOL will be YES if the sender requested a delivery confirmation message.
  */
-- (void)client:(MMXClient *)client didReceiveMessage:(MMXInboundMessage *)message deliveryReceiptRequested:(BOOL)receiptRequested;
+- (void)client:(MMXClient *)client didReceiveMessage:(MMXInternalMessageAdaptor *)message deliveryReceiptRequested:(BOOL)receiptRequested;
 
 /**
  *  This method is called when an error message is received.
@@ -135,11 +138,11 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 /**
  *  This method is called when the server successfully receives a message after sending
  *
- *  @param client    - The client providing the message.
- *  @param messageID - The message ID of the message that was received by the server
- *  @param recipient - The MMXUserID of the user the message was addressed to.
+ *  @param client		- The client providing the message.
+ *  @param messageID	- The message ID of the message that was received by the server
+ *  @param invalidUsers - A set of the usernames that the server was not able to send messages to
  */
-- (void)client:(MMXClient *)client didReceiveServerAckForMessageID:(NSString *)messageID recipient:(MMXUserID *)recipient;
+- (void)client:(MMXClient *)client didReceiveServerAckForMessageID:(NSString *)messageID invalidUsers:(NSSet *)invalidUsers;
 
 // PubSub
 /**
@@ -166,18 +169,6 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
  *  Class that implements the MMXClientDelegate Protocol.
  */
 @property (nonatomic, weak)     id<MMXClientDelegate> delegate;
-
-/**
- *  Current instance of the MMXDeviceManager. See MMXDeviceManager.h for usage.
- *	Must have an active connection to be able to use the MMXDeviceManager.
- */
-@property (nonatomic, readonly) MMXDeviceManager * deviceManager;
-
-/**
- *  Current instance of the MMXAccountManager. See MMXAccountManager.h for usage.
- *	Must have an active connection to be able to use the MMXAccountManager.
- */
-@property (nonatomic, readonly) MMXAccountManager * accountManager;
 
 /**
  *  Current instance of the MMXPubSubManager. See MMXPubSubManager.h for usage.
@@ -232,37 +223,14 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 - (id)initWithConfiguration:(MMXConfiguration *)configuration
                    delegate:(id<MMXClientDelegate>)delegate;
 
-/**
- *  Creates a session as an anonymous user.
- */
-- (void)connectAnonymous;
 
-/**
- *  Creates a session as a named user using the NSURLCredential set as the credentials property of the configuration property.
- */
-- (void)connectWithCredentials;
-
-/**
- *  This method degrades a session using a named account to an anonymous session.
- */
-- (void)goAnonymous;
+- (BOOL)connect;
 
 /**
  *  This closes the connection to the server. The device will still receive push notifications to be alerted to
  *  new messages/content.
  */
 - (void)disconnect;
-
-/**
- *  This method deregisters the current device so it will no longer be a valid endpoint for receiving messages and
- *  push notifications and closes the connection to the server. You must be currently connected to the server to
- *  use this API.
- *
- *  @param success - Block with BOOL. Value should be YES.
- *  @param failure - Block with an NSError with details about the call failure.
- */
-- (void)disconnectAndDeactivateWithSuccess:(void (^)(BOOL success))success
-								   failure:(void (^)(NSError * error))failure;
 
 /**
  *  Sends a message to a desired user. MMXMessageOptions are set to default values.
@@ -285,6 +253,16 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 			  withOptions:(MMXMessageOptions *)options;
 
 /**
+ *  Sends a push message to a desired user or users.
+ *
+ *  @param message	- The MMXMessage to send.
+ *  @param options	- MMXMessageOptions object that sets the value for requesting a delivery receipt and performance optimization
+ *
+ *  @return - The UUID of the message for use in tracking.
+ */
+- (NSString *)sendPushMessage:(MMXOutboundMessage *)message success:(void (^)(NSSet * invalidDevices))success failure:(void (^)(NSError * error))failure;
+
+/**
  *  Optionally send delivery confirmation for inbound message when requested.
  *
  *  @param message - Pass in the message that you want to send a confirmation for.
@@ -303,7 +281,6 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 - (void)queryStateForMessages:(NSArray *)messageIDs
                       success:(void (^)(NSDictionary * response))success
                       failure:(void (^)(NSError * error))failure;
-
 
 /**
  *	Messages are queued if sent when the user is not connected.
@@ -342,13 +319,6 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 - (NSArray *)deleteQueuedPubSubMessages:(NSArray *)messages;
 
 /**
- *  Updates the device token.
- *
- *  @param deviceToken - The device token.
- */
-- (void)updateRemoteNotificationDeviceToken:(NSData *)deviceToken;
-
-/**
  *  Method to publish the current GeoLocation of the user.
  *
  *  @param location - CLLocation object for the current location.
@@ -358,5 +328,15 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 - (void)updateGeoLocation:(CLLocation *)location
 				  success:(void (^)(BOOL success))success
 				  failure:(void (^)(NSError * error))failure;
+
+#pragma mark - MMModule Methods
+
+- (void)updateConfiguration:(NSDictionary *)configurationDict;
+
+- (void)updateDeviceID:(NSString *)deviceID appToken:(NSString *)appToken;
+
+- (void)updateUsername:(NSString *)username deviceID:(NSString *)deviceID userToken:(NSString *)userToken;
+
+- (void)closeConnectionAndInvalidateUserData;
 
 @end

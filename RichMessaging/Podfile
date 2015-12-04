@@ -1,12 +1,12 @@
-# Uncomment this line to define a global platform for your project
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/magnetsystems/Specs.git'
 platform :ios, '8.0'
 
 use_frameworks!
 
 target 'RichMessaging' do
 
-pod 'MMX'
-#pod 'JSQMessagesViewController', '~> 7.1'
+pod 'MagnetMax', '~> 2.0'
 pod 'JSQMessagesViewController', :git => 'https://github.com/jessesquires/JSQMessagesViewController.git', :branch => 'develop'
 pod 'FBSDKLoginKit'
 

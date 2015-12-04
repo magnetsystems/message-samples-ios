@@ -29,23 +29,11 @@
 	msg.timestamp		= message.timestamp;
 	msg.metaData		= message.metaData;
 	msg.messageContent	= message.messageContent;
-	msg.otherRecipients	= [MMXInboundMessage removeUser:message.targetUserID fromRecipients:message.recipients];
+	msg.recipients		= message.recipients;
 	msg.senderUserID	= message.senderUserID;
 	msg.targetUserID	= message.targetUserID;
 	msg.senderEndpoint	= message.senderEndpoint;
 	return msg;
 }
 
-+ (NSArray *)removeUser:(MMXUserID *)userID fromRecipients:(NSArray *)recipients {
-	NSMutableArray *otherRecipients = @[].mutableCopy;
-	for (id<MMXAddressable> recipient in recipients) {
-		MMXInternalAddress *address = recipient.address;
-		if (address) {
-			if (![address.username isEqualToString:userID.username]) {
-				[otherRecipients addObject:recipient];
-			}
-		}
-	}
-	return otherRecipients.copy;
-}
 @end

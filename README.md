@@ -13,7 +13,8 @@ We created a Rock Paper Scissors Lizard Spock game as popularized by the show â€
 
 ### Build Instructions
 
-You must replace the existing Configurations.plist file in the project with your own. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+You must replace the existing MagnetMax.plist file in the project with your own. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+Learn more [here](https://docs.magnet.com/message/v2/ios-objective-c-v2/creating-your-first-ios-app-v2/)
 
 ### How it works (Technical Highlights)
 
@@ -35,7 +36,8 @@ We needed an app to address one of the the most important issues in our office â
 
 ### Build Instructions
 
-You must replace the existing Configurations.plist file in the project with your own. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+You must replace the existing MagnetMax.plist file in the project with your own. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+Learn more [here](https://docs.magnet.com/message/v2/ios-objective-c-v2/creating-your-first-ios-app-v2/)
 
 ### How it works (Technical Highlights)
 
@@ -51,7 +53,8 @@ Quickstart was created to have a simple app that could demonstrate the most basi
 
 ### Build Instructions
 
-You must replace the existing Configurations.plist file in the project with your own. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+You must replace the existing MagnetMax.plist file in the project with your own. You can download this file on the Settings page of the Magnet Message Web Interface. After adding the file to the project just build and run!
+Learn more [here](https://docs.magnet.com/message/v2/ios-objective-c-v2/creating-your-first-ios-app-v2/)
 
 ### How it works (Technical Highlights)
 

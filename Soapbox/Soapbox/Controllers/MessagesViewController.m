@@ -21,7 +21,7 @@
 #import "PubSubCell.h"
 #import "UIColor+Soapbox.h"
 #import "Announcement.h"
-#import <MMX/MMX.h>
+@import MagnetMax;
 
 @interface MessagesViewController ()
 
@@ -154,18 +154,29 @@
 - (void)didPressRightButton:(id)sender {
 	[self.textView refreshFirstResponder];
 	
-    Announcement *announcement = [Announcement announcementWithContent:self.textView.text];
-    NSDictionary *messageContent = [MTLJSONAdapter JSONDictionaryFromModel:announcement];
-    MMXMessage *messageToSend = [MMXMessage messageToChannel:self.channel messageContent:messageContent];
-    /*
-	 *  Publishing our message. In this case I do not need to do anything on success. I will receive the MMXDidReceiveMessageNotification notification
-	 *	I can then treat the message that was sent the same way as any other message I receive.
-	 */
-    [self.channel publish:messageToSend.messageContent success:nil failure:^(NSError *error) {
-        [self showAlertWithTitle:@"Failed to Publish" message:error ? error.localizedFailureReason : @"An unknown error occured when trying to send your message."];
-    }];
+	if (self.channel.canPublish) {
+		Announcement *announcement = [Announcement announcementWithContent:self.textView.text];
+		NSError *error;
+		NSDictionary *messageContent = [MTLJSONAdapter JSONDictionaryFromModel:announcement error:&error];
+		if (error == nil) {
+			MMXMessage *messageToSend = [MMXMessage messageToChannel:self.channel messageContent:messageContent];
+			/*
+			 *  Publishing our message. In this case I do not need to do anything on success. I will receive the MMXDidReceiveMessageNotification notification
+			 *	I can then treat the message that was sent the same way as any other message I receive.
+			 */
+			[self.channel publish:messageToSend.messageContent success:nil failure:^(NSError *error) {
+				[self showAlertWithTitle:@"Failed to Publish" message:error ? error.localizedFailureReason : @"An unknown error occured when trying to send your message."];
+			}];
+		}
+		if (!self.channel.isSubscribed) {
+			[self showAlertWithTitle:@"Not Subscribed" message:@"You are not subscribed to this channel. You will not see the messages you publish show up here."];
+		}
+		
+		[super didPressRightButton:sender];
+	} else {
+		[self showAlertWithTitle:@"Cannot Publish" message:@"You do not have the proper permissions to publish to this channel. Subscribe to the channel and try again."];
+	}
 	
-	[super didPressRightButton:sender];
 }
 
 #pragma mark - TableView
@@ -173,7 +184,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	PubSubCell *cell = (PubSubCell *)[tableView dequeueReusableCellWithIdentifier:@"PubSubCell" forIndexPath:indexPath];
 	MMXMessage * message = self.messageList[indexPath.row];
-	NSString *senderName = message.sender.username;
+	NSString *senderName = message.sender.userName;
 	UIColor *color = [UIColor soapboxLightGray];
 	if (senderName && ![senderName isEqualToString:@""]) {
 		color = [self colorForName:senderName];
@@ -182,7 +193,7 @@
 	/*
 	 *  Checking the current username against the username of the poster.
 	 */
-	BOOL isCurrentUser = [senderName isEqualToString:[MMXUser currentUser].username];
+	BOOL isCurrentUser = [senderName isEqualToString:[MMUser currentUser].userName];
 	if (isCurrentUser) {
 		color = [UIColor soapboxChatCurrentUser];
 	}

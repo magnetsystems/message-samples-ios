@@ -17,7 +17,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import <Mantle/Mantle.h>
+@import MagnetMaxCore;
 @class MMXUserID;
 @class MMXEndpoint;
 
@@ -25,7 +25,7 @@
  *  The MMXInboundMessage represents an incoming message. 
  *	It contains the data provided by the sender, a timestamp for when it was sent, a unique ID and the necessary information to reply to the sender.
  */
-@interface MMXInboundMessage : MTLModel
+@interface MMXInboundMessage : MMModel
 
 /**
  *  Unique UUID for the message to allow tracking.
@@ -56,7 +56,7 @@
 /**
  *  The list of the other users the message was sent to.
  */
-@property(nonatomic, copy, readonly) NSArray *otherRecipients;
+@property(nonatomic, copy, readonly) NSArray *recipients;
 
 /**
  *  The timestamp for when the message was originally sent.

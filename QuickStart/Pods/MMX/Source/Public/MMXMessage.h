@@ -18,11 +18,12 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXMessageTypes.h"
-#import <Mantle/Mantle.h>
-@class MMXUser;
+@import MagnetMaxCore;
+@class MMUser;
 @class MMXChannel;
 
-@interface MMXMessage : MTLModel
+NS_ASSUME_NONNULL_BEGIN
+@interface MMXMessage : MMModel
 
 /**
  *  Type of message. See MMXMessageTypes
@@ -32,33 +33,38 @@
 /**
  *  Unique UUID for the message to allow tracking.
  */
-@property(nonatomic, readonly) NSString *messageID;
+@property(nonatomic, readonly, nullable) NSString *messageID;
 
 /**
  *  The timestamp for when the message was originally sent.
  */
-@property(nonatomic, readonly) NSDate *timestamp;
+@property(nonatomic, readonly, nullable) NSDate *timestamp;
 
 /**
- *  The MMXUserID for the user that sent the message.
+ *  The MMUser for the user that sent the message.
  */
-@property(nonatomic, readonly) MMXUser *sender;
+@property(nonatomic, readonly, nullable) MMUser *sender;
 
 /**
  *  The channel the message was published to. See MMXChannel.h for more details.
  */
-@property (nonatomic, readonly) MMXChannel *channel;
+@property (nonatomic, readonly, nullable) MMXChannel *channel;
 
 /**
  *  The list of users the message was sent to.
  */
-@property(nonatomic, readonly) NSSet *recipients;
+@property(nonatomic, readonly, nullable) NSSet <MMUser *>*recipients;
 
 /**
  *  The content you want to send.
  *	NSDictionary can only contain objects that are JSON serializable.
  */
 @property(nonatomic, readonly) NSDictionary *messageContent;
+
+/**
+ *  The list of attachments associated with the message.
+ */
+@property(nonatomic, readonly, nullable) NSArray <MMAttachment *> *attachments;
 
 /**
  *  Initializer for creating a new MMXMessage object
@@ -68,8 +74,8 @@
  *
  *  @return New MMXMessage
  */
-+ (instancetype)messageToRecipients:(NSSet *)recipients
-					 messageContent:(NSDictionary *)messageContent;
++ (instancetype)messageToRecipients:(NSSet <MMUser *>*)recipients
+					 messageContent:(NSDictionary <NSString *,NSString *>*)messageContent;
 
 /**
  *  Initializer for creating a new MMXMessage object
@@ -80,18 +86,18 @@
  *  @return New MMXMessage
  */
 + (instancetype)messageToChannel:(MMXChannel *)channel
-				  messageContent:(NSDictionary *)messageContent;
+				  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent;
 
 /**
  *  Method to send the message
  *
- *  @param success - Block with the message ID for the sent message.
+ *  @param success - Block with the NSSet of usernames for any users that were not valid.
  *  @param failure - Block with an NSError with details about the call failure.
  *
  *  @return The messageID for the message sent
  */
-- (NSString *)sendWithSuccess:(void (^)(void))success
-					  failure:(void (^)(NSError *error))failure;
+- (nullable NSString *)sendWithSuccess:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+                               failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to send a message in reply to the received message
@@ -102,9 +108,9 @@
  *
  *  @return The messageID for the message sent
  */
-- (NSString *)replyWithContent:(NSDictionary *)content
-				 success:(void (^)(void))success
-				 failure:(void (^)(NSError * error))failure;
+- (nullable NSString *)replyWithContent:(NSDictionary <NSString *,NSString *>*)content
+                                success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+                                failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to send a message to all recipients of the received message including the sender
@@ -115,13 +121,28 @@
  *
  *  @return The messageID for the message sent
  */
-- (NSString *)replyAllWithContent:(NSDictionary *)content
-						  success:(void (^)(void))success
-						  failure:(void (^)(NSError * error))failure;
+- (nullable NSString *)replyAllWithContent:(NSDictionary <NSString *,NSString *>*)content
+                                   success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+                                   failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Send a delivery confimation message to the sender of the message.
  */
 - (void)sendDeliveryConfirmation;
 
+/**
+ *  Add an attachment.
+ *
+ *  @param attachment The attachment to add to the message.
+ */
+- (void)addAttachment:(MMAttachment *)attachment;
+
+/**
+ *  Add attachments.
+ *
+ *  @param attachments The attachments to add to the message.
+ */
+- (void)addAttachments:(NSArray <MMAttachment *> *)attachments;
+
+NS_ASSUME_NONNULL_END
 @end

@@ -1,1 +1,0 @@
-../../../MMXXMPPFramework/Core/XMPPIQ.h

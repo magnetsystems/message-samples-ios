@@ -20,7 +20,8 @@
 
 NSString *const kMMXRemoteNotificationTypeKey = @"ty";
 NSString *const kMMXRemoteNotificationCallbackURLKey = @"cu";
-NSString *const kMMXRemoteNotificationWakeupType = @"mmx:w:retrieve";
+NSString *const kMMXRemoteNotificationPubSubWakeupType = @"pubsub";
+NSString *const kMMXRemoteNotificationWakeupType = @"retrieve";
 NSString *const kMMXRemoteNotificationPushType = @"mmx:p:";
 NSString *const kMMXRemoteNotificationFrameworkKey = @"_mmx";
 
@@ -31,33 +32,36 @@ NSString *const kMMXRemoteNotificationFrameworkKey = @"_mmx";
 }
 
 + (BOOL)isWakeupRemoteNotification:(NSDictionary *)userInfo {
+    if (![self isMMXRemoteNotification:userInfo]) {
+        return NO;
+    }
+    
     NSDictionary *mmxDictionary = userInfo[kMMXRemoteNotificationFrameworkKey];
-    return [mmxDictionary[kMMXRemoteNotificationTypeKey] isEqualToString:kMMXRemoteNotificationWakeupType];
+    id mmxType = mmxDictionary[kMMXRemoteNotificationTypeKey];
+    NSString *mmxTypeStr = [mmxType isKindOfClass:[NSString class]] ? mmxType : @"";
+    
+    BOOL isPubSub = [mmxTypeStr isEqualToString:kMMXRemoteNotificationPubSubWakeupType];
+    BOOL isWakeUp = [mmxTypeStr isEqualToString:kMMXRemoteNotificationWakeupType];
+    
+    return isPubSub || isWakeUp;
 }
 
 + (void)acknowledgeRemoteNotification:(NSDictionary *)userInfo completion:(void (^)(BOOL success))completion {
     NSDictionary *mmxDictionary = userInfo[kMMXRemoteNotificationFrameworkKey];
-    if ([mmxDictionary[kMMXRemoteNotificationTypeKey] isEqualToString:kMMXRemoteNotificationPushType]) {
-        NSString *callbackURLString = mmxDictionary[kMMXRemoteNotificationCallbackURLKey];
-        NSURL *callbackURL = [NSURL URLWithString:callbackURLString];
-        if (callbackURL) {
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:callbackURL];
-            request.HTTPMethod = @"POST";
-            [NSURLConnection sendAsynchronousRequest:request
-                                               queue:[NSOperationQueue mainQueue]
-                                   completionHandler:
-                                           ^(NSURLResponse *response, NSData *data, NSError *error)
-                                           {
-                                               if (completion) {
-                                                   completion(error == nil);
-                                               }
-                                           }];
-        } else {
-            if (completion) {
-                completion(NO);
-            }
-        }
-
+    NSString *callbackURLString = mmxDictionary[kMMXRemoteNotificationCallbackURLKey];
+    NSURL *callbackURL = [NSURL URLWithString:callbackURLString];
+    if (callbackURL) {
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:callbackURL];
+        request.HTTPMethod = @"POST";
+        [NSURLConnection sendAsynchronousRequest:request
+                                           queue:[NSOperationQueue mainQueue]
+                               completionHandler:
+         ^(NSURLResponse *response, NSData *data, NSError *error)
+         {
+             if (completion) {
+                 completion(error == nil);
+             }
+         }];
     } else {
         if (completion) {
             completion(NO);

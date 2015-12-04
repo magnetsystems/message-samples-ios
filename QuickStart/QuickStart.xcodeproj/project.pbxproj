@@ -17,9 +17,9 @@
 		0EBBD5F01B1D1E1E0082709B /* QuickStartUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBBD5EA1B1D1E1E0082709B /* QuickStartUtils.m */; };
 		0EBBD5F11B1D1E1E0082709B /* UIColor+QuickStart.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EBBD5EC1B1D1E1E0082709B /* UIColor+QuickStart.m */; };
 		0EBBD5F31B1D1E340082709B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0EBBD5F21B1D1E340082709B /* LaunchScreen.storyboard */; };
+		0EF38A191BDEC6DA00FF663B /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0EF38A181BDEC6DA00FF663B /* MagnetMax.plist */; };
+		75336434A9D2AF4B13EB61D9 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AF7F124C75928616D715A4B /* Pods.framework */; };
 		AA489D801BB0B9EF00BE7F5F /* QuickStartUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA489D7F1BB0B9EF00BE7F5F /* QuickStartUITests.swift */; };
-		AAE447A01BB45BBF00F9135C /* Configurations.plist in Resources */ = {isa = PBXBuildFile; fileRef = AAE4479F1BB45BBF00F9135C /* Configurations.plist */; settings = {ASSET_TAGS = (); }; };
-		EA4FCC46B6C08172A92BE0AF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84DA70DF1FA8D8DE9E21836B /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,13 +51,13 @@
 		0EBBD5EB1B1D1E1E0082709B /* UIColor+QuickStart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+QuickStart.h"; sourceTree = "<group>"; };
 		0EBBD5EC1B1D1E1E0082709B /* UIColor+QuickStart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+QuickStart.m"; sourceTree = "<group>"; };
 		0EBBD5F21B1D1E340082709B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		84DA70DF1FA8D8DE9E21836B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		0EF38A181BDEC6DA00FF663B /* MagnetMax.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MagnetMax.plist; sourceTree = "<group>"; };
+		3AF7F124C75928616D715A4B /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		880BCCEC229BCE676931BCA2 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A563DD9325B485268629FB2B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		AA489D7D1BB0B9EF00BE7F5F /* QuickStartUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickStartUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA489D7F1BB0B9EF00BE7F5F /* QuickStartUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickStartUITests.swift; sourceTree = "<group>"; };
 		AA489D811BB0B9EF00BE7F5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AAE4479F1BB45BBF00F9135C /* Configurations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Configurations.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA4FCC46B6C08172A92BE0AF /* libPods.a in Frameworks */,
+				75336434A9D2AF4B13EB61D9 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +117,7 @@
 		0E5078C91B1CF88E002A2F28 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				AAE4479F1BB45BBF00F9135C /* Configurations.plist */,
+				0EF38A181BDEC6DA00FF663B /* MagnetMax.plist */,
 				0E5078CA1B1CF88E002A2F28 /* Info.plist */,
 				0E5078CB1B1CF88E002A2F28 /* main.m */,
 			);
@@ -151,7 +151,7 @@
 		7293853152E032143AF2FD68 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				84DA70DF1FA8D8DE9E21836B /* libPods.a */,
+				3AF7F124C75928616D715A4B /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -186,6 +186,7 @@
 				0E5078C31B1CF88E002A2F28 /* Frameworks */,
 				0E5078C41B1CF88E002A2F28 /* Resources */,
 				076337C523B78E029C62E4E2 /* Copy Pods Resources */,
+				CDD6CBE1803F243ECFC3B759 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -262,9 +263,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0EBBD5F31B1D1E340082709B /* LaunchScreen.storyboard in Resources */,
-				AAE447A01BB45BBF00F9135C /* Configurations.plist in Resources */,
 				0E5078D51B1CF88E002A2F28 /* Main.storyboard in Resources */,
 				0E5078D71B1CF88E002A2F28 /* Images.xcassets in Resources */,
+				0EF38A191BDEC6DA00FF663B /* MagnetMax.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +292,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CDD6CBE1803F243ECFC3B759 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E71AB39CC55AB9FA2639E40A /* Check Pods Manifest.lock */ = {

@@ -17,7 +17,8 @@
 
 
 #import "SignInViewController.h"
-#import <MMX/MMX.h>
+@import MagnetMax;
+@import MMX;
 
 @interface SignInViewController ()
 
@@ -25,9 +26,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *signInButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, strong) NSURLCredential * currentCredential;
-
-- (BOOL)validateUsername:(NSString *)username password:(NSString *)password;
 
 @end
 
@@ -56,49 +54,67 @@
 
 - (IBAction)signInPressed:(id)sender {
 
-    if ([self validateUsername:self.usernameTextField.text password:self.passwordTextField.text]) {
-        
-        /*
-         *  Creating a new NSURLCredential.
-         */
-        self.currentCredential = [NSURLCredential credentialWithUser:self.usernameTextField.text
-                                                                 password:self.passwordTextField.text
-                                                              persistence:NSURLCredentialPersistenceNone];
-        
-        [self logInWithCredential:self.currentCredential];
+    if ([self validateTextFields]) {
+		[self logInWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
     }
 }
 
 - (IBAction)registerPressed:(id)sender {
     
-    if ([self validateUsername:self.usernameTextField.text password:self.passwordTextField.text]) {
-        
-        /*
-         *  Creating a new NSURLCredential.
-         */
-        NSURLCredential *credential = [NSURLCredential credentialWithUser:self.usernameTextField.text
-                                                                 password:self.passwordTextField.text
-                                                              persistence:NSURLCredentialPersistenceNone];
-        
-        MMXUser *user = [[MMXUser alloc] init];
-        user.displayName = self.usernameTextField.text;
-        
-        [user registerWithCredential:credential success:^{
-            [self logInWithCredential:credential];
-        } failure:^(NSError *error) {
-            [self showAlertWithTitle:@"Error Registering User" message:error.localizedFailureReason];
-            [self setInputsEnabled:YES];
-        }];
-    }
+	if ([self validateTextFields]) {
+		/*
+		 *  Creating a new MMUser.
+		 */
+		MMUser *newUser = [MMUser new];
+		newUser.userName = self.usernameTextField.text;
+		newUser.password = self.passwordTextField.text;
+		newUser.firstName = self.usernameTextField.text;
+		
+		[newUser register:^(MMUser * user) {
+			[self logInWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
+		} failure:^(NSError * error) {
+			NSString *errorMessage = error.localizedFailureReason ?: error.localizedDescription;
+			if (error.code == 409) {
+				errorMessage = @"User already exists.";
+			}
+			[self showAlertWithTitle:@"Error Registering User" message:errorMessage];
+			[self setInputsEnabled:YES];
+		}];
+		
+	}
 }
 
-- (void)logInWithCredential:(NSURLCredential *)credential {
-    [MMXUser logInWithCredential:credential success:^(MMXUser *user) {
-        [self performSegueWithIdentifier:@"ShowStatsScreen" sender:nil];
-    } failure:^(NSError *error) {
-        [self showAlertWithTitle:@"Error" message:error ? error.localizedFailureReason : @"An unknown error occurred. Please try logging in again"];
-        [self setInputsEnabled:YES];
-    }];
+- (void)logInWithUsername:(NSString *)username password:(NSString *)password {
+	
+	/*
+	 *  Creating a new NSURLCredential.
+	 */
+	NSURLCredential *credential = [NSURLCredential credentialWithUser:username
+															 password:password
+														  persistence:NSURLCredentialPersistenceNone];
+	
+	//Log in the user
+	[MMUser login:credential success:^{
+		//Initialize MMX
+		[MagnetMax initModule:[MMX sharedInstance] success:^{
+			//We will wait to call [MMX start] until we get to the next ViewController where I am better set up to receive messages.
+			[self performSegueWithIdentifier:@"ShowStatsScreen" sender:nil];
+		} failure:^(NSError * error) {
+			if ([error.localizedDescription isEqualToString:@"Authentication Failure"]) {
+				[self showAlertWithTitle:@"Error" message:error.localizedDescription];
+				[self setInputsEnabled:YES];
+			} else {
+				NSLog(@"initModule error = %@", error.localizedDescription);
+			}
+		}];
+	} failure:^(NSError * error) {
+		NSString *errorMessage;
+		if (error) {
+			errorMessage = error.localizedFailureReason ?: error.localizedDescription;
+		}
+		[self showAlertWithTitle:@"Error" message:(errorMessage && ![errorMessage isEqualToString:@""]) ? errorMessage : @"An unknown error occurred. Please try logging in again"];
+		[self setInputsEnabled:YES];
+	}];
 }
 
 #pragma mark - Enable/Disable UI Elements
@@ -138,7 +154,7 @@
 
 #pragma mark - Validate username and password
 
-- (BOOL)validateUsername:(NSString *)username password:(NSString *)password {
+- (BOOL)validateTextFields {
     
     [self setInputsEnabled:NO];
     if (self.usernameTextField.text.length < 5) {

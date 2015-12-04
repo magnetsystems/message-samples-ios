@@ -16,39 +16,30 @@
  */
 
 #import "MMXTopicSubscribersResponse.h"
-#import "DDXML.h"
 #import "MMXConstants.h"
 #import "MMXNotificationConstants.h"
-#import "XMPP.h"
-#import "MMXUser.h"
+@import MMXXMPPFramework;
+@import MagnetMaxCore;
 
 @implementation MMXTopicSubscribersResponse
 
 - (instancetype)initWithIQ:(XMPPIQ *)iq {
-	if ((self = [super init])) {
-		NSXMLElement* mmxElement =  [iq elementForName:MXmmxElement xmlns:MXnsPubSub];
-		if (mmxElement) {
-			NSString* jsonContent =  [[mmxElement childAtIndex:0] XMLString];
-			NSError* error;
-			NSData* jsonData = [jsonContent dataUsingEncoding:NSUTF8StringEncoding];
-			NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-			if (jsonDictionary[@"totalCount"]) {
-				_totalCount = [jsonDictionary[@"totalCount"] intValue];
-			}
-			if (jsonDictionary[@"subscribers"]) {
-				NSArray *tempSubArray = jsonDictionary[@"subscribers"];
-				NSMutableArray *finalSubArray = [NSMutableArray arrayWithCapacity:tempSubArray.count];
-				for (NSDictionary *userDict in tempSubArray) {
-					MMXUser *user = [MMXUser new];
-					user.username = userDict[kAddressUsernameKey];
-					user.displayName = userDict[kAddressDisplayNameKey];
-					[finalSubArray addObject:user];
-				}
-				_subscribers = finalSubArray.copy;
-			}
-		}
-	}
-	return self;
+    if ((self = [super init])) {
+        NSXMLElement* mmxElement =  [iq elementForName:MXmmxElement xmlns:MXnsPubSub];
+        if (mmxElement) {
+            NSString* jsonContent =  [[mmxElement childAtIndex:0] XMLString];
+            NSError* error;
+            NSData* jsonData = [jsonContent dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+            if (jsonDictionary[@"totalCount"]) {
+                _totalCount = [jsonDictionary[@"totalCount"] intValue];
+            }
+            if (jsonDictionary[@"subscribers"]) {
+                _subscribers = [jsonDictionary[@"subscribers"] valueForKey:kAddressUsernameKey];
+            }
+        }
+    }
+    return self;
 }
 
 @end

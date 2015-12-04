@@ -16,17 +16,12 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <Mantle/Mantle.h>
+#import "MMXPublishPermissionsEnum.h"
+@import MagnetMaxCore;
 
 @class MMXUserID;
 
-@interface MMXTopic : MTLModel
-
-typedef NS_ENUM(NSInteger, MMXPublishPermissionsLevel){
-    MMXPublishPermissionsLevelOwner = 0,
-    MMXPublishPermissionsLevelSubscribers,
-    MMXPublishPermissionsLevelAnyone
-};
+@interface MMXTopic : MMModel
 
 /**
  *  Name or identifier for the topic.
@@ -59,9 +54,9 @@ typedef NS_ENUM(NSInteger, MMXPublishPermissionsLevel){
 @property (nonatomic, assign) int maxItemsToBePersisted;
 
 /**
- *  The permissions level required to publish to a topic. See MMXPublishPermissionsLevel for options.
+ *  The permissions level required to publish to a topic. See MMXPublishPermissions for options.
  */
-@property (nonatomic, assign) MMXPublishPermissionsLevel publishPermissionsLevel;
+@property (nonatomic, assign) MMXPublishPermissions publishPermissions;
 
 /**
  *  Create a new topic.
@@ -75,14 +70,14 @@ typedef NS_ENUM(NSInteger, MMXPublishPermissionsLevel){
 /**
  *  Create a new topic.
  *
- *  @param name		- The name of the new topic.
- *  @param maxItems	- Set for the max number of posts that should be persisted. Use -1 for infinite.
- *  @param level	- Permissions level for who should be able to post; Owner/Creator, Subscribers, Anyone.
+ *  @param name					- The name of the new topic.
+ *  @param maxItems				- Set for the max number of posts that should be persisted. Use -1 for infinite.
+ *  @param publishPermissions	- Permissions level required to be able to post; Owner/Creator, Subscribers, Anyone.
  *
  *  @return A new MMXTopic object
  */
 + (instancetype)topicWithName:(NSString *)name
 			maxItemsToPersist:(int)maxItems
-			 permissionsLevel:(MMXPublishPermissionsLevel)level;
+		   publishPermissions:(MMXPublishPermissions)publishPermissions;
 
 @end

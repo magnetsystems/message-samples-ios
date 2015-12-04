@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="15B42" minimumToolsVersion="Xcode 4.3">
+    <entity name="ReliableCall" representedClassName="MagnetMaxCore.MMReliableCall" syncable="YES">
+        <attribute name="callID" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="clazz" attributeType="String" syncable="YES"/>
+        <attribute name="method" attributeType="String" syncable="YES"/>
+        <attribute name="request" attributeType="Transformable" syncable="YES"/>
+        <attribute name="response" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ReliableCall" positionX="-63" positionY="-18" width="128" height="120"/>
+    </elements>
+</model>

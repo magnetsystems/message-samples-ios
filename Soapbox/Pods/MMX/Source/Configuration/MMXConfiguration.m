@@ -36,9 +36,6 @@
 	if (endpointDict[@"DomainName"] && ![endpointDict[@"DomainName"] isEqualToString:@""]) {
 		controllerConfiguration.domain = endpointDict[@"DomainName"];
 	}
-	if (endpointDict[@"PublicAPIPort"]) {
-		controllerConfiguration.publicAPIPort = [endpointDict[@"PublicAPIPort"] integerValue];;
-	}
 	MMXAssert(![controllerConfiguration.appID isEqualToString:@"Invalid"],@"You must have a valid Configurations.plist file. You can download this file on the Settings page of the Magnet Message Web Interface.");
 
 	MMXAssert(controllerConfiguration.appID != nil && ![controllerConfiguration.appID isEqualToString:@""],@"MMXConfiguration appID cannot be nil");
@@ -56,7 +53,6 @@
     self = [super init];
     if (self) {
 		self.baseURL = baseURL;
-		self.publicAPIPort = 5220;
         self.shouldForceTLS = YES;
         self.allowInvalidCertificates = NO;
     }
@@ -95,8 +91,6 @@
         return NO;
 	if (self.credential != configuration.credential && ![self.credential isEqual:configuration.credential])
 		return NO;
-	if (self.publicAPIPort != configuration.publicAPIPort)
-		return NO;
     if (self.allowInvalidCertificates != configuration.allowInvalidCertificates)
         return NO;
 	if (self.shouldForceTLS != configuration.shouldForceTLS)
@@ -114,7 +108,6 @@
     hash = hash * 31u + self.shouldUseCredentialStorage;
     hash = hash * 31u + [self.credential hash];
 	hash = hash * 31u + self.allowInvalidCertificates;
-	hash = hash * 31u + self.publicAPIPort;
 	hash = hash * 31u + self.shouldForceTLS;
 	hash = hash * 31u + [self.domain hash];
     return hash;
@@ -133,7 +126,6 @@
         copy.baseURL = self.baseURL;
         copy.shouldUseCredentialStorage = self.shouldUseCredentialStorage;
         copy.credential = self.credential;
-		copy.publicAPIPort = self.publicAPIPort;
 		copy.shouldForceTLS = self.shouldForceTLS;
 		copy.allowInvalidCertificates = self.allowInvalidCertificates;
 		copy.domain = self.domain;

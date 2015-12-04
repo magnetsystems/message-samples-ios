@@ -19,16 +19,17 @@
 @class RPSLSUserStats;
 @class MMXPubSubMessage;
 @class MMXMessage;
+@class MMUser;
 
 @interface RPSLSUser : NSObject
 
 @property (nonatomic, strong) RPSLSUserStats * stats;
+@property (nonatomic, strong) MMUser * messageUserObject;
 @property (nonatomic, strong) NSDate * timestamp;
-@property (nonatomic, copy) NSString * username;
 @property (nonatomic, assign) BOOL isAvailable;
 
-+ (instancetype)userWithUsername:(NSString *)username
-						   stats:(RPSLSUserStats *)stats;
++ (instancetype)userWithUserObject:(MMUser *)userObject
+							 stats:(RPSLSUserStats *)stats;
 
 + (RPSLSUser *)me;
 
