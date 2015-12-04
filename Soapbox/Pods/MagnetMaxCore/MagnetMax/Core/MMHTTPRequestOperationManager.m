@@ -17,7 +17,6 @@
 
 #import "MMHTTPRequestOperationManager.h"
 #import "MMURLSessionDataTaskOperation.h"
-#import <AFNetworking/AFHTTPSessionManager.h>
 #import <MagnetMaxCore/MagnetMaxCore-Swift.h>
 
 

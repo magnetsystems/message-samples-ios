@@ -21,7 +21,7 @@
 @interface MMXTopicSubscribersResponse : NSObject
 
 @property (nonatomic, assign) int totalCount;
-@property (nonatomic, strong) NSArray *subscribers;
+@property (nonatomic, strong) NSArray <NSString *>*subscribers;
 
 - (instancetype)initWithIQ:(XMPPIQ *)iq;
 

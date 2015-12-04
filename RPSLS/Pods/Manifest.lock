@@ -21,18 +21,18 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (2.2.0):
     - CocoaLumberjack/Default
-  - MagnetMax (2.0.0):
-    - MagnetMaxCore (~> 2.0)
-    - MMX (~> 2.0)
-  - MagnetMaxCore (2.0.0):
-    - AFNetworking/NSURLConnection (~> 2.0)
-    - AFNetworking/NSURLSession (~> 2.0)
+  - MagnetMax (2.1.0):
+    - MagnetMaxCore (~> 2.1)
+    - MMX (~> 2.1)
+  - MagnetMaxCore (2.1.0):
+    - AFNetworking/NSURLConnection (= 2.6.1)
+    - AFNetworking/NSURLSession (= 2.6.1)
     - AFOAuth2Manager (= 2.2.1)
     - CocoaLumberjack (~> 2.2)
-    - Mantle (= 2.0.6)
-  - Mantle (2.0.6):
-    - Mantle/extobjc (= 2.0.6)
-  - Mantle/extobjc (2.0.6)
+    - Mantle (~> 3.0)
+  - Mantle (3.0.0):
+    - Mantle/extobjc (= 3.0.0)
+  - Mantle/extobjc (3.0.0)
   - MDMCoreData (1.5.0):
     - MDMCoreData/MDMCoreDataCore (= 1.5.0)
     - MDMCoreData/MDMFetchedResultsCollectionDataSource (= 1.5.0)
@@ -48,10 +48,10 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (2.0.0):
+  - MMX (2.1.0):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.0)
+    - MagnetMaxCore (~> 2.1)
     - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.13)
   - MMXXMPPFramework (3.6.13):
@@ -85,18 +85,18 @@ PODS:
     - MMXXMPPFramework/XEP-0082
 
 DEPENDENCIES:
-  - MagnetMax (~> 2.0)
+  - MagnetMax (~> 2.1)
 
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
-  MagnetMax: 0cd4f3987238652171a636bc3141560b1dd139ef
-  MagnetMaxCore: aa29401447843f220ee5110becc0e67eb957bcf7
-  Mantle: b02515dd223fa86771241c8c44d92212f479eff9
+  MagnetMax: 213be0394417b54049f7b9d04e98389d950e43c2
+  MagnetMaxCore: 3a580c4cce63813d2ca3f654d8bc18091cb757d3
+  Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: 8f03a35bc30f13a67312c403a742f442814a676c
-  MMXXMPPFramework: 5b056c9870b2e4ce977d085873506399f31fb68e
+  MMX: cb0e6218836680242f88cc313b6418ce1537807f
+  MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
 
 COCOAPODS: 0.39.0

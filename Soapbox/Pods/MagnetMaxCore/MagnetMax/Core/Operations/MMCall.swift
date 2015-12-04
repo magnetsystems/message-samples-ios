@@ -10,6 +10,7 @@ import Foundation
 import AFNetworking
 import Mantle
 
+@objc(MMSwiftCall)
 public class MMCall: GroupOperation {
     // MARK: Properties
     

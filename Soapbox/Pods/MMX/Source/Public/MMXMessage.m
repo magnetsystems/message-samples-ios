@@ -70,91 +70,159 @@
 }
 
 - (NSString *)sendWithSuccess:(void (^)(NSSet <NSString *>*invalidUsers))success
-					  failure:(void (^)(NSError *))failure {
-	if (![MMXMessageUtils isValidMetaData:self.messageContent]) {
-		NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
-		if (failure) {
-			failure(error);
-		}
-		return nil;
-	}
-	if ([MMUser currentUser] == nil) {
-		NSError * error = [MMXClient errorWithTitle:@"Not Logged In" message:@"You must be logged in to send a message." code:401];
-		if (failure) {
-			failure(error);
-		}
-		return nil;
-	}
-	if (self.channel) {
-		NSString *messageID = [[MMXClient sharedClient] generateMessageID];
-		MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self.channel asTopic] content:nil metaData:self.messageContent];
-		msg.messageID = messageID;
-		self.messageID = messageID;
-		if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-			if ([MMUser currentUser]) {
-				[self saveForOfflineAsPubSub:msg];
-				return messageID;
-			} else {
-				if (failure) {
-					failure([MMXMessage notNotLoggedInAndNoUserError]);
-				}
-				return nil;
-			}
-		}
-		[[MMXClient sharedClient].pubsubManager publishPubSubMessage:msg success:^(BOOL successful, NSString *messageID) {
-			self.sender = [MMUser currentUser];
-			self.timestamp = [NSDate date];
-			if (success) {
-				success([NSSet set]);
-			}
-		} failure:^(NSError *error) {
-			if (failure) {
-				failure(error);
-			}
-		}];
-		return messageID;
-	} else {
-		NSString *messageID = [[MMXClient sharedClient] generateMessageID];
-		self.messageID = messageID;
-		if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-			if ([MMUser currentUser]) {
-				[self saveForOfflineAsInAppMessage];
-				return messageID;
-			} else {
-				if (failure) {
-					failure([MMXMessage notNotLoggedInAndNoUserError]);
-				}
-				return nil;
-			}
-		}
-		NSError *error;
-		[MMXMessage validateMessageRecipients:self.recipients content:self.messageContent error:&error];
-		if (error) {
-			if (failure) {
-				failure(error);
-			}
-		} else {
-			[[MagnetDelegate sharedDelegate] sendMessage:self.copy success:^(NSSet *invalidUsers) {
-				self.sender = [MMUser currentUser];
-				self.timestamp = [NSDate date];
-				if (self.recipients.count == invalidUsers.count) {
-					if (failure) {
-						NSError *error = [MMXClient errorWithTitle:@"Invalid User(s)" message:@"The user(s) you are trying to send a message to does not exist or does not have a valid device associated with them." code:500];
-						failure(error);
-					}
-				} else {
-					if (success) {
-						success(invalidUsers);
-					}
-				}
-			} failure:^(NSError *error) {
-				if (failure) {
-					failure(error);
-				}
-			}];
-		}
-		return messageID;
-	}
+                      failure:(void (^)(NSError *))failure {
+    if (![MMXMessageUtils isValidMetaData:self.messageContent]) {
+        NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
+        if (failure) {
+            failure(error);
+        }
+        return nil;
+    }
+    if ([MMUser currentUser] == nil) {
+        NSError * error = [MMXClient errorWithTitle:@"Not Logged In" message:@"You must be logged in to send a message." code:401];
+        if (failure) {
+            failure(error);
+        }
+        return nil;
+    }
+    if (self.channel) {
+        NSString *messageID = [[MMXClient sharedClient] generateMessageID];
+        MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self.channel asTopic] content:nil metaData:self.messageContent];
+        msg.messageID = messageID;
+        self.messageID = messageID;
+        if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+            if ([MMUser currentUser]) {
+                [self saveForOfflineAsPubSub:msg];
+                return messageID;
+            } else {
+                if (failure) {
+                    failure([MMXMessage notNotLoggedInAndNoUserError]);
+                }
+                return nil;
+            }
+        }
+        // Handle attachments
+        if (self.mutableAttachments.count > 0) {
+            [MMAttachmentService upload:self.mutableAttachments success:^{
+                NSMutableDictionary *messageContent = self.messageContent.mutableCopy;
+                NSMutableArray *attachmentsToSend = [NSMutableArray arrayWithCapacity:self.mutableAttachments.count];
+                for (MMAttachment *attachment in self.mutableAttachments) {
+                    [attachmentsToSend addObject:[attachment toJSONString]];
+                }
+                messageContent[@"_attachments"] = attachmentsToSend;
+                self.messageContent = messageContent;
+                msg.metaData = self.messageContent;
+                
+                [[MMXClient sharedClient].pubsubManager publishPubSubMessage:msg success:^(BOOL successful, NSString *messageID) {
+                    self.sender = [MMUser currentUser];
+                    self.timestamp = [NSDate date];
+                    if (success) {
+                        success([NSSet set]);
+                    }
+                } failure:^(NSError *error) {
+                    if (failure) {
+                        failure(error);
+                    }
+                }];
+                
+            } failure:^(NSError * _Nonnull error) {
+                if (failure) {
+                    failure(error);
+                }
+            }];
+        } else {
+            [[MMXClient sharedClient].pubsubManager publishPubSubMessage:msg success:^(BOOL successful, NSString *messageID) {
+                self.sender = [MMUser currentUser];
+                self.timestamp = [NSDate date];
+                if (success) {
+                    success([NSSet set]);
+                }
+            } failure:^(NSError *error) {
+                if (failure) {
+                    failure(error);
+                }
+            }];
+        }
+        return messageID;
+    } else {
+        NSString *messageID = [[MMXClient sharedClient] generateMessageID];
+        self.messageID = messageID;
+        if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+            if ([MMUser currentUser]) {
+                [self saveForOfflineAsInAppMessage];
+                return messageID;
+            } else {
+                if (failure) {
+                    failure([MMXMessage notNotLoggedInAndNoUserError]);
+                }
+                return nil;
+            }
+        }
+        NSError *error;
+        [MMXMessage validateMessageRecipients:self.recipients content:self.messageContent error:&error];
+        if (error) {
+            if (failure) {
+                failure(error);
+            }
+        } else {
+            
+            // Handle attachments
+            if (self.mutableAttachments.count > 0) {
+                [MMAttachmentService upload:self.mutableAttachments success:^{
+                    NSMutableDictionary *messageContent = self.messageContent.mutableCopy;
+                    NSMutableArray *attachmentsToSend = [NSMutableArray arrayWithCapacity:self.mutableAttachments.count];
+                    for (MMAttachment *attachment in self.mutableAttachments) {
+                        [attachmentsToSend addObject:[attachment toJSONString]];
+                    }
+                    messageContent[@"_attachments"] = attachmentsToSend;
+                    self.messageContent = messageContent;
+                    
+                    [[MagnetDelegate sharedDelegate] sendMessage:self success:^(NSSet *invalidUsers) {
+                        self.sender = [MMUser currentUser];
+                        self.timestamp = [NSDate date];
+                        if (self.recipients.count == invalidUsers.count) {
+                            if (failure) {
+                                NSError *error = [MMXClient errorWithTitle:@"Invalid User(s)" message:@"The user(s) you are trying to send a message to does not exist or does not have a valid device associated with them." code:500];
+                                failure(error);
+                            }
+                        } else {
+                            if (success) {
+                                success(invalidUsers);
+                            }
+                        }
+                    } failure:^(NSError *error) {
+                        if (failure) {
+                            failure(error);
+                        }
+                    }];
+                } failure:^(NSError * _Nonnull error) {
+                    if (failure) {
+                        failure(error);
+                    }
+                }];
+            } else {
+                [[MagnetDelegate sharedDelegate] sendMessage:self success:^(NSSet *invalidUsers) {
+                    self.sender = [MMUser currentUser];
+                    self.timestamp = [NSDate date];
+                    if (self.recipients.count == invalidUsers.count) {
+                        if (failure) {
+                            NSError *error = [MMXClient errorWithTitle:@"Invalid User(s)" message:@"The user(s) you are trying to send a message to does not exist or does not have a valid device associated with them." code:500];
+                            failure(error);
+                        }
+                    } else {
+                        if (success) {
+                            success(invalidUsers);
+                        }
+                    }
+                } failure:^(NSError *error) {
+                    if (failure) {
+                        failure(error);
+                    }
+                }];
+            }
+        }
+        return messageID;
+    }
 }
 
 - (NSString *)replyWithContent:(NSDictionary <NSString *,NSString *>*)content
@@ -211,6 +279,17 @@
 		}
 	}];
 	return messageID;
+}
+
+- (void)addAttachment:(MMAttachment *)attachment {
+    NSAssert((attachment.fileURL != nil || attachment.data != nil || attachment.inputStream != nil || attachment.content != nil), @"fileURL, data, inputStream & content cannot be nil");
+    [self.mutableAttachments addObject:attachment];
+}
+
+- (void)addAttachments:(NSArray<MMAttachment *> *)attachments {
+    for (MMAttachment *attachment in attachments) {
+        [self addAttachment:attachment];
+    }
 }
 
 #pragma mark - Offline
@@ -271,6 +350,15 @@
 		return NO;
 	}
 	return YES;
+}
+
+#pragma mark - Overriden getters
+
+- (NSMutableArray *)mutableAttachments {
+    if (!_mutableAttachments) {
+        _mutableAttachments = [NSMutableArray array];
+    }
+    return _mutableAttachments;
 }
 
 @end

@@ -18,6 +18,8 @@
 #import <Foundation/Foundation.h>
 @class MMXMessage;
 @class MMXInternalMessageAdaptor;
+@class MMXPushMessage;
+
 @import MagnetMaxCore;
 
 @interface MagnetDelegate : NSObject<MMModule>
@@ -36,6 +38,10 @@
 - (NSString *)sendMessage:(MMXMessage *)message
 				  success:(void (^)(NSSet *invalidUsers))success
 				  failure:(void (^)(NSError *error))failure;
+
+- (NSString *)sendPushMessage:(MMXPushMessage *)message
+                      success:(void (^)(NSSet * invalidDevices))success
+                      failure:(void (^)(NSError *error))failure;
 
 - (NSString *)sendInternalMessageFormat:(MMXInternalMessageAdaptor *)message
 								success:(void (^)(NSSet *invalidUsers))success

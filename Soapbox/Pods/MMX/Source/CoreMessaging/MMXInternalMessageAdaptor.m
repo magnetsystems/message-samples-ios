@@ -139,7 +139,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 					 @"channelPublishPermissions":[MMXTopic publishPermissionsAsString:channel.publishPermissions],
 					 @"channelName":channel.name,
 					 @"channelSummary":channel.summary ?: [NSNull null],
-					 @"channelCreatorUsername":channel.ownerUserID ?: [NSNull null],
+					 @"channelOwnerId":channel.ownerUserID ?: [NSNull null],
 					 @"channelCreationDate":channel.creationDate ? [MMXUtils stringIniso8601Format:channel.creationDate] : [NSNull null],
 					 @"inviteIsAccepted":@(response)};
 	return msg;
@@ -154,7 +154,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 					 @"channelPublishPermissions":[MMXTopic publishPermissionsAsString:channel.publishPermissions],
 					 @"channelName":channel.name,
 					 @"channelSummary":channel.summary ?: [NSNull null],
-					 @"channelCreatorUsername":channel.ownerUserID ?: [NSNull null],
+					 @"channelOwnerId":channel.ownerUserID ?: [NSNull null],
 					 @"channelCreationDate":channel.creationDate ? [MMXUtils stringIniso8601Format:channel.creationDate] : [NSNull null]};
 	return msg;
 }

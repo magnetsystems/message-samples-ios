@@ -21,6 +21,7 @@
 @class MMPasswordResetRequest;
 @class MMCall;
 @class MMUser;
+@class MMRefreshTokenRequest;
 
 
 @protocol MMUserServiceProtocol <NSObject>
@@ -110,6 +111,16 @@
 - (MMCall *)getUsersByUserIds:(NSArray <NSString *>*)userIds
                       success:(void (^)(NSArray <MMUser *>*response))success
                       failure:(void (^)(NSError *error))failure;
+
+/**
+ 
+ POST /com.magnet.server/user/newtoken
+ @param body style:BODY
+ @return A 'MMCall' object.
+ */
+- (MMCall *)renewAccessToken:(MMRefreshTokenRequest *)body
+                     success:(void (^)(NSString *response))success
+                     failure:(void (^)(NSError *error))failure;
 
 @end
 
