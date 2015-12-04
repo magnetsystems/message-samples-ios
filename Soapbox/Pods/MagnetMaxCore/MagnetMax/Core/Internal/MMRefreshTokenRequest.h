@@ -15,25 +15,21 @@
  * permissions and limitations under the License.
  */
 
-#ifndef _MAGNETMAXCORE_
-    #define _MAGNETMAXCORE_
+#import "MMModel.h"
 
-    #import "MMEndPoint.h"
-    #import "MMServiceAdapter.h"
-    #import "MMService.h"
-    #import "MMServiceMethod.h"
-    #import "MMServiceMethodParameter.h"
-    #import "MMServiceMethodParameterType.h"
-    #import "MMHTTPUtilities.h"
-    #import "MMServiceIOType.h"
-    #import "MMEnumAttributeContainer.h"
-	#import "MMModel.h"
-	#import "MMUser.h"
-    #import "MMOAuthViewController.h"
-    #import "MMData.h"
-    #import "MMLogger.h"
-    #import "MMLogEvent.h"
-    #import "MMDevice.h"
-    #import "MMCall.h"
 
-#endif /* _MAGNETMAXCORE_ */
+
+@interface MMRefreshTokenRequest : MMModel
+
+
+@property (nonatomic, copy) NSString *scope;
+
+@property (nonatomic, copy) NSString *grant_type;
+
+@property (nonatomic, copy) NSString *device_id;
+
+@property (nonatomic, copy) NSString *client_id;
+
+@property (nonatomic, copy) NSString *refresh_token;
+
+@end
