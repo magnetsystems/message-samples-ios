@@ -196,14 +196,14 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
         [serviceAdapter.sessionManager.reachabilityManager startMonitoring];
     }
     
-    AFOAuthCredential *savedCATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:MMCATTokenIdentifier];
-    AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:MMHATTokenIdentifier];
+    AFOAuthCredential *savedCATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter CATTokenIdentifier]];
+    AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
     
     if ((!savedCATToken || savedCATToken.isExpired)) {
         [serviceAdapter authorizeApplicationWithSuccess:^(AFOAuthCredential *credential) {
-            [AFOAuthCredential storeCredential:credential withIdentifier:MMCATTokenIdentifier];
+            [AFOAuthCredential storeCredential:credential withIdentifier:[serviceAdapter CATTokenIdentifier]];
         } failure:^(NSError *error) {
-            [AFOAuthCredential deleteCredentialWithIdentifier:MMCATTokenIdentifier];
+            [AFOAuthCredential deleteCredentialWithIdentifier:[serviceAdapter CATTokenIdentifier]];
         }];
     } else {
         serviceAdapter.CATToken = savedCATToken.accessToken;
@@ -271,12 +271,12 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 - (void)authenticateApplicationWithSuccess:(void (^)())success
                                    failure:(void (^)(NSError *error))failure {
     [self authorizeApplicationWithSuccess:^(AFOAuthCredential *credential) {
-        [AFOAuthCredential storeCredential:credential withIdentifier:MMCATTokenIdentifier];
+        [AFOAuthCredential storeCredential:credential withIdentifier:[self CATTokenIdentifier]];
         if (success) {
             success();
         }
     } failure:^(NSError *error) {
-        [AFOAuthCredential deleteCredentialWithIdentifier:MMCATTokenIdentifier];
+        [AFOAuthCredential deleteCredentialWithIdentifier:[self CATTokenIdentifier]];
         if (failure) {
             failure(error);
         }
@@ -285,7 +285,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 
 - (void)authenticateUserWithSuccess:(void (^)())success
                             failure:(void (^)(NSError *error))failure {
-    NSString *refreshToken = [AFOAuthCredential retrieveCredentialWithIdentifier:MMHATTokenIdentifier].refreshToken;
+    NSString *refreshToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[self HATTokenIdentifier]].refreshToken;
     MMRefreshTokenRequest *refreshTokenRequest = [[MMRefreshTokenRequest alloc] init];
     refreshTokenRequest.grant_type = @"refresh_token";
     refreshTokenRequest.client_id = self.clientID;
@@ -443,7 +443,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     NSOperation *operation = [self.authManager authenticateUsingOAuthWithURLString:@"com.magnet.server/user/session" parameters:params
                                                                         success:^(AFOAuthCredential *credential) {
                                                                             if (rememberMe) {
-                                                                                [AFOAuthCredential storeCredential:credential withIdentifier:MMHATTokenIdentifier];
+                                                                                [AFOAuthCredential storeCredential:credential withIdentifier:[self HATTokenIdentifier]];
                                                                             }
                                                                             
                                                                             self.username = username;
@@ -486,7 +486,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
     [call executeInBackground:nil];
     
     // Delete the HAT token
-    [AFOAuthCredential deleteCredentialWithIdentifier:MMHATTokenIdentifier];
+    [AFOAuthCredential deleteCredentialWithIdentifier:[self HATTokenIdentifier]];
 
     return [self.userService logoutWithSuccess:^(BOOL response) {
         // Clean up
@@ -697,6 +697,19 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                                @"deviceID" : deviceID,
                                };
     [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidInvalidateHATTokenNotification object:self userInfo:userInfo];
+}
+
+- (NSString *)CATTokenIdentifier {
+    return [NSString stringWithFormat:@"%@.%@", [self appID], MMCATTokenIdentifier];
+}
+
+- (NSString *)HATTokenIdentifier {
+    return [NSString stringWithFormat:@"%@.%@", [self appID], MMHATTokenIdentifier];
+}
+
+- (NSString *)appID {
+    NSString *appID = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+    return appID;
 }
 
 @end
