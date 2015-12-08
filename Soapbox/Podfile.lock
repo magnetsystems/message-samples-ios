@@ -94,11 +94,11 @@ SPEC CHECKSUMS:
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
-  MagnetMax: 213be0394417b54049f7b9d04e98389d950e43c2
-  MagnetMaxCore: 3a580c4cce63813d2ca3f654d8bc18091cb757d3
+  MagnetMax: f4a10797ae6c175b6b1e0b5a235cee08bac7e65a
+  MagnetMaxCore: 90caf7b9b1d2a3e6053df77a46a9bd49eadd61c7
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: cb0e6218836680242f88cc313b6418ce1537807f
+  MMX: 2477261ef8b17da6fa42f2a2ab2e9ade7037bcd3
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
   SlackTextViewController: 1f4e8f68c156ef93de73fd422db2b8d5d5b0f4e7
 
