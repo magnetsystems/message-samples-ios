@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.magnet.mmx</groupId>
     <artifactId>ios-samples</artifactId>
-    <version>2.1.0-SNAPSHOT</version>
+    <version>2.1.0</version>
     <packaging>jar</packaging>
     <name>ios-samples</name>
     <url>http://maven.apache.org</url>
