@@ -410,7 +410,7 @@ static NSError * AFErrorFromRFC6749Section5_2Error(id object) {
     OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)queryDictionary, (CFTypeRef *)&result);
 
     if (status != errSecSuccess) {
-        NSLog(@"Unable to fetch credential with identifier \"%@\" (Error %li)", identifier, (long int)status);
+        // NSLog(@"Unable to fetch credential with identifier \"%@\" (Error %li)", identifier, (long int)status);
         return nil;
     }
 
