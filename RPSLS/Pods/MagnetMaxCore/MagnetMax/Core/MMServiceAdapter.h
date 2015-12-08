@@ -23,7 +23,7 @@
 @class MMCall;
 @class MMDevice;
 @protocol MMConfiguration;
-@class AFHTTPSessionManager;
+@class MMHTTPSessionManager;
 @protocol MMRequestOperationManager;
 
 @protocol MMClientFacade <NSObject>
@@ -52,54 +52,23 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 
 @end
 
-@protocol MMRequestFacade <NSObject>
-
-@required
-
-- (void)addValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
-
-- (void)addValue:(NSString *)value forPathParameterField:(NSString *)field;
-
-- (void)addEncodedValue:(NSString *)value forPathParameterField:(NSString *)field;
-
-- (void)addValue:(NSString *)value forQueryParameterField:(NSString *)field;
-
-- (void)addEncodedValue:(NSString *)value forQueryParameterField:(NSString *)field;
-
-@end
-
-@protocol MMProfilerConfiguration <NSObject>
-
-@property(nonatomic, strong) id beforeCallData;
-
-@property(nonatomic, copy) void (^completion)(id requestInfo, long elapsedTime, int statusCode, id beforeCallData);
-
-@end
-
-@interface MMProfiler : NSObject <MMProfilerConfiguration>
-
-+ (instancetype)profiler;
-
-+ (instancetype)profilerWithBeforeCallData:(id)data
-                                completion:(void (^)(id requestInfo, long elapsedTime, int statusCode, id beforeCallData))completion;
-
-@end
-
 @interface MMServiceAdapter : NSObject
 
 @property(nonatomic, strong) MMEndPoint *endPoint;
 
+@property(nonatomic, readonly) NSString *refreshToken;
+
+@property(nonatomic, copy) NSString *CATToken;
+
 @property(nonatomic, copy) NSString *HATToken;
-
-@property(nonatomic, copy) void (^requestInterceptor)(id<MMRequestFacade> request);
-
-@property(nonatomic, strong) id<MMProfilerConfiguration> profiler;
 
 @property(nonatomic, strong) id<MMClientFacade> client;
 
 @property(nonatomic, readonly) MMDevice *currentDevice;
 
-@property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
+@property (nonatomic, strong) MMHTTPSessionManager *backgroundSessionManager;
+
+@property (nonatomic, strong) MMHTTPSessionManager *sessionManager;
 
 @property(nonatomic, strong) id<MMRequestOperationManager> requestOperationManager;
 
@@ -131,7 +100,8 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 
 - (MMCall *)loginWithUsername:(NSString *)username
                      password:(NSString *)password
-                      success:(void (^)(BOOL success))success
+                   rememberMe:(BOOL)rememberMe
+                      success:(void (^)(BOOL successful))success
                       failure:(void (^)(NSError *error))failure;
 
 - (MMCall *)logoutWithSuccess:(void (^)(BOOL response))success
@@ -146,6 +116,12 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 - (void)resendReliableCalls;
 
 - (void)cancelAllOperations;
+
+- (void)authenticateApplicationWithSuccess:(void (^)())success
+                                   failure:(void (^)(NSError *error))failure;
+
+- (void)authenticateUserWithSuccess:(void (^)())success
+                            failure:(void (^)(NSError *error))failure;
 
 /**
  * Posted when (additional) configuration is received.

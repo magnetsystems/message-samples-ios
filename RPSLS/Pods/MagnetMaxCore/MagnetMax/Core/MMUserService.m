@@ -20,6 +20,7 @@
 #import "MMServiceMethodParameter.h"
 #import "MMPasswordResetRequest.h"
 #import "MMUser.h"
+#import "MMRefreshTokenRequest.h"
 
 
 @implementation MMUserService
@@ -239,6 +240,27 @@
         getUsersByUserIdsSuccessFailure.returnComponentType = MMServiceIOTypeMagnetNode;
         getUsersByUserIdsSuccessFailure.returnTypeClass = MMUser.class;
         serviceMetaData[NSStringFromSelector(getUsersByUserIdsSuccessFailure.selector)] = getUsersByUserIdsSuccessFailure;
+        
+        // schema for service method renewAccessToken:success:failure:
+        MMServiceMethod *renewAccessTokenSuccessFailure = [[MMServiceMethod alloc] init];
+        renewAccessTokenSuccessFailure.clazz = [self class];
+        renewAccessTokenSuccessFailure.selector = @selector(renewAccessToken:success:failure:);
+        renewAccessTokenSuccessFailure.path = @"com.magnet.server/user/newtoken";
+        renewAccessTokenSuccessFailure.requestMethod = MMRequestMethodPOST;
+        renewAccessTokenSuccessFailure.produces = [NSSet setWithObjects:@"application/json", nil];
+        
+        NSMutableArray *renewAccessTokenSuccessFailureParams = [NSMutableArray array];
+        MMServiceMethodParameter *renewAccessTokenSuccessFailureParam0 = [[MMServiceMethodParameter alloc] init];
+        renewAccessTokenSuccessFailureParam0.name = @"body";
+        renewAccessTokenSuccessFailureParam0.requestParameterType = MMServiceMethodParameterTypeBody;
+        renewAccessTokenSuccessFailureParam0.type = MMServiceIOTypeMagnetNode;
+        renewAccessTokenSuccessFailureParam0.typeClass = MMRefreshTokenRequest.class;
+        renewAccessTokenSuccessFailureParam0.isOptional = NO;
+        [renewAccessTokenSuccessFailureParams addObject:renewAccessTokenSuccessFailureParam0];
+        
+        renewAccessTokenSuccessFailure.parameters = renewAccessTokenSuccessFailureParams;
+        renewAccessTokenSuccessFailure.returnType = MMServiceIOTypeString;
+        serviceMetaData[NSStringFromSelector(renewAccessTokenSuccessFailure.selector)] = renewAccessTokenSuccessFailure;
 
         
         __metaData = serviceMetaData;

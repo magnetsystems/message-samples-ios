@@ -33,8 +33,8 @@ import MMX
     */
     static public func configure(configuration: MMConfiguration) {
         registerObservers()
-        serviceAdapter = MMServiceAdapter(configuration: configuration)
         MMCoreConfiguration.currentConfiguration = configuration
+        serviceAdapter = MMServiceAdapter(configuration: configuration)
         MMCoreConfiguration.serviceAdapter = serviceAdapter
         
         // Register Modules

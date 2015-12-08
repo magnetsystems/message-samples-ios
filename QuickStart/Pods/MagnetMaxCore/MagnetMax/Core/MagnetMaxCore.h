@@ -34,5 +34,6 @@
     #import "MMLogger.h"
     #import "MMLogEvent.h"
     #import "MMDevice.h"
+    #import "MMCall.h"
 
 #endif /* _MAGNETMAXCORE_ */

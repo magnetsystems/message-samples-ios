@@ -183,6 +183,26 @@ NS_ASSUME_NONNULL_BEGIN
 	publishPermissions:(MMXPublishPermissions)publishPermissions
 			   success:(nullable void (^)(MMXChannel *channel))success
 			   failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ *  Method to create a new channel.
+ *
+ *  @param name					The name you want for the new channel must be unique. Cannot have spaces. The valid character set is alphanumeric plus period, dash and underscore. .-_
+ *  @param summary				The summary you want for the channel. (Used to give other users a better idea about the purpose of the channel).
+ *  @param isPublic				Set to YES if you want the channel to be discoverable by other users.
+ *  @param publishPermissions	Permissions level required to be able to post; Owner/Creator only, Subscribers, Anyone. Owner can always publish.
+ *  @param subscribers          The set of users to auto-subscribe.
+ *  @param success				Block called if operation is successful.
+ *  @param failure				Block with an NSError with details about the call failure.
+ */
++ (void)createWithName:(NSString *)name
+               summary:(nullable NSString *)summary
+              isPublic:(BOOL)isPublic
+    publishPermissions:(MMXPublishPermissions)publishPermissions
+           subscribers:(nullable NSSet <MMUser *>*)subscribers
+               success:(nullable void (^)(MMXChannel *channel))success
+               failure:(nullable void (^)(NSError *error))failure;
+
 /**
  *  Method to delete an existing new channel.
  *	Current user must be the owner of the channel to delete it.
@@ -245,6 +265,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)publish:(NSDictionary <NSString *,NSString *>*)messageContent
 		success:(nullable void (^)(MMXMessage *message))success
 		failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ *  Method to publish to a channel.
+ *
+ *  @param message  The message you want to publish
+ *  @param success  Block with the published message
+ *  @param failure  Block with an NSError with details about the call failure.
+ */
+- (void)publishMessage:(MMXMessage *)message
+               success:(nullable void (^)())success
+               failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Get messages previous posted to this channel.

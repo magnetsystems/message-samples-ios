@@ -686,16 +686,26 @@
 					});
 				}
 			} else {
-				MMXTopicSubscribersResponse *response = [[MMXTopicSubscribersResponse alloc] initWithIQ:iq];
-				NSString* iqId = [iq elementID];
-				[self.delegate stopTrackingIQWithID:iqId];
-				if (response) {
-					if (success) {
-						dispatch_async(self.callbackQueue, ^{
-							success(response.totalCount,response.subscribers);
-						});
-					}
-				} else {
+                MMXTopicSubscribersResponse *response = [[MMXTopicSubscribersResponse alloc] initWithIQ:iq];
+                NSString* iqId = [iq elementID];
+                [self.delegate stopTrackingIQWithID:iqId];
+                if (response) {
+                    [MMUser usersWithUserIDs:response.subscribers success:^(NSArray *users) {
+                        if (success) {
+                            dispatch_async(self.callbackQueue, ^{
+                                success(response.totalCount, users);
+                            });
+                        }
+                    } failure:^(NSError * _Nonnull error) {
+                        [[MMLogger sharedLogger] error:@"Failed to get users for subscribers\n%@",error];
+                        if (failure) {
+                            dispatch_async(self.callbackQueue, ^{
+                                failure(error);
+                            });
+                        }
+                        
+                    }];
+                } else {
 					if (failure) {
 						dispatch_async(self.callbackQueue, ^{
 							failure([MMXClient errorWithTitle:@"Subscribers Error" message:@"An unknown error occured" code:500]);

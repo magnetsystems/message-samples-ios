@@ -59,15 +59,7 @@
 }
 
 + (BOOL)isValidMetaData:(NSDictionary *)metaData {
-	if (metaData == nil) {
-		return YES;
-	}
-	for (id value in [metaData allValues]) {
-		if (![value isKindOfClass:[NSString class]]) {
-			return NO;
-		}
-	}
-	return YES;
+    return YES;
 }
 
 #pragma mark - Payload Conversion

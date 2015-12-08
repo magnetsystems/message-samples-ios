@@ -1,6 +1,9 @@
 #import <UIKit/UIKit.h>
 
 #import "MagnetMaxCore.h"
+#import "MMAsynchronousOperation.h"
+#import "MMCall.h"
+#import "MMCall_Private.h"
 #import "MMClientApplication.h"
 #import "MMClientRegistrationRequest.h"
 #import "MMData.h"

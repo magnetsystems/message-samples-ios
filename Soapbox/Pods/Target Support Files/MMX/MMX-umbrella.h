@@ -65,6 +65,7 @@
 #import "MMXPubSubManager_Private.h"
 #import "MMXPubSubMessage.h"
 #import "MMXPubSubMessage_Private.h"
+#import "MMXPubSubService.h"
 #import "MMXTopic.h"
 #import "MMXTopic_Private.h"
 #import "MMXTopicListResponse.h"
