@@ -984,8 +984,8 @@ int const kReconnectionTimerInterval = 4;
                                            messageContent:metaData.copy];
         if (receivedAttachments.count > 0) {
             NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:receivedAttachments.count];
-            for (NSString *attachmentJsonString in receivedAttachments) {
-                [attachments addObject:[MMAttachment fromJSONString:attachmentJsonString]];
+            for (NSDictionary *attachmentDictionary in receivedAttachments) {
+                [attachments addObject:[MMAttachment fromDictionary:attachmentDictionary]];
             }
             msg.attachments = attachments;
         }
@@ -1073,8 +1073,8 @@ int const kReconnectionTimerInterval = 4;
                 MMXMessage *channelMessage = [MMXMessage messageFromPubSubMessage:pubMsg sender:sender];
                 if (receivedAttachments.count > 0) {
                     NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:receivedAttachments.count];
-                    for (NSString *attachmentJsonString in receivedAttachments) {
-                        [attachments addObject:[MMAttachment fromJSONString:attachmentJsonString]];
+                    for (NSDictionary *attachmentDictionary in receivedAttachments) {
+                        [attachments addObject:[MMAttachment fromDictionary:attachmentDictionary]];
                     }
                     channelMessage.attachments = attachments;
                 }

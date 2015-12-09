@@ -196,7 +196,7 @@ import Foundation
     func toDictionary() -> [String: AnyObject] {
         var dictionary = ["mimeType": mimeType]
         if let attachmentID = self.attachmentID {
-            dictionary["attachmentID"] = attachmentID
+            dictionary["attachmentId"] = attachmentID
         }
         if let name = self.name {
             dictionary["name"] = name
@@ -271,7 +271,7 @@ import Foundation
     */
     class func fromDictionary(dictionary: [String: AnyObject]) -> Self? {
         let attachment = self.init(mimeType: dictionary["mimeType"] as! String, name: dictionary["name"] as? String, description: dictionary["summary"] as? String)
-        attachment.attachmentID = dictionary["attachmentID"] as? String
+        attachment.attachmentID = dictionary["attachmentId"] as? String
         
         return attachment
     }
