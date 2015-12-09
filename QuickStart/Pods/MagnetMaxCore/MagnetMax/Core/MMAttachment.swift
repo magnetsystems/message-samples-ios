@@ -269,7 +269,7 @@ import Foundation
      
         - Returns: An attachment instance.
     */
-    class func fromDictionary(dictionary: [String: AnyObject]) -> Self? {
+    class public func fromDictionary(dictionary: [String: AnyObject]) -> Self? {
         let attachment = self.init(mimeType: dictionary["mimeType"] as! String, name: dictionary["name"] as? String, description: dictionary["summary"] as? String)
         attachment.attachmentID = dictionary["attachmentId"] as? String
         
