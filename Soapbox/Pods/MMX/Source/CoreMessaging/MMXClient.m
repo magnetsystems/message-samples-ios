@@ -967,9 +967,18 @@ int const kReconnectionTimerInterval = 4;
         }
         
         // Handle attachments
-        NSArray *receivedAttachments = message.metaData[@"_attachments"];
         NSMutableDictionary *metaData = message.metaData.mutableCopy;
-        [metaData removeObjectForKey:@"_attachments"];
+        NSArray *receivedAttachments;
+        NSString *attachmentsJSONString = message.metaData[@"_attachments"];
+        if (attachmentsJSONString) {
+            NSData *attachmentsJSON = [attachmentsJSONString dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *serializationError;
+            id attachments = [NSJSONSerialization JSONObjectWithData:attachmentsJSON options:0 error:&serializationError];
+            if (!serializationError) {
+                receivedAttachments = attachments;
+            }
+            [metaData removeObjectForKey:@"_attachments"];
+        }
         
         MMXMessage *msg = [MMXMessage messageToRecipients:[NSSet setWithArray:usersCopy]
                                            messageContent:metaData.copy];
@@ -1047,9 +1056,18 @@ int const kReconnectionTimerInterval = 4;
                 NSPredicate *usernamePredicate = [NSPredicate predicateWithFormat:@"userID = %@",pubMsg.senderUserID.username];
                 MMUser *sender = [users filteredArrayUsingPredicate:usernamePredicate].firstObject;
                 // Handle attachments
-                NSArray *receivedAttachments = pubMsg.metaData[@"_attachments"];
                 NSMutableDictionary *metaData = pubMsg.metaData.mutableCopy;
-                [metaData removeObjectForKey:@"_attachments"];
+                NSArray *receivedAttachments;
+                NSString *attachmentsJSONString = pubMsg.metaData[@"_attachments"];
+                if (attachmentsJSONString) {
+                    NSData *attachmentsJSON = [attachmentsJSONString dataUsingEncoding:NSUTF8StringEncoding];
+                    NSError *serializationError;
+                    id attachments = [NSJSONSerialization JSONObjectWithData:attachmentsJSON options:0 error:&serializationError];
+                    if (!serializationError) {
+                        receivedAttachments = attachments;
+                    }
+                    [metaData removeObjectForKey:@"_attachments"];
+                }
                 pubMsg.metaData = metaData;
                 
                 MMXMessage *channelMessage = [MMXMessage messageFromPubSubMessage:pubMsg sender:sender];

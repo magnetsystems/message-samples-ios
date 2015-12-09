@@ -109,7 +109,12 @@
                 for (MMAttachment *attachment in self.mutableAttachments) {
                     [attachmentsToSend addObject:[attachment toJSONString]];
                 }
-                messageContent[@"_attachments"] = attachmentsToSend;
+                NSError *serializationError;
+                NSData *attachmentsJSON = [NSJSONSerialization dataWithJSONObject:attachmentsToSend options:0 error:&serializationError];
+                NSString *attachmentsJSONString = [[NSString alloc] initWithData:attachmentsJSON encoding:NSUTF8StringEncoding];
+                if (!serializationError) {
+                    messageContent[@"_attachments"] = attachmentsJSONString;
+                }
                 self.messageContent = messageContent;
                 msg.metaData = self.messageContent;
                 
@@ -174,7 +179,12 @@
                     for (MMAttachment *attachment in self.mutableAttachments) {
                         [attachmentsToSend addObject:[attachment toJSONString]];
                     }
-                    messageContent[@"_attachments"] = attachmentsToSend;
+                    NSError *serializationError;
+                    NSData *attachmentsJSON = [NSJSONSerialization dataWithJSONObject:attachmentsToSend options:0 error:&serializationError];
+                    NSString *attachmentsJSONString = [[NSString alloc] initWithData:attachmentsJSON encoding:NSUTF8StringEncoding];
+                    if (!serializationError) {
+                        messageContent[@"_attachments"] = attachmentsJSONString;
+                    }
                     self.messageContent = messageContent;
                     
                     [[MagnetDelegate sharedDelegate] sendMessage:self success:^(NSSet *invalidUsers) {

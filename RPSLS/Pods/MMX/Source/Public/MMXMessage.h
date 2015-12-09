@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  The content you want to send.
  *	NSDictionary can only contain objects that are JSON serializable.
  */
-@property(nonatomic, readonly) NSDictionary *messageContent;
+@property(nonatomic, readonly) NSDictionary <NSString *, NSString *> *messageContent;
 
 /**
  *  The list of attachments associated with the message.
