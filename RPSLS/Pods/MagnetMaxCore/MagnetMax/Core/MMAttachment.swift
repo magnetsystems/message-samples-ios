@@ -64,11 +64,18 @@ import Foundation
     public lazy var downloadURL: NSURL? = {
         [unowned self] in
         if let attachmentID = self.attachmentID, let accessToken = MMCoreConfiguration.serviceAdapter.HATToken {
-            let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)?access_token=\(accessToken)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)
+            var userIDQueryParam = ""
+            if let userID = self.senderId {
+                userIDQueryParam = "&user_id=\(userID)"
+            }
+            let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)?access_token=\(accessToken)\(userIDQueryParam)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)
             return downloadURL
         }
         return nil
         }()
+    
+    /// The sender ID for the attachment.
+    private var senderId: String?
     
     /**
         Initialize attachment.
@@ -186,6 +193,7 @@ import Foundation
         self.mimeType = mimeType
         self.name = name
         self.summary = description
+        senderId = MMUser.currentUser()?.userID
     }
     
     /**
@@ -197,6 +205,9 @@ import Foundation
         var dictionary = ["mimeType": mimeType]
         if let attachmentID = self.attachmentID {
             dictionary["attachmentId"] = attachmentID
+        }
+        if let senderId = self.senderId {
+            dictionary["senderId"] = senderId
         }
         if let name = self.name {
             dictionary["name"] = name
@@ -272,6 +283,7 @@ import Foundation
     class public func fromDictionary(dictionary: [String: AnyObject]) -> Self? {
         let attachment = self.init(mimeType: dictionary["mimeType"] as! String, name: dictionary["name"] as? String, description: dictionary["summary"] as? String)
         attachment.attachmentID = dictionary["attachmentId"] as? String
+        attachment.senderId = dictionary["senderId"] as? String
         
         return attachment
     }
@@ -297,7 +309,7 @@ import Foundation
     */
     public func downloadToFile(fileURL: NSURL, success: (Void -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
-            MMAttachmentService.download(attachmentID, success: { URL in
+            MMAttachmentService.download(attachmentID, userID: senderId, success: { URL in
                 do {
                     try NSFileManager.defaultManager().moveItemAtURL(URL, toURL: fileURL)
                 } catch let error as NSError {
@@ -319,7 +331,7 @@ import Foundation
     */
     public func downloadFileWithSuccess(success: ((fileURL: NSURL) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
-            MMAttachmentService.download(attachmentID, success: { URL in
+            MMAttachmentService.download(attachmentID, userID: senderId, success: { URL in
                 self.fileURL = URL
                 success?(fileURL: URL)
                 }) { error in
@@ -337,7 +349,7 @@ import Foundation
     */
     public func downloadDataWithSuccess(success: ((data: NSData) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
-            MMAttachmentService.download(attachmentID, success: { URL in
+            MMAttachmentService.download(attachmentID, userID: senderId, success: { URL in
                 self.data = NSData(contentsOfURL: URL)
                 success?(data: self.data!)
                 }) { error in
@@ -355,7 +367,7 @@ import Foundation
     */
     public func downloadInputStreamWithSuccess(success: ((inputStream: NSInputStream, length: Int64) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
-            MMAttachmentService.download(attachmentID, success: { URL in
+            MMAttachmentService.download(attachmentID, userID: senderId, success: { URL in
                 self.inputStream = NSInputStream(URL: URL)
                 let fileAttributes = try? NSFileManager.defaultManager().attributesOfItemAtPath(URL.path!)
                 self.length = (fileAttributes?[NSFileSize] as? NSNumber)?.longLongValue
@@ -375,7 +387,7 @@ import Foundation
     */
     public func downloadStringWithSuccess(success: ((content: String) -> Void)?, failure: ((error: NSError) -> Void)?) {
         if let attachmentID = self.attachmentID {
-            MMAttachmentService.download(attachmentID, success: { URL in
+            MMAttachmentService.download(attachmentID, userID: senderId, success: { URL in
                 if let data = NSData(contentsOfURL: URL), content = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
                     success?(content: content)
                 }

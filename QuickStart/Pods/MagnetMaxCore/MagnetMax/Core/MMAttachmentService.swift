@@ -20,7 +20,7 @@ import AFNetworking
 
 @objc public class MMAttachmentService: NSObject {
     
-    static public func upload(attachments: [MMAttachment], success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
+    static public func upload(attachments: [MMAttachment], metaData:[String: String]?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
         guard let uploadURL = NSURL(string: "com.magnet.server/file/save/multiple", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)?.absoluteString else {
             fatalError("uploadURL should not be nil")
         }
@@ -40,6 +40,13 @@ import AFNetworking
                 }
             }
             }, error: nil)
+        
+        // Add metaData
+        if let metaDataToAdd = metaData {
+            for (key, value) in metaDataToAdd {
+                request.setValue(value, forHTTPHeaderField: "metadata_\(key)")
+            }
+        }
         
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")
         let uploadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.uploadTaskWithStreamedRequest(request, progress: nil) { response, responseObject, error in
@@ -64,8 +71,12 @@ import AFNetworking
         uploadTask.resume()
     }
     
-    static public func download(attachmentID: String, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
-        guard let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL) else {
+    static public func download(attachmentID: String, userID userIdentifier: String?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
+        var userIDQueryParam = ""
+        if let userID = userIdentifier {
+            userIDQueryParam = "?user_id=\(userID)"
+        }
+        guard let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)\(userIDQueryParam)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL) else {
             fatalError("downloadURL should not be nil")
         }
         let request = NSMutableURLRequest(URL: downloadURL)

@@ -339,6 +339,10 @@
     channel.subscribers = [[subscribers valueForKey:@"userID"] allObjects];
     MMXPubSubService *pubSubService = [[MMXPubSubService alloc] init];
     MMCall *call = [pubSubService createChannel:channel success:^(NSString *response) {
+        NSMutableArray *subscribers = [channel.subscribers mutableCopy];
+        [subscribers addObject:[MMUser currentUser].userID];
+        channel.subscribers = subscribers;
+        channel.isSubscribed = YES;
         if (success) {
             success(channel);
         }
@@ -474,6 +478,7 @@
 
 	NSString *messageID = [[MMXClient sharedClient] generateMessageID];
 	MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self asTopic] content:nil metaData:messageContent];
+    msg.timestamp = [NSDate date];
 	msg.messageID = messageID;
 	if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
 		if ([MMUser currentUser]) {
@@ -489,6 +494,8 @@
 	[[MMXClient sharedClient].pubsubManager publishPubSubMessage:msg success:^(BOOL successful, NSString *messageID) {
 		if (success) {
 			MMXMessage *message = [MMXMessage messageToChannel:self.copy messageContent:messageContent];
+            message.sender = [MMUser currentUser];
+            message.timestamp = msg.timestamp;
 			message.messageID = messageID;
 			message.channel = self.copy;
 			success(message);
