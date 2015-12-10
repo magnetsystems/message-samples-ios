@@ -1055,29 +1055,7 @@ int const kReconnectionTimerInterval = 4;
             for (MMXPubSubMessage *pubMsg in messageArray) {
                 NSPredicate *usernamePredicate = [NSPredicate predicateWithFormat:@"userID = %@",pubMsg.senderUserID.username];
                 MMUser *sender = [users filteredArrayUsingPredicate:usernamePredicate].firstObject;
-                // Handle attachments
-                NSMutableDictionary *metaData = pubMsg.metaData.mutableCopy;
-                NSArray *receivedAttachments;
-                NSString *attachmentsJSONString = pubMsg.metaData[@"_attachments"];
-                if (attachmentsJSONString) {
-                    NSData *attachmentsJSON = [attachmentsJSONString dataUsingEncoding:NSUTF8StringEncoding];
-                    NSError *serializationError;
-                    id attachments = [NSJSONSerialization JSONObjectWithData:attachmentsJSON options:0 error:&serializationError];
-                    if (!serializationError) {
-                        receivedAttachments = attachments;
-                    }
-                    [metaData removeObjectForKey:@"_attachments"];
-                }
-                pubMsg.metaData = metaData;
-                
                 MMXMessage *channelMessage = [MMXMessage messageFromPubSubMessage:pubMsg sender:sender];
-                if (receivedAttachments.count > 0) {
-                    NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:receivedAttachments.count];
-                    for (NSDictionary *attachmentDictionary in receivedAttachments) {
-                        [attachments addObject:[MMAttachment fromDictionary:attachmentDictionary]];
-                    }
-                    channelMessage.attachments = attachments;
-                }
                 [[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveMessageNotification
                                                                     object:nil
                                                                   userInfo:@{MMXMessageKey:channelMessage}];
