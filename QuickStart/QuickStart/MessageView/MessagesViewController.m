@@ -234,48 +234,53 @@ NSString * const kTextContent = @"textContent";
 }
 
 - (IBAction)changeUserPressed:(id)sender {
-	UIAlertController *alertController = [UIAlertController
-										  alertControllerWithTitle:@"Send Messages To:"
-										  message:nil
-										  preferredStyle:UIAlertControllerStyleAlert];
-	
-	UIAlertAction *meAction = [UIAlertAction
-									  actionWithTitle:[MMUser currentUser].firstName
-									  style:UIAlertActionStyleDefault
-									  handler:^(UIAlertAction *action)
-									  {
-											  self.currentRecipient = [MMUser currentUser];
-									  }];
-	[alertController addAction:meAction];
-	if (self.echoBot) {
-		UIAlertAction *echoAction = [UIAlertAction
-									 actionWithTitle:self.echoBot.firstName
-									 style:UIAlertActionStyleDefault
-									 handler:^(UIAlertAction *action)
-									 {
-										 self.currentRecipient = self.echoBot.copy;
-									 }];
-		[alertController addAction:echoAction];
-	}
-	if (self.amazingBot) {
-		UIAlertAction *amazingAction = [UIAlertAction
-										actionWithTitle:self.amazingBot.firstName
-										style:UIAlertActionStyleDefault
-										handler:^(UIAlertAction *action)
-										{
-											self.currentRecipient = self.amazingBot.copy;
-										}];
-		[alertController addAction:amazingAction];
-
-	}
-	UIAlertAction *cancelAction = [UIAlertAction
-									actionWithTitle:@"Cancel"
-									style:UIAlertActionStyleCancel
-									handler:^(UIAlertAction *action)
-									{
-									}];
-	[alertController addAction:cancelAction];
-	[self presentViewController:alertController animated:YES completion:nil];
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"Send Messages To:"
+                                          message:nil
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *meAction = [UIAlertAction
+                               actionWithTitle:[MMUser currentUser].firstName
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   [self.textView refreshFirstResponder];
+                                   self.currentRecipient = [MMUser currentUser];
+                               }];
+    [alertController addAction:meAction];
+    if (self.echoBot) {
+        UIAlertAction *echoAction = [UIAlertAction
+                                     actionWithTitle:self.echoBot.firstName
+                                     style:UIAlertActionStyleDefault
+                                     handler:^(UIAlertAction *action)
+                                     {
+                                         [self.textView refreshFirstResponder];
+                                         self.currentRecipient = self.echoBot.copy;
+                                         
+                                     }];
+        [alertController addAction:echoAction];
+    }
+    if (self.amazingBot) {
+        UIAlertAction *amazingAction = [UIAlertAction
+                                        actionWithTitle:self.amazingBot.firstName
+                                        style:UIAlertActionStyleDefault
+                                        handler:^(UIAlertAction *action)
+                                        {
+                                            [self.textView refreshFirstResponder];
+                                            self.currentRecipient = self.amazingBot.copy;
+                                        }];
+        [alertController addAction:amazingAction];
+        
+    }
+    UIAlertAction *cancelAction = [UIAlertAction
+                                   actionWithTitle:@"Cancel"
+                                   style:UIAlertActionStyleCancel
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       [self.textView refreshFirstResponder];
+                                   }];
+    [alertController addAction:cancelAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - Helpers

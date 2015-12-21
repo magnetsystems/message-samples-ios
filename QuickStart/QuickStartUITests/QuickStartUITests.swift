@@ -51,7 +51,12 @@ class UITestQuickStart: XCTestCase {
         app.toolbars.buttons["Send"].tap()
         XCTAssertEqual(app.staticTexts[message].exists, true)
         XCTAssertEqual(app.tables.cells.staticTexts[message].exists, true)
-        sleep(3)
+    }
+    
+    private func assertMessageCount() {
+        let count = NSPredicate(format: "count == %d", expectedNumberOfMessages)
+        expectationForPredicate(count, evaluatedWithObject: app.tables.cells, handler: nil)
+        waitForExpectationsWithTimeout(10, handler: nil)
     }
     
     
@@ -61,7 +66,8 @@ class UITestQuickStart: XCTestCase {
         XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].exists)
         app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].tap()
         sendMessage("test1")
-        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
+        //        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
+        assertMessageCount()
     }
     
     func test2SendMessageEchoBot() {
@@ -70,7 +76,8 @@ class UITestQuickStart: XCTestCase {
         XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["Echo"].exists)
         app.alerts["Send Messages To:"].collectionViews.buttons["Echo"].tap()
         sendMessage("test2")
-        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
+        //        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
+        assertMessageCount()
     }
     
     func test3SendMessageAmazingBot() {
@@ -79,13 +86,15 @@ class UITestQuickStart: XCTestCase {
         XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["Amazing"].exists)
         app.alerts["Send Messages To:"].collectionViews.buttons["Amazing"].tap()
         sendMessage("test3")
-        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
+        //        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
+        assertMessageCount()
     }
     
     func test4SendMessageReservedCharacters() {
         launchClearScreen()
         XCTAssert(app.buttons["Send"].exists)
         sendMessage("!@#$%^&*_.")
-        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
+        //        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
+        assertMessageCount()
     }
 }
