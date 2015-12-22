@@ -56,7 +56,7 @@ class UITestQuickStart: XCTestCase {
     private func assertMessageCount() {
         let count = NSPredicate(format: "count == %d", expectedNumberOfMessages)
         expectationForPredicate(count, evaluatedWithObject: app.tables.cells, handler: nil)
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectationsWithTimeout(20, handler: nil)
     }
     
     
