@@ -30,6 +30,7 @@
 #import "MMServiceMethodParameter.h"
 #import "MMServiceMethodParameterType.h"
 #import "MMTimeUnit.h"
+#import "MMUpdateProfileRequest.h"
 #import "MMUser.h"
 #import "MMUserInfoService.h"
 #import "MMUserRealm.h"

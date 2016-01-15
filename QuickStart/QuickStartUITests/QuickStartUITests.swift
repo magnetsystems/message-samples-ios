@@ -1,100 +1,36 @@
 //
-//  UITestQuickStart.swift
-//  UITestQuickStart
+//  QuickStartUITests.swift
+//  QuickStartUITests
 //
-//  Created by Daniel Gulko on 9/16/15.
-//  Copyright © 2015 Magnet Systems, Inc. All rights reserved.
+//  Created by Lorenzo Stanton on 1/14/16.
+//  Copyright © 2016 Lorenzo Stanton. All rights reserved.
 //
 
 import XCTest
-import Foundation
 
-class UITestQuickStart: XCTestCase {
-    let expectedNumberOfMessages: UInt = 2
-    let app = XCUIApplication()
-    
+class QuickStartUITests: XCTestCase {
+        
     override func setUp() {
         super.setUp()
         
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = true
+        continueAfterFailure = false
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
         XCUIApplication().launch()
-        sleep(5)
-        print("done launching")
-        
-        if XCUIApplication().alerts.collectionViews.buttons["OK"].exists {
-            XCUIApplication().alerts.collectionViews.buttons["OK"].tap()
-        }
-        
+
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
     
     override func tearDown() {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
-    // clears the default hello world from send message text field
-    private func launchClearScreen() {
-        print("running clear screen function");
-        app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element.pressForDuration(1.0)
-        app.menuItems["Select All"].tap()
-        app.menuItems["Cut"].tap()
+    func testExample() {
+        // Use recording to get started writing UI tests.
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
-    // send message and assert message sent
-    private func sendMessage(message: String) {
-        XCTAssert(app.buttons["Send"].exists)
-        app.toolbars.containingType(.Button, identifier:"Send").childrenMatchingType(.TextView).element.typeText(message)
-        app.toolbars.buttons["Send"].tap()
-        XCTAssertEqual(app.staticTexts[message].exists, true)
-        XCTAssertEqual(app.tables.cells.staticTexts[message].exists, true)
-    }
-    
-    private func assertMessageCount() {
-        let count = NSPredicate(format: "count == %d", expectedNumberOfMessages)
-        expectationForPredicate(count, evaluatedWithObject: app.tables.cells, handler: nil)
-        waitForExpectationsWithTimeout(20, handler: nil)
-    }
-    
-    
-    func test1SendMessageQuickstart() {
-        launchClearScreen()
-        app.navigationBars["MessagesView"].buttons["Share"].tap()
-        XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].exists)
-        app.alerts["Send Messages To:"].collectionViews.buttons["QuickstartUser1"].tap()
-        sendMessage("test1")
-        //        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
-        assertMessageCount()
-    }
-    
-    func test2SendMessageEchoBot() {
-        launchClearScreen()
-        app.navigationBars["MessagesView"].buttons["Share"].tap()
-        XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["Echo"].exists)
-        app.alerts["Send Messages To:"].collectionViews.buttons["Echo"].tap()
-        sendMessage("test2")
-        //        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
-        assertMessageCount()
-    }
-    
-    func test3SendMessageAmazingBot() {
-        launchClearScreen()
-        app.navigationBars["MessagesView"].buttons["Share"].tap()
-        XCTAssert(app.alerts["Send Messages To:"].collectionViews.buttons["Amazing"].exists)
-        app.alerts["Send Messages To:"].collectionViews.buttons["Amazing"].tap()
-        sendMessage("test3")
-        //        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
-        assertMessageCount()
-    }
-    
-    func test4SendMessageReservedCharacters() {
-        launchClearScreen()
-        XCTAssert(app.buttons["Send"].exists)
-        sendMessage("!@#$%^&*_.")
-        //        XCTAssertEqual(app.tables.cells.count, expectedNumberOfMessages)
-        assertMessageCount()
-    }
 }

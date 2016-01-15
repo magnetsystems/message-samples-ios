@@ -380,8 +380,6 @@ int const kReconnectionTimerInterval = 4;
 - (NSString *)sendMMXMessage:(MMXInternalMessageAdaptor *)outboundMessage
 				 withOptions:(MMXMessageOptions *)options
 			  shouldValidate:(BOOL)validate {
-	
-
 	if (validate && ![self validateAndRespondToErrorsForOutboundMessage:outboundMessage]) {
 		return nil;
 	}
@@ -421,6 +419,14 @@ int const kReconnectionTimerInterval = 4;
 }
 
 - (NSString *)sendPushMessage:(MMXOutboundMessage *)message success:(void (^)(NSSet* invalidDevices))success  failure:(void (^)(NSError * error))failure  {
+    if (![self hasActiveConnection]) {
+        if (failure) {
+            NSError *error = [MMXClient errorWithTitle:@"Transport endpoint is not connected." message:@"No Connection established.\nPlease verify that the module has been initialized. https://developer.magnet.com" code:107];
+            failure(error);
+        }
+        return @"";
+    }
+    
     NSString *messageID = [self generateMessageID];
     XMPPIQ *pushIQ = [[XMPPIQ alloc] initWithType:@"set" child:nil];
     for (MMUser *user in message.recipients) {
@@ -468,6 +474,15 @@ int const kReconnectionTimerInterval = 4;
 		}
 		return NO;
 	}
+    
+    if (![self hasActiveConnection]) {
+        if ([self.delegate respondsToSelector:@selector(client:didFailToSendMessage:recipients:error:)]) {
+            NSError *error = [MMXClient errorWithTitle:@"Transport endpoint is not connected." message:@"No Connection established.\nPlease verify that the module has been initialized. https://developer.magnet.com" code:107];
+            [self.delegate client:self didFailToSendMessage:outboundMessage.messageID recipients:nil error:error];
+        }
+        return NO;
+    }
+    
 	if (outboundMessage.recipients == nil || outboundMessage.recipients.count < 1) {
 		if ([self.delegate respondsToSelector:@selector(client:didFailToSendMessage:recipients:error:)]) {
 			NSError * error = [MMXClient errorWithTitle:@"Recipients not set" message:@"Recipients cannot be nil" code:401];

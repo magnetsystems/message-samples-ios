@@ -17,10 +17,17 @@
 
 import Foundation
 
+@objc public protocol MMUserDelegate {
+    
+    static func overrideCompletion(completion:((error: NSError?) -> Void), error:NSError?, context:String)
+    
+}
+
 public extension MMUser {
     
     /// The currently logged-in user or nil.
     static private var currentlyLoggedInUser: MMUser?
+    @nonobjc static public var delegate : MMUserDelegate.Type?
     
     /**
         Registers a new user.
@@ -62,6 +69,8 @@ public extension MMUser {
             - failure: A block object to be executed when the login finishes with an error. This block has no return value and takes one argument: the error object.
      */
     static public func login(credential: NSURLCredential, rememberMe: Bool, success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
+        
+        let loginClosure : () -> Void = { () in
         MMCoreConfiguration.serviceAdapter.loginWithUsername(credential.user, password: credential.password, rememberMe: rememberMe, success: { _ in
             // Get current user now
             MMCoreConfiguration.serviceAdapter.getCurrentUserWithSuccess({ user -> Void in
@@ -75,15 +84,52 @@ public extension MMUser {
                 // Register for token expired notification
                 NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenExpired:", name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
                 
-                success?()
-            }, failure: { error in
-                failure?(error: error)
+                if let _ = self.delegate {
+                    handleCompletion(success, failure: failure, error : nil, context: "com.magnet.login.succeeded")
+                } else {
+                    success?()
+                }
+                
+                }, failure: { error in
+                    if let _ = self.delegate {
+                        handleCompletion(success, failure: failure, error : error, context: "com.magnet.login.failed")
+                    } else {
+                        failure?(error: error)
+                    }
             }).executeInBackground(nil)
             
-        }) { error in
-            failure?(error: error)
-        }.executeInBackground(nil)
+            }) { error in
+                if let _ = self.delegate {
+                    handleCompletion(success, failure: failure, error : error, context: "com.magnet.login.failed")
+                } else {
+                    failure?(error: error)
+                }
+            }.executeInBackground(nil)
+        }
+        
+        //begin login
+        if currentlyLoggedInUser != nil {
+            MMUser.logout({ () in
+                loginClosure()
+                }) { error in
+                    failure?(error : error);
+            }
+            
+        } else {
+            loginClosure()
+        }
     }
+    
+    static private func handleCompletion(success: (() -> Void)?, failure: ((error: NSError) -> Void)?, error: NSError?, context : String) {
+        delegate?.overrideCompletion({ (error) -> Void in
+            if let error = error {
+                failure?(error: error)
+            } else {
+                success?()
+            }
+            }, error: error, context: context)
+    }
+    
     
     /**
         Acts as the userToken expired event receiver.
@@ -189,6 +235,28 @@ public extension MMUser {
             }) { error in
                 failure?(error: error)
             }.executeInBackground(nil)
+    }
+    
+    /**
+        Update the currently logged-in user's profile.
+     
+        - Parameters:
+            - updateProfileRequest: A profile update request.
+            - success: A block object to be executed when the update finishes successfully. This block has no return value and takes one argument: the updated user.
+            - failure: A block object to be executed when the registration finishes with an error. This block has no return value and takes one argument: the error object.
+     */
+    static public func updateProfile(updateProfileRequest: MMUpdateProfileRequest, success: ((user: MMUser) -> Void)?, failure: ((error: NSError) -> Void)?) {
+        guard let _ = currentUser() else {
+            // FIXME: Use a different domain
+            failure?(error: NSError(domain: "MMXErrorDomain", code: 401, userInfo: nil))
+            return
+        }
+        let userService = MMUserService()
+        userService.updateProfile(updateProfileRequest, success: { user in
+            success?(user: user)
+        }) { error in
+            failure?(error: error)
+        }.executeInBackground(nil)
     }
     
     override public func isEqual(object: AnyObject?) -> Bool {
