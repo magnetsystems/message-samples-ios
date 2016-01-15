@@ -673,7 +673,7 @@
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Public" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PnF-GD-QbK">
-                                <rect key="frame" x="20" y="192" width="47" height="21"/>
+                                <rect key="frame" x="20" y="192" width="47" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -682,7 +682,7 @@
                                 <rect key="frame" x="123" y="187" width="51" height="31"/>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Publish permissions" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oc8-9y-gfx">
-                                <rect key="frame" x="20" y="243" width="95" height="50"/>
+                                <rect key="frame" x="20" y="242" width="95" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="95" id="COK-UU-zGA"/>
                                     <constraint firstAttribute="height" constant="50" id="fS6-LN-Kn3"/>
@@ -692,32 +692,25 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="L0z-gc-DmP">
-                                <rect key="frame" x="123" y="254" width="457" height="29"/>
+                                <rect key="frame" x="123" y="253" width="457" height="29"/>
                                 <segments>
                                     <segment title="OWNER"/>
                                     <segment title="SUBSCRIBERS"/>
                                     <segment title="ANYONE"/>
                                 </segments>
                             </segmentedControl>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Tag" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KWn-I5-Y3M">
-                                <rect key="frame" x="123" y="319" width="457" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Tag 1, Tag 2, Tag 3, Tag 4" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KWn-I5-Y3M">
+                                <rect key="frame" x="20" y="318" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
                                     <outlet property="delegate" destination="WPR-Aw-LNF" id="yFw-DG-4MA"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aul-he-EVC">
-                                <rect key="frame" x="20" y="319" width="54" height="30"/>
-                                <state key="normal" title="Add tag"/>
-                                <connections>
-                                    <action selector="addTagAction" destination="WPR-Aw-LNF" eventType="touchUpInside" id="TGP-G8-f2H"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Fup-63-bR3" userLabel="Tag">
-                                <rect key="frame" x="123" y="357" width="457" height="0.0"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tags cannot contain spaces." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JRK-up-JGX">
+                                <rect key="frame" x="213.5" y="356.5" width="173" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -726,24 +719,21 @@
                             <constraint firstAttribute="leadingMargin" secondItem="PnF-GD-QbK" secondAttribute="leading" id="0fC-7Z-vkz"/>
                             <constraint firstItem="Oc8-9y-gfx" firstAttribute="top" secondItem="PnF-GD-QbK" secondAttribute="bottom" constant="30" id="1oO-tP-fdW"/>
                             <constraint firstItem="Q87-hA-8Zz" firstAttribute="leading" secondItem="PnF-GD-QbK" secondAttribute="trailing" constant="56" id="25a-2b-XsX"/>
-                            <constraint firstItem="KWn-I5-Y3M" firstAttribute="leading" secondItem="Aul-he-EVC" secondAttribute="trailing" constant="49" id="9Dt-nL-FUe"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Fup-63-bR3" secondAttribute="trailing" id="Fu5-dI-DUH"/>
-                            <constraint firstItem="KWn-I5-Y3M" firstAttribute="centerY" secondItem="Aul-he-EVC" secondAttribute="centerY" id="Hcz-mR-ipw"/>
+                            <constraint firstItem="JRK-up-JGX" firstAttribute="centerX" secondItem="7N3-jh-weJ" secondAttribute="centerX" id="8cF-md-20f"/>
                             <constraint firstItem="L0z-gc-DmP" firstAttribute="leading" secondItem="Oc8-9y-gfx" secondAttribute="trailing" constant="8" id="Hgs-ao-wfF"/>
                             <constraint firstItem="Q87-hA-8Zz" firstAttribute="centerY" secondItem="PnF-GD-QbK" secondAttribute="centerY" id="IKB-KY-20G"/>
                             <constraint firstAttribute="leadingMargin" secondItem="Oc8-9y-gfx" secondAttribute="leading" id="Qq6-Ne-Mwr"/>
+                            <constraint firstItem="JRK-up-JGX" firstAttribute="top" secondItem="KWn-I5-Y3M" secondAttribute="bottom" constant="8" id="S7l-A3-dot"/>
                             <constraint firstItem="9dj-Jw-ujd" firstAttribute="top" secondItem="XqP-Ng-jDw" secondAttribute="bottom" constant="30" id="XDb-DL-Nac"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="Aul-he-EVC" secondAttribute="leading" id="Y4Q-hh-v2l"/>
                             <constraint firstItem="bCH-3x-vcP" firstAttribute="top" secondItem="9dj-Jw-ujd" secondAttribute="bottom" constant="8" id="Z8a-Pg-r1U"/>
-                            <constraint firstItem="Fup-63-bR3" firstAttribute="top" secondItem="KWn-I5-Y3M" secondAttribute="bottom" constant="8" id="bHK-rv-Jrv"/>
                             <constraint firstAttribute="trailingMargin" secondItem="bCH-3x-vcP" secondAttribute="trailing" id="cBt-bK-YYu"/>
+                            <constraint firstItem="KWn-I5-Y3M" firstAttribute="leading" secondItem="7N3-jh-weJ" secondAttribute="leadingMargin" id="cn2-oO-Oud"/>
                             <constraint firstAttribute="leadingMargin" secondItem="9dj-Jw-ujd" secondAttribute="leading" id="ghU-Ki-13m"/>
-                            <constraint firstItem="Fup-63-bR3" firstAttribute="leading" secondItem="Aul-he-EVC" secondAttribute="trailing" constant="49" id="hjk-Ea-v61"/>
+                            <constraint firstItem="KWn-I5-Y3M" firstAttribute="top" secondItem="Oc8-9y-gfx" secondAttribute="bottom" constant="26" id="i2v-Hg-o83"/>
                             <constraint firstItem="PnF-GD-QbK" firstAttribute="top" secondItem="bCH-3x-vcP" secondAttribute="bottom" constant="30" id="jb7-EX-Hrz"/>
                             <constraint firstAttribute="trailingMargin" secondItem="KWn-I5-Y3M" secondAttribute="trailing" id="jr4-YL-t4y"/>
                             <constraint firstAttribute="leadingMargin" secondItem="bCH-3x-vcP" secondAttribute="leading" id="klD-YL-Rnw"/>
                             <constraint firstAttribute="trailingMargin" secondItem="L0z-gc-DmP" secondAttribute="trailing" id="o1q-Z4-WEN"/>
-                            <constraint firstItem="Aul-he-EVC" firstAttribute="top" secondItem="Oc8-9y-gfx" secondAttribute="bottom" constant="26" id="pIu-CY-MAE"/>
                             <constraint firstItem="L0z-gc-DmP" firstAttribute="centerY" secondItem="Oc8-9y-gfx" secondAttribute="centerY" id="sTe-UT-bfP"/>
                             <constraint firstAttribute="trailingMargin" secondItem="9dj-Jw-ujd" secondAttribute="trailing" id="vbN-i1-cVH"/>
                         </constraints>
@@ -758,7 +748,6 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="lblTags" destination="Fup-63-bR3" id="WRI-fC-MCW"/>
                         <outlet property="segCtrlPermissions" destination="L0z-gc-DmP" id="sOH-3b-qcY"/>
                         <outlet property="switchIsPublic" destination="Q87-hA-8Zz" id="9JH-W4-ozp"/>
                         <outlet property="txtfName" destination="9dj-Jw-ujd" id="JL0-xL-BfC"/>
