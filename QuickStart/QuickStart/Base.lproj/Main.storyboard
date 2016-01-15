@@ -9,7 +9,7 @@
         <!--Welcome to Magnet Message!-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -66,9 +66,16 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="se9-uj-eWx">
+                                <rect key="frame" x="279" y="216" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="r0Y-X0-v8d" firstAttribute="top" secondItem="se9-uj-eWx" secondAttribute="bottom" constant="8" id="1wz-H3-Wgm"/>
                             <constraint firstItem="r0Y-X0-v8d" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="6pz-gf-8dG"/>
                             <constraint firstItem="0gM-kA-fxt" firstAttribute="top" secondItem="c0c-y3-jZV" secondAttribute="bottom" constant="20" id="O3p-iN-Rrk"/>
                             <constraint firstItem="r0Y-X0-v8d" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="UgV-d6-l0h"/>
@@ -76,6 +83,7 @@
                             <constraint firstItem="c0c-y3-jZV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Z9B-0L-nOZ"/>
                             <constraint firstItem="r0Y-X0-v8d" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-50" id="aNT-j8-Vkf"/>
                             <constraint firstItem="0gM-kA-fxt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bXP-kd-WkB"/>
+                            <constraint firstItem="se9-uj-eWx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bqU-xe-KeZ"/>
                             <constraint firstItem="c0c-y3-jZV" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="10" id="gPO-o7-LiJ"/>
                             <constraint firstItem="c0c-y3-jZV" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="yvI-sS-V5D"/>
                         </constraints>
@@ -88,6 +96,7 @@
                     <navigationItem key="navigationItem" title="Welcome to Magnet Message!" id="jZR-Ob-DJe"/>
                     <connections>
                         <outlet property="passwordTextField" destination="c0c-y3-jZV" id="nbD-MN-pm7"/>
+                        <outlet property="statusLabel" destination="se9-uj-eWx" id="84F-bY-wKl"/>
                         <outlet property="userNameTextField" destination="r0Y-X0-v8d" id="ciu-1A-vhq"/>
                         <segue destination="Ep9-MF-WJG" kind="show" identifier="featuresSegue" id="BmX-xR-s6B"/>
                     </connections>
@@ -204,7 +213,7 @@
         <!--Publish / Subscribe-->
         <scene sceneID="7dq-1m-GLR">
             <objects>
-                <tableViewController id="yN6-ot-6kL" customClass="PublichSubscribeViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="yN6-ot-6kL" customClass="PublichSubscribeViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="rPy-At-8AP">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -329,13 +338,13 @@
         <!--Channel List View Controller-->
         <scene sceneID="rKV-u6-Ft6">
             <objects>
-                <tableViewController id="9c3-Ao-spK" customClass="ChannelListViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="9c3-Ao-spK" customClass="ChannelListViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" id="h4d-CJ-Up6">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChannelCellIdentifier" rowHeight="60" id="7nQ-km-tMc" customClass="ChannelCell" customModule="KitchenSink" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChannelCellIdentifier" rowHeight="60" id="7nQ-km-tMc" customClass="ChannelCell" customModule="QuickStart" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="600" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7nQ-km-tMc" id="Gxe-Ou-Y8W">
@@ -406,7 +415,7 @@
         <!--Messages-->
         <scene sceneID="8ay-VY-qcc">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="P9H-gb-6Jz" customClass="MessagesViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="P9H-gb-6Jz" customClass="MessagesViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TJQ-2U-aEg"/>
                         <viewControllerLayoutGuide type="bottom" id="17D-M4-TAw"/>
@@ -496,7 +505,7 @@
         <!--Subscribers-->
         <scene sceneID="vPM-sq-vuI">
             <objects>
-                <tableViewController id="X72-7Q-a47" customClass="SubscribersViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="X72-7Q-a47" customClass="SubscribersViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="YEy-g9-f0I">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -553,7 +562,7 @@
         <!--Find Channels-->
         <scene sceneID="Ot1-2u-zRl">
             <objects>
-                <viewController id="tHU-Zr-BUV" customClass="FindChannelsViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="tHU-Zr-BUV" customClass="FindChannelsViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dQS-Gk-Z0g"/>
                         <viewControllerLayoutGuide type="bottom" id="FyT-eN-Ou9"/>
@@ -638,7 +647,7 @@
         <!--Create channel-->
         <scene sceneID="qfB-Io-1Kz">
             <objects>
-                <viewController id="WPR-Aw-LNF" customClass="CreateChannelViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="WPR-Aw-LNF" customClass="CreateChannelViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="XqP-Ng-jDw"/>
                         <viewControllerLayoutGuide type="bottom" id="3Jk-NM-bfn"/>
@@ -764,7 +773,7 @@
         <!--Push-->
         <scene sceneID="c3a-VX-efa">
             <objects>
-                <viewController id="Hom-KP-EyF" customClass="PushViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Hom-KP-EyF" customClass="PushViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="6m0-9j-rqh"/>
                         <viewControllerLayoutGuide type="bottom" id="EUC-8m-fhb"/>
@@ -832,7 +841,7 @@
         <!--Send & Receive Messages-->
         <scene sceneID="0qF-Ul-2SY">
             <objects>
-                <viewController id="oKR-s9-qnD" customClass="ChatViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="oKR-s9-qnD" customClass="ChatViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gy5-9C-czj"/>
                         <viewControllerLayoutGuide type="bottom" id="QWw-qE-Fwf"/>
@@ -1034,7 +1043,7 @@
         <!--Navigation Controller-->
         <scene sceneID="qu1-cx-pvy">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="evr-oH-xaO" customClass="NavigationController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="evr-oH-xaO" customClass="NavigationController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7vZ-m4-CVM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1052,7 +1061,7 @@
         <!--Register a new User-->
         <scene sceneID="Koj-05-ibO">
             <objects>
-                <viewController id="Owx-xT-Jli" customClass="UserRegistrationViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Owx-xT-Jli" customClass="UserRegistrationViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gZy-oM-MCG"/>
                         <viewControllerLayoutGuide type="bottom" id="WAb-1q-vpZ"/>
@@ -1110,7 +1119,7 @@
         <!--Retrieve Users-->
         <scene sceneID="k2L-lt-fXL">
             <objects>
-                <viewController id="ahw-ug-doK" customClass="UserRetrievalViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ahw-ug-doK" customClass="UserRetrievalViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="nbU-67-4uS"/>
                         <viewControllerLayoutGuide type="bottom" id="bG3-Lh-cs5"/>
@@ -1194,7 +1203,7 @@
         <!--Log In/Log Out-->
         <scene sceneID="uyY-iT-Ysj">
             <objects>
-                <viewController id="mBf-rx-pr8" customClass="UserLoginViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="mBf-rx-pr8" customClass="UserLoginViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dDi-3E-TzS"/>
                         <viewControllerLayoutGuide type="bottom" id="KRT-l8-xUN"/>
@@ -1271,7 +1280,7 @@
         <!--Search Users-->
         <scene sceneID="nS3-Ct-BoD">
             <objects>
-                <viewController id="eSi-Ze-SMz" customClass="UserSearchViewController" customModule="KitchenSink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="eSi-Ze-SMz" customClass="UserSearchViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="IBU-WE-ssw"/>
                         <viewControllerLayoutGuide type="bottom" id="g7g-eq-t0X"/>

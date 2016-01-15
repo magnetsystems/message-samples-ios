@@ -17,6 +17,7 @@
 
 import UIKit
 import MagnetMax
+import MBProgressHUD
 
 class ViewController: UIViewController {
     
@@ -25,6 +26,7 @@ class ViewController: UIViewController {
     
     
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var userNameTextField: UITextField!
     
     
@@ -33,6 +35,7 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        statusLabel.text = ""
         MMUser.logout({ () -> Void in
             self.userNameTextField.text = nil
             self.passwordTextField.text = nil
@@ -45,9 +48,19 @@ class ViewController: UIViewController {
     // MARK: Private implementation
     
     
+    private func hideSpinner() -> Void {
+        self.view.userInteractionEnabled = true
+        MBProgressHUD.hideAllHUDsForView(self.view, animated: true);
+    }
+    
     private enum InputError: ErrorType {
         case InvalidUserName
         case InvalidPassword
+    }
+    
+    private func showSpinner() -> Void {
+        self.view.userInteractionEnabled = false
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
     }
     
     private func validateCredential() throws -> (String, String) {
@@ -69,18 +82,23 @@ class ViewController: UIViewController {
     
     @IBAction func login() {
         do {
+            statusLabel.text = ""
             // Validate
             let (userName, password) = try validateCredential()
             
             // Login
             let credential = NSURLCredential(user: userName, password: password, persistence: .None)
             
+            self.showSpinner()
             MMUser.login(credential,
                 success: {
+                    self.hideSpinner()
                     print(MMUser.currentUser())
                     self.performSegueWithIdentifier("featuresSegue", sender: nil)
                 },
                 failure: { error in
+                    self.hideSpinner()
+                    self.statusLabel.text = "Invalid userName or password"
                     print("[ERROR]: \(error.localizedDescription)")
             })
         } catch {
@@ -94,6 +112,7 @@ class ViewController: UIViewController {
     
     @IBAction func register() {
         do {
+            statusLabel.text = ""
             // Validate
             let (userName, password) = try validateCredential()
             
@@ -103,9 +122,12 @@ class ViewController: UIViewController {
             user.firstName = userName
             user.password = password
             
+            self.showSpinner()
             user.register({ [weak self] user in
+                self?.hideSpinner()
                 self?.login()
                 }, failure: { [weak self] error in
+                    self?.hideSpinner()
                     if error.code == 409 {
                         // The user already exists, let's attempt a login
                         self?.login()

@@ -33,6 +33,7 @@ PODS:
   - Mantle (3.0.0):
     - Mantle/extobjc (= 3.0.0)
   - Mantle/extobjc (3.0.0)
+  - MBProgressHUD (0.9.2)
   - MDMCoreData (1.5.0):
     - MDMCoreData/MDMCoreDataCore (= 1.5.0)
     - MDMCoreData/MDMFetchedResultsCollectionDataSource (= 1.5.0)
@@ -86,6 +87,7 @@ PODS:
 
 DEPENDENCIES:
   - MagnetMax (~> 2.3)
+  - MBProgressHUD
 
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
@@ -95,6 +97,7 @@ SPEC CHECKSUMS:
   MagnetMax: 79f226626b6759d02d13bf721594a8512d5df6b7
   MagnetMaxCore: efc169604da3ad57ea0bfe174a98b65e8959e900
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
   MMX: 9d40a2af9baaedd075046384bded07d05f35522c
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
