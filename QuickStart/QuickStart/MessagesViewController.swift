@@ -24,6 +24,7 @@ class MessagesViewController: ChatViewController {
 
     
      override func getChannel() {
+        super.getChannel()
         // channel is already set for MessagesViewController
         messageHistory()
     }

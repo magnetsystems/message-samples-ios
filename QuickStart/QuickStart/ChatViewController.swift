@@ -17,6 +17,7 @@
 
 import UIKit
 import MagnetMax
+import MBProgressHUD
 
 class ChatViewController: UIViewController {
     
@@ -45,17 +46,21 @@ class ChatViewController: UIViewController {
         guard let currentUser = MMUser.currentUser() else {
             return
         }
+        self.showSpinner()
         let name = "chat_\(currentUser.userID)"
         MMXChannel.channelForName(name, isPublic: false, success: { [weak self] channel in
             self?.myChatChannel = channel
+            self?.hideSpinner()
             }, failure: { error in
                 // Since channel is not found, attempt to create it
                 let recipients: Set<MMUser> = [currentUser]
                 let name = "chat_\(currentUser.userID)"
                 let summary = "Chat channel for myself"
                 MMXChannel.createWithName(name, summary: summary, isPublic: false, publishPermissions: .Subscribers, subscribers: recipients, success: { [weak self] channel in
+                    self?.hideSpinner()
                     self?.myChatChannel = channel
                     }, failure: { error in
+                        self.hideSpinner()
                         print(error)
                 })
         })
@@ -72,7 +77,7 @@ class ChatViewController: UIViewController {
         MMX.start()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didReceiveMessage:", name: MMXDidReceiveMessageNotification, object: nil)
-     
+        
         getChannel()
     }
     
@@ -120,10 +125,12 @@ class ChatViewController: UIViewController {
                 let attachment = MMAttachment(fileURL: imageURL, mimeType: "image/jpg")
                 message.addAttachment(attachment)
             }
-            
+            self.showSpinner()
             myChatChannel?.publishMessage(message, success: {
+                self.hideSpinner()
                 // do something
                 }, failure: { error in
+                    self.hideSpinner()
                     print(error)
             })
         }
@@ -136,11 +143,14 @@ class ChatViewController: UIViewController {
         let now = NSDate()
         let anHourAgo = now.dateByAddingTimeInterval(-(60 * 60))
         let ascending = false
+        self.showSpinner()
         myChatChannel?.messagesBetweenStartDate(anHourAgo, endDate: now, limit: limit, offset: offset, ascending: ascending, success: { [weak self] totalCount, messages in
+            self?.hideSpinner()
             self?.recentMessages = messages
             self?.messagesTableView.reloadData()
             self?.downloadAttachments()
             }, failure: { error in
+                self.hideSpinner()
                 print(error)
         })
         messageTextField.resignFirstResponder()
@@ -175,6 +185,11 @@ class ChatViewController: UIViewController {
         return imageURL!
     }
     
+    private func hideSpinner() -> Void {
+        self.view.userInteractionEnabled = true
+        MBProgressHUD.hideHUDForView(self.view, animated: true);
+    }
+    
     private func insertNewMessage(message : MMXMessage) -> Void {
         if message.attachments?.count > 0 {
             if let attachment = message.attachments?.first {
@@ -193,6 +208,11 @@ class ChatViewController: UIViewController {
             self.recentMessages.insert(message, atIndex: 0)
             self.messagesTableView.insertRowsAtIndexPaths([NSIndexPath.init(forRow: 0, inSection: 0)], withRowAnimation: .Top)
         }
+    }
+    
+    private func showSpinner() -> Void {
+        self.view.userInteractionEnabled = false
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
     }
     
 }
