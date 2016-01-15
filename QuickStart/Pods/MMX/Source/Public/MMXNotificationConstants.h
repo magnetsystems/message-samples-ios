@@ -23,6 +23,16 @@
 @interface MMXNotificationConstants : NSObject
 
 /**
+	Notification when user has logged in.
+ */
+extern NSString * const MMXUserDidLogInNotification;
+
+/**
+	Notification when when user has logged out.
+ */
+extern NSString * const MMXUserDidLogOutNotification;
+
+/**
 	Notification when receiving a message.
  */
 extern NSString * const MMXDidReceiveMessageNotification;

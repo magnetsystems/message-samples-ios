@@ -21,6 +21,7 @@
 #import "MMPasswordResetRequest.h"
 #import "MMUser.h"
 #import "MMRefreshTokenRequest.h"
+#import "MMUpdateProfileRequest.h"
 
 
 @implementation MMUserService
@@ -261,6 +262,29 @@
         renewAccessTokenSuccessFailure.parameters = renewAccessTokenSuccessFailureParams;
         renewAccessTokenSuccessFailure.returnType = MMServiceIOTypeString;
         serviceMetaData[NSStringFromSelector(renewAccessTokenSuccessFailure.selector)] = renewAccessTokenSuccessFailure;
+        
+        // schema for service method updateProfile:success:failure:
+        MMServiceMethod *updateProfileSuccessFailure = [[MMServiceMethod alloc] init];
+        updateProfileSuccessFailure.clazz = [self class];
+        updateProfileSuccessFailure.selector = @selector(updateProfile:success:failure:);
+        updateProfileSuccessFailure.path = @"com.magnet.server/user/profile";
+        updateProfileSuccessFailure.requestMethod = MMRequestMethodPUT;
+        updateProfileSuccessFailure.consumes = [NSSet setWithObjects:@"application/json", nil];
+        updateProfileSuccessFailure.produces = [NSSet setWithObjects:@"application/json", nil];
+        
+        NSMutableArray *updateProfileSuccessFailureParams = [NSMutableArray array];
+        MMServiceMethodParameter *updateProfileSuccessFailureParam0 = [[MMServiceMethodParameter alloc] init];
+        updateProfileSuccessFailureParam0.name = @"body";
+        updateProfileSuccessFailureParam0.requestParameterType = MMServiceMethodParameterTypeBody;
+        updateProfileSuccessFailureParam0.type = MMServiceIOTypeMagnetNode;
+        updateProfileSuccessFailureParam0.typeClass = MMUpdateProfileRequest.class;
+        updateProfileSuccessFailureParam0.isOptional = NO;
+        [updateProfileSuccessFailureParams addObject:updateProfileSuccessFailureParam0];
+        
+        updateProfileSuccessFailure.parameters = updateProfileSuccessFailureParams;
+        updateProfileSuccessFailure.returnType = MMServiceIOTypeMagnetNode;
+        updateProfileSuccessFailure.returnTypeClass = MMUser.class;
+        serviceMetaData[NSStringFromSelector(updateProfileSuccessFailure.selector)] = updateProfileSuccessFailure;
 
         
         __metaData = serviceMetaData;

@@ -22,6 +22,7 @@
 @class MMCall;
 @class MMUser;
 @class MMRefreshTokenRequest;
+@class MMUpdateProfileRequest;
 
 
 @protocol MMUserServiceProtocol <NSObject>
@@ -121,6 +122,17 @@
 - (MMCall *)renewAccessToken:(MMRefreshTokenRequest *)body
                      success:(void (^)(NSString *response))success
                      failure:(void (^)(NSError *error))failure;
+
+/**
+ 
+ PUT /com.magnet.server/user/profile
+ @param body style:BODY
+ @return A 'MMCall' object.
+ */
+- (MMCall *)updateProfile:(MMUpdateProfileRequest *)body
+                  success:(void (^)(MMUser *response))success
+                  failure:(void (^)(NSError *error))failure;
+
 
 @end
 

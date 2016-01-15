@@ -18,6 +18,9 @@
 
 #import <Foundation/Foundation.h>
 #import "MMXPublishPermissionsEnum.h"
+#import "MMXMatchType.h"
+#import "MMXChannelSummaryResponse.h"
+
 @import MagnetMaxCore;
 @class MMUser;
 @class MMXMessage;
@@ -86,9 +89,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure  Block with an NSError with details about the call failure.
  */
 + (void)allPublicChannelsWithLimit:(int)limit
-							offset:(int)offset
-						   success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
-						   failure:(nullable void (^)(NSError *error))failure;
+                            offset:(int)offset
+                           success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
+                           failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method used to get private channels created by the current user.
@@ -99,9 +102,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure  Block with an NSError with details about the call failure.
  */
 + (void)allPrivateChannelsWithLimit:(int)limit
-							 offset:(int)offset
-							success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
-							failure:(nullable void (^)(NSError *error))failure;
+                             offset:(int)offset
+                            success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
+                            failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Get a channel object by name
@@ -112,9 +115,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure		Block with an NSError with details about the call failure.
  */
 + (void)channelForName:(NSString *)channelName
-			  isPublic:(BOOL)isPublic
-			   success:(nullable void (^)(MMXChannel *channel))success
-			   failure:(nullable void (^)(NSError *error))failure;
+              isPublic:(BOOL)isPublic
+               success:(nullable void (^)(MMXChannel *channel))success
+               failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method used to discover existing channels by name
@@ -126,10 +129,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure  Block with an NSError with details about the call failure.
  */
 + (void)channelsStartingWith:(NSString *)name
-					   limit:(int)limit
-					  offset:(int)offset
-					 success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
-					 failure:(nullable void (^)(NSError *error))failure;
+                       limit:(int)limit
+                      offset:(int)offset
+                     success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
+                     failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method used to discover existing channels that have any of the tags provided
@@ -141,10 +144,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure  Block with a NSError with details about the call failure.
  */
 + (void)findByTags:(NSSet <NSString *>*)tags
-			 limit:(int)limit
-			offset:(int)offset
-		   success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
-		   failure:(nullable void (^)(NSError *error))failure;
+             limit:(int)limit
+            offset:(int)offset
+           success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
+           failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Get tags for this channel
@@ -153,7 +156,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure - Block with a NSError with details about the call failure.
  */
 - (void)tagsWithSuccess:(nullable void (^)(NSSet <NSString *>*tags))success
-				failure:(nullable void (^)(NSError * error))failure;
+                failure:(nullable void (^)(NSError * error))failure;
 
 /**
  *  Set tags for a specific channel. This will overwrite ALL existing tags for the chanel.
@@ -164,8 +167,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure - Block with a NSError with details about the call failure.
  */
 - (void)setTags:(NSSet <NSString *>*)tags
-		success:(nullable void (^)(void))success
-		failure:(nullable void (^)(NSError *error))failure;
+        success:(nullable void (^)(void))success
+        failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to create a new channel.
@@ -178,11 +181,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure				Block with an NSError with details about the call failure.
  */
 + (void)createWithName:(NSString *)name
-			   summary:(nullable NSString *)summary
-			  isPublic:(BOOL)isPublic
-	publishPermissions:(MMXPublishPermissions)publishPermissions
-			   success:(nullable void (^)(MMXChannel *channel))success
-			   failure:(nullable void (^)(NSError *error))failure;
+               summary:(nullable NSString *)summary
+              isPublic:(BOOL)isPublic
+    publishPermissions:(MMXPublishPermissions)publishPermissions
+               success:(nullable void (^)(MMXChannel *channel))success
+               failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to create a new channel.
@@ -211,7 +214,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure - Block with an NSError with details about the call failure.
  */
 - (void)deleteWithSuccess:(nullable void (^)(void))success
-				  failure:(nullable void (^)(NSError *error))failure;
+                  failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to subscribe to an existing channel.
@@ -220,7 +223,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure - Block with an NSError with details about the call failure.
  */
 - (void)subscribeWithSuccess:(nullable void (^)(void))success
-					 failure:(nullable void (^)(NSError *error))failure;
+                     failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to unsubscribe to an existing channel.
@@ -229,7 +232,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure - Block with an NSError with details about the call failure.
  */
 - (void)unSubscribeWithSuccess:(nullable void (^)(void))success
-					   failure:(nullable void (^)(NSError *error))failure;
+                       failure:(nullable void (^)(NSError *error))failure;
 
 
 /**
@@ -239,7 +242,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure - Block with an NSError with details about the call failure.
  */
 + (void)subscribedChannelsWithSuccess:(nullable void (^)(NSArray <MMXChannel *>*channels))success
-							  failure:(nullable void (^)(NSError *error))failure;
+                              failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Get the subscribers for a channel
@@ -251,9 +254,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure	Block with an NSError with details about the call failure.
  */
 - (void)subscribersWithLimit:(int)limit
-					  offset:(int)offset
-					 success:(nullable void (^)(int totalCount, NSArray <MMUser *>*subscribers))success
-					 failure:(nullable void (^)(NSError *error))failure;
+                      offset:(int)offset
+                     success:(nullable void (^)(int totalCount, NSArray <MMUser *>*subscribers))success
+                     failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to publish to a channel.
@@ -263,8 +266,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure		  Block with an NSError with details about the call failure.
  */
 - (void)publish:(NSDictionary <NSString *,NSString *>*)messageContent
-		success:(nullable void (^)(MMXMessage *message))success
-		failure:(nullable void (^)(NSError *error))failure;
+        success:(nullable void (^)(MMXMessage *message))success
+        failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Method to publish to a channel.
@@ -289,12 +292,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure		Block with an NSError with details about the call failure.
  */
 - (void)messagesBetweenStartDate:(nullable NSDate *)startDate
-						 endDate:(nullable NSDate *)endDate
-						   limit:(int)limit
-						  offset:(int)offset
-					   ascending:(BOOL)ascending
-						 success:(nullable void (^)(int totalCount, NSArray <MMXMessage *>*messages))success
-						 failure:(nullable void (^)(NSError *error))failure;
+                         endDate:(nullable NSDate *)endDate
+                           limit:(int)limit
+                          offset:(int)offset
+                       ascending:(BOOL)ascending
+                         success:(nullable void (^)(int totalCount, NSArray <MMXMessage *>*messages))success
+                         failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Invite a user to the channel
@@ -307,8 +310,54 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return The messageID for the invite sent
  */
 - (NSString *)inviteUser:(MMUser *)user
-				comments:(nullable NSString *)comments
-				 success:(nullable void (^)(MMXInvite *invite))success
-				 failure:(nullable void (^)(NSError *error))failure;
+                comments:(nullable NSString *)comments
+                 success:(nullable void (^)(MMXInvite *invite))success
+                 failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ *  Method to add subscribers to a channel. (Owner Only)
+ *
+ *  @param subscribers    The users you want to subscribe
+ *  @param success		  Block with the invalid users
+ *  @param failure		  Block with an NSError with details about the call failure.
+ */
+- (void)addSubscribers:(NSArray <MMUser *> *)subscribers
+               success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+               failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ *  Method to remove subscribers from a channel. (Owner Only)
+ *
+ *  @param subscribers    The users you want remove
+ *  @param success		  Block with the invalid users
+ *  @param failure		  Block with an NSError with details about the call failure.
+ */
+- (void)removeSubscribers:(NSArray <MMUser *> *)subscribers
+                  success:(nullable void (^)(NSSet <NSString *>*invalidUsers))success
+                  failure:(nullable void (^)(NSError *error))failure;
+/**
+ *  Method to find common subscribers for a channel.
+ *
+ *  @param subscribers    The users you want remove
+ *  @param success		  Block with the channels
+ *  @param failure		  Block with an NSError with details about the call failure.
+ */
++ (void)findChannelsBySubscribers:(NSArray <MMUser *> *)subscribers
+                        matchType:(MMXMatchType)matchType
+                          success:(nullable void (^)(NSArray <MMXChannel *>*channels))success
+                          failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ *  Method to find summaries for channels.
+ *
+ *  @param subscribers    The users you want remove
+ *  @param success		  Block with the channels
+ *  @param failure		  Block with an NSError with details about the call failure.
+ */
++ (void)channelSummary:(NSSet<MMXChannel *>*)channels
+      numberOfMessages:(NSInteger)numberOfMessages
+    numberOfSubcribers:(NSInteger)numberOfSubcribers
+               success:(nullable void (^)(NSArray <MMXChannelSummaryResponse *>*channelSummaries))success
+               failure:(nullable void (^)(NSError *error))failure;
 NS_ASSUME_NONNULL_END
 @end
