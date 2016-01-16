@@ -18,7 +18,6 @@
 		8D34D0101C488F230004BC1C /* FindChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34CFF61C488F230004BC1C /* FindChannelsViewController.swift */; };
 		8D34D0111C488F230004BC1C /* GoldenGateBridge1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CFF71C488F230004BC1C /* GoldenGateBridge1.jpg */; };
 		8D34D0121C488F230004BC1C /* GoldenGateBridge2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CFF81C488F230004BC1C /* GoldenGateBridge2.jpg */; };
-		8D34D0131C488F230004BC1C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CFF91C488F230004BC1C /* Info.plist */; };
 		8D34D0141C488F230004BC1C /* lock-7.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CFFA1C488F230004BC1C /* lock-7.png */; };
 		8D34D0151C488F230004BC1C /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CFFB1C488F230004BC1C /* MagnetMax.plist */; };
 		8D34D0161C488F230004BC1C /* message-7.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CFFC1C488F230004BC1C /* message-7.png */; };
@@ -386,7 +385,6 @@
 				8D34D0211C488F230004BC1C /* woman-man-7.png in Resources */,
 				8D34D0141C488F230004BC1C /* lock-7.png in Resources */,
 				8D34D0151C488F230004BC1C /* MagnetMax.plist in Resources */,
-				8D34D0131C488F230004BC1C /* Info.plist in Resources */,
 				8D34D0091C488F230004BC1C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
