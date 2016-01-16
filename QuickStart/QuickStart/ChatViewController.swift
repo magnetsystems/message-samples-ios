@@ -47,14 +47,13 @@ class ChatViewController: UIViewController {
             return
         }
         self.showSpinner()
-        let name = "chat_\(currentUser.userID)"
+        let name = currentUser.userName
         MMXChannel.channelForName(name, isPublic: false, success: { [weak self] channel in
             self?.myChatChannel = channel
             self?.hideSpinner()
             }, failure: { error in
                 // Since channel is not found, attempt to create it
                 let recipients: Set<MMUser> = [currentUser]
-                let name = "chat_\(currentUser.userID)"
                 let summary = "Chat channel for myself"
                 MMXChannel.createWithName(name, summary: summary, isPublic: false, publishPermissions: .Subscribers, subscribers: recipients, success: { [weak self] channel in
                     self?.hideSpinner()
