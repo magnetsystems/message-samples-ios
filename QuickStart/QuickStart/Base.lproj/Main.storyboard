@@ -23,26 +23,21 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r0Y-X0-v8d">
-                                <rect key="frame" x="20" y="245" width="560" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES"/>
-                            </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0gM-kA-fxt">
                                 <rect key="frame" x="243" y="345" width="115" height="30"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iOa-O6-NRd">
-                                        <rect key="frame" x="0.0" y="0.0" width="57" height="30"/>
-                                        <state key="normal" title="Register"/>
-                                        <connections>
-                                            <action selector="register" destination="BYZ-38-t0r" eventType="touchUpInside" id="LDG-uD-FPA"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9zE-kr-mtU">
                                         <rect key="frame" x="77" y="0.0" width="38" height="30"/>
                                         <state key="normal" title="Login"/>
                                         <connections>
                                             <action selector="login" destination="BYZ-38-t0r" eventType="touchUpInside" id="pxU-Rv-D1T"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iOa-O6-NRd">
+                                        <rect key="frame" x="0.0" y="0.0" width="57" height="30"/>
+                                        <state key="normal" title="Register"/>
+                                        <connections>
+                                            <action selector="register" destination="BYZ-38-t0r" eventType="touchUpInside" id="LDG-uD-FPA"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -66,12 +61,24 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="se9-uj-eWx">
-                                <rect key="frame" x="279" y="216" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="se9-uj-eWx">
+                                <rect key="frame" x="279" y="220" width="41.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="navbar_logo" translatesAutoresizingMaskIntoConstraints="NO" id="b5c-op-pcy">
+                                <rect key="frame" x="200" y="151" width="200" height="61"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="Wcz-iC-k2f"/>
+                                    <constraint firstAttribute="height" constant="61" id="g5n-k0-0VE"/>
+                                </constraints>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r0Y-X0-v8d">
+                                <rect key="frame" x="20" y="245" width="560" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -85,6 +92,8 @@
                             <constraint firstItem="0gM-kA-fxt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bXP-kd-WkB"/>
                             <constraint firstItem="se9-uj-eWx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bqU-xe-KeZ"/>
                             <constraint firstItem="c0c-y3-jZV" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="10" id="gPO-o7-LiJ"/>
+                            <constraint firstItem="b5c-op-pcy" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jnL-L7-FnQ"/>
+                            <constraint firstItem="se9-uj-eWx" firstAttribute="top" secondItem="b5c-op-pcy" secondAttribute="bottom" constant="8" id="rXD-7J-2Q2"/>
                             <constraint firstItem="c0c-y3-jZV" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="yvI-sS-V5D"/>
                         </constraints>
                         <variation key="default">
@@ -108,7 +117,7 @@
         <!--Features-->
         <scene sceneID="K2c-Ew-zBw">
             <objects>
-                <tableViewController id="Ep9-MF-WJG" sceneMemberID="viewController">
+                <tableViewController id="Ep9-MF-WJG" customClass="FeaturesViewController" customModule="QuickStart" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="b22-c3-HOK">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1355,6 +1364,7 @@
     </scenes>
     <resources>
         <image name="message-7.png" width="30" height="30"/>
+        <image name="navbar_logo" width="595" height="183"/>
         <image name="woman-man-7.png" width="29" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
