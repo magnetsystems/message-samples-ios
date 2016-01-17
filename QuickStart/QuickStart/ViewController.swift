@@ -98,7 +98,7 @@ class ViewController: UIViewController {
                 },
                 failure: { error in
                     self.hideSpinner()
-                    self.statusLabel.text = "Invalid userName or password"
+                    self.statusLabel.text = "Invalid username or password"
                     print("[ERROR]: \(error.localizedDescription)")
             })
         } catch {
