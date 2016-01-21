@@ -139,10 +139,10 @@ class ChatViewController: UIViewController {
         let offset: Int32 = 0
         
         let now = NSDate()
-        let anHourAgo = now.dateByAddingTimeInterval(-(60 * 60))
+        let aDayAgo = now.dateByAddingTimeInterval(-(60 * 60 * 24))
         let ascending = false
         self.showSpinner()
-        myChatChannel?.messagesBetweenStartDate(anHourAgo, endDate: now, limit: limit, offset: offset, ascending: ascending, success: { [weak self] totalCount, messages in
+        myChatChannel?.messagesBetweenStartDate(aDayAgo, endDate: now, limit: limit, offset: offset, ascending: ascending, success: { [weak self] totalCount, messages in
             self?.hideSpinner()
             self?.recentMessages = messages
             self?.messagesTableView.reloadData()

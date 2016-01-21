@@ -448,8 +448,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ENZ-g7-chL">
-                                <rect key="frame" x="156" y="226" width="289" height="30"/>
-                                <state key="normal" title="Fetch all messages posted in the last hour"/>
+                                <rect key="frame" x="141" y="226" width="318" height="30"/>
+                                <state key="normal" title="Fetch all messages posted in the last 24 hours"/>
                                 <connections>
                                     <action selector="messageHistory" destination="oKR-s9-qnD" eventType="touchUpInside" id="kKd-WH-QLl"/>
                                     <action selector="messageHistory" destination="P9H-gb-6Jz" eventType="touchUpInside" id="ui7-jK-NbX"/>
@@ -863,8 +863,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ilT-c6-OAz">
-                                <rect key="frame" x="156" y="238" width="289" height="30"/>
-                                <state key="normal" title="Fetch all messages posted in the last hour"/>
+                                <rect key="frame" x="141" y="238" width="318" height="30"/>
+                                <state key="normal" title="Fetch all messages posted in the last 24 hours"/>
                                 <connections>
                                     <action selector="messageHistory" destination="oKR-s9-qnD" eventType="touchUpInside" id="pxO-Rp-NBE"/>
                                 </connections>
