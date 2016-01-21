@@ -40,9 +40,8 @@ class ChatViewController: UIViewController {
     
     // MARK: public implementations
     
-    
+    // Ensure channel with current user's userName exists!
     func getChannel() {
-        // Ensure that the channel exists
         guard let currentUser = MMUser.currentUser() else {
             return
         }
@@ -97,7 +96,7 @@ class ChatViewController: UIViewController {
         
         if let attachment = message.attachments?.first {
             let data = attachment.downloadURL?.absoluteString;
-            messageContent = messageContent + "\n" + (data != nil ? data! : "")
+            messageContent = messageContent + "\n" + (data != nil ? "(has attachment)" : "")
         }
         let messageReceivedAlert = UIAlertController(title: "Message received", message: messageContent, preferredStyle: .Alert)
         let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)

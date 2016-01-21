@@ -86,6 +86,8 @@ class UserSearchViewController: UIViewController {
     
     @IBAction func retrieveUsers(sender: UIBarButtonItem) {
         if let searchString = searchTextField.text {
+            // userName BEGINSWITH j: userName:j*
+            // userName ENDSWITH e: userName:*e
             MMUser.searchUsers(searchString, limit: 10, offset: 0, sort: "userName:asc", success: { [weak self] users in
                 self?.users = users
                 self?.usersTableView.reloadData()
