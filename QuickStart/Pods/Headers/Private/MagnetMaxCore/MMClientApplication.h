@@ -1,1 +1,0 @@
-../../../MagnetMaxCore/MagnetMax/Core/MMClientApplication.h

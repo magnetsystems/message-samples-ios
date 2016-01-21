@@ -1,0 +1,1 @@
+../../../MMXXMPPFramework/Authentication/Deprecated-Plain/XMPPDeprecatedPlainAuthentication.h

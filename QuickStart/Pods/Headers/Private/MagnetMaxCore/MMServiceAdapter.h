@@ -1,1 +1,0 @@
-../../../MagnetMaxCore/MagnetMax/Core/MMServiceAdapter.h

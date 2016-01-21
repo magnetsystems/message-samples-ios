@@ -1,1 +1,0 @@
-../../../MMXXMPPFramework/Extensions/Roster/XMPPUser.h
