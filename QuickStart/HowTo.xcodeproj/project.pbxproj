@@ -337,7 +337,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0710;
-				ORGANIZATIONNAME = "Lorenzo Stanton";
+				ORGANIZATIONNAME = "Magnet Systems, Inc.";
 				TargetAttributes = {
 					8D34CFB81C488E800004BC1C = {
 						CreatedOnToolsVersion = 7.1.1;
