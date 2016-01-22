@@ -44,7 +44,7 @@
                                     <arg value="-r" />
                                     <arg value="-y" />
                                     <arg value="${basedir}/target/ios-samples/quickstart-ios.zip" />
-                                    <arg value="QuickStart" />
+                                    <arg value="HowTo" />
                                 </exec>
                                 <exec executable="zip" dir="${basedir}">
                                     <arg value="-r" />
