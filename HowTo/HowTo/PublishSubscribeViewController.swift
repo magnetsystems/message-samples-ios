@@ -17,7 +17,7 @@
 
 import UIKit
 
-class PublichSubscribeViewController: UITableViewController {
+class PublishSubscribeViewController: UITableViewController {
 
     
     // MARK: - Navigation

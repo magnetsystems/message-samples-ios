@@ -23,7 +23,7 @@
 		8D34D0161C488F230004BC1C /* message-7.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D34CFFC1C488F230004BC1C /* message-7.png */; };
 		8D34D0171C488F230004BC1C /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34CFFD1C488F230004BC1C /* MessagesViewController.swift */; };
 		8D34D0181C488F230004BC1C /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34CFFE1C488F230004BC1C /* NavigationController.swift */; };
-		8D34D0191C488F230004BC1C /* PublichSubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34CFFF1C488F230004BC1C /* PublichSubscribeViewController.swift */; };
+		8D34D0191C488F230004BC1C /* PublishSubscribeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34CFFF1C488F230004BC1C /* PublishSubscribeViewController.swift */; };
 		8D34D01A1C488F230004BC1C /* PushViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34D0001C488F230004BC1C /* PushViewController.swift */; };
 		8D34D01B1C488F230004BC1C /* SubscribersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34D0011C488F230004BC1C /* SubscribersViewController.swift */; };
 		8D34D01C1C488F230004BC1C /* UserLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34D0021C488F230004BC1C /* UserLoginViewController.swift */; };
@@ -82,7 +82,7 @@
 		8D34CFFC1C488F230004BC1C /* message-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message-7.png"; sourceTree = "<group>"; };
 		8D34CFFD1C488F230004BC1C /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		8D34CFFE1C488F230004BC1C /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
-		8D34CFFF1C488F230004BC1C /* PublichSubscribeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublichSubscribeViewController.swift; sourceTree = "<group>"; };
+		8D34CFFF1C488F230004BC1C /* PublishSubscribeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublishSubscribeViewController.swift; sourceTree = "<group>"; };
 		8D34D0001C488F230004BC1C /* PushViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushViewController.swift; sourceTree = "<group>"; };
 		8D34D0011C488F230004BC1C /* SubscribersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscribersViewController.swift; sourceTree = "<group>"; };
 		8D34D0021C488F230004BC1C /* UserLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLoginViewController.swift; sourceTree = "<group>"; };
@@ -218,7 +218,7 @@
 				8D34CFF51C488F230004BC1C /* CreateChannelViewController.swift */,
 				8D34CFF61C488F230004BC1C /* FindChannelsViewController.swift */,
 				8D34CFF31C488F230004BC1C /* ChannelListViewController.swift */,
-				8D34CFFF1C488F230004BC1C /* PublichSubscribeViewController.swift */,
+				8D34CFFF1C488F230004BC1C /* PublishSubscribeViewController.swift */,
 				8D34D0011C488F230004BC1C /* SubscribersViewController.swift */,
 				8D34CFFD1C488F230004BC1C /* MessagesViewController.swift */,
 				8D34D02B1C488FEB0004BC1C /* ChannelCell */,
@@ -465,7 +465,7 @@
 				8D34D01F1C488F230004BC1C /* UserSearchViewController.swift in Sources */,
 				8D34D0171C488F230004BC1C /* MessagesViewController.swift in Sources */,
 				8D34D01C1C488F230004BC1C /* UserLoginViewController.swift in Sources */,
-				8D34D0191C488F230004BC1C /* PublichSubscribeViewController.swift in Sources */,
+				8D34D0191C488F230004BC1C /* PublishSubscribeViewController.swift in Sources */,
 				8D34D01B1C488F230004BC1C /* SubscribersViewController.swift in Sources */,
 				8D34D00F1C488F230004BC1C /* CreateChannelViewController.swift in Sources */,
 				8D34D0101C488F230004BC1C /* FindChannelsViewController.swift in Sources */,

@@ -222,7 +222,7 @@
         <!--Publish / Subscribe-->
         <scene sceneID="7dq-1m-GLR">
             <objects>
-                <tableViewController id="yN6-ot-6kL" customClass="PublichSubscribeViewController" customModule="HowTo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="yN6-ot-6kL" customClass="PublishSubscribeViewController" customModule="HowTo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="rPy-At-8AP">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
