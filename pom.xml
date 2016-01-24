@@ -44,6 +44,13 @@
                                 <exec executable="zip" dir="${basedir}">
                                     <arg value="-r" />
                                     <arg value="-y" />
+                                    <arg value="${basedir}/target/ios-samples/my first app-ios.zip" />
+                                    <arg value="My First App" />
+                                </exec>
+
+                                <exec executable="zip" dir="${basedir}">
+                                    <arg value="-r" />
+                                    <arg value="-y" />
                                     <arg value="${basedir}/target/ios-samples/howto-ios.zip" />
                                     <arg value="HowTo" />
                                 </exec>

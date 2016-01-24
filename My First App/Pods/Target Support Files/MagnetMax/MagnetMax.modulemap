@@ -1,0 +1,6 @@
+framework module MagnetMax {
+  umbrella header "MagnetMax-umbrella.h"
+
+  export *
+  module * { export * }
+}
