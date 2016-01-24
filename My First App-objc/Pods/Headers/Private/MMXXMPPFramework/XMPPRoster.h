@@ -1,0 +1,1 @@
+../../../MMXXMPPFramework/Extensions/Roster/XMPPRoster.h

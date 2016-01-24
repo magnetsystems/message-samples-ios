@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="kee-21-JXx">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="Ecg-GS-qZp">
+            <objects>
+                <viewController id="kee-21-JXx" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SsG-g8-axO"/>
+                        <viewControllerLayoutGuide type="bottom" id="UkT-YD-rDy"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8IL-nE-26J">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Npc-pS-WWK">
+                                <rect key="frame" x="248" y="66" width="105" height="43"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="43" id="1ZW-oy-qQA"/>
+                                    <constraint firstAttribute="width" constant="105" id="VED-Em-f9v"/>
+                                </constraints>
+                                <state key="normal" title="Send">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="send:" destination="kee-21-JXx" eventType="touchUpInside" id="kEh-lR-T4a"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Hello World!" borderStyle="roundedRect" placeholder="Message Content" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NHt-3K-0fj">
+                                <rect key="frame" x="20" y="28" width="560" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="HMm-O2-SJj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="HMm-O2-SJj"/>
+                                    </mask>
+                                </variation>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="NHt-3K-0fj" firstAttribute="leading" secondItem="8IL-nE-26J" secondAttribute="leadingMargin" id="0Jg-Yf-8zE"/>
+                            <constraint firstItem="NHt-3K-0fj" firstAttribute="top" secondItem="SsG-g8-axO" secondAttribute="bottom" constant="8" id="6g2-Zq-f9H"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="NHt-3K-0fj" secondAttribute="trailing" id="B2i-nw-Iet"/>
+                            <constraint firstItem="Npc-pS-WWK" firstAttribute="centerX" secondItem="NHt-3K-0fj" secondAttribute="centerX" id="eJo-w4-VJM"/>
+                            <constraint firstItem="Npc-pS-WWK" firstAttribute="top" secondItem="NHt-3K-0fj" secondAttribute="bottom" constant="8" id="nWl-NS-EsQ"/>
+                            <constraint firstItem="Npc-pS-WWK" firstAttribute="top" secondItem="NHt-3K-0fj" secondAttribute="bottom" id="xVo-kO-UaW"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="xVo-kO-UaW"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="messageText" destination="NHt-3K-0fj" id="DPt-dz-acT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="n7Q-AY-tuo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="135" y="202"/>
+        </scene>
+    </scenes>
+</document>
