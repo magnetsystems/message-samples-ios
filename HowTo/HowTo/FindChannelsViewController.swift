@@ -52,9 +52,10 @@ class FindChannelsViewController: UIViewController, UITableViewDataSource {
             
             switch segCtrlSearchType.selectedSegmentIndex {
             case 0:
-                MMXChannel.channelForName(parameter, isPublic: true, success: { [weak self] (channel) in
+                MMXChannel.channelForName(parameter, isPublic: true, success: { [weak self] channel in
                     self?.channels = [channel]
-                }, failure: { error in
+                }, failure: { [weak self] error in
+                    self?.channels = []
                     print("[ERROR]: \(error)")
                 })
             case 1:

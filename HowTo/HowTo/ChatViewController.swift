@@ -113,7 +113,10 @@ class ChatViewController: UIViewController {
     
     
     @IBAction func sendMessage(sender: UIBarButtonItem) {
-        if let messageText = messageTextField.text {
+        // Hide keyboard
+        messageTextField.resignFirstResponder()
+        
+        if let messageText = messageTextField.text where (messageText.isEmpty == false) {
             let content = ["content": messageText]
             // Build the message
             let message = MMXMessage(toChannel: myChatChannel!, messageContent: content)
