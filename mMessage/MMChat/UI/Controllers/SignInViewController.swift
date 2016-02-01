@@ -42,10 +42,10 @@ class SignInViewController : BaseViewController {
             }, failure: { error in
                 print("[ERROR]: \(error)")
                 self.hideLoadingIndicator()
-                self.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close")
+                self.showAlert("Username and password not found.\n Please try again.", title: "Couldn't log in", closeTitle: "Close")
             })
         } else {
-            showAlert("Email or password is incorrect", title: "Please check your information and try again", closeTitle: "Close")
+            showAlert("Please fill in email and password", title: "Please fill in email and password", closeTitle: "Close")
         }
     }
 
