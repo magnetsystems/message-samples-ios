@@ -130,7 +130,7 @@ class ChatViewController: JSQMessagesViewController {
         if chat?.name != mmxMessage.channel?.name { return }
         
         //Show the typing indicator to be shown
-        showTypingIndicator = !self.showTypingIndicator
+        showTypingIndicator = true && mmxMessage.sender != MMUser.currentUser()
         
         // Scroll to actually view the indicator
         scrollToBottomAnimated(true)
@@ -176,22 +176,22 @@ class ChatViewController: JSQMessagesViewController {
         
         self.inputToolbar!.contentView!.textView?.resignFirstResponder()
         
-        let alertController = UIAlertController(title: "Media messages", message: nil, preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: "Media Messages", message: nil, preferredStyle: .ActionSheet)
         
-        let sendPhotoAction = UIAlertAction(title: "Send photo", style: .Default) { (_) in
-            self.addPhotoMediaMessage()
+        let sendFromCamera = UIAlertAction(title: "Take Photo or Video", style: .Default) { (_) in
+            self.addMediaMessageFromCamera()
         }
-        let sendLocationAction = UIAlertAction(title: "Send location", style: .Default) { (_) in
+        let sendFromLibrary = UIAlertAction(title: "Photo Library", style: .Default) { (_) in
+            self.addMediaMessageFromLibrary()
+        }
+        let sendLocationAction = UIAlertAction(title: "Send Location", style: .Default) { (_) in
             self.addLocationMediaMessage()
-        }
-        let sendVideoAction = UIAlertAction(title: "Send video", style: .Default) { (_) in
-            self.addVideoMediaMessage()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
         
-        alertController.addAction(sendPhotoAction)
+        alertController.addAction(sendFromCamera)
+        alertController.addAction(sendFromLibrary)
         alertController.addAction(sendLocationAction)
-        alertController.addAction(sendVideoAction)
         alertController.addAction(cancelAction)
         
         self.presentViewController(alertController, animated: true, completion: nil)
@@ -373,21 +373,21 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    private func addPhotoMediaMessage() {
+    private func addMediaMessageFromLibrary() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .PhotoLibrary
-        
+        imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
         presentViewController(imagePicker, animated: true, completion: nil)
     }
     
-    private func addVideoMediaMessage() {
+    private func addMediaMessageFromCamera() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .PhotoLibrary
-        imagePicker.mediaTypes = [kUTTypeMovie as String]
-        
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .Camera
+        imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
         presentViewController(imagePicker, animated: true, completion: nil)
     }
     
@@ -486,7 +486,7 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
             if let data = UIImagePNGRepresentation(pickedImage) {
             
-                let attachment = MMAttachment(data: data, mimeType: "image/*")
+                let attachment = MMAttachment(data: data, mimeType: "image/png")
                 mmxMessage.addAttachment(attachment)
                 mmxMessage.sendWithSuccess({ [weak self] _ in
                     self?.finishSendingMessageAnimated(true)

@@ -19,10 +19,12 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         super.viewDidLoad()
 
         if let revealVC = self.revealViewController() {
-            self.navigationItem.leftBarButtonItem!.target = revealVC
-            self.navigationItem.leftBarButtonItem!.action = "revealToggle:"
+            let menu = UIBarButtonItem(title: "≡", style: .Plain, target:revealVC, action: "revealToggle:")
+            navigationItem.leftBarButtonItem = menu
             self.view.addGestureRecognizer(revealVC.panGestureRecognizer())
         }
+        
+        
         
         // Indicate that you are ready to receive messages now!
         MMX.start()
