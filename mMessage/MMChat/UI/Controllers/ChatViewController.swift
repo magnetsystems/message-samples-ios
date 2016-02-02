@@ -344,7 +344,7 @@ class ChatViewController: JSQMessagesViewController {
         print("Tapped message bubble!")
         let message = messages[indexPath.item] as! Message
         
-        if message.isMediaMessage() {
+        if message.isMediaMessage() && message.isDownloaded {
             self.inputToolbar!.contentView!.textView?.resignFirstResponder()
             
             switch message.type {

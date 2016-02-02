@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-        <key>BaseURL</key>
-        <string>http://192.168.101.142:8443/api</string>
-        <key>ClientID</key>
-        <string>eaddf34b-a543-4ac1-80e5-1318ab7ecc33</string>
-        <key>ClientSecret</key>
-        <string>6Ve8oWPdzxqyfdVumA9wGh-fxA1OnCic6l8JbEJytKE</string>
-    </dict>
+<dict>
+	<key>BaseURL</key>
+	<string>https://sandy.magnet.com/mobile/api</string>
+	<key>ClientID</key>
+	<string>2a28e4ca-9939-458d-ba28-b386ddd2f1f5</string>
+	<key>ClientSecret</key>
+	<string>HkEjwDZQ1AkjEa--UVhWdWHVL7bYMoJHf80_3Bbcjxc</string>
+</dict>
 </plist>

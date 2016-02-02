@@ -9,7 +9,7 @@
 import UIKit
 import MagnetMax
 
-class ChannelObserver : NSObject {
+class ChannelObserver {
     var channel : MMXChannel?
     weak var object : AnyObject?
     var selector : Selector?
