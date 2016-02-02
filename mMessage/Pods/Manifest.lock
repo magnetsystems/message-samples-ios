@@ -26,10 +26,10 @@ PODS:
   - JSQMessagesViewController (7.2.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
-  - MagnetMax (2.3.0):
-    - MagnetMaxCore (~> 2.3)
-    - MMX (~> 2.3)
-  - MagnetMaxCore (2.3.0):
+  - MagnetMax (2.3.1):
+    - MagnetMaxCore (~> 2.3.1)
+    - MMX (~> 2.3.1)
+  - MagnetMaxCore (2.3.1):
     - AFNetworking/NSURLConnection (= 2.6.1)
     - AFNetworking/NSURLSession (= 2.6.1)
     - AFOAuth2Manager (= 2.2.1)
@@ -53,10 +53,10 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (2.3.0):
+  - MMX (2.3.1):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.3)
+    - MagnetMaxCore (~> 2.3.1)
     - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.13)
   - MMXXMPPFramework (3.6.13):
@@ -88,21 +88,19 @@ PODS:
   - MMXXMPPFramework/XEP-0203 (3.6.13):
     - MMXXMPPFramework/Core
     - MMXXMPPFramework/XEP-0082
-  - NYTPhotoViewer (1.0.0):
-    - NYTPhotoViewer/AnimatedGifSupport (= 1.0.0)
-    - NYTPhotoViewer/Core (= 1.0.0)
-  - NYTPhotoViewer/AnimatedGifSupport (1.0.0):
+  - NYTPhotoViewer (1.0.1):
+    - NYTPhotoViewer/AnimatedGifSupport (= 1.0.1)
+    - NYTPhotoViewer/Core (= 1.0.1)
+  - NYTPhotoViewer/AnimatedGifSupport (1.0.1):
     - FLAnimatedImage (~> 1.0.8)
     - NYTPhotoViewer/Core
-  - NYTPhotoViewer/Core (1.0.0)
-  - Player (0.1.0)
+  - NYTPhotoViewer/Core (1.0.1)
 
 DEPENDENCIES:
   - DZVideoPlayerViewController
   - JSQMessagesViewController
-  - MagnetMax (~> 2.3.0)
+  - MagnetMax (~> 2.3)
   - NYTPhotoViewer (~> 1.0.0)
-  - Player
 
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
@@ -113,13 +111,12 @@ SPEC CHECKSUMS:
   FLAnimatedImage: e16a1e1cef08e4c509b47e4acbe3923f65c16135
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  MagnetMax: 10884d3b44ae1726758827e0e10a7e0c05928463
-  MagnetMaxCore: e999c6d5187d9c67065c0444a4f08e5bc56676df
+  MagnetMax: 37f6ba2f0c1b148259f457b4da0612350809515d
+  MagnetMaxCore: d8e84000a98cac75496bf2a67d16af9b40fb7232
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: ca82f2f1667f3666d8a5d9e6b404e443e4cc6964
+  MMX: 181c6affa2ae3aaabecf98e1c75aba09d94d2fdb
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
-  NYTPhotoViewer: a2fa487ccfad736a8b7ba0b1a0f2652b878b74a7
-  Player: e05be4073ea64fce1981869898ad9796c27cdd2b
+  NYTPhotoViewer: 98e0a54a9d28e4a980fc4b611fd5e419ca89ad74
 
 COCOAPODS: 0.39.0

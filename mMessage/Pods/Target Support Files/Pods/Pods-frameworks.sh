@@ -99,7 +99,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/MagnetMaxCore.framework"
   install_framework "Pods/Mantle.framework"
   install_framework "Pods/NYTPhotoViewer.framework"
-  install_framework "Pods/Player.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/AFNetworking.framework"
@@ -117,5 +116,4 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/MagnetMaxCore.framework"
   install_framework "Pods/Mantle.framework"
   install_framework "Pods/NYTPhotoViewer.framework"
-  install_framework "Pods/Player.framework"
 fi
