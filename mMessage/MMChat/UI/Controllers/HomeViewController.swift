@@ -19,7 +19,13 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         super.viewDidLoad()
 
         if let revealVC = self.revealViewController() {
-            let menu = UIBarButtonItem(title: "≡", style: .Plain, target:revealVC, action: "revealToggle:")
+            let button = UIButton.init(type: .Custom)
+            button.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 0), size: CGSize.init(width: 40, height: 40))
+            button.setTitle("≡", forState: .Normal)
+            button.setTitleColor(UIColor(red: 0 / 255.0, green: 122 / 255.0, blue: 255 / 255.0, alpha: 1.0), forState: .Normal)
+            button.titleLabel?.font = UIFont.systemFontOfSize(36)
+            let menu = UIBarButtonItem(customView: button)
+            button.addTarget(revealVC, action: "revealToggle:", forControlEvents: .TouchUpInside)
             navigationItem.leftBarButtonItem = menu
             self.view.addGestureRecognizer(revealVC.panGestureRecognizer())
         }

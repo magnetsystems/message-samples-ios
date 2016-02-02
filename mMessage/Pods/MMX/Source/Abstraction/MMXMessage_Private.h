@@ -34,7 +34,7 @@
 
 @property(nonatomic, readwrite) NSSet *recipients;
 
-@property(nonatomic, readwrite) NSDictionary *messageContent;
+@property(nonatomic, readwrite) NSDictionary <NSString *, NSString *> *messageContent;
 
 @property(nonatomic, strong) NSMutableArray<MMAttachment *> *mutableAttachments;
 
