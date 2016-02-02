@@ -22,6 +22,10 @@ class ChatViewController: JSQMessagesViewController {
     var activityIndicator : UIActivityIndicatorView?
     var chat : MMXChannel? {
         didSet {
+            //Register for a notification to receive the message
+            if let channel = chat {
+                ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
+            }
             loadMessages()
         }
     }
@@ -50,9 +54,6 @@ class ChatViewController: JSQMessagesViewController {
         guard let user = MMUser.currentUser() else {
             return
         }
-        
-        //Register for a notification to receive the message
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didReceiveMessage:", name: MMXDidReceiveMessageNotification, object: nil)
         
         let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .Gray)
         activityIndicator.hidesWhenStopped = true
@@ -87,13 +88,18 @@ class ChatViewController: JSQMessagesViewController {
         self.automaticallyScrollsToMostRecentMessage = true
     }
     
-    deinit {
-        print("--------> deinit chat <---------")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        // Save the last channel show
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         if let _ = chat {
             ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat!.name)
         }
+    }
+    
+    deinit {
+        // Save the last channel show
+        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+        print("--------> deinit chat <---------")
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     // MARK: - Public methods
@@ -131,15 +137,10 @@ class ChatViewController: JSQMessagesViewController {
     
     // MARK: - MMX methods
     
-    func didReceiveMessage(notification: NSNotification) {
-        
-        let tmp : [NSObject : AnyObject] = notification.userInfo!
-        let mmxMessage = tmp[MMXMessageKey] as! MMXMessage
-        //Check if message is for current chat
-        if chat?.name != mmxMessage.channel?.name { return }
+    func didReceiveMessage(mmxMessage: MMXMessage) {
         
         //Show the typing indicator to be shown
-        showTypingIndicator = true && mmxMessage.sender != MMUser.currentUser()
+        showTypingIndicator = mmxMessage.sender != MMUser.currentUser()
         
         // Scroll to actually view the indicator
         scrollToBottomAnimated(true)
