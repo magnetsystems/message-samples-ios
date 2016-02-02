@@ -21,7 +21,7 @@ class ChannelManager {
     
     let formatter = DateFormatter()
     var channels : [MMXChannel]?
-    var channelSummaries : [MMXChannelSummaryResponse]?
+    var channelDetails : [MMXChannelDetailResponse]?
     private var channelObservers : [ChannelObserver] = []
     
     func channelForName(name: String) -> MMXChannel? {
@@ -37,14 +37,14 @@ class ChannelManager {
         return nil
     }
     
-    func channelSummaryForChannelName(name: String) -> MMXChannelSummaryResponse? {
+    func channelDetailForChannelName(name: String) -> MMXChannelDetailResponse? {
         
-        if nil == channels || nil == channelSummaries { return nil }
+        if nil == channels || nil == channelDetails { return nil }
         
         if let channel = channelForName(name) {
-            for summary in channelSummaries! {
-                if summary.channelName == channel.name {
-                    return summary
+            for detail in channelDetails! {
+                if detail.channelName == channel.name {
+                    return detail
                 }
             }
         }
@@ -92,8 +92,9 @@ class ChannelManager {
     }
     
     func removeChannelMessageObserver(object : AnyObject) {
+        
         channelObservers = channelObservers.filter({
-            if $0.object !== object {
+            if $0.object !== object && $0.object != nil {
                 return true
             }
             
@@ -123,7 +124,7 @@ class ChannelManager {
         for observer in observers {
             guard let object = observer.object, let selector = observer.selector else {
                 removeChannelMessageObserver(observer)
-                break
+                continue
             }
             
             object.performSelector(selector, withObject:mmxMessage)
@@ -146,7 +147,7 @@ class ChannelManager {
     
     private func removeChannelMessageObserver(object : AnyObject, channel : MMXChannel) {
         channelObservers = channelObservers.filter({
-            if $0 !== object || $0.channel?.name != channel.name {
+            if ($0 !== object || $0.channel?.name != channel.name) && $0.object != nil {
                 return true
             }
             

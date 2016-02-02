@@ -15,64 +15,45 @@
  * permissions and limitations under the License.
  */
 
-#import "MMXPubSubItemChannel.h"
-#import "MMXChannel.h"
+#import "MMUserProfile.h"
 
-@implementation MMXPubSubItemChannel
+@implementation MMUserProfile
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
-                                 @"messageID" : @"itemId",
-                                 @"messageContent" : @"content"
-                                 };
+    };
     NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
     [attributeMappings addEntriesFromDictionary:dictionary];
-    
+
     return attributeMappings;
 }
 
 + (NSDictionary *)listAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                                      }];
+    }];
     [dictionary addEntriesFromDictionary:[super listAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)mapAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                                      }];
+    }];
     [dictionary addEntriesFromDictionary:[super mapAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)enumAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                                      }];
+    }];
     [dictionary addEntriesFromDictionary:[super enumAttributeTypes]];
     return dictionary;
 }
 
 + (NSArray *)charAttributes {
     NSMutableArray *array = [NSMutableArray arrayWithArray:@[
-                                                             ]];
+    ]];
     [array addObjectsFromArray:[super charAttributes]];
     return array;
-}
-
-- (MMXMessage *)toMMXMessage {
-    
-    NSMutableDictionary *dictionary = @{
-                                        @"messageID" : self.messageID,
-                                        @"messageContent" : self.messageContent
-                                        }.mutableCopy;
-
-    if (self.publisher.userId) {
-        MMUser *user = [[MMUser alloc] init];
-        user.userID = self.publisher.userId;
-        [dictionary setObject:user forKey:@"sender"];
-    }
-    
-    return [[MMXMessage alloc] initWithDictionary:dictionary error:nil];
 }
 
 @end

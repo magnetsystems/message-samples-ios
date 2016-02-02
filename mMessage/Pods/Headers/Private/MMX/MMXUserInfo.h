@@ -1,1 +1,1 @@
-../../../MMX/Source/Public/MMXUserInfo.h
+../../../MMX/Source/PubSub/ChannelRequest/MMXUserInfo.h

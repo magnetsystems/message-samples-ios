@@ -18,48 +18,49 @@ class SummaryResponseCell: UITableViewCell {
     @IBOutlet weak var lblMessage : UILabel!
     @IBOutlet weak var ivMessageIcon : UIImageView!
     
-    var summaryResponse : MMXChannelSummaryResponse! {
+    var detailResponse : MMXChannelDetailResponse! {
         didSet {
-            if var subscribers = summaryResponse.subscribers as? [MMXUserInfo] {
-                var subscribersTitle = ""
-                var index: Int?
-                subscribers.forEach({ user in
-                    if user.userId == MMUser.currentUser()?.userID {
-                        index = subscribers.indexOf(user)!
-                    }
-                })
-                // Exclude currentUser
-                if let _ = index { subscribers.removeAtIndex(index!) }
-                
-                for user in subscribers {
-                    subscribersTitle += (subscribers.indexOf(user) == subscribers.count - 1) ? user.displayName! : "\(user.displayName!), "
+            var subscribers : [MMUserProfile] = detailResponse.subscribers as! [MMUserProfile]
+            
+            subscribers = subscribers.filter({
+                if $0.userId != MMUser.currentUser()?.userID {
+                    return true
                 }
-                lblSubscribers.text = subscribersTitle
+                return false
+            })
+            var subscribersTitle = ""
+            
+            for user in subscribers {
+                if let displayName = user.displayName {
+                subscribersTitle += (subscribers.indexOf(user) == subscribers.count - 1) ? displayName : "\(displayName), "
+                }
             }
-            if let messages = summaryResponse.messages as? [MMXPubSubItemChannel], content = messages.last?.content as! [String : String]! {
+            lblSubscribers.text = subscribersTitle
+            
+            if let messages = detailResponse.messages, content = messages.last?.messageContent {
                 lblMessage.text = content[Constants.ContentKey.Message] ?? "Attachment file"
             } else {
                 lblMessage.text = ""
             }
             
-            lblLastTime.text = ChannelManager.sharedInstance.formatter.displayTime(summaryResponse.lastPublishedTime!)
-            ivMessageIcon.image = (summaryResponse.subscribers.count > 2) ? UIImage(named: "messages.png") : UIImage(named: "message.png")
+            lblLastTime.text = ChannelManager.sharedInstance.formatter.displayTime(detailResponse.lastPublishedTime!)
+            ivMessageIcon.image = (detailResponse.subscribers.count > 2) ? UIImage(named: "messages.png") : UIImage(named: "message.png")
             vNewMessageIndicator.hidden = !hasNewMessagesFromLastTime()
         }
     }
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         vNewMessageIndicator.layer.cornerRadius = vNewMessageIndicator.bounds.width / 2
         vNewMessageIndicator.clipsToBounds = true
     }
-
+    
     // MARK: - Helpers
     
     private func hasNewMessagesFromLastTime() -> Bool {
-        if let lastViewTime = ChannelManager.sharedInstance.getLastViewTimeForChannel(summaryResponse.channelName) {
-            if let lastPublishedTime = ChannelManager.sharedInstance.formatter.dateForStringTime(summaryResponse.lastPublishedTime!) {
+        if let lastViewTime = ChannelManager.sharedInstance.getLastViewTimeForChannel(detailResponse.channelName) {
+            if let lastPublishedTime = ChannelManager.sharedInstance.formatter.dateForStringTime(detailResponse.lastPublishedTime!) {
                 let result = lastViewTime.compare(lastPublishedTime)
                 if result == .OrderedAscending {
                     return true
@@ -67,11 +68,11 @@ class SummaryResponseCell: UITableViewCell {
                     return false
                 }
             }
-        } else if summaryResponse.messages.count > 0 {
+        } else if detailResponse.messages.count > 0 {
             return true
         }
         
         return false
     }
-
+    
 }

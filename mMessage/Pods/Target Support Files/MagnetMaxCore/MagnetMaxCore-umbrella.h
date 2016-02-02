@@ -33,6 +33,7 @@
 #import "MMUpdateProfileRequest.h"
 #import "MMUser.h"
 #import "MMUserInfoService.h"
+#import "MMUserProfile.h"
 #import "MMUserRealm.h"
 #import "MMUserService.h"
 #import "MMValueTransformer.h"

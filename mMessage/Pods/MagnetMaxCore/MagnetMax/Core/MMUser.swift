@@ -23,10 +23,37 @@ import Foundation
     
 }
 
+public enum SessionStatus {
+    case NotLoggedIn
+    case LoggedIn
+    case CanResume
+}
+
 public extension MMUser {
     
     /// The currently logged-in user or nil.
-    static private var currentlyLoggedInUser: MMUser?
+    static private var currentlyLoggedInUser: MMUser? {
+        didSet {
+            if let user = currentlyLoggedInUser where user.rememberMe {
+                saveCurrentUser()
+            } else {
+                deleteSavedUser()
+            }
+        }
+    }
+    
+    private struct HATTokenRefreshStatus : OptionSetType {
+        let rawValue: Int
+        
+        static let None         = HATTokenRefreshStatus(rawValue: 0)
+        static let HasRefreshed  = HATTokenRefreshStatus(rawValue: 1 << 0)
+        static let WaitingForRefresh = HATTokenRefreshStatus(rawValue: 1 << 1)
+    }
+    
+    static private var resumeSessionCompletionBlocks : [((error : NSError?) -> Void)] = [];
+    static private let SAVED_OBJECT_KEY = "com.magnet.user.current"
+    static private var tokenRefreshStatus : HATTokenRefreshStatus = .None
+    
     @nonobjc static public var delegate : MMUserDelegate.Type?
     
     /**
@@ -45,6 +72,68 @@ public extension MMUser {
         }) { error in
             failure?(error: error)
         }.executeInBackground(nil)
+    }
+
+    /**
+     Logs in as a MMuser from saved Token.
+     - success: A block object to be executed when the login finishes successfully. This block has no return value and takes no arguments.
+     - failure: A block object to be executed when the login finishes with an error. This block has no return value and takes one argument: the error object.
+     */
+    static public func resumeSession(success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
+
+            let completion : ((error : NSError?) -> Void) = { error in
+                guard let e = error else {
+                    success?()
+                    
+                    return
+                }
+                
+                failure?(error: e)
+            }
+        
+        if self.sessionStatus() == .NotLoggedIn {
+            let error = NSError.init(domain:"com.magnet.mms.no.user", code: 400, userInfo: nil)
+            completion(error: error)
+            
+            return
+        } else if currentUser() != nil && tokenRefreshStatus == .None {
+            completion(error: nil)
+            
+            return
+        }
+        
+        resumeSessionCompletionBlocks.append(completion)
+        
+        tokenRefreshStatus = tokenRefreshStatus.union(.WaitingForRefresh)
+        if tokenRefreshStatus.contains(.HasRefreshed) && resumeSessionCompletionBlocks.count == 1 {
+            resumeSession()
+        }
+    }
+    
+    static private func resumeSession() {
+        if let user = retrieveSavedUser() {
+            updateCurrentUser(user, rememberMe: true)
+            //update current user
+            if let _ = self.delegate {
+                handleCompletion({
+                    tokenRefreshStatus = .None
+                    for i in (0..<resumeSessionCompletionBlocks.count).reverse() {
+                        let completion = resumeSessionCompletionBlocks[i]
+                        completion(error: nil)
+                    }
+                    resumeSessionCompletionBlocks = []
+                    
+                    }, failure:{error in
+                        tokenRefreshStatus = .None
+                        for i in (0..<resumeSessionCompletionBlocks.count).reverse() {
+                            let completion = resumeSessionCompletionBlocks[i]
+                            completion(error: error)
+                        }
+                        resumeSessionCompletionBlocks = []
+                        
+                    }, error : nil, context: "com.magnet.login.succeeded")
+            }
+        }
     }
     
     /**
@@ -74,15 +163,8 @@ public extension MMUser {
         MMCoreConfiguration.serviceAdapter.loginWithUsername(credential.user, password: credential.password, rememberMe: rememberMe, success: { _ in
             // Get current user now
             MMCoreConfiguration.serviceAdapter.getCurrentUserWithSuccess({ user -> Void in
-                // Reset the state
-                userTokenExpired(nil)
-                
-                currentlyLoggedInUser = user
-                let userInfo = ["userID": user.userID, "deviceID": MMServiceAdapter.deviceUUID(), "token": MMCoreConfiguration.serviceAdapter.HATToken]
-                NSNotificationCenter.defaultCenter().postNotificationName(MMServiceAdapterDidReceiveHATTokenNotification, object: self, userInfo: userInfo)
-                
-                // Register for token expired notification
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenExpired:", name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
+               //update current user
+                updateCurrentUser(user, rememberMe: rememberMe)
                 
                 if let _ = self.delegate {
                     handleCompletion(success, failure: failure, error : nil, context: "com.magnet.login.succeeded")
@@ -118,6 +200,28 @@ public extension MMUser {
         } else {
             loginClosure()
         }
+    }
+    
+    /**
+     Refreshes A Saved User
+     */
+    @objc static private func refreshUser() {
+        tokenRefreshStatus = tokenRefreshStatus.union(.HasRefreshed)
+        if tokenRefreshStatus.contains(.WaitingForRefresh) {
+            resumeSession()
+        }
+    }
+    
+    static private func updateCurrentUser(user : MMUser, rememberMe : Bool) {
+        // Reset the state
+        userTokenExpired(nil)
+        user.rememberMe = rememberMe
+        currentlyLoggedInUser = user
+        let userInfo = ["userID": user.userID, "deviceID": MMServiceAdapter.deviceUUID(), "token": MMCoreConfiguration.serviceAdapter.HATToken]
+        NSNotificationCenter.defaultCenter().postNotificationName(MMServiceAdapterDidReceiveHATTokenNotification, object: self, userInfo: userInfo)
+        
+        // Register for token expired notification
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenExpired:", name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
     }
     
     static private func handleCompletion(success: (() -> Void)?, failure: ((error: NSError) -> Void)?, error: NSError?, context : String) {
@@ -157,6 +261,8 @@ public extension MMUser {
             - failure: A block object to be executed when the logout finishes with an error. This block has no return value and takes one argument: the error object.
     */
     static public func logout(success: (() -> Void)?, failure: ((error: NSError) -> Void)?) {
+        tokenRefreshStatus = .None
+        
         if currentUser() == nil {
             success?()
             return
@@ -166,9 +272,24 @@ public extension MMUser {
         
         MMCoreConfiguration.serviceAdapter.logoutWithSuccess({ _ in
             success?()
-        }) { error in
-            failure?(error: error)
-        }.executeInBackground(nil)
+            }) { error in
+                failure?(error: error)
+            }.executeInBackground(nil)
+    }
+
+    /**
+     Get the user logged in status
+     
+     - Returns: Whether a user is logged in or not or is a user can be retrieved from saved credential
+     */
+    static public func sessionStatus() -> SessionStatus {
+        if self.currentUser() != nil {
+            return .LoggedIn
+        } else if self.retrieveSavedUser() != nil {
+            return .CanResume
+        } else {
+            return .NotLoggedIn
+        }
     }
     
     /**
@@ -268,5 +389,40 @@ public extension MMUser {
     
     override var hash: Int {
         return userID != nil ? userID.hashValue : ObjectIdentifier(self).hashValue
+    }
+    
+    static private func deleteSavedUser() {
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(SAVED_OBJECT_KEY)
+    }
+    
+    static public func savedUser() -> MMUser? {
+        
+    return retrieveSavedUser()
+    }
+    
+    static private func retrieveSavedUser() -> MMUser? {
+        guard let data = NSUserDefaults.standardUserDefaults().objectForKey(SAVED_OBJECT_KEY) as? NSData where MMCoreConfiguration.serviceAdapter.hasAuthToken() == true else {
+            self.deleteSavedUser()
+            return nil
+        }
+        return NSKeyedUnarchiver.unarchiveObjectWithData(data) as? MMUser
+    }
+    
+    static private func saveCurrentUser() {
+        guard let currentUser = currentlyLoggedInUser else {
+            self.deleteSavedUser()
+            return
+        }
+        let data = NSKeyedArchiver.archivedDataWithRootObject(currentUser)
+        NSUserDefaults.standardUserDefaults().setObject(data, forKey: SAVED_OBJECT_KEY)
+    }
+
+    static public func registerForNotifications() {
+        struct Pred {
+            static var token: dispatch_once_t = 0
+        }
+        dispatch_once(&Pred.token, {
+             NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshUser" , name: MMServiceAdapterDidRestoreHATTokenNotification, object: nil)
+            })
     }
 }

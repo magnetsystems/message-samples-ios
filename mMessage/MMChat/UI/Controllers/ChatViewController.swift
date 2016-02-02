@@ -116,13 +116,8 @@ class ChatViewController: JSQMessagesViewController {
         //Check if channel exists
         MMXChannel.findChannelsBySubscribers(allSubscribers, matchType: .EXACT_MATCH, success: { [weak self] channels in
             if channels.count == 1 {
-                //FIXME: temporary solution
-                let channelInfos : AnyObject = channels
-                if let channelInfo = channelInfos as? [MMXChannelInfo] {
-                    // Use existing channel
-                    self?.chat = ChannelManager.sharedInstance.channelForName(channelInfo.first!.name)
-                    self?.recipients = allSubscribers
-                }
+                self?.chat = channels.first
+                self?.recipients = allSubscribers
             } else if channels.count == 0 {
                 self?.chat?.addSubscribers(newSubscribers, success: { [weak self] _ in
                     self?.recipients = allSubscribers
@@ -140,23 +135,32 @@ class ChatViewController: JSQMessagesViewController {
     func didReceiveMessage(mmxMessage: MMXMessage) {
         
         //Show the typing indicator to be shown
-        showTypingIndicator = mmxMessage.sender != MMUser.currentUser()
+        
         
         // Scroll to actually view the indicator
         scrollToBottomAnimated(true)
         
-        // Allow typing indicator to show
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(1.0 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { [weak self] () in
+        let finishedMessageClosure : () -> Void = {
             let message = Message(message: mmxMessage)
-            self?.messages.append(message)
+            self.messages.append(message)
             JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
             
             if message.isMediaMessage() {
                 message.mediaCompletionBlock = { [weak self] in self?.collectionView?.reloadData() }
             }
             
-            self?.finishReceivingMessageAnimated(true)
-            })
+            self.finishReceivingMessageAnimated(true)
+        }
+        
+        if  mmxMessage.sender != MMUser.currentUser() {
+            showTypingIndicator = true
+            // Allow typing indicator to show
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(1.0 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
+                finishedMessageClosure()
+                })
+        } else {
+            finishedMessageClosure()
+        }
     }
     
     //MARK: - overriden JSQMessagesViewController methods
@@ -427,14 +431,8 @@ class ChatViewController: JSQMessagesViewController {
                         alert.presentForController(self!)
                     })
             } else if channels.count == 1 {
-                //FIXME: temp solution
-                let info : AnyObject = channels
-                if let channelInfo = info as? [MMXChannelInfo] {
-                    self?.chat = ChannelManager.sharedInstance.channelForName(channelInfo.first!.name)
-                }
                 
-                //Use existing
-                //                self?.chat = channels.first
+                self?.chat = channels.first
             }
             }) { error in
                 print("[ERROR]: \(error)")

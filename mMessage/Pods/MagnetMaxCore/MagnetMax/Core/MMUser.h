@@ -75,4 +75,9 @@
  */
 @property (nonatomic, copy) NSArray <NSString *>*tags;
 
+/**
+Remember the user.
+ */
+@property (nonatomic, assign) BOOL rememberMe;
+
 @end

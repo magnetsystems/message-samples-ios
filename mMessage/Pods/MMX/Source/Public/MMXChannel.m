@@ -764,17 +764,17 @@
     MMXPubSubService *pubSubService = [[MMXPubSubService alloc] init];
     MMCall *call = [pubSubService queryChannels:queryChannel success:^(MMXQueryChannelResponse *response) {
         if (success) {
-            success(response.channels);
+            success(response.toMMXChannels);
         }
     } failure:failure];
     
     [call executeInBackground:nil];
 }
 
-+ (void)channelSummary:(NSSet<MMXChannel *>*)channels
++ (void)channelDetails:(NSArray<MMXChannel *>*)channels
       numberOfMessages:(NSInteger)numberOfMessages
     numberOfSubcribers:(NSInteger)numberOfSubcribers
-               success:(nullable void (^)(NSArray <MMXChannelSummaryResponse *>*channelSummaries))success
+               success:(nullable void (^)(NSArray <MMXChannelDetailResponse *>*detailsForChannels))success
                failure:(nullable void (^)(NSError *error))failure {
     if (channels.count == 0) {
         NSError *error = [MMXClient errorWithTitle:@"No channels" message:@"No channels" code:403];
@@ -789,8 +789,10 @@
     channelSummary.numOfMessages = numberOfMessages;
     channelSummary.numOfSubcribers = numberOfSubcribers;
     NSMutableArray *channelRequestObjects = [NSMutableArray new];
+    NSMutableDictionary *channelMap = [NSMutableDictionary new];
     
     for (MMXChannel *channel in channels) {
+        [channelMap setObject:channel forKey:channel.name];
         MMXChannelLookupKey *channelRequestObject = [[MMXChannelLookupKey alloc] init];
         channelRequestObject.ownerUserID = channel.ownerUserID;
         channelRequestObject.privateChannel = channel.privateChannel;
@@ -801,7 +803,10 @@
     
     MMXPubSubService *pubSubService = [[MMXPubSubService alloc] init];
     MMCall *call = [pubSubService getSummary:channelSummary
-                                     success:^(NSArray<MMXChannelSummaryResponse *>*response) {
+                                     success:^(NSArray<MMXChannelDetailResponse *>*response) {
+                                         for (MMXChannelDetailResponse *details in response) {
+                                             details.channel = [channelMap objectForKey:details.channelName];
+                                         }
                                          if (success) {
                                              success(response);
                                          }
