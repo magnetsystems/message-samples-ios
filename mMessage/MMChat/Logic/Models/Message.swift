@@ -13,11 +13,26 @@ import MMX
 class Message : NSObject, JSQMessageData {
     
     var mediaCompletionBlock: JSQLocationMediaItemCompletionBlock?
-    let underlyingMessage: MMXMessage
+    private(set) var underlyingMessage: MMXMessage {
+        didSet {
+            switch self.type {
+            case .Text:
+                self.isDownloaded  = true
+            case .Location:
+                break
+            case .Photo:
+                break
+            case .Video:
+                break
+            }
+        }
+    }
+    
+    private(set) var isDownloaded : Bool = false
     
     lazy var type: MessageType = {
         return MessageType(rawValue: self.underlyingMessage.messageContent["type"]!)
-    }()!
+        }()!
     
     lazy var mediaContent: JSQMessageMediaData! = {
         
@@ -28,15 +43,15 @@ class Message : NSObject, JSQMessageData {
             let messageContent = self.underlyingMessage.messageContent
             let locationMediaItem = JSQLocationMediaItem()
             locationMediaItem.appliesMediaViewMaskAsOutgoing = false
-
+            
             if let latitude = Double(messageContent["latitude"]!), let longitude = Double(messageContent["longitude"]!) {
                 let location = CLLocation(latitude: latitude, longitude: longitude)
                 locationMediaItem.setLocation(location, withCompletionHandler: self.mediaCompletionBlock ?? nil)
             }
-
+            self.isDownloaded  = true
             self.mediaCompletionBlock = nil
             return locationMediaItem
-
+            
         case .Photo:
             let photoMediaItem = JSQPhotoMediaItem()
             photoMediaItem.appliesMediaViewMaskAsOutgoing = false
@@ -49,7 +64,8 @@ class Message : NSObject, JSQMessageData {
                     self?.mediaCompletionBlock!()
                     self?.mediaCompletionBlock = nil
                 }
-            }, failure: nil)
+                self?.isDownloaded  = true
+                }, failure: nil)
             
             return photoMediaItem
             
@@ -60,6 +76,7 @@ class Message : NSObject, JSQMessageData {
             
             let attachment = self.underlyingMessage.attachments?.first
             videoMediaItem.fileURL = attachment!.downloadURL
+            self.isDownloaded  = true
             
             return videoMediaItem
         }

@@ -12,17 +12,25 @@ import MagnetMax
 class HomeViewController: UITableViewController, UISearchResultsUpdating, ContactsViewControllerDelegate {
     
     let searchController = UISearchController(searchResultsController: nil)
-    var summaryResponses : [MMXChannelSummaryResponse] = []
-    var filteredSummaryResponses : [MMXChannelSummaryResponse] = []
+    var detailResponses : [MMXChannelDetailResponse] = []
+    var filteredDetailResponses : [MMXChannelDetailResponse] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let revealVC = self.revealViewController() {
-            self.navigationItem.leftBarButtonItem!.target = revealVC
-            self.navigationItem.leftBarButtonItem!.action = "revealToggle:"
+            let button = UIButton.init(type: .Custom)
+            button.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 0), size: CGSize.init(width: 40, height: 40))
+            button.setTitle("≡", forState: .Normal)
+            button.setTitleColor(UIColor(red: 0 / 255.0, green: 122 / 255.0, blue: 255 / 255.0, alpha: 1.0), forState: .Normal)
+            button.titleLabel?.font = UIFont.systemFontOfSize(36)
+            let menu = UIBarButtonItem(customView: button)
+            button.addTarget(revealVC, action: "revealToggle:", forControlEvents: .TouchUpInside)
+            navigationItem.leftBarButtonItem = menu
             self.view.addGestureRecognizer(revealVC.panGestureRecognizer())
         }
+        
+        
         
         // Indicate that you are ready to receive messages now!
         MMX.start()
@@ -45,7 +53,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
         }
         
-        loadSummaries()
+        loadDetails()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -53,8 +61,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         self.title = nil
     }
     
-    @IBAction func refreshChannelSummary() {
-        loadSummaries()
+    @IBAction func refreshChannelDetail() {
+        loadDetails()
     }
     
     deinit {
@@ -80,14 +88,14 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.active {
-            return filteredSummaryResponses.count
+            return filteredDetailResponses.count
         }
-        return summaryResponses.count
+        return detailResponses.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
-        cell.summaryResponse = searchController.active ? filteredSummaryResponses[indexPath.row] : summaryResponses[indexPath.row]
+        cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
         
         return cell
     }
@@ -97,20 +105,20 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let summaryResponse = summaryResponses[indexPath.row]
+        let detailResponse = detailResponses[indexPath.row]
         var isLastPersonInChat = false
-        if summaryResponse.messages.count > 0 {
-            isLastPersonInChat = (summaryResponse.messages.last as! MMXPubSubItemChannel).publisher.userId == MMUser.currentUser()?.userID
+        if detailResponse.messages.count > 0 {
+            isLastPersonInChat = detailResponse.messages.last?.sender?.userID == MMUser.currentUser()?.userID
         }
         
         if isLastPersonInChat {
             // Current user must be the owner of the channel to delete it
-            if let chat = ChannelManager.sharedInstance.isOwnerForChat(summaryResponse.channelName) {
+            if let chat = ChannelManager.sharedInstance.isOwnerForChat(detailResponse.channelName) {
                 let delete = UITableViewRowAction(style: .Normal, title: "Delete") { [weak self] action, index in
                     chat.deleteWithSuccess({ _ in
-                        self?.summaryResponses.removeAtIndex(index.row)
+                        self?.detailResponses.removeAtIndex(index.row)
                         tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
-                        ChannelManager.sharedInstance.removeLastViewTimeForChannel(summaryResponse.channelName)
+                        ChannelManager.sharedInstance.removeLastViewTimeForChannel(detailResponse.channelName)
                     }, failure: { error in
                         print(error)
                     })
@@ -122,11 +130,11 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         
         // Unsubscribe
         let leave = UITableViewRowAction(style: .Normal, title: "Leave") { [weak self] action, index in
-            if let chat = ChannelManager.sharedInstance.channelForName(summaryResponse.channelName) {
+            if let chat = ChannelManager.sharedInstance.channelForName(detailResponse.channelName) {
                 chat.unSubscribeWithSuccess({ _ in
-                    self?.summaryResponses.removeAtIndex(index.row)
+                    self?.detailResponses.removeAtIndex(index.row)
                     tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
-                    ChannelManager.sharedInstance.removeLastViewTimeForChannel(summaryResponse.channelName)
+                    ChannelManager.sharedInstance.removeLastViewTimeForChannel(detailResponse.channelName)
                 }, failure: { error in
                     print(error)
                 })
@@ -155,7 +163,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         if segue.identifier == "showChatFromChannelSummary" {
             searchController.active = false
             if let chatVC = segue.destinationViewController as? ChatViewController, let cell = sender as? SummaryResponseCell {
-                chatVC.chat = ChannelManager.sharedInstance.channelForName(cell.summaryResponse.channelName)
+                chatVC.chat = ChannelManager.sharedInstance.channelForName(cell.detailResponse.channelName)
             }
         } else if segue.identifier == "showContactsSelector" {
             if let navigationVC = segue.destinationViewController as? UINavigationController {
@@ -169,15 +177,14 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     // MARK: - Helpers
     
-    private func loadSummaries() {
+    private func loadDetails() {
         // Get all channels the current user is subscribed to
         MMXChannel.subscribedChannelsWithSuccess({ [weak self] channels in
             ChannelManager.sharedInstance.channels = channels
-            // Get summaries
-            let channelsSet = Set(channels)
-            MMXChannel.channelSummary(channelsSet, numberOfMessages: 10, numberOfSubcribers: 10, success: { summaryResponses in
-                ChannelManager.sharedInstance.channelSummaries = summaryResponses
-                self?.summaryResponses = summaryResponses
+            // Get details
+            MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
+                ChannelManager.sharedInstance.channelDetails = detailResponses
+                self?.detailResponses = detailResponses
                 self?.endRefreshing()
             }, failure: { error in
                 self?.endRefreshing()
@@ -191,10 +198,10 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         let searchString = searchController.searchBar.text!.lowercaseString
-        filteredSummaryResponses = summaryResponses.filter { summary in
-            if let pubSubItems = summary.messages as? [MMXPubSubItemChannel] {
+        filteredDetailResponses = detailResponses.filter { detail in
+            if let pubSubItems = detail.messages {
                 for message in pubSubItems {
-                    let content = message.content as! [String : String]!
+                    let content = message.messageContent
                     if let text = content[Constants.ContentKey.Message] where text.containsString(searchString) {
                         return true
                     }

@@ -1,0 +1,1 @@
+../../../MagnetMaxCore/MagnetMax/Core/MMUserProfile.h

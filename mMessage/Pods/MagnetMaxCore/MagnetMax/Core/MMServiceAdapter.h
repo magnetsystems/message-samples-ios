@@ -122,6 +122,7 @@ The timeout interval, in seconds, for created requests. The default timeout inte
 
 - (void)authenticateUserWithSuccess:(void (^)())success
                             failure:(void (^)(NSError *error))failure;
+- (BOOL)hasAuthToken;
 
 /**
  * Posted when (additional) configuration is received.
@@ -137,6 +138,11 @@ extern NSString *const MMServiceAdapterDidReceiveCATTokenNotification;
  * Posted when an user (HAT) token is received.
  */
 extern NSString *const MMServiceAdapterDidReceiveHATTokenNotification;
+
+/**
+ * Posted when an user (HAT) token is restored.
+ */
+extern NSString *const MMServiceAdapterDidRestoreHATTokenNotification;
 
 /**
  * Posted when an user (HAT) token is invalidated.

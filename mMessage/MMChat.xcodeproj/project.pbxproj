@@ -14,8 +14,6 @@
 		8B0909A11C3AD5F20042F361 /* SummaryResponseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0909A01C3AD5F20042F361 /* SummaryResponseCell.swift */; };
 		8B0909A51C3ADB030042F361 /* disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B0909A41C3ADB030042F361 /* disclosure@2x.png */; };
 		8B0909A81C3AE9010042F361 /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B0909A71C3AE9010042F361 /* MagnetMax.plist */; };
-		8B223F481C3308D80096D204 /* menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B223F461C3308D80096D204 /* menu@2x.png */; };
-		8B223F491C3308D80096D204 /* menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B223F471C3308D80096D204 /* menu@3x.png */; };
 		8B223F4B1C33099B0096D204 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B223F4A1C33099B0096D204 /* HomeViewController.swift */; };
 		8B2D67A31C4024A4001394C5 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B2D67A21C4024A4001394C5 /* message.png */; };
 		8B2E53CE1C2AC31900C9AC47 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2E53CD1C2AC31900C9AC47 /* AppDelegate.swift */; };
@@ -83,8 +81,6 @@
 		8B0909A01C3AD5F20042F361 /* SummaryResponseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryResponseCell.swift; sourceTree = "<group>"; };
 		8B0909A41C3ADB030042F361 /* disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure@2x.png"; sourceTree = "<group>"; };
 		8B0909A71C3AE9010042F361 /* MagnetMax.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MagnetMax.plist; sourceTree = "<group>"; };
-		8B223F461C3308D80096D204 /* menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu@2x.png"; sourceTree = "<group>"; };
-		8B223F471C3308D80096D204 /* menu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu@3x.png"; sourceTree = "<group>"; };
 		8B223F4A1C33099B0096D204 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		8B223F4F1C330CBB0096D204 /* MMChat-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MMChat-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B2D67A21C4024A4001394C5 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
@@ -215,8 +211,6 @@
 				8BA6E34B1C3D94380095F65F /* messages.png */,
 				8B0909A41C3ADB030042F361 /* disclosure@2x.png */,
 				8B09099D1C3AB5C60042F361 /* new_message@2x.png */,
-				8B223F461C3308D80096D204 /* menu@2x.png */,
-				8B223F471C3308D80096D204 /* menu@3x.png */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -506,6 +500,7 @@
 				TargetAttributes = {
 					8B2E53C91C2AC31900C9AC47 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = UXAB3BW444;
 					};
 					8B2E53DD1C2AC31900C9AC47 = {
 						CreatedOnToolsVersion = 7.2;
@@ -540,12 +535,10 @@
 				8B38D2EB1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX.png in Resources */,
 				8B71BE6B1C57B2D7006E5C1F /* DZVideoPlayerViewController_simple.xib in Resources */,
 				8B71BE6E1C57B2E1006E5C1F /* videoplayer_expand@3x.png in Resources */,
-				8B223F491C3308D80096D204 /* menu@3x.png in Resources */,
 				8B71BE701C57B2E1006E5C1F /* videoplayer_pause@2x.png in Resources */,
 				8B71BE6A1C57B2D3006E5C1F /* DZVideoPlayerViewController.xib in Resources */,
 				8B2E53D81C2AC31900C9AC47 /* LaunchScreen.storyboard in Resources */,
 				8B0909A51C3ADB030042F361 /* disclosure@2x.png in Resources */,
-				8B223F481C3308D80096D204 /* menu@2x.png in Resources */,
 				8B38D2EC1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX@2x.png in Resources */,
 				8BA6E34C1C3D94380095F65F /* messages.png in Resources */,
 				8B2E53D51C2AC31900C9AC47 /* Assets.xcassets in Resources */,
@@ -789,7 +782,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.MMChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MMChat/MMChat-Bridging-Header.h";
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/lib";
 			};
 			name = Debug;
 		};
@@ -805,7 +800,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.MMChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MMChat/MMChat-Bridging-Header.h";
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/lib";
 			};
 			name = Release;
 		};

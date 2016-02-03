@@ -19,7 +19,7 @@
 #import <Foundation/Foundation.h>
 #import "MMXPublishPermissionsEnum.h"
 #import "MMXMatchType.h"
-#import "MMXChannelSummaryResponse.h"
+#import "MMXChannelDetailResponse.h"
 
 @import MagnetMaxCore;
 @class MMUser;
@@ -354,10 +354,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param success		  Block with the channels
  *  @param failure		  Block with an NSError with details about the call failure.
  */
-+ (void)channelSummary:(NSSet<MMXChannel *>*)channels
++ (void)channelDetails:(NSArray<MMXChannel *>*)channels
       numberOfMessages:(NSInteger)numberOfMessages
     numberOfSubcribers:(NSInteger)numberOfSubcribers
-               success:(nullable void (^)(NSArray <MMXChannelSummaryResponse *>*channelSummaries))success
+               success:(nullable void (^)(NSArray <MMXChannelDetailResponse *>*detailsForChannels))success
                failure:(nullable void (^)(NSError *error))failure;
 NS_ASSUME_NONNULL_END
 @end

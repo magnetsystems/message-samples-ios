@@ -20,7 +20,7 @@
 #import "MMXQueryChannel.h"
 #import "MMXChannel.h"
 #import "MMXChannelSummaryRequest.h"
-#import "MMXChannelSummaryResponse.h"
+#import "MMXChannelDetailResponse.h"
 #import "MMXChannelResponse.h"
 #import "MMXRemoveSubscribersResponse.h"
 #import "MMXAddSubscribersResponse.h"
@@ -100,7 +100,7 @@
         getSummarySuccessFailure.parameters = getSummarySuccessFailureParams;
         getSummarySuccessFailure.returnType = MMServiceIOTypeArray;
         getSummarySuccessFailure.returnComponentType = MMServiceIOTypeMagnetNode;
-        getSummarySuccessFailure.returnTypeClass = MMXChannelSummaryResponse.class;
+        getSummarySuccessFailure.returnTypeClass = MMXChannelDetailResponse.class;
         serviceMetaData[NSStringFromSelector(getSummarySuccessFailure.selector)] = getSummarySuccessFailure;
         
         // schema for service method addSubscribersToChannel:body:success:failure:

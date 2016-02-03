@@ -58,4 +58,30 @@
     return array;
 }
 
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeObject:self.userID forKey:@"userID"];
+    [encoder encodeObject:self.userName forKey:@"userName"];
+    [encoder encodeObject:self.firstName forKey:@"firstName"];
+    [encoder encodeObject:self.lastName forKey:@"lastName"];
+    [encoder encodeObject:self.email forKey:@"email"];
+    [encoder encodeObject:self.roles forKey:@"roles"];
+    [encoder encodeObject:@(self.userRealm) forKey:@"userRealm"];
+    [encoder encodeObject:self.extras forKey:@"extras"];
+    [encoder encodeObject:self.tags forKey:@"tags"];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder {
+    if((self = [super init])) {
+        self.userID = [decoder decodeObjectForKey:@"userID"];
+        self.userName = [decoder decodeObjectForKey:@"userName"];
+        self.firstName = [decoder decodeObjectForKey:@"firstName"];
+        self.lastName = [decoder decodeObjectForKey:@"lastName"];
+        self.roles = [decoder decodeObjectForKey:@"roles"];
+        self.userRealm = (MMUserRealm)[[decoder decodeObjectForKey:@"userRealm"] integerValue];
+        self.extras = [decoder decodeObjectForKey:@"extras"];
+        self.tags = [decoder decodeObjectForKey:@"tags"];
+    }
+    return self;
+}
+
 @end

@@ -18,45 +18,63 @@
 #import "MMXQueryChannelResponse.h"
 #import "MMXChannelResponse.h"
 #import "MMXChannelInfo.h"
+#import "MMXChannel.h"
 
 @implementation MMXQueryChannelResponse
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
-    };
+                                 };
     NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
     [attributeMappings addEntriesFromDictionary:dictionary];
-
+    
     return attributeMappings;
 }
 
 + (NSDictionary *)listAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-        @"channels" : MMXChannelInfo.class,
-    }];
+                                                                                      @"channels" : MMXChannelInfo.class,
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super listAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)mapAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super mapAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)enumAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super enumAttributeTypes]];
     return dictionary;
 }
 
 + (NSArray *)charAttributes {
     NSMutableArray *array = [NSMutableArray arrayWithArray:@[
-    ]];
+                                                             ]];
     [array addObjectsFromArray:[super charAttributes]];
     return array;
+}
+
+- (NSArray *)toMMXChannels {
+    NSMutableArray *channels = [NSMutableArray new];
+    for (MMXChannelInfo *channelInfo in self.channels) {
+        NSDictionary *channelDictionary = @{
+                                            @"name" : channelInfo.name,
+                                            @"privateChannel": @(!channelInfo.subscriptionEnabled),
+                                            @"summary": channelInfo.description,
+                                            @"publishPermissions": @(channelInfo.publishPermission)
+                                            };
+        MMXChannel *ch = [[MMXChannel alloc] initWithDictionary:channelDictionary error:nil];
+        if (ch)
+            [channels addObject:ch];
+    }
+    
+    return channels;
 }
 
 @end
