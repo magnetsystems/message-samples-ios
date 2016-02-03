@@ -490,7 +490,6 @@ class ChatViewController: JSQMessagesViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetailsSegue" {
             if let detailVC = segue.destinationViewController as? DetailsViewController {
-                detailVC.recipients = recipients
                 detailVC.channel = chat
             }
         } else if segue.identifier == "showMapViewController" {

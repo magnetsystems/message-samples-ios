@@ -11,12 +11,19 @@ import MagnetMax
 
 class DetailsViewController: UITableViewController, ContactsViewControllerDelegate {
     
-    var recipients : [MMUser]!
+    var recipients : [MMUser]?
     var channel : MMXChannel!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+   
+   channel.subscribersWithLimit(200, offset: 0, success: { (total, users) -> Void in
+    self.recipients = users
+    self.tableView.reloadData()
+    
+    }) { (error) -> Void in
+        //error
+        }
     }
     
     @IBAction func leaveAction() {
@@ -33,18 +40,23 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
     // MARK: - Table view data source
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recipients.count + 1
+        guard let i = recipients?.count else {
+            
+            return 1
+        }
+        
+        return i + 1
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("RecipientsCellIdentifier", forIndexPath: indexPath)
 
-        if indexPath.row == recipients.count {
+        if indexPath.row == recipients?.count {
             let color = ChannelManager.sharedInstance.isOwnerForChat(channel.name) != nil ? self.view.tintColor : UIColor.blackColor()
             cell.textLabel?.attributedText = NSAttributedString(string: "+ Add Contact",
                                                             attributes: [NSForegroundColorAttributeName : color,
                                                                          NSFontAttributeName : UIFont.systemFontOfSize((cell.textLabel?.font.pointSize)!)])
-        } else {
+        } else if let recipients = self.recipients {
             let attributes = [NSFontAttributeName : UIFont.boldSystemFontOfSize((cell.textLabel?.font.pointSize)!),
                               NSForegroundColorAttributeName : UIColor.blackColor()]
             var title = NSAttributedString()
@@ -71,7 +83,7 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
     // MARK: - Table view delegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if (indexPath.row == recipients.count) && ChannelManager.sharedInstance.isOwnerForChat(channel.name) != nil {
+        if (indexPath.row == recipients?.count) && ChannelManager.sharedInstance.isOwnerForChat(channel.name) != nil {
             // Show contact selector
             if let navigationVC = self.storyboard?.instantiateViewControllerWithIdentifier("ContactsNavigationController") as? UINavigationController {
                 if let contactsVC = navigationVC.topViewController as? ContactsViewController {
