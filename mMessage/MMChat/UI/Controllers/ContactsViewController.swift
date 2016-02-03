@@ -13,25 +13,26 @@ protocol ContactsViewControllerDelegate: class {
     func contactsControllerDidFinish(with selectedUsers: [MMUser])
 }
 
-class ContactsViewController: UITableViewController, UISearchResultsUpdating {
+class ContactsViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
     weak var delegate: ContactsViewControllerDelegate?
     var availableRecipients = [String : [MMUser]]()
     var filteredRecipients = [MMUser]()
+    var selectedUsers : [MMUser] = []
     let resultSearchController = UISearchController(searchResultsController: nil)
-
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.rightBarButtonItem?.enabled = false
-        
         resultSearchController.searchResultsUpdater = self
         resultSearchController.dimsBackgroundDuringPresentation = false
         resultSearchController.searchBar.sizeToFit()
-        
+        resultSearchController.searchBar.returnKeyType = .Done
+        resultSearchController.searchBar.setShowsCancelButton(false, animated: false)
+        resultSearchController.searchBar.delegate = self
+        updateNextButton()
         tableView.tableHeaderView = resultSearchController.searchBar
         tableView.reloadData()
-
+        
         let searchQuery = "userName:*"
         MMUser.searchUsers(searchQuery, limit: 100, offset: 0, sort: "userName:asc", success: { [weak self] users in
             var tempUsers = users
@@ -40,9 +41,13 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating {
             }
             self?.availableRecipients = self!.createAlphabetDictionary(tempUsers)
             self?.tableView.reloadData()
-        }, failure: { error in
-            print("[ERROR]: \(error.localizedDescription)")
+            }, failure: { error in
+                print("[ERROR]: \(error.localizedDescription)")
         })
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        resultSearchController.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func cancelAction() {
@@ -50,20 +55,21 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     @IBAction func nextAction() {
-        delegate?.contactsControllerDidFinish(with: selectedUsers())
+        
+        delegate?.contactsControllerDidFinish(with: selectedUsers)
         
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if resultSearchController.active {
             return 1
         }
         return availableRecipients.count
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if resultSearchController.active {
             return filteredRecipients.count
@@ -88,6 +94,17 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating {
             user = users![indexPath.row]
         }
         
+        let selectedUsers = self.selectedUsers.filter({
+            if $0 === user {
+                return true
+            }
+            return false
+        })
+        
+        if selectedUsers.count > 0 && !cell.highlighted {
+            tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition:.None)
+        }
+        
         let attributes = [NSFontAttributeName : UIFont.boldSystemFontOfSize((cell.textLabel?.font.pointSize)!)]
         var title = NSAttributedString()
         if let lastName = user.lastName where lastName.isEmpty == false {
@@ -107,7 +124,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating {
         
         return cell
     }
-
+    
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if resultSearchController.active {
             return ""
@@ -118,16 +135,33 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let selectedRows : [NSIndexPath] = tableView.indexPathsForSelectedRows {
-            self.navigationItem.rightBarButtonItem?.enabled = selectedRows.count > 0
+        if resultSearchController.active {
+            let user = filteredRecipients[indexPath.row]
+            addSelectedUser(user)
+        } else {
+            let letters = Array(availableRecipients.keys)
+            let letter = letters[indexPath.section]
+            if let users = availableRecipients[letter] {
+                let user = users[indexPath.row]
+                addSelectedUser(user)
+            }
         }
+        updateNextButton()
     }
     
     override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        if let _ = tableView.indexPathsForSelectedRows {
+        if resultSearchController.active {
+            let user = filteredRecipients[indexPath.row]
+            removeSelectedUser(user)
         } else {
-            self.navigationItem.rightBarButtonItem?.enabled = false
+            let letters = Array(availableRecipients.keys)
+            let letter = letters[indexPath.section]
+            if let users = availableRecipients[letter] {
+                let user = users[indexPath.row]
+                removeSelectedUser(user)
+            }
         }
+        updateNextButton()
     }
     
     // MARK: - UISearchResultsUpdating
@@ -144,6 +178,27 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating {
         }
         
         tableView.reloadData()
+    }
+    
+    // MARK: - Private Methods
+    
+    private func addSelectedUser(selectedUser : MMUser) {
+        removeSelectedUser(selectedUser)
+        selectedUsers.append(selectedUser)
+    }
+    
+    private func removeSelectedUser(selectedUser : MMUser) {
+        selectedUsers = selectedUsers.filter({
+            if $0 !== selectedUser {
+                return true
+            }
+            
+            return false
+        })
+    }
+    
+    private func updateNextButton() {
+        self.navigationItem.rightBarButtonItem?.enabled = selectedUsers.count > 0
     }
     
     // MARK: - Helpers
@@ -185,17 +240,4 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating {
         return namesForLetters
     }
     
-    func selectedUsers() -> [MMUser] {
-        let selectedRows : [NSIndexPath] = tableView.indexPathsForSelectedRows!
-        var userArray = [MMUser]()
-        
-        let letters = Array(availableRecipients.keys)
-        for indexPath in selectedRows {
-            let letter = letters[indexPath.section]
-            let users = availableRecipients[letter]
-            userArray.append(users![indexPath.row])
-        }
-        return userArray
-    }
-
 }

@@ -206,14 +206,12 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         let searchString = searchController.searchBar.text!.lowercaseString
-        filteredDetailResponses = detailResponses.filter { detail in
-            if let pubSubItems = detail.messages {
-                for message in pubSubItems {
-                    let content = message.messageContent
-                    if let text = content[Constants.ContentKey.Message] where text.containsString(searchString) {
+        filteredDetailResponses = detailResponses.filter {
+                for subscriber in $0.subscribers {
+                    let name = subscriber.displayName
+                    if name.lowercaseString.containsString(searchString.lowercaseString) || searchString.characters.count == 0 {
                         return true
                     }
-                }
             }
             
             return false
