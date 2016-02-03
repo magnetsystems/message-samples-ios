@@ -157,7 +157,7 @@ class ChatViewController: JSQMessagesViewController {
             // Allow typing indicator to show
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(1.0 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
                 finishedMessageClosure()
-                })
+            })
         } else {
             finishedMessageClosure()
         }
@@ -176,12 +176,16 @@ class ChatViewController: JSQMessagesViewController {
             Constants.ContentKey.Message: forcedString,
         ]
         
+        button.userInteractionEnabled = false
+        
         self.showSpinner()
         let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
         mmxMessage.sendWithSuccess( { [weak self] _ in
+            button.userInteractionEnabled = true
             self?.hideSpinner()
             self?.finishSendingMessageAnimated(true)
             }) { error in
+                button.userInteractionEnabled = true
                 self.hideSpinner()
                 print(error)
         }
