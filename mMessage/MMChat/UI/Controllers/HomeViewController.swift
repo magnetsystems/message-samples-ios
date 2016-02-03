@@ -54,11 +54,18 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
         
         loadDetails()
+        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.title = nil
+        
+        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+    }
+    
+    func didReceiveMessage(mmxMessage: MMXMessage) {
+        loadDetails()
     }
     
     @IBAction func refreshChannelDetail() {

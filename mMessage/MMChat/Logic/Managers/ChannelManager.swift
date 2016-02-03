@@ -52,8 +52,10 @@ class ChannelManager {
         return nil
     }
     
-    func addChannelMessageObserver(target : AnyObject, channel : MMXChannel, selector : Selector) {
-        removeChannelMessageObserver(target, channel: channel)
+    func addChannelMessageObserver(target : AnyObject, channel : MMXChannel?, selector : Selector) {
+        if let ch = channel {
+        removeChannelMessageObserver(target, channel: ch)
+        }
         
         let observer = ChannelObserver.init()
         observer.object = target
@@ -114,7 +116,7 @@ class ChannelManager {
         let channel = mmxMessage.channel
         
         let observers : [ChannelObserver] = channelObservers.filter({
-            if $0.channel?.name == channel?.name {
+            if $0.channel?.name == channel?.name || $0.channel == nil  {
                 return true
             }
             
