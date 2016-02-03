@@ -28,6 +28,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             button.addTarget(revealVC, action: "revealToggle:", forControlEvents: .TouchUpInside)
             navigationItem.leftBarButtonItem = menu
             self.view.addGestureRecognizer(revealVC.panGestureRecognizer())
+            self.view.addGestureRecognizer(revealVC.tapGestureRecognizer())
         }
         
         
