@@ -424,7 +424,7 @@
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="t5z-4z-76O">
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
-                            <action selector="refreshChannelSummary" destination="9K4-UP-Qkk" eventType="valueChanged" id="biR-Sf-ghP"/>
+                            <action selector="refreshChannelDetail" destination="9K4-UP-Qkk" eventType="valueChanged" id="4f3-5V-kAD"/>
                         </connections>
                     </refreshControl>
                 </tableViewController>
