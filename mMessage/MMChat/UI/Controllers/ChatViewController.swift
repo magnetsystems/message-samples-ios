@@ -110,27 +110,17 @@ class ChatViewController: JSQMessagesViewController {
     
     func addSubscribers(newSubscribers: [MMUser]) {
         
-        guard let _ = recipients, let _ = chat else {
+        guard let _ = recipients, let currentChat = chat else {
             print("Add subscribers error")
             return
         }
         
         let allSubscribers = Array(Set(newSubscribers + self.recipients))
         
-        //Check if channel exists
-        MMXChannel.findChannelsBySubscribers(allSubscribers, matchType: .EXACT_MATCH, success: { [weak self] channels in
-            if channels.count == 1 {
-                self?.chat = channels.first
-                self?.recipients = allSubscribers
-            } else if channels.count == 0 {
-                self?.chat?.addSubscribers(newSubscribers, success: { [weak self] _ in
-                    self?.recipients = allSubscribers
-                    }, failure: { error in
-                        print("[ERROR]: can't add subscribers - \(error)")
-                })
-            }
-            }, failure: { error in
-                print("[ERROR]: \(error)")
+        currentChat.addSubscribers(newSubscribers, success: { [weak self] _ in
+            self?.recipients = allSubscribers
+        }, failure: { error in
+            print("[ERROR]: can't add subscribers - \(error)")
         })
     }
     
@@ -422,7 +412,7 @@ class ChatViewController: JSQMessagesViewController {
     private func getChannelBySubscribers(users: [MMUser]) {
         //Check if channel exists
         MMXChannel.findChannelsBySubscribers(users, matchType: .EXACT_MATCH, success: { [weak self] channels in
-            if channels.count == 0 {
+            if channels.count != 1 {
                 //Create new chat
                 let subscribers = Set(users)
                 
@@ -438,16 +428,15 @@ class ChatViewController: JSQMessagesViewController {
                         })
                         alert.presentForController(self!)
                     })
-            } else if channels.count == 1 {
-                
+            } else {
                 self?.chat = channels.first
             }
-            }) { error in
-                print("[ERROR]: \(error)")
-                let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close", handler: { _ in
-                    self.navigationController?.popViewControllerAnimated(true)
-                })
-                alert.presentForController(self)
+        }) { error in
+            print("[ERROR]: \(error)")
+            let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close", handler: { _ in
+                self.navigationController?.popViewControllerAnimated(true)
+            })
+            alert.presentForController(self)
         }
     }
     

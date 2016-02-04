@@ -135,7 +135,7 @@ class ChannelManager {
         let channel = mmxMessage.channel
         
         let observers : [ChannelObserver] = channelObservers.filter({
-            if $0.channel?.name == channel?.name || $0.channel == nil  {
+            if $0.channel?.name.lowercaseString == channel?.name.lowercaseString || $0.channel == nil  {
                 return true
             }
             
