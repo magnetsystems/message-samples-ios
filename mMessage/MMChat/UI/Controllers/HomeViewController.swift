@@ -187,15 +187,19 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         // Get all channels the current user is subscribed to
         MMXChannel.subscribedChannelsWithSuccess({ [weak self] channels in
             ChannelManager.sharedInstance.channels = channels
-            // Get details
-            MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
-                ChannelManager.sharedInstance.channelDetails = detailResponses
-                self?.detailResponses = detailResponses
-                self?.endRefreshing()
-            }, failure: { error in
-                self?.endRefreshing()
-                print(error)
-            })
+            if channels.count > 0 {
+                // Get details
+                MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
+                    ChannelManager.sharedInstance.channelDetails = detailResponses
+                    self?.detailResponses = detailResponses
+                    self?.endRefreshing()
+                }, failure: { error in
+                    self?.endRefreshing()
+                    print(error)
+                })
+            } else {
+                ChannelManager.sharedInstance.channelDetails?.removeAll()
+            }
         }) { [weak self] error in
             self?.endRefreshing()
             print(error)
