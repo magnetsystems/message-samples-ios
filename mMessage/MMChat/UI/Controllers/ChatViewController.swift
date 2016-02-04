@@ -18,8 +18,8 @@ class ChatViewController: JSQMessagesViewController {
     var notifier : NavigationNotifier?
     var messages = [Message]()
     var avatars = Dictionary<String, UIImage>()
-    let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
-    let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
+    let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
+    let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     var activityIndicator : UIActivityIndicatorView?
     var chat : MMXChannel? {
         didSet {
