@@ -15,10 +15,19 @@ class SignInViewController : BaseViewController {
     @IBOutlet weak var txtfPassword : UITextField!
     @IBOutlet weak var btnRemember : UISwitch!
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         txtfPassword.text = ""
         navigationController?.setNavigationBarHidden(true, animated: animated)
+
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     @IBAction func signInAction() {
