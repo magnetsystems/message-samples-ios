@@ -32,7 +32,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
         
         
-        
+        navigationController?.setNavigationBarHidden(false, animated: true)
         // Indicate that you are ready to receive messages now!
         MMX.start()
         // Handling disconnection
