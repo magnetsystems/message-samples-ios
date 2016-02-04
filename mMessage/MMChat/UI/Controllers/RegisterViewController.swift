@@ -30,6 +30,7 @@ class RegisterViewController : BaseViewController {
         super.viewWillDisappear(animated)
         
         NSNotificationCenter.defaultCenter().removeObserver(self)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     //MARK: Handlers
