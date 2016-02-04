@@ -64,8 +64,9 @@
     NSMutableArray *channels = [NSMutableArray new];
     for (MMXChannelInfo *channelInfo in self.channels) {
         NSDictionary *channelDictionary = @{
+                                            @"ownerUserID" : channelInfo.userId,
                                             @"name" : channelInfo.name,
-                                            @"privateChannel": @(!channelInfo.subscriptionEnabled),
+                                            @"privateChannel": @(channelInfo.userChannel),
                                             @"summary": channelInfo.description,
                                             @"publishPermissions": @(channelInfo.publishPermission)
                                             };
