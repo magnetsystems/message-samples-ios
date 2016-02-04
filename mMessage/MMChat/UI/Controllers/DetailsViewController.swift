@@ -36,6 +36,10 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
         }
     }
 
+    func isOwner() -> Bool {
+        return MMUser.currentUser()?.userID == channel.ownerUserID
+    }
+    
     // MARK: - Table view data source
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -44,13 +48,17 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
             return 1
         }
         
+        if !isOwner() {
+          return i
+        }
+        
         return i + 1
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("RecipientsCellIdentifier", forIndexPath: indexPath)
 
-        if indexPath.row == recipients?.count {
+        if indexPath.row == recipients?.count && isOwner()  {
             let color = ChannelManager.sharedInstance.isOwnerForChat(channel.name) != nil ? self.view.tintColor : UIColor.blackColor()
             cell.textLabel?.attributedText = NSAttributedString(string: "+ Add Contact",
                                                             attributes: [NSForegroundColorAttributeName : color,
