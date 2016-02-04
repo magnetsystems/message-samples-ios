@@ -54,7 +54,7 @@ class ChannelManager {
     
     func addChannelMessageObserver(target : AnyObject, channel : MMXChannel?, selector : Selector) {
         if let ch = channel {
-        removeChannelMessageObserver(target, channel: ch)
+            removeChannelMessageObserver(target, channel: ch)
         }
         
         let observer = ChannelObserver.init()
@@ -73,23 +73,46 @@ class ChannelManager {
     }
     
     func getLastViewTimeForChannel(name: String) -> NSDate? {
-        if let decoded = NSUserDefaults.standardUserDefaults().objectForKey(name) as? NSData {
-            let decodedTime = NSKeyedUnarchiver.unarchiveObjectWithData(decoded) as! UserViewTimestamp
-            if decodedTime.userName == MMUser.currentUser()?.userName {
+        if let string = MMUser.currentUser()?.extras[name] {
+            if let decoded = NSData.init(base64EncodedString: string, options: .IgnoreUnknownCharacters) {
+                let decodedTime = NSKeyedUnarchiver.unarchiveObjectWithData(decoded) as! Timestamp
                 return decodedTime.date
-                
             }
         }
+        
         return nil
     }
     
-    func saveLastViewTimeForChannel(name: String) {
+    func getLastMessageForChannel(name: String) -> String? {
+        return  MMUser.currentUser()?.extras["\(name)_last_message_id"]
+    }
+     
+    func saveLastViewTimeForChannel(channel: MMXChannel, date : NSDate) {
         if let user = MMUser.currentUser() {
-            let lastViewTime = UserViewTimestamp(userName: user.userName, date: NSDate())
-            let userDefaults = NSUserDefaults.standardUserDefaults()
+            let lastViewTime = Timestamp(date: date)
             let encodedData = NSKeyedArchiver.archivedDataWithRootObject(lastViewTime)
-            userDefaults.setObject(encodedData, forKey: name)
-            userDefaults.synchronize()
+            user.extras[channel.name] = encodedData.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+            let updateRequest = MMUpdateProfileRequest.init(user: user)
+            MMUser.updateProfile(updateRequest, success: { (user) -> Void in
+                print("[UPDATE] SUCCEEDED")
+                }, failure: { (error) -> Void in
+                    print("[UPDATE] FAILED : \(error.localizedDescription)")
+            })
+        }
+    }
+    
+    func saveLastViewTimeForChannel(channel: MMXChannel, message : MMXMessage, date : NSDate) {
+        if let user = MMUser.currentUser() {
+            let lastViewTime = Timestamp(date: date)
+            let encodedData = NSKeyedArchiver.archivedDataWithRootObject(lastViewTime)
+            user.extras[channel.name] = encodedData.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+            user.extras["\(channel.name)_last_message_id"] = message.messageID
+            let updateRequest = MMUpdateProfileRequest.init(user: user)
+            MMUser.updateProfile(updateRequest, success: { (user) -> Void in
+                print("[UPDATE] SUCCEEDED")
+                }, failure: { (error) -> Void in
+                    print("[UPDATE] FAILED : \(error.localizedDescription)")
+            })
         }
     }
     
@@ -102,10 +125,6 @@ class ChannelManager {
             
             return false
         })
-    }
-    
-    func removeLastViewTimeForChannel(name: String) {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(name)
     }
     
     // MARK: - Private implementation

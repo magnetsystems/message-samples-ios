@@ -59,17 +59,15 @@ class SummaryResponseCell: UITableViewCell {
     // MARK: - Helpers
     
     private func hasNewMessagesFromLastTime() -> Bool {
+        if let lastMessageID = ChannelManager.sharedInstance.getLastMessageForChannel(detailResponse.channelName) {
+         return lastMessageID != detailResponse.messages.last?.messageID
+        }
         if let lastViewTime = ChannelManager.sharedInstance.getLastViewTimeForChannel(detailResponse.channelName) {
-            if let lastPublishedTime = ChannelManager.sharedInstance.formatter.dateForStringTime(detailResponse.lastPublishedTime!) {
-                let result = lastViewTime.compare(lastPublishedTime)
-                if result == .OrderedAscending {
-                    return true
-                } else {
-                    return false
-                }
-            }
-        } else if detailResponse.messages.count > 0 {
-            return true
+        if let lastPublishedTime = detailResponse.lastPublishedTime {
+        
+            return lastViewTime.timeIntervalSince1970 < ChannelManager.sharedInstance.formatter.dateForStringTime(lastPublishedTime)?.timeIntervalSince1970
+        
+        }
         }
         
         return false

@@ -15,7 +15,8 @@ import Toucan
 
 class ChatViewController: JSQMessagesViewController {
     
-    var messages = [JSQMessageData]()
+    var notifier : NavigationNotifier?
+    var messages = [Message]()
     var avatars = Dictionary<String, UIImage>()
     let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
@@ -24,6 +25,7 @@ class ChatViewController: JSQMessagesViewController {
         didSet {
             //Register for a notification to receive the message
             if let channel = chat {
+                notifier = NavigationNotifier.init(viewController: self, exceptFor: channel)
                 ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
             }
             loadMessages()
@@ -55,6 +57,7 @@ class ChatViewController: JSQMessagesViewController {
             return
         }
         
+       
         let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .Gray)
         activityIndicator.hidesWhenStopped = true
         let indicator = UIBarButtonItem(customView: activityIndicator)
@@ -90,8 +93,9 @@ class ChatViewController: JSQMessagesViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        if let _ = chat {
-            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat!.name)
+        
+        if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage, let timestamp = lastMessage.timestamp {
+            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:timestamp)
         }
     }
     
@@ -545,3 +549,4 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
         dismissViewControllerAnimated(true, completion: nil)
     }
 }
+

@@ -216,6 +216,7 @@ public extension MMUser {
         // Reset the state
         userTokenExpired(nil)
         user.rememberMe = rememberMe
+        user.password = nil
         currentlyLoggedInUser = user
         let userInfo = ["userID": user.userID, "deviceID": MMServiceAdapter.deviceUUID(), "token": MMCoreConfiguration.serviceAdapter.HATToken]
         NSNotificationCenter.defaultCenter().postNotificationName(MMServiceAdapterDidReceiveHATTokenNotification, object: self, userInfo: userInfo)
