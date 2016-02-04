@@ -20,7 +20,7 @@ class SummaryResponseCell: UITableViewCell {
     
     var detailResponse : MMXChannelDetailResponse! {
         didSet {
-            var subscribers : [MMUserProfile] = detailResponse.subscribers as! [MMUserProfile]
+            var subscribers : [MMUserProfile] = detailResponse.subscribers
             
             subscribers = subscribers.filter({
                 if $0.userId != MMUser.currentUser()?.userID {
