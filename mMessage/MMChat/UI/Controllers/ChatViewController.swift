@@ -278,9 +278,9 @@ class ChatViewController: JSQMessagesViewController {
         
         if !message.isMediaMessage() {
             if message.senderId() == senderId {
-                cell.textView!.textColor = UIColor.blackColor()
-            } else {
                 cell.textView!.textColor = UIColor.whiteColor()
+            } else {
+                cell.textView!.textColor = UIColor.blackColor()
             }
             
             cell.textView!.linkTextAttributes = [
