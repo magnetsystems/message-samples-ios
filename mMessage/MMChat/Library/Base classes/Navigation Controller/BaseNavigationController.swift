@@ -11,8 +11,6 @@ import MagnetMax
 
 class BaseNavigationController: UINavigationController {
  
-    var indicatorView : UIView?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }

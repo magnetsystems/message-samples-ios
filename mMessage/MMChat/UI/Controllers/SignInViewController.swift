@@ -18,6 +18,7 @@ class SignInViewController : BaseViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         txtfPassword.text = ""
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     @IBAction func signInAction() {
@@ -31,14 +32,8 @@ class SignInViewController : BaseViewController {
             self.showLoadingIndicator()
             let credential = NSURLCredential(user: email, password: password, persistence: .None)
             MMUser.login(credential, rememberMe: btnRemember.on, success: {
-                // Initialize Magnet Message
-                MagnetMax.initModule(MMX.sharedInstance(), success: { [weak self] in
-                    self?.hideLoadingIndicator()
-                    self?.performSegueWithIdentifier("showSlideMenuVC", sender: nil)
-                }, failure: { error in
                     self.hideLoadingIndicator()
-                    print("[ERROR]: \(error)")
-                })
+                    self.performSegueWithIdentifier("showSlideMenuVC", sender: nil)
             }, failure: { error in
                 print("[ERROR]: \(error)")
                 self.hideLoadingIndicator()

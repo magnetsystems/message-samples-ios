@@ -340,7 +340,7 @@ class ChatViewController: JSQMessagesViewController {
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
         print("Tapped message bubble!")
-        let message = messages[indexPath.item] as! Message
+        let message = messages[indexPath.item]
         
         if message.isMediaMessage() && message.isDownloaded {
             self.inputToolbar!.contentView!.textView?.resignFirstResponder()
