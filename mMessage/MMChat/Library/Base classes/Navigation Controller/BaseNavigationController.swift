@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import MagnetMax
 
 class BaseNavigationController: UINavigationController {
-
+ 
+    var indicatorView : UIView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     override func shouldAutorotate() -> Bool {

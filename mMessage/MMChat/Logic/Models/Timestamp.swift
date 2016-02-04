@@ -8,24 +8,20 @@
 
 import UIKit
 
-class UserViewTimestamp: NSObject, NSCoding {
-
-    let userName: String
+class Timestamp: NSObject {
+    
     let date: NSDate
     
-    init(userName: String, date: NSDate) {
-        self.userName = userName
+    init(date: NSDate) {
         self.date = date
     }
     
     required convenience init(coder aDecoder: NSCoder) {
-        let name = aDecoder.decodeObjectForKey("userName") as! String
         let date = aDecoder.decodeObjectForKey("date") as! NSDate
-        self.init(userName: name, date: date)
+        self.init(date: date)
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(userName, forKey: "userName")
         aCoder.encodeObject(date, forKey: "date")
     }
     
