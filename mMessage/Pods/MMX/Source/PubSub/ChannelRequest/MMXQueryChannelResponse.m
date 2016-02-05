@@ -64,13 +64,20 @@
     NSMutableArray *channels = [NSMutableArray new];
     for (MMXChannelInfo *channelInfo in self.channels) {
         NSDictionary *channelDictionary = @{
-                                            @"ownerUserID" : channelInfo.userId,
                                             @"name" : channelInfo.name,
                                             @"privateChannel": @(channelInfo.userChannel),
                                             @"summary": channelInfo.description,
                                             @"publishPermissions": @(channelInfo.publishPermission)
                                             };
-        MMXChannel *ch = [[MMXChannel alloc] initWithDictionary:channelDictionary error:nil];
+        NSDictionary *dictionaryToUse;
+        if (channelInfo.userId) {
+            NSMutableDictionary *channelMutableDictionary = [NSMutableDictionary dictionary];
+            channelMutableDictionary[@"ownerUserID"] = channelInfo.userId;
+            dictionaryToUse = channelMutableDictionary;
+        } else {
+            dictionaryToUse = channelDictionary;
+        }
+        MMXChannel *ch = [[MMXChannel alloc] initWithDictionary:dictionaryToUse error:nil];
         if (ch)
             [channels addObject:ch];
     }

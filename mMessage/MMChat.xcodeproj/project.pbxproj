@@ -503,7 +503,6 @@
 				TargetAttributes = {
 					8B2E53C91C2AC31900C9AC47 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = UXAB3BW444;
 					};
 					8B2E53DD1C2AC31900C9AC47 = {
 						CreatedOnToolsVersion = 7.2;

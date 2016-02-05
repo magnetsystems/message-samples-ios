@@ -2,7 +2,6 @@ platform :ios, "8.0"
 
 source 'https://github.com/CocoaPods/Specs'
 source 'https://github.com/magnetsystems/Specs'
-source 'https://github.com/magnetsystems/iOS-Distribution.git'
 
 use_frameworks!
 

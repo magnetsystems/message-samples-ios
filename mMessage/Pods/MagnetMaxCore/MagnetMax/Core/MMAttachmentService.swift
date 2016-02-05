@@ -1,19 +1,19 @@
 /*
- * Copyright (c) 2015 Magnet Systems, Inc.
- * All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you
- * may not use this file except in compliance with the License. You
- * may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
- * implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
 import Foundation
 import AFNetworking
@@ -21,6 +21,11 @@ import AFNetworking
 @objc public class MMAttachmentService: NSObject {
     
     static public func upload(attachments: [MMAttachment], metaData:[String: String]?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
+        var progress : NSProgress? = nil
+        upload(attachments, metaData: metaData, progress: &progress, success: success, failure: failure)
+    }
+    
+    static public func upload(attachments: [MMAttachment], metaData:[String: String]?, inout progress : NSProgress?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
         guard let uploadURL = NSURL(string: "com.magnet.server/file/save/multiple", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)?.absoluteString else {
             fatalError("uploadURL should not be nil")
         }
@@ -48,8 +53,10 @@ import AFNetworking
             }
         }
         
+        request.timeoutInterval = 60 * 5
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")
-        let uploadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.uploadTaskWithStreamedRequest(request, progress: nil) { response, responseObject, error in
+        
+        let uploadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.uploadTaskWithStreamedRequest(request, progress:&progress) { response, responseObject, error in
             if let e = error {
                 failure?(error: e)
             } else {
@@ -72,6 +79,11 @@ import AFNetworking
     }
     
     static public func download(attachmentID: String, userID userIdentifier: String?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
+        var progress : NSProgress? = nil
+        download(attachmentID, userID: userIdentifier, progress: &progress, success: success, failure: failure)
+    }
+    
+    static public func download(attachmentID: String, userID userIdentifier: String?, inout progress : NSProgress?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
         var userIDQueryParam = ""
         if let userID = userIdentifier {
             userIDQueryParam = "?user_id=\(userID)"
@@ -81,25 +93,25 @@ import AFNetworking
         }
         let request = NSMutableURLRequest(URL: downloadURL)
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")
-        
-        let downloadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.downloadTaskWithRequest(request, progress: nil, destination: { targetPath, response in
+        request.timeoutInterval = 60 * 5
+        let downloadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.downloadTaskWithRequest(request, progress: &progress, destination: { targetPath, response in
             let documentsDirectoryURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
             let destination  = documentsDirectoryURL.URLByAppendingPathComponent("\(attachmentID)_\(response.suggestedFilename!)")
             //            let _ = try? NSFileManager.defaultManager().removeItemAtURL(destination)
             return destination
             
-        }) { response, filePath, error in
-            if let e = error {
-                failure?(error: e)
-            } else {
-//                guard let httpResponse = response as? NSHTTPURLResponse else {
-//                    fatalError("response should be of type NSHTTPURLResponse")
-//                }
-//                let headers = httpResponse.allHeaderFields["Content-Type"] as! [String: AnyObject]
-//                var contentType = "application/octet-stream"
-//                if let contentTypeHeader = headers["Content-Type"] as? String {
-//                    contentType = contentTypeHeader
-//                }
+            }) { response, filePath, error in
+                if let e = error {
+                    failure?(error: e)
+                } else {
+                    //                guard let httpResponse = response as? NSHTTPURLResponse else {
+                    //                    fatalError("response should be of type NSHTTPURLResponse")
+                    //                }
+                    //                let headers = httpResponse.allHeaderFields["Content-Type"] as! [String: AnyObject]
+                    //                var contentType = "application/octet-stream"
+                    //                if let contentTypeHeader = headers["Content-Type"] as? String {
+                    //                    contentType = contentTypeHeader
+                    //                }
                     success?(filePath!)
                 }
         }

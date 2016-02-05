@@ -56,7 +56,7 @@ PODS:
   - MMX (2.4.0):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.4.0)
+    - MagnetMaxCore (~> 2.4)
     - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.13)
   - MMXXMPPFramework (3.6.13):
@@ -88,13 +88,13 @@ PODS:
   - MMXXMPPFramework/XEP-0203 (3.6.13):
     - MMXXMPPFramework/Core
     - MMXXMPPFramework/XEP-0082
-  - NYTPhotoViewer (1.0.0):
-    - NYTPhotoViewer/AnimatedGifSupport (= 1.0.0)
-    - NYTPhotoViewer/Core (= 1.0.0)
-  - NYTPhotoViewer/AnimatedGifSupport (1.0.0):
+  - NYTPhotoViewer (1.0.1):
+    - NYTPhotoViewer/AnimatedGifSupport (= 1.0.1)
+    - NYTPhotoViewer/Core (= 1.0.1)
+  - NYTPhotoViewer/AnimatedGifSupport (1.0.1):
     - FLAnimatedImage (~> 1.0.8)
     - NYTPhotoViewer/Core
-  - NYTPhotoViewer/Core (1.0.0)
+  - NYTPhotoViewer/Core (1.0.1)
   - Toucan (0.5.0)
 
 DEPENDENCIES:
@@ -113,13 +113,13 @@ SPEC CHECKSUMS:
   FLAnimatedImage: e16a1e1cef08e4c509b47e4acbe3923f65c16135
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  MagnetMax: e22d8c82e805d8d8cd38719e97444a8d485b9a87
-  MagnetMaxCore: 62d62e385d03357253e585f305926d5e25e4e897
+  MagnetMax: bd41e5fd99ce74ce9284cb2b18c3ec38fdf3aea0
+  MagnetMaxCore: 5698033003aace0a5e2fdb469797f8b0df87fe49
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: cd9655eb4b6ea4063868382ea168d9e12ec18c0d
+  MMX: aa1a55cc57ddbf1c4bd04d5db3f331fbe89dfc30
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
-  NYTPhotoViewer: a2fa487ccfad736a8b7ba0b1a0f2652b878b74a7
+  NYTPhotoViewer: 98e0a54a9d28e4a980fc4b611fd5e419ca89ad74
   Toucan: 0519c341148252ae114c5a657d2a85bb9ada9e40
 
 COCOAPODS: 0.39.0

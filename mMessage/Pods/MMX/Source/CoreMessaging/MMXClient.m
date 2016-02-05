@@ -817,7 +817,7 @@ int const kReconnectionTimerInterval = 4;
 	if (self.shouldSuspendIncomingMessages) {
 		[self updatePresenceWithPriority:-1];
 	} else {
-		[self updatePresenceWithPriority:24];
+		[self updatePresenceWithPriority:0];
 	}
 	[self sendArchivedMessages];
 }
