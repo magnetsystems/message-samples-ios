@@ -1,26 +1,42 @@
 /*
- * Copyright (c) 2015 Magnet Systems, Inc.
- * All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you
- * may not use this file except in compliance with the License. You
- * may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
- * implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
 import Foundation
 import AFNetworking
 
+public class MMAttachmentProgress : NSObject {
+    dynamic private(set) public var uploadProgress : NSProgress?
+    dynamic private(set) public var downloadProgress : NSProgress?
+    
+    override init() {
+        super.init()
+        
+        uploadProgress = NSProgress.init()
+        downloadProgress = NSProgress.init()
+    }
+}
+
 @objc public class MMAttachmentService: NSObject {
     
     static public func upload(attachments: [MMAttachment], metaData:[String: String]?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
+        upload(attachments, metaData: metaData, progress: nil, success: success, failure: failure)
+    }
+    
+    static public func upload(attachments: [MMAttachment], metaData:[String: String]?, progress : MMAttachmentProgress?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
         guard let uploadURL = NSURL(string: "com.magnet.server/file/save/multiple", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)?.absoluteString else {
             fatalError("uploadURL should not be nil")
         }
@@ -47,9 +63,15 @@ import AFNetworking
                 request.setValue(value, forHTTPHeaderField: "metadata_\(key)")
             }
         }
-        
+        request.timeoutInterval = 60 * 5
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")
-        let uploadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.uploadTaskWithStreamedRequest(request, progress: nil) { response, responseObject, error in
+        
+        var progressObject : MMAttachmentProgress = MMAttachmentProgress.init()
+        if let prog = progress {
+            progressObject = prog
+        }
+        
+        let uploadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.uploadTaskWithStreamedRequest(request, progress:&progressObject.uploadProgress) { response, responseObject, error in
             if let e = error {
                 failure?(error: e)
             } else {
@@ -72,6 +94,10 @@ import AFNetworking
     }
     
     static public func download(attachmentID: String, userID userIdentifier: String?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
+        download(attachmentID, userID: userIdentifier, progress: nil, success: success, failure: failure)
+    }
+    
+    static public func download(attachmentID: String, userID userIdentifier: String?, progress : MMAttachmentProgress?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
         var userIDQueryParam = ""
         if let userID = userIdentifier {
             userIDQueryParam = "?user_id=\(userID)"
@@ -81,25 +107,27 @@ import AFNetworking
         }
         let request = NSMutableURLRequest(URL: downloadURL)
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")
+        request.timeoutInterval = 60 * 5
         
-        let downloadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.downloadTaskWithRequest(request, progress: nil, destination: { targetPath, response in
+        var prog = progress?.downloadProgress
+        let downloadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.downloadTaskWithRequest(request, progress: &prog, destination: { targetPath, response in
             let documentsDirectoryURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
             let destination  = documentsDirectoryURL.URLByAppendingPathComponent("\(attachmentID)_\(response.suggestedFilename!)")
             //            let _ = try? NSFileManager.defaultManager().removeItemAtURL(destination)
             return destination
             
-        }) { response, filePath, error in
-            if let e = error {
-                failure?(error: e)
-            } else {
-//                guard let httpResponse = response as? NSHTTPURLResponse else {
-//                    fatalError("response should be of type NSHTTPURLResponse")
-//                }
-//                let headers = httpResponse.allHeaderFields["Content-Type"] as! [String: AnyObject]
-//                var contentType = "application/octet-stream"
-//                if let contentTypeHeader = headers["Content-Type"] as? String {
-//                    contentType = contentTypeHeader
-//                }
+            }) { response, filePath, error in
+                if let e = error {
+                    failure?(error: e)
+                } else {
+                    //                guard let httpResponse = response as? NSHTTPURLResponse else {
+                    //                    fatalError("response should be of type NSHTTPURLResponse")
+                    //                }
+                    //                let headers = httpResponse.allHeaderFields["Content-Type"] as! [String: AnyObject]
+                    //                var contentType = "application/octet-stream"
+                    //                if let contentTypeHeader = headers["Content-Type"] as? String {
+                    //                    contentType = contentTypeHeader
+                    //                }
                     success?(filePath!)
                 }
         }

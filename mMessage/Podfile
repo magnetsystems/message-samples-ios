@@ -6,8 +6,9 @@ source 'https://github.com/magnetsystems/iOS-Distribution.git'
 
 use_frameworks!
 
-pod 'MagnetMax', '~> 2.4'
+pod 'MagnetMax', '~> 2.4.1'
 pod 'JSQMessagesViewController'
 pod 'NYTPhotoViewer', '~> 1.0.0'
 pod 'DZVideoPlayerViewController'
+pod 'SGNavigationProgress'
 pod 'Toucan'

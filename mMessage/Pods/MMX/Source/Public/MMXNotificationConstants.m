@@ -27,6 +27,7 @@ NSString * const MMXDidReceiveDeliveryConfirmationNotification = @"com.magnet.mm
 NSString * const MMXRecipientKey = @"com.magnet.recipient.key";
 NSString * const MMXMessageIDKey = @"com.magnet.message_id.key";
 NSString * const MMXDidReceiveChannelInviteNotification = @"com.magnet.mmx.invite.receive";
+NSString * const MMXAttachmentUploadDidChangeValueNotification = @"com.magnet.attachment.upload.value.did.change";
 NSString * const MMXInviteKey = @"com.magnet.invite.key";
 NSString * const MMXDidReceiveChannelInviteResponseNotification = @"com.magnet.mmx.invite.response.receive";
 NSString * const MMXInviteResponseKey = @"com.magnet.invite.response.key";

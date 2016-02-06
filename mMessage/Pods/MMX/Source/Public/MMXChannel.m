@@ -839,36 +839,26 @@
 }
 
 + (NSArray *)channelsFromTopics:(NSArray *)topics summaries:(NSArray *)summaries subscriptions:(NSArray *)subscriptions {
-    NSMutableDictionary *channelDict = [NSMutableDictionary dictionaryWithCapacity:topics.count];
+    NSMutableArray *channelArray = [NSMutableArray arrayWithCapacity:topics.count];
+    NSUInteger i = 0;
     for (MMXTopic *topic in topics) {
         MMXChannel *channel = [MMXChannel channelWithName:topic.topicName summary:topic.topicDescription isPublic:!topic.inUserNameSpace publishPermissions:topic.publishPermissions];
         channel.ownerUserID = topic.topicCreator.username;
         channel.isPublic = !topic.inUserNameSpace;
         channel.creationDate = topic.creationDate;
-        [channelDict setObject:channel forKey:[MMXChannel channelKeyFromTopic:topic]];
-    }
-    for (MMXTopicSummary *sum in summaries) {
-        MMXChannel *channel = channelDict[[MMXChannel channelKeyFromTopic:sum.topic]];
-        if (channel) {
-            channel.numberOfMessages = sum.numItemsPublished;
-            channel.lastTimeActive = sum.lastTimePublishedTo;
+        if (i <= ([summaries count] - 1)) {
+            MMXTopicSummary *summary = summaries[i];
+            channel.numberOfMessages = summary.numItemsPublished;
+            channel.lastTimeActive = summary.lastTimePublishedTo;
         }
-    }
-    for (MMXTopicSubscription *sub in subscriptions) {
-        MMXChannel *channel = channelDict[[MMXChannel channelKeyFromTopic:sub.topic]];
-        if (channel) {
+        if (i <= ([subscriptions count] - 1)) {
+            MMXTopicSubscription *sub = subscriptions[i];
             channel.isSubscribed = sub.isSubscribed;
         }
+        [channelArray addObject:channel];
+        i++;
     }
-    NSMutableArray *channelArray = [NSMutableArray arrayWithCapacity:topics.count];
-    for (MMXTopic *topic in topics) {
-        MMXChannel *chan = [channelDict objectForKey:[MMXChannel channelKeyFromTopic:topic]];
-        if (chan) {
-            [channelArray addObject:chan];
-        }
-        
-    }
-    return channelArray.copy;
+    return channelArray;
 }
 
 + (NSString *)channelKeyFromTopic:(MMXTopic *)topic {
