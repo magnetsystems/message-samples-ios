@@ -12,6 +12,7 @@ import JSQMessagesViewController
 import MobileCoreServices
 import NYTPhotoViewer
 import Toucan
+import SGNavigationProgress
 
 class ChatViewController: JSQMessagesViewController {
     
@@ -81,6 +82,7 @@ class ChatViewController: JSQMessagesViewController {
         } else if recipients != nil {
             getChannelBySubscribers(recipients)
         }
+       
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -88,6 +90,8 @@ class ChatViewController: JSQMessagesViewController {
         self.automaticallyScrollsToMostRecentMessage = false
         super.viewWillAppear(animated)
         self.automaticallyScrollsToMostRecentMessage = true
+        
+         navigationController?.setSGProgressPercentage(0)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -96,6 +100,7 @@ class ChatViewController: JSQMessagesViewController {
         if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage, let timestamp = lastMessage.timestamp {
             ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:timestamp)
         }
+        navigationController?.setSGProgressPercentage(0)
     }
     
     deinit {
@@ -499,6 +504,24 @@ class ChatViewController: JSQMessagesViewController {
 
 extension ChatViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    func didProgressUpload(notification : NSNotification) {
+        if let message : MMXMessage = notification.object as? MMXMessage {
+        if let i : Double = message.attachmentUploadProgress?.fractionCompleted {
+        self.navigationController?.setSGProgressPercentage(Float(i * Double(100.0)))
+        }
+        }
+    }
+    
+    func registerForProgressUpdates() {
+        self.navigationController?.setSGProgressPercentage(0)
+         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didProgressUpload:", name: MMXAttachmentUploadDidChangeValueNotification, object: nil)
+    }
+    
+    func unRegisterForProgressUpdates() {
+        self.navigationController?.setSGProgressPercentage(0)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MMXAttachmentUploadDidChangeValueNotification, object: nil)
+    }
+    
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
@@ -513,10 +536,13 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
                 let attachment = MMAttachment(data: data, mimeType: "image/PNG")
                 mmxMessage.addAttachment(attachment)
                 self.showSpinner()
+               registerForProgressUpdates()
                 mmxMessage.sendWithSuccess({ [weak self] _ in
+                    self?.unRegisterForProgressUpdates()
                     self?.hideSpinner()
                     self?.finishSendingMessageAnimated(true)
                     }) { error in
+                        self.unRegisterForProgressUpdates()
                         self.hideSpinner()
                         print(error)
                 }
@@ -528,10 +554,13 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             let attachment = MMAttachment(fileURL: urlOfVideo, mimeType: "video/quicktime", name: name, description: "Video file")
             self.showSpinner()
             mmxMessage.addAttachment(attachment)
+            registerForProgressUpdates()
             mmxMessage.sendWithSuccess({ [weak self] _ in
+                self?.unRegisterForProgressUpdates()
                 self?.hideSpinner()
                 self?.finishSendingMessageAnimated(true)
                 }) { error in
+                    self.unRegisterForProgressUpdates()
                     self.hideSpinner()
                     print(error)
             }
