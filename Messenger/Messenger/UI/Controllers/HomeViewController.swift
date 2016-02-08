@@ -190,9 +190,14 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             if channels.count > 0 {
                 // Get details
                 MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
-                    ChannelManager.sharedInstance.channelDetails = detailResponses
-                    self?.detailResponses = detailResponses
-                    self?.endRefreshing()
+                    let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
+                        let formatter = ChannelManager.sharedInstance.formatter
+                        return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
+                    })
+
+                    ChannelManager.sharedInstance.channelDetails = sortedDetails
+                    self?.detailResponses = sortedDetails
+                        self?.endRefreshing()
                 }, failure: { error in
                     self?.endRefreshing()
                     print(error)

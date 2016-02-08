@@ -19,6 +19,12 @@ class DateFormatter {
         return NSDateFormatter.localizedStringFromDate(date, dateStyle: .ShortStyle, timeStyle: .NoStyle)
     }
     
+    func dayOfTheWeek(date: NSDate) -> String {
+        let dayFormatter = NSDateFormatter()
+        dayFormatter.dateFormat = "EEEE"
+        return dayFormatter.stringFromDate(date)
+    }
+    
     func timeForDate(date: NSDate) -> String {
         return NSDateFormatter.localizedStringFromDate(date, dateStyle: .NoStyle, timeStyle: .ShortStyle)
     }
@@ -34,13 +40,21 @@ class DateFormatter {
     }
     
     func displayTime(stringTime: String) -> String! {
-        let secondsInDay: NSTimeInterval = 24 * 60 * 60
-        let yesturday = NSDate(timeInterval: -secondsInDay, sinceDate: NSDate())
+        let now = NSDate()
         
-        if let lastPublishedTime = dateForStringTime(stringTime) {
-            let result = yesturday.compare(lastPublishedTime)
-            if result == .OrderedAscending {
+        let components = NSCalendar.currentCalendar().components([.Day , .Month, .Year ], fromDate: now)
+        let midnight = NSCalendar.currentCalendar().dateFromComponents(components)
+        let secondsInWeek: NSTimeInterval = 24 * 60 * 60 * 7
+        let aWeekago = NSDate(timeInterval: -secondsInWeek, sinceDate: NSDate())
+        let aMinutesAgo = NSDate(timeInterval: -(1 * 60), sinceDate: NSDate())
+        
+        if let lastPublishedTime = dateForStringTime(stringTime)  {
+            if aMinutesAgo.compare(lastPublishedTime) == .OrderedAscending {
+                return "Now"
+            } else if midnight?.compare(lastPublishedTime) == .OrderedAscending {
                 return timeForDate(lastPublishedTime)
+            } else if aWeekago.compare(lastPublishedTime) == .OrderedAscending {
+                return dayOfTheWeek(lastPublishedTime)
             } else {
                 return relativeDateForDate(lastPublishedTime)
             }
@@ -48,5 +62,4 @@ class DateFormatter {
         
         return stringTime
     }
-
 }
