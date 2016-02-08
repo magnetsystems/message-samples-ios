@@ -13,10 +13,15 @@ protocol ContactsViewControllerDelegate: class {
     func contactsControllerDidFinish(with selectedUsers: [MMUser])
 }
 
+class UserLetterGroup : NSObject {
+    var letter : String  = ""
+    var users : [MMUser] = []
+}
+
 class ContactsViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
     weak var delegate: ContactsViewControllerDelegate?
-    var availableRecipients = [String : [MMUser]]()
+    var availableRecipients = [UserLetterGroup]()
     var filteredRecipients = [MMUser]()
     var selectedUsers : [MMUser] = []
     let resultSearchController = UISearchController(searchResultsController: nil)
@@ -74,11 +79,8 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         if resultSearchController.active {
             return filteredRecipients.count
         }
-        
-        let letters = Array(availableRecipients.keys)
-        let letter = letters[section]
-        let users = availableRecipients[letter]
-        return users!.count
+        let users = availableRecipients[section].users
+        return users.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -88,10 +90,8 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         if resultSearchController.active {
             user = filteredRecipients[indexPath.row]
         } else {
-            let letters = Array(availableRecipients.keys)
-            let letter = letters[indexPath.section]
-            let users = availableRecipients[letter]
-            user = users![indexPath.row]
+            let users = availableRecipients[indexPath.section].users
+            user = users[indexPath.row]
         }
         
         let selectedUsers = self.selectedUsers.filter({
@@ -129,9 +129,8 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         if resultSearchController.active {
             return ""
         }
-        let letters = Array(availableRecipients.keys)
-        let letter = letters[section]
-        return letter
+        let letter = availableRecipients[section]
+        return letter.letter
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -139,12 +138,10 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             let user = filteredRecipients[indexPath.row]
             addSelectedUser(user)
         } else {
-            let letters = Array(availableRecipients.keys)
-            let letter = letters[indexPath.section]
-            if let users = availableRecipients[letter] {
+            
+            let users = availableRecipients[indexPath.section].users
                 let user = users[indexPath.row]
                 addSelectedUser(user)
-            }
         }
         updateNextButton()
     }
@@ -154,12 +151,9 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             let user = filteredRecipients[indexPath.row]
             removeSelectedUser(user)
         } else {
-            let letters = Array(availableRecipients.keys)
-            let letter = letters[indexPath.section]
-            if let users = availableRecipients[letter] {
+           let users = availableRecipients[indexPath.section].users
                 let user = users[indexPath.row]
                 removeSelectedUser(user)
-            }
         }
         updateNextButton()
     }
@@ -167,7 +161,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     // MARK: - UISearchResultsUpdating
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        let userArrays = Array(availableRecipients.values)
+        if let userArrays = (availableRecipients as NSArray).valueForKey("users") as? [[MMUser]] {
         var allUsers = [MMUser]()
         for userArray in userArrays {
             allUsers += userArray
@@ -178,6 +172,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         }
         
         tableView.reloadData()
+        }
     }
     
     // MARK: - Private Methods
@@ -203,7 +198,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     
     // MARK: - Helpers
     
-    func createAlphabetDictionary(users: [MMUser]) -> [String : [MMUser]] {
+    func createAlphabetDictionary(users: [MMUser]) -> [UserLetterGroup] {
         var tempFirstLetterArray = [String]()
         for user in users {
             var letterString = ""
@@ -220,7 +215,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         }
         tempFirstLetterArray.sortInPlace()
         
-        var namesForLetters = [String : [MMUser]]()
+        var letterGroups : [UserLetterGroup] = []
         for letter in tempFirstLetterArray {
             var usersBeginWithLetter = [MMUser]()
             for user in users {
@@ -234,10 +229,13 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
                     }
                 }
             }
-            namesForLetters.updateValue(usersBeginWithLetter, forKey: letter)
+            let letterGroup = UserLetterGroup()
+            letterGroup.letter = letter
+            letterGroup.users = usersBeginWithLetter
+            letterGroups.append(letterGroup)
         }
         
-        return namesForLetters
+        return letterGroups
     }
     
 }
