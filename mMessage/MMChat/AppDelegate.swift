@@ -11,10 +11,10 @@ import MagnetMax
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
-
-
+    
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         // Initialize MagnetMax
@@ -22,37 +22,81 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)
         MagnetMax.configure(configuration!)
         
-//        MMXLogger.sharedLogger().level = .Verbose
-//        MMXLogger.sharedLogger().startLogging()
+        //        MMXLogger.sharedLogger().level = .Verbose
+        //        MMXLogger.sharedLogger().startLogging()
+        
         
         let settings = UIUserNotificationSettings(forTypes: [.Badge,.Alert,.Sound], categories: nil)
         application.registerUserNotificationSettings(settings);
         
+        //is user alread logged In ?
+        setMainWindow(launchViewController())
+        self.window?.makeKeyAndVisible()
+        
+        if MMUser.sessionStatus() != .NotLoggedIn {
+            MMUser.resumeSession({ () -> Void in
+                if let navController : UINavigationController = self.rootViewController() as? UINavigationController {
+                    if MMUser.sessionStatus() == .LoggedIn {
+                        if let viewController = navController.storyboard?.instantiateViewControllerWithIdentifier("SlideMenuVC") {
+                            navController.pushViewController(viewController, animated: false)
+                        }
+                    }
+                    self.appendToMainWindow(navController, animated: true)
+                }
+                }, failure: { (error) -> Void in
+                    self.appendToMainWindow(self.rootViewController(), animated: true)
+            })
+        } else {
+            appendToMainWindow(rootViewController(), animated: true)
+        }
+        
         return true
     }
-
+    
+    func launchViewController() -> UIViewController {
+        let storyboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        return storyboard.instantiateViewControllerWithIdentifier("main")
+    }
+    
+    func rootViewController() -> UIViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        return storyboard.instantiateViewControllerWithIdentifier("baseNavigationController")
+    }
+    
+    func setMainWindow(viewController : UIViewController) {
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window?.backgroundColor = UIColor.whiteColor()
+        self.window?.rootViewController = viewController
+        
+    }
+    
+    func appendToMainWindow(viewController : UIViewController, animated : Bool) {
+        viewController.modalTransitionStyle = .CrossDissolve
+        self.window?.rootViewController?.presentViewController(viewController, animated: animated, completion: nil)
+    }
+    
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
-
+    
     func applicationDidEnterBackground(application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
-
+    
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
-
+    
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
-
+    
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
+    
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         application.registerForRemoteNotifications()
     }
@@ -64,8 +108,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         MMDevice.updateCurentDeviceToken(deviceToken, success: { () -> Void in
             print("Successfully updated device token")
-        }, failure:{ (error) -> Void in
-            print("Error updating device token. \(error)")
+            }, failure:{ (error) -> Void in
+                print("Error updating device token. \(error)")
         })
     }
     
@@ -76,6 +120,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             MMXRemoteNotification.acknowledgeRemoteNotification(userInfo, completion: nil)
         }
     }
-
+    
 }
 

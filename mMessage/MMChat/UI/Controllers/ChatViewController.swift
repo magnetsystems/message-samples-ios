@@ -57,7 +57,6 @@ class ChatViewController: JSQMessagesViewController {
             return
         }
         
-       
         let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .Gray)
         activityIndicator.hidesWhenStopped = true
         let indicator = UIBarButtonItem(customView: activityIndicator)
@@ -509,13 +508,9 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
             let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
             
-            //compress image
-            let width = min(UIScreen.mainScreen().bounds.size.width, pickedImage.size.width)
-            let height = min(UIScreen.mainScreen().bounds.size.height, pickedImage.size.height)
-            let image = Toucan(image: pickedImage).resize(CGSize(width: width * 0.5, height: height * 0.5)).image
-            if let data = UIImageJPEGRepresentation(image, 0.5) {
+            if let data = UIImagePNGRepresentation(pickedImage) {
                 
-                let attachment = MMAttachment(data: data, mimeType: "image/JPG")
+                let attachment = MMAttachment(data: data, mimeType: "image/PNG")
                 mmxMessage.addAttachment(attachment)
                 self.showSpinner()
                 mmxMessage.sendWithSuccess({ [weak self] _ in

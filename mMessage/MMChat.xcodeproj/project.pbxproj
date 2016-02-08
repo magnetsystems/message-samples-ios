@@ -59,6 +59,8 @@
 		8BA6E34C1C3D94380095F65F /* messages.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA6E34B1C3D94380095F65F /* messages.png */; };
 		8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */; };
 		8BF254C01C49697A008719AA /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF254BF1C49697A008719AA /* Popup.swift */; };
+		8DDFA5A11C659F7400566A4D /* message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA59D1C659F7400566A4D /* message@2x.png */; };
+		8DDFA5A21C659F7400566A4D /* messages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA59E1C659F7400566A4D /* messages@2x.png */; };
 		8DFC78F51C62D59F008FB312 /* NavigationNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC78F41C62D59F008FB312 /* NavigationNotifier.swift */; };
 		C9BF0143BBC1E4E412BF8629 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6622CC48F4FE90AA03DBE8F9 /* Pods.framework */; };
 /* End PBXBuildFile section */
@@ -133,6 +135,8 @@
 		8BDF49D81C32FD5500F0E51B /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		8BF254BF1C49697A008719AA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
+		8DDFA59D1C659F7400566A4D /* message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message@2x.png"; sourceTree = "<group>"; };
+		8DDFA59E1C659F7400566A4D /* messages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messages@2x.png"; sourceTree = "<group>"; };
 		8DFC78F41C62D59F008FB312 /* NavigationNotifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationNotifier.swift; sourceTree = "<group>"; };
 		9B1845AFF91157CEDCC1D6E3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		D530003B360E31447A1F6A63 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -209,6 +213,8 @@
 		8B223F451C3308D80096D204 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				8DDFA59D1C659F7400566A4D /* message@2x.png */,
+				8DDFA59E1C659F7400566A4D /* messages@2x.png */,
 				8B2D67A21C4024A4001394C5 /* message.png */,
 				8BA6E34B1C3D94380095F65F /* messages.png */,
 				8B0909A41C3ADB030042F361 /* disclosure@2x.png */,
@@ -535,7 +541,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B38D2EB1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX.png in Resources */,
+				8DDFA5A11C659F7400566A4D /* message@2x.png in Resources */,
 				8B71BE6B1C57B2D7006E5C1F /* DZVideoPlayerViewController_simple.xib in Resources */,
+				8DDFA5A21C659F7400566A4D /* messages@2x.png in Resources */,
 				8B71BE6E1C57B2E1006E5C1F /* videoplayer_expand@3x.png in Resources */,
 				8B71BE701C57B2E1006E5C1F /* videoplayer_pause@2x.png in Resources */,
 				8B71BE6A1C57B2D3006E5C1F /* DZVideoPlayerViewController.xib in Resources */,
