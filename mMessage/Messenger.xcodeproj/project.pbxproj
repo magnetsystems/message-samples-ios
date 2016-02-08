@@ -20,7 +20,7 @@
 		8B2E53D31C2AC31900C9AC47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B2E53D11C2AC31900C9AC47 /* Main.storyboard */; };
 		8B2E53D51C2AC31900C9AC47 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B2E53D41C2AC31900C9AC47 /* Assets.xcassets */; };
 		8B2E53D81C2AC31900C9AC47 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B2E53D61C2AC31900C9AC47 /* LaunchScreen.storyboard */; };
-		8B2E53E31C2AC31900C9AC47 /* MMChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2E53E21C2AC31900C9AC47 /* MMChatTests.swift */; };
+		8B2E53E31C2AC31900C9AC47 /* MessengerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2E53E21C2AC31900C9AC47 /* MessengerTests.swift */; };
 		8B38D2E61C5698F3006431F7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B38D2E51C5698F3006431F7 /* MapViewController.swift */; };
 		8B38D2EB1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B38D2E81C56A59D006431F7 /* NYTPhotoViewerCloseButtonX.png */; };
 		8B38D2EC1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B38D2E91C56A59D006431F7 /* NYTPhotoViewerCloseButtonX@2x.png */; };
@@ -85,16 +85,16 @@
 		8B0909A41C3ADB030042F361 /* disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure@2x.png"; sourceTree = "<group>"; };
 		8B0909A71C3AE9010042F361 /* MagnetMax.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MagnetMax.plist; sourceTree = "<group>"; };
 		8B223F4A1C33099B0096D204 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		8B223F4F1C330CBB0096D204 /* MMChat-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MMChat-Bridging-Header.h"; sourceTree = "<group>"; };
+		8B223F4F1C330CBB0096D204 /* Messenger-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Messenger-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B2D67A21C4024A4001394C5 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
-		8B2E53CA1C2AC31900C9AC47 /* MMChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MMChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B2E53CA1C2AC31900C9AC47 /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B2E53CD1C2AC31900C9AC47 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B2E53D21C2AC31900C9AC47 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8B2E53D41C2AC31900C9AC47 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B2E53D71C2AC31900C9AC47 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B2E53D91C2AC31900C9AC47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B2E53DE1C2AC31900C9AC47 /* MMChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MMChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B2E53E21C2AC31900C9AC47 /* MMChatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMChatTests.swift; sourceTree = "<group>"; };
+		8B2E53DE1C2AC31900C9AC47 /* Messenger.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Messenger.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B2E53E21C2AC31900C9AC47 /* MessengerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessengerTests.swift; sourceTree = "<group>"; };
 		8B2E53E41C2AC31900C9AC47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B38D2E51C5698F3006431F7 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		8B38D2E81C56A59D006431F7 /* NYTPhotoViewerCloseButtonX.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NYTPhotoViewerCloseButtonX.png; sourceTree = "<group>"; };
@@ -226,8 +226,8 @@
 		8B2E53C11C2AC31900C9AC47 = {
 			isa = PBXGroup;
 			children = (
-				8B2E53CC1C2AC31900C9AC47 /* MMChat */,
-				8B2E53E11C2AC31900C9AC47 /* MMChatTests */,
+				8B2E53CC1C2AC31900C9AC47 /* Messenger */,
+				8B2E53E11C2AC31900C9AC47 /* MessengerTests */,
 				8B2E53CB1C2AC31900C9AC47 /* Products */,
 				E34B15ABF8CC1C3FB094E241 /* Pods */,
 				72D70E5961C7F3A180077AC3 /* Frameworks */,
@@ -237,13 +237,13 @@
 		8B2E53CB1C2AC31900C9AC47 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8B2E53CA1C2AC31900C9AC47 /* MMChat.app */,
-				8B2E53DE1C2AC31900C9AC47 /* MMChatTests.xctest */,
+				8B2E53CA1C2AC31900C9AC47 /* Messenger.app */,
+				8B2E53DE1C2AC31900C9AC47 /* Messenger.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8B2E53CC1C2AC31900C9AC47 /* MMChat */ = {
+		8B2E53CC1C2AC31900C9AC47 /* Messenger */ = {
 			isa = PBXGroup;
 			children = (
 				8B81C12F1C3C21D800C186B6 /* Logic */,
@@ -256,18 +256,18 @@
 				8B2E53D41C2AC31900C9AC47 /* Assets.xcassets */,
 				8B2E53D61C2AC31900C9AC47 /* LaunchScreen.storyboard */,
 				8B2E53D91C2AC31900C9AC47 /* Info.plist */,
-				8B223F4F1C330CBB0096D204 /* MMChat-Bridging-Header.h */,
+				8B223F4F1C330CBB0096D204 /* Messenger-Bridging-Header.h */,
 			);
-			path = MMChat;
+			path = Messenger;
 			sourceTree = "<group>";
 		};
-		8B2E53E11C2AC31900C9AC47 /* MMChatTests */ = {
+		8B2E53E11C2AC31900C9AC47 /* MessengerTests */ = {
 			isa = PBXGroup;
 			children = (
-				8B2E53E21C2AC31900C9AC47 /* MMChatTests.swift */,
+				8B2E53E21C2AC31900C9AC47 /* MessengerTests.swift */,
 				8B2E53E41C2AC31900C9AC47 /* Info.plist */,
 			);
-			path = MMChatTests;
+			path = MessengerTests;
 			sourceTree = "<group>";
 		};
 		8B38D2E41C5698DE006431F7 /* MapViewController */ = {
@@ -459,9 +459,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8B2E53C91C2AC31900C9AC47 /* MMChat */ = {
+		8B2E53C91C2AC31900C9AC47 /* Messenger */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8B2E53E71C2AC31900C9AC47 /* Build configuration list for PBXNativeTarget "MMChat" */;
+			buildConfigurationList = 8B2E53E71C2AC31900C9AC47 /* Build configuration list for PBXNativeTarget "Messenger" */;
 			buildPhases = (
 				FAF1D043402EB81F9E480D64 /* Check Pods Manifest.lock */,
 				8B2E53C61C2AC31900C9AC47 /* Sources */,
@@ -474,14 +474,14 @@
 			);
 			dependencies = (
 			);
-			name = MMChat;
+			name = Messenger;
 			productName = MMChat;
-			productReference = 8B2E53CA1C2AC31900C9AC47 /* MMChat.app */;
+			productReference = 8B2E53CA1C2AC31900C9AC47 /* Messenger.app */;
 			productType = "com.apple.product-type.application";
 		};
-		8B2E53DD1C2AC31900C9AC47 /* MMChatTests */ = {
+		8B2E53DD1C2AC31900C9AC47 /* MessengerTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8B2E53EA1C2AC31900C9AC47 /* Build configuration list for PBXNativeTarget "MMChatTests" */;
+			buildConfigurationList = 8B2E53EA1C2AC31900C9AC47 /* Build configuration list for PBXNativeTarget "MessengerTests" */;
 			buildPhases = (
 				8B2E53DA1C2AC31900C9AC47 /* Sources */,
 				8B2E53DB1C2AC31900C9AC47 /* Frameworks */,
@@ -492,9 +492,9 @@
 			dependencies = (
 				8B2E53E01C2AC31900C9AC47 /* PBXTargetDependency */,
 			);
-			name = MMChatTests;
+			name = MessengerTests;
 			productName = MMChatTests;
-			productReference = 8B2E53DE1C2AC31900C9AC47 /* MMChatTests.xctest */;
+			productReference = 8B2E53DE1C2AC31900C9AC47 /* Messenger.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -505,7 +505,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0720;
-				ORGANIZATIONNAME = "Kostya Grishchenko";
+				ORGANIZATIONNAME = "Magnet Systems, Inc.";
 				TargetAttributes = {
 					8B2E53C91C2AC31900C9AC47 = {
 						CreatedOnToolsVersion = 7.2;
@@ -516,7 +516,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 8B2E53C51C2AC31900C9AC47 /* Build configuration list for PBXProject "MMChat" */;
+			buildConfigurationList = 8B2E53C51C2AC31900C9AC47 /* Build configuration list for PBXProject "Messenger" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -529,8 +529,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8B2E53C91C2AC31900C9AC47 /* MMChat */,
-				8B2E53DD1C2AC31900C9AC47 /* MMChatTests */,
+				8B2E53C91C2AC31900C9AC47 /* Messenger */,
+				8B2E53DD1C2AC31900C9AC47 /* MessengerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -666,7 +666,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B2E53E31C2AC31900C9AC47 /* MMChatTests.swift in Sources */,
+				8B2E53E31C2AC31900C9AC47 /* MessengerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -675,7 +675,7 @@
 /* Begin PBXTargetDependency section */
 		8B2E53E01C2AC31900C9AC47 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8B2E53C91C2AC31900C9AC47 /* MMChat */;
+			target = 8B2E53C91C2AC31900C9AC47 /* Messenger */;
 			targetProxy = 8B2E53DF1C2AC31900C9AC47 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -788,13 +788,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = MMChat/Info.plist;
+				INFOPLIST_FILE = Messenger/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.MMChat;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.Messenger;
+				PRODUCT_NAME = Messenger;
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "MMChat/MMChat-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Messenger/Messenger-Bridging-Header.h";
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/lib";
 			};
 			name = Debug;
@@ -806,13 +806,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = MMChat/Info.plist;
+				INFOPLIST_FILE = Messenger/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.MMChat;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.Messenger;
+				PRODUCT_NAME = Messenger;
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "MMChat/MMChat-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Messenger/Messenger-Bridging-Header.h";
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/lib";
 			};
 			name = Release;
@@ -824,8 +824,8 @@
 				INFOPLIST_FILE = MMChatTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.MMChatTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MMChat.app/MMChat";
+				PRODUCT_NAME = Messenger;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Messenger.app/Messenger";
 			};
 			name = Debug;
 		};
@@ -836,15 +836,15 @@
 				INFOPLIST_FILE = MMChatTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.MMChatTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MMChat.app/MMChat";
+				PRODUCT_NAME = Messenger;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Messenger.app/Messenger";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8B2E53C51C2AC31900C9AC47 /* Build configuration list for PBXProject "MMChat" */ = {
+		8B2E53C51C2AC31900C9AC47 /* Build configuration list for PBXProject "Messenger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8B2E53E51C2AC31900C9AC47 /* Debug */,
@@ -853,7 +853,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8B2E53E71C2AC31900C9AC47 /* Build configuration list for PBXNativeTarget "MMChat" */ = {
+		8B2E53E71C2AC31900C9AC47 /* Build configuration list for PBXNativeTarget "Messenger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8B2E53E81C2AC31900C9AC47 /* Debug */,
@@ -862,7 +862,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8B2E53EA1C2AC31900C9AC47 /* Build configuration list for PBXNativeTarget "MMChatTests" */ = {
+		8B2E53EA1C2AC31900C9AC47 /* Build configuration list for PBXNativeTarget "MessengerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8B2E53EB1C2AC31900C9AC47 /* Debug */,
