@@ -11,7 +11,7 @@
         <!--Sign In View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="SignInViewController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="SignInViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -138,7 +138,7 @@
         <!--Rear Menu View Controller-->
         <scene sceneID="yiW-lR-aWa">
             <objects>
-                <tableViewController id="R7P-fI-G7h" customClass="RearMenuViewController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="R7P-fI-G7h" customClass="RearMenuViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="Xnw-dK-Nhd">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -215,7 +215,7 @@
         <!--Change Password-->
         <scene sceneID="3uF-XY-qjs">
             <objects>
-                <viewController id="cHp-ay-4Hg" customClass="ChangePasswordViewController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cHp-ay-4Hg" customClass="ChangePasswordViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="IfL-81-YFf"/>
                         <viewControllerLayoutGuide type="bottom" id="JaP-xu-zan"/>
@@ -297,13 +297,13 @@
         <!--Home View Controller-->
         <scene sceneID="g9w-pq-dUp">
             <objects>
-                <tableViewController id="9K4-UP-Qkk" customClass="HomeViewController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="9K4-UP-Qkk" customClass="HomeViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="28" sectionFooterHeight="28" id="5oc-Ue-cNo">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SummaryResponseCell" rowHeight="70" id="Rkt-vY-9Ae" customClass="SummaryResponseCell" customModule="MMChat" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SummaryResponseCell" rowHeight="70" id="Rkt-vY-9Ae" customClass="SummaryResponseCell" customModule="Messenger" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="600" height="70"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Rkt-vY-9Ae" id="5qN-b6-fsm">
@@ -411,7 +411,7 @@
         <!--Chat View Controller-->
         <scene sceneID="msf-bF-Zb2">
             <objects>
-                <viewController storyboardIdentifier="ChatViewController" id="GE3-Xe-YEw" customClass="ChatViewController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChatViewController" id="GE3-Xe-YEw" customClass="ChatViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="nkS-8p-ZRD"/>
                         <viewControllerLayoutGuide type="bottom" id="Pde-Nb-oKN"/>
@@ -439,7 +439,7 @@
         <!--Map View Controller-->
         <scene sceneID="eRY-Nx-tSg">
             <objects>
-                <viewController id="Bi4-TZ-no2" customClass="MapViewController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Bi4-TZ-no2" customClass="MapViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Jcg-e3-IQc"/>
                         <viewControllerLayoutGuide type="bottom" id="iEZ-81-Add"/>
@@ -483,7 +483,7 @@
         <!--Details-->
         <scene sceneID="A8y-9a-slq">
             <objects>
-                <tableViewController id="9fb-zj-rz4" customClass="DetailsViewController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="9fb-zj-rz4" customClass="DetailsViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="RxJ-cf-vhm">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -527,7 +527,7 @@
         <!--Contacts View Controller-->
         <scene sceneID="J7X-9q-xGt">
             <objects>
-                <tableViewController id="l6R-Te-dnJ" customClass="ContactsViewController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="l6R-Te-dnJ" customClass="ContactsViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="q09-19-W86">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -573,10 +573,10 @@
             </objects>
             <point key="canvasLocation" x="3747" y="1236"/>
         </scene>
-        <!--Register New Account-->
+        <!--Register-->
         <scene sceneID="hFr-EV-rLZ">
             <objects>
-                <viewController id="YoL-Ya-4ey" customClass="RegisterViewController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="YoL-Ya-4ey" customClass="RegisterViewController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9JZ-4S-1HT"/>
                         <viewControllerLayoutGuide type="bottom" id="2C6-mZ-C8P"/>
@@ -669,7 +669,7 @@
                             <constraint firstItem="SQ6-fe-Y2a" firstAttribute="top" secondItem="laP-a4-3Vs" secondAttribute="bottom" constant="8" id="zec-ma-BpH"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Register New Account" id="bpD-a3-VAw">
+                    <navigationItem key="navigationItem" title="Register" id="bpD-a3-VAw">
                         <rightBarButtonItems>
                             <barButtonItem title="Register" id="jo1-Wy-pYd">
                                 <connections>
@@ -714,7 +714,7 @@
         <!--Base Navigation Controller-->
         <scene sceneID="gxJ-J5-AYV">
             <objects>
-                <navigationController storyboardIdentifier="baseNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" navigationBarHidden="YES" id="vzp-aP-CxL" customClass="BaseNavigationController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="baseNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" navigationBarHidden="YES" id="vzp-aP-CxL" customClass="BaseNavigationController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="orN-c0-3KP">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -750,7 +750,7 @@
         <!--Base Navigation Controller-->
         <scene sceneID="0KB-M2-vd4">
             <objects>
-                <navigationController storyboardIdentifier="ContactsNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="AHl-zx-bt3" customClass="BaseNavigationController" customModule="MMChat" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ContactsNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="AHl-zx-bt3" customClass="BaseNavigationController" customModule="Messenger" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="JyO-Qb-FdS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -773,6 +773,6 @@
         <image name="new_message.png" width="32" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ink-rm-ibO"/>
+        <segue reference="hYW-jJ-cei"/>
     </inferredMetricsTieBreakers>
 </document>
