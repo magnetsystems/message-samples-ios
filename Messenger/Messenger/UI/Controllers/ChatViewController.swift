@@ -191,8 +191,6 @@ class ChatViewController: JSQMessagesViewController {
 
     override func didPressAccessoryButton(sender: UIButton!) {
         
-        guard let _ = self.chat else { return }
-        
         self.inputToolbar!.contentView!.textView?.resignFirstResponder()
         
         let alertController = UIAlertController(title: "Media Messages", message: nil, preferredStyle: .ActionSheet)
