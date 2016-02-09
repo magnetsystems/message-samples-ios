@@ -11,7 +11,6 @@ import MagnetMax
 import JSQMessagesViewController
 import MobileCoreServices
 import NYTPhotoViewer
-import Toucan
 
 class ChatViewController: JSQMessagesViewController {
     
