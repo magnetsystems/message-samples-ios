@@ -21,17 +21,12 @@ class NavigationNotifier: NSObject {
         
         channel = exceptFor
         let parent = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 20))
-        let view = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 5, height: 5))
-        view.backgroundColor = UIColor(red: 0 / 255.0, green: 122 / 255.0, blue: 255 / 255.0, alpha: 1.0)
-        view.layer.cornerRadius = view.frame.size.width / 2.0
-        view.clipsToBounds = true
-        view.transform = CGAffineTransformMakeTranslation(-10, 0)
-        parent.addSubview(view)
         
         label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 20))
         label.text = ""
         label.font = UIFont.systemFontOfSize(14)
         label.textColor = viewController.view.tintColor
+        label.transform = CGAffineTransformMakeTranslation(-5, 0)
         parent.addSubview(label)
         
         let left = UIBarButtonItem.init(customView: parent)
@@ -47,9 +42,11 @@ class NavigationNotifier: NSObject {
     }
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
-        if mmxMessage.channel?.name == channel.name {
+        
+        guard let ch = mmxMessage.channel where ch.name != channel.name else {
             return
         }
+        
         count++
         indicatorView.hidden = false
         label.text = "(\(count <= NavigationNotifier.MAXCOUNT ? "\(count)" : "\(NavigationNotifier.MAXCOUNT)+"))"
