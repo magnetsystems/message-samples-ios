@@ -71,7 +71,7 @@
                                             };
         NSDictionary *dictionaryToUse;
         if (channelInfo.userId) {
-            NSMutableDictionary *channelMutableDictionary = [NSMutableDictionary dictionary];
+            NSMutableDictionary *channelMutableDictionary = [NSMutableDictionary dictionaryWithDictionary:channelDictionary];
             channelMutableDictionary[@"ownerUserID"] = channelInfo.userId;
             dictionaryToUse = channelMutableDictionary;
         } else {
