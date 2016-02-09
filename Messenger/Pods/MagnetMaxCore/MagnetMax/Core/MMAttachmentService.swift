@@ -18,14 +18,25 @@
 import Foundation
 import AFNetworking
 
+public class MMAttachmentProgress : NSObject {
+    dynamic private(set) public var uploadProgress : NSProgress?
+    dynamic private(set) public var downloadProgress : NSProgress?
+    
+    override init() {
+        super.init()
+        
+        uploadProgress = NSProgress.init()
+        downloadProgress = NSProgress.init()
+    }
+}
+
 @objc public class MMAttachmentService: NSObject {
     
     static public func upload(attachments: [MMAttachment], metaData:[String: String]?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
-        var progress : NSProgress? = nil
-        upload(attachments, metaData: metaData, progress: &progress, success: success, failure: failure)
+        upload(attachments, metaData: metaData, progress: nil, success: success, failure: failure)
     }
     
-    static public func upload(attachments: [MMAttachment], metaData:[String: String]?, inout progress : NSProgress?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
+    static public func upload(attachments: [MMAttachment], metaData:[String: String]?, progress : MMAttachmentProgress?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
         guard let uploadURL = NSURL(string: "com.magnet.server/file/save/multiple", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL)?.absoluteString else {
             fatalError("uploadURL should not be nil")
         }
@@ -52,11 +63,15 @@ import AFNetworking
                 request.setValue(value, forHTTPHeaderField: "metadata_\(key)")
             }
         }
-        
         request.timeoutInterval = 60 * 5
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")
         
-        let uploadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.uploadTaskWithStreamedRequest(request, progress:&progress) { response, responseObject, error in
+        var progressObject : MMAttachmentProgress = MMAttachmentProgress.init()
+        if let prog = progress {
+            progressObject = prog
+        }
+        
+        let uploadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.uploadTaskWithStreamedRequest(request, progress:&progressObject.uploadProgress) { response, responseObject, error in
             if let e = error {
                 failure?(error: e)
             } else {
@@ -79,11 +94,10 @@ import AFNetworking
     }
     
     static public func download(attachmentID: String, userID userIdentifier: String?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
-        var progress : NSProgress? = nil
-        download(attachmentID, userID: userIdentifier, progress: &progress, success: success, failure: failure)
+        download(attachmentID, userID: userIdentifier, progress: nil, success: success, failure: failure)
     }
     
-    static public func download(attachmentID: String, userID userIdentifier: String?, inout progress : NSProgress?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
+    static public func download(attachmentID: String, userID userIdentifier: String?, progress : MMAttachmentProgress?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
         var userIDQueryParam = ""
         if let userID = userIdentifier {
             userIDQueryParam = "?user_id=\(userID)"
@@ -94,7 +108,9 @@ import AFNetworking
         let request = NSMutableURLRequest(URL: downloadURL)
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = 60 * 5
-        let downloadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.downloadTaskWithRequest(request, progress: &progress, destination: { targetPath, response in
+        
+        var prog = progress?.downloadProgress
+        let downloadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.downloadTaskWithRequest(request, progress: &prog, destination: { targetPath, response in
             let documentsDirectoryURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
             let destination  = documentsDirectoryURL.URLByAppendingPathComponent("\(attachmentID)_\(response.suggestedFilename!)")
             //            let _ = try? NSFileManager.defaultManager().removeItemAtURL(destination)

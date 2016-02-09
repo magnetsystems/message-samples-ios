@@ -26,10 +26,10 @@ PODS:
   - JSQMessagesViewController (7.2.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
-  - MagnetMax (2.4.0):
-    - MagnetMaxCore (~> 2.4)
-    - MMX (~> 2.4)
-  - MagnetMaxCore (2.4.0):
+  - MagnetMax (2.4.1):
+    - MagnetMaxCore (~> 2.4.1)
+    - MMX (~> 2.4.1)
+  - MagnetMaxCore (2.4.1):
     - AFNetworking/NSURLConnection (= 2.6.1)
     - AFNetworking/NSURLSession (= 2.6.1)
     - AFOAuth2Manager (= 2.2.1)
@@ -53,10 +53,10 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (2.4.0):
+  - MMX (2.4.1):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.4)
+    - MagnetMaxCore (~> 2.4.1)
     - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.13)
   - MMXXMPPFramework (3.6.13):
@@ -95,14 +95,12 @@ PODS:
     - FLAnimatedImage (~> 1.0.8)
     - NYTPhotoViewer/Core
   - NYTPhotoViewer/Core (1.0.1)
-  - Toucan (0.5.0)
 
 DEPENDENCIES:
   - DZVideoPlayerViewController
   - JSQMessagesViewController
-  - MagnetMax (~> 2.4)
+  - MagnetMax (~> 2.4.1)
   - NYTPhotoViewer (~> 1.0.0)
-  - Toucan
 
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
@@ -113,13 +111,12 @@ SPEC CHECKSUMS:
   FLAnimatedImage: e16a1e1cef08e4c509b47e4acbe3923f65c16135
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  MagnetMax: bd41e5fd99ce74ce9284cb2b18c3ec38fdf3aea0
-  MagnetMaxCore: 5698033003aace0a5e2fdb469797f8b0df87fe49
+  MagnetMax: 6f7742fa81a93ca9b728838f30af81ff2a2152bf
+  MagnetMaxCore: b78855ca50f957b9967e85e74f936bb253d82561
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: aa1a55cc57ddbf1c4bd04d5db3f331fbe89dfc30
+  MMX: 55c40aad1add6bebe158a5e268da9486e015abdb
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
   NYTPhotoViewer: 98e0a54a9d28e4a980fc4b611fd5e419ca89ad74
-  Toucan: 0519c341148252ae114c5a657d2a85bb9ada9e40
 
 COCOAPODS: 0.39.0

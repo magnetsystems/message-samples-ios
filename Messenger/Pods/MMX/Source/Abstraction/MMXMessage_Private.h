@@ -20,6 +20,8 @@
 
 @interface MMXMessage ()
 
+@property(nonatomic, strong) MMAttachmentProgress *attachmentProgress;
+
 @property (nonatomic, readwrite) MMXMessageType messageType;
 
 @property(nonatomic, readwrite) NSString *messageID;
