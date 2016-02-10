@@ -11,10 +11,15 @@ import MagnetMax
 
 class HomeViewController: UITableViewController, UISearchResultsUpdating, ContactsViewControllerDelegate {
     
+
     let searchController = UISearchController(searchResultsController: nil)
     var detailResponses : [MMXChannelDetailResponse] = []
     var filteredDetailResponses : [MMXChannelDetailResponse] = []
 
+    
+    var actualEvents : [MMXChannelDetailResponse] = []
+    var askMagnet : [MMXChannelDetailResponse] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,11 +29,6 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
         
         navigationController?.setNavigationBarHidden(false, animated: true)
-        // Indicate that you are ready to receive messages now!
-//        MMX.start()
-//        // Handling disconnection
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
-
         
         // Add search bar
         searchController.searchResultsUpdater = self
@@ -40,6 +40,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         tableView.registerNib(UINib(nibName: Utils.name(SummaryResponseCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(SummaryResponseCell.classForCoder()))
         tableView.registerNib(UINib(nibName: Utils.name(EventChannelTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(EventChannelTableViewCell.classForCoder()))
         tableView.registerNib(UINib(nibName: Utils.name(AskMagnetTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(AskMagnetTableViewCell.classForCoder()))
+        tableView.registerNib(UINib(nibName: Utils.name(CreateChatCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(CreateChatCell.classForCoder()))
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -48,9 +49,9 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         if let user = MMUser.currentUser() {
             self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
         }
-        
-        
-        
+
+        loadEventChannels()
+        loadAskMagnetChannel()
         loadDetails()
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
     }
@@ -60,6 +61,43 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         self.title = nil
         
         ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+    }
+    
+    func loadEventChannels(){
+        
+        MMXChannel.findByTags( Set(["active"]), limit: 5, offset: 0, success: { (total, channels) -> Void in
+            if channels.count > 0 {
+                let channel = channels.first
+                channel?.subscribeWithSuccess({ () -> Void in
+                    MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 1000, success: { (responseDetails) -> Void in
+                        self.actualEvents = responseDetails
+                        self.endRefreshing()
+                        }, failure: { (error) -> Void in
+                    })
+                    }, failure: { (error) -> Void in
+                      print("subscribe global error \(error)")
+                })
+            }
+            }) { (error) -> Void in
+        }
+    }
+    
+    func loadAskMagnetChannel() {
+        MMXChannel.findByTags( Set(["global"]), limit: 5, offset: 0, success: { (total, channels) -> Void in
+            if channels.count > 0 {
+                let channel = channels.first
+                channel?.subscribeWithSuccess({ () -> Void in
+                    MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 1000, success: { (responseDetails) -> Void in
+                        self.askMagnet = responseDetails
+                        self.endRefreshing()
+                        }, failure: { (error) -> Void in
+                    })
+                    }, failure: { (error) -> Void in
+                        print("subscribe ask error \(error)")
+                })
+            }
+            }) { (error) -> Void in
+        }
     }
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
@@ -73,90 +111,84 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     @IBAction func showSideMenu(sender: UIBarButtonItem) {
         self.revealViewController().revealToggleAnimated(true)
     }
-    
-    deinit {
-        // Indicate that you are not ready to receive messages now!
-//        MMX.stop()
-//        
-//        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
-    // MARK: - Notification handler
-    
-//    private func didDisconnect(notification: NSNotification) {
-//        // Indicate that you are not ready to receive messages now!
-//        MMX.stop()
-//        
-//        // Redirect to the login screen
-//        if let revealVC = self.revealViewController() {
-//            revealVC.rearViewController.navigationController?.popToRootViewControllerAnimated(true)
-//        }
-//    }
 
     // MARK: - Table view data source
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        var channelDetail: MMXChannelDetailResponse
-        
-        if searchController.active {
-            channelDetail = filteredDetailResponses[indexPath.row]
-        } else {
-            channelDetail = detailResponses[indexPath.row]
+        switch indexPath.section {
+        case 0: return EventChannelTableViewCell.cellHeight()
+        case 1 : return AskMagnetTableViewCell.cellHeight()
+        case 2 :
+            if detailResponses.count > 0 {return SummaryResponseCell.cellHeight()}
+            else { return CreateChatCell.cellHeight()}
+        default : return 44
         }
-        
-        if channelDetail.channel.summary!.containsString("Forum") {
-            return 150
-        } else if channelDetail.channel.summary!.containsString("Ask") {
-            return 80
-        }
-        return 44
+    }
+    
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 3
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.active {
-            return filteredDetailResponses.count
+        
+        switch section {
+        case 0: return actualEvents.count
+        case 1: return askMagnet.count
+        case 2:
+            if detailResponses.count > 0 {
+                if searchController.active {return filteredDetailResponses.count}
+                else {return detailResponses.count}}
+            else { return 1}
+            
+        default : return 0
         }
-        return detailResponses.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var channelDetail: MMXChannelDetailResponse
+        var channelDetail: MMXChannelDetailResponse = MMXChannelDetailResponse()
         var identifier = ""
         
-        if searchController.active {
-            channelDetail = filteredDetailResponses[indexPath.row]
-        } else {
-            channelDetail = detailResponses[indexPath.row]
+        switch indexPath.section {
+        case 0:
+            identifier = Utils.name(EventChannelTableViewCell.classForCoder())
+            channelDetail = self.actualEvents.first!
+        case 1:
+            identifier = Utils.name(AskMagnetTableViewCell.classForCoder())
+            channelDetail = self.askMagnet.first!
+        case 2:
+            if detailResponses.count > 0 {
+                identifier = Utils.name(SummaryResponseCell.classForCoder())
+                if searchController.active {
+                    channelDetail = filteredDetailResponses[indexPath.row]
+                } else {
+                    channelDetail = detailResponses[indexPath.row]
+                }
+            } else {
+                identifier = Utils.name(CreateChatCell.classForCoder())
+            }
+        default:break;
         }
         
-        if channelDetail.channel.summary!.containsString("Forum") {
-            identifier = Utils.name(EventChannelTableViewCell.classForCoder())
-//           let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as! EventChannelTableViewCell
-//            cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
-//            return cell
-        } else if channelDetail.channel.summary!.containsString("Ask") {
-            identifier = Utils.name(AskMagnetTableViewCell.classForCoder())
-//            let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as! AskMagnetTableViewCell
-//            cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
-//            return cell
-        } else {
-            identifier = Utils.name(SummaryResponseCell.classForCoder())
-//            let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as! SummaryResponseCell
-//            cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
-//            return cell
-        }
         let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as! ChannelDetailBaseTVCell
-        cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
+        cell.detailResponse = channelDetail
         return cell
     }
 
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if indexPath.section != 2 {
+            return false
+        }
         return true
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        
+        if indexPath.section != 2 {
+            return nil
+        }
+        
         let detailResponse = detailResponses[indexPath.row]
         var isLastPersonInChat = false
         if detailResponse.messages.count > 0 {
@@ -169,7 +201,9 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
                 let delete = UITableViewRowAction(style: .Normal, title: kStr_Delete) { [weak self] action, index in
                     chat.deleteWithSuccess({ _ in
                         self?.detailResponses.removeAtIndex(index.row)
+                        if self?.detailResponses.count > 0 {
                         tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
+                        }
                     }, failure: { error in
                         print(error)
                     })
@@ -202,9 +236,18 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         
         searchController.active = false
 
-        if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? ChannelDetailBaseTVCell {
-            chatVC.chat = ChannelManager.sharedInstance.channelForName(cell.detailResponse.channelName)
-            self.navigationController?.pushViewController(chatVC, animated: true)
+        if indexPath.section == 2 && self.detailResponses.count == 0 {
+            self.performSegueWithIdentifier(kSegueShowContactSelector, sender: nil)
+        } else {
+ 
+            if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? ChannelDetailBaseTVCell {
+                if indexPath.section != 2 {
+                    chatVC.chat = cell.detailResponse?.channel
+                } else {
+                    chatVC.chat = ChannelManager.sharedInstance.channelForName(cell.detailResponse!.channelName)
+                }
+                self.navigationController?.pushViewController(chatVC, animated: true)
+            }
         }
     }
     
@@ -233,8 +276,12 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     // MARK: - Helpers
     
     private func loadDetails() {
+        
+        refreshControl?.beginRefreshing()
+        
         // Get all channels the current user is subscribed to
-        MMXChannel.subscribedChannelsWithSuccess({ [weak self] channels in
+        MMXChannel.allPrivateChannelsWithLimit(100, offset: 0, success: { (total, channels) in
+
             ChannelManager.sharedInstance.channels = channels
             if channels.count > 0 {
                 // Get details
@@ -245,14 +292,15 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
                     })
 
                     ChannelManager.sharedInstance.channelDetails = sortedDetails
-                    self?.detailResponses = sortedDetails
-                        self?.endRefreshing()
+                    self.detailResponses = sortedDetails
+                        self.endRefreshing()
                 }, failure: { error in
-                    self?.endRefreshing()
+                    self.endRefreshing()
                     print(error)
                 })
             } else {
                 ChannelManager.sharedInstance.channelDetails?.removeAll()
+                
             }
         }) { [weak self] error in
             self?.endRefreshing()

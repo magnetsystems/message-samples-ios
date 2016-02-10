@@ -33,6 +33,8 @@
 		7A76D4121C6AAABB004ADC49 /* AskMagnetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76D4111C6AAABB004ADC49 /* AskMagnetTableViewCell.swift */; };
 		7A76D4141C6AAACA004ADC49 /* AskMagnetTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A76D4131C6AAACA004ADC49 /* AskMagnetTableViewCell.xib */; };
 		7A76D4161C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76D4151C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift */; };
+		7A76D41D1C6B90BA004ADC49 /* CreateChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76D41C1C6B90BA004ADC49 /* CreateChatCell.swift */; };
+		7A76D41F1C6B90ED004ADC49 /* CreateChatCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A76D41E1C6B90EC004ADC49 /* CreateChatCell.xib */; };
 		7ABB8C2E1C6A413200BF441A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7ABB8C2C1C6A413200BF441A /* LaunchScreen.storyboard */; };
 		8B0760381C4E5D9A00EAC402 /* ChannelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0760371C4E5D9A00EAC402 /* ChannelManager.swift */; };
 		8B09099E1C3AB5C60042F361 /* new_message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B09099D1C3AB5C60042F361 /* new_message@2x.png */; };
@@ -76,7 +78,6 @@
 		8B8E80331C2ACAC8008D8C43 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8E80321C2ACAC8008D8C43 /* BaseViewController.swift */; };
 		8B8E80351C2ACB15008D8C43 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8E80341C2ACB15008D8C43 /* SignInViewController.swift */; };
 		8B8E80381C2ACDBE008D8C43 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8E80371C2ACDBE008D8C43 /* BaseNavigationController.swift */; };
-		8B8E803A1C2AE17E008D8C43 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8E80391C2AE17E008D8C43 /* ForgotPasswordViewController.swift */; };
 		8B8E803C1C2AE733008D8C43 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8E803B1C2AE733008D8C43 /* RegisterViewController.swift */; };
 		8B901AEE1C5BBC2800AA5DF1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B901AED1C5BBC2800AA5DF1 /* Constants.swift */; };
 		8B9C67651C522D5F00661586 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C67641C522D5F00661586 /* Photo.swift */; };
@@ -126,7 +127,9 @@
 		7A76D40D1C6AA6F0004ADC49 /* icon_messages_group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_messages_group.png; path = Messages/icon_messages_group.png; sourceTree = "<group>"; };
 		7A76D4111C6AAABB004ADC49 /* AskMagnetTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AskMagnetTableViewCell.swift; sourceTree = "<group>"; };
 		7A76D4131C6AAACA004ADC49 /* AskMagnetTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AskMagnetTableViewCell.xib; sourceTree = "<group>"; };
-		7A76D4151C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelDetailBaseTVCell.swift; sourceTree = "<group>"; };
+		7A76D4151C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelDetailBaseTVCell.swift; path = ../../UI/Views/ChannelDetailBaseTVCell.swift; sourceTree = "<group>"; };
+		7A76D41C1C6B90BA004ADC49 /* CreateChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChatCell.swift; sourceTree = "<group>"; };
+		7A76D41E1C6B90EC004ADC49 /* CreateChatCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateChatCell.xib; sourceTree = "<group>"; };
 		7ABB8C2D1C6A413200BF441A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B0760371C4E5D9A00EAC402 /* ChannelManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelManager.swift; sourceTree = "<group>"; };
 		8B09099D1C3AB5C60042F361 /* new_message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "new_message@2x.png"; sourceTree = "<group>"; };
@@ -175,7 +178,6 @@
 		8B8E80321C2ACAC8008D8C43 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		8B8E80341C2ACB15008D8C43 /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		8B8E80371C2ACDBE008D8C43 /* BaseNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
-		8B8E80391C2AE17E008D8C43 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		8B8E803B1C2AE733008D8C43 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		8B901AED1C5BBC2800AA5DF1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Library/Constants.swift; sourceTree = "<group>"; };
 		8B9C67641C522D5F00661586 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
@@ -273,6 +275,79 @@
 			name = Messages;
 			sourceTree = "<group>";
 		};
+		7A76D4171C6B9033004ADC49 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				7A76D4181C6B9038004ADC49 /* PrivateChatsSummary */,
+				7A76D41B1C6B9075004ADC49 /* CreateNewSummary */,
+				7A76D4191C6B904A004ADC49 /* EventChannelSummary */,
+				7A76D41A1C6B905D004ADC49 /* AskMagnetSummary */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		7A76D4181C6B9038004ADC49 /* PrivateChatsSummary */ = {
+			isa = PBXGroup;
+			children = (
+				8B0909A01C3AD5F20042F361 /* SummaryResponseCell.swift */,
+				7A76D4061C6A869B004ADC49 /* SummaryResponseCell.xib */,
+			);
+			name = PrivateChatsSummary;
+			sourceTree = "<group>";
+		};
+		7A76D4191C6B904A004ADC49 /* EventChannelSummary */ = {
+			isa = PBXGroup;
+			children = (
+				7A76D4081C6AA5E1004ADC49 /* EventChannelTableViewCell.swift */,
+				7A76D40A1C6AA5F0004ADC49 /* EventChannelTableViewCell.xib */,
+			);
+			name = EventChannelSummary;
+			sourceTree = "<group>";
+		};
+		7A76D41A1C6B905D004ADC49 /* AskMagnetSummary */ = {
+			isa = PBXGroup;
+			children = (
+				7A76D4111C6AAABB004ADC49 /* AskMagnetTableViewCell.swift */,
+				7A76D4131C6AAACA004ADC49 /* AskMagnetTableViewCell.xib */,
+			);
+			name = AskMagnetSummary;
+			sourceTree = "<group>";
+		};
+		7A76D41B1C6B9075004ADC49 /* CreateNewSummary */ = {
+			isa = PBXGroup;
+			children = (
+				7A76D41C1C6B90BA004ADC49 /* CreateChatCell.swift */,
+				7A76D41E1C6B90EC004ADC49 /* CreateChatCell.xib */,
+			);
+			name = CreateNewSummary;
+			sourceTree = "<group>";
+		};
+		7A76D4201C6B9292004ADC49 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				8B8E80341C2ACB15008D8C43 /* SignInViewController.swift */,
+				8B8E803B1C2AE733008D8C43 /* RegisterViewController.swift */,
+			);
+			name = Auth;
+			sourceTree = "<group>";
+		};
+		7A76D4211C6B929D004ADC49 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				8B3EBB5E1C3BE0F400BAED8E /* RearMenuViewController.swift */,
+			);
+			name = Menu;
+			sourceTree = "<group>";
+		};
+		7A76D4221C6B92AB004ADC49 /* Flow */ = {
+			isa = PBXGroup;
+			children = (
+				8B223F4A1C33099B0096D204 /* HomeViewController.swift */,
+				7A76D3EA1C6A4EBE004ADC49 /* EventsViewController.swift */,
+			);
+			name = Flow;
+			sourceTree = "<group>";
+		};
 		7ABB8C291C6A3DEF00BF441A /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -306,13 +381,7 @@
 		8B09099F1C3AD5BF0042F361 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8B0909A01C3AD5F20042F361 /* SummaryResponseCell.swift */,
-				7A76D4061C6A869B004ADC49 /* SummaryResponseCell.xib */,
-				7A76D4081C6AA5E1004ADC49 /* EventChannelTableViewCell.swift */,
-				7A76D40A1C6AA5F0004ADC49 /* EventChannelTableViewCell.xib */,
-				7A76D4111C6AAABB004ADC49 /* AskMagnetTableViewCell.swift */,
-				7A76D4131C6AAACA004ADC49 /* AskMagnetTableViewCell.xib */,
-				7A76D4151C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift */,
+				7A76D4171C6B9033004ADC49 /* Cells */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -395,8 +464,8 @@
 			isa = PBXGroup;
 			children = (
 				8B2E53CD1C2AC31900C9AC47 /* AppDelegate.swift */,
-				8B2E53D11C2AC31900C9AC47 /* Main.storyboard */,
 				7ABB8C2C1C6A413200BF441A /* LaunchScreen.storyboard */,
+				8B2E53D11C2AC31900C9AC47 /* Main.storyboard */,
 				7ABB8C2A1C6A3E0200BF441A /* 3rdParty */,
 				7ABB8C291C6A3DEF00BF441A /* Core */,
 				8B8E802B1C2AC6CC008D8C43 /* Classes */,
@@ -491,6 +560,7 @@
 		8B8E802B1C2AC6CC008D8C43 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8B8E802E1C2ACA1F008D8C43 /* Base classes */,
 				8B09099F1C3AD5BF0042F361 /* Views */,
 				8B8E802C1C2AC8E1008D8C43 /* Controllers */,
 			);
@@ -501,12 +571,9 @@
 		8B8E802C1C2AC8E1008D8C43 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8B8E80341C2ACB15008D8C43 /* SignInViewController.swift */,
-				8B8E80391C2AE17E008D8C43 /* ForgotPasswordViewController.swift */,
-				8B8E803B1C2AE733008D8C43 /* RegisterViewController.swift */,
-				8B3EBB5E1C3BE0F400BAED8E /* RearMenuViewController.swift */,
-				8B223F4A1C33099B0096D204 /* HomeViewController.swift */,
-				7A76D3EA1C6A4EBE004ADC49 /* EventsViewController.swift */,
+				7A76D4201C6B9292004ADC49 /* Auth */,
+				7A76D4211C6B929D004ADC49 /* Menu */,
+				7A76D4221C6B92AB004ADC49 /* Flow */,
 				8B3EBB601C3BF80200BAED8E /* ContactsViewController.swift */,
 				8B81C12D1C3C1E5600C186B6 /* ChatViewController.swift */,
 				8B6AA87C1C3C3BB100DE3C42 /* DetailsViewController.swift */,
@@ -518,7 +585,6 @@
 			isa = PBXGroup;
 			children = (
 				8B1B543B1C46CCB7002B268C /* Categories */,
-				8B8E802E1C2ACA1F008D8C43 /* Base classes */,
 				8B8E802F1C2ACA1F008D8C43 /* Helpers */,
 			);
 			path = Library;
@@ -527,10 +593,12 @@
 		8B8E802E1C2ACA1F008D8C43 /* Base classes */ = {
 			isa = PBXGroup;
 			children = (
+				7A76D4151C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift */,
 				8B8E80301C2ACA89008D8C43 /* Navigation Controller */,
 				8B8E80311C2ACA89008D8C43 /* View Controller */,
 			);
-			path = "Base classes";
+			name = "Base classes";
+			path = "../Library/Base classes";
 			sourceTree = "<group>";
 		};
 		8B8E802F1C2ACA1F008D8C43 /* Helpers */ = {
@@ -687,6 +755,7 @@
 				7A76D3F81C6A5A1C004ADC49 /* bg_img_1.png in Resources */,
 				8DDFA5A21C659F7400566A4D /* messages@2x.png in Resources */,
 				7A76D40F1C6AA6F0004ADC49 /* icon_messages_group.png in Resources */,
+				7A76D41F1C6B90ED004ADC49 /* CreateChatCell.xib in Resources */,
 				7A76D4051C6A866B004ADC49 /* ask_magnet.png in Resources */,
 				8B71BE6E1C57B2E1006E5C1F /* videoplayer_expand@3x.png in Resources */,
 				7A508DDB1C6A42350041B429 /* check_on.png in Resources */,
@@ -795,6 +864,7 @@
 				8B901AEE1C5BBC2800AA5DF1 /* Constants.swift in Sources */,
 				7A76D4121C6AAABB004ADC49 /* AskMagnetTableViewCell.swift in Sources */,
 				8BF254C01C49697A008719AA /* Popup.swift in Sources */,
+				7A76D41D1C6B90BA004ADC49 /* CreateChatCell.swift in Sources */,
 				8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */,
 				7A76D4011C6A7903004ADC49 /* Utils.swift in Sources */,
 				8B81C1351C3C22CA00C186B6 /* DownloadManager.swift in Sources */,
@@ -803,7 +873,6 @@
 				8B9C67651C522D5F00661586 /* Photo.swift in Sources */,
 				8B8E80381C2ACDBE008D8C43 /* BaseNavigationController.swift in Sources */,
 				7A76D3EB1C6A4EBE004ADC49 /* EventsViewController.swift in Sources */,
-				8B8E803A1C2AE17E008D8C43 /* ForgotPasswordViewController.swift in Sources */,
 				7A76D3FE1C6A76F4004ADC49 /* Strings.swift in Sources */,
 				8B71BE7A1C57BB42006E5C1F /* DateFormatter.swift in Sources */,
 				8B3EBB611C3BF80300BAED8E /* ContactsViewController.swift in Sources */,

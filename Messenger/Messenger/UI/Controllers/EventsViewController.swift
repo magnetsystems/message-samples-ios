@@ -28,8 +28,6 @@ class EventsViewController: UITableViewController, UISearchResultsUpdating, Cont
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.sizeToFit()
-//        searchController.searchBar.backgroundImage = UIImage(named:"input_search")
-//        searchController.searchBar.searchBarStyle = UISearchBarStyle.Prominent;
         tableView.tableHeaderView = searchController.searchBar
         tableView.reloadData()
         
@@ -87,7 +85,7 @@ class EventsViewController: UITableViewController, UISearchResultsUpdating, Cont
         searchController.active = false
         
         if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventChannelTableViewCell {
-            chatVC.chat = ChannelManager.sharedInstance.channelForName(cell.detailResponse.channelName)
+            chatVC.chat = cell.detailResponse.channel
             self.navigationController?.pushViewController(chatVC, animated: true)
         }
     }
@@ -101,21 +99,21 @@ class EventsViewController: UITableViewController, UISearchResultsUpdating, Cont
         }
     }
     
-    // MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == kSegueShowContactSelector {
-            if let navigationVC = segue.destinationViewController as? UINavigationController {
-                if let contactsVC = navigationVC.topViewController as? ContactsViewController {
-                    contactsVC.delegate = self
-                    contactsVC.title = kStr_NewMessage
-                }
-            }
-        }
-    }
-    
     //MARK: - Actions
 
+    @IBAction func createNewChat (sender: UIBarButtonItem) {
+        
+        if let navigationVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_ContactsNav) as? UINavigationController {
+            if let contactsVC = navigationVC.topViewController as? ContactsViewController {
+                contactsVC.delegate = self
+                contactsVC.title = kStr_NewMessage
+                
+                self.navigationController?.presentViewController(navigationVC, animated: true, completion: nil)
+            }
+        }
+
+    }
+    
     @IBAction func refreshChannelDetail() {
         loadDetails()
     }
@@ -128,47 +126,48 @@ class EventsViewController: UITableViewController, UISearchResultsUpdating, Cont
     private func loadDetails() {
         // Get all channels the current user is subscribed to
         
-        MMXChannel.allPublicChannelsWithLimit(100, offset: 0, success: { (total, channels) -> Void in
-            print("channels total \(total) \(channels)")
+        refreshControl?.beginRefreshing()
+        
+        MMXChannel.findByTags(Set(["hackathon"]), limit: 100, offset: 0, success: { (total, eventChannels) -> Void in
             
-            var eventChannels = channels;
-            
-            for channel:MMXChannel in channels {
-                channel.subscribeWithSuccess(nil, failure: nil)
-                if channel.summary!.containsString("Ask") {
-                    eventChannels .removeAtIndex(channels.indexOf(channel)!)
-                }
-            }
-            
-            MMXChannel.channelDetails(eventChannels, numberOfMessages: 10, numberOfSubcribers: 1000, success: { detailResponses in
-                ChannelManager.sharedInstance.eventChannels = eventChannels
-                if eventChannels.count > 0 {
-                    // Get details
-                    MMXChannel.channelDetails(eventChannels, numberOfMessages: 10, numberOfSubcribers: 1000, success: { detailResponses in
-                        let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
-                            let formatter = ChannelManager.sharedInstance.formatter
-                            return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
-                        })
-                        
-                        ChannelManager.sharedInstance.eventChannelDetails = sortedDetails
-                        
-                        self.hackatonChannels = sortedDetails
-                        self.endRefreshing()
-                        }, failure: { error in
+            if eventChannels.count > 0 {
+                
+                MMXChannel.channelDetails(eventChannels, numberOfMessages: 10, numberOfSubcribers: 1000, success: { detailResponses in
+                    ChannelManager.sharedInstance.eventChannels = eventChannels
+                    if eventChannels.count > 0 {
+                        // Get details
+                        MMXChannel.channelDetails(eventChannels, numberOfMessages: 10, numberOfSubcribers: 1000, success: { detailResponses in
+                            let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
+                                let formatter = ChannelManager.sharedInstance.formatter
+                                return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
+                            })
+                            
+                            ChannelManager.sharedInstance.eventChannelDetails = sortedDetails
+                            
+                            self.hackatonChannels = sortedDetails
                             self.endRefreshing()
-                            print(error)
-                    })
-                } else {
-                    ChannelManager.sharedInstance.eventChannelDetails?.removeAll()
-                }
+                            }, failure: { error in
+                                self.endRefreshing()
+                                print(error)
+                        })
+                    } else {
+                        ChannelManager.sharedInstance.eventChannelDetails?.removeAll()
+                        self.endRefreshing()
 
-                }) { [weak self] error in
-                    self?.endRefreshing()
-                    print(error)
+                    }
+                    }) { [weak self] error in
+                        self?.endRefreshing()
+                        print(error)
+                }
+            } else {
+                self.endRefreshing()
             }
+            
+            
             }) { (error) -> Void in
-                print("error \(error)")
+                self.endRefreshing()
         }
+        
     }
     
     private func endRefreshing() {

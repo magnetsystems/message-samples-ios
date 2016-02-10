@@ -12,8 +12,17 @@ import JSQMessagesViewController
 
 class ChannelDetailBaseTVCell: UITableViewCell {
 
-    var detailResponse : MMXChannelDetailResponse!
+    var detailResponse : MMXChannelDetailResponse?
 
+    static func cellHeight() -> CGFloat {
+        
+        let nibs : [AnyObject]! = NSBundle.mainBundle().loadNibNamed(Utils.name(self.classForCoder()), owner: self, options: nil)
+        
+        let cellView = nibs.first as! UIView;
+        
+        return cellView.frame.size.height;
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
