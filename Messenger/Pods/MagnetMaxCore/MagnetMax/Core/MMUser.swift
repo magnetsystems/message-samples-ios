@@ -56,18 +56,54 @@ public extension MMUser {
     
     @nonobjc static public var delegate : MMUserDelegate.Type?
     
+    private func avatarID() -> String {
+        return self.userID
+    }
+    
     /**
      The unique avatar URL for the user.
      */
     public func avatarURL() -> NSURL? {
-        return MMAttachmentService.attachmentURL(self.userID, userId: self.userID)
+        var url : NSURL? = nil
+        if let accessToken = MMCoreConfiguration.serviceAdapter.HATToken {
+            url = MMAttachmentService.attachmentURL(avatarID(), userId: self.userID, parameters: ["access_token" : accessToken])
+        }
+        
+        return url
     }
-  
+    
     /**
      sets the avatar image for the user with file.
      */
-    public func setAvatar(file : NSURL, success: (Void -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
-       
+    public func setAvatarWithURL(url : NSURL, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
+            let data : NSData? = NSData.init(contentsOfURL: url)
+
+            self.setAvatarWithData(data, success: success, failure: failure)
+        })
+    }
+    
+    /**
+     sets the avatar image for the user with data.
+     */
+    public func setAvatarWithData(data : NSData?, success: ((url : NSURL?) -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+        guard let imageData = data where imageData.length > 0 else {
+            let userInfo = [
+                NSLocalizedDescriptionKey: NSLocalizedString("Data Empty", comment : "Data Empty"),
+                NSLocalizedFailureReasonErrorKey: NSLocalizedString("NSData cannot be nil", comment : "NSData cannot be nil"),
+            ]
+            
+            let error = NSError.init(domain: "MMErrorDomain", code: 500, userInfo: userInfo)
+            failure?(error: error)
+            
+            return
+        }
+        
+        let attachment = MMAttachment.init(data: imageData, mimeType: "image/png")
+        let metaData = ["file_id" : avatarID()]
+        MMAttachmentService.upload([attachment], metaData: metaData, success: {
+                success?(url: self.avatarURL())
+            }, failure:failure)
     }
     
     /**

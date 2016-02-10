@@ -30,6 +30,7 @@ let vc_id_Events = "events"
 let vc_id_SlideMenu = "SlideMenuVC"
 let vc_id_VideoPlayer = "VideoPlayerViewController"
 let vc_id_ContactsNav = "ContactsNavigationController"
+let vc_id_UserProfile = "userProfileVC"
 
 let kSegueShowChatFromChatActivity = "showChatFromChannelSummary"
 let kSegueShowContactSelector = "showContactsSelector"

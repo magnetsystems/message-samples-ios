@@ -11,8 +11,13 @@ import MagnetMax
 
 class RearMenuViewController: UITableViewController {
     
+    @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var userAvatar: UIImageView!
+
+    
     enum IndexPathRowAction: Int {
-        case Home = 0
+        case UserInfo = 0
+        case Home 
         case Events
         case SignOut
     }
@@ -23,37 +28,38 @@ class RearMenuViewController: UITableViewController {
         MMX.start()
         // Handling disconnection
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
+        
+        if let user = MMUser.currentUser() {
+            username.text = "\(user.firstName ?? "") \(user.lastName ?? "")"
+            if ((user.avatarURL()?.absoluteString) == nil) {
+                userAvatar.image = UIImage(data: NSData(contentsOfURL:user.avatarURL()!)!)
+            }
+        }
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        var title = String()
-        if let user = MMUser.currentUser() {
-            title = "\(user.firstName ?? "") \(user.lastName ?? "")"
-        }
-        return title
-    }
+
     
     // MARK: - Table view delegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.row {
+        case IndexPathRowAction.UserInfo.rawValue:
+            self.revealViewController().revealToggleAnimated(true)
+            self.revealViewController().presentViewController((self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_UserProfile))!, animated: true, completion: nil)
         case IndexPathRowAction.SignOut.rawValue :
             MMUser.logout({ () -> Void in
                 self.navigationController?.popToRootViewControllerAnimated(true)
                 }, failure: { (error) -> Void in
                     print("[ERROR]: \(error)")
             })
-            break;
         case IndexPathRowAction.Home.rawValue :
             let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
             let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Home);
             self.revealViewController().pushFrontViewController(vc, animated: true);
-            break;
         case IndexPathRowAction.Events.rawValue:
             let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
             let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
             self.revealViewController().pushFrontViewController(vc, animated: true);
-            break;
         default:break;
         }
 

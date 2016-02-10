@@ -33,10 +33,25 @@ public class MMAttachmentProgress : NSObject {
 @objc public class MMAttachmentService: NSObject {
     
     static public func attachmentURL(attachmentID: String, userId : String?) -> NSURL? {
+     return attachmentURL(attachmentID, userId: userId, parameters: nil)
+    }
+    
+    static public func attachmentURL(attachmentID: String, userId : String?, parameters : NSDictionary?) -> NSURL? {
         var userIDQueryParam : String = ""
         if let userID = userId {
             userIDQueryParam = "?user_id=\(userID)"
         }
+        if let params = parameters {
+            for (key, value) in params {
+                if userIDQueryParam.characters.count == 0 {
+                    userIDQueryParam = "?"
+                } else {
+                    userIDQueryParam += "&"
+                }
+                userIDQueryParam += "\(key)=\(value)"
+            }
+        }
+        
         guard let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)\(userIDQueryParam)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL) else {
             return nil
         }
