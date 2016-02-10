@@ -25,6 +25,11 @@ class ChatViewController: JSQMessagesViewController {
         didSet {
             //Register for a notification to receive the message
             if let channel = chat {
+                if chat != nil && chat!.summary!.containsString("Ask") {
+                    navigationItem.title = "Ask Magnet"
+                } else if chat != nil && chat!.summary!.containsString("Forum") {
+                    navigationItem.title = "Forum"
+                }
                 notifier = NavigationNotifier.init(viewController: self, exceptFor: channel)
                 ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
             }
@@ -35,9 +40,9 @@ class ChatViewController: JSQMessagesViewController {
     var recipients : [MMUser]! {
         didSet {
             
-            if chat!.summary!.containsString("Ask") {
+            if chat != nil && chat!.summary!.containsString("Ask") {
                 navigationItem.title = "Ask Magnet"
-            } else if chat!.summary!.containsString("Forum") {
+            } else if chat != nil && chat!.summary!.containsString("Forum") {
                 navigationItem.title = "Forum"
             } else {
                 
