@@ -423,7 +423,8 @@ class ChatViewController: JSQMessagesViewController {
     
     private func getChannelBySubscribers(users: [MMUser]) {
         //Check if channel exists
-        MMXChannel.findChannelsBySubscribers(users, matchType: .EXACT_MATCH, success: { [weak self] channels in
+        MMXChannel.findChannelsBySubscribers(users, matchType: .EXACT_MATCH, success: { [weak self] allChannels in
+            let channels = allChannels.filter { !$0.name.hasPrefix("global_") }
             if channels.count != 1 {
                 //Create new chat
                 let subscribers = Set(users)
