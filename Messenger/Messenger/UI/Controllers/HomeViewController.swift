@@ -280,8 +280,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         refreshControl?.beginRefreshing()
         
         // Get all channels the current user is subscribed to
-        MMXChannel.subscribedChannelsWithSuccess({ [weak self] channels in
-
+        MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
+            let channels = allChannels.filter { !$0.name.hasPrefix("global_") }
             ChannelManager.sharedInstance.channels = channels
             if channels.count > 0 {
                 // Get details
