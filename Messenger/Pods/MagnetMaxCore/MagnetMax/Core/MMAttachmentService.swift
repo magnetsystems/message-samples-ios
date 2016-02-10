@@ -32,6 +32,33 @@ public class MMAttachmentProgress : NSObject {
 
 @objc public class MMAttachmentService: NSObject {
     
+    static public func attachmentURL(attachmentID: String, userId : String?) -> NSURL? {
+     return attachmentURL(attachmentID, userId: userId, parameters: nil)
+    }
+    
+    static public func attachmentURL(attachmentID: String, userId : String?, parameters : NSDictionary?) -> NSURL? {
+        var userIDQueryParam : String = ""
+        if let userID = userId {
+            userIDQueryParam = "?user_id=\(userID)"
+        }
+        if let params = parameters {
+            for (key, value) in params {
+                if userIDQueryParam.characters.count == 0 {
+                    userIDQueryParam = "?"
+                } else {
+                    userIDQueryParam += "&"
+                }
+                userIDQueryParam += "\(key)=\(value)"
+            }
+        }
+        
+        guard let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)\(userIDQueryParam)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL) else {
+            return nil
+        }
+        
+        return downloadURL
+    }
+
     static public func upload(attachments: [MMAttachment], metaData:[String: String]?, success: (() -> ())?, failure: ((error: NSError) -> Void)?) {
         upload(attachments, metaData: metaData, progress: nil, success: success, failure: failure)
     }
@@ -98,11 +125,8 @@ public class MMAttachmentProgress : NSObject {
     }
     
     static public func download(attachmentID: String, userID userIdentifier: String?, progress : MMAttachmentProgress?, success: ((NSURL) -> ())?, failure: ((error: NSError) -> Void)?) {
-        var userIDQueryParam = ""
-        if let userID = userIdentifier {
-            userIDQueryParam = "?user_id=\(userID)"
-        }
-        guard let downloadURL = NSURL(string: "com.magnet.server/file/download/\(attachmentID)\(userIDQueryParam)", relativeToURL: MMCoreConfiguration.serviceAdapter.endPoint.URL) else {
+        
+        guard let downloadURL = attachmentURL(attachmentID, userId: userIdentifier) else {
             fatalError("downloadURL should not be nil")
         }
         let request = NSMutableURLRequest(URL: downloadURL)

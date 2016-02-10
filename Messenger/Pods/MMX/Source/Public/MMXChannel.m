@@ -16,6 +16,7 @@
  */
 
 #import "MMXChannel_Private.h"
+#import "MMXConstants.h"
 #import "MMXMessage_Private.h"
 #import "MMXTopic_Private.h"
 #import "MMXTopicSummary.h"
@@ -255,6 +256,54 @@
             failure(error);
         }
     }];
+}
+
+- (NSString *)iconID {
+    NSMutableString *iconID = self.name.mutableCopy;
+    if (!self.isPublic) {
+        [iconID appendFormat:@"_%@",self.ownerUserID];
+    }
+    return iconID;
+}
+
+- (NSURL *)iconURL {
+    NSString *accessToken = MMCoreConfiguration.serviceAdapter.HATToken;
+    if (accessToken) {
+        return [MMAttachmentService attachmentURL:[self iconID]
+                                           userId:self.ownerUserID
+                                       parameters:@{@"access_token" : accessToken}];
+    }
+    
+    return nil;
+}
+
+- (void)setIconWithURL:(nullable NSURL *)url
+               success:(nullable void (^)(NSURL *iconUrl))success
+               failure:(nullable void (^)(NSError *error))failure {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        
+        [self setIconWithData:data success:success failure:failure];
+    });
+}
+
+- (void)setIconWithData:(nullable NSData *)data
+                success:(nullable void (^)(NSURL *iconUrl))success
+                failure:(nullable void (^)(NSError *error))failure {
+    if (data.length <= 0) {
+        NSError *error = [MMXClient errorWithTitle:@"Data Empty" message:@"NSData cannot be nil" code:500];
+        failure(error);
+        
+        return;
+    }
+    
+    MMAttachment *attachment = [[MMAttachment alloc] initWithData:data mimeType:@"image/png"];
+    NSDictionary *metadata = @{@"file_id" : [self iconID]};
+    [MMAttachmentService upload:@[attachment] metaData:metadata success:^{
+        if (success) {
+            success(self.iconURL);
+        }
+    } failure:failure];
 }
 
 - (void)tagsWithSuccess:(void (^)(NSSet <NSString *>*))success

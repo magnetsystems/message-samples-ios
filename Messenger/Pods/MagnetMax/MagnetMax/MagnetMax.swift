@@ -22,8 +22,36 @@ import MMX
 
 @objc public class MagnetMax: NSObject, MMUserDelegate {
     
+    /// The default baseURL.
+    static private let defaultBaseURL = "https://sandbox.magnet.com/mobile/api"
+    
     /// The service adapter with the current configuration.
     static var serviceAdapter: MMServiceAdapter?
+    
+    /**
+        Configure MagnetMax with a clientID and clientSecret.
+     
+        - Parameters:
+            - clientID: The clientID to be used.
+            - clientSecret: The clientSecret to be used.
+     */
+    static public func configureWithClientID(clientID: String, clientSecret: String) {
+        configureWithBaseURL(defaultBaseURL, clientID: clientID, clientSecret: clientSecret)
+    }
+    
+    /**
+        Configure MagnetMax with a baseURL, clientID and clientSecret.
+     
+        - Parameters:
+            - baseURL: The baseURL to be used.
+            - clientID: The clientID to be used.
+            - clientSecret: The clientSecret to be used.
+     */
+    static public func configureWithBaseURL(baseURL: String, clientID: String, clientSecret: String) {
+        let dictionary = ["BaseURL": baseURL, "ClientID": clientID, "ClientSecret": clientSecret]
+        let configuration = MMPropertyListConfiguration(dictionary: dictionary)
+        MagnetMax.configure(configuration)
+    }
     
     /**
         Configure MagnetMax with specified configuration.
