@@ -22,6 +22,11 @@ class ChannelManager {
     let formatter = DateFormatter()
     var channels : [MMXChannel]?
     var channelDetails : [MMXChannelDetailResponse]?
+    
+    var eventChannels : [MMXChannel]?
+    var eventChannelDetails : [MMXChannelDetailResponse]?
+
+    
     private var channelObservers : [ChannelObserver] = []
     
     func channelForName(name: String) -> MMXChannel? {

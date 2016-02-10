@@ -99,7 +99,7 @@ PODS:
 DEPENDENCIES:
   - DZVideoPlayerViewController
   - JSQMessagesViewController
-  - MagnetMax (~> 2.4.1)
+  - MagnetMax (~> 2.4)
   - NYTPhotoViewer (~> 1.0.0)
 
 SPEC CHECKSUMS:

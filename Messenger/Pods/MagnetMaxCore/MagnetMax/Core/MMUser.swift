@@ -57,6 +57,20 @@ public extension MMUser {
     @nonobjc static public var delegate : MMUserDelegate.Type?
     
     /**
+     The unique avatar URL for the user.
+     */
+    public func avatarURL() -> NSURL? {
+        return MMAttachmentService.attachmentURL(self.userID, userId: self.userID)
+    }
+  
+    /**
+     sets the avatar image for the user with file.
+     */
+    public func setAvatar(file : NSURL, success: (Void -> Void)?, failure: ((error: NSError) -> Void)? ) -> Void {
+       
+    }
+    
+    /**
         Registers a new user.
      
         - Parameters:
@@ -211,7 +225,7 @@ public extension MMUser {
             resumeSession()
         }
     }
-    
+
     static private func updateCurrentUser(user : MMUser, rememberMe : Bool) {
         // Reset the state
         userTokenExpired(nil)
@@ -426,4 +440,6 @@ public extension MMUser {
              NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshUser" , name: MMServiceAdapterDidRestoreHATTokenNotification, object: nil)
             })
     }
+    
+    
 }

@@ -12,13 +12,17 @@ import MagnetMax
 class RearMenuViewController: UITableViewController {
     
     enum IndexPathRowAction: Int {
-        case ChangePassword = 0
-        case SignOut = 1
+        case Home = 0
+        case Events
+        case SignOut
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        MMX.start()
+        // Handling disconnection
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -32,25 +36,37 @@ class RearMenuViewController: UITableViewController {
     // MARK: - Table view delegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == IndexPathRowAction.SignOut.rawValue {
+        switch indexPath.row {
+        case IndexPathRowAction.SignOut.rawValue :
             MMUser.logout({ () -> Void in
                 self.navigationController?.popToRootViewControllerAnimated(true)
-            }, failure: { (error) -> Void in
-                print("[ERROR]: \(error)")
+                }, failure: { (error) -> Void in
+                    print("[ERROR]: \(error)")
             })
+            break;
+        case IndexPathRowAction.Home.rawValue :
+            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Home);
+            self.revealViewController().pushFrontViewController(vc, animated: true);
+            break;
+        case IndexPathRowAction.Events.rawValue:
+            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
+            self.revealViewController().pushFrontViewController(vc, animated: true);
+            break;
+        default:break;
         }
+
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    private func didDisconnect(notification: NSNotification) {
+        // Indicate that you are not ready to receive messages now!
+        MMX.stop()
+        
+        // Redirect to the login screen
+        if let revealVC = self.revealViewController() {
+            revealVC.rearViewController.navigationController?.popToRootViewControllerAnimated(true)
+        }
     }
-    */
-
 }

@@ -359,5 +359,12 @@ NS_ASSUME_NONNULL_BEGIN
     numberOfSubcribers:(NSInteger)numberOfSubcribers
                success:(nullable void (^)(NSArray <MMXChannelDetailResponse *>*detailsForChannels))success
                failure:(nullable void (^)(NSError *error))failure;
+
+- (NSURL *)iconURL;
+
+- (void)setIcon:(NSURL *)file
+        success:(nullable void (^)())success
+        failure:(nullable void (^)(NSError *error))failure;
+
 NS_ASSUME_NONNULL_END
 @end

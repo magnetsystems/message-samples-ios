@@ -17,26 +17,17 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         if let revealVC = self.revealViewController() {
-            let button = UIButton.init(type: .Custom)
-            button.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 0), size: CGSize.init(width: 40, height: 40))
-            button.setTitle("≡", forState: .Normal)
-            button.setTitleColor(UIColor(red: 0 / 255.0, green: 122 / 255.0, blue: 255 / 255.0, alpha: 1.0), forState: .Normal)
-            button.titleLabel?.font = UIFont.systemFontOfSize(36)
-            let menu = UIBarButtonItem(customView: button)
-            button.addTarget(revealVC, action: "revealToggle:", forControlEvents: .TouchUpInside)
-            navigationItem.leftBarButtonItem = menu
             self.view.addGestureRecognizer(revealVC.panGestureRecognizer())
             self.view.addGestureRecognizer(revealVC.tapGestureRecognizer())
         }
         
-        
         navigationController?.setNavigationBarHidden(false, animated: true)
         // Indicate that you are ready to receive messages now!
-        MMX.start()
-        // Handling disconnection
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
+//        MMX.start()
+//        // Handling disconnection
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
 
         
         // Add search bar
@@ -45,6 +36,10 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         searchController.searchBar.sizeToFit()
         tableView.tableHeaderView = searchController.searchBar
         tableView.reloadData()
+        
+        tableView.registerNib(UINib(nibName: Utils.name(SummaryResponseCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(SummaryResponseCell.classForCoder()))
+        tableView.registerNib(UINib(nibName: Utils.name(EventChannelTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(EventChannelTableViewCell.classForCoder()))
+        tableView.registerNib(UINib(nibName: Utils.name(AskMagnetTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(AskMagnetTableViewCell.classForCoder()))
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -53,6 +48,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         if let user = MMUser.currentUser() {
             self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
         }
+        
+        
         
         loadDetails()
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
@@ -73,27 +70,49 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         loadDetails()
     }
     
+    @IBAction func showSideMenu(sender: UIBarButtonItem) {
+        self.revealViewController().revealToggleAnimated(true)
+    }
+    
     deinit {
         // Indicate that you are not ready to receive messages now!
-        MMX.stop()
-        
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+//        MMX.stop()
+//        
+//        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     // MARK: - Notification handler
     
-    private func didDisconnect(notification: NSNotification) {
-        // Indicate that you are not ready to receive messages now!
-        MMX.stop()
-        
-        // Redirect to the login screen
-        if let revealVC = self.revealViewController() {
-            revealVC.rearViewController.navigationController?.popToRootViewControllerAnimated(true)
-        }
-    }
+//    private func didDisconnect(notification: NSNotification) {
+//        // Indicate that you are not ready to receive messages now!
+//        MMX.stop()
+//        
+//        // Redirect to the login screen
+//        if let revealVC = self.revealViewController() {
+//            revealVC.rearViewController.navigationController?.popToRootViewControllerAnimated(true)
+//        }
+//    }
 
     // MARK: - Table view data source
 
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        var channelDetail: MMXChannelDetailResponse
+        
+        if searchController.active {
+            channelDetail = filteredDetailResponses[indexPath.row]
+        } else {
+            channelDetail = detailResponses[indexPath.row]
+        }
+        
+        if channelDetail.channel.summary!.containsString("Forum") {
+            return 150
+        } else if channelDetail.channel.summary!.containsString("Ask") {
+            return 80
+        }
+        return 44
+    }
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.active {
             return filteredDetailResponses.count
@@ -102,9 +121,34 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
-        cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
         
+        var channelDetail: MMXChannelDetailResponse
+        var identifier = ""
+        
+        if searchController.active {
+            channelDetail = filteredDetailResponses[indexPath.row]
+        } else {
+            channelDetail = detailResponses[indexPath.row]
+        }
+        
+        if channelDetail.channel.summary!.containsString("Forum") {
+            identifier = Utils.name(EventChannelTableViewCell.classForCoder())
+//           let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as! EventChannelTableViewCell
+//            cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
+//            return cell
+        } else if channelDetail.channel.summary!.containsString("Ask") {
+            identifier = Utils.name(AskMagnetTableViewCell.classForCoder())
+//            let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as! AskMagnetTableViewCell
+//            cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
+//            return cell
+        } else {
+            identifier = Utils.name(SummaryResponseCell.classForCoder())
+//            let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as! SummaryResponseCell
+//            cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
+//            return cell
+        }
+        let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as! ChannelDetailBaseTVCell
+        cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
         return cell
     }
 
@@ -122,7 +166,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         if isLastPersonInChat {
             // Current user must be the owner of the channel to delete it
             if let chat = ChannelManager.sharedInstance.isOwnerForChat(detailResponse.channelName) {
-                let delete = UITableViewRowAction(style: .Normal, title: "Delete") { [weak self] action, index in
+                let delete = UITableViewRowAction(style: .Normal, title: kStr_Delete) { [weak self] action, index in
                     chat.deleteWithSuccess({ _ in
                         self?.detailResponses.removeAtIndex(index.row)
                         tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
@@ -136,7 +180,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
         
         // Unsubscribe
-        let leave = UITableViewRowAction(style: .Normal, title: "Leave") { [weak self] action, index in
+        let leave = UITableViewRowAction(style: .Normal, title: kStr_Leave) { [weak self] action, index in
             if let chat = ChannelManager.sharedInstance.channelForName(detailResponse.channelName) {
                 chat.unSubscribeWithSuccess({ _ in
                     self?.detailResponses.removeAtIndex(index.row)
@@ -154,10 +198,20 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
  
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        searchController.active = false
+
+        if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? ChannelDetailBaseTVCell {
+            chatVC.chat = ChannelManager.sharedInstance.channelForName(cell.detailResponse.channelName)
+            self.navigationController?.pushViewController(chatVC, animated: true)
+        }
+    }
+    
     //MARK: - ContactsViewControllerDelegate
     
     func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
-        if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier("ChatViewController") as? ChatViewController {
+        if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController {
             chatVC.recipients = selectedUsers + [MMUser.currentUser()!]
             self.navigationController?.pushViewController(chatVC, animated: false)
         }
@@ -166,16 +220,11 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showChatFromChannelSummary" {
-            searchController.active = false
-            if let chatVC = segue.destinationViewController as? ChatViewController, let cell = sender as? SummaryResponseCell {
-                chatVC.chat = ChannelManager.sharedInstance.channelForName(cell.detailResponse.channelName)
-            }
-        } else if segue.identifier == "showContactsSelector" {
+        if segue.identifier == kSegueShowContactSelector {
             if let navigationVC = segue.destinationViewController as? UINavigationController {
                 if let contactsVC = navigationVC.topViewController as? ContactsViewController {
                     contactsVC.delegate = self
-                    contactsVC.title = "New message"
+                    contactsVC.title = kStr_NewMessage
                 }
             }
         }
@@ -189,7 +238,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             ChannelManager.sharedInstance.channels = channels
             if channels.count > 0 {
                 // Get details
-                MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
+                MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 10, success: { detailResponses in
                     let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
                         let formatter = ChannelManager.sharedInstance.formatter
                         return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970

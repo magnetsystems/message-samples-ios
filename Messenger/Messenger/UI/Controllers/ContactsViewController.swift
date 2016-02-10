@@ -9,6 +9,8 @@
 import UIKit
 import MagnetMax
 
+let userCellId = "UserCellIdentifier"
+
 protocol ContactsViewControllerDelegate: class {
     func contactsControllerDidFinish(with selectedUsers: [MMUser])
 }
@@ -84,7 +86,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("UserCellIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(userCellId, forIndexPath: indexPath)
         
         var user: MMUser!
         if resultSearchController.active {
@@ -121,6 +123,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         }
         
         cell.textLabel?.attributedText = title
+        cell.imageView?.image = UIImage(named: "user_default");
         
         return cell
     }

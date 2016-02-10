@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="80" id="M91-2w-P5s" customClass="AskMagnetTableViewCell" customModule="Messenger" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="M91-2w-P5s" id="ZLT-Vp-g5z">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ask_magnet.png" translatesAutoresizingMaskIntoConstraints="NO" id="2hq-MI-7y5">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="2hq-MI-7y5" firstAttribute="top" secondItem="ZLT-Vp-g5z" secondAttribute="top" id="2qU-Yw-6XJ"/>
+                    <constraint firstAttribute="trailing" secondItem="2hq-MI-7y5" secondAttribute="trailing" id="Cms-gn-cTx"/>
+                    <constraint firstAttribute="bottom" secondItem="2hq-MI-7y5" secondAttribute="bottom" id="coJ-zv-D7U"/>
+                    <constraint firstItem="2hq-MI-7y5" firstAttribute="leading" secondItem="ZLT-Vp-g5z" secondAttribute="leading" id="yVd-wP-Gkd"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="190" y="244"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ask_magnet.png" width="750" height="155"/>
+    </resources>
+</document>

@@ -23,12 +23,12 @@ class BaseViewController: UIViewController, UITextFieldDelegate {
     }
     
     func showLoadingIndicator() {
-        activityIndicator.startAnimating()
+        activityIndicator?.startAnimating()
         self.view.userInteractionEnabled = false
     }
     
     func hideLoadingIndicator() {
-        activityIndicator.stopAnimating()
+        activityIndicator?.stopAnimating()
         self.view.userInteractionEnabled = true
     }
     

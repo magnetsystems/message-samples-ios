@@ -10,7 +10,7 @@ import UIKit
 import MagnetMax
 import JSQMessagesViewController
 
-class SummaryResponseCell: UITableViewCell {
+class SummaryResponseCell: ChannelDetailBaseTVCell {
     
     @IBOutlet weak var vNewMessageIndicator : UIView!
     @IBOutlet weak var lblSubscribers : UILabel!
@@ -18,7 +18,7 @@ class SummaryResponseCell: UITableViewCell {
     @IBOutlet weak var lblMessage : UILabel!
     @IBOutlet weak var ivMessageIcon : UIImageView!
     
-    var detailResponse : MMXChannelDetailResponse! {
+    override var detailResponse : MMXChannelDetailResponse! {
         didSet {
             var subscribers : [MMUserProfile] = detailResponse.subscribers
             
@@ -38,7 +38,7 @@ class SummaryResponseCell: UITableViewCell {
             lblSubscribers.text = subscribersTitle
             
             if let messages = detailResponse.messages, content = messages.last?.messageContent {
-                lblMessage.text = content[Constants.ContentKey.Message] ?? "Attachment file"
+                lblMessage.text = content[Constants.ContentKey.Message] ?? kStr_AttachmentFile
             } else {
                 lblMessage.text = ""
             }

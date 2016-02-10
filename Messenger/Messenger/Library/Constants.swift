@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 struct Constants {
     
     struct ContentKey {
@@ -19,3 +18,23 @@ struct Constants {
     }
     
 }
+
+ /// IDs for storyboards, ViewControllers and segues
+
+let sb_id_Main = "Main"
+let sb_id_Launch = "LaunchScreen"
+
+let vc_id_Chat = "ChatViewController"
+let vc_id_Home = "home"
+let vc_id_Events = "events"
+let vc_id_SlideMenu = "SlideMenuVC"
+let vc_id_VideoPlayer = "VideoPlayerViewController"
+let vc_id_ContactsNav = "ContactsNavigationController"
+
+let kSegueShowChatFromChatActivity = "showChatFromChannelSummary"
+let kSegueShowContactSelector = "showContactsSelector"
+let kSegueShowSlideMenu = "showSlideMenuVC"
+let kSegueRegisterToHome = "registerToMenuSegue"
+let kSegueShowMap = "showMapViewController"
+let kSegueShowDetails = "showDetailsSegue"
+

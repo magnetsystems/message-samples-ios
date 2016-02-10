@@ -62,15 +62,15 @@ class RegisterViewController : BaseViewController {
                     } else {
                         print("[ERROR]: \(error)")
                         self?.hideLoadingIndicator()
-                        self?.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close")
+                        self?.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: kStr_Close)
                     }
                 })
         } catch InputError.InvalidUserNames {
-            self.showAlert("Please enter your first and last name", title: "Field required", closeTitle: "Close")
+            self.showAlert(kStr_EnterFirstLastName, title: kStr_FieldRequired, closeTitle: kStr_Close)
         } catch InputError.InvalidEmail {
-            self.showAlert("Please enter your email", title: "Field required", closeTitle: "Close")
+            self.showAlert(kStr_EnterEmail, title: kStr_FieldRequired, closeTitle: kStr_Close)
         } catch InputError.InvalidPassword {
-            self.showAlert("Please enter your password and verify your password again", title: "Passwords do not match", closeTitle: "Close")
+            self.showAlert(kStr_EnterPasswordAndVerify, title: kStr_PasssNotMatch, closeTitle: kStr_Close)
         } catch { }
     }
     
@@ -109,7 +109,7 @@ class RegisterViewController : BaseViewController {
             // Initialize Magnet Message
             MagnetMax.initModule(MMX.sharedInstance(), success: {
                 self?.hideLoadingIndicator()
-                self?.performSegueWithIdentifier("registerToMenuSegue", sender: nil)
+                self?.performSegueWithIdentifier(kSegueRegisterToHome, sender: nil)
                 }, failure: { error in
                     self?.hideLoadingIndicator()
                     print("[ERROR]: \(error)")
@@ -117,7 +117,7 @@ class RegisterViewController : BaseViewController {
             }, failure: { [weak self] error  in
                 self?.hideLoadingIndicator()
                 print("[ERROR]: \(error.localizedDescription)")
-                self?.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close")
+                self?.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: kStr_Close)
             })
     }
 }

@@ -11,7 +11,7 @@ import MagnetMax
 import JSQMessagesViewController
 import MobileCoreServices
 import NYTPhotoViewer
-import Toucan
+//import Toucan
 
 class ChatViewController: JSQMessagesViewController {
     
@@ -34,16 +34,24 @@ class ChatViewController: JSQMessagesViewController {
     
     var recipients : [MMUser]! {
         didSet {
-            if recipients.count == 1 {
-                navigationItem.title = MMUser.currentUser()?.firstName
-            } else if recipients.count == 2 {
-                var users = recipients
-                if let currentUser = MMUser.currentUser(), index = users.indexOf(currentUser) {
-                    users.removeAtIndex(index)
-                }
-                navigationItem.title = users.first?.firstName!
+            
+            if chat!.summary!.containsString("Ask") {
+                navigationItem.title = "Ask Magnet"
+            } else if chat!.summary!.containsString("Forum") {
+                navigationItem.title = "Forum"
             } else {
-                navigationItem.title = "Group"
+                
+                if recipients.count == 1 {
+                    navigationItem.title = MMUser.currentUser()?.firstName
+                } else if recipients.count == 2 {
+                    var users = recipients
+                    if let currentUser = MMUser.currentUser(), index = users.indexOf(currentUser) {
+                        users.removeAtIndex(index)
+                    }
+                    navigationItem.title = users.first?.firstName!
+                } else {
+                    navigationItem.title = kStr_Group
+                }
             }
         }
     }
@@ -190,18 +198,18 @@ class ChatViewController: JSQMessagesViewController {
         
         self.inputToolbar!.contentView!.textView?.resignFirstResponder()
         
-        let alertController = UIAlertController(title: "Media Messages", message: nil, preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: kStr_MediaMessages, message: nil, preferredStyle: .ActionSheet)
         
-        let sendFromCamera = UIAlertAction(title: "Take Photo or Video", style: .Default) { (_) in
+        let sendFromCamera = UIAlertAction(title: kStr_TakePhotoOrVideo, style: .Default) { (_) in
             self.addMediaMessageFromCamera()
         }
-        let sendFromLibrary = UIAlertAction(title: "Photo Library", style: .Default) { (_) in
+        let sendFromLibrary = UIAlertAction(title: kStr_PhotoLib, style: .Default) { (_) in
             self.addMediaMessageFromLibrary()
         }
-        let sendLocationAction = UIAlertAction(title: "Send Location", style: .Default) { (_) in
+        let sendLocationAction = UIAlertAction(title: kStr_SendLoc, style: .Default) { (_) in
             self.addLocationMediaMessage()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
+        let cancelAction = UIAlertAction(title: kStr_Cancel, style: .Cancel) { (_) in }
         
         alertController.addAction(sendFromCamera)
         alertController.addAction(sendFromLibrary)
@@ -347,7 +355,7 @@ class ChatViewController: JSQMessagesViewController {
             switch message.type {
             case .Text: break
             case .Location:
-                self.performSegueWithIdentifier("showMapViewController", sender: message.media())
+                self.performSegueWithIdentifier(kSegueShowMap, sender: message.media())
             case .Photo:
                 let photoItem = message.media() as! JSQPhotoMediaItem
                 let photo = Photo(photo: photoItem.image)
@@ -355,7 +363,7 @@ class ChatViewController: JSQMessagesViewController {
                 presentViewController(viewer, animated: true, completion: nil)
             case .Video:
                 if let attachment = message.underlyingMessage.attachments?.first where attachment.name != nil {
-                    let videoVC = VideoPlayerViewController(nibName: "VideoPlayerViewController", bundle: nil)
+                    let videoVC = VideoPlayerViewController(nibName: vc_id_VideoPlayer, bundle: nil)
                     videoVC.attachment = attachment
                     presentViewController(videoVC, animated: true, completion: nil)
                 }
@@ -432,7 +440,7 @@ class ChatViewController: JSQMessagesViewController {
             }
         }) { error in
             print("[ERROR]: \(error)")
-            let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close", handler: { _ in
+            let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: kStr_Close, handler: { _ in
                 self.navigationController?.popViewControllerAnimated(true)
             })
             alert.presentForController(self)
@@ -484,11 +492,11 @@ class ChatViewController: JSQMessagesViewController {
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showDetailsSegue" {
+        if segue.identifier == kSegueShowDetails {
             if let detailVC = segue.destinationViewController as? DetailsViewController {
                 detailVC.channel = chat
             }
-        } else if segue.identifier == "showMapViewController" {
+        } else if segue.identifier == kSegueShowMap {
             if let locationItem = sender as? JSQLocationMediaItem {
                 let mapVC = segue.destinationViewController as! MapViewController
                 mapVC.location = locationItem.coordinate

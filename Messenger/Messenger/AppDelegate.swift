@@ -22,14 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)
         MagnetMax.configure(configuration!)
         
-        //        MMXLogger.sharedLogger().level = .Verbose
-        //        MMXLogger.sharedLogger().startLogging()
-        
         
         let settings = UIUserNotificationSettings(forTypes: [.Badge,.Alert,.Sound], categories: nil)
         application.registerUserNotificationSettings(settings);
         
-        //is user alread logged In ?
+//        is user alread logged In ?
         setMainWindow(launchViewController())
         self.window?.makeKeyAndVisible()
         
@@ -37,7 +34,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             MMUser.resumeSession({ () -> Void in
                 if let navController : UINavigationController = self.rootViewController() as? UINavigationController {
                     if MMUser.sessionStatus() == .LoggedIn {
-                        if let viewController = navController.storyboard?.instantiateViewControllerWithIdentifier("SlideMenuVC") {
+                        
+                        MMX.start()
+                        
+                        if let viewController = navController.storyboard?.instantiateViewControllerWithIdentifier(vc_id_SlideMenu) {
                             navController.pushViewController(viewController, animated: false)
                         }
                     }
@@ -54,13 +54,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func launchViewController() -> UIViewController {
-        let storyboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        return storyboard.instantiateViewControllerWithIdentifier("main")
+        let storyboard = UIStoryboard(name: sb_id_Launch, bundle: nil)
+        return storyboard.instantiateInitialViewController()!;
     }
     
     func rootViewController() -> UIViewController {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        return storyboard.instantiateViewControllerWithIdentifier("baseNavigationController")
+        let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+        return storyboard.instantiateInitialViewController()!
     }
     
     func setMainWindow(viewController : UIViewController) {

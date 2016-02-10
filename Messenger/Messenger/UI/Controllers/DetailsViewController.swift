@@ -9,6 +9,8 @@
 import UIKit
 import MagnetMax
 
+let recipientCellIdentifier = "RecipientsCellIdentifier"
+
 class DetailsViewController: UITableViewController, ContactsViewControllerDelegate {
     
     var recipients : [MMUser]?
@@ -56,7 +58,7 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("RecipientsCellIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(recipientCellIdentifier, forIndexPath: indexPath)
 
         if indexPath.row == recipients?.count && isOwner()  {
             let color = ChannelManager.sharedInstance.isOwnerForChat(channel.name) != nil ? self.view.tintColor : UIColor.blackColor()
@@ -92,10 +94,10 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if (indexPath.row == recipients?.count) && ChannelManager.sharedInstance.isOwnerForChat(channel.name) != nil {
             // Show contact selector
-            if let navigationVC = self.storyboard?.instantiateViewControllerWithIdentifier("ContactsNavigationController") as? UINavigationController {
+            if let navigationVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_ContactsNav) as? UINavigationController {
                 if let contactsVC = navigationVC.topViewController as? ContactsViewController {
                     contactsVC.delegate = self
-                    contactsVC.title = "Add a contact"
+                    contactsVC.title = kStr_AddContact
                     self.presentViewController(navigationVC, animated: true, completion: nil)
                 }
             }

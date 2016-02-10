@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="123" id="dE6-3H-7xM" customClass="EventChannelTableViewCell" customModule="Messenger" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="123"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dE6-3H-7xM" id="63v-eL-9MZ">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="122"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_img_1.png" translatesAutoresizingMaskIntoConstraints="NO" id="ZrF-25-cjl">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="122"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_messages_group.png" translatesAutoresizingMaskIntoConstraints="NO" id="EtH-5O-Y27">
+                        <rect key="frame" x="40" y="54" width="33" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="9Ze-eU-osu"/>
+                            <constraint firstAttribute="width" secondItem="EtH-5O-Y27" secondAttribute="height" multiplier="41:28" id="V0C-Gl-Ena"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Developer Week 2016 Forum" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bmR-Ww-UeS">
+                        <rect key="frame" x="81" y="52" width="231" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="320 Subscribers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y9I-f2-NE5">
+                        <rect key="frame" x="107" y="70" width="107" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_right.png" translatesAutoresizingMaskIntoConstraints="NO" id="LkR-oI-gtV">
+                        <rect key="frame" x="299" y="54" width="13" height="13"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="13" id="G6p-HS-MEn"/>
+                            <constraint firstAttribute="height" constant="13" id="Uiq-x3-9VB"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="ZrF-25-cjl" secondAttribute="bottom" id="1AQ-hU-qrH"/>
+                    <constraint firstItem="bmR-Ww-UeS" firstAttribute="centerY" secondItem="EtH-5O-Y27" secondAttribute="centerY" constant="-4" id="8bR-4A-lSd"/>
+                    <constraint firstItem="Y9I-f2-NE5" firstAttribute="centerX" secondItem="63v-eL-9MZ" secondAttribute="centerX" id="ANx-lh-EPV"/>
+                    <constraint firstItem="bmR-Ww-UeS" firstAttribute="centerY" secondItem="63v-eL-9MZ" secondAttribute="centerY" id="QLl-GK-Rng"/>
+                    <constraint firstAttribute="trailing" secondItem="bmR-Ww-UeS" secondAttribute="trailing" constant="8" id="SNO-Gz-Ufw"/>
+                    <constraint firstItem="bmR-Ww-UeS" firstAttribute="leading" secondItem="EtH-5O-Y27" secondAttribute="trailing" constant="8" id="WlM-mg-02f"/>
+                    <constraint firstItem="ZrF-25-cjl" firstAttribute="leading" secondItem="63v-eL-9MZ" secondAttribute="leading" id="Z3o-jQ-qbV"/>
+                    <constraint firstItem="EtH-5O-Y27" firstAttribute="leading" secondItem="63v-eL-9MZ" secondAttribute="leading" constant="40" id="aba-X5-yDp"/>
+                    <constraint firstItem="LkR-oI-gtV" firstAttribute="centerY" secondItem="63v-eL-9MZ" secondAttribute="centerY" id="gW1-lp-3aa"/>
+                    <constraint firstItem="Y9I-f2-NE5" firstAttribute="top" secondItem="bmR-Ww-UeS" secondAttribute="bottom" id="k93-MA-kYb"/>
+                    <constraint firstItem="ZrF-25-cjl" firstAttribute="top" secondItem="63v-eL-9MZ" secondAttribute="top" id="kH9-rW-d1b"/>
+                    <constraint firstAttribute="trailing" secondItem="LkR-oI-gtV" secondAttribute="trailing" constant="8" id="q18-wh-IQ0"/>
+                    <constraint firstAttribute="trailing" secondItem="ZrF-25-cjl" secondAttribute="trailing" id="vva-wT-7xr"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="backgroundIV" destination="ZrF-25-cjl" id="d4T-id-bVY"/>
+                <outlet property="channelDesrL" destination="bmR-Ww-UeS" id="ZwY-vl-rs0"/>
+                <outlet property="totalSubscribersL" destination="Y9I-f2-NE5" id="oYz-aq-s4M"/>
+            </connections>
+            <point key="canvasLocation" x="198" y="284.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="arrow_right.png" width="25" height="25"/>
+        <image name="bg_img_1.png" width="750" height="314"/>
+        <image name="icon_messages_group.png" width="67" height="45"/>
+    </resources>
+</document>
