@@ -60,13 +60,17 @@ public extension MMUser {
         return self.userID
     }
     
+    
+    
     /**
      The unique avatar URL for the user.
      */
     public func avatarURL() -> NSURL? {
         var url : NSURL? = nil
-        if let accessToken = MMCoreConfiguration.serviceAdapter.HATToken {
-            url = MMAttachmentService.attachmentURL(avatarID(), userId: self.userID, parameters: ["access_token" : accessToken])
+        if extras["hasAvatar"] == "true" {
+            if let accessToken = MMCoreConfiguration.serviceAdapter.HATToken {
+                url = MMAttachmentService.attachmentURL(avatarID(), userId: self.userID, parameters: ["access_token" : accessToken])
+            }
         }
         
         return url
@@ -102,8 +106,13 @@ public extension MMUser {
         let attachment = MMAttachment.init(data: imageData, mimeType: "image/png")
         let metaData = ["file_id" : avatarID()]
         MMAttachmentService.upload([attachment], metaData: metaData, success: {
+            let updateProfileRequest = MMUpdateProfileRequest(user: MMUser.currentUser())
+            updateProfileRequest.password = nil
+            updateProfileRequest.extras["hasAvatar"] = "true"
+            MMUser.updateProfile(updateProfileRequest, success: { user in
                 success?(url: self.avatarURL())
             }, failure:failure)
+        }, failure:failure)
     }
     
     /**

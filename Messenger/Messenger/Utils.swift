@@ -47,13 +47,11 @@ class Utils: NSObject {
     
     static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage) {
        
-        let url = user.avatarURL()
-        print("user avatar url \(url)")
+        if let url = user.avatarURL() {
+            print("user avatar url \(url)")
         
-        if url!.absoluteString.characters.count > 0 {
-            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                let data = NSData(contentsOfURL:url!)
+                let data = NSData(contentsOfURL:url)
                 dispatch_async(dispatch_get_main_queue()) {
                     if data?.length > 0 {
                         print("data \(data?.length)")

@@ -98,8 +98,8 @@ class ChannelManager {
             let encodedData = NSKeyedArchiver.archivedDataWithRootObject(lastViewTime)
             user.extras[channel.name] = encodedData.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
             let updateRequest = MMUpdateProfileRequest.init(user: user)
+            updateRequest.password = nil
             MMUser.updateProfile(updateRequest, success: { (user) -> Void in
-                updateRequest.password = nil
                 print("[UPDATE] SUCCEEDED")
                 }, failure: { (error) -> Void in
                     print("[UPDATE] FAILED : \(error.localizedDescription)")
