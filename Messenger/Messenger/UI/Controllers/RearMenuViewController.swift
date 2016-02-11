@@ -21,22 +21,34 @@ class RearMenuViewController: UITableViewController {
         case Events
         case SignOut
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         MMX.start()
         // Handling disconnection
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
         
+        userAvatar.layer.cornerRadius = userAvatar.frame.size.width/2
+        userAvatar.layer.masksToBounds = true
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
         if let user = MMUser.currentUser() {
             username.text = "\(user.firstName ?? "") \(user.lastName ?? "")"
-            if ((user.avatarURL()?.absoluteString) == nil) {
-                userAvatar.image = UIImage(data: NSData(contentsOfURL:user.avatarURL()!)!)
+            let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+            dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                // do some task
+                if let data = NSData(contentsOfURL:user.avatarURL()!) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        // update some UI
+                        self.userAvatar?.image = UIImage(data: data)
+                    }
+                }
             }
         }
     }
-    
 
     
     // MARK: - Table view delegate

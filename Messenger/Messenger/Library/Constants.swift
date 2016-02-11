@@ -19,6 +19,8 @@ struct Constants {
     
 }
 
+let kUserDefaultsShowProfile = "kUserDefaultsShowProfile"
+
  /// IDs for storyboards, ViewControllers and segues
 
 let sb_id_Main = "Main"

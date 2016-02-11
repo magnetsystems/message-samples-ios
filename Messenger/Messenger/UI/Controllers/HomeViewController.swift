@@ -11,7 +11,6 @@ import MagnetMax
 
 class HomeViewController: UITableViewController, UISearchResultsUpdating, ContactsViewControllerDelegate {
     
-
     let searchController = UISearchController(searchResultsController: nil)
     var detailResponses : [MMXChannelDetailResponse] = []
     var filteredDetailResponses : [MMXChannelDetailResponse] = []
@@ -49,11 +48,20 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         if let user = MMUser.currentUser() {
             self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
         }
-
+        
         loadEventChannels()
         loadAskMagnetChannel()
         loadDetails()
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if NSUserDefaults.standardUserDefaults().boolForKey(kUserDefaultsShowProfile) {
+            NSUserDefaults.standardUserDefaults().removeObjectForKey(kUserDefaultsShowProfile)
+            self.navigationController!.presentViewController((self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_UserProfile))!, animated: true, completion: nil)
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {

@@ -22,16 +22,35 @@ class UserProfileViewController: BaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        userAvatarIV.layer.cornerRadius = userAvatarIV.frame.size.width/2
+        userAvatarIV.layer.masksToBounds = true
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         if let user = MMUser.currentUser() {
             firstNameTF?.text = "\(user.firstName ?? "")"
             lastNameTF?.text = "\(user.lastName ?? "")"
-
-            if ((user.avatarURL()?.absoluteString) == nil) {
-                userAvatarIV?.image = UIImage(data: NSData(contentsOfURL:user.avatarURL()!)!)
-            }
+            userEmailL.text = user.userName
+            
+                
+            self.loadUserAvatar(user)
         }
     }
 
+    func loadUserAvatar(user:MMUser) {
+        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+        dispatch_async(dispatch_get_global_queue(priority, 0)) {
+            // do some task
+            if let data = NSData(contentsOfURL:user.avatarURL()!) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    // update some UI
+                    self.userAvatarIV?.image = UIImage(data: data)
+                }
+            }
+        }
+    }
+    
     //MARK: - Actions
 
     @IBAction func close(sender: UIBarButtonItem) {
@@ -48,12 +67,15 @@ class UserProfileViewController: BaseViewController {
     }
     
     @IBAction func saveChanges(sender: UIButton) {
-        let profileUpdateReq = MMUpdateProfileRequest()
+        firstNameTF.resignFirstResponder()
+        lastNameTF.resignFirstResponder()
+        
+        let profileUpdateReq = MMUpdateProfileRequest(user: MMUser.currentUser())
         profileUpdateReq.firstName = firstNameTF.text
         profileUpdateReq.lastName = lastNameTF.text
         
         MMUser.updateProfile(profileUpdateReq, success: { (user) -> Void in
-            
+            print("updated \(MMUser.currentUser())")
             }) { (error) -> Void in
                 
         }
@@ -71,48 +93,12 @@ extension UserProfileViewController: UIImagePickerControllerDelegate, UINavigati
         if let user = MMUser.currentUser() {
             
             user.setAvatarWithData(UIImageJPEGRepresentation(pickedImage, 0.1), success: { (url) -> Void in
-                self.userAvatarIV.image = UIImage(data: NSData(contentsOfURL:url!)!)
+                self.loadUserAvatar(user)
                 }, failure: { (error) -> Void in
                     
             })
         }
         }
-        
-//        JSQSystemSoundPlayer.jsq_playMessageSentSound()
-        
-//        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-        
-//            let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
-//            let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
-//            
-//            if let data = UIImagePNGRepresentation(pickedImage) {
-//                
-//                let attachment = MMAttachment(data: data, mimeType: "image/PNG")
-//                mmxMessage.addAttachment(attachment)
-//                self.showSpinner()
-//                mmxMessage.sendWithSuccess({ [weak self] _ in
-//                    self?.hideSpinner()
-//                    self?.finishSendingMessageAnimated(true)
-//                    }) { error in
-//                        self.hideSpinner()
-//                        print(error)
-//                }
-//            }
-//        } else if let urlOfVideo = info[UIImagePickerControllerMediaURL] as? NSURL {
-//            let messageContent = [Constants.ContentKey.Type: MessageType.Video.rawValue]
-//            let name = urlOfVideo.lastPathComponent
-//            let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
-//            let attachment = MMAttachment(fileURL: urlOfVideo, mimeType: "video/quicktime", name: name, description: "Video file")
-//            self.showSpinner()
-//            mmxMessage.addAttachment(attachment)
-//            mmxMessage.sendWithSuccess({ [weak self] _ in
-//                self?.hideSpinner()
-//                self?.finishSendingMessageAnimated(true)
-//                }) { error in
-//                    self.hideSpinner()
-//                    print(error)
-//            }
-//        }
         
         dismissViewControllerAnimated(true, completion: nil)
     }

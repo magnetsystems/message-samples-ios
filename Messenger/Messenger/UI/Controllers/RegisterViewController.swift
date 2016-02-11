@@ -120,4 +120,10 @@ class RegisterViewController : BaseViewController {
                 self?.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: kStr_Close)
             })
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == kSegueRegisterToHome {
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: kUserDefaultsShowProfile)
+        }
+    }
 }
