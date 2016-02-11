@@ -300,14 +300,15 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
 
                     ChannelManager.sharedInstance.channelDetails = sortedDetails
                     self?.detailResponses = sortedDetails
-                        self?.endRefreshing()
+                    self?.endRefreshing()
                 }, failure: { error in
                     self?.endRefreshing()
                     print(error)
                 })
             } else {
                 ChannelManager.sharedInstance.channelDetails?.removeAll()
-                
+                self?.detailResponses.removeAll()
+                self?.endRefreshing()
             }
         }) { [weak self] error in
             self?.endRefreshing()
