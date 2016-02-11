@@ -8,6 +8,8 @@
 
 import UIKit
 import MagnetMax
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -50,6 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             appendToMainWindow(rootViewController(), animated: true)
         }
         
+        Fabric.with([Crashlytics.self])
         return true
     }
     

@@ -34,28 +34,7 @@ class UserProfileViewController: BaseViewController {
             userEmailL.text = user.userName
             
                 
-            self.loadUserAvatar(user)
-        }
-    }
-
-    func loadUserAvatar(user:MMUser) {
-        
-        let url = user.avatarURL()
-        print("user avatar url \(url!)")
-        
-        if url!.absoluteString.characters.count > 0 {
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                let data = NSData(contentsOfURL:url!)
-                dispatch_async(dispatch_get_main_queue()) {
-                    if data?.length > 0 {
-                        print("data \(data?.length)")
-                        self.userAvatarIV?.imageURL = url
-                    } else {
-                        print("no url content data")
-                        self.userAvatarIV.image = UIImage(named: "user_default")
-                    }                        }
-            }
+            Utils.loadUserAvatar(user, toImageView: self.userAvatarIV, placeholderImage: UIImage(named: "user_default")!)
         }
     }
     
@@ -101,7 +80,7 @@ extension UserProfileViewController: UIImagePickerControllerDelegate, UINavigati
         if let user = MMUser.currentUser() {
             
             user.setAvatarWithData(UIImageJPEGRepresentation(pickedImage, 0.1), success: { (url) -> Void in
-                self.loadUserAvatar(user)
+                Utils.loadUserAvatar(user, toImageView: self.userAvatarIV, placeholderImage: UIImage(named: "user_default")!)
                 }, failure: { (error) -> Void in
                     
             })
