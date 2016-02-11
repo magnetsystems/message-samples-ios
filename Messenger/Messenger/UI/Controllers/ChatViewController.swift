@@ -30,7 +30,7 @@ class ChatViewController: JSQMessagesViewController {
                 } else if chat != nil && chat!.summary!.containsString("Forum") {
                     navigationItem.title = "Forum"
                 }
-                notifier = NavigationNotifier.init(viewController: self, exceptFor: channel)
+                notifier = NavigationNotifier(viewController: self, exceptFor: channel)
                 ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
             }
             loadMessages()
