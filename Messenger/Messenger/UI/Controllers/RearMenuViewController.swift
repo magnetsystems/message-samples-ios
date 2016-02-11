@@ -38,8 +38,7 @@ class RearMenuViewController: UITableViewController {
         if let user = MMUser.currentUser() {
             username.text = "\(user.firstName ?? "") \(user.lastName ?? "")"
 
-            self.userAvatar?.imageURL = user.avatarURL()
-
+            Utils.loadUserAvatar(user, toImageView: self.userAvatar, placeholderImage: UIImage(named: "user_default")!)
         }
     }
 

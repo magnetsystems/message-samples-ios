@@ -8,6 +8,8 @@
 
 import UIKit
 import MagnetMax
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -38,8 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         MMX.start()
                         
                         if let viewController = navController.storyboard?.instantiateViewControllerWithIdentifier(vc_id_SlideMenu) as? SWRevealViewController {
-                            viewController.rearViewRevealWidth = 300
-                            viewController.rearViewRevealOverdraw = 8
                             navController.pushViewController(viewController, animated: false)
                         }
                     }
@@ -52,6 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             appendToMainWindow(rootViewController(), animated: true)
         }
         
+        Fabric.with([Crashlytics.self])
         return true
     }
     

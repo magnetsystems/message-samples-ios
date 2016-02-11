@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		3A1795E41C4D39140038596D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1795E31C4D39140038596D /* LocationManager.swift */; };
+		7A1894D21C6CEA190068183A /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A1894D01C6CEA190068183A /* Fabric.framework */; };
+		7A1894D31C6CEA190068183A /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A1894D11C6CEA190068183A /* Crashlytics.framework */; };
+		7A1894D51C6CEB0D0068183A /* UIImage_extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1894D41C6CEB0D0068183A /* UIImage_extension.swift */; };
+		7A1894D71C6D000B0068183A /* AvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1894D61C6D000B0068183A /* AvatarImage.swift */; };
 		7A508DDA1C6A42350041B429 /* check_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A508DD61C6A42350041B429 /* check_off.png */; };
 		7A508DDB1C6A42350041B429 /* check_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A508DD71C6A42350041B429 /* check_on.png */; };
 		7A508DDC1C6A42350041B429 /* input_search.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A508DD91C6A42350041B429 /* input_search.png */; };
@@ -106,6 +110,10 @@
 /* Begin PBXFileReference section */
 		3A1795E31C4D39140038596D /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		6622CC48F4FE90AA03DBE8F9 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A1894D01C6CEA190068183A /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		7A1894D11C6CEA190068183A /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		7A1894D41C6CEB0D0068183A /* UIImage_extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImage_extension.swift; path = Library/Helpers/UIImage_extension.swift; sourceTree = "<group>"; };
+		7A1894D61C6D000B0068183A /* AvatarImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarImage.swift; sourceTree = "<group>"; };
 		7A508DD61C6A42350041B429 /* check_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_off.png; sourceTree = "<group>"; };
 		7A508DD71C6A42350041B429 /* check_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_on.png; sourceTree = "<group>"; };
 		7A508DD91C6A42350041B429 /* input_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = input_search.png; sourceTree = "<group>"; };
@@ -205,6 +213,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9BF0143BBC1E4E412BF8629 /* Pods.framework in Frameworks */,
+				7A1894D31C6CEA190068183A /* Crashlytics.framework in Frameworks */,
+				7A1894D21C6CEA190068183A /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +231,8 @@
 		72D70E5961C7F3A180077AC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7A1894D01C6CEA190068183A /* Fabric.framework */,
+				7A1894D11C6CEA190068183A /* Crashlytics.framework */,
 				6622CC48F4FE90AA03DBE8F9 /* Pods.framework */,
 			);
 			name = Frameworks;
@@ -269,6 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				7A76D4001C6A7903004ADC49 /* Utils.swift */,
+				7A1894D41C6CEB0D0068183A /* UIImage_extension.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -577,6 +590,7 @@
 				8B81C1311C3C21D800C186B6 /* Message.swift */,
 				8B9C67641C522D5F00661586 /* Photo.swift */,
 				8B71BE7B1C57C70E006E5C1F /* Timestamp.swift */,
+				7A1894D61C6D000B0068183A /* AvatarImage.swift */,
 			);
 			name = Models;
 			path = Logic/Models;
@@ -713,6 +727,7 @@
 				8B2E53C81C2AC31900C9AC47 /* Resources */,
 				D4D2EC7ECC281E593B9A936A /* Embed Pods Frameworks */,
 				093772B36C265444FFA91809 /* Copy Pods Resources */,
+				7A1894CF1C6CE9F70068183A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -861,6 +876,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7A1894CF1C6CE9F70068183A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 929ed5a54aa69c465b81ef5e148bdbd5b6829484 d9ec913c80e459f74061f9c1045f85a43e29d136678c0294ed4fe20f3fcaede3";
+		};
 		D4D2EC7ECC281E593B9A936A /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -899,10 +927,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B901AEE1C5BBC2800AA5DF1 /* Constants.swift in Sources */,
+				7A1894D71C6D000B0068183A /* AvatarImage.swift in Sources */,
 				7A76D4121C6AAABB004ADC49 /* AskMagnetTableViewCell.swift in Sources */,
 				8BF254C01C49697A008719AA /* Popup.swift in Sources */,
 				7A76D41D1C6B90BA004ADC49 /* CreateChatCell.swift in Sources */,
 				8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */,
+				7A1894D51C6CEB0D0068183A /* UIImage_extension.swift in Sources */,
 				7A76D4011C6A7903004ADC49 /* Utils.swift in Sources */,
 				8B81C1351C3C22CA00C186B6 /* DownloadManager.swift in Sources */,
 				8B0909A11C3AD5F20042F361 /* SummaryResponseCell.swift in Sources */,
@@ -1061,6 +1091,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Messenger/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1080,6 +1114,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Messenger/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

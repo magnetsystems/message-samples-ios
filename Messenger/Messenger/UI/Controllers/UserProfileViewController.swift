@@ -34,20 +34,7 @@ class UserProfileViewController: BaseViewController {
             userEmailL.text = user.userName
             
                 
-            self.loadUserAvatar(user)
-        }
-    }
-
-    func loadUserAvatar(user:MMUser) {
-        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-        dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            // do some task
-            if let data = NSData(contentsOfURL:user.avatarURL()!) {
-                dispatch_async(dispatch_get_main_queue()) {
-                    // update some UI
-                    self.userAvatarIV?.image = UIImage(data: data)
-                }
-            }
+            Utils.loadUserAvatar(user, toImageView: self.userAvatarIV, placeholderImage: UIImage(named: "user_default")!)
         }
     }
     
@@ -78,7 +65,7 @@ class UserProfileViewController: BaseViewController {
         MMUser.updateProfile(profileUpdateReq, success: { (user) -> Void in
             print("updated \(MMUser.currentUser())")
             }) { (error) -> Void in
-                
+            print("update err \(error)")
         }
         
     }
@@ -94,9 +81,10 @@ extension UserProfileViewController: UIImagePickerControllerDelegate, UINavigati
         if let user = MMUser.currentUser() {
             
             user.setAvatarWithData(UIImageJPEGRepresentation(pickedImage, 0.1), success: { (url) -> Void in
-                self.loadUserAvatar(user)
+                print("avatar updated, new url \(url)")
+                Utils.loadUserAvatarWithUrl(url!, toImageView: self.userAvatarIV, placeholderImage: UIImage(named: "user_default")!)
                 }, failure: { (error) -> Void in
-                    
+                    print("avatar update error \(error)")
             })
         }
         }
