@@ -242,13 +242,12 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        searchController.active = false
-
         if indexPath.section == 2 && self.detailResponses.count == 0 {
             self.performSegueWithIdentifier(kSegueShowContactSelector, sender: nil)
         } else {
  
             if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? ChannelDetailBaseTVCell {
+                searchController.active = false
                 if indexPath.section != 2 {
                     chatVC.chat = cell.detailResponse?.channel
                 } else {
