@@ -210,10 +210,13 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             if let chat = ChannelManager.sharedInstance.isOwnerForChat(detailResponse.channelName) {
                 let delete = UITableViewRowAction(style: .Normal, title: kStr_Delete) { [weak self] action, index in
                     chat.deleteWithSuccess({ _ in
-                        self?.detailResponses.removeAtIndex(index.row)
-                        if self?.detailResponses.count > 0 {
-                        tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
+                        if let channelIndexToRemove = self?.detailResponses.indexOf({$0.channelName == detailResponse.channelName}) {
+                            self?.detailResponses.removeAtIndex(channelIndexToRemove)
                         }
+                        if let channelIndexToRemove = self?.filteredDetailResponses.indexOf({$0.channelName == detailResponse.channelName}) {
+                            self?.filteredDetailResponses.removeAtIndex(channelIndexToRemove)
+                        }
+                        tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
                     }, failure: { error in
                         print(error)
                     })
@@ -227,7 +230,12 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         let leave = UITableViewRowAction(style: .Normal, title: kStr_Leave) { [weak self] action, index in
             if let chat = ChannelManager.sharedInstance.channelForName(detailResponse.channelName) {
                 chat.unSubscribeWithSuccess({ _ in
-                    self?.detailResponses.removeAtIndex(index.row)
+                    if let channelIndexToRemove = self?.detailResponses.indexOf({$0.channelName == detailResponse.channelName}) {
+                        self?.detailResponses.removeAtIndex(channelIndexToRemove)
+                    }
+                    if let channelIndexToRemove = self?.filteredDetailResponses.indexOf({$0.channelName == detailResponse.channelName}) {
+                        self?.filteredDetailResponses.removeAtIndex(channelIndexToRemove)
+                    }
                     tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
                 }, failure: { error in
                     print(error)

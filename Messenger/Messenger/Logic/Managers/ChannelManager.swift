@@ -99,6 +99,7 @@ class ChannelManager {
             user.extras[channel.name] = encodedData.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
             let updateRequest = MMUpdateProfileRequest.init(user: user)
             MMUser.updateProfile(updateRequest, success: { (user) -> Void in
+                updateRequest.password = nil
                 print("[UPDATE] SUCCEEDED")
                 }, failure: { (error) -> Void in
                     print("[UPDATE] FAILED : \(error.localizedDescription)")
@@ -113,6 +114,7 @@ class ChannelManager {
             user.extras[channel.name] = encodedData.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
             user.extras["\(channel.name)_last_message_id"] = message.messageID
             let updateRequest = MMUpdateProfileRequest.init(user: user)
+            updateRequest.password = nil
             MMUser.updateProfile(updateRequest, success: { (user) -> Void in
                 print("[UPDATE] SUCCEEDED")
                 }, failure: { (error) -> Void in
