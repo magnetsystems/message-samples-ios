@@ -288,8 +288,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         refreshControl?.beginRefreshing()
         
         // Get all channels the current user is subscribed to
-        MMXChannel.allPrivateChannelsWithLimit(100, offset: 0, success: { (total, channels) in
-
+        MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
+            let channels = allChannels.filter { !$0.name.hasPrefix("global_") }
             ChannelManager.sharedInstance.channels = channels
             if channels.count > 0 {
                 // Get details
@@ -300,10 +300,10 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
                     })
 
                     ChannelManager.sharedInstance.channelDetails = sortedDetails
-                    self.detailResponses = sortedDetails
-                        self.endRefreshing()
+                    self?.detailResponses = sortedDetails
+                        self?.endRefreshing()
                 }, failure: { error in
-                    self.endRefreshing()
+                    self?.endRefreshing()
                     print(error)
                 })
             } else {
