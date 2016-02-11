@@ -18,7 +18,7 @@ class RearMenuViewController: UITableViewController {
     enum IndexPathRowAction: Int {
         case UserInfo = 0
         case Home 
-        case Events
+//        case Events
         case SignOut
     }
     
@@ -60,10 +60,10 @@ class RearMenuViewController: UITableViewController {
             let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
             let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Home);
             self.revealViewController().pushFrontViewController(vc, animated: true);
-        case IndexPathRowAction.Events.rawValue:
-            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
-            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
-            self.revealViewController().pushFrontViewController(vc, animated: true);
+//        case IndexPathRowAction.Events.rawValue:
+//            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+//            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
+//            self.revealViewController().pushFrontViewController(vc, animated: true);
         default:break;
         }
 
