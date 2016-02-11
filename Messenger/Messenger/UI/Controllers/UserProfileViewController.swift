@@ -60,6 +60,7 @@ class UserProfileViewController: BaseViewController {
         let profileUpdateReq = MMUpdateProfileRequest(user: MMUser.currentUser())
         profileUpdateReq.firstName = firstNameTF.text
         profileUpdateReq.lastName = lastNameTF.text
+        profileUpdateReq.password = nil
         
         MMUser.updateProfile(profileUpdateReq, success: { (user) -> Void in
             print("updated \(MMUser.currentUser())")

@@ -21,6 +21,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        definesPresentationContext = true
         
         if let revealVC = self.revealViewController() {
             self.view.addGestureRecognizer(revealVC.panGestureRecognizer())
@@ -33,6 +34,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.sizeToFit()
+        searchController.searchBar.placeholder = "Search message by user"
         tableView.tableHeaderView = searchController.searchBar
         tableView.reloadData()
         
@@ -45,10 +47,6 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let user = MMUser.currentUser() {
-            self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
-        }
-        
         loadEventChannels()
         loadAskMagnetChannel()
         loadDetails()
@@ -57,6 +55,10 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        if let user = MMUser.currentUser() {
+            self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
+        }
         
         if NSUserDefaults.standardUserDefaults().boolForKey(kUserDefaultsShowProfile) {
             NSUserDefaults.standardUserDefaults().removeObjectForKey(kUserDefaultsShowProfile)
@@ -247,11 +249,12 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         } else {
  
             if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? ChannelDetailBaseTVCell {
-                searchController.active = false
                 if indexPath.section != 2 {
                     chatVC.chat = cell.detailResponse?.channel
+                    chatVC.canLeaveChat = false
                 } else {
                     chatVC.chat = ChannelManager.sharedInstance.channelForName(cell.detailResponse!.channelName)
+                    chatVC.canLeaveChat = true
                 }
                 self.navigationController?.pushViewController(chatVC, animated: true)
             }
