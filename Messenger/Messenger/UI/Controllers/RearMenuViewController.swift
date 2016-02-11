@@ -37,9 +37,29 @@ class RearMenuViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         if let user = MMUser.currentUser() {
             username.text = "\(user.firstName ?? "") \(user.lastName ?? "")"
-
-            self.userAvatar?.imageURL = user.avatarURL()
-
+            
+            let url = user.avatarURL()
+            print("user avatar url \(url!)")
+            
+            if url!.absoluteString.characters.count > 0 {
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                    let data = NSData(contentsOfURL:url!)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if data?.length > 0 {
+                            print("data \(data?.length)")
+                            self.userAvatar?.imageURL = url
+                        } else {
+                            print("no url content data")
+                            self.userAvatar.image = UIImage(named: "user_default")
+                        }
+                    }
+                }
+            }
+            
+        } else {
+            print("no url")
+            self.userAvatar.image = UIImage(named: "user_default")
         }
     }
 

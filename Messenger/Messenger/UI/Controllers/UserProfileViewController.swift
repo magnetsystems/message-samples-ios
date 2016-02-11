@@ -39,14 +39,22 @@ class UserProfileViewController: BaseViewController {
     }
 
     func loadUserAvatar(user:MMUser) {
-        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-        dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            // do some task
-            if let data = NSData(contentsOfURL:user.avatarURL()!) {
+        
+        let url = user.avatarURL()
+        print("user avatar url \(url!)")
+        
+        if url!.absoluteString.characters.count > 0 {
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                let data = NSData(contentsOfURL:url!)
                 dispatch_async(dispatch_get_main_queue()) {
-                    // update some UI
-                    self.userAvatarIV?.image = UIImage(data: data)
-                }
+                    if data?.length > 0 {
+                        print("data \(data?.length)")
+                        self.userAvatarIV?.imageURL = url
+                    } else {
+                        print("no url content data")
+                        self.userAvatarIV.image = UIImage(named: "user_default")
+                    }                        }
             }
         }
     }
@@ -77,7 +85,7 @@ class UserProfileViewController: BaseViewController {
         MMUser.updateProfile(profileUpdateReq, success: { (user) -> Void in
             print("updated \(MMUser.currentUser())")
             }) { (error) -> Void in
-                
+            print("update err \(error)")
         }
         
     }

@@ -38,8 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         MMX.start()
                         
                         if let viewController = navController.storyboard?.instantiateViewControllerWithIdentifier(vc_id_SlideMenu) as? SWRevealViewController {
-                            viewController.rearViewRevealWidth = 300
-                            viewController.rearViewRevealOverdraw = 8
                             navController.pushViewController(viewController, animated: false)
                         }
                     }
