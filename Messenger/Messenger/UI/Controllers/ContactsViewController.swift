@@ -171,7 +171,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         }
         filteredRecipients = allUsers.filter { user in
             let searchString = searchController.searchBar.text!.lowercaseString
-            return user.firstName.lowercaseString.containsString(searchString) || user.lastName.lowercaseString.containsString(searchString)
+            return (user.firstName != nil && user.firstName.lowercaseString.containsString(searchString)) || (user.lastName != nil && user.lastName.lowercaseString.containsString(searchString))
         }
         
         tableView.reloadData()
