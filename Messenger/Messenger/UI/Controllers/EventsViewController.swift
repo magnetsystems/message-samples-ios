@@ -9,11 +9,9 @@
 import UIKit
 import MagnetMax
 
-class EventsViewController: UITableViewController, UISearchResultsUpdating, ContactsViewControllerDelegate {
+class EventsViewController: UITableViewController, ContactsViewControllerDelegate {
 
-    let searchController = UISearchController(searchResultsController: nil)
     var hackatonChannels: [MMXChannelDetailResponse] = [];
-    var filteredChannels: [MMXChannelDetailResponse] = [];
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,31 +21,8 @@ class EventsViewController: UITableViewController, UISearchResultsUpdating, Cont
             self.view.addGestureRecognizer(revealVC.panGestureRecognizer())
             self.view.addGestureRecognizer(revealVC.tapGestureRecognizer())
         }
-
-        // Add search bar
-        searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.sizeToFit()
-        tableView.tableHeaderView = searchController.searchBar
-        tableView.reloadData()
         
         tableView.registerNib(UINib(nibName: Utils.name(EventChannelTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(EventChannelTableViewCell.classForCoder()))
-    }
-    
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        let searchString = searchController.searchBar.text!.lowercaseString
-        filteredChannels = hackatonChannels.filter {
-            for subscriber in $0.subscribers {
-                let name = subscriber.displayName
-                if name.lowercaseString.containsString(searchString.lowercaseString) || searchString.characters.count == 0 {
-                    return true
-                }
-            }
-            
-            return false
-        }
-        
-        tableView.reloadData()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -67,22 +42,17 @@ class EventsViewController: UITableViewController, UISearchResultsUpdating, Cont
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.active {
-            return filteredChannels.count
-        }
         return hackatonChannels.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(Utils.name(EventChannelTableViewCell.classForCoder()), forIndexPath: indexPath) as! EventChannelTableViewCell
-        cell.detailResponse = searchController.active ? filteredChannels[indexPath.row] : hackatonChannels[indexPath.row]
+        cell.detailResponse = hackatonChannels[indexPath.row]
         
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        searchController.active = false
         
         if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? EventChannelTableViewCell {
             chatVC.chat = cell.detailResponse.channel
