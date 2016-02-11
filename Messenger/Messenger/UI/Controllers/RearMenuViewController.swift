@@ -37,16 +37,9 @@ class RearMenuViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         if let user = MMUser.currentUser() {
             username.text = "\(user.firstName ?? "") \(user.lastName ?? "")"
-            let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-            dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                // do some task
-                if let data = NSData(contentsOfURL:user.avatarURL()!) {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        // update some UI
-                        self.userAvatar?.image = UIImage(data: data)
-                    }
-                }
-            }
+
+            self.userAvatar?.imageURL = user.avatarURL()
+
         }
     }
 

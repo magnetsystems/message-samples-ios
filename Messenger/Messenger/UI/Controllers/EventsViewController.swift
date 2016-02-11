@@ -138,8 +138,7 @@ class EventsViewController: UITableViewController, UISearchResultsUpdating, Cont
                         // Get details
                         MMXChannel.channelDetails(eventChannels, numberOfMessages: 10, numberOfSubcribers: 1000, success: { detailResponses in
                             let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
-                                let formatter = ChannelManager.sharedInstance.formatter
-                                return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
+                                return (detail1.channel.creationDate.timeIntervalSince1970 > detail2.channel.creationDate.timeIntervalSince1970)
                             })
                             
                             ChannelManager.sharedInstance.eventChannelDetails = sortedDetails

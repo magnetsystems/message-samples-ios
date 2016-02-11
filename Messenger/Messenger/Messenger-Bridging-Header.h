@@ -13,3 +13,5 @@
 #import <NYTPhotoViewer/NYTPhotosViewController.h>
 
 #import <DZVideoPlayerViewController/DZVideoPlayerViewController.h>
+
+#import "AsyncImageView.h"
