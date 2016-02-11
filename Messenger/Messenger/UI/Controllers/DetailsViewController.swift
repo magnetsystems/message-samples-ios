@@ -15,16 +15,21 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
     
     var recipients : [MMUser]?
     var channel : MMXChannel!
+    var canLeave = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if !canLeave {
+            navigationItem.rightBarButtonItem = nil
+        }
    
-   channel.subscribersWithLimit(200, offset: 0, success: { (total, users) -> Void in
-    self.recipients = users
-    self.tableView.reloadData()
-    
-    }) { (error) -> Void in
-        //error
+        channel.subscribersWithLimit(200, offset: 0, success: { (total, users) -> Void in
+        self.recipients = users
+        self.tableView.reloadData()
+        
+        }) { (error) -> Void in
+            //error
         }
     }
     

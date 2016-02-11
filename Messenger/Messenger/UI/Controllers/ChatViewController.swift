@@ -21,6 +21,7 @@ class ChatViewController: JSQMessagesViewController {
     let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
     let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     var activityIndicator : UIActivityIndicatorView?
+    var canLeaveChat = false
     var chat : MMXChannel? {
         didSet {
             //Register for a notification to receive the message
@@ -502,6 +503,7 @@ class ChatViewController: JSQMessagesViewController {
         if segue.identifier == kSegueShowDetails {
             if let detailVC = segue.destinationViewController as? DetailsViewController {
                 detailVC.channel = chat
+                detailVC.canLeave = self.canLeaveChat
             }
         } else if segue.identifier == kSegueShowMap {
             if let locationItem = sender as? JSQLocationMediaItem {
