@@ -23,6 +23,28 @@ class Utils: NSObject {
         return newImage;
     }
     
+    static func loadUserAvatarWithUrl(url : NSURL, toImageView: UIImageView, placeholderImage:UIImage) {
+        
+        if url.absoluteString.characters.count > 0 {
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                let data = NSData(contentsOfURL:url)
+                dispatch_async(dispatch_get_main_queue()) {
+                    if data!.length > 0 {
+                        print("data \(data!.length)")
+                        toImageView.image = UIImage(data: data!)
+                    } else {
+                        print("no url content data")
+                        toImageView.image = placeholderImage
+                    }
+                }
+            }
+        } else {
+            print("no url")
+            toImageView.image = placeholderImage
+        }
+    }
+    
     static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage) {
        
         let url = user.avatarURL()
@@ -35,7 +57,7 @@ class Utils: NSObject {
                 dispatch_async(dispatch_get_main_queue()) {
                     if data?.length > 0 {
                         print("data \(data?.length)")
-                        toImageView.imageURL = url
+                        toImageView.image = UIImage(data: data!)
                     } else {
                         print("no url content data")
                         toImageView.image = placeholderImage
