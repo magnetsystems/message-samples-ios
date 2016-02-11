@@ -1,0 +1,6 @@
+framework module MagnetMaxCore {
+  umbrella header "MagnetMaxCore-umbrella.h"
+
+  export *
+  module * { export * }
+}
