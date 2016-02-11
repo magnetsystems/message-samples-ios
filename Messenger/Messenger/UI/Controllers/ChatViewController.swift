@@ -430,7 +430,8 @@ class ChatViewController: JSQMessagesViewController {
                 let subscribers = Set(users)
                 
                 // Set channel name
-                let name = "\(self!.senderDisplayName)_\(ChannelManager.sharedInstance.formatter.currentTimeStamp())"
+//                let name = "\(self!.senderDisplayName)_\(ChannelManager.sharedInstance.formatter.currentTimeStamp())"
+                let name = NSUUID().UUIDString
                 
                 MMXChannel.createWithName(name, summary: "\(self!.senderDisplayName) private chat", isPublic: false, publishPermissions: .Subscribers, subscribers: subscribers, success: { [weak self] channel in
                     self?.chat = channel
