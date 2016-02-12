@@ -14,7 +14,7 @@
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Copyright (c) 2011&#8211;2015 Alamofire Software Foundation (http://alamofire.org/)
+			<string>Copyright (c) 20112015 Alamofire Software Foundation (http://alamofire.org/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -264,7 +264,7 @@ THE SOFTWARE.
 			<key>FooterText</key>
 			<string>
 Please see README.txt for full license terms for Magnet Message.                           
-&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-      
+-      
 
 				Apache License
                            Version 2.0, January 2004
@@ -534,7 +534,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 			<key>FooterText</key>
 			<string>
 Please see README.txt for full license terms for Magnet Message.                           
-&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-      
+-      
 
 				Apache License
                            Version 2.0, January 2004
@@ -747,7 +747,7 @@ Please see README.txt for full license terms for Magnet Message.
 			<key>FooterText</key>
 			<string>
 Please see README.txt for full license terms for Magnet Message.                           
-&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-      
+-      
 
 				Apache License
                            Version 2.0, January 2004

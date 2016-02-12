@@ -82,7 +82,9 @@ extension UserProfileViewController: UIImagePickerControllerDelegate, UINavigati
             
             user.setAvatarWithData(UIImageJPEGRepresentation(pickedImage, 0.1), success: { (url) -> Void in
                 print("avatar updated, new url \(url)")
-                Utils.loadUserAvatarWithUrl(url!, toImageView: self.userAvatarIV, placeholderImage: UIImage(named: "user_default")!)
+                if url?.absoluteString.characters.count > 0 {
+                    Utils.loadUserAvatarWithUrl(url!, toImageView: self.userAvatarIV, placeholderImage: UIImage(named: "user_default")!)
+                }
                 }, failure: { (error) -> Void in
                     print("avatar update error \(error)")
             })
