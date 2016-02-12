@@ -43,13 +43,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             navController.pushViewController(viewController, animated: false)
                         }
                     }
-                    self.appendToMainWindow(navController, animated: true)
+                    self.appendToMainWindow(navController, animated: false)
                 }
                 }, failure: { (error) -> Void in
-                    self.appendToMainWindow(self.rootViewController(), animated: true)
+                    self.setMainWindow(self.rootViewController())
             })
         } else {
-            appendToMainWindow(rootViewController(), animated: true)
+            setMainWindow(rootViewController())
         }
         
         Fabric.with([Crashlytics.self])
@@ -67,8 +67,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setMainWindow(viewController : UIViewController) {
+        if self.window == nil {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.backgroundColor = UIColor.whiteColor()
+        }
         self.window?.rootViewController = viewController
         
     }
