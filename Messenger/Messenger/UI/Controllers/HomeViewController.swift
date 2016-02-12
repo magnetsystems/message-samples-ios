@@ -48,7 +48,13 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         super.viewWillAppear(animated)
         
         loadEventChannels()
-        loadAskMagnetChannel()
+        // Magnet Employees will have the magnetsupport tag
+        // Hide the Ask Magnet option for Magnet employees
+        askMagnet = [MMXChannelDetailResponse()]
+        if !isMagnetEmployee() {
+//            self.loadAskMagnetChannel()
+                
+        }
         loadDetails()
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
     }
@@ -258,6 +264,10 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
  
             if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? ChannelDetailBaseTVCell {
                 if indexPath.section != 2 {
+                    // Ask Magnet channel
+                    if indexPath.section == 1 {
+                        chatVC.isAskMagnetChannel = true
+                    }
                     chatVC.chat = cell.detailResponse?.channel
                     chatVC.canLeaveChat = false
                 } else {
@@ -299,7 +309,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         
         // Get all channels the current user is subscribed to
         MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
-            let channels = allChannels.filter { !$0.name.hasPrefix("global_") }
+            let channels = allChannels.filter { !$0.name.hasPrefix("global_") && ( $0.name != "askMagnet" || (self != nil && self!.isMagnetEmployee()) ) }
             ChannelManager.sharedInstance.channels = channels
             if channels.count > 0 {
                 // Get details
@@ -346,6 +356,14 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     private func endRefreshing() {
         refreshControl?.endRefreshing()
         tableView.reloadData()
+    }
+    
+    private func isMagnetEmployee() -> Bool {
+        print(MMUser.currentUser())
+        if let currentUser = MMUser.currentUser() where ( currentUser.email != nil && currentUser.email.hasSuffix(kMagnetEmailDomain) ) {
+            return true
+        }
+        return false
     }
 
 }

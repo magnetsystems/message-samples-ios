@@ -22,6 +22,37 @@ class ChatViewController: JSQMessagesViewController {
     let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     var activityIndicator : UIActivityIndicatorView?
     var canLeaveChat = false
+    var isAskMagnetChannel = false {
+        didSet {
+            if isAskMagnetChannel {
+                let isPublic = false
+                MMXChannel.channelForName(kAskMagnetChannel, isPublic: isPublic, success: { [weak self] channel in
+                    self?.chat = channel
+                }, failure: { error in
+                    // Since channel is not found, attempt to create it
+                    // Magnet Employees will have the magnetsupport tag
+                    // Subscribe all Magnet employees
+//                    MMUser.searchUsers("tags:\(kMagnetSupportTag)", limit: 30, offset: 0, sort: "firstName:asc", success: { users in
+                    MMUser.searchUsers("email:*\(kMagnetEmailDomain)", limit: 30, offset: 0, sort: "firstName:asc", success: { users in
+                        let summary: String
+                        if let userName = MMUser.currentUser()?.userName {
+                            summary = "Ask Magnet for \(userName)"
+                        } else {
+                            // We should never be here!
+                            summary = "Ask Magnet for anonymous"
+                        }
+                        MMXChannel.createWithName(kAskMagnetChannel, summary: summary, isPublic: isPublic, publishPermissions: .Subscribers, subscribers: Set(users), success: { [weak self] channel in
+                            self?.chat = channel
+                        }, failure: { error in
+                            print("[ERROR]: \(error.localizedDescription)")
+                        })
+                    }, failure: { error in
+                        print("[ERROR]: \(error.localizedDescription)")
+                    })
+                })
+            }
+        }
+    }
     var chat : MMXChannel? {
         didSet {
             //Register for a notification to receive the message

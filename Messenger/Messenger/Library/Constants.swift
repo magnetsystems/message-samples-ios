@@ -41,3 +41,7 @@ let kSegueRegisterToHome = "registerToMenuSegue"
 let kSegueShowMap = "showMapViewController"
 let kSegueShowDetails = "showDetailsSegue"
 
+let kMagnetSupportTag = "magnetsupport"
+let kAskMagnetChannel = "askMagnet"
+let kMagnetEmailDomain = "@magnet.com"
+
