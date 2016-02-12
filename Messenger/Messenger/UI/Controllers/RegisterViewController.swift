@@ -111,7 +111,7 @@ class RegisterViewController : BaseViewController {
     
     func login(credential: NSURLCredential) {
         
-        MMUser.login(credential, success: { [weak self] in
+        MMUser.login(credential, rememberMe: true, success: { [weak self] in
             // Initialize Magnet Message
             MagnetMax.initModule(MMX.sharedInstance(), success: {
                 self?.hideLoadingIndicator()
