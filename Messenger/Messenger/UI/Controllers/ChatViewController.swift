@@ -216,17 +216,17 @@ class ChatViewController: JSQMessagesViewController {
         
         button.userInteractionEnabled = false
         
-        self.showSpinner()
+        showSpinner()
         let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
         mmxMessage.sendWithSuccess( { [weak self] _ in
             button.userInteractionEnabled = true
             self?.hideSpinner()
-            self?.finishSendingMessageAnimated(true)
-            }) { error in
-                button.userInteractionEnabled = true
-                self.hideSpinner()
-                print(error)
+        }) { error in
+            button.userInteractionEnabled = true
+            self.hideSpinner()
+            print(error)
         }
+        finishSendingMessageAnimated(true)
     }
     
     override func didPressAccessoryButton(sender: UIButton!) {
@@ -560,29 +560,29 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
                 
                 let attachment = MMAttachment(data: data, mimeType: "image/PNG")
                 mmxMessage.addAttachment(attachment)
-                self.showSpinner()
+                showSpinner()
                 mmxMessage.sendWithSuccess({ [weak self] _ in
                     self?.hideSpinner()
-                    self?.finishSendingMessageAnimated(true)
-                    }) { error in
-                        self.hideSpinner()
-                        print(error)
+                }) { error in
+                    self.hideSpinner()
+                    print(error)
                 }
+                finishSendingMessageAnimated(true)
             }
         } else if let urlOfVideo = info[UIImagePickerControllerMediaURL] as? NSURL {
             let messageContent = [Constants.ContentKey.Type: MessageType.Video.rawValue]
             let name = urlOfVideo.lastPathComponent
             let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
             let attachment = MMAttachment(fileURL: urlOfVideo, mimeType: "video/quicktime", name: name, description: "Video file")
-            self.showSpinner()
+            showSpinner()
             mmxMessage.addAttachment(attachment)
             mmxMessage.sendWithSuccess({ [weak self] _ in
                 self?.hideSpinner()
-                self?.finishSendingMessageAnimated(true)
-                }) { error in
-                    self.hideSpinner()
-                    print(error)
+            }) { error in
+                self.hideSpinner()
+                print(error)
             }
+            finishSendingMessageAnimated(true)
         }
         
         dismissViewControllerAnimated(true, completion: nil)
