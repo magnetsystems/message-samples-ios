@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,24 +13,78 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="M91-2w-P5s" id="ZLT-Vp-g5z">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ask_magnet.png" translatesAutoresizingMaskIntoConstraints="NO" id="2hq-MI-7y5">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_askmagnet" translatesAutoresizingMaskIntoConstraints="NO" id="2hq-MI-7y5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
+                    </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="At9-Le-90N" userLabel="newMessageIndicatior">
+                        <rect key="frame" x="67" y="29" width="10" height="10"/>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="10" id="5ue-nH-zeA"/>
+                            <constraint firstAttribute="width" secondItem="At9-Le-90N" secondAttribute="height" multiplier="1:1" id="L2e-XM-fhf"/>
+                        </constraints>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="messages_wh.png" translatesAutoresizingMaskIntoConstraints="NO" id="u2f-h7-XGK" userLabel="messageIcon">
+                        <rect key="frame" x="83" y="29" width="26" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="35" id="Zrt-SD-xhm"/>
+                            <constraint firstAttribute="width" secondItem="u2f-h7-XGK" secondAttribute="height" multiplier="13:11" id="hIS-LU-tzB"/>
+                            <constraint firstAttribute="height" constant="22" id="sPa-Kp-fff"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Zrt-SD-xhm"/>
+                            </mask>
+                        </variation>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ask Magnet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ky-BY-zeZ">
+                        <rect key="frame" x="112" y="29.5" width="97.5" height="20.5"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_right.png" translatesAutoresizingMaskIntoConstraints="NO" id="b7a-GE-v4k">
+                        <rect key="frame" x="299" y="33" width="13" height="13"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="13" id="ckA-jg-cTc"/>
+                            <constraint firstAttribute="height" constant="13" id="skD-9J-dr2"/>
+                        </constraints>
                     </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="2hq-MI-7y5" firstAttribute="top" secondItem="ZLT-Vp-g5z" secondAttribute="top" id="2qU-Yw-6XJ"/>
+                    <constraint firstItem="b7a-GE-v4k" firstAttribute="centerY" secondItem="ZLT-Vp-g5z" secondAttribute="centerY" id="Aup-FT-uQV"/>
                     <constraint firstAttribute="trailing" secondItem="2hq-MI-7y5" secondAttribute="trailing" id="Cms-gn-cTx"/>
+                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="leading" secondItem="u2f-h7-XGK" secondAttribute="trailing" constant="3" id="H81-wW-Rm0"/>
+                    <constraint firstItem="b7a-GE-v4k" firstAttribute="trailing" secondItem="ZLT-Vp-g5z" secondAttribute="trailingMargin" id="JPF-0P-fBk"/>
+                    <constraint firstItem="u2f-h7-XGK" firstAttribute="top" secondItem="At9-Le-90N" secondAttribute="top" id="KOh-T4-bNV"/>
+                    <constraint firstItem="At9-Le-90N" firstAttribute="width" secondItem="At9-Le-90N" secondAttribute="height" multiplier="1:1" id="QAc-ee-AJM"/>
+                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="centerY" secondItem="u2f-h7-XGK" secondAttribute="centerY" id="X9u-uD-4rO"/>
                     <constraint firstAttribute="bottom" secondItem="2hq-MI-7y5" secondAttribute="bottom" id="coJ-zv-D7U"/>
+                    <constraint firstItem="u2f-h7-XGK" firstAttribute="leading" secondItem="At9-Le-90N" secondAttribute="trailing" constant="6" id="jV4-u7-6LG"/>
+                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="centerY" secondItem="ZLT-Vp-g5z" secondAttribute="centerY" id="lNa-FD-8Zz"/>
+                    <constraint firstItem="u2f-h7-XGK" firstAttribute="centerY" secondItem="At9-Le-90N" secondAttribute="centerY" id="oXd-lm-1U0"/>
+                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="centerX" secondItem="ZLT-Vp-g5z" secondAttribute="centerX" id="taG-YR-D2H"/>
                     <constraint firstItem="2hq-MI-7y5" firstAttribute="leading" secondItem="ZLT-Vp-g5z" secondAttribute="leading" id="yVd-wP-Gkd"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="oXd-lm-1U0"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="vNewMessageIndicator" destination="At9-Le-90N" id="dwH-rq-lBq"/>
+            </connections>
             <point key="canvasLocation" x="190" y="244"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ask_magnet.png" width="750" height="155"/>
+        <image name="arrow_right.png" width="25" height="25"/>
+        <image name="bg_askmagnet" width="320" height="66"/>
+        <image name="messages_wh.png" width="76" height="74"/>
     </resources>
 </document>

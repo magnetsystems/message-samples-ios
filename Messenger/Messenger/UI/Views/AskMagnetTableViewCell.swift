@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MagnetMax
 
 class AskMagnetTableViewCell: ChannelDetailBaseTVCell {
 
@@ -14,7 +15,7 @@ class AskMagnetTableViewCell: ChannelDetailBaseTVCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

@@ -140,6 +140,8 @@ class ChatViewController: JSQMessagesViewController {
         
         if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage, let timestamp = lastMessage.timestamp {
             ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:timestamp)
+        } else  if let chat = self.chat {
+             ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, date:NSDate.init())
         }
     }
     

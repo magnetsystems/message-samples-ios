@@ -30,6 +30,7 @@ class EventChannelTableViewCell: ChannelDetailBaseTVCell {
 
     override var detailResponse : MMXChannelDetailResponse! {
         didSet {
+            super.detailResponse = self.detailResponse
             
             if detailResponse.channel.summary!.containsString("Week") {
                 backgroundIV.image = UIImage(named: "bg_img_1")
