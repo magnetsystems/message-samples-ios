@@ -32,8 +32,8 @@ class ChatViewController: JSQMessagesViewController {
                     // Since channel is not found, attempt to create it
                     // Magnet Employees will have the magnetsupport tag
                     // Subscribe all Magnet employees
-//                    MMUser.searchUsers("tags:\(kMagnetSupportTag)", limit: 30, offset: 0, sort: "firstName:asc", success: { users in
-                    MMUser.searchUsers("email:*\(kMagnetEmailDomain)", limit: 30, offset: 0, sort: "firstName:asc", success: { users in
+                    MMUser.searchUsers("tags:\(kMagnetSupportTag)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
+//                    MMUser.searchUsers("email:*\(kMagnetEmailDomain)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
                         let summary: String
                         if let userName = MMUser.currentUser()?.userName {
                             summary = "Ask Magnet for \(userName)"
@@ -85,7 +85,7 @@ class ChatViewController: JSQMessagesViewController {
                     if let currentUser = MMUser.currentUser(), index = users.indexOf(currentUser) {
                         users.removeAtIndex(index)
                     }
-                    navigationItem.title = users.first?.firstName!
+                    navigationItem.title = users.first?.firstName
                 } else {
                     navigationItem.title = kStr_Group
                 }

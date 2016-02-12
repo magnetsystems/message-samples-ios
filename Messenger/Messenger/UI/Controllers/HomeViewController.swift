@@ -360,8 +360,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     }
     
     private func isMagnetEmployee() -> Bool {
-        print(MMUser.currentUser())
-        if let currentUser = MMUser.currentUser() where ( currentUser.email != nil && currentUser.email.hasSuffix(kMagnetEmailDomain) ) {
+//        print(MMUser.currentUser())
+        if let currentUser = MMUser.currentUser() where ( currentUser.tags != nil && currentUser.tags.contains(kMagnetSupportTag) ) {
             return true
         }
         return false
