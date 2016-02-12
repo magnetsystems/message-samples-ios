@@ -89,6 +89,7 @@
 		8B901AEE1C5BBC2800AA5DF1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B901AED1C5BBC2800AA5DF1 /* Constants.swift */; };
 		8B9C67651C522D5F00661586 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C67641C522D5F00661586 /* Photo.swift */; };
 		8BA6E34C1C3D94380095F65F /* messages.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA6E34B1C3D94380095F65F /* messages.png */; };
+		8BC6B8191C6E547D00A9CBA3 /* DAKeyboardControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BC6B8181C6E547D00A9CBA3 /* DAKeyboardControl.m */; };
 		8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */; };
 		8BF254C01C49697A008719AA /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF254BF1C49697A008719AA /* Popup.swift */; };
 		8DDFA5A11C659F7400566A4D /* message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA59D1C659F7400566A4D /* message@2x.png */; };
@@ -197,6 +198,8 @@
 		8B901AED1C5BBC2800AA5DF1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Library/Constants.swift; sourceTree = "<group>"; };
 		8B9C67641C522D5F00661586 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		8BA6E34B1C3D94380095F65F /* messages.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = messages.png; sourceTree = "<group>"; };
+		8BC6B8171C6E547D00A9CBA3 /* DAKeyboardControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAKeyboardControl.h; sourceTree = "<group>"; };
+		8BC6B8181C6E547D00A9CBA3 /* DAKeyboardControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAKeyboardControl.m; sourceTree = "<group>"; };
 		8BDF49D81C32FD5500F0E51B /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		8BF254BF1C49697A008719AA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
@@ -393,6 +396,7 @@
 		7ABB8C2A1C6A3E0200BF441A /* 3rdParty */ = {
 			isa = PBXGroup;
 			children = (
+				8BC6B8161C6E547D00A9CBA3 /* DAKeyboardControl */,
 				7A875C1F1C6CD1A80006EEE9 /* AsyncImageView */,
 				8BDF49D71C32FD5500F0E51B /* SWRevealViewController */,
 			);
@@ -687,6 +691,16 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		8BC6B8161C6E547D00A9CBA3 /* DAKeyboardControl */ = {
+			isa = PBXGroup;
+			children = (
+				8BC6B8171C6E547D00A9CBA3 /* DAKeyboardControl.h */,
+				8BC6B8181C6E547D00A9CBA3 /* DAKeyboardControl.m */,
+			);
+			name = DAKeyboardControl;
+			path = Library/Helpers/DAKeyboardControl;
+			sourceTree = "<group>";
+		};
 		8BDF49D71C32FD5500F0E51B /* SWRevealViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -927,6 +941,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B901AEE1C5BBC2800AA5DF1 /* Constants.swift in Sources */,
+				8BC6B8191C6E547D00A9CBA3 /* DAKeyboardControl.m in Sources */,
 				7A1894D71C6D000B0068183A /* AvatarImage.swift in Sources */,
 				7A76D4121C6AAABB004ADC49 /* AskMagnetTableViewCell.swift in Sources */,
 				8BF254C01C49697A008719AA /* Popup.swift in Sources */,

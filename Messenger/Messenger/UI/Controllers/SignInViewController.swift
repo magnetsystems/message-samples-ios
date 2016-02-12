@@ -23,6 +23,7 @@ class SignInViewController : BaseViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         txtfPassword.text = ""
+        self.view.addKeyboardPanningWithActionHandler(nil)
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
