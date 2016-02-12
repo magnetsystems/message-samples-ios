@@ -27,6 +27,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     var filteredRecipients = [MMUser]()
     var selectedUsers : [MMUser] = []
     let resultSearchController = UISearchController(searchResultsController: nil)
+    let placeholderAvatarImage = UIImage(named: "user_default")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,7 +124,15 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         }
         
         cell.textLabel?.attributedText = title
-        cell.imageView?.image = UIImage(named: "user_default");
+        let borderSize:CGFloat = 30
+        cell.imageView?.image = Utils.resizeImage(placeholderAvatarImage!, toSize: CGSize(width: borderSize, height: borderSize))
+        cell.imageView?.contentMode = UIViewContentMode.ScaleAspectFill
+        cell.imageView?.layer.cornerRadius = borderSize / 2
+        cell.imageView?.layer.masksToBounds = true
+
+        if let url = user.avatarURL() {
+            cell.imageView?.imageURL = url
+        }
         
         return cell
     }
