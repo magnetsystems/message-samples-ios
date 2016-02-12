@@ -338,9 +338,19 @@ class ChatViewController: JSQMessagesViewController {
         cell.avatarImageView?.layer.masksToBounds = true
         cell.avatarImageView?.contentMode = UIViewContentMode.ScaleAspectFill
 
+        if let avatar = self.avatars[message.senderId()] {
+            cell.avatarImageView!.image = avatar
+        }
+        
         MMUser.usersWithUserIDs([message.senderId()], success: { (users) -> Void in
             let user = users.first
-            Utils.loadUserAvatar(user!, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user!))
+            
+
+            
+            Utils.loadUserAvatar(user!, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user!), complete: { (image) -> Void in
+                self.avatars[message.senderId()] = image
+            })
+            
             }) { (error) -> Void in
                 cell.avatarImageView?.image = UIImage(named: "user_default")
         }

@@ -45,6 +45,31 @@ class Utils: NSObject {
         }
     }
     
+    static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage : UIImage, complete:((UIImage)->Void)?) {
+        if let url = user.avatarURL() {
+            print("user avatar url \(url)")
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                let data = NSData(contentsOfURL:url)
+                dispatch_async(dispatch_get_main_queue()) {
+                    if data?.length > 0 {
+                        print("data \(data?.length)")
+                        toImageView.image = UIImage(data: data!)
+                        complete!(UIImage(data: data!)!)
+                    } else {
+                        print("no url content data")
+                        toImageView.image = placeholderImage
+                        complete!(placeholderImage)
+                    }
+                }
+            }
+        } else {
+            print("no url")
+            toImageView.image = placeholderImage
+            complete!(placeholderImage)
+        }
+    }
+    
     static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage) {
        
         if let url = user.avatarURL() {
