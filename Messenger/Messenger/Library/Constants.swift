@@ -45,3 +45,5 @@ let kMagnetSupportTag = "magnetsupport"
 let kAskMagnetChannel = "askMagnet"
 let kMagnetEmailDomain = "@magnet.com"
 
+let kMinPasswordLength = 6
+

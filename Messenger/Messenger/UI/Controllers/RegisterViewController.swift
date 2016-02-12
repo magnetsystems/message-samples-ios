@@ -72,6 +72,8 @@ class RegisterViewController : BaseViewController {
             self.showAlert(kStr_EnterEmail, title: kStr_FieldRequired, closeTitle: kStr_Close)
         } catch InputError.InvalidPassword {
             self.showAlert(kStr_EnterPasswordAndVerify, title: kStr_PasssNotMatch, closeTitle: kStr_Close)
+        } catch InputError.InvalidPasswordLength {
+            self.showAlert(kStr_EnterPasswordLength, title: kStr_PasswordShort, closeTitle: kStr_Close)
         } catch { }
     }
     
@@ -81,6 +83,7 @@ class RegisterViewController : BaseViewController {
         case InvalidUserNames
         case InvalidEmail
         case InvalidPassword
+        case InvalidPasswordLength
     }
     
     private func validateCredential() throws -> (String, String, String, String) {
@@ -98,6 +101,8 @@ class RegisterViewController : BaseViewController {
             let passwordAgain = txtfPasswordAgain.text where (passwordAgain.isEmpty == false && password == passwordAgain) else {
                 throw InputError.InvalidPassword
         }
+        
+        if password.characters.count < kMinPasswordLength { throw InputError.InvalidPasswordLength }
         
         return (firstName, lastName, email, password)
     }

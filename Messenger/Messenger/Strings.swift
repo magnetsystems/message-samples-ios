@@ -16,9 +16,11 @@ let kStr_FillEmailPass = "Please fill in email and password"
 let kStr_EnterFirstLastName = "Please enter your first and last name"
 let kStr_EnterEmail = "Please enter your email"
 let kStr_EnterPasswordAndVerify = "Please enter your password and verify your password again"
+let kStr_EnterPasswordLength = "Please enter at least 6 characters"
 
 let kStr_FieldRequired = "Field required"
 let kStr_PasssNotMatch = "Passwords do not match"
+let kStr_PasswordShort = "Too short password"
 
 let kStr_MediaMessages = "Media Messages"
 let kStr_TakePhotoOrVideo = "Take Photo or Video"
