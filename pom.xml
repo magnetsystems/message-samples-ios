@@ -41,6 +41,13 @@
                         <configuration>
                             <target>
                                 <mkdir dir="${basedir}/target/ios-samples" />
+                                
+                                <exec executable="zip" dir="${basedir}">
+                                    <arg value="-r" />
+                                    <arg value="-y" />
+                                    <arg value="${basedir}/target/ios-samples/Messenger.zip" />
+                                    <arg value="Messenger" />
+                                </exec>
                                 <exec executable="zip" dir="${basedir}">
                                     <arg value="-r" />
                                     <arg value="-y" />
