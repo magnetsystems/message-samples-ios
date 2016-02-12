@@ -22,8 +22,9 @@ class UserModel : NSObject {
     var user : MMUser?
     weak var delegate : UserModelDelegate?
     var indexPath : NSIndexPath?
-    lazy var image : UIImage = {
-        var imageContent = UIImage.init(named: "user_default.png", inBundle: NSBundle(forClass: self.dynamicType), compatibleWithTraitCollection: nil)!
+    lazy var image : UIImage? = {
+        var imageContent : UIImage?
+//        var imageContent = UIImage.init(named: "user_default.png", inBundle: NSBundle(forClass: self.dynamicType), compatibleWithTraitCollection: nil)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
             if let data = NSData.init( contentsOfURL: (self.user?.avatarURL())!), let img = UIImage.init(data: data) {
                 self.image = img
@@ -52,7 +53,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         resultSearchController.searchBar.resignFirstResponder()
     }
     
-   convenience init(disabledUsers : [MMUser]) {
+    convenience init(disabledUsers : [MMUser]) {
         self.init()
         self.disabledUsers = disabledUsers
     }
@@ -88,14 +89,14 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             var hash  : [String : MMUser] = [:]
             
             for user in self.disabledUsers {
-                if let userId = user.userID {
-                hash[userId] = user
+                if let userName = user.userName {
+                    hash[userName] = user
                 }
             }
             var tempUsers : [MMUser] = []
-             for user in users {
-                if let userId = user.userID where hash[userId] == nil {
-                  tempUsers.append(user)
+            for user in users {
+                if let userName = user.userName where hash[userName] == nil {
+                    tempUsers.append(user)
                 }
             }
             
@@ -115,6 +116,8 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     func didDownloadMedia(userModel: UserModel) {
         if let indexPath = userModel.indexPath {
             self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        } else {
+            self.tableView.reloadData()
         }
     }
     
@@ -152,7 +155,11 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("UserCellIdentifier", forIndexPath: indexPath) as! ContactsCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("UserCellIdentifier") as! ContactsCell?
+        
+        if cell == nil {
+            cell = ContactsCell.init(style: .Default, reuseIdentifier: "UserCellIdentifier")
+        }
         
         var user: MMUser!
         var userModel : UserModel
@@ -172,11 +179,11 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             return false
         })
         
-        if selectedUsers.count > 0 && !cell.highlighted {
+        if selectedUsers.count > 0 && !cell!.highlighted {
             tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition:.None)
         }
         
-        let attributes = [NSFontAttributeName : UIFont.boldSystemFontOfSize((cell.userName?.font.pointSize)!)]
+        let attributes = [NSFontAttributeName : UIFont.boldSystemFontOfSize((cell?.userName?.font.pointSize)!)]
         var title = NSAttributedString()
         if let lastName = user.lastName where lastName.isEmpty == false {
             title = NSAttributedString(string: lastName, attributes: attributes)
@@ -191,11 +198,11 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             }
         }
         
-        cell.userName?.attributedText = title
-        cell.avatar?.image = userModel.image
+        cell?.userName?.attributedText = title
+        //cell?.avatar?.image = userModel.image
         userModel.indexPath = indexPath
         
-        return cell
+        return cell!
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -242,6 +249,9 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             var allUsers : [UserModel] = [UserModel]()
             for userArray in userArrays {
                 allUsers += userArray
+            }
+            for userModel in allUsers {
+                userModel.indexPath = nil
             }
             filteredRecipients = allUsers.filter { userModel in
                 let searchString = searchController.searchBar.text!.lowercaseString

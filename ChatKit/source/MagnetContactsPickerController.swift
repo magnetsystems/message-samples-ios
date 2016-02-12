@@ -13,7 +13,7 @@ public protocol ContactsPickerControllerDelegate: class {
     func contactsControllerDidFinish(with selectedUsers: [MMUser])
 }
 
-public class ContactsPickerController: UINavigationController {
+public class MagnetContactsPickerController: UINavigationController {
     private var underlyingContactsViewController = ContactsViewController.init()
     public weak var pickerDelegate : ContactsPickerControllerDelegate?
     

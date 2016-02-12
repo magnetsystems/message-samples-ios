@@ -10,7 +10,7 @@ import UIKit
 import ChatKitUI
 import MagnetMax
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, ContactsPickerControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,12 +35,20 @@ class ViewController: UIViewController {
                 print("[ERROR] \(error.localizedDescription)")
         })
     }
+    
+    func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
+        
+    }
+    
     func login (user : MMUser) {
         let cred = NSURLCredential.init(user: user.userName, password: user.password, persistence: .None)
         MMUser.login(cred, rememberMe: false, success: {
 //            let url = NSURL.init(string: "https://clipartion.com/wp-content/uploads/2015/11/free-clipart-of-happy-person.png")
 //            MMUser.currentUser()?.setAvatarWithURL(url!, success: { url in
-                let c = ContactsPickerController(disabledUsers: [MMUser.currentUser()!])
+            let u = MMUser.init()
+            u.userName = "gogo"
+                let c = MagnetContactsPickerController(disabledUsers: [MMUser.currentUser()!])
+            c.pickerDelegate = self
                 self.presentViewController(c, animated: true, completion: nil)
 //                }, failure: {error in
 //                   print("[ERROR] \(error.localizedDescription)")

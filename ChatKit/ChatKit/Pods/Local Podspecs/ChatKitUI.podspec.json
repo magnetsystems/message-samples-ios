@@ -15,9 +15,9 @@
   },
   "requires_arc": true,
   "resources": [
-    "source/**/*.{bundle,xib,png}"
+    "source/**/*.{bundle}"
   ],
-  "source_files": "source/**/*.{h,m,swift}",
+  "source_files": "source/**/*.{h,m,swift,xib,png}",
   "frameworks": [
     "QuartzCore",
     "CoreGraphics",

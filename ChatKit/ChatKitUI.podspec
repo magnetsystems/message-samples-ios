@@ -11,17 +11,17 @@ Pod::Spec.new do |s|
   s.platform = :ios, '8.0'
   s.requires_arc = true
 
-  s.resources = ['source/**/*.{bundle,xib,png}']
+  s.resources = ['source/**/*.{bundle}']
 
-  s.source_files = 'source/**/*.{h,m,swift}'
+  s.source_files = 'source/**/*.{h,m,swift,xib,png}'
 
   s.frameworks = 'QuartzCore', 'CoreGraphics', 'CoreLocation', 'MapKit', 'UIKit', 'Foundation', 'AudioToolbox'
 
   s.xcconfig       =  { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2', 'OTHER_LDFLAGS' => '-ObjC', 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES','ENABLE_BITCODE' => 'NO'}
 
   s.dependency 'MagnetMax', '~> 2.4.1'
-
   s.dependency 'NYTPhotoViewer' , '~> 1.1.0'
   s.dependency 'DZVideoPlayerViewController'
 
 end
+

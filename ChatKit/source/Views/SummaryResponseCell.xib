@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SummaryResponseCell" rowHeight="70" id="SoL-lY-cLW" customClass="SummaryResponseCell" customModule="ChatKitUI" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SoL-lY-cLW" id="Nff-BY-JZJ">
+                <rect key="frame" x="0.0" y="0.0" width="600" height="69.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="us6-QV-OcO" userLabel="newMessageIndicatior">
+                        <rect key="frame" x="8" y="12" width="10" height="10"/>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="10" id="R8L-zP-UXT"/>
+                            <constraint firstAttribute="width" secondItem="us6-QV-OcO" secondAttribute="height" multiplier="1:1" id="rXu-at-6Q5"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="Wednesday" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0vs-b6-irg" userLabel="lastTime">
+                        <rect key="frame" x="504" y="10" width="70" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="Ifc-JO-azv"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Subscribers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rjI-SV-YdM">
+                        <rect key="frame" x="26" y="8" width="470" height="18"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Uf-I0-hUm" userLabel="message">
+                        <rect key="frame" x="26" y="26" width="566" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="6kz-X5-ilD"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="›" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dSy-4I-2ff">
+                        <rect key="frame" x="582" y="8" width="10" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="rqx-J0-adI"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="2Uf-I0-hUm" firstAttribute="leading" secondItem="rjI-SV-YdM" secondAttribute="leading" id="6g8-3N-7XX"/>
+                    <constraint firstItem="2Uf-I0-hUm" firstAttribute="top" secondItem="rjI-SV-YdM" secondAttribute="bottom" id="AJc-B5-m5d"/>
+                    <constraint firstItem="rjI-SV-YdM" firstAttribute="leading" secondItem="us6-QV-OcO" secondAttribute="trailing" constant="8" id="DVo-b8-MEM"/>
+                    <constraint firstAttribute="leadingMargin" secondItem="us6-QV-OcO" secondAttribute="leading" id="JwC-98-0le"/>
+                    <constraint firstItem="0vs-b6-irg" firstAttribute="leading" secondItem="rjI-SV-YdM" secondAttribute="trailing" constant="8" id="U8i-Q2-tBo"/>
+                    <constraint firstItem="dSy-4I-2ff" firstAttribute="leading" secondItem="0vs-b6-irg" secondAttribute="trailing" constant="8" id="WH5-8D-DBs"/>
+                    <constraint firstItem="dSy-4I-2ff" firstAttribute="centerY" secondItem="0vs-b6-irg" secondAttribute="centerY" id="Xa5-X4-lru"/>
+                    <constraint firstAttribute="topMargin" secondItem="rjI-SV-YdM" secondAttribute="top" id="ZXK-pf-dHD"/>
+                    <constraint firstAttribute="topMargin" secondItem="us6-QV-OcO" secondAttribute="top" constant="-4" id="flE-OM-V22"/>
+                    <constraint firstAttribute="trailing" secondItem="dSy-4I-2ff" secondAttribute="trailing" constant="8" id="iHS-GH-PUC"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="2Uf-I0-hUm" secondAttribute="trailing" id="lnT-P6-wil"/>
+                    <constraint firstItem="dSy-4I-2ff" firstAttribute="top" secondItem="Nff-BY-JZJ" secondAttribute="top" constant="8" id="mjb-N9-MEi"/>
+                    <constraint firstAttribute="topMargin" secondItem="0vs-b6-irg" secondAttribute="top" id="zbR-LT-hgd"/>
+                </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="zbR-LT-hgd"/>
+                    </mask>
+                </variation>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <connections>
+                <outlet property="lblLastTime" destination="0vs-b6-irg" id="hyF-A0-tuH"/>
+                <outlet property="lblMessage" destination="2Uf-I0-hUm" id="uBO-4S-7eS"/>
+                <outlet property="lblSubscribers" destination="rjI-SV-YdM" id="b9l-n8-oSE"/>
+                <outlet property="vNewMessageIndicator" destination="us6-QV-OcO" id="Puo-nv-qHN"/>
+            </connections>
+            <point key="canvasLocation" x="155" y="349"/>
+        </tableViewCell>
+    </objects>
+</document>

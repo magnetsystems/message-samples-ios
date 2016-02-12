@@ -11,6 +11,9 @@
             location = "group:Controllers"
             name = "Controllers">
             <FileRef
+               location = "group:HomeViewController.swift">
+            </FileRef>
+            <FileRef
                location = "group:ContactsViewController.swift">
             </FileRef>
          </Group>
@@ -438,9 +441,21 @@
          <FileRef
             location = "group:ContactsCell.xib">
          </FileRef>
+         <FileRef
+            location = "group:HomeViewController.xib">
+         </FileRef>
+         <FileRef
+            location = "group:SummaryResponseCell.swift">
+         </FileRef>
+         <FileRef
+            location = "group:SummaryResponseCell.xib">
+         </FileRef>
       </Group>
       <FileRef
-         location = "group:ContactsPickerController.swift">
+         location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/MagnetContactsPickerController.swift">
+      </FileRef>
+      <FileRef
+         location = "group:MagnetThreadsViewController.swift">
       </FileRef>
    </Group>
    <FileRef
