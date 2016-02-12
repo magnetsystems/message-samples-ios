@@ -85,7 +85,14 @@ class Utils: NSObject {
 
     
     static func noAvatarImageForUser(user : MMUser) -> UIImage {
-        return Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
+        return Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName ?? "")
+    }
+    
+    static func firstCharacterInString(s: String) -> String {
+        if s == "" {
+            return ""
+        }
+        return s.substringWithRange(Range<String.Index>(start: s.startIndex, end: s.endIndex.advancedBy(-(s.characters.count - 1))))
     }
     
     static func noAvatarImageForUser(firstName : String, lastName:String) -> UIImage {
@@ -94,7 +101,10 @@ class Utils: NSObject {
         
         let lbl : UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         lbl.backgroundColor = UIColor(red: 71/255.0, green: 161/255.0, blue: 1, alpha: 1)
-        lbl.text = "\(firstName.uppercaseString.characters.first!)\(lastName.uppercaseString.characters.first!)"
+        let f = firstCharacterInString(firstName).uppercaseString
+        let l = firstCharacterInString(lastName).uppercaseString
+        
+        lbl.text = "\(f)\(l)"
         lbl.textAlignment = NSTextAlignment.Center
         lbl.textColor = UIColor.whiteColor()
         
