@@ -433,14 +433,9 @@ public extension MMUser {
             return
         }
         let userService = MMUserService()
-        userService.updateProfile(updateProfileRequest, success: { _ in
-            // Get current user now
-            MMCoreConfiguration.serviceAdapter.getCurrentUserWithSuccess({ user in
-                currentlyLoggedInUser = user
-                success?(user: user)
-            }) { error in
-                failure?(error: error)
-            }.executeInBackground(nil)
+        userService.updateProfile(updateProfileRequest, success: { user in
+            currentlyLoggedInUser = user
+            success?(user: user)
         }) { error in
             failure?(error: error)
         }.executeInBackground(nil)
