@@ -24,6 +24,12 @@ class UserProfileViewController: BaseViewController {
         // Do any additional setup after loading the view.
         userAvatarIV.layer.cornerRadius = userAvatarIV.frame.size.width/2
         userAvatarIV.layer.masksToBounds = true
+        
+        let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .Gray)
+        activityIndicator.hidesWhenStopped = true
+        let indicator = UIBarButtonItem(customView: activityIndicator)
+        navigationItem.leftBarButtonItems = [indicator]
+        self.activityIndicator = activityIndicator
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -62,10 +68,14 @@ class UserProfileViewController: BaseViewController {
         profileUpdateReq.lastName = lastNameTF.text
         profileUpdateReq.password = nil
         
-        MMUser.updateProfile(profileUpdateReq, success: { (user) -> Void in
+        self.showLoadingIndicator()
+        MMUser.updateProfile(profileUpdateReq, success: { [weak self] user in
             print("updated \(MMUser.currentUser())")
-            }) { (error) -> Void in
+            self?.hideLoadingIndicator()
+            self?.showAlert("Changes are saved", title: "Saved", closeTitle: kStr_Close)
+            }) { [weak self] error in
             print("update err \(error)")
+            self?.hideLoadingIndicator()
         }
         
     }
