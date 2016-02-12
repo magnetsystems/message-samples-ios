@@ -88,13 +88,22 @@ class Utils: NSObject {
         return Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
     }
     
-    static func noAvatarImageForUser(firstName : String, lastName:String) -> UIImage {
+    static func noAvatarImageForUser(firstName : String?, lastName:String?) -> UIImage {
         
         let view : UIView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         
         let lbl : UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         lbl.backgroundColor = UIColor(red: 71/255.0, green: 161/255.0, blue: 1, alpha: 1)
-        lbl.text = "\(firstName.uppercaseString.characters.first!)\(lastName.uppercaseString.characters.first!)"
+        var name = "?"
+        
+        if let firstName = firstName {
+          name = "\(firstName.uppercaseString.characters.first)"
+        }
+        if let lastName = firstName {
+          name += "\(lastName.uppercaseString.characters.first)"
+        }
+        
+        lbl.text = name
         lbl.textAlignment = NSTextAlignment.Center
         lbl.textColor = UIColor.whiteColor()
         
