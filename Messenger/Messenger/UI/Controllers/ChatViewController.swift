@@ -113,8 +113,8 @@ class ChatViewController: JSQMessagesViewController {
         senderId = user.userID
         senderDisplayName = user.firstName
         //        showLoadEarlierMessagesHeader = true
-        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
-        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+//        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
+//        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
         
         // Find recipients
         if chat != nil {
@@ -331,8 +331,19 @@ class ChatViewController: JSQMessagesViewController {
                 NSForegroundColorAttributeName : cell.textView?.textColor as! AnyObject,
                 NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue | NSUnderlineStyle.PatternSolid.rawValue
             ]
+            
         }
         
+        MMUser.usersWithUserIDs([message.senderId()], success: { (users) -> Void in
+            let user = users.first
+            Utils.loadUserAvatar(user!, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user!))
+            }) { (error) -> Void in
+                cell.avatarImageView?.image = UIImage(named: "user_default")
+        }
+        
+        
+        
+
         return cell
     }
     

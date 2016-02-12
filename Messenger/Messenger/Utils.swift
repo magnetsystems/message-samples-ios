@@ -68,13 +68,33 @@ class Utils: NSObject {
         }
     }
     
+    static func loadUserAvatarByUserID(userID : String, toImageView: UIImageView, placeholderImage:UIImage?) {
+        
+        MMUser.usersWithUserIDs([userID], success: { (users) -> Void in
+            let user = users.first
+            if (user != nil) {
+                Utils.loadUserAvatar(user!, toImageView: toImageView, placeholderImage: placeholderImage!)
+            } else {
+                print("fail to get users")
+                toImageView.image = placeholderImage
+            }
+            }) { (error) -> Void in
+                print("error getting users \(error)")
+        }
+    }
+
+    
     static func noAvatarImageForUser(user : MMUser) -> UIImage {
+        return Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
+    }
+    
+    static func noAvatarImageForUser(firstName : String, lastName:String) -> UIImage {
         
         let view : UIView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         
         let lbl : UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         lbl.backgroundColor = UIColor(red: 71/255.0, green: 161/255.0, blue: 1, alpha: 1)
-        lbl.text = "\(user.firstName.uppercaseString.characters.first!)\(user.lastName.uppercaseString.characters.first!)"
+        lbl.text = "\(firstName.uppercaseString.characters.first!)\(lastName.uppercaseString.characters.first!)"
         lbl.textAlignment = NSTextAlignment.Center
         lbl.textColor = UIColor.whiteColor()
         

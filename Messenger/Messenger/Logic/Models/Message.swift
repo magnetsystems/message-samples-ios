@@ -91,7 +91,7 @@ class Message : NSObject, JSQMessageData {
     }
     
     func senderDisplayName() -> String! {
-        return (underlyingMessage.sender!.firstName != nil) ? underlyingMessage.sender!.firstName : underlyingMessage.sender!.userName
+        return (underlyingMessage.sender!.firstName != nil && underlyingMessage.sender!.lastName != nil) ? "\(underlyingMessage.sender!.firstName) \(underlyingMessage.sender!.lastName)" : underlyingMessage.sender!.userName
     }
     
     func date() -> NSDate! {
