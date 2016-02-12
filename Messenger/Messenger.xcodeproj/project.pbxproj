@@ -92,6 +92,11 @@
 		8BC6B8191C6E547D00A9CBA3 /* DAKeyboardControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BC6B8181C6E547D00A9CBA3 /* DAKeyboardControl.m */; };
 		8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */; };
 		8BF254C01C49697A008719AA /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF254BF1C49697A008719AA /* Popup.swift */; };
+		8D7F515F1C6E9C0000814064 /* bg_img_1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */; };
+		8DB526B01C6E6CF4001D9AF9 /* messages_wh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */; };
+		8DB526B11C6E6CF4001D9AF9 /* messages_wh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526AF1C6E6CF4001D9AF9 /* messages_wh@2x.png */; };
+		8DB526B41C6E6D51001D9AF9 /* message_wh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526B21C6E6D51001D9AF9 /* message_wh.png */; };
+		8DB526B51C6E6D51001D9AF9 /* message_wh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526B31C6E6D51001D9AF9 /* message_wh@2x.png */; };
 		8DDFA5A11C659F7400566A4D /* message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA59D1C659F7400566A4D /* message@2x.png */; };
 		8DDFA5A21C659F7400566A4D /* messages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA59E1C659F7400566A4D /* messages@2x.png */; };
 		8DFC78F51C62D59F008FB312 /* NavigationNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC78F41C62D59F008FB312 /* NavigationNotifier.swift */; };
@@ -203,6 +208,11 @@
 		8BDF49D81C32FD5500F0E51B /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		8BF254BF1C49697A008719AA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
+		8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_img_1_2.png; sourceTree = "<group>"; };
+		8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = messages_wh.png; sourceTree = "<group>"; };
+		8DB526AF1C6E6CF4001D9AF9 /* messages_wh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messages_wh@2x.png"; sourceTree = "<group>"; };
+		8DB526B21C6E6D51001D9AF9 /* message_wh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message_wh.png; sourceTree = "<group>"; };
+		8DB526B31C6E6D51001D9AF9 /* message_wh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message_wh@2x.png"; sourceTree = "<group>"; };
 		8DDFA59D1C659F7400566A4D /* message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message@2x.png"; sourceTree = "<group>"; };
 		8DDFA59E1C659F7400566A4D /* messages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messages@2x.png"; sourceTree = "<group>"; };
 		8DFC78F41C62D59F008FB312 /* NavigationNotifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationNotifier.swift; sourceTree = "<group>"; };
@@ -271,6 +281,7 @@
 		7A76D3F21C6A5A1C004ADC49 /* events */ = {
 			isa = PBXGroup;
 			children = (
+				8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */,
 				7A76D4041C6A866B004ADC49 /* ask_magnet.png */,
 				7A76D3F31C6A5A1C004ADC49 /* arrow_right.png */,
 				7A76D3F41C6A5A1C004ADC49 /* bg_img_1.png */,
@@ -480,6 +491,10 @@
 		8B223F451C3308D80096D204 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				8DB526B21C6E6D51001D9AF9 /* message_wh.png */,
+				8DB526B31C6E6D51001D9AF9 /* message_wh@2x.png */,
+				8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */,
+				8DB526AF1C6E6CF4001D9AF9 /* messages_wh@2x.png */,
 				7AD897DA1C6BCEDD000A85DE /* icon_info.png */,
 				7A76D3EC1C6A5A13004ADC49 /* ic_menu.png */,
 				7A76D3ED1C6A5A13004ADC49 /* slider_close@2x.png */,
@@ -815,17 +830,20 @@
 			files = (
 				8B38D2EB1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX.png in Resources */,
 				8DDFA5A11C659F7400566A4D /* message@2x.png in Resources */,
+				8DB526B51C6E6D51001D9AF9 /* message_wh@2x.png in Resources */,
 				7A76D40E1C6AA6F0004ADC49 /* icon_messages_group_new.png in Resources */,
 				8B71BE6B1C57B2D7006E5C1F /* DZVideoPlayerViewController_simple.xib in Resources */,
 				7A76D3F81C6A5A1C004ADC49 /* bg_img_1.png in Resources */,
 				8DDFA5A21C659F7400566A4D /* messages@2x.png in Resources */,
 				7A76D40F1C6AA6F0004ADC49 /* icon_messages_group.png in Resources */,
 				7A76D41F1C6B90ED004ADC49 /* CreateChatCell.xib in Resources */,
+				8DB526B41C6E6D51001D9AF9 /* message_wh.png in Resources */,
 				7A76D4051C6A866B004ADC49 /* ask_magnet.png in Resources */,
 				8B71BE6E1C57B2E1006E5C1F /* videoplayer_expand@3x.png in Resources */,
 				7A508DDB1C6A42350041B429 /* check_on.png in Resources */,
 				8B71BE701C57B2E1006E5C1F /* videoplayer_pause@2x.png in Resources */,
 				7A76D4141C6AAACA004ADC49 /* AskMagnetTableViewCell.xib in Resources */,
+				8DB526B11C6E6CF4001D9AF9 /* messages_wh@2x.png in Resources */,
 				7A508DDA1C6A42350041B429 /* check_off.png in Resources */,
 				7A76D3F11C6A5A13004ADC49 /* slider_close@3x.png in Resources */,
 				7A508DDF1C6A428F0041B429 /* splash.png in Resources */,
@@ -835,9 +853,11 @@
 				7A76D3EF1C6A5A13004ADC49 /* ic_menu.png in Resources */,
 				8B38D2EC1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX@2x.png in Resources */,
 				7A76D3F91C6A5A1C004ADC49 /* bg_img_2.png in Resources */,
+				8DB526B01C6E6CF4001D9AF9 /* messages_wh.png in Resources */,
 				7A76D3F71C6A5A1C004ADC49 /* arrow_right.png in Resources */,
 				8BA6E34C1C3D94380095F65F /* messages.png in Resources */,
 				8B2E53D51C2AC31900C9AC47 /* Assets.xcassets in Resources */,
+				8D7F515F1C6E9C0000814064 /* bg_img_1_2.png in Resources */,
 				8B38D2ED1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX@3x.png in Resources */,
 				8B71BE771C57B2E1006E5C1F /* videoplayer_shrink@3x.png in Resources */,
 				8B71BE6D1C57B2E1006E5C1F /* videoplayer_expand@2x.png in Resources */,

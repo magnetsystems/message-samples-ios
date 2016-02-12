@@ -12,7 +12,6 @@ import JSQMessagesViewController
 
 class SummaryResponseCell: ChannelDetailBaseTVCell {
     
-    @IBOutlet weak var vNewMessageIndicator : UIView!
     @IBOutlet weak var lblSubscribers : UILabel!
     @IBOutlet weak var lblLastTime : UILabel!
     @IBOutlet weak var lblMessage : UILabel!
@@ -20,8 +19,9 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
     
     override var detailResponse : MMXChannelDetailResponse! {
         didSet {
-            var subscribers : [MMUserProfile] = detailResponse.subscribers
+            super.detailResponse = self.detailResponse
             
+            var subscribers : [MMUserProfile] = detailResponse.subscribers
             subscribers = subscribers.filter({
                 if $0.userId != MMUser.currentUser()?.userID {
                     return true
@@ -45,32 +45,6 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
             
             lblLastTime.text = ChannelManager.sharedInstance.formatter.displayTime(detailResponse.lastPublishedTime!)
             ivMessageIcon.image = (detailResponse.subscribers.count > 2) ? UIImage(named: "messages.png") : UIImage(named: "message.png")
-            vNewMessageIndicator.hidden = !hasNewMessagesFromLastTime()
         }
     }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        vNewMessageIndicator.layer.cornerRadius = vNewMessageIndicator.bounds.width / 2
-        vNewMessageIndicator.clipsToBounds = true
-    }
-    
-    // MARK: - Helpers
-    
-    private func hasNewMessagesFromLastTime() -> Bool {
-        if let lastMessageID = ChannelManager.sharedInstance.getLastMessageForChannel(detailResponse.channelName) {
-         return lastMessageID != detailResponse.messages.last?.messageID
-        }
-        if let lastViewTime = ChannelManager.sharedInstance.getLastViewTimeForChannel(detailResponse.channelName) {
-        if let lastPublishedTime = detailResponse.lastPublishedTime {
-        
-            return lastViewTime.timeIntervalSince1970 < ChannelManager.sharedInstance.formatter.dateForStringTime(lastPublishedTime)?.timeIntervalSince1970
-        
-        }
-        }
-        
-        return false
-    }
-    
 }

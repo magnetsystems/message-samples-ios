@@ -164,7 +164,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var channelDetail: MMXChannelDetailResponse = MMXChannelDetailResponse()
+        var channelDetail: MMXChannelDetailResponse?
         var identifier = ""
         
         switch indexPath.section {
@@ -173,7 +173,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             channelDetail = self.actualEvents.first!
         case 1:
             identifier = Utils.name(AskMagnetTableViewCell.classForCoder())
-            channelDetail = self.askMagnet.first!
+            channelDetail = nil;
         case 2:
             if detailResponses.count > 0 {
                 identifier = Utils.name(SummaryResponseCell.classForCoder())
