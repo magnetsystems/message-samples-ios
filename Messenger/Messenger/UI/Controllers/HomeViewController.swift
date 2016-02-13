@@ -154,11 +154,12 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         case 0: return actualEvents.count
         case 1: return askMagnet.count
         case 2:
-            if detailResponses.count > 0 {
-                if searchController.active {return filteredDetailResponses.count}
-                else {return detailResponses.count}}
-            else { return 1}
-            
+            if searchController.active {
+                return filteredDetailResponses.count
+            }
+            else {
+                return detailResponses.count
+            }
         default : return 0
         }
     }
