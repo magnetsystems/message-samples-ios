@@ -55,10 +55,12 @@ class Utils: NSObject {
                     if data?.length > 0 {
                         print("data \(data?.length)")
                         toImageView.image = UIImage(data: data!)
+                        toImageView.layer.cornerRadius = (toImageView.image?.size.width)!/2.0
                         complete!(UIImage(data: data!)!)
                     } else {
                         print("no url content data")
                         toImageView.image = placeholderImage
+                        toImageView.layer.cornerRadius = (toImageView.image?.size.width)!/2.0
                         complete!(placeholderImage)
                     }
                 }
@@ -66,6 +68,7 @@ class Utils: NSObject {
         } else {
             print("no url")
             toImageView.image = placeholderImage
+            toImageView.layer.cornerRadius = (toImageView.image?.size.width)!/2.0
             complete!(placeholderImage)
         }
     }
@@ -125,7 +128,7 @@ class Utils: NSObject {
         let view : UIView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         
         let lbl : UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-        lbl.backgroundColor = UIColor(red: 71/255.0, green: 161/255.0, blue: 1, alpha: 1)
+        lbl.backgroundColor = UIColor.jsq_messageBubbleBlueColor()
         let f = firstCharacterInString(firstName).uppercaseString
         let l = firstCharacterInString(lastName).uppercaseString
         
@@ -134,9 +137,6 @@ class Utils: NSObject {
         lbl.textColor = UIColor.whiteColor()
         
         view.addSubview(lbl)
-        view.layer.cornerRadius = view.frame.size.width/2
-        view.layer.masksToBounds = true
-        
         
         let image:UIImage = UIImage.init(view: view)
         return image

@@ -336,12 +336,12 @@ class ChatViewController: JSQMessagesViewController {
             
         }
         
-        cell.avatarImageView?.layer.cornerRadius = (cell.avatarImageView?.frame.size.width)!/2
         cell.avatarImageView?.layer.masksToBounds = true
         cell.avatarImageView?.contentMode = UIViewContentMode.ScaleAspectFill
 
         if let avatar = self.avatars[message.senderId()] {
             cell.avatarImageView!.image = avatar
+            cell.avatarImageView?.layer.cornerRadius = avatar.size.width/2.0
         }
         
         MMUser.usersWithUserIDs([message.senderId()], success: { (users) -> Void in
