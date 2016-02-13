@@ -8,6 +8,35 @@
 
 import UIKit
 
+extension UIViewController {
+    
+    public func resignOnBackgroundTouch () -> Void {
+        let onTouch = UITapGestureRecognizer.init(target: self, action: "didTouch:")
+        self.view.addGestureRecognizer(onTouch)
+    }
+    
+    @objc private func didTouch(tap : UITapGestureRecognizer) {
+        resignFirstResponder(self.view)
+    }
+    
+    private func resignFirstResponder(view : UIView) -> Bool {
+        if (view.isFirstResponder()) {
+            view.resignFirstResponder()
+            
+            return true;
+        }
+        
+        for sub in view.subviews {
+            if resignFirstResponder(sub) {
+                
+                return true;
+            }
+        }
+        
+        return false
+    }
+}
+
 class BaseViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!

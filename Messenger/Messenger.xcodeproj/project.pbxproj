@@ -89,10 +89,10 @@
 		8B901AEE1C5BBC2800AA5DF1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B901AED1C5BBC2800AA5DF1 /* Constants.swift */; };
 		8B9C67651C522D5F00661586 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C67641C522D5F00661586 /* Photo.swift */; };
 		8BA6E34C1C3D94380095F65F /* messages.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA6E34B1C3D94380095F65F /* messages.png */; };
-		8BC6B8191C6E547D00A9CBA3 /* DAKeyboardControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BC6B8181C6E547D00A9CBA3 /* DAKeyboardControl.m */; };
 		8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */; };
 		8BF254C01C49697A008719AA /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF254BF1C49697A008719AA /* Popup.swift */; };
 		8D7F515F1C6E9C0000814064 /* bg_img_1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */; };
+		8D7F51621C6EC14100814064 /* ContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7F51611C6EC14100814064 /* ContactsTableViewCell.swift */; };
 		8DB526B01C6E6CF4001D9AF9 /* messages_wh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */; };
 		8DB526B11C6E6CF4001D9AF9 /* messages_wh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526AF1C6E6CF4001D9AF9 /* messages_wh@2x.png */; };
 		8DB526B41C6E6D51001D9AF9 /* message_wh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526B21C6E6D51001D9AF9 /* message_wh.png */; };
@@ -203,12 +203,11 @@
 		8B901AED1C5BBC2800AA5DF1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Library/Constants.swift; sourceTree = "<group>"; };
 		8B9C67641C522D5F00661586 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		8BA6E34B1C3D94380095F65F /* messages.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = messages.png; sourceTree = "<group>"; };
-		8BC6B8171C6E547D00A9CBA3 /* DAKeyboardControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAKeyboardControl.h; sourceTree = "<group>"; };
-		8BC6B8181C6E547D00A9CBA3 /* DAKeyboardControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAKeyboardControl.m; sourceTree = "<group>"; };
 		8BDF49D81C32FD5500F0E51B /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		8BF254BF1C49697A008719AA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
 		8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_img_1_2.png; sourceTree = "<group>"; };
+		8D7F51611C6EC14100814064 /* ContactsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsTableViewCell.swift; sourceTree = "<group>"; };
 		8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = messages_wh.png; sourceTree = "<group>"; };
 		8DB526AF1C6E6CF4001D9AF9 /* messages_wh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messages_wh@2x.png"; sourceTree = "<group>"; };
 		8DB526B21C6E6D51001D9AF9 /* message_wh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message_wh.png; sourceTree = "<group>"; };
@@ -312,6 +311,7 @@
 		7A76D4171C6B9033004ADC49 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				8D7F51601C6EC11F00814064 /* Contacts */,
 				7A76D4181C6B9038004ADC49 /* PrivateChatsSummary */,
 				7A76D41B1C6B9075004ADC49 /* CreateNewSummary */,
 				7A76D4191C6B904A004ADC49 /* EventChannelSummary */,
@@ -407,7 +407,6 @@
 		7ABB8C2A1C6A3E0200BF441A /* 3rdParty */ = {
 			isa = PBXGroup;
 			children = (
-				8BC6B8161C6E547D00A9CBA3 /* DAKeyboardControl */,
 				7A875C1F1C6CD1A80006EEE9 /* AsyncImageView */,
 				8BDF49D71C32FD5500F0E51B /* SWRevealViewController */,
 			);
@@ -706,16 +705,6 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		8BC6B8161C6E547D00A9CBA3 /* DAKeyboardControl */ = {
-			isa = PBXGroup;
-			children = (
-				8BC6B8171C6E547D00A9CBA3 /* DAKeyboardControl.h */,
-				8BC6B8181C6E547D00A9CBA3 /* DAKeyboardControl.m */,
-			);
-			name = DAKeyboardControl;
-			path = Library/Helpers/DAKeyboardControl;
-			sourceTree = "<group>";
-		};
 		8BDF49D71C32FD5500F0E51B /* SWRevealViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -732,6 +721,14 @@
 				8BF254BF1C49697A008719AA /* Popup.swift */,
 			);
 			path = Popup;
+			sourceTree = "<group>";
+		};
+		8D7F51601C6EC11F00814064 /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				8D7F51611C6EC14100814064 /* ContactsTableViewCell.swift */,
+			);
+			name = Contacts;
 			sourceTree = "<group>";
 		};
 		E34B15ABF8CC1C3FB094E241 /* Pods */ = {
@@ -961,7 +958,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B901AEE1C5BBC2800AA5DF1 /* Constants.swift in Sources */,
-				8BC6B8191C6E547D00A9CBA3 /* DAKeyboardControl.m in Sources */,
 				7A1894D71C6D000B0068183A /* AvatarImage.swift in Sources */,
 				7A76D4121C6AAABB004ADC49 /* AskMagnetTableViewCell.swift in Sources */,
 				8BF254C01C49697A008719AA /* Popup.swift in Sources */,
@@ -982,6 +978,7 @@
 				7A875C221C6CD1A80006EEE9 /* AsyncImageView.m in Sources */,
 				8B223F4B1C33099B0096D204 /* HomeViewController.swift in Sources */,
 				8B38D2E61C5698F3006431F7 /* MapViewController.swift in Sources */,
+				8D7F51621C6EC14100814064 /* ContactsTableViewCell.swift in Sources */,
 				8B71BE541C579539006E5C1F /* VideoPlayerViewController.swift in Sources */,
 				7A76D4161C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift in Sources */,
 				8B3EBB5F1C3BE0F400BAED8E /* RearMenuViewController.swift in Sources */,
