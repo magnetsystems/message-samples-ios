@@ -8,6 +8,7 @@
 
 import UIKit
 import MagnetMax
+import AFNetworking
 
 let userCellId = "UserCellIdentifier"
 
@@ -87,7 +88,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(userCellId, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(userCellId, forIndexPath: indexPath) as! ContactsTableViewCell
         
         var user: MMUser!
         if resultSearchController.active {
@@ -123,16 +124,17 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             }
         }
         
-        cell.textLabel?.attributedText = title
-        let borderSize:CGFloat = 30
-        cell.imageView?.image = Utils.resizeImage(placeholderAvatarImage!, toSize: CGSize(width: borderSize, height: borderSize))
-        cell.imageView?.contentMode = UIViewContentMode.ScaleAspectFill
-        cell.imageView?.layer.cornerRadius = borderSize / 2
-        cell.imageView?.layer.masksToBounds = true
-
+        cell.profileText?.attributedText = title
+        let borderSize:CGFloat = 37.0
+        cell.avatarImage?.image = Utils.resizeImage(placeholderAvatarImage!, toSize: CGSize(width: borderSize, height: borderSize))
         if let url = user.avatarURL() {
-            cell.imageView?.imageURL = url
+            cell.avatarImage?.cancelImageRequestOperation()
+            cell.avatarImage?.setImageWithURL(url)
         }
+        
+        cell.avatarImage?.superview?.layer.cornerRadius = borderSize / 2.0
+        cell.avatarImage?.superview?.layer.masksToBounds = true
+        cell.avatarImage?.superview?.translatesAutoresizingMaskIntoConstraints = false
         
         return cell
     }
@@ -187,6 +189,9 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         }
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 63.0
+    }
     // MARK: - Private Methods
     
     private func addSelectedUser(selectedUser : MMUser) {
@@ -250,4 +255,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         return letterGroups
     }
     
+    override func didReceiveMemoryWarning() {
+            super.didReceiveMemoryWarning()
+        }
 }

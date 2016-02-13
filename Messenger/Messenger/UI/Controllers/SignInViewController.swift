@@ -15,18 +15,22 @@ class SignInViewController : BaseViewController {
     @IBOutlet weak var txtfPassword : UITextField!
     @IBOutlet weak var btnRemember : UISwitch!
     @IBOutlet weak var chbRememberMe: UIImageView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+    self.view.addKeyboardPanningWithActionHandler(nil)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         txtfPassword.text = ""
-        self.view.addKeyboardPanningWithActionHandler(nil)
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
     }
@@ -45,23 +49,23 @@ class SignInViewController : BaseViewController {
         
         // Validate
         if let (email, password) = validateCredential() {
-        
+            
             // Login
             self.showLoadingIndicator()
             let credential = NSURLCredential(user: email, password: password, persistence: .None)
             MMUser.login(credential, rememberMe: btnRemember.on, success: {
-                    self.hideLoadingIndicator()
-                    self.performSegueWithIdentifier(kSegueShowSlideMenu, sender: nil)
-            }, failure: { error in
-                print("[ERROR]: \(error)")
                 self.hideLoadingIndicator()
-                self.showAlert(kStr_EmailPassNotFound, title: kStr_CouldntLogin, closeTitle: kStr_Close)
+                self.performSegueWithIdentifier(kSegueShowSlideMenu, sender: nil)
+                }, failure: { error in
+                    print("[ERROR]: \(error)")
+                    self.hideLoadingIndicator()
+                    self.showAlert(kStr_EmailPassNotFound, title: kStr_CouldntLogin, closeTitle: kStr_Close)
             })
         } else {
             showAlert(kStr_FillEmailPass, title: kStr_FillEmailPass, closeTitle: kStr_Close)
         }
     }
-
+    
     private func validateCredential() -> (String, String)? {
         
         guard let email = txtfEmail.text where (email.isEmpty == false) else {
@@ -73,5 +77,9 @@ class SignInViewController : BaseViewController {
         }
         
         return (email, password)
+    }
+    
+    deinit {
+         self.view.removeKeyboardControl()
     }
 }
