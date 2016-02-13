@@ -10,6 +10,9 @@ PODS:
   - AFNetworking/Reachability (2.6.1)
   - AFNetworking/Security (2.6.1)
   - AFNetworking/Serialization (2.6.1)
+  - AFNetworking/UIKit (2.6.1):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
   - AFOAuth2Manager (2.2.1):
     - AFNetworking/NSURLConnection (~> 2.2)
   - CocoaAsyncSocket (7.4.1)
@@ -100,6 +103,7 @@ PODS:
   - NYTPhotoViewer/Core (1.0.1)
 
 DEPENDENCIES:
+  - AFNetworking/UIKit
   - Crashlytics
   - DZVideoPlayerViewController
   - Fabric
