@@ -18,6 +18,7 @@ class ChatViewController: JSQMessagesViewController {
     var notifier : NavigationNotifier?
     var messages = [Message]()
     var avatars = Dictionary<String, UIImage>()
+    var avatarsDownloading = Dictionary<String, MMUser>()
     let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
     let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     var activityIndicator : UIActivityIndicatorView?
@@ -341,24 +342,25 @@ class ChatViewController: JSQMessagesViewController {
 
         if let avatar = self.avatars[message.senderId()] {
             cell.avatarImageView!.image = avatar
-            cell.avatarImageView?.layer.cornerRadius = avatar.size.width/2.0
-        }
-        
+            cell.avatarImageView?.layer.cornerRadius = cell.avatarImageView!.bounds.size.width/2.0
+            
+        } else if avatarsDownloading[message.senderId()] == nil {
+            
+        avatarsDownloading[message.senderId()] = message.underlyingMessage.sender
+            
         MMUser.usersWithUserIDs([message.senderId()], success: { (users) -> Void in
             let user = users.first
-            
-
-            
             Utils.loadUserAvatar(user!, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user!), complete: { (image) -> Void in
+                self.avatarsDownloading.removeValueForKey(message.senderId())
                 self.avatars[message.senderId()] = image
+                collectionView.reloadData()
             })
             
             }) { (error) -> Void in
+                 self.avatarsDownloading.removeValueForKey(message.senderId())
                 cell.avatarImageView?.image = UIImage(named: "user_default")
         }
-        
-        
-        
+        }
 
         return cell
     }
