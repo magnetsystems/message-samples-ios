@@ -9,7 +9,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sample.version>2.3.2</sample.version>
+        <sample.version>2.5.0</sample.version>
     </properties>
 
     <dependencies>
