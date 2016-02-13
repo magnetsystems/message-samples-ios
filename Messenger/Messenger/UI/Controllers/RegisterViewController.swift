@@ -86,6 +86,14 @@ class RegisterViewController : BaseViewController {
         case InvalidPasswordLength
     }
     
+    private func isValidEmail(testStr:String) -> Bool {
+        // println("validate calendar: \(testStr)")
+        let emailRegEx = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+        
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluateWithObject(testStr)
+    }
+    
     private func validateCredential() throws -> (String, String, String, String) {
         // Get values from UI
         guard let firstName = txtfFirstName.text where (firstName.isEmpty == false),
@@ -93,7 +101,7 @@ class RegisterViewController : BaseViewController {
                 throw InputError.InvalidUserNames
         }
         
-        guard let email = txtfEmail.text where (email.isEmpty == false) else {
+        guard let email = txtfEmail.text where (email.isEmpty == false) && isValidEmail(email) else {
             throw InputError.InvalidEmail
         }
         
