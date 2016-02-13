@@ -21,9 +21,13 @@ class RegisterViewController : BaseViewController {
     var viewOffset: CGFloat!
     var keyboardIsShowing = false
     
+    override func viewDidLoad() {
+         super.viewDidLoad()
+        self.resignOnBackgroundTouch()
+    }
+    
     override func viewWillAppear(animated:Bool) {
         super.viewWillAppear(animated)
-        self.view.addKeyboardPanningWithActionHandler(nil)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     

@@ -28,7 +28,6 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             self.view.addGestureRecognizer(revealVC.tapGestureRecognizer())
         }
         
-        self.view.addKeyboardPanningWithActionHandler(nil)
         navigationController?.setNavigationBarHidden(false, animated: true)
         
         // Add search bar

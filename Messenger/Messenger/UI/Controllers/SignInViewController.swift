@@ -18,8 +18,7 @@ class SignInViewController : BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-    self.view.addKeyboardPanningWithActionHandler(nil)
+        self.resignOnBackgroundTouch()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -80,6 +79,5 @@ class SignInViewController : BaseViewController {
     }
     
     deinit {
-         self.view.removeKeyboardControl()
     }
 }
