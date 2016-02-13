@@ -1,13 +1,11 @@
 source 'https://github.com/CocoaPods/Specs.git'
-#Private
-source 'https://github.com/magnetsystems/iOS-Distribution.git'
 #Public
 source 'https://github.com/magnetsystems/Specs'
 
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'MagnetMax', '~> 2.4'
+pod 'MagnetMax', '~> 2.5'
 pod 'JSQMessagesViewController'
 pod 'NYTPhotoViewer', '~> 1.0.0'
 pod 'DZVideoPlayerViewController'
