@@ -118,6 +118,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     }
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
+        loadEventChannels()
         loadDetails()
     }
     
