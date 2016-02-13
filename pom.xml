@@ -110,25 +110,7 @@
                     <recursive>true</recursive>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.bazaarvoice.maven.plugins</groupId>
-                <artifactId>s3-upload-maven-plugin</artifactId>
-                <version>1.3</version>
-                <executions>
-                    <execution>
-                        <id>deploy-server-s3-objc</id>
-                        <phase>install</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <accessKey>${accessKey}</accessKey>
-                    <secretKey>${secretKey}</secretKey>
-                    <bucketName>${bucketName}</bucketName>
-                    <source>${project.build.directory}/objc-samples</source>
-                    <destination>${sample.version}/objc-samples</destination>
-                    <recursive>true</recursive>
-                </configuration>
-            </plugin>
+
 
         </plugins>
     </build>
