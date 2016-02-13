@@ -35,7 +35,11 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
                 subscribersTitle += (subscribers.indexOf(user) == subscribers.count - 1) ? displayName : "\(displayName), "
                 }
             }
+            if self.detailResponse.channelName != "askMagnet" {
             lblSubscribers.text = subscribersTitle
+            } else {
+            lblSubscribers.text = "Ask Magnet"
+            }
             
             if let messages = detailResponse.messages, content = messages.last?.messageContent {
                 lblMessage.text = content[Constants.ContentKey.Message] ?? kStr_AttachmentFile
