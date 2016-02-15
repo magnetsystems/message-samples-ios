@@ -139,6 +139,9 @@ class ChatViewController: JSQMessagesViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
+        if let textView = self.inputToolbar?.contentView?.textView where textView.isFirstResponder() {
+        self.inputToolbar?.contentView?.textView?.resignFirstResponder()
+        }
         if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage, let timestamp = lastMessage.timestamp {
             ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:timestamp)
         } else  if let chat = self.chat {
