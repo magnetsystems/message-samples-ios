@@ -129,34 +129,29 @@ public class MMAttachmentProgress : NSObject {
         guard let downloadURL = attachmentURL(attachmentID, userId: userIdentifier) else {
             fatalError("downloadURL should not be nil")
         }
-        let request = NSMutableURLRequest(URL: downloadURL)
+        let request = NSMutableURLRequest(URL: downloadURL, cachePolicy: .UseProtocolCachePolicy, timeoutInterval: 60 * 5)
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")
-        request.timeoutInterval = 60 * 5
+//        let request = NSMutableURLRequest(URL: NSURL(string: "https://cdn.sstatic.net/stackoverflow/img/sprites.png?v=3c6263c3453b")!, cachePolicy: .UseProtocolCachePolicy, timeoutInterval: 300)
         
-        var prog = progress?.downloadProgress
-        let downloadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.downloadTaskWithRequest(request, progress: &prog, destination: { targetPath, response in
-            let documentsDirectoryURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
-            let destination  = documentsDirectoryURL.URLByAppendingPathComponent("\(attachmentID)_\(response.suggestedFilename!)")
-            //            let _ = try? NSFileManager.defaultManager().removeItemAtURL(destination)
-            return destination
-            
-            }) { response, filePath, error in
-                if let e = error {
-                    failure?(error: e)
-                } else {
-                    //                guard let httpResponse = response as? NSHTTPURLResponse else {
-                    //                    fatalError("response should be of type NSHTTPURLResponse")
-                    //                }
-                    //                let headers = httpResponse.allHeaderFields["Content-Type"] as! [String: AnyObject]
-                    //                var contentType = "application/octet-stream"
-                    //                if let contentTypeHeader = headers["Content-Type"] as? String {
-                    //                    contentType = contentTypeHeader
-                    //                }
-                    success?(filePath!)
-                }
+        //        let request = NSMutableURLRequest(URL: NSURL(string: "http://media.licdn.com/mpr/mpr/shrinknp_400_400/p/3/000/202/3a4/2d8ca5f.jpg")!, cachePolicy: .UseProtocolCachePolicy, timeoutInterval: 300)
+        
+        //        let request = NSURLRequest(URL: downloadURL)
+        
+        
+        //        var prog = progress?.downloadProgress
+        let _ = progress?.downloadProgress
+        
+        let dataTask = MMCoreConfiguration.serviceAdapter.sessionManager.dataTaskWithRequest(request) { response, data, error in
+            if let e = error {
+                failure?(error: e)
+            } else {
+                let destination  = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("\(attachmentID)_\(response.suggestedFilename!)")
+                (data as? NSData)?.writeToURL(destination, atomically: true)
+                success?(destination)
+            }
         }
         
-        downloadTask.resume()
+        dataTask.resume()
     }
     
 }
