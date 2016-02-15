@@ -56,12 +56,12 @@ class Utils: NSObject {
                         print("data \(data?.length)")
                         toImageView.image = UIImage(data: data!)
                         toImageView.layer.cornerRadius = (toImageView.image?.size.width)!/2.0
-                        complete!(UIImage(data: data!)!)
+                        complete?(UIImage(data: data!)!)
                     } else {
                         print("no url content data")
                         toImageView.image = placeholderImage
                         toImageView.layer.cornerRadius = (toImageView.image?.size.width)!/2.0
-                        complete!(placeholderImage)
+                        complete?(placeholderImage)
                     }
                 }
             }
@@ -69,7 +69,7 @@ class Utils: NSObject {
             print("no url")
             toImageView.image = placeholderImage
             toImageView.layer.cornerRadius = (toImageView.image?.size.width)!/2.0
-            complete!(placeholderImage)
+            complete?(placeholderImage)
         }
     }
     

@@ -351,16 +351,16 @@ class ChatViewController: JSQMessagesViewController {
             
         avatarsDownloading[message.senderId()] = message.underlyingMessage.sender
             
-        MMUser.usersWithUserIDs([message.senderId()], success: { (users) -> Void in
+        MMUser.usersWithUserIDs([message.senderId()], success: {[weak self] (users) -> Void in
             let user = users.first
-            Utils.loadUserAvatar(user!, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user!), complete: { (image) -> Void in
-                self.avatarsDownloading.removeValueForKey(message.senderId())
-                self.avatars[message.senderId()] = image
-                collectionView.reloadData()
+            Utils.loadUserAvatar(user!, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user!), complete: {(image) -> Void in
+                self?.avatarsDownloading.removeValueForKey(message.senderId())
+                self?.avatars[message.senderId()] = image
+                self?.collectionView?.reloadData()
             })
             
-            }) { (error) -> Void in
-                 self.avatarsDownloading.removeValueForKey(message.senderId())
+            }) { [weak self] (error) -> Void in
+                 self?.avatarsDownloading.removeValueForKey(message.senderId())
                 cell.avatarImageView?.image = UIImage(named: "user_default")
         }
         }
@@ -574,6 +574,16 @@ class ChatViewController: JSQMessagesViewController {
                 mapVC.location = locationItem.coordinate
             }
         }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        
+        var newMessages:[Message] = []
+        for message in messages {
+           newMessages.append(Message(message: message.underlyingMessage))
+        }
+        messages = newMessages
     }
 }
 
