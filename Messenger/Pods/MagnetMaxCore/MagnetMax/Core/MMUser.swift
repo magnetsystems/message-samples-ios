@@ -434,6 +434,9 @@ public extension MMUser {
         }
         let userService = MMUserService()
         userService.updateProfile(updateProfileRequest, success: { user in
+            if let currentUser = currentlyLoggedInUser {
+                user.rememberMe = currentUser.rememberMe
+            }
             currentlyLoggedInUser = user
             success?(user: user)
         }) { error in
