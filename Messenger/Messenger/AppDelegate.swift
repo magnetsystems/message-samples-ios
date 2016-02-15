@@ -19,6 +19,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        // TODO: Set to 100 MB instead of 500 MB after we resize those huge images.
+        let URLCache = NSURLCache(memoryCapacity: 4 * 1024 * 1024, diskCapacity: 500 * 1024 * 1024, diskPath: nil)
+        NSURLCache.setSharedURLCache(URLCache)
+        
         // Initialize MagnetMax
         let configurationFile = NSBundle.mainBundle().pathForResource("MagnetMax", ofType: "plist")
         let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)

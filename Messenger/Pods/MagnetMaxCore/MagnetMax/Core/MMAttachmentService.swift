@@ -141,6 +141,9 @@ public class MMAttachmentProgress : NSObject {
         //        var prog = progress?.downloadProgress
         let _ = progress?.downloadProgress
         
+        // Mark the request as cacheable
+        NSURLProtocol.setProperty(7200, forKey: MMURLProtocol.cacheAgeKey, inRequest: request)
+        
         let dataTask = MMCoreConfiguration.serviceAdapter.sessionManager.dataTaskWithRequest(request) { response, data, error in
             if let e = error {
                 failure?(error: e)
