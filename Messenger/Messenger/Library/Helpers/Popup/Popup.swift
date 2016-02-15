@@ -23,5 +23,9 @@ class Popup: NSObject {
     func presentForController(controller: UIViewController) {
         controller.presentViewController(alertController, animated: true, completion: nil)
     }
+    
+    func addAction(action: UIAlertAction) {
+        alertController.addAction(action)
+    }
 
 }

@@ -51,11 +51,18 @@ class RearMenuViewController: UITableViewController {
             self.revealViewController().revealToggleAnimated(true)
             self.revealViewController().presentViewController((self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_UserProfile))!, animated: true, completion: nil)
         case IndexPathRowAction.SignOut.rawValue :
-            MMUser.logout({ () -> Void in
-                self.navigationController?.popToRootViewControllerAnimated(true)
-                }, failure: { (error) -> Void in
-                    print("[ERROR]: \(error)")
-            })
+            
+            let confirmationAlert = Popup(message: kStr_SignOutAsk, title: kStr_SignOut, closeTitle: kStr_No)
+            let okAction = UIAlertAction(title: kStr_Yes, style: .Default) { action in
+                MMUser.logout({ [weak self] () -> Void in
+                    self?.navigationController?.popToRootViewControllerAnimated(true)
+                    }, failure: { (error) -> Void in
+                        print("[ERROR]: \(error)")
+                })
+            }
+            confirmationAlert.addAction(okAction)
+            confirmationAlert.presentForController(self)
+
         case IndexPathRowAction.Home.rawValue :
             let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
             let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Home);
