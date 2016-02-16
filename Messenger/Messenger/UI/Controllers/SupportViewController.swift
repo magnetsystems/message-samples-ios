@@ -41,11 +41,13 @@ class SupportViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(Utils.name(SupportTableViewCell.classForCoder()), forIndexPath: indexPath) as! SupportTableViewCell
         cell.detailResponse = supportChannelDetails[indexPath.row]
         if let user = userForChannelDetail(supportChannelDetails[indexPath.row]) {
+            cell.ivAvatarImage.image = Utils.noAvatarImageForUser(user)
+            cell.lblAsker.text = "\(user.firstName ?? "") \(user.lastName ?? "")"
+
             if let url = user.avatarURL() {
                 cell.ivAvatarImage?.cancelImageRequestOperation()
                 cell.ivAvatarImage?.setImageWithURL(url)
             }
-            cell.lblAsker.text = "\(user.firstName ?? "") \(user.lastName ?? "")"
         }
         
         return cell

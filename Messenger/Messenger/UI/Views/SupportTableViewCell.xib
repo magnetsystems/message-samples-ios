@@ -24,7 +24,7 @@
                             <constraint firstAttribute="height" constant="10" id="w6Y-V8-N3o"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_default.png" translatesAutoresizingMaskIntoConstraints="NO" id="3d4-e9-mHN" userLabel="avatarImage">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3d4-e9-mHN" userLabel="avatarImage">
                         <rect key="frame" x="24" y="8" width="40" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="BJy-H0-hcc"/>
@@ -93,6 +93,5 @@
     </objects>
     <resources>
         <image name="disclosure.png" width="13" height="14"/>
-        <image name="user_default.png" width="89" height="89"/>
     </resources>
 </document>

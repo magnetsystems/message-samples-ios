@@ -15,19 +15,19 @@ class SupportNotifier: NSObject {
     private var count : Int = 0
     private var label : UILabel
     
-    init(cell : UITableViewCell, exceptFor : (MMXChannel)) {
+    init(cell : UITableViewCell) {
         
-        indicatorView = UIView.init(frame: CGRect.init(x: (cell.textLabel?.frame.maxX)!, y: (cell.textLabel?.frame.minY)!, width: 80, height: 20))
+        indicatorView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 100, height: 20))
+        indicatorView.center = CGPointMake(150, cell.contentView.center.y)
         
         let image = UIImageView(image: UIImage(named: "icon_alert.png"))
         image.frame = CGRect.init(x: 0, y: 0, width: 20, height: 20)
         indicatorView.addSubview(image)
         
-        label = UILabel.init(frame: CGRect.init(x: 20, y: 0, width: 60, height: 20))
+        label = UILabel.init(frame: CGRect.init(x: 30, y: 0, width: 70, height: 20))
         label.text = ""
-        label.font = UIFont.systemFontOfSize(14)
+        label.font = UIFont.systemFontOfSize(15)
         label.textColor = cell.tintColor
-//        label.transform = CGAffineTransformMakeTranslation(-5, 0)
         indicatorView.addSubview(label)
         indicatorView.hidden = true
         cell.contentView.addSubview(indicatorView)
@@ -46,6 +46,11 @@ class SupportNotifier: NSObject {
         count++
         indicatorView.hidden = false
         label.text = "\(count) new"
+    }
+    
+    func setToZero() {
+        count = 0
+        indicatorView.hidden = true
     }
 
 }
