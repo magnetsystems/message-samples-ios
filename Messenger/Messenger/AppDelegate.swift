@@ -15,7 +15,7 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    
+    weak var baseViewController : UIViewController?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -56,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             setMainWindow(rootViewController())
         }
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionEnded", name: MMXUserDidLogOutNotification, object: nil)
         Fabric.with([Crashlytics.self])
         return true
     }
@@ -76,12 +77,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.backgroundColor = UIColor.whiteColor()
         }
         self.window?.rootViewController = viewController
-        
+        self.baseViewController = viewController
     }
     
     func appendToMainWindow(viewController : UIViewController, animated : Bool) {
         viewController.modalTransitionStyle = .CrossDissolve
         self.window?.rootViewController?.presentViewController(viewController, animated: animated, completion: nil)
+        self.baseViewController = viewController
+    }
+    
+    func sessionEnded() {
+        print("[SESSION]: SESSION ENDED")
+        if let mainNav = self.baseViewController as? UINavigationController {
+            print("[SESSION]: WILL DISPLAY LOGIN")
+            mainNav.popToRootViewControllerAnimated(true)
+        }
     }
     
     func applicationWillResignActive(application: UIApplication) {

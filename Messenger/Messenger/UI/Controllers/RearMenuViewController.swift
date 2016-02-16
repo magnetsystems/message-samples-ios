@@ -54,8 +54,8 @@ class RearMenuViewController: UITableViewController {
             
             let confirmationAlert = Popup(message: kStr_SignOutAsk, title: kStr_SignOut, closeTitle: kStr_No)
             let okAction = UIAlertAction(title: kStr_Yes, style: .Default) { action in
-                MMUser.logout({ [weak self] () -> Void in
-                    self?.navigationController?.popToRootViewControllerAnimated(true)
+                MMUser.logout({() -> Void in
+                    print("[SESSION]: SESSION ENDED BY USER")
                     }, failure: { (error) -> Void in
                         print("[ERROR]: \(error)")
                 })
