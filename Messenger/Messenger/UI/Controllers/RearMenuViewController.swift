@@ -17,7 +17,8 @@ class RearMenuViewController: UITableViewController {
     
     enum IndexPathRowAction: Int {
         case UserInfo = 0
-        case Home 
+        case Home
+        case Support
 //        case Events
         case SignOut
     }
@@ -71,10 +72,28 @@ class RearMenuViewController: UITableViewController {
 //            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
 //            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
 //            self.revealViewController().pushFrontViewController(vc, animated: true);
+        case IndexPathRowAction.Support.rawValue :
+            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Support);
+            self.revealViewController().pushFrontViewController(vc, animated: true);
         default:break;
         }
 
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.row == IndexPathRowAction.Support.rawValue {
+            if let currentUser = MMUser.currentUser() {
+                if currentUser.tags == nil {
+                    return 0
+                } else if !currentUser.tags.contains(kMagnetSupportTag) {
+                    return 0
+                }
+            }
+        }
+        
+        return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
     }
 
     private func didDisconnect(notification: NSNotification) {
