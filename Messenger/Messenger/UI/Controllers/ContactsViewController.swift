@@ -126,7 +126,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         
         cell.profileText?.attributedText = title
         let borderSize:CGFloat = 37.0
-        let placeHolderImage = Utils.resizeImage(placeholderAvatarImage!, toSize: CGSize(width: borderSize, height: borderSize))
+        let placeHolderImage = Utils.noAvatarImageForUser(user)
         
         if let avatarImage = cell.avatarImage {
             Utils.loadImageWithUrl(user.avatarURL(), toImageView: avatarImage, placeholderImage: placeHolderImage)
