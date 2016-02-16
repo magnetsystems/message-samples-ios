@@ -28,6 +28,7 @@ let sb_id_Launch = "LaunchScreen"
 
 let vc_id_Chat = "ChatViewController"
 let vc_id_Home = "home"
+let vc_id_Support = "support"
 let vc_id_Events = "events"
 let vc_id_SlideMenu = "SlideMenuVC"
 let vc_id_VideoPlayer = "VideoPlayerViewController"
