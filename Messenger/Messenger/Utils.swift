@@ -6,13 +6,14 @@
 //  Copyright © 2016 Magnet Systems, Inc. All rights reserved.
 //
 
-import UIKit
-import MagnetMax
 import AFNetworking
+import MagnetMax
+import UIKit
 
 class UtilsSet {
-    var set : Set<UIImageView> = Set()
+    
     var completionBlocks : [(()->Void)] = []
+    var set : Set<UIImageView> = Set()
     
     func addCompletionBlock(completion : (()->Void)?) {
         if let completion = completion {
@@ -22,12 +23,82 @@ class UtilsSet {
 }
 
 class Utils: NSObject {
+    
+    
+    //MARK: Private Properties
+    
+    
     private static var downloadObjects : [String : String] = [:]
     private static var loadingURLs : [String : UtilsSet] = [:]
+    
+    
+    //MARK: Image Loading
+    
+    
+    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?) {
+        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, completion: nil)
+    }
+    
+    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, completion : (()->Void)?) {
+        imageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, completion: completion)
+    }
+    
+    static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage?) {
+        
+        loadImageWithUrl(user.avatarURL(), toImageView: toImageView, placeholderImage: placeholderImage)
+    }
+    
+    static func loadUserAvatarByUserID(userID : String, toImageView: UIImageView, placeholderImage:UIImage?) {
+        
+        toImageView.image = placeholderImage
+        
+        MMUser.usersWithUserIDs([userID], success: { (users) -> Void in
+            let user = users.first
+            if (user != nil) {
+                Utils.loadUserAvatar(user!, toImageView: toImageView, placeholderImage: placeholderImage)
+            }
+            }) { (error) -> Void in
+                print("error getting users \(error)")
+        }
+    }
+    
+    
+    //MARK: User Avatar Generation
+    
+    
+    static func firstCharacterInString(s: String) -> String {
+        if s == "" {
+            return ""
+        }
+        return s.substringWithRange(Range<String.Index>(start: s.startIndex, end: s.endIndex.advancedBy(-(s.characters.count - 1))))
+    }
     
     class func name(name: AnyClass) -> String {
         let ident:String = NSStringFromClass(name).componentsSeparatedByString(".").last!
         return ident
+    }
+    
+    static func noAvatarImageForUser(user : MMUser) -> UIImage {
+        return Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName ?? "")
+    }
+    
+    static func noAvatarImageForUser(firstName : String, lastName:String) -> UIImage {
+        let diameter : CGFloat = 30.0 * 3
+        
+        let view : UIView = UIView(frame: CGRect(x: 0, y: 0, width: diameter, height: diameter))
+        let lbl : UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: diameter, height: diameter))
+        lbl.backgroundColor = UIColor.jsq_messageBubbleBlueColor()
+        let f = firstCharacterInString(firstName).uppercaseString
+        let l = firstCharacterInString(lastName).uppercaseString
+        lbl.font = UIFont.systemFontOfSize(diameter * 0.5)
+        lbl.text = "\(f)\(l)"
+        lbl.textAlignment = NSTextAlignment.Center
+        lbl.textColor = UIColor.whiteColor()
+        
+        view.addSubview(lbl)
+        
+        let image:UIImage = UIImage.init(view: view)
+        return image
     }
     
     class func resizeImage(image:UIImage, toSize:CGSize) -> UIImage {
@@ -38,14 +109,14 @@ class Utils: NSObject {
         return newImage;
     }
     
-    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?) {
-       loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, completion: nil)
-    }
     
-    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, completion : (()->Void)?) {
+    //MARK: Private Methods
+    
+    
+    private static func imageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, completion : (()->Void)?) {
         
         if placeholderImage != nil {
-        toImageView.image = placeholderImage
+            toImageView.image = placeholderImage
         }
         
         guard let imageUrl = url else {
@@ -106,7 +177,7 @@ class Utils: NSObject {
                     objc_sync_enter(self.downloadObjects)
                     self.downloadObjects.removeValueForKey("\(imageView.hashValue)")
                     if image != nil {
-                    imageView.image = image
+                        imageView.image = image
                     }
                     objc_sync_exit(self.downloadObjects)
                 }
@@ -120,53 +191,4 @@ class Utils: NSObject {
         }
     }
     
-    static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage?) {
-        
-        loadImageWithUrl(user.avatarURL(), toImageView: toImageView, placeholderImage: placeholderImage)
-    }
-    
-    static func loadUserAvatarByUserID(userID : String, toImageView: UIImageView, placeholderImage:UIImage?) {
-        
-        toImageView.image = placeholderImage
-        
-        MMUser.usersWithUserIDs([userID], success: { (users) -> Void in
-            let user = users.first
-            if (user != nil) {
-                Utils.loadUserAvatar(user!, toImageView: toImageView, placeholderImage: placeholderImage)
-            }
-            }) { (error) -> Void in
-                print("error getting users \(error)")
-        }
-    }
-    
-    
-    static func noAvatarImageForUser(user : MMUser) -> UIImage {
-        return Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName ?? "")
-    }
-    
-    static func firstCharacterInString(s: String) -> String {
-        if s == "" {
-            return ""
-        }
-        return s.substringWithRange(Range<String.Index>(start: s.startIndex, end: s.endIndex.advancedBy(-(s.characters.count - 1))))
-    }
-    
-    static func noAvatarImageForUser(firstName : String, lastName:String) -> UIImage {
-        
-        let view : UIView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-        
-        let lbl : UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-        lbl.backgroundColor = UIColor.jsq_messageBubbleBlueColor()
-        let f = firstCharacterInString(firstName).uppercaseString
-        let l = firstCharacterInString(lastName).uppercaseString
-        
-        lbl.text = "\(f)\(l)"
-        lbl.textAlignment = NSTextAlignment.Center
-        lbl.textColor = UIColor.whiteColor()
-        
-        view.addSubview(lbl)
-        
-        let image:UIImage = UIImage.init(view: view)
-        return image
-    }
 }
