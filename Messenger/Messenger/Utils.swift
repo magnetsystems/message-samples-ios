@@ -8,8 +8,23 @@
 
 import UIKit
 import MagnetMax
+import AFNetworking
+
+class UtilsSet {
+    var set : Set<UIImageView> = Set()
+    var completionBlocks : [(()->Void)] = []
+    
+    func addCompletionBlock(completion : (()->Void)?) {
+        if let completion = completion {
+            completionBlocks.append(completion)
+        }
+    }
+}
 
 class Utils: NSObject {
+    private static var downloadObjects : [String : String] = [:]
+    private static var loadingURLs : [String : UtilsSet] = [:]
+    
     class func name(name: AnyClass) -> String {
         let ident:String = NSStringFromClass(name).componentsSeparatedByString(".").last!
         return ident
@@ -23,94 +38,107 @@ class Utils: NSObject {
         return newImage;
     }
     
-    static func loadUserAvatarWithUrl(url : NSURL, toImageView: UIImageView, placeholderImage:UIImage) {
+    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?) {
+       loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, completion: nil)
+    }
+    
+    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, completion : (()->Void)?) {
         
-        if url.absoluteString.characters.count > 0 {
+        if placeholderImage != nil {
+        toImageView.image = placeholderImage
+        }
+        
+        guard let imageUrl = url else {
+            print("no url content data")
+            objc_sync_enter(self.downloadObjects)
+            self.downloadObjects.removeValueForKey("\(toImageView.hashValue)")
+            objc_sync_exit(self.downloadObjects)
+            completion?()
+            return
+        }
+        
+        //TODO: ADD API
+        
+        //track image View
+        
+        objc_sync_enter(self.downloadObjects)
+        self.downloadObjects["\(toImageView.hashValue)"] = url?.path
+        objc_sync_exit(self.downloadObjects)
+        
+        if let urlPath = url?.path {
+            objc_sync_enter(self.loadingURLs)
             
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                let data = NSData(contentsOfURL:url)
-                dispatch_async(dispatch_get_main_queue()) {
-                    if data!.length > 0 {
-                        print("data \(data!.length)")
-                        toImageView.image = UIImage(data: data!)
-                    } else {
-                        print("no url content data")
-                        toImageView.image = placeholderImage
+            if self.loadingURLs[urlPath] == nil {
+                self.loadingURLs[urlPath] = UtilsSet()
+            }
+            self.loadingURLs[urlPath]?.set.insert(toImageView)
+            self.loadingURLs[urlPath]?.addCompletionBlock(completion)
+            if self.loadingURLs[urlPath]?.set.count > 1 {
+                objc_sync_exit(self.loadingURLs)
+                return
+            } else {
+                objc_sync_exit(self.loadingURLs)
+            }
+        }
+        
+        let requestOperation = AFHTTPRequestOperation(request: NSURLRequest(URL: imageUrl))
+        requestOperation.responseSerializer = AFImageResponseSerializer();
+        requestOperation.setCompletionBlockWithSuccess({ (operation, response) -> Void in
+            if let img = response as? UIImage {
+                //if last request on image view
+                pushImageToImageView(img, url: url)
+            } else {
+                pushImageToImageView(placeholderImage, url: url)
+            }
+            }) { (operation, error) -> Void in
+                pushImageToImageView(placeholderImage, url: url)
+                print("No Image")
+        }
+        requestOperation.start()
+    }
+    
+    private static func pushImageToImageView(image : UIImage?, url : NSURL?) {
+        objc_sync_enter(self.loadingURLs)
+        if let urlPath = url?.path, let loadingURLObject = self.loadingURLs[urlPath] {
+            let imageViews = loadingURLObject.set
+            for imageView in imageViews {
+                if self.downloadObjects["\(imageView.hashValue)"]  == url?.path {
+                    objc_sync_enter(self.downloadObjects)
+                    self.downloadObjects.removeValueForKey("\(imageView.hashValue)")
+                    if image != nil {
+                    imageView.image = image
                     }
+                    objc_sync_exit(self.downloadObjects)
                 }
             }
-        } else {
-            print("no url")
-            toImageView.image = placeholderImage
+            let completionBlocks = loadingURLObject.completionBlocks
+            for block in completionBlocks {
+                block()
+            }
+            self.loadingURLs.removeValueForKey(urlPath)
+            objc_sync_exit(self.loadingURLs)
         }
     }
     
-    static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage : UIImage, complete:((UIImage)->Void)?) {
-        if let url = user.avatarURL() {
-            print("user avatar url \(url)")
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                let data = NSData(contentsOfURL:url)
-                dispatch_async(dispatch_get_main_queue()) {
-                    if data?.length > 0 {
-                        print("data \(data?.length)")
-                        toImageView.image = UIImage(data: data!)
-                        toImageView.layer.cornerRadius = (toImageView.image?.size.width)!/2.0
-                        complete?(UIImage(data: data!)!)
-                    } else {
-                        print("no url content data")
-                        toImageView.image = placeholderImage
-                        toImageView.layer.cornerRadius = (toImageView.image?.size.width)!/2.0
-                        complete?(placeholderImage)
-                    }
-                }
-            }
-        } else {
-            print("no url")
-            toImageView.image = placeholderImage
-            toImageView.layer.cornerRadius = (toImageView.image?.size.width)!/2.0
-            complete?(placeholderImage)
-        }
-    }
-    
-    static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage) {
-       
-        if let url = user.avatarURL() {
-            print("user avatar url \(url)")
+    static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage?) {
         
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                let data = NSData(contentsOfURL:url)
-                dispatch_async(dispatch_get_main_queue()) {
-                    if data?.length > 0 {
-                        print("data \(data?.length)")
-                        toImageView.image = UIImage(data: data!)
-                    } else {
-                        print("no url content data")
-                        toImageView.image = placeholderImage
-                    }
-                }
-            }
-        } else {
-            print("no url")
-            toImageView.image = placeholderImage
-        }
+        loadImageWithUrl(user.avatarURL(), toImageView: toImageView, placeholderImage: placeholderImage)
     }
     
     static func loadUserAvatarByUserID(userID : String, toImageView: UIImageView, placeholderImage:UIImage?) {
         
+        toImageView.image = placeholderImage
+        
         MMUser.usersWithUserIDs([userID], success: { (users) -> Void in
             let user = users.first
             if (user != nil) {
-                Utils.loadUserAvatar(user!, toImageView: toImageView, placeholderImage: placeholderImage!)
-            } else {
-                print("fail to get users")
-                toImageView.image = placeholderImage
+                Utils.loadUserAvatar(user!, toImageView: toImageView, placeholderImage: placeholderImage)
             }
             }) { (error) -> Void in
                 print("error getting users \(error)")
         }
     }
-
+    
     
     static func noAvatarImageForUser(user : MMUser) -> UIImage {
         return Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName ?? "")

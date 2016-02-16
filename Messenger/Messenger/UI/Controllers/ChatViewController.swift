@@ -29,27 +29,27 @@ class ChatViewController: JSQMessagesViewController {
                 let isPublic = false
                 MMXChannel.channelForName(kAskMagnetChannel, isPublic: isPublic, success: { [weak self] channel in
                     self?.chat = channel
-                }, failure: { error in
-                    // Since channel is not found, attempt to create it
-                    // Magnet Employees will have the magnetsupport tag
-                    // Subscribe all Magnet employees
-                    MMUser.searchUsers("tags:\(kMagnetSupportTag)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
-//                    MMUser.searchUsers("email:*\(kMagnetEmailDomain)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
-                        let summary: String
-                        if let userName = MMUser.currentUser()?.userName {
-                            summary = "Ask Magnet for \(userName)"
-                        } else {
-                            // We should never be here!
-                            summary = "Ask Magnet for anonymous"
-                        }
-                        MMXChannel.createWithName(kAskMagnetChannel, summary: summary, isPublic: isPublic, publishPermissions: .Subscribers, subscribers: Set(users), success: { [weak self] channel in
-                            self?.chat = channel
-                        }, failure: { error in
-                            print("[ERROR]: \(error.localizedDescription)")
-                        })
                     }, failure: { error in
-                        print("[ERROR]: \(error.localizedDescription)")
-                    })
+                        // Since channel is not found, attempt to create it
+                        // Magnet Employees will have the magnetsupport tag
+                        // Subscribe all Magnet employees
+                        MMUser.searchUsers("tags:\(kMagnetSupportTag)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
+                            //                    MMUser.searchUsers("email:*\(kMagnetEmailDomain)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
+                            let summary: String
+                            if let userName = MMUser.currentUser()?.userName {
+                                summary = "Ask Magnet for \(userName)"
+                            } else {
+                                // We should never be here!
+                                summary = "Ask Magnet for anonymous"
+                            }
+                            MMXChannel.createWithName(kAskMagnetChannel, summary: summary, isPublic: isPublic, publishPermissions: .Subscribers, subscribers: Set(users), success: { [weak self] channel in
+                                self?.chat = channel
+                                }, failure: { error in
+                                    print("[ERROR]: \(error.localizedDescription)")
+                            })
+                            }, failure: { error in
+                                print("[ERROR]: \(error.localizedDescription)")
+                        })
                 })
             }
         }
@@ -114,8 +114,8 @@ class ChatViewController: JSQMessagesViewController {
         senderId = user.userID
         senderDisplayName = user.firstName
         //        showLoadEarlierMessagesHeader = true
-//        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
-//        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+        //        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
+        //        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
         
         // Find recipients
         if chat != nil {
@@ -140,12 +140,12 @@ class ChatViewController: JSQMessagesViewController {
         super.viewWillDisappear(animated)
         
         if let textView = self.inputToolbar?.contentView?.textView where textView.isFirstResponder() {
-        self.inputToolbar?.contentView?.textView?.resignFirstResponder()
+            self.inputToolbar?.contentView?.textView?.resignFirstResponder()
         }
         if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage, let timestamp = lastMessage.timestamp {
             ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:timestamp)
         } else  if let chat = self.chat {
-             ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, date:NSDate.init())
+            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, date:NSDate.init())
         }
     }
     
@@ -169,8 +169,8 @@ class ChatViewController: JSQMessagesViewController {
         
         currentChat.addSubscribers(newSubscribers, success: { [weak self] _ in
             self?.recipients = allSubscribers
-        }, failure: { error in
-            print("[ERROR]: can't add subscribers - \(error)")
+            }, failure: { error in
+                print("[ERROR]: can't add subscribers - \(error)")
         })
     }
     
@@ -227,10 +227,10 @@ class ChatViewController: JSQMessagesViewController {
         mmxMessage.sendWithSuccess( { [weak self] _ in
             button.userInteractionEnabled = true
             self?.hideSpinner()
-        }) { error in
-            button.userInteractionEnabled = true
-            self.hideSpinner()
-            print(error)
+            }) { error in
+                button.userInteractionEnabled = true
+                self.hideSpinner()
+                print(error)
         }
         finishSendingMessageAnimated(true)
     }
@@ -340,31 +340,18 @@ class ChatViewController: JSQMessagesViewController {
             
         }
         
-        cell.avatarImageView?.layer.masksToBounds = true
-        cell.avatarImageView?.contentMode = UIViewContentMode.ScaleAspectFill
-
-        if let avatar = self.avatars[message.senderId()] {
-            cell.avatarImageView!.image = avatar
-            cell.avatarImageView?.layer.cornerRadius = cell.avatarImageView!.bounds.size.width/2.0
-            
-        } else if avatarsDownloading[message.senderId()] == nil {
-            
-        avatarsDownloading[message.senderId()] = message.underlyingMessage.sender
-            
-        MMUser.usersWithUserIDs([message.senderId()], success: {[weak self] (users) -> Void in
-            let user = users.first
-            Utils.loadUserAvatar(user!, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user!), complete: {(image) -> Void in
-                self?.avatarsDownloading.removeValueForKey(message.senderId())
-                self?.avatars[message.senderId()] = image
-                self?.collectionView?.reloadData()
-            })
-            
-            }) { [weak self] (error) -> Void in
-                 self?.avatarsDownloading.removeValueForKey(message.senderId())
-                cell.avatarImageView?.image = UIImage(named: "user_default")
+        if cell.avatarImageView?.image == nil {
+            cell.avatarImageView?.layer.masksToBounds = true
+            cell.avatarImageView?.contentMode = UIViewContentMode.ScaleAspectFill
         }
+        //cell.avatarImageView!.image = avatar
+        if let layout = collectionView.collectionViewLayout as? JSQMessagesCollectionViewFlowLayout {
+            cell.avatarImageView?.layer.cornerRadius = layout.incomingAvatarViewSize.width/2.0
         }
-
+        if let user = message.underlyingMessage.sender {
+            Utils.loadUserAvatar(user, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user))
+        }
+        
         return cell
     }
     
@@ -494,7 +481,7 @@ class ChatViewController: JSQMessagesViewController {
                 let subscribers = Set(users)
                 
                 // Set channel name
-//                let name = "\(self!.senderDisplayName)_\(ChannelManager.sharedInstance.formatter.currentTimeStamp())"
+                //                let name = "\(self!.senderDisplayName)_\(ChannelManager.sharedInstance.formatter.currentTimeStamp())"
                 let name = NSUUID().UUIDString
                 
                 MMXChannel.createWithName(name, summary: "\(self!.senderDisplayName) private chat", isPublic: false, publishPermissions: .Subscribers, subscribers: subscribers, success: { [weak self] channel in
@@ -509,12 +496,12 @@ class ChatViewController: JSQMessagesViewController {
             } else {
                 self?.chat = channels.first
             }
-        }) { error in
-            print("[ERROR]: \(error)")
-            let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: kStr_Close, handler: { _ in
-                self.navigationController?.popViewControllerAnimated(true)
-            })
-            alert.presentForController(self)
+            }) { error in
+                print("[ERROR]: \(error)")
+                let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: kStr_Close, handler: { _ in
+                    self.navigationController?.popViewControllerAnimated(true)
+                })
+                alert.presentForController(self)
         }
     }
     
@@ -532,11 +519,6 @@ class ChatViewController: JSQMessagesViewController {
         channel.messagesBetweenStartDate(dayAgo, endDate: now, limit: 100, offset: 0, ascending: true, success: { [weak self] _ , messages in
             self?.messages = messages.map({ mmxMessage in
                 let message = Message(message: mmxMessage)
-                if message.isMediaMessage() {
-                    message.mediaCompletionBlock = { [weak self] () in
-                        self?.collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forItem: messages.indexOf(mmxMessage)!, inSection: 0)])
-                    }
-                }
                 return message
             })
             self?.collectionView?.reloadData()
@@ -581,7 +563,7 @@ class ChatViewController: JSQMessagesViewController {
         
         var newMessages:[Message] = []
         for message in messages {
-           newMessages.append(Message(message: message.underlyingMessage))
+            newMessages.append(Message(message: message.underlyingMessage))
         }
         messages = newMessages
     }
@@ -605,9 +587,9 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
                 showSpinner()
                 mmxMessage.sendWithSuccess({ [weak self] _ in
                     self?.hideSpinner()
-                }) { error in
-                    self.hideSpinner()
-                    print(error)
+                    }) { error in
+                        self.hideSpinner()
+                        print(error)
                 }
                 finishSendingMessageAnimated(true)
             }
@@ -620,9 +602,9 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             mmxMessage.addAttachment(attachment)
             mmxMessage.sendWithSuccess({ [weak self] _ in
                 self?.hideSpinner()
-            }) { error in
-                self.hideSpinner()
-                print(error)
+                }) { error in
+                    self.hideSpinner()
+                    print(error)
             }
             finishSendingMessageAnimated(true)
         }

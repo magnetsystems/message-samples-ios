@@ -126,11 +126,12 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         
         cell.profileText?.attributedText = title
         let borderSize:CGFloat = 37.0
-        cell.avatarImage?.image = Utils.resizeImage(placeholderAvatarImage!, toSize: CGSize(width: borderSize, height: borderSize))
-        if let url = user.avatarURL() {
-            cell.avatarImage?.cancelImageRequestOperation()
-            cell.avatarImage?.setImageWithURL(url)
+        let placeHolderImage = Utils.resizeImage(placeholderAvatarImage!, toSize: CGSize(width: borderSize, height: borderSize))
+        
+        if let avatarImage = cell.avatarImage {
+            Utils.loadImageWithUrl(user.avatarURL(), toImageView: avatarImage, placeholderImage: placeHolderImage)
         }
+     
         
         cell.avatarImage?.superview?.layer.cornerRadius = borderSize / 2.0
         cell.avatarImage?.superview?.layer.masksToBounds = true
