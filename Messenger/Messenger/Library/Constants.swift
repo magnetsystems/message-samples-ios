@@ -46,4 +46,4 @@ let kAskMagnetChannel = "askMagnet"
 let kMagnetEmailDomain = "@magnet.com"
 
 let kMinPasswordLength = 6
-
+let kMinNameLength = 1

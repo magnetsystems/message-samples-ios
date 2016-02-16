@@ -48,10 +48,10 @@ class RegisterViewController : BaseViewController {
             // Register
             let user = MMUser()
             user.userName = email
-            user.firstName = firstName
-            user.lastName = lastName
+            user.firstName = trimWhiteSpace(firstName)
+            user.lastName = trimWhiteSpace(lastName)
             user.password = password
-            user.email = email
+            user.email = trimWhiteSpace(email)
             
             // Login
             let credential = NSURLCredential(user: email, password: password, persistence: .None)
@@ -83,6 +83,10 @@ class RegisterViewController : BaseViewController {
     
     // MARK: Private implementation
     
+    private func trimWhiteSpace(string : String) -> String {
+      return string.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+    }
+    
     private enum InputError: ErrorType {
         case InvalidUserNames
         case InvalidEmail
@@ -100,12 +104,12 @@ class RegisterViewController : BaseViewController {
     
     private func validateCredential() throws -> (String, String, String, String) {
         // Get values from UI
-        guard let firstName = txtfFirstName.text where (firstName.isEmpty == false),
-            let lastName = txtfLastName.text where (lastName.isEmpty == false) else {
+        guard let firstName = txtfFirstName.text where (trimWhiteSpace(firstName).characters.count >= kMinNameLength),
+            let lastName = txtfLastName.text where (trimWhiteSpace(lastName).characters.count >= kMinNameLength) else {
                 throw InputError.InvalidUserNames
         }
         
-        guard let email = txtfEmail.text where (email.isEmpty == false) && isValidEmail(email) else {
+        guard let email = txtfEmail.text where (email.isEmpty == false) && isValidEmail(trimWhiteSpace(email)) else {
             throw InputError.InvalidEmail
         }
         
