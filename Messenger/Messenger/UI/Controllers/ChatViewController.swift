@@ -519,6 +519,11 @@ class ChatViewController: JSQMessagesViewController {
         channel.messagesBetweenStartDate(dayAgo, endDate: now, limit: 100, offset: 0, ascending: true, success: { [weak self] _ , messages in
             self?.messages = messages.map({ mmxMessage in
                 let message = Message(message: mmxMessage)
+                if message.isMediaMessage() {
+                    message.mediaCompletionBlock = { [weak self] () in
+                        self?.collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forItem: messages.indexOf(mmxMessage)!, inSection: 0)])
+                    }
+                }
                 return message
             })
             self?.collectionView?.reloadData()
