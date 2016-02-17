@@ -36,4 +36,10 @@
 
 @property (nonatomic, strong) MMXChannel *channel;
 
+/**
+ The unique identifer for the owner.
+ */
+@property (nonatomic, copy) NSString *userID;
+
+
 @end

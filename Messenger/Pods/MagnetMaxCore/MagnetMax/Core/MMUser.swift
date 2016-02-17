@@ -109,7 +109,14 @@ public extension MMUser {
             let updateProfileRequest = MMUpdateProfileRequest(user: MMUser.currentUser())
             updateProfileRequest.password = nil
             updateProfileRequest.extras["hasAvatar"] = "true"
+            self.extras["hasAvatar"] = "true"
             MMUser.updateProfile(updateProfileRequest, success: { user in
+                // http://stackoverflow.com/questions/26260401/nsurlcache-does-not-clear-stored-responses-in-ios8
+//                if let avatarURL = self.avatarURL() {
+//                    let request = NSURLRequest(URL: avatarURL)
+//                    NSURLCache.sharedURLCache().removeCachedResponseForRequest(request)
+//                }
+                NSURLCache.sharedURLCache().removeAllCachedResponses()
                 success?(url: self.avatarURL())
             }, failure:failure)
         }, failure:failure)
@@ -264,11 +271,26 @@ public extension MMUser {
     /**
      Refreshes A Saved User
      */
-    @objc static private func refreshUser() {
+    @objc static private func refreshUser(notification : NSNotification) {
         tokenRefreshStatus = tokenRefreshStatus.union(.HasRefreshed)
         if tokenRefreshStatus.contains(.WaitingForRefresh) {
-            resumeSession()
+            if let error : NSError = notification.userInfo?["error"] as? NSError {
+                refreshUserFailed(error)
+            } else {
+                resumeSession()
+            }
         }
+    }
+
+    /**
+     Called when A Saved User failed to refresh
+     */
+    static private func refreshUserFailed(error : NSError) {
+        for i in (0..<resumeSessionCompletionBlocks.count).reverse() {
+            let completion = resumeSessionCompletionBlocks[i]
+            completion(error: error)
+        }
+        resumeSessionCompletionBlocks = []
     }
 
     static private func updateCurrentUser(user : MMUser, rememberMe : Bool) {
@@ -486,7 +508,7 @@ public extension MMUser {
             static var token: dispatch_once_t = 0
         }
         dispatch_once(&Pred.token, {
-             NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshUser" , name: MMServiceAdapterDidRestoreHATTokenNotification, object: nil)
+             NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshUser:" , name: MMServiceAdapterDidRestoreHATTokenNotification, object: nil)
             })
     }
     
