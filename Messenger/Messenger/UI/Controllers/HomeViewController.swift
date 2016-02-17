@@ -135,7 +135,12 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         
         switch indexPath.section {
         case 0: return EventChannelTableViewCell.cellHeight()
-        case 1 : return AskMagnetTableViewCell.cellHeight()
+        case 1 :
+            if let tags = MMUser.currentUser()?.tags where tags.contains(kMagnetSupportTag) {
+                return 0
+            } else {
+                return AskMagnetTableViewCell.cellHeight()
+            }
         case 2 :
             if detailResponses.count > 0 {return SummaryResponseCell.cellHeight()}
             else { return CreateChatCell.cellHeight()}
@@ -208,31 +213,6 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
         
         let detailResponse = detailResponses[indexPath.row]
-        var isLastPersonInChat = false
-        if detailResponse.messages.count > 0 {
-            isLastPersonInChat = detailResponse.messages.last?.sender?.userID == MMUser.currentUser()?.userID
-        }
-        
-        if isLastPersonInChat {
-            // Current user must be the owner of the channel to delete it
-            if let chat = ChannelManager.sharedInstance.isOwnerForChat(detailResponse.channelName) {
-                let delete = UITableViewRowAction(style: .Normal, title: kStr_Delete) { [weak self] action, index in
-                    chat.deleteWithSuccess({ _ in
-                        if let channelIndexToRemove = self?.detailResponses.indexOf({$0.channelName == detailResponse.channelName}) {
-                            self?.detailResponses.removeAtIndex(channelIndexToRemove)
-                        }
-                        if let channelIndexToRemove = self?.filteredDetailResponses.indexOf({$0.channelName == detailResponse.channelName}) {
-                            self?.filteredDetailResponses.removeAtIndex(channelIndexToRemove)
-                        }
-                        tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
-                    }, failure: { error in
-                        print(error)
-                    })
-                }
-                delete.backgroundColor = UIColor.redColor()
-                return [delete]
-            }
-        }
         
         // Unsubscribe
         let leave = UITableViewRowAction(style: .Normal, title: kStr_Leave) { [weak self] action, index in
