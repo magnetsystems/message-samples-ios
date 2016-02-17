@@ -13,6 +13,8 @@ class RearMenuViewController: UITableViewController {
     
     @IBOutlet weak var username: UILabel!
     @IBOutlet weak var userAvatar: UIImageView!
+    @IBOutlet weak var version: UILabel!
+    
     var notifier : SupportNotifier?
     
     enum IndexPathRowAction: Int {
@@ -21,6 +23,7 @@ class RearMenuViewController: UITableViewController {
         case Support
 //        case Events
         case SignOut
+        case Version
     }
     
     override func viewDidLoad() {
@@ -32,7 +35,10 @@ class RearMenuViewController: UITableViewController {
         
         userAvatar.layer.cornerRadius = userAvatar.frame.size.width/2
         userAvatar.layer.masksToBounds = true
-        
+        self.version.text = ""
+        if let version = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as? String {
+            self.version.text = "v\(version)"
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -47,39 +53,41 @@ class RearMenuViewController: UITableViewController {
     // MARK: - Table view delegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch indexPath.row {
-        case IndexPathRowAction.UserInfo.rawValue:
-            self.revealViewController().revealToggleAnimated(true)
-            self.revealViewController().presentViewController((self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_UserProfile))!, animated: true, completion: nil)
-        case IndexPathRowAction.SignOut.rawValue :
-            
-            let confirmationAlert = Popup(message: kStr_SignOutAsk, title: kStr_SignOut, closeTitle: kStr_No)
-            let okAction = UIAlertAction(title: kStr_Yes, style: .Default) { action in
-                MMUser.logout({() -> Void in
-                    print("[SESSION]: SESSION ENDED BY USER")
-                    }, failure: { (error) -> Void in
-                        print("[ERROR]: \(error)")
-                })
+        if indexPath.section == 0 {
+            switch indexPath.row {
+            case IndexPathRowAction.UserInfo.rawValue:
+                self.revealViewController().revealToggleAnimated(true)
+                self.revealViewController().presentViewController((self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_UserProfile))!, animated: true, completion: nil)
+            case IndexPathRowAction.SignOut.rawValue :
+                
+                let confirmationAlert = Popup(message: kStr_SignOutAsk, title: kStr_SignOut, closeTitle: kStr_No)
+                let okAction = UIAlertAction(title: kStr_Yes, style: .Default) { action in
+                    MMUser.logout({() -> Void in
+                        print("[SESSION]: SESSION ENDED BY USER")
+                        }, failure: { (error) -> Void in
+                            print("[ERROR]: \(error)")
+                    })
+                }
+                confirmationAlert.addAction(okAction)
+                confirmationAlert.presentForController(self)
+                
+            case IndexPathRowAction.Home.rawValue :
+                let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Home);
+                self.revealViewController().pushFrontViewController(vc, animated: true);
+                //        case IndexPathRowAction.Events.rawValue:
+                //            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+                //            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
+                //            self.revealViewController().pushFrontViewController(vc, animated: true);
+            case IndexPathRowAction.Support.rawValue :
+                notifier?.setToZero()
+                let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+                let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Support);
+                self.revealViewController().pushFrontViewController(vc, animated: true);
+            default:break;
             }
-            confirmationAlert.addAction(okAction)
-            confirmationAlert.presentForController(self)
-
-        case IndexPathRowAction.Home.rawValue :
-            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
-            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Home);
-            self.revealViewController().pushFrontViewController(vc, animated: true);
-//        case IndexPathRowAction.Events.rawValue:
-//            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
-//            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
-//            self.revealViewController().pushFrontViewController(vc, animated: true);
-        case IndexPathRowAction.Support.rawValue :
-            notifier?.setToZero()
-            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
-            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Support);
-            self.revealViewController().pushFrontViewController(vc, animated: true);
-        default:break;
         }
-
+        
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
