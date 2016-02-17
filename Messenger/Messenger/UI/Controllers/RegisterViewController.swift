@@ -72,7 +72,7 @@ class RegisterViewController : BaseViewController {
                     } else if MMXHttpError(rawValue: error.code) == .ServerTimeout || MMXHttpError(rawValue: error.code) == .Offline {
                         self?.showAlert(NSLocalizedString("Please check your internet connection and try again", comment: ""), title: NSLocalizedString("Not Connected to the Internet", comment: ""), closeTitle: kStr_Close)
                     } else {
-                        self?.showAlert(NSLocalizedString("Could not register, please try again.", comment: ""), title: NSLocalizedString("Opps!", comment: ""), closeTitle: kStr_Close)
+                        self?.showAlert(NSLocalizedString("Could not register, please try again.", comment: ""), title: NSLocalizedString("Oops!", comment: ""), closeTitle: kStr_Close)
                     }
                 })
         } catch InputError.InvalidUserNames {
