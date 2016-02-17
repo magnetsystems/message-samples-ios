@@ -10,6 +10,7 @@ import UIKit
 import MagnetMax
 import Fabric
 import Crashlytics
+import AFNetworking
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -57,6 +58,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionEnded", name: MMXUserDidLogOutNotification, object: nil)
+        AFNetworkReachabilityManager.sharedManager().setReachabilityStatusChangeBlock { (status) -> Void in
+            if status == .NotReachable {
+             NSNotificationCenter.defaultCenter().postNotificationName(kNotificationNetworkOffline, object: self)
+            }
+        }
+        AFNetworkReachabilityManager.sharedManager().startMonitoring()
         Fabric.with([Crashlytics.self])
         return true
     }

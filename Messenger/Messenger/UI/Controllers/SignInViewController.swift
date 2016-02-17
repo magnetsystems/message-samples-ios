@@ -8,6 +8,7 @@
 
 import UIKit
 import MagnetMax
+import AFNetworking
 
 class SignInViewController : BaseViewController {
     
@@ -58,7 +59,11 @@ class SignInViewController : BaseViewController {
                 }, failure: { error in
                     print("[ERROR]: \(error)")
                     self.hideLoadingIndicator()
-                    self.showAlert(kStr_EmailPassNotFound, title: kStr_CouldntLogin, closeTitle: kStr_Close)
+                    if MMXHttpError(rawValue: error.code) == .ServerTimeout || MMXHttpError(rawValue: error.code) == .Offline {
+                        self.showAlert(NSLocalizedString("Please check your internet connection and try again", comment: ""), title: NSLocalizedString("Not Connected to the Internet", comment: ""), closeTitle: kStr_Close)
+                    } else {
+                        self.showAlert(kStr_EmailPassNotFound, title: kStr_CouldntLogin, closeTitle: kStr_Close)
+                    }
             })
         } else {
             showAlert(kStr_FillEmailPass, title: kStr_FillEmailPass, closeTitle: kStr_Close)

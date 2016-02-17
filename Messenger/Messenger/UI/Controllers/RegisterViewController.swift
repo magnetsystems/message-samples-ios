@@ -8,6 +8,7 @@
 
 import UIKit
 import MagnetMax
+import AFNetworking
 
 class RegisterViewController : BaseViewController {
     
@@ -41,6 +42,7 @@ class RegisterViewController : BaseViewController {
     //MARK: Handlers
     
     @IBAction func registerAction() {
+        
         do {
             // Validate
             let (firstName, lastName, email, password) = try validateCredential()
@@ -61,13 +63,16 @@ class RegisterViewController : BaseViewController {
             user.register({ [weak self] user in
                 self?.login(credential)
                 }, failure: { [weak self] error in
-                    if error.code == 409 {
-                        // The user already exists, let's attempt a login
-                        self?.login(credential)
+                    
+                    self?.hideLoadingIndicator()
+                    print("[ERROR]: \(error)")
+                    
+                    if MMXHttpError(rawValue: error.code) == .Conflict {
+                        self?.showAlert(NSLocalizedString("Sorry, that username is already taken. Please select a new username and try again.", comment: ""), title: NSLocalizedString("Username Taken.", comment : ""), closeTitle: kStr_Close)
+                    } else if MMXHttpError(rawValue: error.code) == .ServerTimeout || MMXHttpError(rawValue: error.code) == .Offline {
+                        self?.showAlert(NSLocalizedString("Please check your internet connection and try again", comment: ""), title: NSLocalizedString("Not Connected to the Internet", comment: ""), closeTitle: kStr_Close)
                     } else {
-                        print("[ERROR]: \(error)")
-                        self?.hideLoadingIndicator()
-                        self?.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: kStr_Close)
+                        self?.showAlert(NSLocalizedString("Could not register, please try again.", comment: ""), title: NSLocalizedString("Opps!", comment: ""), closeTitle: kStr_Close)
                     }
                 })
         } catch InputError.InvalidUserNames {
@@ -75,7 +80,7 @@ class RegisterViewController : BaseViewController {
         } catch InputError.InvalidEmail {
             self.showAlert(kStr_EnterEmail, title: kStr_FieldRequired, closeTitle: kStr_Close)
         } catch InputError.InvalidPassword {
-            self.showAlert(kStr_EnterPasswordAndVerify, title: kStr_PasssNotMatch, closeTitle: kStr_Close)
+            self.showAlert(kStr_EnterPasswordAndVerify, title: kStr_FieldRequired, closeTitle: kStr_Close)
         } catch InputError.InvalidPasswordLength {
             self.showAlert(kStr_EnterPasswordLength, title: kStr_PasswordShort, closeTitle: kStr_Close)
         } catch { }
@@ -128,18 +133,12 @@ class RegisterViewController : BaseViewController {
     func login(credential: NSURLCredential) {
         
         MMUser.login(credential, rememberMe: true, success: { [weak self] in
-            // Initialize Magnet Message
-            MagnetMax.initModule(MMX.sharedInstance(), success: {
                 self?.hideLoadingIndicator()
                 self?.performSegueWithIdentifier(kSegueRegisterToHome, sender: nil)
-                }, failure: { error in
-                    self?.hideLoadingIndicator()
-                    print("[ERROR]: \(error)")
-            })
             }, failure: { [weak self] error  in
                 self?.hideLoadingIndicator()
                 print("[ERROR]: \(error.localizedDescription)")
-                self?.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: kStr_Close)
+                self?.navigationController?.popToRootViewControllerAnimated(true)
             })
     }
     

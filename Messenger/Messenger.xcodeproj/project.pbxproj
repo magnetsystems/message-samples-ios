@@ -96,6 +96,7 @@
 		8BABFD591C738C7E004D5827 /* SupportNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BABFD581C738C7E004D5827 /* SupportNotifier.swift */; };
 		8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */; };
 		8BF254C01C49697A008719AA /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF254BF1C49697A008719AA /* Popup.swift */; };
+		8D4413F61C74FBA90008314B /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4413F51C74FBA90008314B /* Errors.swift */; };
 		8D7F515F1C6E9C0000814064 /* bg_img_1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */; };
 		8D7F51621C6EC14100814064 /* ContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7F51611C6EC14100814064 /* ContactsTableViewCell.swift */; };
 		8DB526B01C6E6CF4001D9AF9 /* messages_wh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */; };
@@ -216,6 +217,7 @@
 		8BDF49D81C32FD5500F0E51B /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		8BF254BF1C49697A008719AA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
+		8D4413F51C74FBA90008314B /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_img_1_2.png; sourceTree = "<group>"; };
 		8D7F51611C6EC14100814064 /* ContactsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsTableViewCell.swift; sourceTree = "<group>"; };
 		8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = messages_wh.png; sourceTree = "<group>"; };
@@ -544,6 +546,7 @@
 		8B2E53CC1C2AC31900C9AC47 /* Messenger */ = {
 			isa = PBXGroup;
 			children = (
+				8D4413F51C74FBA90008314B /* Errors.swift */,
 				8B2E53CD1C2AC31900C9AC47 /* AppDelegate.swift */,
 				7ABB8C2C1C6A413200BF441A /* LaunchScreen.storyboard */,
 				8B2E53D11C2AC31900C9AC47 /* Main.storyboard */,
@@ -1018,6 +1021,7 @@
 				8B6AA87D1C3C3BB100DE3C42 /* DetailsViewController.swift in Sources */,
 				8B8E803C1C2AE733008D8C43 /* RegisterViewController.swift in Sources */,
 				8B8E80331C2ACAC8008D8C43 /* BaseViewController.swift in Sources */,
+				8D4413F61C74FBA90008314B /* Errors.swift in Sources */,
 				8B8E80351C2ACB15008D8C43 /* SignInViewController.swift in Sources */,
 				3A1795E41C4D39140038596D /* LocationManager.swift in Sources */,
 				8B81C1321C3C21D800C186B6 /* Message.swift in Sources */,

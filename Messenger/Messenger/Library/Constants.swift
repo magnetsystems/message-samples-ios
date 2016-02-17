@@ -35,6 +35,8 @@ let vc_id_VideoPlayer = "VideoPlayerViewController"
 let vc_id_ContactsNav = "ContactsNavigationController"
 let vc_id_UserProfile = "userProfileVC"
 
+let kNotificationNetworkOffline = "com.magnet.network.offline"
+
 let kSegueShowChatFromChatActivity = "showChatFromChannelSummary"
 let kSegueShowContactSelector = "showContactsSelector"
 let kSegueShowSlideMenu = "showSlideMenuVC"
