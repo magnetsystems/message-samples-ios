@@ -598,9 +598,9 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
             let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
             
-            if let data = UIImagePNGRepresentation(pickedImage) {
+            if let data = UIImageJPEGRepresentation(pickedImage, 0.8) {
                 
-                let attachment = MMAttachment(data: data, mimeType: "image/PNG")
+                let attachment = MMAttachment(data: data, mimeType: "image/jpg")
                 mmxMessage.addAttachment(attachment)
                 showSpinner()
                 mmxMessage.sendWithSuccess({ [weak self] _ in
