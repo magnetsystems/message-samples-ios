@@ -439,9 +439,9 @@ public extension MMUser {
             }
             currentlyLoggedInUser = user
             success?(user: user)
-        }) { error in
-            failure?(error: error)
-        }.executeInBackground(nil)
+            }) { error in
+                failure?(error: error)
+            }.executeInBackground(nil)
     }
     
     override public func isEqual(object: AnyObject?) -> Bool {
