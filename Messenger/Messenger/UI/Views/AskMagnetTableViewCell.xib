@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -13,35 +12,21 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="M91-2w-P5s" id="ZLT-Vp-g5z">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_askmagnet" translatesAutoresizingMaskIntoConstraints="NO" id="2hq-MI-7y5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
                     </imageView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="At9-Le-90N" userLabel="newMessageIndicatior">
-                        <rect key="frame" x="67" y="29" width="10" height="10"/>
-                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_group_magnet.png" translatesAutoresizingMaskIntoConstraints="NO" id="u2f-h7-XGK" userLabel="messageIcon">
+                        <rect key="frame" x="73" y="25" width="30" height="30"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="10" id="5ue-nH-zeA"/>
-                            <constraint firstAttribute="width" secondItem="At9-Le-90N" secondAttribute="height" multiplier="1:1" id="L2e-XM-fhf"/>
+                            <constraint firstAttribute="height" constant="30" id="LRe-qj-a5s"/>
+                            <constraint firstAttribute="width" constant="30" id="v6k-Ai-kfq"/>
                         </constraints>
-                    </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="messages_wh.png" translatesAutoresizingMaskIntoConstraints="NO" id="u2f-h7-XGK" userLabel="messageIcon">
-                        <rect key="frame" x="83" y="29" width="26" height="22"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="35" id="Zrt-SD-xhm"/>
-                            <constraint firstAttribute="width" secondItem="u2f-h7-XGK" secondAttribute="height" multiplier="13:11" id="hIS-LU-tzB"/>
-                            <constraint firstAttribute="height" constant="22" id="sPa-Kp-fff"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="Zrt-SD-xhm"/>
-                            </mask>
-                        </variation>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ask Magnet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Ky-BY-zeZ">
-                        <rect key="frame" x="112" y="29.5" width="97.5" height="20.5"/>
+                        <rect key="frame" x="111" y="29" width="98" height="21"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -53,38 +38,39 @@
                             <constraint firstAttribute="height" constant="13" id="skD-9J-dr2"/>
                         </constraints>
                     </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="At9-Le-90N" userLabel="newMessageIndicatior">
+                        <rect key="frame" x="55" y="35" width="10" height="10"/>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="10" id="Dy2-55-14D"/>
+                            <constraint firstAttribute="width" constant="10" id="zlx-eF-rgi"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="2hq-MI-7y5" firstAttribute="top" secondItem="ZLT-Vp-g5z" secondAttribute="top" id="2qU-Yw-6XJ"/>
                     <constraint firstItem="b7a-GE-v4k" firstAttribute="centerY" secondItem="ZLT-Vp-g5z" secondAttribute="centerY" id="Aup-FT-uQV"/>
                     <constraint firstAttribute="trailing" secondItem="2hq-MI-7y5" secondAttribute="trailing" id="Cms-gn-cTx"/>
-                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="leading" secondItem="u2f-h7-XGK" secondAttribute="trailing" constant="3" id="H81-wW-Rm0"/>
+                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="centerY" secondItem="2hq-MI-7y5" secondAttribute="centerY" id="H6c-tP-e4T"/>
+                    <constraint firstItem="u2f-h7-XGK" firstAttribute="leading" secondItem="At9-Le-90N" secondAttribute="trailing" constant="8" id="Icy-as-rYa"/>
                     <constraint firstItem="b7a-GE-v4k" firstAttribute="trailing" secondItem="ZLT-Vp-g5z" secondAttribute="trailingMargin" id="JPF-0P-fBk"/>
-                    <constraint firstItem="u2f-h7-XGK" firstAttribute="top" secondItem="At9-Le-90N" secondAttribute="top" id="KOh-T4-bNV"/>
-                    <constraint firstItem="At9-Le-90N" firstAttribute="width" secondItem="At9-Le-90N" secondAttribute="height" multiplier="1:1" id="QAc-ee-AJM"/>
-                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="centerY" secondItem="u2f-h7-XGK" secondAttribute="centerY" id="X9u-uD-4rO"/>
+                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="centerX" secondItem="2hq-MI-7y5" secondAttribute="centerX" id="UYa-AE-PqD"/>
+                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="leading" secondItem="u2f-h7-XGK" secondAttribute="trailing" constant="8" id="XbU-wG-SoU"/>
+                    <constraint firstItem="At9-Le-90N" firstAttribute="centerY" secondItem="2hq-MI-7y5" secondAttribute="centerY" id="YEm-s2-nsm"/>
                     <constraint firstAttribute="bottom" secondItem="2hq-MI-7y5" secondAttribute="bottom" id="coJ-zv-D7U"/>
-                    <constraint firstItem="u2f-h7-XGK" firstAttribute="leading" secondItem="At9-Le-90N" secondAttribute="trailing" constant="6" id="jV4-u7-6LG"/>
-                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="centerY" secondItem="ZLT-Vp-g5z" secondAttribute="centerY" id="lNa-FD-8Zz"/>
-                    <constraint firstItem="u2f-h7-XGK" firstAttribute="centerY" secondItem="At9-Le-90N" secondAttribute="centerY" id="oXd-lm-1U0"/>
-                    <constraint firstItem="4Ky-BY-zeZ" firstAttribute="centerX" secondItem="ZLT-Vp-g5z" secondAttribute="centerX" id="taG-YR-D2H"/>
+                    <constraint firstItem="u2f-h7-XGK" firstAttribute="centerY" secondItem="4Ky-BY-zeZ" secondAttribute="centerY" id="fNs-hU-zx6"/>
                     <constraint firstItem="2hq-MI-7y5" firstAttribute="leading" secondItem="ZLT-Vp-g5z" secondAttribute="leading" id="yVd-wP-Gkd"/>
                 </constraints>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="oXd-lm-1U0"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="vNewMessageIndicator" destination="At9-Le-90N" id="dwH-rq-lBq"/>
             </connections>
-            <point key="canvasLocation" x="190" y="244"/>
+            <point key="canvasLocation" x="216" y="238"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="arrow_right.png" width="25" height="25"/>
         <image name="bg_askmagnet" width="320" height="66"/>
-        <image name="messages_wh.png" width="76" height="74"/>
+        <image name="icon_group_magnet.png" width="88" height="88"/>
     </resources>
 </document>

@@ -61,6 +61,8 @@
 		8B38D2ED1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B38D2EA1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX@3x.png */; };
 		8B3EBB5F1C3BE0F400BAED8E /* RearMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3EBB5E1C3BE0F400BAED8E /* RearMenuViewController.swift */; };
 		8B3EBB611C3BF80300BAED8E /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3EBB601C3BF80200BAED8E /* ContactsViewController.swift */; };
+		8B4C8E6F1C74DE6500315377 /* icon_group_magnet.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B4C8E6E1C74DE6500315377 /* icon_group_magnet.png */; };
+		8B4C8E711C74DF6900315377 /* user_group.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B4C8E701C74DF6900315377 /* user_group.png */; };
 		8B6AA87D1C3C3BB100DE3C42 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6AA87C1C3C3BB100DE3C42 /* DetailsViewController.swift */; };
 		8B71BE541C579539006E5C1F /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B71BE521C579539006E5C1F /* VideoPlayerViewController.swift */; };
 		8B71BE551C579539006E5C1F /* VideoPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B71BE531C579539006E5C1F /* VideoPlayerViewController.xib */; };
@@ -180,6 +182,8 @@
 		8B38D2EA1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "NYTPhotoViewerCloseButtonX@3x.png"; sourceTree = "<group>"; };
 		8B3EBB5E1C3BE0F400BAED8E /* RearMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RearMenuViewController.swift; sourceTree = "<group>"; };
 		8B3EBB601C3BF80200BAED8E /* ContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
+		8B4C8E6E1C74DE6500315377 /* icon_group_magnet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_group_magnet.png; sourceTree = "<group>"; };
+		8B4C8E701C74DF6900315377 /* user_group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_group.png; sourceTree = "<group>"; };
 		8B6AA87C1C3C3BB100DE3C42 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		8B71BE521C579539006E5C1F /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		8B71BE531C579539006E5C1F /* VideoPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoPlayerViewController.xib; sourceTree = "<group>"; };
@@ -273,6 +277,8 @@
 		7A508DD81C6A42350041B429 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				8B4C8E701C74DF6900315377 /* user_group.png */,
+				8B4C8E6E1C74DE6500315377 /* icon_group_magnet.png */,
 				7A76D4021C6A7F1C004ADC49 /* user_default.png */,
 				7A508DD91C6A42350041B429 /* input_search.png */,
 			);
@@ -890,6 +896,7 @@
 				8B71BE761C57B2E1006E5C1F /* videoplayer_shrink@2x.png in Resources */,
 				8B0909A81C3AE9010042F361 /* MagnetMax.plist in Resources */,
 				8B09099E1C3AB5C60042F361 /* new_message@2x.png in Resources */,
+				8B4C8E711C74DF6900315377 /* user_group.png in Resources */,
 				8B71BE711C57B2E1006E5C1F /* videoplayer_pause@3x.png in Resources */,
 				8B71BE751C57B2E1006E5C1F /* videoplayer_shrink@1x.png in Resources */,
 				8B71BE551C579539006E5C1F /* VideoPlayerViewController.xib in Resources */,
@@ -898,6 +905,7 @@
 				8B71BE721C57B2E1006E5C1F /* videoplayer_play@1x.png in Resources */,
 				7A76D3F01C6A5A13004ADC49 /* slider_close@2x.png in Resources */,
 				8B71BE731C57B2E1006E5C1F /* videoplayer_play@2x.png in Resources */,
+				8B4C8E6F1C74DE6500315377 /* icon_group_magnet.png in Resources */,
 				7ABB8C2E1C6A413200BF441A /* LaunchScreen.storyboard in Resources */,
 				7A76D3FC1C6A60EA004ADC49 /* logo_magnet.png in Resources */,
 				8B2E53D31C2AC31900C9AC47 /* Main.storyboard in Resources */,

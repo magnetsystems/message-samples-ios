@@ -17,6 +17,13 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
     @IBOutlet weak var lblMessage : UILabel!
     @IBOutlet weak var ivMessageIcon : UIImageView!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        ivMessageIcon.layer.cornerRadius = ivMessageIcon.bounds.width / 2
+        ivMessageIcon.clipsToBounds = true
+    }
+    
     override var detailResponse : MMXChannelDetailResponse! {
         didSet {
             super.detailResponse = self.detailResponse
@@ -32,13 +39,13 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
             
             for user in subscribers {
                 if let displayName = user.displayName {
-                subscribersTitle += (subscribers.indexOf(user) == subscribers.count - 1) ? displayName : "\(displayName), "
+                    subscribersTitle += (subscribers.indexOf(user) == subscribers.count - 1) ? displayName : "\(displayName), "
                 }
             }
-            if self.detailResponse.channelName != "askMagnet" {
-            lblSubscribers.text = subscribersTitle
+            if self.detailResponse.channelName != kAskMagnetChannel {
+                lblSubscribers.text = subscribersTitle
             } else {
-            lblSubscribers.text = "Ask Magnet"
+                lblSubscribers.text = "Ask Magnet"
             }
             
             if let messages = detailResponse.messages, content = messages.last?.messageContent {
@@ -48,7 +55,20 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
             }
             
             lblLastTime.text = ChannelManager.sharedInstance.formatter.displayTime(detailResponse.lastPublishedTime!)
-            ivMessageIcon.image = (detailResponse.subscribers.count > 2) ? UIImage(named: "messages.png") : UIImage(named: "message.png")
+            if detailResponse.subscribers.count > 2 {
+                ivMessageIcon.image = UIImage(named: "user_group.png")
+            } else if let userProfile = subscribers.first {
+                MMUser.usersWithUserIDs([userProfile.userId], success: { [weak self] users in
+                    if let user = users.first {
+                        self?.ivMessageIcon.image = Utils.noAvatarImageForUser(user)
+                        if let url = user.avatarURL() {
+                            self?.ivMessageIcon.setImageWithURL(url)
+                        }
+                    }
+                    }, failure: { error in
+                        print("[ERROR]: \(error)")
+                })
+            }
         }
     }
 }

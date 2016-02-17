@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -13,7 +13,7 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JT9-53-9eF" id="iE5-Fh-Lw1">
-                <rect key="frame" x="0.0" y="0.0" width="600" height="69.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="600" height="69"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hvE-oc-GRt" userLabel="newMessageIndicatior">
@@ -24,10 +24,10 @@
                             <constraint firstAttribute="height" constant="10" id="w6Y-V8-N3o"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="messages.png" translatesAutoresizingMaskIntoConstraints="NO" id="3d4-e9-mHN" userLabel="messageIcon">
-                        <rect key="frame" x="24" y="8" width="35" height="30"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_group.png" translatesAutoresizingMaskIntoConstraints="NO" id="3d4-e9-mHN" userLabel="messageIcon">
+                        <rect key="frame" x="24" y="8" width="35" height="35"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="30" id="BJy-H0-hcc"/>
+                            <constraint firstAttribute="height" constant="35" id="BJy-H0-hcc"/>
                             <constraint firstAttribute="width" constant="35" id="Q9m-oY-s5v"/>
                         </constraints>
                     </imageView>
@@ -92,6 +92,6 @@
     </objects>
     <resources>
         <image name="disclosure.png" width="13" height="14"/>
-        <image name="messages.png" width="76" height="74"/>
+        <image name="user_group.png" width="88" height="88"/>
     </resources>
 </document>
