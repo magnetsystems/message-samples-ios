@@ -42,7 +42,7 @@ class Message : NSObject, JSQMessageData {
         case .Location:
             let messageContent = self.underlyingMessage.messageContent
             let locationMediaItem = JSQLocationMediaItem()
-            locationMediaItem.appliesMediaViewMaskAsOutgoing = false
+            locationMediaItem.appliesMediaViewMaskAsOutgoing = self.senderId() == MMUser.currentUser()?.userID
             
             if let latitude = Double(messageContent["latitude"]!), let longitude = Double(messageContent["longitude"]!) {
                 let location = CLLocation(latitude: latitude, longitude: longitude)
@@ -54,7 +54,7 @@ class Message : NSObject, JSQMessageData {
             
         case .Photo:
             let photoMediaItem = JSQPhotoMediaItem()
-            photoMediaItem.appliesMediaViewMaskAsOutgoing = false
+            photoMediaItem.appliesMediaViewMaskAsOutgoing = self.senderId() == MMUser.currentUser()?.userID
             photoMediaItem.image = nil
             
             let attachment = self.underlyingMessage.attachments?.first
@@ -71,7 +71,7 @@ class Message : NSObject, JSQMessageData {
             
         case .Video:
             let videoMediaItem = JSQVideoMediaItem()
-            videoMediaItem.appliesMediaViewMaskAsOutgoing = false
+            videoMediaItem.appliesMediaViewMaskAsOutgoing = self.senderId() == MMUser.currentUser()?.userID
             videoMediaItem.isReadyToPlay = true
             
             let attachment = self.underlyingMessage.attachments?.first
