@@ -24,6 +24,7 @@
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
+                                 @"userID": @"userId",
                                  };
     NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
     [attributeMappings addEntriesFromDictionary:dictionary];

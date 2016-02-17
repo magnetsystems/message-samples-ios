@@ -84,10 +84,10 @@ class SupportViewController: UITableViewController {
                     
                     let formatter = ChannelManager.sharedInstance.formatter
                     let sortedDetails = detailResponses.sort({
-                        formatter.dateForStringTime($0.lastPublishedTime)?.timeIntervalSince1970 < formatter.dateForStringTime($1.lastPublishedTime)?.timeIntervalSince1970
+                        formatter.dateForStringTime($0.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime($1.lastPublishedTime)?.timeIntervalSince1970
                     })
                     
-                    self?.supportChannelDetails = sortedDetails
+                    self?.supportChannelDetails = sortedDetails.filter { $0.messages.count != 0 }
                     
                     let IDs = (channels as NSArray).valueForKey("ownerUserID") as! [String]
                     MMUser.usersWithUserIDs(IDs, success: { [weak self] users in

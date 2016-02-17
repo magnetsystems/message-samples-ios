@@ -51,7 +51,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         // Magnet Employees will have the magnetsupport tag
         // Hide the Ask Magnet option for Magnet employees
         askMagnet = [MMXChannelDetailResponse()]
-        if !isMagnetEmployee() {
+        if !Utils.isMagnetEmployee() {
 //            self.loadAskMagnetChannel()
                 
         }
@@ -303,7 +303,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         
         // Get all channels the current user is subscribed to
         MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
-            let channels = allChannels.filter { !$0.name.hasPrefix("global_") && ( $0.name != "askMagnet" || (self != nil && self!.isMagnetEmployee()) ) }
+            let channels = allChannels.filter { !$0.name.hasPrefix("global_") && $0.name != kAskMagnetChannel }
             ChannelManager.sharedInstance.channels = channels
             if channels.count > 0 {
                 // Get details
@@ -350,14 +350,6 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     private func endRefreshing() {
         refreshControl?.endRefreshing()
         tableView.reloadData()
-    }
-    
-    private func isMagnetEmployee() -> Bool {
-//        print(MMUser.currentUser())
-        if let currentUser = MMUser.currentUser() where ( currentUser.tags != nil && currentUser.tags.contains(kMagnetSupportTag) ) {
-            return true
-        }
-        return false
     }
 
 }

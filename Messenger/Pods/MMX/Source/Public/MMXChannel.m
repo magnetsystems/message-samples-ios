@@ -841,7 +841,11 @@
     NSMutableDictionary *channelMap = [NSMutableDictionary new];
     
     for (MMXChannel *channel in channels) {
-        [channelMap setObject:channel forKey:channel.name];
+        NSString *channelName = channel.name;
+        if (!channel.isPublic) {
+            channelName = [NSString stringWithFormat:@"%@#%@", channel.ownerUserID, channelName];
+        }
+        [channelMap setObject:channel forKey:channelName];
         MMXChannelLookupKey *channelRequestObject = [[MMXChannelLookupKey alloc] init];
         channelRequestObject.ownerUserID = channel.ownerUserID;
         channelRequestObject.privateChannel = channel.privateChannel;
@@ -854,6 +858,9 @@
     MMCall *call = [pubSubService getSummary:channelSummary
                                      success:^(NSArray<MMXChannelDetailResponse *>*response) {
                                          for (MMXChannelDetailResponse *details in response) {
+                                             if (!details.channel.isPublic && (details.userID && ![details.channelName hasPrefix:details.userID])) {
+                                                 details.channelName = [NSString stringWithFormat:@"%@#%@", details.userID, details.channelName];
+                                             }
                                              details.channel = [channelMap objectForKey:details.channelName];
                                          }
                                          if (success) {

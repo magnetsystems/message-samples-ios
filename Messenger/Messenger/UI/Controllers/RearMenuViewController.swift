@@ -101,12 +101,8 @@ class RearMenuViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.row == IndexPathRowAction.Support.rawValue {
-            if let currentUser = MMUser.currentUser() {
-                if (currentUser.tags == nil) {
-                    return 0
-                } else if !currentUser.tags.contains(kMagnetSupportTag) {
-                    return 0
-                }
+            if !Utils.isMagnetEmployee() {
+                return 0
             }
         }
         

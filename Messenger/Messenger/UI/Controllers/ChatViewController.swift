@@ -519,6 +519,11 @@ class ChatViewController: JSQMessagesViewController {
         channel.messagesBetweenStartDate(dayAgo, endDate: now, limit: 100, offset: 0, ascending: true, success: { [weak self] _ , messages in
             self?.messages = messages.map({ mmxMessage in
                 let message = Message(message: mmxMessage)
+                if message.isMediaMessage() {
+                    message.mediaCompletionBlock = { [weak self] () in
+                        self?.collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forItem: messages.indexOf(mmxMessage)!, inSection: 0)])
+                    }
+                }
                 return message
             })
             self?.collectionView?.reloadData()
@@ -580,9 +585,9 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
             let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
             let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
             
-            if let data = UIImagePNGRepresentation(pickedImage) {
+            if let data = UIImageJPEGRepresentation(pickedImage, 0.8) {
                 
-                let attachment = MMAttachment(data: data, mimeType: "image/PNG")
+                let attachment = MMAttachment(data: data, mimeType: "image/jpg")
                 mmxMessage.addAttachment(attachment)
                 showSpinner()
                 mmxMessage.sendWithSuccess({ [weak self] _ in
