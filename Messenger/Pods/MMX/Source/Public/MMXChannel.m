@@ -841,11 +841,7 @@
     NSMutableDictionary *channelMap = [NSMutableDictionary new];
     
     for (MMXChannel *channel in channels) {
-        NSString *channelName = channel.name;
-        if (!channel.isPublic) {
-            channelName = [NSString stringWithFormat:@"%@#%@", channel.ownerUserID, channelName];
-        }
-        [channelMap setObject:channel forKey:channelName];
+        [channelMap setObject:channel forKey:channel.channelID];
         MMXChannelLookupKey *channelRequestObject = [[MMXChannelLookupKey alloc] init];
         channelRequestObject.ownerUserID = channel.ownerUserID;
         channelRequestObject.privateChannel = channel.privateChannel;
@@ -859,7 +855,9 @@
                                      success:^(NSArray<MMXChannelDetailResponse *>*response) {
                                          for (MMXChannelDetailResponse *details in response) {
                                              NSString *channelName = details.channelName;
-                                             if (!details.channel.isPublic && (details.userID && ![details.channelName hasPrefix:details.userID])) {
+                                             // TODO: Use details.isPublic instead when it's implemented on the server
+                                             BOOL isPublic = (details.userID == nil);
+                                             if (!isPublic) {
                                                  channelName = [NSString stringWithFormat:@"%@#%@", details.userID, details.channelName];
                                              }
                                              details.channel = [channelMap objectForKey:channelName];
@@ -947,6 +945,15 @@
 }
 
 #pragma mark - Override Getters
+
+- (NSString *)channelID {
+    NSString *channelName = self.name;
+    if (!self.isPublic) {
+        channelName = [NSString stringWithFormat:@"%@#%@", self.ownerUserID, channelName];
+    }
+    
+    return channelName;
+}
 
 - (NSDate *)lastTimeActive {
     return _lastTimeActive ?: self.creationDate;

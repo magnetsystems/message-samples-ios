@@ -77,7 +77,16 @@ class ChannelManager {
         return nil
     }
     
-    func getLastViewTimeForChannel(name: String) -> NSDate? {
+    func nameForChannel(channel: MMXChannel) -> String {
+        let key = channel.name == kAskMagnetChannel ? channel.channelID : channel.name
+        
+        return key
+    }
+    
+    func getLastViewTimeForChannel(channel: MMXChannel) -> NSDate? {
+        
+        let name = nameForChannel(channel)
+        
         if let string = MMUser.currentUser()?.extras[name] {
             if let interval : NSTimeInterval = NSTimeInterval(string)  {
             return NSDate(timeIntervalSince1970: interval)
@@ -87,7 +96,9 @@ class ChannelManager {
         return nil
     }
     
-    func getLastMessageForChannel(name: String) -> String? {
+    func getLastMessageForChannel(channel: MMXChannel) -> String? {
+        let name = nameForChannel(channel)
+        
         return MMUser.currentUser()?.extras["\(name)_last_message_id"]
     }
      
@@ -96,10 +107,12 @@ class ChannelManager {
     }
     
     func saveLastViewTimeForChannel(channel: MMXChannel, message : MMXMessage?, date : NSDate) {
+        let name = nameForChannel(channel)
+        
         if let user = MMUser.currentUser() {
-            user.extras[channel.name] = "\(date.timeIntervalSince1970)"
+            user.extras[name] = "\(date.timeIntervalSince1970)"
             if let msg = message {
-            user.extras["\(channel.name)_last_message_id"] = msg.messageID
+            user.extras["\(name)_last_message_id"] = msg.messageID
             }
             
             let updateRequest = MMUpdateProfileRequest.init(user: user)
