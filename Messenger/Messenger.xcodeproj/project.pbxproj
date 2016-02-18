@@ -39,7 +39,6 @@
 		7A76D4161C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76D4151C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift */; };
 		7A76D41D1C6B90BA004ADC49 /* CreateChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76D41C1C6B90BA004ADC49 /* CreateChatCell.swift */; };
 		7A76D41F1C6B90ED004ADC49 /* CreateChatCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A76D41E1C6B90EC004ADC49 /* CreateChatCell.xib */; };
-		7A875C221C6CD1A80006EEE9 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A875C211C6CD1A80006EEE9 /* AsyncImageView.m */; };
 		7ABB8C2E1C6A413200BF441A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7ABB8C2C1C6A413200BF441A /* LaunchScreen.storyboard */; };
 		7AD897DB1C6BCEDD000A85DE /* icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AD897DA1C6BCEDD000A85DE /* icon_info.png */; };
 		7AD897DD1C6BD216000A85DE /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD897DC1C6BD216000A85DE /* UserProfileViewController.swift */; };
@@ -157,8 +156,6 @@
 		7A76D4151C6ABF2C004ADC49 /* ChannelDetailBaseTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelDetailBaseTVCell.swift; path = ../../UI/Views/ChannelDetailBaseTVCell.swift; sourceTree = "<group>"; };
 		7A76D41C1C6B90BA004ADC49 /* CreateChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChatCell.swift; sourceTree = "<group>"; };
 		7A76D41E1C6B90EC004ADC49 /* CreateChatCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateChatCell.xib; sourceTree = "<group>"; };
-		7A875C201C6CD1A80006EEE9 /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
-		7A875C211C6CD1A80006EEE9 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
 		7ABB8C2D1C6A413200BF441A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7AD897DA1C6BCEDD000A85DE /* icon_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_info.png; sourceTree = "<group>"; };
 		7AD897DC1C6BD216000A85DE /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -406,16 +403,6 @@
 			name = Flow;
 			sourceTree = "<group>";
 		};
-		7A875C1F1C6CD1A80006EEE9 /* AsyncImageView */ = {
-			isa = PBXGroup;
-			children = (
-				7A875C201C6CD1A80006EEE9 /* AsyncImageView.h */,
-				7A875C211C6CD1A80006EEE9 /* AsyncImageView.m */,
-			);
-			name = AsyncImageView;
-			path = Library/Helpers/AsyncImageView;
-			sourceTree = "<group>";
-		};
 		7ABB8C291C6A3DEF00BF441A /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -432,7 +419,6 @@
 		7ABB8C2A1C6A3E0200BF441A /* 3rdParty */ = {
 			isa = PBXGroup;
 			children = (
-				7A875C1F1C6CD1A80006EEE9 /* AsyncImageView */,
 				8BDF49D71C32FD5500F0E51B /* SWRevealViewController */,
 			);
 			name = 3rdParty;
@@ -1019,7 +1005,6 @@
 				7A76D3FE1C6A76F4004ADC49 /* Strings.swift in Sources */,
 				8B71BE7A1C57BB42006E5C1F /* DateFormatter.swift in Sources */,
 				8B3EBB611C3BF80300BAED8E /* ContactsViewController.swift in Sources */,
-				7A875C221C6CD1A80006EEE9 /* AsyncImageView.m in Sources */,
 				8B223F4B1C33099B0096D204 /* HomeViewController.swift in Sources */,
 				8B38D2E61C5698F3006431F7 /* MapViewController.swift in Sources */,
 				8BABFD531C733DE1004D5827 /* SupportTableViewCell.swift in Sources */,
