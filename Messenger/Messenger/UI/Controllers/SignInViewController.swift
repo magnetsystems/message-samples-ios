@@ -8,51 +8,68 @@
 
 import UIKit
 import MagnetMax
+import AFNetworking
 
 class SignInViewController : BaseViewController {
     
     @IBOutlet weak var txtfEmail : UITextField!
     @IBOutlet weak var txtfPassword : UITextField!
     @IBOutlet weak var btnRemember : UISwitch!
-
+    @IBOutlet weak var chbRememberMe: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.resignOnBackgroundTouch()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         txtfPassword.text = ""
         navigationController?.setNavigationBarHidden(true, animated: animated)
-
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
     }
     
+    @IBAction func selectCheckbox(sender: UIButton) {
+        if btnRemember.on {
+            btnRemember.on = false;
+            chbRememberMe.image = UIImage(named: "check_off");
+        } else {
+            btnRemember.on = true;
+            chbRememberMe.image = UIImage(named: "check_on");
+        }
+    }
+    
     @IBAction func signInAction() {
         
-//        self.performSegueWithIdentifier("showSlideMenuVC", sender: nil)
-
         // Validate
         if let (email, password) = validateCredential() {
-        
+            
             // Login
             self.showLoadingIndicator()
             let credential = NSURLCredential(user: email, password: password, persistence: .None)
             MMUser.login(credential, rememberMe: btnRemember.on, success: {
-                    self.hideLoadingIndicator()
-                    self.performSegueWithIdentifier("showSlideMenuVC", sender: nil)
-            }, failure: { error in
-                print("[ERROR]: \(error)")
                 self.hideLoadingIndicator()
-                self.showAlert("Username and password not found.\n Please try again.", title: "Couldn't log in", closeTitle: "Close")
+                self.performSegueWithIdentifier(kSegueShowSlideMenu, sender: nil)
+                }, failure: { error in
+                    print("[ERROR]: \(error)")
+                    self.hideLoadingIndicator()
+                    if MMXHttpError(rawValue: error.code) == .ServerTimeout || MMXHttpError(rawValue: error.code) == .Offline {
+                        self.showAlert(kStr_NoInternetError, title: kStr_NoInternetErrorTitle, closeTitle: kStr_Close)
+                    } else {
+                        self.showAlert(kStr_EmailPassNotFound, title: kStr_CouldntLogin, closeTitle: kStr_Close)
+                    }
             })
         } else {
-            showAlert("Please fill in email and password", title: "Please fill in email and password", closeTitle: "Close")
+            showAlert(kStr_FillEmailPass, title: kStr_FillEmailPass, closeTitle: kStr_Close)
         }
     }
-
+    
     private func validateCredential() -> (String, String)? {
         
         guard let email = txtfEmail.text where (email.isEmpty == false) else {
@@ -66,15 +83,6 @@ class SignInViewController : BaseViewController {
         return (email, password)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    deinit {
     }
-    */
-
 }

@@ -641,7 +641,7 @@ int const kReconnectionTimerInterval = 4;
 
 - (void)updatePresenceWithPriority:(NSInteger)priorityValue {
 	NSXMLElement *priority = [NSXMLElement elementWithName:@"priority" stringValue:[@(priorityValue) stringValue]];
-	XMPPPresence * presence = [XMPPPresence presenceWithType:(priorityValue >= 0) ? @"available" : @"unavailable"];
+	XMPPPresence * presence = [XMPPPresence presenceWithType:(priorityValue >= 0) ? nil : @"unavailable"];
 	[presence addChild:priority];
 	[self.xmppStream sendElement:presence];
 }

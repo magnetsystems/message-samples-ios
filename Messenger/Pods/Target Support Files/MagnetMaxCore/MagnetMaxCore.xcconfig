@@ -1,6 +1,6 @@
 ENABLE_BITCODE = NO
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/MagnetMaxCore" "${PODS_ROOT}/Headers/Public"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/MagnetMaxCore" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Crashlytics" "${PODS_ROOT}/Headers/Public/Fabric"
 OTHER_LDFLAGS = -ObjC -all_load -l"icucore" -framework "CFNetwork" -framework "CoreData" -framework "Foundation" -framework "Security" -framework "SystemConfiguration" -framework "UIKit"
 OTHER_SWIFT_FLAGS = $(inherited) "-D" "COCOAPODS"
 PODS_ROOT = ${SRCROOT}

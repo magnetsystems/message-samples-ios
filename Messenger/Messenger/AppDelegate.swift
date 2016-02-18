@@ -8,28 +8,31 @@
 
 import UIKit
 import MagnetMax
+import Fabric
+import Crashlytics
+import AFNetworking
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    
+    weak var baseViewController : UIViewController?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        let URLCache = NSURLCache(memoryCapacity: 4 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024, diskPath: nil)
+        NSURLCache.setSharedURLCache(URLCache)
         
         // Initialize MagnetMax
         let configurationFile = NSBundle.mainBundle().pathForResource("MagnetMax", ofType: "plist")
         let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)
         MagnetMax.configure(configuration!)
         
-        //        MMXLogger.sharedLogger().level = .Verbose
-        //        MMXLogger.sharedLogger().startLogging()
-        
         
         let settings = UIUserNotificationSettings(forTypes: [.Badge,.Alert,.Sound], categories: nil)
         application.registerUserNotificationSettings(settings);
         
-        //is user alread logged In ?
+//        is user alread logged In ?
         setMainWindow(launchViewController())
         self.window?.makeKeyAndVisible()
         
@@ -37,42 +40,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             MMUser.resumeSession({ () -> Void in
                 if let navController : UINavigationController = self.rootViewController() as? UINavigationController {
                     if MMUser.sessionStatus() == .LoggedIn {
-                        if let viewController = navController.storyboard?.instantiateViewControllerWithIdentifier("SlideMenuVC") {
+                        
+                        MMX.start()
+                        
+                        if let viewController = navController.storyboard?.instantiateViewControllerWithIdentifier(vc_id_SlideMenu) as? SWRevealViewController {
                             navController.pushViewController(viewController, animated: false)
                         }
                     }
-                    self.appendToMainWindow(navController, animated: true)
+                    self.appendToMainWindow(navController, animated: false)
                 }
                 }, failure: { (error) -> Void in
-                    self.appendToMainWindow(self.rootViewController(), animated: true)
+                    self.setMainWindow(self.rootViewController())
             })
         } else {
-            appendToMainWindow(rootViewController(), animated: true)
+            setMainWindow(rootViewController())
         }
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionEnded", name: MMXUserDidLogOutNotification, object: nil)
+        AFNetworkReachabilityManager.sharedManager().setReachabilityStatusChangeBlock { (status) -> Void in
+            if status == .NotReachable {
+             NSNotificationCenter.defaultCenter().postNotificationName(kNotificationNetworkOffline, object: self)
+            }
+        }
+        AFNetworkReachabilityManager.sharedManager().startMonitoring()
+        Fabric.with([Crashlytics.self])
         return true
     }
     
     func launchViewController() -> UIViewController {
-        let storyboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        return storyboard.instantiateViewControllerWithIdentifier("main")
+        let storyboard = UIStoryboard(name: sb_id_Launch, bundle: nil)
+        return storyboard.instantiateInitialViewController()!;
     }
     
     func rootViewController() -> UIViewController {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        return storyboard.instantiateViewControllerWithIdentifier("baseNavigationController")
+        let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+        return storyboard.instantiateInitialViewController()!
     }
     
     func setMainWindow(viewController : UIViewController) {
+        if self.window == nil {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.backgroundColor = UIColor.whiteColor()
+        }
         self.window?.rootViewController = viewController
-        
+        self.baseViewController = viewController
     }
     
     func appendToMainWindow(viewController : UIViewController, animated : Bool) {
         viewController.modalTransitionStyle = .CrossDissolve
         self.window?.rootViewController?.presentViewController(viewController, animated: animated, completion: nil)
+        self.baseViewController = viewController
+    }
+    
+    func sessionEnded() {
+        print("[SESSION]: SESSION ENDED")
+        if let mainNav = self.baseViewController as? UINavigationController {
+            print("[SESSION]: WILL DISPLAY LOGIN")
+            mainNav.popToRootViewControllerAnimated(true)
+        }
     }
     
     func applicationWillResignActive(application: UIApplication) {

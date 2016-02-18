@@ -8,6 +8,9 @@
 
 import UIKit
 import MagnetMax
+import AFNetworking
+
+let userCellId = "UserCellIdentifier"
 
 protocol ContactsViewControllerDelegate: class {
     func contactsControllerDidFinish(with selectedUsers: [MMUser])
@@ -25,6 +28,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     var filteredRecipients = [MMUser]()
     var selectedUsers : [MMUser] = []
     let resultSearchController = UISearchController(searchResultsController: nil)
+    let placeholderAvatarImage = UIImage(named: "user_default")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,7 +88,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("UserCellIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(userCellId, forIndexPath: indexPath) as! ContactsTableViewCell
         
         var user: MMUser!
         if resultSearchController.active {
@@ -120,7 +124,18 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             }
         }
         
-        cell.textLabel?.attributedText = title
+        cell.profileText?.attributedText = title
+        let borderSize:CGFloat = 37.0
+        let placeHolderImage = Utils.noAvatarImageForUser(user)
+        
+        if let avatarImage = cell.avatarImage {
+            Utils.loadImageWithUrl(user.avatarURL(), toImageView: avatarImage, placeholderImage: placeHolderImage)
+        }
+     
+        
+        cell.avatarImage?.superview?.layer.cornerRadius = borderSize / 2.0
+        cell.avatarImage?.superview?.layer.masksToBounds = true
+        cell.avatarImage?.superview?.translatesAutoresizingMaskIntoConstraints = false
         
         return cell
     }
@@ -168,13 +183,16 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         }
         filteredRecipients = allUsers.filter { user in
             let searchString = searchController.searchBar.text!.lowercaseString
-            return user.firstName.lowercaseString.containsString(searchString) || user.lastName.lowercaseString.containsString(searchString)
+            return (user.firstName != nil && user.firstName.lowercaseString.containsString(searchString)) || (user.lastName != nil && user.lastName.lowercaseString.containsString(searchString))
         }
         
         tableView.reloadData()
         }
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 63.0
+    }
     // MARK: - Private Methods
     
     private func addSelectedUser(selectedUser : MMUser) {
@@ -238,4 +256,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         return letterGroups
     }
     
+    override func didReceiveMemoryWarning() {
+            super.didReceiveMemoryWarning()
+        }
 }

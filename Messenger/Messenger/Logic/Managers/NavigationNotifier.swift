@@ -43,7 +43,7 @@ class NavigationNotifier: NSObject {
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
         
-        guard let ch = mmxMessage.channel where ch.name != channel.name else {
+        guard let ch = mmxMessage.channel where ch.name.lowercaseString != channel.name.lowercaseString else {
             return
         }
         

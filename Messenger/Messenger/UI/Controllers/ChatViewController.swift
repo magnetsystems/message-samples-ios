@@ -11,20 +11,59 @@ import MagnetMax
 import JSQMessagesViewController
 import MobileCoreServices
 import NYTPhotoViewer
+//import Toucan
 
 class ChatViewController: JSQMessagesViewController {
     
     var notifier : NavigationNotifier?
     var messages = [Message]()
     var avatars = Dictionary<String, UIImage>()
+    var avatarsDownloading = Dictionary<String, MMUser>()
     let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
     let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     var activityIndicator : UIActivityIndicatorView?
+    var canLeaveChat = false
+    var isAskMagnetChannel = false {
+        didSet {
+            if isAskMagnetChannel {
+                let isPublic = false
+                MMXChannel.channelForName(kAskMagnetChannel, isPublic: isPublic, success: { [weak self] channel in
+                    self?.chat = channel
+                    }, failure: { error in
+                        // Since channel is not found, attempt to create it
+                        // Magnet Employees will have the magnetsupport tag
+                        // Subscribe all Magnet employees
+                        MMUser.searchUsers("tags:\(kMagnetSupportTag)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
+                            //                    MMUser.searchUsers("email:*\(kMagnetEmailDomain)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
+                            let summary: String
+                            if let userName = MMUser.currentUser()?.userName {
+                                summary = "Ask Magnet for \(userName)"
+                            } else {
+                                // We should never be here!
+                                summary = "Ask Magnet for anonymous"
+                            }
+                            MMXChannel.createWithName(kAskMagnetChannel, summary: summary, isPublic: isPublic, publishPermissions: .Subscribers, subscribers: Set(users), success: { [weak self] channel in
+                                self?.chat = channel
+                                }, failure: { error in
+                                    print("[ERROR]: \(error.localizedDescription)")
+                            })
+                            }, failure: { error in
+                                print("[ERROR]: \(error.localizedDescription)")
+                        })
+                })
+            }
+        }
+    }
     var chat : MMXChannel? {
         didSet {
             //Register for a notification to receive the message
             if let channel = chat {
-                notifier = NavigationNotifier.init(viewController: self, exceptFor: channel)
+                if chat != nil && chat!.summary!.containsString("Ask") {
+                    navigationItem.title = "Ask Magnet"
+                } else if chat != nil && chat!.summary!.containsString("Forum") {
+                    navigationItem.title = "Forum"
+                }
+                notifier = NavigationNotifier(viewController: self, exceptFor: channel)
                 ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
             }
             loadMessages()
@@ -33,16 +72,24 @@ class ChatViewController: JSQMessagesViewController {
     
     var recipients : [MMUser]! {
         didSet {
-            if recipients.count == 1 {
-                navigationItem.title = MMUser.currentUser()?.firstName
-            } else if recipients.count == 2 {
-                var users = recipients
-                if let currentUser = MMUser.currentUser(), index = users.indexOf(currentUser) {
-                    users.removeAtIndex(index)
-                }
-                navigationItem.title = users.first?.firstName!
+            
+            if chat != nil && chat!.summary!.containsString("Ask") {
+                navigationItem.title = "Ask Magnet"
+            } else if chat != nil && chat!.summary!.containsString("Forum") {
+                navigationItem.title = "Forum"
             } else {
-                navigationItem.title = "Group"
+                
+                if recipients.count == 1 {
+                    navigationItem.title = MMUser.currentUser()?.firstName
+                } else if recipients.count == 2 {
+                    var users = recipients
+                    if let currentUser = MMUser.currentUser(), index = users.indexOf(currentUser) {
+                        users.removeAtIndex(index)
+                    }
+                    navigationItem.title = users.first?.firstName
+                } else {
+                    navigationItem.title = kStr_Group
+                }
             }
         }
     }
@@ -67,8 +114,8 @@ class ChatViewController: JSQMessagesViewController {
         senderId = user.userID
         senderDisplayName = user.firstName
         //        showLoadEarlierMessagesHeader = true
-        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
-        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+        //        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
+        //        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
         
         // Find recipients
         if chat != nil {
@@ -92,8 +139,13 @@ class ChatViewController: JSQMessagesViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage, let timestamp = lastMessage.timestamp {
-            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:timestamp)
+        if let textView = self.inputToolbar?.contentView?.textView where textView.isFirstResponder() {
+            self.inputToolbar?.contentView?.textView?.resignFirstResponder()
+        }
+        if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage {
+            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:NSDate.init())
+        } else  if let chat = self.chat {
+            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, date:NSDate.init())
         }
     }
     
@@ -117,8 +169,8 @@ class ChatViewController: JSQMessagesViewController {
         
         currentChat.addSubscribers(newSubscribers, success: { [weak self] _ in
             self?.recipients = allSubscribers
-        }, failure: { error in
-            print("[ERROR]: can't add subscribers - \(error)")
+            }, failure: { error in
+                print("[ERROR]: can't add subscribers - \(error)")
         })
     }
     
@@ -159,52 +211,48 @@ class ChatViewController: JSQMessagesViewController {
     
     override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         
-        chatChannel({ channel in
-            if text.characters.count == 0 {
-                return
-            }
-            
-            JSQSystemSoundPlayer.jsq_playMessageSentSound()
-            let forcedString: String = text
-            let messageContent = [
-                Constants.ContentKey.Type: MessageType.Text.rawValue,
-                Constants.ContentKey.Message: forcedString,
-            ]
-            
-            button.userInteractionEnabled = false
-            
-            self.showSpinner()
-            let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
-            mmxMessage.sendWithSuccess( { [weak self] _ in
+        guard let channel = self.chat else { return }
+        
+        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        let forcedString: String = text
+        let messageContent = [
+            Constants.ContentKey.Type: MessageType.Text.rawValue,
+            Constants.ContentKey.Message: forcedString,
+        ]
+        
+        button.userInteractionEnabled = false
+        
+        showSpinner()
+        let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
+        mmxMessage.sendWithSuccess( { [weak self] _ in
+            button.userInteractionEnabled = true
+            self?.hideSpinner()
+            }) { error in
                 button.userInteractionEnabled = true
-                self?.hideSpinner()
-                self?.finishSendingMessageAnimated(true)
-                }) { error in
-                    button.userInteractionEnabled = true
-                    self.hideSpinner()
-                    print(error)
-            }
-            }, failure: { (error) -> Void in
-                self.alertError(error)
-        })
+                self.hideSpinner()
+                print(error)
+        }
+        finishSendingMessageAnimated(true)
     }
-
+    
     override func didPressAccessoryButton(sender: UIButton!) {
+        
+        guard let _ = self.chat else { return }
         
         self.inputToolbar!.contentView!.textView?.resignFirstResponder()
         
-        let alertController = UIAlertController(title: "Media Messages", message: nil, preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: kStr_MediaMessages, message: nil, preferredStyle: .ActionSheet)
         
-        let sendFromCamera = UIAlertAction(title: "Take Photo or Video", style: .Default) { (_) in
+        let sendFromCamera = UIAlertAction(title: kStr_TakePhotoOrVideo, style: .Default) { (_) in
             self.addMediaMessageFromCamera()
         }
-        let sendFromLibrary = UIAlertAction(title: "Photo Library", style: .Default) { (_) in
+        let sendFromLibrary = UIAlertAction(title: kStr_PhotoLib, style: .Default) { (_) in
             self.addMediaMessageFromLibrary()
         }
-        let sendLocationAction = UIAlertAction(title: "Send Location", style: .Default) { (_) in
+        let sendLocationAction = UIAlertAction(title: kStr_SendLoc, style: .Default) { (_) in
             self.addLocationMediaMessage()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
+        let cancelAction = UIAlertAction(title: kStr_Cancel, style: .Cancel) { (_) in }
         
         alertController.addAction(sendFromCamera)
         alertController.addAction(sendFromLibrary)
@@ -289,6 +337,19 @@ class ChatViewController: JSQMessagesViewController {
                 NSForegroundColorAttributeName : cell.textView?.textColor as! AnyObject,
                 NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue | NSUnderlineStyle.PatternSolid.rawValue
             ]
+            
+        }
+        
+        if cell.avatarImageView?.image == nil {
+            cell.avatarImageView?.layer.masksToBounds = true
+            cell.avatarImageView?.contentMode = UIViewContentMode.ScaleAspectFill
+        }
+        //cell.avatarImageView!.image = avatar
+        if let layout = collectionView.collectionViewLayout as? JSQMessagesCollectionViewFlowLayout {
+            cell.avatarImageView?.layer.cornerRadius = layout.incomingAvatarViewSize.width/2.0
+        }
+        if let user = message.underlyingMessage.sender {
+            Utils.loadUserAvatar(user, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user))
         }
         
         return cell
@@ -350,7 +411,7 @@ class ChatViewController: JSQMessagesViewController {
             switch message.type {
             case .Text: break
             case .Location:
-                self.performSegueWithIdentifier("showMapViewController", sender: message.media())
+                self.performSegueWithIdentifier(kSegueShowMap, sender: message.media())
             case .Photo:
                 let photoItem = message.media() as! JSQPhotoMediaItem
                 let photo = Photo(photo: photoItem.image)
@@ -358,7 +419,7 @@ class ChatViewController: JSQMessagesViewController {
                 presentViewController(viewer, animated: true, completion: nil)
             case .Video:
                 if let attachment = message.underlyingMessage.attachments?.first where attachment.name != nil {
-                    let videoVC = VideoPlayerViewController(nibName: "VideoPlayerViewController", bundle: nil)
+                    let videoVC = VideoPlayerViewController(nibName: vc_id_VideoPlayer, bundle: nil)
                     videoVC.attachment = attachment
                     presentViewController(videoVC, animated: true, completion: nil)
                 }
@@ -372,7 +433,7 @@ class ChatViewController: JSQMessagesViewController {
     // MARK: Helper methods
     
     private func addLocationMediaMessage() {
-        chatChannel({ channel in
+        
         LocationManager.sharedInstance.getLocation { [weak self] location in
             JSQSystemSoundPlayer.jsq_playMessageSentSound()
             
@@ -382,7 +443,7 @@ class ChatViewController: JSQMessagesViewController {
                 Constants.ContentKey.Longitude: "\(location.coordinate.longitude)"
             ]
             self?.showSpinner()
-            let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
+            let mmxMessage = MMXMessage(toChannel: (self?.chat)!, messageContent: messageContent)
             mmxMessage.sendWithSuccess( { _ in
                 self?.hideSpinner()
                 self?.finishSendingMessageAnimated(true)
@@ -391,17 +452,15 @@ class ChatViewController: JSQMessagesViewController {
                     print("[ERROR]: \(error)")
             }
         }
-    }, failure: { (error) -> Void in
-    self.alertError(error)
-    })
     }
-
+    
     private func addMediaMessageFromLibrary() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .PhotoLibrary
-        imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
+        imagePicker.mediaTypes = [kUTTypeImage as String]
+        //imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
         presentViewController(imagePicker, animated: true, completion: nil)
     }
     
@@ -410,53 +469,41 @@ class ChatViewController: JSQMessagesViewController {
         imagePicker.delegate = self
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .Camera
-        imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
+        //imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
+        imagePicker.mediaTypes = [kUTTypeImage as String]
         presentViewController(imagePicker, animated: true, completion: nil)
-    }
-    
-    private func chatChannel(success : ((channel : MMXChannel) -> Void), failure :((error : NSError) -> Void)) -> Void {
-        guard let channel = self.chat else {
-        //Create new chat
-        let subscribers = Set(self.recipients)
-        
-        // Set channel name
-        let name = "\(self.senderDisplayName)_\(ChannelManager.sharedInstance.formatter.currentTimeStamp())"
-        
-        MMXChannel.createWithName(name, summary: "\(self.senderDisplayName) private chat", isPublic: false, publishPermissions: .Subscribers, subscribers: subscribers, success: { [weak self] channel in
-            self?.chat = channel
-            success(channel : channel)
-            }, failure: { error in
-             failure(error: error)
-            })
-            
-         return
-        }
-        
-       success(channel : channel)
-    }
-    
-    private func alertError(error : NSError) {
-        print("[ERROR]: \(error)")
-        let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close", handler: { _ in
-            self.navigationController?.popViewControllerAnimated(true)
-        })
-        alert.presentForController(self)
     }
     
     private func getChannelBySubscribers(users: [MMUser]) {
         //Check if channel exists
-        MMXChannel.findChannelsBySubscribers(users, matchType: .EXACT_MATCH, success: { [weak self] channels in
+        MMXChannel.findChannelsBySubscribers(users, matchType: .EXACT_MATCH, success: { [weak self] allChannels in
+            let channels = allChannels.filter { !$0.name.hasPrefix("global_") }
             if channels.count != 1 {
-            //create channel when sending message
+                //Create new chat
+                let subscribers = Set(users)
+                
+                // Set channel name
+                //                let name = "\(self!.senderDisplayName)_\(ChannelManager.sharedInstance.formatter.currentTimeStamp())"
+                let name = NSUUID().UUIDString
+                
+                MMXChannel.createWithName(name, summary: "\(self!.senderDisplayName) private chat", isPublic: false, publishPermissions: .Subscribers, subscribers: subscribers, success: { [weak self] channel in
+                    self?.chat = channel
+                    }, failure: { [weak self] error in
+                        print("[ERROR]: \(error)")
+                        let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close", handler: { _ in
+                            self?.navigationController?.popViewControllerAnimated(true)
+                        })
+                        alert.presentForController(self!)
+                    })
             } else {
                 self?.chat = channels.first
             }
-        }) { error in
-            print("[ERROR]: \(error)")
-            let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close", handler: { _ in
-                self.navigationController?.popViewControllerAnimated(true)
-            })
-            alert.presentForController(self)
+            }) { error in
+                print("[ERROR]: \(error)")
+                let alert = Popup(message: error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: kStr_Close, handler: { _ in
+                    self.navigationController?.popViewControllerAnimated(true)
+                })
+                alert.presentForController(self)
         }
     }
     
@@ -505,16 +552,27 @@ class ChatViewController: JSQMessagesViewController {
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showDetailsSegue" {
+        if segue.identifier == kSegueShowDetails {
             if let detailVC = segue.destinationViewController as? DetailsViewController {
                 detailVC.channel = chat
+                detailVC.canLeave = self.canLeaveChat
             }
-        } else if segue.identifier == "showMapViewController" {
+        } else if segue.identifier == kSegueShowMap {
             if let locationItem = sender as? JSQLocationMediaItem {
                 let mapVC = segue.destinationViewController as! MapViewController
                 mapVC.location = locationItem.coordinate
             }
         }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        
+        var newMessages:[Message] = []
+        for message in messages {
+            newMessages.append(Message(message: message.underlyingMessage))
+        }
+        messages = newMessages
     }
 }
 
@@ -522,47 +580,41 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
-        chatChannel({ channel in
-            JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             
-            if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
+            let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
+            
+            if let data = UIImageJPEGRepresentation(pickedImage, 0.8) {
                 
-                let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
-                let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
-                
-                if let data = UIImagePNGRepresentation(pickedImage) {
-                    
-                    let attachment = MMAttachment(data: data, mimeType: "image/PNG")
-                    mmxMessage.addAttachment(attachment)
-                    self.showSpinner()
-                    mmxMessage.sendWithSuccess({ [weak self] _ in
-                        self?.hideSpinner()
-                        self?.finishSendingMessageAnimated(true)
-                        }) { error in
-                            self.hideSpinner()
-                            print(error)
-                    }
-                }
-            } else if let urlOfVideo = info[UIImagePickerControllerMediaURL] as? NSURL {
-                let messageContent = [Constants.ContentKey.Type: MessageType.Video.rawValue]
-                let name = urlOfVideo.lastPathComponent
-                
-                let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
-                let attachment = MMAttachment(fileURL: urlOfVideo, mimeType: "video/quicktime", name: name, description: "Video file")
-                self.showSpinner()
+                let attachment = MMAttachment(data: data, mimeType: "image/jpg")
                 mmxMessage.addAttachment(attachment)
+                showSpinner()
                 mmxMessage.sendWithSuccess({ [weak self] _ in
                     self?.hideSpinner()
-                    self?.finishSendingMessageAnimated(true)
                     }) { error in
                         self.hideSpinner()
                         print(error)
                 }
+                finishSendingMessageAnimated(true)
             }
-            
-            }, failure: { (error) -> Void in
-                self.alertError(error)
-        })
+        } else if let urlOfVideo = info[UIImagePickerControllerMediaURL] as? NSURL {
+            let messageContent = [Constants.ContentKey.Type: MessageType.Video.rawValue]
+            let name = urlOfVideo.lastPathComponent
+            let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
+            let attachment = MMAttachment(fileURL: urlOfVideo, mimeType: "video/quicktime", name: name, description: "Video file")
+            showSpinner()
+            mmxMessage.addAttachment(attachment)
+            mmxMessage.sendWithSuccess({ [weak self] _ in
+                self?.hideSpinner()
+                }) { error in
+                    self.hideSpinner()
+                    print(error)
+            }
+            finishSendingMessageAnimated(true)
+        }
         
         dismissViewControllerAnimated(true, completion: nil)
     }

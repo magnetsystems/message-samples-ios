@@ -8,6 +8,7 @@
 
 import UIKit
 import MagnetMax
+import AFNetworking
 
 class RegisterViewController : BaseViewController {
     
@@ -20,6 +21,11 @@ class RegisterViewController : BaseViewController {
     
     var viewOffset: CGFloat!
     var keyboardIsShowing = false
+    
+    override func viewDidLoad() {
+         super.viewDidLoad()
+        self.resignOnBackgroundTouch()
+    }
     
     override func viewWillAppear(animated:Bool) {
         super.viewWillAppear(animated)
@@ -36,6 +42,7 @@ class RegisterViewController : BaseViewController {
     //MARK: Handlers
     
     @IBAction func registerAction() {
+        
         do {
             // Validate
             let (firstName, lastName, email, password) = try validateCredential()
@@ -43,10 +50,10 @@ class RegisterViewController : BaseViewController {
             // Register
             let user = MMUser()
             user.userName = email
-            user.firstName = firstName
-            user.lastName = lastName
+            user.firstName = trimWhiteSpace(firstName)
+            user.lastName = trimWhiteSpace(lastName)
             user.password = password
-            user.email = email
+            user.email = trimWhiteSpace(email)
             
             // Login
             let credential = NSURLCredential(user: email, password: password, persistence: .None)
@@ -56,40 +63,58 @@ class RegisterViewController : BaseViewController {
             user.register({ [weak self] user in
                 self?.login(credential)
                 }, failure: { [weak self] error in
-                    if error.code == 409 {
-                        // The user already exists, let's attempt a login
-                        self?.login(credential)
+                    
+                    self?.hideLoadingIndicator()
+                    print("[ERROR]: \(error)")
+                    
+                    if MMXHttpError(rawValue: error.code) == .Conflict {
+                        self?.showAlert(kStr_UsernameTaken, title: kStr_UsernameTitle, closeTitle: kStr_Close)
+                    } else if MMXHttpError(rawValue: error.code) == .ServerTimeout || MMXHttpError(rawValue: error.code) == .Offline {
+                        self?.showAlert(kStr_NoInternetError, title: kStr_NoInternetErrorTitle, closeTitle: kStr_Close)
                     } else {
-                        print("[ERROR]: \(error)")
-                        self?.hideLoadingIndicator()
-                        self?.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close")
+                        self?.showAlert(kStr_PleaseTryAgain, title:kStr_CouldntRegisterTitle, closeTitle: kStr_Close)
                     }
                 })
         } catch InputError.InvalidUserNames {
-            self.showAlert("Please enter your first and last name", title: "Field required", closeTitle: "Close")
+            self.showAlert(kStr_EnterFirstLastName, title: kStr_FieldRequired, closeTitle: kStr_Close)
         } catch InputError.InvalidEmail {
-            self.showAlert("Please enter your email", title: "Field required", closeTitle: "Close")
+            self.showAlert(kStr_EnterEmail, title: kStr_FieldRequired, closeTitle: kStr_Close)
         } catch InputError.InvalidPassword {
-            self.showAlert("Please enter your password and verify your password again", title: "Passwords do not match", closeTitle: "Close")
+            self.showAlert(kStr_EnterPasswordAndVerify, title: kStr_FieldRequired, closeTitle: kStr_Close)
+        } catch InputError.InvalidPasswordLength {
+            self.showAlert(kStr_EnterPasswordLength, title: kStr_PasswordShort, closeTitle: kStr_Close)
         } catch { }
     }
     
     // MARK: Private implementation
     
+    private func trimWhiteSpace(string : String) -> String {
+      return string.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+    }
+    
     private enum InputError: ErrorType {
         case InvalidUserNames
         case InvalidEmail
         case InvalidPassword
+        case InvalidPasswordLength
+    }
+    
+    private func isValidEmail(testStr:String) -> Bool {
+        // println("validate calendar: \(testStr)")
+        let emailRegEx = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+        
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluateWithObject(testStr)
     }
     
     private func validateCredential() throws -> (String, String, String, String) {
         // Get values from UI
-        guard let firstName = txtfFirstName.text where (firstName.isEmpty == false),
-            let lastName = txtfLastName.text where (lastName.isEmpty == false) else {
+        guard let firstName = txtfFirstName.text where (trimWhiteSpace(firstName).characters.count >= kMinNameLength),
+            let lastName = txtfLastName.text where (trimWhiteSpace(lastName).characters.count >= kMinNameLength) else {
                 throw InputError.InvalidUserNames
         }
         
-        guard let email = txtfEmail.text where (email.isEmpty == false) else {
+        guard let email = txtfEmail.text where (email.isEmpty == false) && isValidEmail(trimWhiteSpace(email)) else {
             throw InputError.InvalidEmail
         }
         
@@ -98,6 +123,8 @@ class RegisterViewController : BaseViewController {
                 throw InputError.InvalidPassword
         }
         
+        if password.characters.count < kMinPasswordLength { throw InputError.InvalidPasswordLength }
+        
         return (firstName, lastName, email, password)
     }
     
@@ -105,19 +132,19 @@ class RegisterViewController : BaseViewController {
     
     func login(credential: NSURLCredential) {
         
-        MMUser.login(credential, success: { [weak self] in
-            // Initialize Magnet Message
-            MagnetMax.initModule(MMX.sharedInstance(), success: {
+        MMUser.login(credential, rememberMe: true, success: { [weak self] in
                 self?.hideLoadingIndicator()
-                self?.performSegueWithIdentifier("registerToMenuSegue", sender: nil)
-                }, failure: { error in
-                    self?.hideLoadingIndicator()
-                    print("[ERROR]: \(error)")
-            })
+                self?.performSegueWithIdentifier(kSegueRegisterToHome, sender: nil)
             }, failure: { [weak self] error  in
                 self?.hideLoadingIndicator()
                 print("[ERROR]: \(error.localizedDescription)")
-                self?.showAlert(error.localizedDescription, title: error.localizedFailureReason ?? "", closeTitle: "Close")
+                self?.navigationController?.popToRootViewControllerAnimated(true)
             })
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == kSegueRegisterToHome {
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: kUserDefaultsShowProfile)
+        }
     }
 }
