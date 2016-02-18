@@ -36,7 +36,6 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         searchController.searchBar.sizeToFit()
         searchController.searchBar.placeholder = "Search message by user"
         tableView.tableHeaderView = searchController.searchBar
-        tableView.reloadData()
         
         tableView.registerNib(UINib(nibName: Utils.name(SummaryResponseCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(SummaryResponseCell.classForCoder()))
         tableView.registerNib(UINib(nibName: Utils.name(EventChannelTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(EventChannelTableViewCell.classForCoder()))
@@ -253,18 +252,9 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
                     chatVC.chat = cell.detailResponse?.channel
                     chatVC.canLeaveChat = false
                 } else {
-                   
                     chatVC.canLeaveChat = true
-                    MMUser.usersWithUserIDs((cell.detailResponse!.subscribers! as NSArray).valueForKey("userId") as! [String], success: { (users) -> Void in
-                        
-                        MMXChannel.findChannelsBySubscribers(users, matchType: .EXACT_MATCH, success: { (channels) -> Void in
-                            chatVC.chat = channels.first
-                            
-                            self.navigationController?.pushViewController(chatVC, animated: true)
-                            }, failure: nil)
-                        
-                        }, failure: nil)
-                   
+                    chatVC.chat = cell.detailResponse?.channel
+                    self.navigationController?.pushViewController(chatVC, animated: true)
                     
                     return
                 }

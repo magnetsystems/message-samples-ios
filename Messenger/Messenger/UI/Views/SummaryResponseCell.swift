@@ -16,7 +16,7 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
     @IBOutlet weak var lblLastTime : UILabel!
     @IBOutlet weak var lblMessage : UILabel!
     @IBOutlet weak var ivMessageIcon : UIImageView!
-    
+    static var images : [String : UIImage] = [:]
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -58,17 +58,40 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
             if detailResponse.subscribers.count > 2 {
                 ivMessageIcon.image = UIImage(named: "user_group.png")
             } else if let userProfile = subscribers.first {
-                MMUser.usersWithUserIDs([userProfile.userId], success: { [weak self] users in
-                    if let user = users.first {
-                        self?.ivMessageIcon.image = Utils.noAvatarImageForUser(user)
-                        if let url = user.avatarURL() {
-                            self?.ivMessageIcon.setImageWithURL(url)
+                let tmpUser = MMUser()
+                tmpUser.extras = ["hasAvatar" : "true"]
+                tmpUser.firstName = ""
+                tmpUser.lastName = ""
+                tmpUser.userName = userProfile.displayName
+                tmpUser.userID = userProfile.userId
+                let nameComponents = userProfile.displayName.componentsSeparatedByString(" ")
+                if let firstName = nameComponents.first {
+                    tmpUser.firstName = firstName
+                }
+                
+                if nameComponents.count > 1 {
+                    tmpUser.lastName = nameComponents[1]
+                }
+                
+                if let avatarImage = self.ivMessageIcon {
+                    if let image = SummaryResponseCell.images[tmpUser.userID] {
+                        avatarImage.image = image
+                    } else {
+                        avatarImage.image = nil
+                        let placeHolderImage = Utils.noAvatarImageForUser(tmpUser)
+                        if let url = tmpUser.avatarURL() {
+                            Utils.loadImageWithUrl(url, toImageView: avatarImage, placeholderImage: placeHolderImage, onlyShowAfterDownload: true, completion: { image in
+                                SummaryResponseCell.images[tmpUser.userID] = image
+                            })
+                        } else {
+                            avatarImage.image = placeHolderImage
                         }
                     }
-                    }, failure: { error in
-                        print("[ERROR]: \(error)")
-                })
+                }
             }
         }
     }
+    
+    
+    
 }
