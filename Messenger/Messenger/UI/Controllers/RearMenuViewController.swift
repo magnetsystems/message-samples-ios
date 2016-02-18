@@ -72,6 +72,8 @@ class RearMenuViewController: UITableViewController {
                 confirmationAlert.presentForController(self)
                 
             case IndexPathRowAction.Home.rawValue :
+                notifier?.stopped = false
+                
                 let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
                 let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Home);
                 self.revealViewController().pushFrontViewController(vc, animated: true);
@@ -80,7 +82,9 @@ class RearMenuViewController: UITableViewController {
                 //            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
                 //            self.revealViewController().pushFrontViewController(vc, animated: true);
             case IndexPathRowAction.Support.rawValue :
-                notifier?.setToZero()
+                SupportNotifier.hideAllSupportNotifiers()
+                notifier?.stopped = true
+                
                 let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
                 let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Support);
                 self.revealViewController().pushFrontViewController(vc, animated: true);
@@ -93,7 +97,7 @@ class RearMenuViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-        if indexPath.row == IndexPathRowAction.Support.rawValue {
+        if indexPath.row == IndexPathRowAction.Support.rawValue && Utils.isMagnetEmployee() {
             notifier = SupportNotifier(cell: cell)
         }
         return cell

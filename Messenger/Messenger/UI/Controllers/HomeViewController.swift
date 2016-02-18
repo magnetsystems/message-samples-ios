@@ -18,7 +18,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     var actualEvents : [MMXChannelDetailResponse] = []
     var askMagnet : [MMXChannelDetailResponse] = []
-    
+    var notifier: SupportNotifier?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
@@ -36,6 +37,11 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         searchController.searchBar.sizeToFit()
         searchController.searchBar.placeholder = "Search message by user"
         tableView.tableHeaderView = searchController.searchBar
+        
+        //Add notifier for Ask magnet channels
+        if Utils.isMagnetEmployee() {
+            notifier = SupportNotifier(viewController: self)
+        }
         
         tableView.registerNib(UINib(nibName: Utils.name(SummaryResponseCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(SummaryResponseCell.classForCoder()))
         tableView.registerNib(UINib(nibName: Utils.name(EventChannelTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(EventChannelTableViewCell.classForCoder()))

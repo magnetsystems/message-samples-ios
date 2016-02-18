@@ -28,10 +28,18 @@ class SupportViewController: UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         self.navigationItem.title = kStr_Support;
+        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
         self.loadDetails()
     }
 
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+    }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return supportChannelDetails.count
@@ -70,6 +78,10 @@ class SupportViewController: UITableViewController {
     }
     
     //MARK: - Private
+    
+    func didReceiveMessage(mmxMessage: MMXMessage) {
+        loadDetails()
+    }
     
     private func loadDetails() {
         // Get all Ask Magnet channels
