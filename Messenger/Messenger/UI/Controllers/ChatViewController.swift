@@ -142,8 +142,8 @@ class ChatViewController: JSQMessagesViewController {
         if let textView = self.inputToolbar?.contentView?.textView where textView.isFirstResponder() {
             self.inputToolbar?.contentView?.textView?.resignFirstResponder()
         }
-        if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage, let timestamp = lastMessage.timestamp {
-            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:timestamp)
+        if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage {
+            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:NSDate.init())
         } else  if let chat = self.chat {
             ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, date:NSDate.init())
         }
