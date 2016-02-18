@@ -60,7 +60,7 @@ class SignInViewController : BaseViewController {
                     print("[ERROR]: \(error)")
                     self.hideLoadingIndicator()
                     if MMXHttpError(rawValue: error.code) == .ServerTimeout || MMXHttpError(rawValue: error.code) == .Offline {
-                        self.showAlert(NSLocalizedString("Please check your internet connection and try again", comment: ""), title: NSLocalizedString("Not Connected to the Internet", comment: ""), closeTitle: kStr_Close)
+                        self.showAlert(kStr_NoInternetError, title: kStr_NoInternetErrorTitle, closeTitle: kStr_Close)
                     } else {
                         self.showAlert(kStr_EmailPassNotFound, title: kStr_CouldntLogin, closeTitle: kStr_Close)
                     }

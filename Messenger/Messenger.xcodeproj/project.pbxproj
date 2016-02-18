@@ -100,6 +100,7 @@
 		8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */; };
 		8BF254C01C49697A008719AA /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF254BF1C49697A008719AA /* Popup.swift */; };
 		8D4413F61C74FBA90008314B /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4413F51C74FBA90008314B /* Errors.swift */; };
+		8D4413FA1C7646710008314B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8D4413F91C7646710008314B /* Localizable.strings */; };
 		8D7F515F1C6E9C0000814064 /* bg_img_1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */; };
 		8D7F51621C6EC14100814064 /* ContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7F51611C6EC14100814064 /* ContactsTableViewCell.swift */; };
 		8DB526B01C6E6CF4001D9AF9 /* messages_wh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */; };
@@ -224,6 +225,7 @@
 		8BDF49D91C32FD5500F0E51B /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		8BF254BF1C49697A008719AA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
 		8D4413F51C74FBA90008314B /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		8D4413F91C7646710008314B /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_img_1_2.png; sourceTree = "<group>"; };
 		8D7F51611C6EC14100814064 /* ContactsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsTableViewCell.swift; sourceTree = "<group>"; };
 		8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = messages_wh.png; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 			isa = PBXGroup;
 			children = (
 				8B901AED1C5BBC2800AA5DF1 /* Constants.swift */,
+				8D4413F91C7646710008314B /* Localizable.strings */,
 				7A76D3FD1C6A76F4004ADC49 /* Strings.swift */,
 				8B81C1331C3C22CA00C186B6 /* Managers */,
 				7A76D3FF1C6A7834004ADC49 /* Utils */,
@@ -885,6 +888,7 @@
 				7A76D4031C6A7F1C004ADC49 /* user_default.png in Resources */,
 				8BABFD551C733E11004D5827 /* SupportTableViewCell.xib in Resources */,
 				8B0909A51C3ADB030042F361 /* disclosure@2x.png in Resources */,
+				8D4413FA1C7646710008314B /* Localizable.strings in Resources */,
 				7A76D3EF1C6A5A13004ADC49 /* ic_menu.png in Resources */,
 				8B38D2EC1C56A59D006431F7 /* NYTPhotoViewerCloseButtonX@2x.png in Resources */,
 				7A76D3F91C6A5A1C004ADC49 /* bg_img_2.png in Resources */,

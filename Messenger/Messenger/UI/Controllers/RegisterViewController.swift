@@ -68,11 +68,11 @@ class RegisterViewController : BaseViewController {
                     print("[ERROR]: \(error)")
                     
                     if MMXHttpError(rawValue: error.code) == .Conflict {
-                        self?.showAlert(NSLocalizedString("Sorry, that username is already taken. Please select a new username and try again.", comment: ""), title: NSLocalizedString("Username Taken.", comment : ""), closeTitle: kStr_Close)
+                        self?.showAlert(kStr_UsernameTaken, title: kStr_UsernameTitle, closeTitle: kStr_Close)
                     } else if MMXHttpError(rawValue: error.code) == .ServerTimeout || MMXHttpError(rawValue: error.code) == .Offline {
-                        self?.showAlert(NSLocalizedString("Please check your internet connection and try again", comment: ""), title: NSLocalizedString("Not Connected to the Internet", comment: ""), closeTitle: kStr_Close)
+                        self?.showAlert(kStr_NoInternetError, title: kStr_NoInternetErrorTitle, closeTitle: kStr_Close)
                     } else {
-                        self?.showAlert(NSLocalizedString("Could not register, please try again.", comment: ""), title: NSLocalizedString("Oops!", comment: ""), closeTitle: kStr_Close)
+                        self?.showAlert(kStr_PleaseTryAgain, title:kStr_CouldntRegisterTitle, closeTitle: kStr_Close)
                     }
                 })
         } catch InputError.InvalidUserNames {
