@@ -30,6 +30,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MMXChannel : MMModel
 
 /**
+ * The unique identifer for the channel.
+ */
+@property (nonatomic, readonly) NSString *channelID;
+
+/**
  *  Is the topic public?
  */
 @property (nonatomic, assign) BOOL isPublic;

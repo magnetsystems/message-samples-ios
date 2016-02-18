@@ -49,12 +49,12 @@ class ChannelDetailBaseTVCell: UITableViewCell {
     func hasNewMessagesFromLastTime(useLastMessage useLastMessage: Bool) -> Bool {
         if let detailResponse = self.detailResponse {
             if useLastMessage {
-                if let lastMessageID = ChannelManager.sharedInstance.getLastMessageForChannel(detailResponse.channelName) {
+                if let lastMessageID = ChannelManager.sharedInstance.getLastMessageForChannel(detailResponse.channel) {
                     return lastMessageID != detailResponse.messages.last?.messageID
                 }
             }
             
-            if let lastViewTime = ChannelManager.sharedInstance.getLastViewTimeForChannel(detailResponse.channelName) {
+            if let lastViewTime = ChannelManager.sharedInstance.getLastViewTimeForChannel(detailResponse.channel) {
                 if let sender = detailResponse.messages.last?.sender, let currentUser = MMUser.currentUser() where sender.userID  == currentUser.userID  {
                     return false
                 }
