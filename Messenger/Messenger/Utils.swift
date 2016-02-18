@@ -47,8 +47,16 @@ class Utils: NSObject {
         loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, completion: nil)
     }
     
+    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?,  onlyShowAfterDownload:Bool) {
+        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, onlyShowAfterDownload:onlyShowAfterDownload, completion: nil)
+    }
+    
     static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, completion : (()->Void)?) {
-        imageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, completion: completion)
+        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage,  onlyShowAfterDownload: placeholderImage == nil, completion: completion)
+    }
+    
+    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?,  onlyShowAfterDownload:Bool, completion : (()->Void)?) {
+        imageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage,  onlyShowAfterDownload: onlyShowAfterDownload, completion: completion)
     }
     
     static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage?) {
@@ -121,9 +129,9 @@ class Utils: NSObject {
     //MARK: Private Methods
     
     
-    private static func imageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, completion : (()->Void)?) {
+    private static func imageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, onlyShowAfterDownload:Bool, completion : (()->Void)?) {
         
-        if placeholderImage != nil {
+        if  !onlyShowAfterDownload {
             toImageView.image = placeholderImage
         }
         
