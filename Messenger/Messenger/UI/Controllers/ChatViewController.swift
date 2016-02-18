@@ -459,7 +459,8 @@ class ChatViewController: JSQMessagesViewController {
         imagePicker.delegate = self
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .PhotoLibrary
-        imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
+        imagePicker.mediaTypes = [kUTTypeImage as String]
+        //imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
         presentViewController(imagePicker, animated: true, completion: nil)
     }
     
@@ -468,7 +469,8 @@ class ChatViewController: JSQMessagesViewController {
         imagePicker.delegate = self
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .Camera
-        imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
+        //imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
+        imagePicker.mediaTypes = [kUTTypeImage as String]
         presentViewController(imagePicker, animated: true, completion: nil)
     }
     

@@ -23,7 +23,7 @@ let kStr_PasssNotMatch = "Passwords do not match"
 let kStr_PasswordShort = "Too short password"
 
 let kStr_MediaMessages = "Media Messages"
-let kStr_TakePhotoOrVideo = "Take Photo or Video"
+let kStr_TakePhotoOrVideo = "Take Photo"
 let kStr_PhotoLib = "Photo Library"
 let kStr_SendLoc = "Send Location"
 
