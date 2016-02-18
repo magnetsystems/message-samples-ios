@@ -84,7 +84,6 @@
 		8B71BE7C1C57C70E006E5C1F /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B71BE7B1C57C70E006E5C1F /* Timestamp.swift */; };
 		8B81C12E1C3C1E5600C186B6 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B81C12D1C3C1E5600C186B6 /* ChatViewController.swift */; };
 		8B81C1321C3C21D800C186B6 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B81C1311C3C21D800C186B6 /* Message.swift */; };
-		8B81C1351C3C22CA00C186B6 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B81C1341C3C22CA00C186B6 /* DownloadManager.swift */; };
 		8B8E80331C2ACAC8008D8C43 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8E80321C2ACAC8008D8C43 /* BaseViewController.swift */; };
 		8B8E80351C2ACB15008D8C43 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8E80341C2ACB15008D8C43 /* SignInViewController.swift */; };
 		8B8E80381C2ACDBE008D8C43 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8E80371C2ACDBE008D8C43 /* BaseNavigationController.swift */; };
@@ -206,7 +205,6 @@
 		8B71BE7B1C57C70E006E5C1F /* Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
 		8B81C12D1C3C1E5600C186B6 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		8B81C1311C3C21D800C186B6 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		8B81C1341C3C22CA00C186B6 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		8B8E80321C2ACAC8008D8C43 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		8B8E80341C2ACB15008D8C43 /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		8B8E80371C2ACDBE008D8C43 /* BaseNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
@@ -631,7 +629,6 @@
 		8B81C1331C3C22CA00C186B6 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				8B81C1341C3C22CA00C186B6 /* DownloadManager.swift */,
 				3A1795E31C4D39140038596D /* LocationManager.swift */,
 				8B0760371C4E5D9A00EAC402 /* ChannelManager.swift */,
 				8DFC78F41C62D59F008FB312 /* NavigationNotifier.swift */,
@@ -995,7 +992,6 @@
 				8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */,
 				7A1894D51C6CEB0D0068183A /* UIImage_extension.swift in Sources */,
 				7A76D4011C6A7903004ADC49 /* Utils.swift in Sources */,
-				8B81C1351C3C22CA00C186B6 /* DownloadManager.swift in Sources */,
 				8B0909A11C3AD5F20042F361 /* SummaryResponseCell.swift in Sources */,
 				8DFC78F51C62D59F008FB312 /* NavigationNotifier.swift in Sources */,
 				7AD897DD1C6BD216000A85DE /* UserProfileViewController.swift in Sources */,
