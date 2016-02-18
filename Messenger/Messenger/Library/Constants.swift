@@ -45,7 +45,7 @@ let vc_id_ContactsNav = "ContactsNavigationController"
 let vc_id_UserProfile = "userProfileVC"
 
 let kNotificationNetworkOffline = "com.magnet.network.offline"
-let kNotificationHideNotifiers = "HideNotifiersNotification"
+let kNotificationHideSupportNotifiers = "HideSupportNotifiersNotification"
 
 let kSegueShowChatFromChatActivity = "showChatFromChannelSummary"
 let kSegueShowContactSelector = "showContactsSelector"

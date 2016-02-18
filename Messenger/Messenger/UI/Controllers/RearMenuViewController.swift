@@ -91,7 +91,7 @@ class RearMenuViewController: UITableViewController {
                 //            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
                 //            self.revealViewController().pushFrontViewController(vc, animated: true);
             case IndexPathRowAction.Support.rawValue :
-                SupportNotifier.hideAllSupportNotifiers()
+                SupportNotifier.hideSupportNotifiers()
                 notifier?.stopped = true
                 
                 let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
@@ -107,7 +107,8 @@ class RearMenuViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         if indexPath.row == IndexPathRowAction.Support.rawValue && Utils.isMagnetEmployee() {
-            notifier = SupportNotifier(cell: cell)
+            notifier = SupportNotifier(view: cell.contentView)
+            notifier?.count = NewSupportMessages.count
         }
         return cell
     }

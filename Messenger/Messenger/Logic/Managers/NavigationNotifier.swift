@@ -20,44 +20,94 @@ import MagnetMax
 
 class NavigationNotifier: NSObject {
     
-    private var indicatorView : UIView
-    private var channel : MMXChannel
-    private var count : Int = 0
-    private var label : UILabel
+    var indicatorView : UIView?
+    private var channel : MMXChannel?
+    private var _count = 0
+    var count : Int {
+        set {
+            _count = newValue
+            reload()
+        }
+        get {
+            return _count
+        }
+    }
+    
+    var label : UILabel?
+    
     static let MAXCOUNT : Int = 99
     
-    init(viewController : UIViewController, exceptFor : (MMXChannel)) {
+    override init() {
+        super.init()
+    }
+    
+    init(viewController : UIViewController, exceptFor : MMXChannel?) {
         
         channel = exceptFor
         let parent = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 20))
         
         label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 20))
-        label.text = ""
-        label.font = UIFont.systemFontOfSize(14)
-        label.textColor = viewController.view.tintColor
-        label.transform = CGAffineTransformMakeTranslation(-5, 0)
-        parent.addSubview(label)
-        
+        label?.text = ""
+        label?.font = UIFont.systemFontOfSize(14)
+        label?.textColor = viewController.view.tintColor
+        if let lbl = label {
+            parent.addSubview(lbl)
+        }
         let left = UIBarButtonItem.init(customView: parent)
         viewController.navigationItem.leftItemsSupplementBackButton = true
         viewController.navigationItem.leftBarButtonItems = [left]
         parent.hidden = true
         indicatorView = parent
         
-        
         super.init()
-        
-        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
+        setIndicatorOffset(-5)
+        self.subscribeToIncomingMessages()
+    }
+    
+    func subscribeToIncomingMessages() {
+      ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
+    }
+    
+    func reload() {
+        if count > 0 {
+            indicatorView?.hidden = false
+            label?.text = "(\(notifierCount()))"
+        } else {
+            indicatorView?.hidden = true
+            label?.text = ""
+        }
+    }
+    
+    func resetCount() {
+        count = 0
+        indicatorView?.hidden = true
+        label?.text = ""
+    }
+    
+    func setIndicatorOffset(offset : CGFloat) {
+        label?.transform = CGAffineTransformMakeTranslation(offset, 0)
+    }
+    
+    func shouldNotifyFor(mmxMessage : MMXMessage) -> Bool {
+        if let ch = mmxMessage.channel, let channel = self.channel where ch.name.lowercaseString != channel.name.lowercaseString {
+            return true
+        }
+        return false
+    }
+    
+    func notifierCount() -> String {
+        return "\(count <= NavigationNotifier.MAXCOUNT ? "\(count)" : "\(NavigationNotifier.MAXCOUNT)+")"
     }
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
-        
-        guard let ch = mmxMessage.channel where ch.name.lowercaseString != channel.name.lowercaseString else {
+        if !shouldNotifyFor(mmxMessage) {
             return
         }
         
         count++
-        indicatorView.hidden = false
-        label.text = "(\(count <= NavigationNotifier.MAXCOUNT ? "\(count)" : "\(NavigationNotifier.MAXCOUNT)+"))"
+    }
+    
+    deinit {
+        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
     }
 }

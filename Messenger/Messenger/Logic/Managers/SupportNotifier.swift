@@ -18,41 +18,51 @@
 import UIKit
 import MagnetMax
 
-class SupportNotifier: NSObject {
+class NewSupportMessages {
+    static var count = 0
+}
+
+class SupportNotifier: NavigationNotifier {
     
     var stopped = false
-    private var indicatorView : UIView
-    private var count : Int = 0
-    private var label : UILabel
     
-    static func hideAllSupportNotifiers() {
-        NSNotificationCenter.defaultCenter().postNotificationName(kNotificationHideNotifiers, object: nil)
+    override var count : Int {
+        didSet {
+            NewSupportMessages.count = count
+        }
     }
     
-    init(cell : UITableViewCell) {
+    static func hideSupportNotifiers() {
+        NSNotificationCenter.defaultCenter().postNotificationName(kNotificationHideSupportNotifiers, object: nil)
+    }
+    
+    init(view : UIView) {
+        super.init()
         
         indicatorView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 100, height: 20))
-        indicatorView.center = CGPointMake(150, cell.contentView.center.y)
+        indicatorView?.center = CGPointMake(150, view.center.y)
         
         let image = UIImageView(image: UIImage(named: "icon_alert.png"))
         image.frame = CGRect.init(x: 0, y: 0, width: 20, height: 20)
-        indicatorView.addSubview(image)
+        indicatorView?.addSubview(image)
         
         label = UILabel.init(frame: CGRect.init(x: 30, y: 0, width: 70, height: 20))
-        label.text = ""
-        label.font = UIFont.systemFontOfSize(15)
-        label.textColor = cell.tintColor
-        indicatorView.addSubview(label)
-        indicatorView.hidden = true
-        cell.contentView.addSubview(indicatorView)
+        label?.text = ""
+        label?.font = UIFont.systemFontOfSize(15)
+        label?.textColor = view.tintColor
+        if let lbl = label {
+            indicatorView?.addSubview(lbl)
+        }
+        indicatorView?.hidden = true
+        if let indView = indicatorView {
+            view.addSubview(indView)
+        }
         
-        super.init()
-        
-        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("hideNotifier"), name: kNotificationHideNotifiers, object: nil)
+        self.subscribeToIncomingMessages()
     }
     
     init(viewController : UIViewController) {
+        super.init()
         
         let leftBarButtonItem = viewController.navigationItem.leftBarButtonItem!
         
@@ -65,37 +75,43 @@ class SupportNotifier: NSObject {
         viewController.navigationItem.leftBarButtonItem = customItem
         
         indicatorView = UIImageView(image: UIImage(named: "icon_alert.png"))
-        indicatorView.frame = CGRectMake(-10, -5, 20, 20)
-        indicatorView.hidden = true
-        button.addSubview(indicatorView)
+        indicatorView?.frame = CGRectMake(-10, -5, 20, 20)
+        indicatorView?.hidden = true
         
-        label = UILabel.init()
-        
-        super.init()
-        
-        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("hideNotifier"), name: kNotificationHideNotifiers, object: nil)
-    }
-    
-    func didReceiveMessage(mmxMessage: MMXMessage) {
-        
-        guard let ch = mmxMessage.channel where ch.name.lowercaseString == kAskMagnetChannel.lowercaseString && !stopped else {
-            return
+        if let indView = indicatorView {
+            button.addSubview(indView)
         }
         
-        count++
-        indicatorView.hidden = false
-        label.text = "\(count) new"
+        self.subscribeToIncomingMessages()
     }
     
-    func hideNotifier() {
-        count = 0
-        indicatorView.hidden = true
+    override func subscribeToIncomingMessages() {
+        super.subscribeToIncomingMessages()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetCount", name: kNotificationHideSupportNotifiers, object: nil)
+    }
+    
+    override func shouldNotifyFor(mmxMessage: MMXMessage) -> Bool {
+        if let ch = mmxMessage.channel where ch.name.lowercaseString == kAskMagnetChannel.lowercaseString && !stopped {
+            return true
+        }
+        return false
+    }
+    
+    override func reload() {
+        super.reload()
+        
+        if count > 0 {
+            indicatorView?.hidden = false
+            label?.text = "\(notifierCount()) new"
+        }
+    }
+    
+    override func didReceiveMessage(mmxMessage: MMXMessage) {
+        super.didReceiveMessage(mmxMessage)
     }
     
     deinit {
-        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-
 }

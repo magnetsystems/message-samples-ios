@@ -27,7 +27,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     var actualEvents : [MMXChannelDetailResponse] = []
     var askMagnet : [MMXChannelDetailResponse] = []
-    var notifier: SupportNotifier?
+    var notifier: NavigationNotifier?
 
     override func viewDidLoad() {
         super.viewDidLoad()
