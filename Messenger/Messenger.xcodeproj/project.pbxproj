@@ -99,6 +99,8 @@
 		8BF254C01C49697A008719AA /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF254BF1C49697A008719AA /* Popup.swift */; };
 		8D4413F61C74FBA90008314B /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4413F51C74FBA90008314B /* Errors.swift */; };
 		8D4413FA1C7646710008314B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8D4413F91C7646710008314B /* Localizable.strings */; };
+		8D4413FC1C769DE30008314B /* ChatViewControllerCollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4413FB1C769DE30008314B /* ChatViewControllerCollectionExtension.swift */; };
+		8D4413FE1C769F0E0008314B /* ChatViewControllerChatViewControllerImagePickerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4413FD1C769F0E0008314B /* ChatViewControllerChatViewControllerImagePickerExtension.swift */; };
 		8D7F515F1C6E9C0000814064 /* bg_img_1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */; };
 		8D7F51621C6EC14100814064 /* ContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7F51611C6EC14100814064 /* ContactsTableViewCell.swift */; };
 		8DB526B01C6E6CF4001D9AF9 /* messages_wh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */; };
@@ -221,6 +223,8 @@
 		8BF254BF1C49697A008719AA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
 		8D4413F51C74FBA90008314B /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		8D4413F91C7646710008314B /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		8D4413FB1C769DE30008314B /* ChatViewControllerCollectionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewControllerCollectionExtension.swift; sourceTree = "<group>"; };
+		8D4413FD1C769F0E0008314B /* ChatViewControllerChatViewControllerImagePickerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewControllerChatViewControllerImagePickerExtension.swift; sourceTree = "<group>"; };
 		8D7F515E1C6E9C0000814064 /* bg_img_1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_img_1_2.png; sourceTree = "<group>"; };
 		8D7F51611C6EC14100814064 /* ContactsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsTableViewCell.swift; sourceTree = "<group>"; };
 		8DB526AE1C6E6CF4001D9AF9 /* messages_wh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = messages_wh.png; sourceTree = "<group>"; };
@@ -437,6 +441,8 @@
 			children = (
 				8B3EBB601C3BF80200BAED8E /* ContactsViewController.swift */,
 				8B81C12D1C3C1E5600C186B6 /* ChatViewController.swift */,
+				8D4413FB1C769DE30008314B /* ChatViewControllerCollectionExtension.swift */,
+				8D4413FD1C769F0E0008314B /* ChatViewControllerChatViewControllerImagePickerExtension.swift */,
 				8B6AA87C1C3C3BB100DE3C42 /* DetailsViewController.swift */,
 			);
 			name = Chats;
@@ -989,6 +995,7 @@
 				7A76D4121C6AAABB004ADC49 /* AskMagnetTableViewCell.swift in Sources */,
 				8BF254C01C49697A008719AA /* Popup.swift in Sources */,
 				7A76D41D1C6B90BA004ADC49 /* CreateChatCell.swift in Sources */,
+				8D4413FE1C769F0E0008314B /* ChatViewControllerChatViewControllerImagePickerExtension.swift in Sources */,
 				8BDF49DA1C32FD5500F0E51B /* SWRevealViewController.m in Sources */,
 				7A1894D51C6CEB0D0068183A /* UIImage_extension.swift in Sources */,
 				7A76D4011C6A7903004ADC49 /* Utils.swift in Sources */,
@@ -1016,6 +1023,7 @@
 				8B81C12E1C3C1E5600C186B6 /* ChatViewController.swift in Sources */,
 				8B0EC58A1C723DC9004CCDA0 /* SupportViewController.swift in Sources */,
 				8B6AA87D1C3C3BB100DE3C42 /* DetailsViewController.swift in Sources */,
+				8D4413FC1C769DE30008314B /* ChatViewControllerCollectionExtension.swift in Sources */,
 				8B8E803C1C2AE733008D8C43 /* RegisterViewController.swift in Sources */,
 				8B8E80331C2ACAC8008D8C43 /* BaseViewController.swift in Sources */,
 				8D4413F61C74FBA90008314B /* Errors.swift in Sources */,
