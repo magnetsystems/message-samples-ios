@@ -96,13 +96,16 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     }
     
     
-    //MARK: - public Methods
+    //MARK: - Notifications
     
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
         loadEventChannels()
         loadDetails()
     }
+    
+    
+    //MARK: - public Methods
     
     
     func loadAskMagnetChannel() {
