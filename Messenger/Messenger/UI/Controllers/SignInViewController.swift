@@ -15,20 +15,32 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
-import MagnetMax
 import AFNetworking
+import MagnetMax
+import UIKit
 
 class SignInViewController : BaseViewController {
+    
+    
+    //MARK: Public properties
+    
     
     @IBOutlet weak var txtfEmail : UITextField!
     @IBOutlet weak var txtfPassword : UITextField!
     @IBOutlet weak var btnRemember : UISwitch!
     @IBOutlet weak var chbRememberMe: UIImageView!
     
+    
+    //MARK: Overrides
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.resignOnBackgroundTouch()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -40,9 +52,10 @@ class SignInViewController : BaseViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
     }
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-    }
+
+    
+    //MARK: Actions
+    
     
     @IBAction func selectCheckbox(sender: UIButton) {
         if btnRemember.on {
@@ -79,6 +92,10 @@ class SignInViewController : BaseViewController {
         }
     }
     
+    
+    //MARK: - private Methods
+    
+    
     private func validateCredential() -> (String, String)? {
         
         guard let email = txtfEmail.text where (email.isEmpty == false) else {
@@ -90,8 +107,5 @@ class SignInViewController : BaseViewController {
         }
         
         return (email, password)
-    }
-    
-    deinit {
     }
 }

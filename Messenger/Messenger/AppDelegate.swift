@@ -15,17 +15,17 @@
 * permissions and limitations under the License.
 */
 
+import AFNetworking
+import Crashlytics
+import Fabric
 import UIKit
 import MagnetMax
-import Fabric
-import Crashlytics
-import AFNetworking
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-    var window: UIWindow?
+
     weak var baseViewController : UIViewController?
+    var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -76,6 +76,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func appendToMainWindow(viewController : UIViewController, animated : Bool) {
+        viewController.modalTransitionStyle = .CrossDissolve
+        self.window?.rootViewController?.presentViewController(viewController, animated: animated, completion: nil)
+        self.baseViewController = viewController
+    }
+    
     func launchViewController() -> UIViewController {
         let storyboard = UIStoryboard(name: sb_id_Launch, bundle: nil)
         return storyboard.instantiateInitialViewController()!;
@@ -86,6 +92,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return storyboard.instantiateInitialViewController()!
     }
     
+    func sessionEnded() {
+        print("[SESSION]: SESSION ENDED")
+        if let mainNav = self.baseViewController as? UINavigationController {
+            print("[SESSION]: WILL DISPLAY LOGIN")
+            mainNav.popToRootViewControllerAnimated(true)
+        }
+    }
+    
     func setMainWindow(viewController : UIViewController) {
         if self.window == nil {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
@@ -93,20 +107,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         self.window?.rootViewController = viewController
         self.baseViewController = viewController
-    }
-    
-    func appendToMainWindow(viewController : UIViewController, animated : Bool) {
-        viewController.modalTransitionStyle = .CrossDissolve
-        self.window?.rootViewController?.presentViewController(viewController, animated: animated, completion: nil)
-        self.baseViewController = viewController
-    }
-    
-    func sessionEnded() {
-        print("[SESSION]: SESSION ENDED")
-        if let mainNav = self.baseViewController as? UINavigationController {
-            print("[SESSION]: WILL DISPLAY LOGIN")
-            mainNav.popToRootViewControllerAnimated(true)
-        }
     }
     
     func applicationWillResignActive(application: UIApplication) {

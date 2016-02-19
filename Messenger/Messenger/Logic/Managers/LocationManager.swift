@@ -15,15 +15,27 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
 import CoreLocation
+import UIKit
 
 class LocationManager: NSObject, CLLocationManagerDelegate {
     
+    
+    //MARK: Static properties
+    
+    
     static let sharedInstance = LocationManager()
     
-    private var locationManager = CLLocationManager()
+    
+    //MARK: Private properties
+    
+    
     private var locationHandler : ((CLLocation) -> Void)?
+    private var locationManager = CLLocationManager()
+    
+    
+    //MARK: Overrides
+    
     
     private override init() {
         super.init()
@@ -32,11 +44,20 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestAlwaysAuthorization()
     }
     
+    
+    //MARK: - Public implementation
+    
+    
     func getLocation(handler: ((CLLocation) -> Void)?) {
         if handler != nil {
             locationHandler = handler
             locationManager.startUpdatingLocation()
         }
+    }
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        locationManager.stopUpdatingLocation()
+        print("\(error.localizedFailureReason, error.localizedDescription)")
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -48,9 +69,5 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
         locationManager.stopUpdatingLocation()
     }
-
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        locationManager.stopUpdatingLocation()
-        print("\(error.localizedFailureReason, error.localizedDescription)")
-    }
+    
 }

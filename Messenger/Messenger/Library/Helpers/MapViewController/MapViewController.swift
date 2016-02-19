@@ -19,9 +19,17 @@ import UIKit
 
 class MapViewController: UIViewController, MKMapViewDelegate {
     
-    @IBOutlet weak var vMap: MKMapView!
+    
+    //MARK: Public properties
+    
+    
     var location: CLLocationCoordinate2D!
-
+    @IBOutlet weak var vMap: MKMapView!
+    
+    
+    //MARK: Overrides
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,31 +39,45 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let annotation = MapPin(coordinate: location)
         vMap.addAnnotation(annotation)
-
-//        vMap.setCenterCoordinate(location, animated: false)
         self.view.sendSubviewToBack(vMap)
     }
-
+    
+    
+    //MARK: Actions
+    
+    
     @IBAction func closeAction() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    
+    //MARK: - public Methods
+    
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? MapPin {
             
             let view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
-
+            
             view.annotation = annotation
             
             return view
         }
         return nil
     }
-
 }
 
 class MapPin: NSObject, MKAnnotation {
+    
+    
+    //MARK: Public properties
+    
+    
     let coordinate: CLLocationCoordinate2D
+    
+    
+     //MARK: Init
+    
     
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate

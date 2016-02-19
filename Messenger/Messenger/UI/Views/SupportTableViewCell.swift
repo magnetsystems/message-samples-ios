@@ -15,23 +15,17 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
 import MagnetMax
+import UIKit
 
 class SupportTableViewCell: ChannelDetailBaseTVCell {
     
-    @IBOutlet weak var lblAsker : UILabel!
-    @IBOutlet weak var lblLastTime : UILabel!
-    @IBOutlet weak var lblMessage : UILabel!
-    @IBOutlet weak var ivAvatarImage : UIImageView!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        let borderSize:CGFloat = 40.0
-        ivAvatarImage.layer.cornerRadius = borderSize / 2.0
-        ivAvatarImage.layer.masksToBounds = true
-        ivAvatarImage.translatesAutoresizingMaskIntoConstraints = false
-    }
+    //MARK: Public properties
+    
+    
+    @IBOutlet weak var lblAsker : UILabel!
+    @IBOutlet weak var ivAvatarImage : UIImageView!
     
     override var detailResponse : MMXChannelDetailResponse! {
         didSet {
@@ -50,4 +44,19 @@ class SupportTableViewCell: ChannelDetailBaseTVCell {
         }
     }
 
+    @IBOutlet weak var lblLastTime : UILabel!
+    @IBOutlet weak var lblMessage : UILabel!
+    
+    
+    //MARK: Overrides
+    
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        let borderSize:CGFloat = 40.0
+        ivAvatarImage.layer.cornerRadius = borderSize / 2.0
+        ivAvatarImage.layer.masksToBounds = true
+        ivAvatarImage.translatesAutoresizingMaskIntoConstraints = false
+    }
 }

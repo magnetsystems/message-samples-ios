@@ -15,14 +15,21 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
 import MagnetMax
+import UIKit
 
 class NavigationNotifier: NSObject {
     
-    var indicatorView : UIView?
-    private var channel : MMXChannel?
-    private var _count = 0
+    
+    //MARK: Static properties
+    
+    
+    static let MAXCOUNT : Int = 99
+    
+    
+    //MARK: Public properties
+    
+    
     var count : Int {
         set {
             _count = newValue
@@ -33,9 +40,23 @@ class NavigationNotifier: NSObject {
         }
     }
     
+    var indicatorView : UIView?
     var label : UILabel?
     
-    static let MAXCOUNT : Int = 99
+    
+    //MARK: Private properties
+    
+    
+    private var channel : MMXChannel?
+    private var _count = 0
+    
+    
+    //MARK: Overrides
+    
+    
+    deinit {
+        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+    }
     
     override init() {
         super.init()
@@ -64,8 +85,20 @@ class NavigationNotifier: NSObject {
         self.subscribeToIncomingMessages()
     }
     
-    func subscribeToIncomingMessages() {
-      ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
+    
+    //MARK: - Public implementation
+    
+    
+    func didReceiveMessage(mmxMessage: MMXMessage) {
+        if !shouldNotifyFor(mmxMessage) {
+            return
+        }
+        
+        count++
+    }
+
+    func notifierCount() -> String {
+        return "\(count <= NavigationNotifier.MAXCOUNT ? "\(count)" : "\(NavigationNotifier.MAXCOUNT)+")"
     }
     
     func reload() {
@@ -84,6 +117,7 @@ class NavigationNotifier: NSObject {
         label?.text = ""
     }
     
+    
     func setIndicatorOffset(offset : CGFloat) {
         label?.transform = CGAffineTransformMakeTranslation(offset, 0)
     }
@@ -95,19 +129,8 @@ class NavigationNotifier: NSObject {
         return false
     }
     
-    func notifierCount() -> String {
-        return "\(count <= NavigationNotifier.MAXCOUNT ? "\(count)" : "\(NavigationNotifier.MAXCOUNT)+")"
+    func subscribeToIncomingMessages() {
+        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
     }
-    
-    func didReceiveMessage(mmxMessage: MMXMessage) {
-        if !shouldNotifyFor(mmxMessage) {
-            return
-        }
-        
-        count++
-    }
-    
-    deinit {
-        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
-    }
+ 
 }

@@ -15,14 +15,14 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
 import MagnetMax
+import UIKit
 
 class BaseNavigationController: UINavigationController {
  
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    
+    //MARK: Overrides
+    
     
     override func shouldAutorotate() -> Bool {
         return false
@@ -31,5 +31,8 @@ class BaseNavigationController: UINavigationController {
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         return .Portrait
     }
-
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
 }

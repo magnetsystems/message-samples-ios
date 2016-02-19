@@ -20,20 +20,30 @@ import MagnetMax
 
 class RearMenuViewController: UITableViewController {
     
-    @IBOutlet weak var username: UILabel!
-    @IBOutlet weak var userAvatar: UIImageView!
-    @IBOutlet weak var version: UILabel!
+    
+    //MARK: Public properties
+    
     
     var notifier : SupportNotifier?
+    @IBOutlet weak var userAvatar: UIImageView!
+    @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var version: UILabel!
+    
+    
+    //MARK: Type Def
+    
     
     enum IndexPathRowAction: Int {
         case UserInfo = 0
         case Home
         case Support
-//        case Events
         case SignOut
         case Version
     }
+    
+    
+    //MARK: Overrides
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +71,7 @@ class RearMenuViewController: UITableViewController {
     
     // MARK: - Table view delegate
     
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
             switch indexPath.row {
@@ -82,14 +93,9 @@ class RearMenuViewController: UITableViewController {
                 
             case IndexPathRowAction.Home.rawValue :
                 notifier?.stopped = false
-                
                 let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
                 let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Home);
                 self.revealViewController().pushFrontViewController(vc, animated: true);
-                //        case IndexPathRowAction.Events.rawValue:
-                //            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
-                //            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
-                //            self.revealViewController().pushFrontViewController(vc, animated: true);
             case IndexPathRowAction.Support.rawValue :
                 SupportNotifier.hideSupportNotifiers()
                 notifier?.stopped = true
@@ -123,6 +129,10 @@ class RearMenuViewController: UITableViewController {
         return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
     }
 
+    
+    //Mark Notifications
+    
+    
     private func didDisconnect(notification: NSNotification) {
         // Indicate that you are not ready to receive messages now!
         MMX.stop()

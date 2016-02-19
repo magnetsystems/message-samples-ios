@@ -15,17 +15,25 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
-import MobileCoreServices
+
 import MagnetMax
+import MobileCoreServices
+import UIKit
 
 class UserProfileViewController: BaseViewController {
 
-    @IBOutlet weak var userAvatarIV: UIImageView!
-    @IBOutlet weak var userEmailL: UILabel!
+    
+    //MARK: Public properties
+    
+    
     @IBOutlet weak var firstNameTF: UITextField!
     @IBOutlet weak var lastNameTF: UITextField!
+    @IBOutlet weak var userAvatarIV: UIImageView!
+    @IBOutlet weak var userEmailL: UILabel!
 
+    
+    //MARK: Overrides
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,19 +61,12 @@ class UserProfileViewController: BaseViewController {
         }
     }
     
+    
     //MARK: - Actions
 
+    
     @IBAction func close(sender: UIBarButtonItem) {
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func selectAvatar(sender: UIButton) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.allowsEditing = false
-        imagePicker.sourceType = .PhotoLibrary
-        imagePicker.mediaTypes = [kUTTypeImage as String]
-        presentViewController(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func saveChanges(sender: UIButton) {
@@ -89,10 +90,22 @@ class UserProfileViewController: BaseViewController {
         
     }
     
-    
+    @IBAction func selectAvatar(sender: UIButton) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .PhotoLibrary
+        imagePicker.mediaTypes = [kUTTypeImage as String]
+        presentViewController(imagePicker, animated: true, completion: nil)
+    }
 }
 
+
 extension UserProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    
+    //MARK: - UIImagePickerControllerDelegate
+    
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         

@@ -15,40 +15,59 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
 import MagnetMax
+import UIKit
 
 class ChannelObserver {
+    
+    
+    //MARK: Public properties
+    
+    
     var channel : MMXChannel?
     weak var object : AnyObject?
     var selector : Selector?
 }
 
+
 class ChannelManager {
+    
+    
+    //MARK: Static properties
+    
     
     static let sharedInstance = ChannelManager()
     
-    let formatter = DateFormatter()
+    
+    //MARK: Public properties
+    
+    
     var channels : [MMXChannel]?
     var channelDetails : [MMXChannelDetailResponse]?
-    
     var eventChannels : [MMXChannel]?
     var eventChannelDetails : [MMXChannelDetailResponse]?
-
+    let formatter = DateFormatter()
+    
+    
+    //MARK: Private properties
+    
     
     private var channelObservers : [ChannelObserver] = []
     
-    func channelForName(name: String) -> MMXChannel? {
-        
-        if nil == channels { return nil }
-        
-        for channel in channels! {
-            if channel.name == name {
-                return channel
-            }
+    
+    //MARK: - Public implementation
+    
+    
+    func addChannelMessageObserver(target : AnyObject, channel : MMXChannel?, selector : Selector) {
+        if let ch = channel {
+            removeChannelMessageObserver(target, channel: ch)
         }
         
-        return nil
+        let observer = ChannelObserver.init()
+        observer.object = target
+        observer.channel = channel
+        observer.selector = selector
+        channelObservers.append(observer)
     }
     
     func channelDetailForChannelName(name: String) -> MMXChannelDetailResponse? {
@@ -66,18 +85,38 @@ class ChannelManager {
         return nil
     }
     
-    func addChannelMessageObserver(target : AnyObject, channel : MMXChannel?, selector : Selector) {
-        if let ch = channel {
-            removeChannelMessageObserver(target, channel: ch)
+    func channelForName(name: String) -> MMXChannel? {
+        
+        if nil == channels { return nil }
+        
+        for channel in channels! {
+            if channel.name == name {
+                return channel
+            }
         }
         
-        let observer = ChannelObserver.init()
-        observer.object = target
-        observer.channel = channel
-        observer.selector = selector
-        channelObservers.append(observer)
+        return nil
+    }
+   
+    func getLastMessageForChannel(channel: MMXChannel) -> String? {
+        let name = nameForChannel(channel)
+        
+        return MMUser.currentUser()?.extras["\(name)_last_message_id"]
     }
     
+    func getLastViewTimeForChannel(channel: MMXChannel) -> NSDate? {
+        
+        let name = nameForChannel(channel)
+        
+        if let string = MMUser.currentUser()?.extras[name] {
+            if let interval : NSTimeInterval = NSTimeInterval(string)  {
+                return NSDate(timeIntervalSince1970: interval)
+            }
+        }
+        
+        return nil
+    }
+
     func isOwnerForChat(name: String) -> MMXChannel? {
         if let channel = channelForName(name) where channel.ownerUserID == MMUser.currentUser()?.userID {
             return channel
@@ -92,25 +131,6 @@ class ChannelManager {
         return key
     }
     
-    func getLastViewTimeForChannel(channel: MMXChannel) -> NSDate? {
-        
-        let name = nameForChannel(channel)
-        
-        if let string = MMUser.currentUser()?.extras[name] {
-            if let interval : NSTimeInterval = NSTimeInterval(string)  {
-            return NSDate(timeIntervalSince1970: interval)
-            }
-        }
-        
-        return nil
-    }
-    
-    func getLastMessageForChannel(channel: MMXChannel) -> String? {
-        let name = nameForChannel(channel)
-        
-        return MMUser.currentUser()?.extras["\(name)_last_message_id"]
-    }
-     
     func saveLastViewTimeForChannel(channel: MMXChannel, date : NSDate) {
         saveLastViewTimeForChannel(channel, message: nil, date: date)
     }
@@ -145,7 +165,9 @@ class ChannelManager {
         })
     }
     
-    // MARK: - Private implementation
+    
+    //MARK: - Private implementation
+    
     
     @objc private func didReceiveMessage(notification: NSNotification) {
         let tmp : [NSObject : AnyObject] = notification.userInfo!

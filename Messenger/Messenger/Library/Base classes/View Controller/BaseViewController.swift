@@ -19,6 +19,10 @@ import UIKit
 
 extension UIViewController {
     
+    
+    //MARK: - public Methods
+    
+    
     public func resignOnBackgroundTouch () -> Void {
         let onTouch = UITapGestureRecognizer.init(target: self, action: "didTouch:")
         self.view.addGestureRecognizer(onTouch)
@@ -27,6 +31,10 @@ extension UIViewController {
     @objc private func didTouch(tap : UITapGestureRecognizer) {
         resignFirstResponder(self.view)
     }
+    
+    
+    //MARK: - private Methods
+    
     
     private func resignFirstResponder(view : UIView) -> Bool {
         if (view.isFirstResponder()) {
@@ -48,21 +56,27 @@ extension UIViewController {
 
 class BaseViewController: UIViewController, UITextFieldDelegate {
     
+    
+    //MARK: Public properties
+    
+    
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
+    
+    //MARK: Overrides
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
+    
+    
+    //MARK: - public Methods
+    
     
     func showAlert(message :String, title :String, closeTitle :String, handler:((UIAlertAction) -> Void)? = nil) {
         let alert = Popup(message: message, title: title, closeTitle: closeTitle, handler: handler)
         alert.presentForController(self)
-    }
-    
-    func showLoadingIndicator() {
-        activityIndicator?.startAnimating()
-        self.view.userInteractionEnabled = false
     }
     
     func hideLoadingIndicator() {
@@ -70,7 +84,14 @@ class BaseViewController: UIViewController, UITextFieldDelegate {
         self.view.userInteractionEnabled = true
     }
     
+    func showLoadingIndicator() {
+        activityIndicator?.startAnimating()
+        self.view.userInteractionEnabled = false
+    }
+    
+    
     //MARK: UITextField delegate
+    
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()

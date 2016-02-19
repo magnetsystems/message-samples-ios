@@ -21,6 +21,7 @@ class UIImage_extension: NSObject {
 
 }
 
+
 extension UIImage {
     convenience init(view: UIView) {
         UIGraphicsBeginImageContext(view.frame.size)

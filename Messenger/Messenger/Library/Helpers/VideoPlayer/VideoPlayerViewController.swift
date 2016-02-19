@@ -20,12 +20,28 @@ import MagnetMax
 
 class VideoPlayerViewController: BaseViewController, DZVideoPlayerViewControllerDelegate {
     
-    @IBOutlet weak var videoContainerView: DZVideoPlayerViewControllerContainerView!
-    var videoPlayerViewController: DZVideoPlayerViewController!
+    
+    //MARK: Public properties
+    
+    
     var attachment: MMAttachment!
     var fileURL: NSURL!
     private var hideStatusBar = true
+    @IBOutlet weak var videoContainerView: DZVideoPlayerViewControllerContainerView!
+    var videoPlayerViewController: DZVideoPlayerViewController!
+   
+    
+    //MARK: Overrides
 
+   
+    override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
+        return .None
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return hideStatusBar
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,25 +77,19 @@ class VideoPlayerViewController: BaseViewController, DZVideoPlayerViewController
         }
     }
     
-    override func prefersStatusBarHidden() -> Bool {
-        return hideStatusBar
-    }
+
+    //MARK: Public Methods
     
-    override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
-        return .None
-    }
     
     func startPlay() {
-
-        //    self.videoPlayerViewController.configuration.isBackgroundPlaybackEnabled = NO;
-        //    self.videoPlayerViewController.configuration.isHideControlsOnIdleEnabled = NO;
-        
         self.videoPlayerViewController.activityIndicatorView?.stopAnimating()
         self.videoPlayerViewController.videoURL = fileURL
         self.videoPlayerViewController.prepareAndPlayAutomatically(true)
     }
     
+    
     //MARK: - DZVideoPlayerViewControllerDelegate
+    
     
     func playerDoneButtonTouched() {
         self.videoContainerView.videoPlayerViewController.stop()

@@ -15,23 +15,47 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
-import MagnetMax
 import JSQMessagesViewController
+import MagnetMax
 import MobileCoreServices
 import NYTPhotoViewer
-//import Toucan
+import UIKit
 
 class ChatViewController: JSQMessagesViewController {
     
-    var notifier : NavigationNotifier?
-    var messages = [Message]()
+    
+    //MARK: Public properties
+    
+    
+    var activityIndicator : UIActivityIndicatorView?
     var avatars = Dictionary<String, UIImage>()
     var avatarsDownloading = Dictionary<String, MMUser>()
-    let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
-    let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
-    var activityIndicator : UIActivityIndicatorView?
     var canLeaveChat = false
+    let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
+    var messages = [Message]()
+    var notifier : NavigationNotifier?
+    let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
+    
+    
+    //MARK: Overridden Properties
+    
+    
+    var chat : MMXChannel? {
+        didSet {
+            //Register for a notification to receive the message
+            if let channel = chat {
+                if chat != nil && chat!.summary!.containsString("Ask") {
+                    navigationItem.title = "Ask Magnet"
+                } else if chat != nil && chat!.summary!.containsString("Forum") {
+                    navigationItem.title = "Forum"
+                }
+                notifier = NavigationNotifier(viewController: self, exceptFor: channel)
+                ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
+            }
+            loadMessages()
+        }
+    }
+    
     var isAskMagnetChannel = false {
         didSet {
             if isAskMagnetChannel {
@@ -63,21 +87,6 @@ class ChatViewController: JSQMessagesViewController {
             }
         }
     }
-    var chat : MMXChannel? {
-        didSet {
-            //Register for a notification to receive the message
-            if let channel = chat {
-                if chat != nil && chat!.summary!.containsString("Ask") {
-                    navigationItem.title = "Ask Magnet"
-                } else if chat != nil && chat!.summary!.containsString("Forum") {
-                    navigationItem.title = "Forum"
-                }
-                notifier = NavigationNotifier(viewController: self, exceptFor: channel)
-                ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
-            }
-            loadMessages()
-        }
-    }
     
     var recipients : [MMUser]! {
         didSet {
@@ -103,7 +112,16 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    // MARK: - View
+    
+    // MARK: - overrides
+    
+    
+    deinit {
+        // Save the last channel show
+        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+        print("--------> deinit chat <---------")
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,9 +140,6 @@ class ChatViewController: JSQMessagesViewController {
         
         senderId = user.userID
         senderDisplayName = user.firstName
-        //        showLoadEarlierMessagesHeader = true
-        //        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
-        //        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
         
         // Find recipients
         if chat != nil {
@@ -158,14 +173,9 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    deinit {
-        // Save the last channel show
-        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
-        print("--------> deinit chat <---------")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
     
     // MARK: - Public methods
+    
     
     func addSubscribers(newSubscribers: [MMUser]) {
         
@@ -183,13 +193,13 @@ class ChatViewController: JSQMessagesViewController {
         })
     }
     
+    
     // MARK: - MMX methods
+    
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
         
         //Show the typing indicator to be shown
-        
-        
         // Scroll to actually view the indicator
         scrollToBottomAnimated(true)
         
@@ -216,7 +226,9 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    //MARK: - overriden JSQMessagesViewController methods
+    
+    //MARK: - overridden JSQMessagesViewController methods
+    
     
     override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         
@@ -325,7 +337,9 @@ class ChatViewController: JSQMessagesViewController {
         return nil
     }
     
+    
     // MARK: UICollectionView DataSource
+    
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages.count
@@ -364,7 +378,9 @@ class ChatViewController: JSQMessagesViewController {
         return cell
     }
     
+    
     // MARK: JSQMessagesCollectionViewDelegateFlowLayout methods
+    
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
         //Each label in a cell has a `height` delegate method that corresponds to its text dataSource method

@@ -15,19 +15,26 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
-import MagnetMax
 import JSQMessagesViewController
+import MagnetMax
+import UIKit
 
 class ChannelDetailBaseTVCell: UITableViewCell {
     
-    @IBOutlet weak var vNewMessageIndicator : UIView?
+    
+    //MARK: Public properties
     
     var detailResponse : MMXChannelDetailResponse? {
         didSet {
             vNewMessageIndicator?.hidden = !hasNewMessagesFromLastTime(useLastMessage : false)
         }
     }
+    
+    @IBOutlet weak var vNewMessageIndicator : UIView?
+
+    
+    //MARK: Static Methods
+    
     
     static func cellHeight() -> CGFloat {
         
@@ -38,6 +45,10 @@ class ChannelDetailBaseTVCell: UITableViewCell {
         return cellView.frame.size.height;
     }
     
+    
+    //MARK: Overrides
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -46,14 +57,10 @@ class ChannelDetailBaseTVCell: UITableViewCell {
             vNewMessageIndicator.clipsToBounds = true
         }
     }
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
+
     
     // MARK: - Helpers
+    
     
     func hasNewMessagesFromLastTime(useLastMessage useLastMessage: Bool) -> Bool {
         if let detailResponse = self.detailResponse {

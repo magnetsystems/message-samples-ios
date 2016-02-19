@@ -31,6 +31,7 @@ class UtilsSet {
     }
 }
 
+
 class Utils: NSObject {
     
     
@@ -40,7 +41,9 @@ class Utils: NSObject {
     private static var downloadObjects : [String : String] = [:]
     private static var loadingURLs : [String : UtilsSet] = [:]
     
+    
     //MARK: Magnet helper
+    
     
     static func isMagnetEmployee() -> Bool {
         if let currentUser = MMUser.currentUser() where ( currentUser.tags != nil && currentUser.tags.contains(kMagnetSupportTag) ) {
@@ -48,6 +51,7 @@ class Utils: NSObject {
         }
         return false
     }
+    
     
     //MARK: Image Loading
     

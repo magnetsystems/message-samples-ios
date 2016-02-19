@@ -15,23 +15,30 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
-import MagnetMax
 import JSQMessagesViewController
+import MagnetMax
+import UIKit
 
 class SummaryResponseCell: ChannelDetailBaseTVCell {
     
+    
+    //MARK: Static properties
+    
+    
+    static var images : [String : UIImage] = [:]
+    
+    
+    //MARK: Public properties
+    
+    
+    @IBOutlet weak var ivMessageIcon : UIImageView!
     @IBOutlet weak var lblSubscribers : UILabel!
     @IBOutlet weak var lblLastTime : UILabel!
     @IBOutlet weak var lblMessage : UILabel!
-    @IBOutlet weak var ivMessageIcon : UIImageView!
-    static var images : [String : UIImage] = [:]
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        ivMessageIcon.layer.cornerRadius = ivMessageIcon.bounds.width / 2
-        ivMessageIcon.clipsToBounds = true
-    }
+    
+    
+    //MARK: Overridden Properties
+    
     
     override var detailResponse : MMXChannelDetailResponse! {
         didSet {
@@ -102,5 +109,14 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
     }
     
     
+    //MARK: Overrides
+    
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        ivMessageIcon.layer.cornerRadius = ivMessageIcon.bounds.width / 2
+        ivMessageIcon.clipsToBounds = true
+    }
     
 }

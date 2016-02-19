@@ -18,18 +18,11 @@
 import UIKit
 
 class ContactsTableViewCell: UITableViewCell {
+    
+    
+    //MARK: Public properties
+    
+    
     @IBOutlet var avatarImage : UIImageView?
     @IBOutlet var profileText : UILabel?
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
-    
 }

@@ -17,25 +17,28 @@
 
 class DateFormatter {
     
+    
+    //MARK: Public properties
+    
+    
     let formatter = NSDateFormatter()
+    
+    
+    //MARK: - Init
+    
     
     init() {
         formatter.locale = NSLocale.currentLocale()
         formatter.timeZone = NSTimeZone(name: "GMT")
     }
     
-    func relativeDateForDate(date: NSDate) -> String {
-        return NSDateFormatter.localizedStringFromDate(date, dateStyle: .ShortStyle, timeStyle: .NoStyle)
-    }
     
-    func dayOfTheWeek(date: NSDate) -> String {
-        let dayFormatter = NSDateFormatter()
-        dayFormatter.dateFormat = "EEEE"
-        return dayFormatter.stringFromDate(date)
-    }
+    //MARK: - public Methods
     
-    func timeForDate(date: NSDate) -> String {
-        return NSDateFormatter.localizedStringFromDate(date, dateStyle: .NoStyle, timeStyle: .ShortStyle)
+    
+    func currentTimeStamp() -> String {
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        return formatter.stringFromDate(NSDate())
     }
     
     func dateForStringTime(stringTime: String) -> NSDate? {
@@ -43,9 +46,10 @@ class DateFormatter {
         return formatter.dateFromString(stringTime)
     }
     
-    func currentTimeStamp() -> String {
-        formatter.dateFormat = "yyyyMMddHHmmss"
-        return formatter.stringFromDate(NSDate())
+    func dayOfTheWeek(date: NSDate) -> String {
+        let dayFormatter = NSDateFormatter()
+        dayFormatter.dateFormat = "EEEE"
+        return dayFormatter.stringFromDate(date)
     }
     
     func displayTime(stringTime: String) -> String! {
@@ -70,5 +74,13 @@ class DateFormatter {
         }
         
         return stringTime
+    }
+    
+    func relativeDateForDate(date: NSDate) -> String {
+        return NSDateFormatter.localizedStringFromDate(date, dateStyle: .ShortStyle, timeStyle: .NoStyle)
+    }
+    
+    func timeForDate(date: NSDate) -> String {
+        return NSDateFormatter.localizedStringFromDate(date, dateStyle: .NoStyle, timeStyle: .ShortStyle)
     }
 }

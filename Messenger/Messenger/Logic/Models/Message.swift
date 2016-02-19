@@ -15,12 +15,17 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
 import JSQMessagesViewController
 import MMX
+import UIKit
 
 class Message : NSObject, JSQMessageData {
     
+    
+    //MARK: Public properties
+    
+    
+    private(set) var isDownloaded : Bool = false
     var mediaCompletionBlock: JSQLocationMediaItemCompletionBlock?
     private(set) var underlyingMessage: MMXMessage {
         didSet {
@@ -36,12 +41,6 @@ class Message : NSObject, JSQMessageData {
             }
         }
     }
-    
-    private(set) var isDownloaded : Bool = false
-    
-    lazy var type: MessageType = {
-        return MessageType(rawValue: self.underlyingMessage.messageContent["type"]!)
-        }()!
     
     lazy var mediaContent: JSQMessageMediaData! = {
         
@@ -91,17 +90,20 @@ class Message : NSObject, JSQMessageData {
         }
     }()
     
+    lazy var type: MessageType = {
+        return MessageType(rawValue: self.underlyingMessage.messageContent["type"]!)
+        }()!
+    
+    
+    //MARK: init
+    
+    
     init(message: MMXMessage) {
         self.underlyingMessage = message
     }
     
-    func senderId() -> String! {
-        return underlyingMessage.sender!.userID
-    }
     
-    func senderDisplayName() -> String! {
-        return (underlyingMessage.sender!.firstName != nil && underlyingMessage.sender!.lastName != nil) ? "\(underlyingMessage.sender!.firstName) \(underlyingMessage.sender!.lastName)" : underlyingMessage.sender!.userName
-    }
+    //MARK: - Public implementation
     
     func date() -> NSDate! {
         if let date = underlyingMessage.timestamp {
@@ -119,6 +121,14 @@ class Message : NSObject, JSQMessageData {
         return UInt(abs(underlyingMessage.messageID!.hash))
     }
     
+    func senderId() -> String! {
+        return underlyingMessage.sender!.userID
+    }
+    
+    func senderDisplayName() -> String! {
+        return (underlyingMessage.sender!.firstName != nil && underlyingMessage.sender!.lastName != nil) ? "\(underlyingMessage.sender!.firstName) \(underlyingMessage.sender!.lastName)" : underlyingMessage.sender!.userName
+    }
+    
     func text() -> String! {
         return underlyingMessage.messageContent[Constants.ContentKey.Message]! as String
     }
@@ -126,6 +136,10 @@ class Message : NSObject, JSQMessageData {
     func media() -> JSQMessageMediaData! {
         return mediaContent
     }
+    
+    
+    //MARK: Overrides
+    
     
     override var description: String {
         return "senderId is \(senderId()), messageContent is \(underlyingMessage.messageContent)"

@@ -20,43 +20,42 @@ import Foundation
 struct Constants {
     
     struct ContentKey {
-        static let Message = "message"
-        static let Type = "type"
         static let Latitude = "latitude"
         static let Longitude = "longitude"
+        static let Message = "message"
+        static let Type = "type"
     }
     
 }
 
 let kUserDefaultsShowProfile = "kUserDefaultsShowProfile"
+let kAskMagnetChannel = "askMagnet"
+let kMagnetEmailDomain = "@magnet.com"
+let kMagnetSupportTag = "magnetsupport"
 
- /// IDs for storyboards, ViewControllers and segues
-
-let sb_id_Main = "Main"
-let sb_id_Launch = "LaunchScreen"
-
-let vc_id_Chat = "ChatViewController"
-let vc_id_Home = "home"
-let vc_id_Support = "support"
-let vc_id_Events = "events"
-let vc_id_SlideMenu = "SlideMenuVC"
-let vc_id_VideoPlayer = "VideoPlayerViewController"
-let vc_id_ContactsNav = "ContactsNavigationController"
-let vc_id_UserProfile = "userProfileVC"
+let kMinNameLength = 1
+let kMinPasswordLength = 6
 
 let kNotificationNetworkOffline = "com.magnet.network.offline"
 let kNotificationHideSupportNotifiers = "HideSupportNotifiersNotification"
 
+ /// IDs for storyboards, ViewControllers and segues
+
+let kSegueRegisterToHome = "registerToMenuSegue"
 let kSegueShowChatFromChatActivity = "showChatFromChannelSummary"
 let kSegueShowContactSelector = "showContactsSelector"
-let kSegueShowSlideMenu = "showSlideMenuVC"
-let kSegueRegisterToHome = "registerToMenuSegue"
-let kSegueShowMap = "showMapViewController"
 let kSegueShowDetails = "showDetailsSegue"
+let kSegueShowSlideMenu = "showSlideMenuVC"
+let kSegueShowMap = "showMapViewController"
 
-let kMagnetSupportTag = "magnetsupport"
-let kAskMagnetChannel = "askMagnet"
-let kMagnetEmailDomain = "@magnet.com"
+let sb_id_Launch = "LaunchScreen"
+let sb_id_Main = "Main"
 
-let kMinPasswordLength = 6
-let kMinNameLength = 1
+let vc_id_Chat = "ChatViewController"
+let vc_id_ContactsNav = "ContactsNavigationController"
+let vc_id_Events = "events"
+let vc_id_Home = "home"
+let vc_id_SlideMenu = "SlideMenuVC"
+let vc_id_Support = "support"
+let vc_id_UserProfile = "userProfileVC"
+let vc_id_VideoPlayer = "VideoPlayerViewController"

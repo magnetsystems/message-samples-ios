@@ -15,20 +15,7 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
 import MagnetMax
+import UIKit
 
-class AskMagnetTableViewCell: ChannelDetailBaseTVCell {
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
-}
+class AskMagnetTableViewCell: ChannelDetailBaseTVCell { }

@@ -17,8 +17,4 @@
 
 import UIKit
 
-class CreateChatCell: ChannelDetailBaseTVCell {
-
-
-
-}
+class CreateChatCell: ChannelDetailBaseTVCell { }

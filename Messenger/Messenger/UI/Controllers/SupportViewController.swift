@@ -15,14 +15,22 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
 import MagnetMax
+import UIKit
 
 class SupportViewController: UITableViewController {
+    
+    
+    //MARK: Public properties
+    
     
     var supportChannels: [MMXChannel] = [];
     var supportChannelDetails: [MMXChannelDetailResponse] = [];
     var users: [MMUser] = []
+    
+    
+    //MARK: Overrides
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +57,17 @@ class SupportViewController: UITableViewController {
         
         ChannelManager.sharedInstance.removeChannelMessageObserver(self)
     }
+    
+    //Mark: Notifications
+    
+    
+    func didReceiveMessage(mmxMessage: MMXMessage) {
+        loadDetails()
+    }
+    
+    
+    //MARK: - TableView Delegate
+    
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return supportChannelDetails.count
@@ -78,6 +97,10 @@ class SupportViewController: UITableViewController {
         }
     }
     
+    
+    //MARK: Actions
+    
+    
     @IBAction func refreshChannelDetail() {
         loadDetails()
     }
@@ -86,10 +109,13 @@ class SupportViewController: UITableViewController {
         self.revealViewController().revealToggleAnimated(true)
     }
     
-    //MARK: - Private
     
-    func didReceiveMessage(mmxMessage: MMXMessage) {
-        loadDetails()
+    //MARK: - Private Methods
+    
+    
+    private func endRefreshing() {
+        refreshControl?.endRefreshing()
+        tableView.reloadData()
     }
     
     private func loadDetails() {
@@ -128,11 +154,6 @@ class SupportViewController: UITableViewController {
                 print("[ERROR]: \(error)")
                 self?.endRefreshing()
         }
-    }
-    
-    private func endRefreshing() {
-        refreshControl?.endRefreshing()
-        tableView.reloadData()
     }
     
     private func userForChannelDetail(detail: MMXChannelDetailResponse) -> MMUser? {

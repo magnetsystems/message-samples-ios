@@ -15,28 +15,24 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
-import MagnetMax
 import JSQMessagesViewController
+import MagnetMax
+import UIKit
 
 class EventChannelTableViewCell: ChannelDetailBaseTVCell {
-
+    
+    
+    //MARK: Public properties
+    
+    
     @IBOutlet weak var channelDesrL: UILabel!
     @IBOutlet weak var totalSubscribersL: UILabel!
     @IBOutlet weak var backgroundIV: UIImageView!
-
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
+    
+    //MARK: Overridden Properties
+    
+    
     override var detailResponse : MMXChannelDetailResponse! {
         didSet {
             super.detailResponse = self.detailResponse
@@ -57,19 +53,19 @@ class EventChannelTableViewCell: ChannelDetailBaseTVCell {
             
         }
     }
-
-//    private func hasNewMessagesFromLastTime() -> Bool {
-//        if let lastMessageID = ChannelManager.sharedInstance.getLastMessageForChannel(detailResponse.channelName) {
-//            return lastMessageID != detailResponse.messages.last?.messageID
-//        }
-//        if let lastViewTime = ChannelManager.sharedInstance.getLastViewTimeForChannel(detailResponse.channelName) {
-//            if let lastPublishedTime = detailResponse.lastPublishedTime {
-//                
-//                return lastViewTime.timeIntervalSince1970 < ChannelManager.sharedInstance.formatter.dateForStringTime(lastPublishedTime)?.timeIntervalSince1970
-//                
-//            }
-//        }
-//        
-//        return false
-//    }
+    
+    
+    //MARK: Overrides
+    
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+    
+    override func setSelected(selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        // Configure the view for the selected state
+    }
 }

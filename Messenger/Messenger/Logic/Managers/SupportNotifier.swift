@@ -15,16 +15,19 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
 import MagnetMax
+import UIKit
 
 class NewSupportMessages {
     static var count = 0
 }
 
+
 class SupportNotifier: NavigationNotifier {
     
-    var stopped = false
+    
+    //MARK: Public properties
+    
     
     override var count : Int {
         didSet {
@@ -32,10 +35,28 @@ class SupportNotifier: NavigationNotifier {
         }
     }
     
+    var stopped = false
+    
+    
+    //MARK: Static Methods
+    
+    
     static func hideSupportNotifiers() {
         NSNotificationCenter.defaultCenter().postNotificationName(kNotificationHideSupportNotifiers, object: nil)
     }
     
+    
+    //MARK: Overrides
+    
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    override func didReceiveMessage(mmxMessage: MMXMessage) {
+        super.didReceiveMessage(mmxMessage)
+    }
+
     init(view : UIView) {
         super.init()
         
@@ -85,17 +106,17 @@ class SupportNotifier: NavigationNotifier {
         self.subscribeToIncomingMessages()
     }
     
-    override func subscribeToIncomingMessages() {
-        super.subscribeToIncomingMessages()
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetCount", name: kNotificationHideSupportNotifiers, object: nil)
-    }
-    
     override func shouldNotifyFor(mmxMessage: MMXMessage) -> Bool {
         if let ch = mmxMessage.channel where ch.name.lowercaseString == kAskMagnetChannel.lowercaseString && !stopped {
             return true
         }
         return false
+    }
+    
+    override func subscribeToIncomingMessages() {
+        super.subscribeToIncomingMessages()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetCount", name: kNotificationHideSupportNotifiers, object: nil)
     }
     
     override func reload() {
@@ -107,11 +128,4 @@ class SupportNotifier: NavigationNotifier {
         }
     }
     
-    override func didReceiveMessage(mmxMessage: MMXMessage) {
-        super.didReceiveMessage(mmxMessage)
-    }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
 }

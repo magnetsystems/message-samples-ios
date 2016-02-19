@@ -15,29 +15,51 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
-import MagnetMax
 import AFNetworking
+import MagnetMax
+import UIKit
+
+
+//MARK: Constants
+
 
 let userCellId = "UserCellIdentifier"
+
+
+//MARK: Protocol
+
 
 protocol ContactsViewControllerDelegate: class {
     func contactsControllerDidFinish(with selectedUsers: [MMUser])
 }
+
 
 class UserLetterGroup : NSObject {
     var letter : String  = ""
     var users : [MMUser] = []
 }
 
+
 class ContactsViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
-    weak var delegate: ContactsViewControllerDelegate?
+    
+    //MARK: Public properties
+    
+    
     var availableRecipients = [UserLetterGroup]()
+    weak var delegate: ContactsViewControllerDelegate?
     var filteredRecipients = [MMUser]()
-    var selectedUsers : [MMUser] = []
-    let resultSearchController = UISearchController(searchResultsController: nil)
     let placeholderAvatarImage = UIImage(named: "user_default")
+    let resultSearchController = UISearchController(searchResultsController: nil)
+    var selectedUsers : [MMUser] = []
+    
+    
+    //MARK: Overrides
+    
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,9 +86,9 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         })
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        resultSearchController.dismissViewControllerAnimated(true, completion: nil)
-    }
+    
+    //MARK: Actions
+    
     
     @IBAction func cancelAction() {
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
@@ -79,7 +101,13 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        resultSearchController.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
     // MARK: - Table view data source
+    
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if resultSearchController.active {
@@ -140,7 +168,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         if let avatarImage = cell.avatarImage {
             Utils.loadImageWithUrl(user.avatarURL(), toImageView: avatarImage, placeholderImage: placeHolderImage)
         }
-     
+        
         
         cell.avatarImage?.superview?.layer.cornerRadius = borderSize / 2.0
         cell.avatarImage?.superview?.layer.masksToBounds = true
@@ -164,8 +192,8 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         } else {
             
             let users = availableRecipients[indexPath.section].users
-                let user = users[indexPath.row]
-                addSelectedUser(user)
+            let user = users[indexPath.row]
+            addSelectedUser(user)
         }
         updateNextButton()
     }
@@ -175,55 +203,44 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             let user = filteredRecipients[indexPath.row]
             removeSelectedUser(user)
         } else {
-           let users = availableRecipients[indexPath.section].users
-                let user = users[indexPath.row]
-                removeSelectedUser(user)
+            let users = availableRecipients[indexPath.section].users
+            let user = users[indexPath.row]
+            removeSelectedUser(user)
         }
         updateNextButton()
     }
     
+    
     // MARK: - UISearchResultsUpdating
+    
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         if let userArrays = (availableRecipients as NSArray).valueForKey("users") as? [[MMUser]] {
-        var allUsers = [MMUser]()
-        for userArray in userArrays {
-            allUsers += userArray
-        }
-        filteredRecipients = allUsers.filter { user in
-            let searchString = searchController.searchBar.text!.lowercaseString
-            return (user.firstName != nil && user.firstName.lowercaseString.containsString(searchString)) || (user.lastName != nil && user.lastName.lowercaseString.containsString(searchString))
-        }
-        
-        tableView.reloadData()
+            var allUsers = [MMUser]()
+            for userArray in userArrays {
+                allUsers += userArray
+            }
+            filteredRecipients = allUsers.filter { user in
+                let searchString = searchController.searchBar.text!.lowercaseString
+                return (user.firstName != nil && user.firstName.lowercaseString.containsString(searchString)) || (user.lastName != nil && user.lastName.lowercaseString.containsString(searchString))
+            }
+            
+            tableView.reloadData()
         }
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 63.0
     }
+    
+    
     // MARK: - Private Methods
+    
     
     private func addSelectedUser(selectedUser : MMUser) {
         removeSelectedUser(selectedUser)
         selectedUsers.append(selectedUser)
     }
-    
-    private func removeSelectedUser(selectedUser : MMUser) {
-        selectedUsers = selectedUsers.filter({
-            if $0 !== selectedUser {
-                return true
-            }
-            
-            return false
-        })
-    }
-    
-    private func updateNextButton() {
-        self.navigationItem.rightBarButtonItem?.enabled = selectedUsers.count > 0
-    }
-    
-    // MARK: - Helpers
     
     func createAlphabetDictionary(users: [MMUser]) -> [UserLetterGroup] {
         var tempFirstLetterArray = [String]()
@@ -265,7 +282,17 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         return letterGroups
     }
     
-    override func didReceiveMemoryWarning() {
-            super.didReceiveMemoryWarning()
-        }
+    private func removeSelectedUser(selectedUser : MMUser) {
+        selectedUsers = selectedUsers.filter({
+            if $0 !== selectedUser {
+                return true
+            }
+            
+            return false
+        })
+    }
+    
+    private func updateNextButton() {
+        self.navigationItem.rightBarButtonItem?.enabled = selectedUsers.count > 0
+    }
 }
