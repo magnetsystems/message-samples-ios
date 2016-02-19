@@ -1,28 +1,61 @@
-//
-//  ChatViewController.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 1/5/16.
-//  Copyright © 2016 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
-import UIKit
-import MagnetMax
 import JSQMessagesViewController
+import MagnetMax
 import MobileCoreServices
 import NYTPhotoViewer
-//import Toucan
+import UIKit
 
 class ChatViewController: JSQMessagesViewController {
     
-    var notifier : NavigationNotifier?
-    var messages = [Message]()
+    
+    //MARK: Public properties
+    
+    
+    var activityIndicator : UIActivityIndicatorView?
     var avatars = Dictionary<String, UIImage>()
     var avatarsDownloading = Dictionary<String, MMUser>()
-    let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
-    let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
-    var activityIndicator : UIActivityIndicatorView?
     var canLeaveChat = false
+    let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
+    var messages = [Message]()
+    var notifier : NavigationNotifier?
+    let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
+    
+    
+    //MARK: Overridden Properties
+    
+    
+    var chat : MMXChannel? {
+        didSet {
+            //Register for a notification to receive the message
+            if let channel = chat {
+                if chat != nil && chat!.summary!.containsString("Ask") {
+                    navigationItem.title = "Ask Magnet"
+                } else if chat != nil && chat!.summary!.containsString("Forum") {
+                    navigationItem.title = "Forum"
+                }
+                notifier = NavigationNotifier(viewController: self, exceptFor: channel)
+                ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
+            }
+            loadMessages()
+        }
+    }
+    
     var isAskMagnetChannel = false {
         didSet {
             if isAskMagnetChannel {
@@ -34,7 +67,6 @@ class ChatViewController: JSQMessagesViewController {
                         // Magnet Employees will have the magnetsupport tag
                         // Subscribe all Magnet employees
                         MMUser.searchUsers("tags:\(kMagnetSupportTag)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
-                            //                    MMUser.searchUsers("email:*\(kMagnetEmailDomain)", limit: 50, offset: 0, sort: "firstName:asc", success: { users in
                             let summary: String
                             if let userName = MMUser.currentUser()?.userName {
                                 summary = "Ask Magnet for \(userName)"
@@ -52,21 +84,6 @@ class ChatViewController: JSQMessagesViewController {
                         })
                 })
             }
-        }
-    }
-    var chat : MMXChannel? {
-        didSet {
-            //Register for a notification to receive the message
-            if let channel = chat {
-                if chat != nil && chat!.summary!.containsString("Ask") {
-                    navigationItem.title = "Ask Magnet"
-                } else if chat != nil && chat!.summary!.containsString("Forum") {
-                    navigationItem.title = "Forum"
-                }
-                notifier = NavigationNotifier(viewController: self, exceptFor: channel)
-                ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
-            }
-            loadMessages()
         }
     }
     
@@ -94,7 +111,26 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    // MARK: - View
+    
+    // MARK: - overrides
+    
+    
+    deinit {
+        // Save the last channel show
+        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+        print("--------> deinit chat <---------")
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        
+        var newMessages:[Message] = []
+        for message in messages {
+            newMessages.append(Message(message: message.underlyingMessage))
+        }
+        messages = newMessages
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,9 +149,6 @@ class ChatViewController: JSQMessagesViewController {
         
         senderId = user.userID
         senderDisplayName = user.firstName
-        //        showLoadEarlierMessagesHeader = true
-        //        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
-        //        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
         
         // Find recipients
         if chat != nil {
@@ -149,14 +182,9 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    deinit {
-        // Save the last channel show
-        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
-        print("--------> deinit chat <---------")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
     
     // MARK: - Public methods
+    
     
     func addSubscribers(newSubscribers: [MMUser]) {
         
@@ -174,13 +202,26 @@ class ChatViewController: JSQMessagesViewController {
         })
     }
     
-    // MARK: - MMX methods
+    func hideSpinner() {
+        if let activityIndicator = self.activityIndicator {
+            activityIndicator.tag = max(activityIndicator.tag - 1, 0)
+            if activityIndicator.tag == 0 {
+                activityIndicator.stopAnimating()
+            }
+        }
+    }
+    
+    func showSpinner() {
+        self.activityIndicator?.tag++
+        self.activityIndicator?.startAnimating()
+    }
+    
+    
+    // MARK: - Notifications
+    
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
-        
         //Show the typing indicator to be shown
-        
-        
         // Scroll to actually view the indicator
         scrollToBottomAnimated(true)
         
@@ -207,33 +248,9 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    //MARK: - overriden JSQMessagesViewController methods
     
-    override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
-        
-        guard let channel = self.chat else { return }
-        
-        JSQSystemSoundPlayer.jsq_playMessageSentSound()
-        let forcedString: String = text
-        let messageContent = [
-            Constants.ContentKey.Type: MessageType.Text.rawValue,
-            Constants.ContentKey.Message: forcedString,
-        ]
-        
-        button.userInteractionEnabled = false
-        
-        showSpinner()
-        let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
-        mmxMessage.sendWithSuccess( { [weak self] _ in
-            button.userInteractionEnabled = true
-            self?.hideSpinner()
-            }) { error in
-                button.userInteractionEnabled = true
-                self.hideSpinner()
-                print(error)
-        }
-        finishSendingMessageAnimated(true)
-    }
+    //MARK: Actions
+    
     
     override func didPressAccessoryButton(sender: UIButton!) {
         
@@ -262,175 +279,35 @@ class ChatViewController: JSQMessagesViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
-        return messages[indexPath.item]
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, didDeleteMessageAtIndexPath indexPath: NSIndexPath!) {
-        messages.removeAtIndex(indexPath.item)
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
+    override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         
-        let message = messages[indexPath.item]
-        if message.senderId() == senderId {
-            return outgoingBubbleImageView
+        guard let channel = self.chat else { return }
+        
+        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        let forcedString: String = text
+        let messageContent = [
+            Constants.ContentKey.Type: MessageType.Text.rawValue,
+            Constants.ContentKey.Message: forcedString,
+        ]
+        
+        button.userInteractionEnabled = false
+        
+        showSpinner()
+        let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
+        mmxMessage.sendWithSuccess( { [weak self] _ in
+            button.userInteractionEnabled = true
+            self?.hideSpinner()
+            }) { error in
+                button.userInteractionEnabled = true
+                self.hideSpinner()
+                print(error)
         }
-        
-        return incomingBubbleImageView
+        finishSendingMessageAnimated(true)
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
-        return nil
-    }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
-        if indexPath.item % 3 == 0 {
-            let message = messages[indexPath.item]
-            return JSQMessagesTimestampFormatter.sharedFormatter().attributedTimestampForDate(message.date())
-        }
-        
-        return nil
-    }
+    // MARK: Private Methods
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForMessageBubbleTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
-        let message = messages[indexPath.item]
-        
-        if message.senderId() == senderId {
-            return nil
-        }
-        
-        if indexPath.item - 1 > 0 {
-            let previousMessage = messages[indexPath.item - 1]
-            if previousMessage.senderId() == message.senderId() {
-                return nil
-            }
-        }
-        
-        // Don't specify attributes to use the defaults.
-        
-        return NSAttributedString(string: message.senderDisplayName())
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
-        return nil
-    }
-    
-    // MARK: UICollectionView DataSource
-    
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return messages.count
-    }
-    
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
-        let message = messages[indexPath.item]
-        
-        if !message.isMediaMessage() {
-            if message.senderId() == senderId {
-                cell.textView!.textColor = UIColor.whiteColor()
-            } else {
-                cell.textView!.textColor = UIColor.blackColor()
-            }
-            
-            cell.textView!.linkTextAttributes = [
-                NSForegroundColorAttributeName : cell.textView?.textColor as! AnyObject,
-                NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue | NSUnderlineStyle.PatternSolid.rawValue
-            ]
-            
-        }
-        
-        if cell.avatarImageView?.image == nil {
-            cell.avatarImageView?.layer.masksToBounds = true
-            cell.avatarImageView?.contentMode = UIViewContentMode.ScaleAspectFill
-        }
-        //cell.avatarImageView!.image = avatar
-        if let layout = collectionView.collectionViewLayout as? JSQMessagesCollectionViewFlowLayout {
-            cell.avatarImageView?.layer.cornerRadius = layout.incomingAvatarViewSize.width/2.0
-        }
-        if let user = message.underlyingMessage.sender {
-            Utils.loadUserAvatar(user, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user))
-        }
-        
-        return cell
-    }
-    
-    // MARK: JSQMessagesCollectionViewDelegateFlowLayout methods
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        //Each label in a cell has a `height` delegate method that corresponds to its text dataSource method
-        
-        /**
-        *  This logic should be consistent with what you return from `attributedTextForCellTopLabelAtIndexPath:`
-        *  The other label height delegate methods should follow similarly
-        *  Show a timestamp for every 3rd message
-        */
-        if indexPath.item % 3 == 0 {
-            return kJSQMessagesCollectionViewCellLabelHeightDefault
-        }
-        
-        return 0.0
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForMessageBubbleTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        
-        let currentMessage = messages[indexPath.item]
-        if currentMessage.senderId() == senderId {
-            return 0.0
-        }
-        
-        if indexPath.item - 1 > 0 {
-            let previousMessage = messages[indexPath.item - 1]
-            if previousMessage.senderId() == currentMessage.senderId() {
-                return 0.0
-            }
-        }
-        
-        return kJSQMessagesCollectionViewCellLabelHeightDefault
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        return 0.0
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, header headerView: JSQMessagesLoadEarlierHeaderView!, didTapLoadEarlierMessagesButton sender: UIButton!) {
-        print("Load earlier messages!")
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, atIndexPath indexPath: NSIndexPath!) {
-        print("Tapped avatar!")
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
-        print("Tapped message bubble!")
-        let message = messages[indexPath.item]
-        
-        if message.isMediaMessage() && message.isDownloaded {
-            self.inputToolbar!.contentView!.textView?.resignFirstResponder()
-            
-            switch message.type {
-            case .Text: break
-            case .Location:
-                self.performSegueWithIdentifier(kSegueShowMap, sender: message.media())
-            case .Photo:
-                let photoItem = message.media() as! JSQPhotoMediaItem
-                let photo = Photo(photo: photoItem.image)
-                let viewer = NYTPhotosViewController(photos: [photo])
-                presentViewController(viewer, animated: true, completion: nil)
-            case .Video:
-                if let attachment = message.underlyingMessage.attachments?.first where attachment.name != nil {
-                    let videoVC = VideoPlayerViewController(nibName: vc_id_VideoPlayer, bundle: nil)
-                    videoVC.attachment = attachment
-                    presentViewController(videoVC, animated: true, completion: nil)
-                }
-            }
-        }
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, didTapCellAtIndexPath indexPath: NSIndexPath!, touchLocation: CGPoint) {
-    }
-    
-    // MARK: Helper methods
     
     private func addLocationMediaMessage() {
         
@@ -454,26 +331,24 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
+    private func addMediaMessageFromCamera() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .Camera
+        imagePicker.mediaTypes = [kUTTypeImage as String]
+        presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
     private func addMediaMessageFromLibrary() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .PhotoLibrary
         imagePicker.mediaTypes = [kUTTypeImage as String]
-        //imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
         presentViewController(imagePicker, animated: true, completion: nil)
     }
-    
-    private func addMediaMessageFromCamera() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.allowsEditing = false
-        imagePicker.sourceType = .Camera
-        //imagePicker.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
-        imagePicker.mediaTypes = [kUTTypeImage as String]
-        presentViewController(imagePicker, animated: true, completion: nil)
-    }
-    
+
     private func getChannelBySubscribers(users: [MMUser]) {
         //Check if channel exists
         MMXChannel.findChannelsBySubscribers(users, matchType: .EXACT_MATCH, success: { [weak self] allChannels in
@@ -481,9 +356,6 @@ class ChatViewController: JSQMessagesViewController {
             if channels.count != 1 {
                 //Create new chat
                 let subscribers = Set(users)
-                
-                // Set channel name
-                //                let name = "\(self!.senderDisplayName)_\(ChannelManager.sharedInstance.formatter.currentTimeStamp())"
                 let name = NSUUID().UUIDString
                 
                 MMXChannel.createWithName(name, summary: "\(self!.senderDisplayName) private chat", isPublic: false, publishPermissions: .Subscribers, subscribers: subscribers, success: { [weak self] channel in
@@ -535,21 +407,9 @@ class ChatViewController: JSQMessagesViewController {
         })
     }
     
-    private func showSpinner() {
-        self.activityIndicator?.tag++
-        self.activityIndicator?.startAnimating()
-    }
-    
-    private func hideSpinner() {
-        if let activityIndicator = self.activityIndicator {
-            activityIndicator.tag = max(activityIndicator.tag - 1, 0)
-            if activityIndicator.tag == 0 {
-                activityIndicator.stopAnimating()
-            }
-        }
-    }
     
     // MARK: - Navigation
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == kSegueShowDetails {
@@ -563,64 +423,6 @@ class ChatViewController: JSQMessagesViewController {
                 mapVC.location = locationItem.coordinate
             }
         }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        
-        var newMessages:[Message] = []
-        for message in messages {
-            newMessages.append(Message(message: message.underlyingMessage))
-        }
-        messages = newMessages
-    }
-}
-
-extension ChatViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        
-        JSQSystemSoundPlayer.jsq_playMessageSentSound()
-        
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            
-            let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
-            let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
-            
-            if let data = UIImageJPEGRepresentation(pickedImage, 0.8) {
-                
-                let attachment = MMAttachment(data: data, mimeType: "image/jpg")
-                mmxMessage.addAttachment(attachment)
-                showSpinner()
-                mmxMessage.sendWithSuccess({ [weak self] _ in
-                    self?.hideSpinner()
-                    }) { error in
-                        self.hideSpinner()
-                        print(error)
-                }
-                finishSendingMessageAnimated(true)
-            }
-        } else if let urlOfVideo = info[UIImagePickerControllerMediaURL] as? NSURL {
-            let messageContent = [Constants.ContentKey.Type: MessageType.Video.rawValue]
-            let name = urlOfVideo.lastPathComponent
-            let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
-            let attachment = MMAttachment(fileURL: urlOfVideo, mimeType: "video/quicktime", name: name, description: "Video file")
-            showSpinner()
-            mmxMessage.addAttachment(attachment)
-            mmxMessage.sendWithSuccess({ [weak self] _ in
-                self?.hideSpinner()
-                }) { error in
-                    self.hideSpinner()
-                    print(error)
-            }
-            finishSendingMessageAnimated(true)
-        }
-        
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
     }
 }
 

@@ -1,22 +1,47 @@
-//
-//  VideoPlayerViewController.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 1/26/16.
-//  Copyright © 2016 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
 import DZVideoPlayerViewController
 import MagnetMax
 
 class VideoPlayerViewController: BaseViewController, DZVideoPlayerViewControllerDelegate {
     
-    @IBOutlet weak var videoContainerView: DZVideoPlayerViewControllerContainerView!
-    var videoPlayerViewController: DZVideoPlayerViewController!
+    
+    //MARK: Public properties
+    
+    
     var attachment: MMAttachment!
     var fileURL: NSURL!
     private var hideStatusBar = true
+    @IBOutlet weak var videoContainerView: DZVideoPlayerViewControllerContainerView!
+    var videoPlayerViewController: DZVideoPlayerViewController!
+   
+    
+    //MARK: Overrides
 
+   
+    override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
+        return .None
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return hideStatusBar
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,25 +77,19 @@ class VideoPlayerViewController: BaseViewController, DZVideoPlayerViewController
         }
     }
     
-    override func prefersStatusBarHidden() -> Bool {
-        return hideStatusBar
-    }
+
+    //MARK: Public Methods
     
-    override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
-        return .None
-    }
     
     func startPlay() {
-
-        //    self.videoPlayerViewController.configuration.isBackgroundPlaybackEnabled = NO;
-        //    self.videoPlayerViewController.configuration.isHideControlsOnIdleEnabled = NO;
-        
         self.videoPlayerViewController.activityIndicatorView?.stopAnimating()
         self.videoPlayerViewController.videoURL = fileURL
         self.videoPlayerViewController.prepareAndPlayAutomatically(true)
     }
     
+    
     //MARK: - DZVideoPlayerViewControllerDelegate
+    
     
     func playerDoneButtonTouched() {
         self.videoContainerView.videoPlayerViewController.stop()

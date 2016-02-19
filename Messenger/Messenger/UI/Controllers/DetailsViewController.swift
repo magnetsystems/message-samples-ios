@@ -1,21 +1,42 @@
-//
-//  DetailsViewController.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 1/5/16.
-//  Copyright © 2016 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
-import UIKit
 import MagnetMax
+import UIKit
+
+
+//MARK: Constants
+
 
 let recipientCellIdentifier = "RecipientsCellIdentifier"
 
 class DetailsViewController: UITableViewController, ContactsViewControllerDelegate {
     
-    var recipients : [MMUser]?
-    var channel : MMXChannel!
+    
+    //MARK: Public properties
+    
+    
     var canLeave = false
+    var channel : MMXChannel!
+    var recipients : [MMUser]?
+   
+    
+    //MARK: Overrides
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +54,10 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
         }
     }
     
+    
+    //MARK: Actions
+    
+    
     @IBAction func leaveAction() {
         if channel != nil {
             channel.unSubscribeWithSuccess({ [weak self] in
@@ -43,12 +68,18 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
         }
     }
 
+    
+    //MARK: Public methods
+    
+    
     func isOwner() -> Bool {
         return MMUser.currentUser()?.userID == channel.ownerUserID
     }
     
+    
     // MARK: - Table view data source
 
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let i = recipients?.count else {
             
@@ -94,7 +125,9 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
         return cell
     }
     
+    
     // MARK: - Table view delegate
+    
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if (indexPath.row == recipients?.count) && ChannelManager.sharedInstance.isOwnerForChat(channel.name) != nil {
@@ -110,7 +143,9 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
+    
     //MARK: - ContactsViewControllerDelegate
+    
     
     func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
         // Show chat after selection of recipients
@@ -122,5 +157,4 @@ class DetailsViewController: UITableViewController, ContactsViewControllerDelega
             }
         }
     }
-    
 }

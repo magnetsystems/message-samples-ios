@@ -1,21 +1,38 @@
-//
-//  EventsViewController.swift
-//  Messenger
-//
-//  Created by Vladimir Yevdokimov on 2/9/16.
-//  Copyright © 2016 Magnet Systems, Inc. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
-import UIKit
 import MagnetMax
+import UIKit
 
 class EventsViewController: UITableViewController, ContactsViewControllerDelegate {
-
+    
+    
+    //MARK: Public properties
+    
+    
     var hackatonChannels: [MMXChannelDetailResponse] = [];
+    
+    
+    //MARK: Overrides
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         if let revealVC = self.revealViewController() {
             self.view.addGestureRecognizer(revealVC.panGestureRecognizer())
@@ -35,8 +52,10 @@ class EventsViewController: UITableViewController, ContactsViewControllerDelegat
         
     }
     
+    
     //MARK: - UITableView
-
+    
+    
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 150
     }
@@ -60,7 +79,9 @@ class EventsViewController: UITableViewController, ContactsViewControllerDelegat
         }
     }
     
+    
     //MARK: - ContactsViewControllerDelegate
+    
     
     func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
         if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController {
@@ -69,8 +90,10 @@ class EventsViewController: UITableViewController, ContactsViewControllerDelegat
         }
     }
     
+    
     //MARK: - Actions
-
+    
+    
     @IBAction func createNewChat (sender: UIBarButtonItem) {
         
         if let navigationVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_ContactsNav) as? UINavigationController {
@@ -81,18 +104,26 @@ class EventsViewController: UITableViewController, ContactsViewControllerDelegat
                 self.navigationController?.presentViewController(navigationVC, animated: true, completion: nil)
             }
         }
-
+        
     }
     
     @IBAction func refreshChannelDetail() {
         loadDetails()
     }
-
+    
     @IBAction func showSideMenu(sender: UIBarButtonItem) {
-        self.revealViewController().revealToggleAnimated(true)        
+        self.revealViewController().revealToggleAnimated(true)
     }
+    
+    
     //MARK: - Private
-
+    
+    
+    private func endRefreshing() {
+        refreshControl?.endRefreshing()
+        tableView.reloadData()
+    }
+    
     private func loadDetails() {
         // Get all channels the current user is subscribed to
         
@@ -122,7 +153,7 @@ class EventsViewController: UITableViewController, ContactsViewControllerDelegat
                     } else {
                         ChannelManager.sharedInstance.eventChannelDetails?.removeAll()
                         self.endRefreshing()
-
+                        
                     }
                     }) { [weak self] error in
                         self?.endRefreshing()
@@ -131,16 +162,9 @@ class EventsViewController: UITableViewController, ContactsViewControllerDelegat
             } else {
                 self.endRefreshing()
             }
-            
-            
             }) { (error) -> Void in
                 self.endRefreshing()
         }
         
-    }
-    
-    private func endRefreshing() {
-        refreshControl?.endRefreshing()
-        tableView.reloadData()
     }
 }

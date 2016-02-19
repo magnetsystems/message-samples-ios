@@ -1,22 +1,39 @@
-//
-//  UserProfileViewController.swift
-//  Messenger
-//
-//  Created by Vladimir Yevdokimov on 2/10/16.
-//  Copyright © 2016 Magnet Systems, Inc. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
-import UIKit
-import MobileCoreServices
+
 import MagnetMax
+import MobileCoreServices
+import UIKit
 
 class UserProfileViewController: BaseViewController {
 
-    @IBOutlet weak var userAvatarIV: UIImageView!
-    @IBOutlet weak var userEmailL: UILabel!
+    
+    //MARK: Public properties
+    
+    
     @IBOutlet weak var firstNameTF: UITextField!
     @IBOutlet weak var lastNameTF: UITextField!
+    @IBOutlet weak var userAvatarIV: UIImageView!
+    @IBOutlet weak var userEmailL: UILabel!
 
+    
+    //MARK: Overrides
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,19 +61,12 @@ class UserProfileViewController: BaseViewController {
         }
     }
     
+    
     //MARK: - Actions
 
+    
     @IBAction func close(sender: UIBarButtonItem) {
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func selectAvatar(sender: UIButton) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.allowsEditing = false
-        imagePicker.sourceType = .PhotoLibrary
-        imagePicker.mediaTypes = [kUTTypeImage as String]
-        presentViewController(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func saveChanges(sender: UIButton) {
@@ -80,10 +90,22 @@ class UserProfileViewController: BaseViewController {
         
     }
     
-    
+    @IBAction func selectAvatar(sender: UIButton) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .PhotoLibrary
+        imagePicker.mediaTypes = [kUTTypeImage as String]
+        presentViewController(imagePicker, animated: true, completion: nil)
+    }
 }
 
+
 extension UserProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    
+    //MARK: - UIImagePickerControllerDelegate
+    
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         

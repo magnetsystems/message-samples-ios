@@ -1,30 +1,49 @@
-//
-//  RearMenuViewController.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 1/5/16.
-//  Copyright © 2016 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
 import UIKit
 import MagnetMax
 
 class RearMenuViewController: UITableViewController {
     
-    @IBOutlet weak var username: UILabel!
-    @IBOutlet weak var userAvatar: UIImageView!
-    @IBOutlet weak var version: UILabel!
+    
+    //MARK: Public properties
+    
     
     var notifier : SupportNotifier?
+    @IBOutlet weak var userAvatar: UIImageView!
+    @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var version: UILabel!
+    
+    
+    //MARK: Type Def
+    
     
     enum IndexPathRowAction: Int {
         case UserInfo = 0
         case Home
         case Support
-//        case Events
         case SignOut
         case Version
     }
+    
+    
+    //MARK: Overrides
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +71,7 @@ class RearMenuViewController: UITableViewController {
     
     // MARK: - Table view delegate
     
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
             switch indexPath.row {
@@ -73,16 +93,11 @@ class RearMenuViewController: UITableViewController {
                 
             case IndexPathRowAction.Home.rawValue :
                 notifier?.stopped = false
-                
                 let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
                 let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Home);
                 self.revealViewController().pushFrontViewController(vc, animated: true);
-                //        case IndexPathRowAction.Events.rawValue:
-                //            let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
-                //            let vc = storyboard.instantiateViewControllerWithIdentifier(vc_id_Events);
-                //            self.revealViewController().pushFrontViewController(vc, animated: true);
             case IndexPathRowAction.Support.rawValue :
-                SupportNotifier.hideAllSupportNotifiers()
+                SupportNotifier.hideSupportNotifiers()
                 notifier?.stopped = true
                 
                 let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
@@ -98,7 +113,8 @@ class RearMenuViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         if indexPath.row == IndexPathRowAction.Support.rawValue && Utils.isMagnetEmployee() {
-            notifier = SupportNotifier(cell: cell)
+            notifier = SupportNotifier(view: cell.contentView)
+            notifier?.count = NewSupportMessages.count
         }
         return cell
     }
@@ -113,6 +129,10 @@ class RearMenuViewController: UITableViewController {
         return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
     }
 
+    
+    //Mark Notifications
+    
+    
     private func didDisconnect(notification: NSNotification) {
         // Indicate that you are not ready to receive messages now!
         MMX.stop()

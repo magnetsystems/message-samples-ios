@@ -1,25 +1,53 @@
-//
-//  HomeViewController.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 12/29/15.
-//  Copyright © 2015 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
-import UIKit
 import MagnetMax
+import UIKit
 
 class HomeViewController: UITableViewController, UISearchResultsUpdating, ContactsViewControllerDelegate {
     
-    let searchController = UISearchController(searchResultsController: nil)
-    var detailResponses : [MMXChannelDetailResponse] = []
-    var filteredDetailResponses : [MMXChannelDetailResponse] = []
-
+    
+    //MARK: Public properties
+    
     
     var actualEvents : [MMXChannelDetailResponse] = []
     var askMagnet : [MMXChannelDetailResponse] = []
-    var notifier: SupportNotifier?
-
+    var detailResponses : [MMXChannelDetailResponse] = []
+    var filteredDetailResponses : [MMXChannelDetailResponse] = []
+    var notifier: NavigationNotifier?
+    let searchController = UISearchController(searchResultsController: nil)
+    
+    
+    //MARK: Overrides
+    
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let user = MMUser.currentUser() {
+            self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
+        }
+        
+        if NSUserDefaults.standardUserDefaults().boolForKey(kUserDefaultsShowProfile) {
+            NSUserDefaults.standardUserDefaults().removeObjectForKey(kUserDefaultsShowProfile)
+            self.navigationController!.presentViewController((self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_UserProfile))!, animated: true, completion: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
@@ -56,25 +84,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         // Magnet Employees will have the magnetsupport tag
         // Hide the Ask Magnet option for Magnet employees
         askMagnet = [MMXChannelDetailResponse()]
-        if !Utils.isMagnetEmployee() {
-//            self.loadAskMagnetChannel()
-                
-        }
         loadDetails()
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if let user = MMUser.currentUser() {
-            self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
-        }
-        
-        if NSUserDefaults.standardUserDefaults().boolForKey(kUserDefaultsShowProfile) {
-            NSUserDefaults.standardUserDefaults().removeObjectForKey(kUserDefaultsShowProfile)
-            self.navigationController!.presentViewController((self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_UserProfile))!, animated: true, completion: nil)
-        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -84,24 +95,18 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         ChannelManager.sharedInstance.removeChannelMessageObserver(self)
     }
     
-    func loadEventChannels(){
-        
-        MMXChannel.findByTags( Set(["active"]), limit: 5, offset: 0, success: { (total, channels) -> Void in
-            if channels.count > 0 {
-                let channel = channels.first
-                channel?.subscribeWithSuccess({ () -> Void in
-                    MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 1000, success: { (responseDetails) -> Void in
-                        self.actualEvents = responseDetails
-                        self.endRefreshing()
-                        }, failure: { (error) -> Void in
-                    })
-                    }, failure: { (error) -> Void in
-                      print("subscribe global error \(error)")
-                })
-            }
-            }) { (error) -> Void in
-        }
+    
+    //MARK: - Notifications
+    
+    
+    func didReceiveMessage(mmxMessage: MMXMessage) {
+        loadEventChannels()
+        loadDetails()
     }
+    
+    
+    //MARK: - public Methods
+    
     
     func loadAskMagnetChannel() {
         MMXChannel.findByTags( Set(["global"]), limit: 5, offset: 0, success: { (total, channels) -> Void in
@@ -121,10 +126,78 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
     }
     
-    func didReceiveMessage(mmxMessage: MMXMessage) {
-        loadEventChannels()
-        loadDetails()
+    private func loadDetails() {
+        
+        refreshControl?.beginRefreshing()
+        
+        // Get all channels the current user is subscribed to
+        MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
+            let channels = allChannels.filter { !$0.name.hasPrefix("global_") && $0.name != kAskMagnetChannel }
+            ChannelManager.sharedInstance.channels = channels
+            if channels.count > 0 {
+                // Get details
+                MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 1000, success: { detailResponses in
+                    let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
+                        let formatter = ChannelManager.sharedInstance.formatter
+                        return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
+                    })
+                    
+                    ChannelManager.sharedInstance.channelDetails = sortedDetails
+                    self?.detailResponses = sortedDetails
+                    self?.endRefreshing()
+                    }, failure: { error in
+                        self?.endRefreshing()
+                        print(error)
+                })
+            } else {
+                ChannelManager.sharedInstance.channelDetails?.removeAll()
+                self?.detailResponses.removeAll()
+                self?.endRefreshing()
+            }
+            }) { [weak self] error in
+                self?.endRefreshing()
+                print(error)
+        }
     }
+    
+    func loadEventChannels(){
+        
+        MMXChannel.findByTags( Set(["active"]), limit: 5, offset: 0, success: { (total, channels) -> Void in
+            if channels.count > 0 {
+                let channel = channels.first
+                channel?.subscribeWithSuccess({ () -> Void in
+                    MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 1000, success: { (responseDetails) -> Void in
+                        self.actualEvents = responseDetails
+                        self.endRefreshing()
+                        }, failure: { (error) -> Void in
+                    })
+                    }, failure: { (error) -> Void in
+                        print("subscribe global error \(error)")
+                })
+            }
+            }) { (error) -> Void in
+        }
+    }
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        let searchString = searchController.searchBar.text!.lowercaseString
+        filteredDetailResponses = detailResponses.filter {
+            for subscriber in $0.subscribers {
+                let name = subscriber.displayName
+                if name.lowercaseString.containsString(searchString.lowercaseString) || searchString.characters.count == 0 {
+                    return true
+                }
+            }
+            
+            return false
+        }
+        
+        tableView.reloadData()
+    }
+    
+    
+    //MARK: Actions
+    
     
     @IBAction func refreshChannelDetail() {
         loadDetails()
@@ -133,9 +206,11 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     @IBAction func showSideMenu(sender: UIBarButtonItem) {
         self.revealViewController().revealToggleAnimated(true)
     }
-
+    
+    
     // MARK: - Table view data source
-
+    
+    
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         switch indexPath.section {
@@ -172,7 +247,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         default : return 0
         }
     }
-
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var channelDetail: MMXChannelDetailResponse?
@@ -203,7 +278,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         cell.detailResponse = channelDetail
         return cell
     }
-
+    
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         if indexPath.section != 2 {
             return false
@@ -230,17 +305,17 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
                         self?.filteredDetailResponses.removeAtIndex(channelIndexToRemove)
                     }
                     tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
-                }, failure: { error in
-                    print(error)
+                    }, failure: { error in
+                        print(error)
                 })
             }
         }
         leave.backgroundColor = UIColor.orangeColor()
         return [leave]
     }
-
+    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
- 
+        
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -248,7 +323,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         if indexPath.section == 2 && self.detailResponses.count == 0 {
             self.performSegueWithIdentifier(kSegueShowContactSelector, sender: nil)
         } else {
- 
+            
             if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? ChannelDetailBaseTVCell {
                 if indexPath.section != 2 {
                     // Ask Magnet channel
@@ -269,7 +344,9 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
     }
     
+    
     //MARK: - ContactsViewControllerDelegate
+    
     
     func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
         if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController {
@@ -277,9 +354,11 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             self.navigationController?.pushViewController(chatVC, animated: false)
         }
     }
-
+    
+    
     // MARK: - Navigation
-
+    
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == kSegueShowContactSelector {
             if let navigationVC = segue.destinationViewController as? UINavigationController {
@@ -291,62 +370,14 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
     }
     
+    
     // MARK: - Helpers
     
-    private func loadDetails() {
-        
-        refreshControl?.beginRefreshing()
-        
-        // Get all channels the current user is subscribed to
-        MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
-            let channels = allChannels.filter { !$0.name.hasPrefix("global_") && $0.name != kAskMagnetChannel }
-            ChannelManager.sharedInstance.channels = channels
-            if channels.count > 0 {
-                // Get details
-                MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 1000, success: { detailResponses in
-                    let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
-                        let formatter = ChannelManager.sharedInstance.formatter
-                        return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
-                    })
-
-                    ChannelManager.sharedInstance.channelDetails = sortedDetails
-                    self?.detailResponses = sortedDetails
-                    self?.endRefreshing()
-                }, failure: { error in
-                    self?.endRefreshing()
-                    print(error)
-                })
-            } else {
-                ChannelManager.sharedInstance.channelDetails?.removeAll()
-                self?.detailResponses.removeAll()
-                self?.endRefreshing()
-            }
-        }) { [weak self] error in
-            self?.endRefreshing()
-            print(error)
-        }
-    }
-    
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        let searchString = searchController.searchBar.text!.lowercaseString
-        filteredDetailResponses = detailResponses.filter {
-                for subscriber in $0.subscribers {
-                    let name = subscriber.displayName
-                    if name.lowercaseString.containsString(searchString.lowercaseString) || searchString.characters.count == 0 {
-                        return true
-                    }
-            }
-            
-            return false
-        }
-        
-        tableView.reloadData()
-    }
     
     private func endRefreshing() {
         refreshControl?.endRefreshing()
         tableView.reloadData()
     }
-
+    
 }
 

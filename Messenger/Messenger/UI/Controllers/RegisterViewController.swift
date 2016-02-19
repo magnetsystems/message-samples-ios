@@ -1,29 +1,43 @@
-//
-//  RegisterViewController.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 12/23/15.
-//  Copyright © 2015 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
-import UIKit
-import MagnetMax
 import AFNetworking
+import MagnetMax
+import UIKit
 
 class RegisterViewController : BaseViewController {
     
+    
+    //MARK: Public properties
+    
+    var keyboardIsShowing = false
     @IBOutlet weak var txtfFirstName : UITextField!
     @IBOutlet weak var txtfLastName : UITextField!
     @IBOutlet weak var txtfEmail : UITextField!
     @IBOutlet weak var txtfPassword : UITextField!
     @IBOutlet weak var txtfPasswordAgain : UITextField!
-    
-    
     var viewOffset: CGFloat!
-    var keyboardIsShowing = false
+    
+    
+    //MARK: Overrides
+    
     
     override func viewDidLoad() {
-         super.viewDidLoad()
+        super.viewDidLoad()
         self.resignOnBackgroundTouch()
     }
     
@@ -39,7 +53,31 @@ class RegisterViewController : BaseViewController {
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
-    //MARK: Handlers
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == kSegueRegisterToHome {
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: kUserDefaultsShowProfile)
+        }
+    }
+    
+    
+    //MARK: Public Methods
+    
+    
+    func login(credential: NSURLCredential) {
+        
+        MMUser.login(credential, rememberMe: true, success: { [weak self] in
+            self?.hideLoadingIndicator()
+            self?.performSegueWithIdentifier(kSegueRegisterToHome, sender: nil)
+            }, failure: { [weak self] error  in
+                self?.hideLoadingIndicator()
+                print("[ERROR]: \(error.localizedDescription)")
+                self?.navigationController?.popToRootViewControllerAnimated(true)
+            })
+    }
+    
+    
+    //MARK: Actions
+    
     
     @IBAction func registerAction() {
         
@@ -86,11 +124,9 @@ class RegisterViewController : BaseViewController {
         } catch { }
     }
     
+    
     // MARK: Private implementation
     
-    private func trimWhiteSpace(string : String) -> String {
-      return string.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-    }
     
     private enum InputError: ErrorType {
         case InvalidUserNames
@@ -105,6 +141,10 @@ class RegisterViewController : BaseViewController {
         
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailTest.evaluateWithObject(testStr)
+    }
+    
+    private func trimWhiteSpace(string : String) -> String {
+        return string.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
     
     private func validateCredential() throws -> (String, String, String, String) {
@@ -126,25 +166,5 @@ class RegisterViewController : BaseViewController {
         if password.characters.count < kMinPasswordLength { throw InputError.InvalidPasswordLength }
         
         return (firstName, lastName, email, password)
-    }
-    
-    //MARK: Helpers
-    
-    func login(credential: NSURLCredential) {
-        
-        MMUser.login(credential, rememberMe: true, success: { [weak self] in
-                self?.hideLoadingIndicator()
-                self?.performSegueWithIdentifier(kSegueRegisterToHome, sender: nil)
-            }, failure: { [weak self] error  in
-                self?.hideLoadingIndicator()
-                print("[ERROR]: \(error.localizedDescription)")
-                self?.navigationController?.popToRootViewControllerAnimated(true)
-            })
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == kSegueRegisterToHome {
-            NSUserDefaults.standardUserDefaults().setBool(true, forKey: kUserDefaultsShowProfile)
-        }
     }
 }

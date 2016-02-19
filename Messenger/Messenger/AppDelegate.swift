@@ -1,22 +1,31 @@
-//
-//  AppDelegate.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 12/23/15.
-//  Copyright © 2015 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
+import AFNetworking
+import Crashlytics
+import Fabric
 import UIKit
 import MagnetMax
-import Fabric
-import Crashlytics
-import AFNetworking
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-    var window: UIWindow?
+
     weak var baseViewController : UIViewController?
+    var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -67,6 +76,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func appendToMainWindow(viewController : UIViewController, animated : Bool) {
+        viewController.modalTransitionStyle = .CrossDissolve
+        self.window?.rootViewController?.presentViewController(viewController, animated: animated, completion: nil)
+        self.baseViewController = viewController
+    }
+    
     func launchViewController() -> UIViewController {
         let storyboard = UIStoryboard(name: sb_id_Launch, bundle: nil)
         return storyboard.instantiateInitialViewController()!;
@@ -77,6 +92,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return storyboard.instantiateInitialViewController()!
     }
     
+    func sessionEnded() {
+        print("[SESSION]: SESSION ENDED")
+        if let mainNav = self.baseViewController as? UINavigationController {
+            print("[SESSION]: WILL DISPLAY LOGIN")
+            mainNav.popToRootViewControllerAnimated(true)
+        }
+    }
+    
     func setMainWindow(viewController : UIViewController) {
         if self.window == nil {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
@@ -84,20 +107,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         self.window?.rootViewController = viewController
         self.baseViewController = viewController
-    }
-    
-    func appendToMainWindow(viewController : UIViewController, animated : Bool) {
-        viewController.modalTransitionStyle = .CrossDissolve
-        self.window?.rootViewController?.presentViewController(viewController, animated: animated, completion: nil)
-        self.baseViewController = viewController
-    }
-    
-    func sessionEnded() {
-        print("[SESSION]: SESSION ENDED")
-        if let mainNav = self.baseViewController as? UINavigationController {
-            print("[SESSION]: WILL DISPLAY LOGIN")
-            mainNav.popToRootViewControllerAnimated(true)
-        }
     }
     
     func applicationWillResignActive(application: UIApplication) {

@@ -1,25 +1,46 @@
-//
-//  SignInViewController.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 12/23/15.
-//  Copyright © 2015 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
-import UIKit
-import MagnetMax
 import AFNetworking
+import MagnetMax
+import UIKit
 
 class SignInViewController : BaseViewController {
+    
+    
+    //MARK: Public properties
+    
     
     @IBOutlet weak var txtfEmail : UITextField!
     @IBOutlet weak var txtfPassword : UITextField!
     @IBOutlet weak var btnRemember : UISwitch!
     @IBOutlet weak var chbRememberMe: UIImageView!
     
+    
+    //MARK: Overrides
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.resignOnBackgroundTouch()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -31,9 +52,10 @@ class SignInViewController : BaseViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
     }
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-    }
+
+    
+    //MARK: Actions
+    
     
     @IBAction func selectCheckbox(sender: UIButton) {
         if btnRemember.on {
@@ -70,6 +92,10 @@ class SignInViewController : BaseViewController {
         }
     }
     
+    
+    //MARK: - private Methods
+    
+    
     private func validateCredential() -> (String, String)? {
         
         guard let email = txtfEmail.text where (email.isEmpty == false) else {
@@ -81,8 +107,5 @@ class SignInViewController : BaseViewController {
         }
         
         return (email, password)
-    }
-    
-    deinit {
     }
 }

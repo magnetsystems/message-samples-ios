@@ -1,24 +1,40 @@
-//
-//  ChannelDetailBaseTVCell.swift
-//  Messenger
-//
-//  Created by Vladimir Yevdokimov on 2/10/16.
-//  Copyright © 2016 Magnet Systems, Inc. All rights reserved.
-//
+/*
+* Copyright (c) 2015 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
-import UIKit
-import MagnetMax
 import JSQMessagesViewController
+import MagnetMax
+import UIKit
 
 class ChannelDetailBaseTVCell: UITableViewCell {
     
-    @IBOutlet weak var vNewMessageIndicator : UIView?
+    
+    //MARK: Public properties
     
     var detailResponse : MMXChannelDetailResponse? {
         didSet {
             vNewMessageIndicator?.hidden = !hasNewMessagesFromLastTime(useLastMessage : false)
         }
     }
+    
+    @IBOutlet weak var vNewMessageIndicator : UIView?
+
+    
+    //MARK: Static Methods
+    
     
     static func cellHeight() -> CGFloat {
         
@@ -29,6 +45,10 @@ class ChannelDetailBaseTVCell: UITableViewCell {
         return cellView.frame.size.height;
     }
     
+    
+    //MARK: Overrides
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -37,14 +57,10 @@ class ChannelDetailBaseTVCell: UITableViewCell {
             vNewMessageIndicator.clipsToBounds = true
         }
     }
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
+
     
     // MARK: - Helpers
+    
     
     func hasNewMessagesFromLastTime(useLastMessage useLastMessage: Bool) -> Bool {
         if let detailResponse = self.detailResponse {
