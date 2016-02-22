@@ -18,7 +18,17 @@
 import MagnetMax
 import UIKit
 
-class NavigationNotifier: NSObject {
+class NotifierListener : NSObject {
+    override init() {
+        super.init()
+        
+        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
+    }
+    
+    func didReceiveMessage(mmxMessage: MMXMessage) { }
+}
+
+class NavigationNotifier: NotifierListener {
     
     
     //MARK: Static properties
@@ -82,21 +92,20 @@ class NavigationNotifier: NSObject {
         
         super.init()
         setIndicatorOffset(-5)
-        self.subscribeToIncomingMessages()
     }
     
     
     //MARK: - Public implementation
     
     
-    func didReceiveMessage(mmxMessage: MMXMessage) {
+    override func didReceiveMessage(mmxMessage: MMXMessage) {
         if !shouldNotifyFor(mmxMessage) {
             return
         }
         
         count++
     }
-
+    
     func notifierCount() -> String {
         return "\(count <= NavigationNotifier.MAXCOUNT ? "\(count)" : "\(NavigationNotifier.MAXCOUNT)+")"
     }
@@ -129,8 +138,4 @@ class NavigationNotifier: NSObject {
         return false
     }
     
-    func subscribeToIncomingMessages() {
-        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
-    }
- 
 }

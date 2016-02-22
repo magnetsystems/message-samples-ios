@@ -18,14 +18,22 @@
 import AFNetworking
 import Crashlytics
 import Fabric
-import UIKit
 import MagnetMax
+import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    
+    //MARK: Public properties
+    
+    
     weak var baseViewController : UIViewController?
     var window: UIWindow?
+    
+    
+    //Mark: Did Finish Launching
+    
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -76,6 +84,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    
+    //Mark: Display Methods
+    
+    
     func appendToMainWindow(viewController : UIViewController, animated : Bool) {
         viewController.modalTransitionStyle = .CrossDissolve
         self.window?.rootViewController?.presentViewController(viewController, animated: animated, completion: nil)
@@ -108,6 +120,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = viewController
         self.baseViewController = viewController
     }
+    
+
+    //Mark: AppleDelegate
+    
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
