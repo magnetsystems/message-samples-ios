@@ -56,7 +56,7 @@ class SupportNotifier: NavigationNotifier {
     override func didReceiveMessage(mmxMessage: MMXMessage) {
         super.didReceiveMessage(mmxMessage)
     }
-
+    
     init(view : UIView) {
         super.init()
         
@@ -78,8 +78,7 @@ class SupportNotifier: NavigationNotifier {
         if let indView = indicatorView {
             view.addSubview(indView)
         }
-        
-        self.subscribeToIncomingMessages()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetCount", name: kNotificationHideSupportNotifiers, object: nil)
     }
     
     init(viewController : UIViewController) {
@@ -102,8 +101,7 @@ class SupportNotifier: NavigationNotifier {
         if let indView = indicatorView {
             button.addSubview(indView)
         }
-        
-        self.subscribeToIncomingMessages()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetCount", name: kNotificationHideSupportNotifiers, object: nil)
     }
     
     override func shouldNotifyFor(mmxMessage: MMXMessage) -> Bool {
@@ -111,12 +109,6 @@ class SupportNotifier: NavigationNotifier {
             return true
         }
         return false
-    }
-    
-    override func subscribeToIncomingMessages() {
-        super.subscribeToIncomingMessages()
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resetCount", name: kNotificationHideSupportNotifiers, object: nil)
     }
     
     override func reload() {
