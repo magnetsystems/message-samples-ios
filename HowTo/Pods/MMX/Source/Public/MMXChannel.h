@@ -19,7 +19,7 @@
 #import <Foundation/Foundation.h>
 #import "MMXPublishPermissionsEnum.h"
 #import "MMXMatchType.h"
-#import "MMXChannelSummaryResponse.h"
+#import "MMXChannelDetailResponse.h"
 
 @import MagnetMaxCore;
 @class MMUser;
@@ -28,6 +28,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @interface MMXChannel : MMModel
+
+/**
+ * The unique identifer for the channel.
+ */
+@property (nonatomic, readonly) NSString *channelID;
 
 /**
  *  Is the topic public?
@@ -127,8 +132,27 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param offset	The offset into the results list. Used for pagination.
  *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
  *  @param failure  Block with an NSError with details about the call failure.
+
+ *  @deprecated This method has been deprecated. Use -channelsStartingWith:isPublic:limit:offset:success:failure: instead.
  */
 + (void)channelsStartingWith:(NSString *)name
+                       limit:(int)limit
+                      offset:(int)offset
+                     success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
+                     failure:(nullable void (^)(NSError *error))failure DEPRECATED_ATTRIBUTE;
+
+/**
+ *  Method used to discover existing channels by name
+ *
+ *  @param name     The begining of the channel name you are searching for.
+ *  @param isPublic	Set to YES if it is a public channel. Will only return private channels created by the logged in user.
+ *  @param limit	The max number of items you want returned.
+ *  @param offset	The offset into the results list. Used for pagination.
+ *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
+ *  @param failure  Block with an NSError with details about the call failure.
+ */
++ (void)channelsStartingWith:(NSString *)name
+                    isPublic:(BOOL)isPublic
                        limit:(int)limit
                       offset:(int)offset
                      success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
@@ -354,10 +378,21 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param success		  Block with the channels
  *  @param failure		  Block with an NSError with details about the call failure.
  */
-+ (void)channelSummary:(NSSet<MMXChannel *>*)channels
++ (void)channelDetails:(NSArray<MMXChannel *>*)channels
       numberOfMessages:(NSInteger)numberOfMessages
     numberOfSubcribers:(NSInteger)numberOfSubcribers
-               success:(nullable void (^)(NSArray <MMXChannelSummaryResponse *>*channelSummaries))success
+               success:(nullable void (^)(NSArray <MMXChannelDetailResponse *>*detailsForChannels))success
                failure:(nullable void (^)(NSError *error))failure;
+
+- (NSURL *)iconURL;
+
+- (void)setIconWithURL:(nullable NSURL *)url
+        success:(nullable void (^)(NSURL *iconUrl))success
+        failure:(nullable void (^)(NSError *error))failure;
+
+- (void)setIconWithData:(nullable NSData *)data
+            success:(nullable void (^)(NSURL *iconUrl))success
+            failure:(nullable void (^)(NSError *error))failure;
+
 NS_ASSUME_NONNULL_END
 @end

@@ -18,22 +18,18 @@
 #import <Foundation/Foundation.h>
 #import "MMXPubSubPayload.h"
 #import "MMXItemPublisher.h"
-#import "MMXUserInfo.h"
+#import "MMXMessage.h"
 
 @import MagnetMaxCore;
 
 @interface MMXPubSubItemChannel : MMModel
 
-@property (nonatomic, copy) NSString *itemId;
+@property (nonatomic, copy) NSString *messageID;
 
-@property (nonatomic, strong) MMXPubSubPayload *metaData;
-
-@property (nonatomic, strong) MMXUserInfo *publisherInfo;
+@property (nonatomic, copy) NSDictionary <NSString *, NSString *>  *messageContent;
 
 @property (nonatomic, strong) MMXItemPublisher *publisher;
 
-@property (nonatomic, copy) NSString *channelName;
-
-@property (nonatomic, copy) NSDictionary *content;
+- (MMXMessage *)toMMXMessage;
 
 @end

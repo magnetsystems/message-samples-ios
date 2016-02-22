@@ -15,11 +15,9 @@
  * permissions and limitations under the License.
  */
 
-#import "MMXChannelSummaryResponse.h"
-#import "MMXUserInfo.h"
-#import "MMXPubSubItemChannel.h"
+#import "MMUserProfile.h"
 
-@implementation MMXChannelSummaryResponse
+@implementation MMUserProfile
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
@@ -32,8 +30,6 @@
 
 + (NSDictionary *)listAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-        @"messages" : MMXPubSubItemChannel.class,
-        @"subscribers" : MMXUserInfo.class,
     }];
     [dictionary addEntriesFromDictionary:[super listAttributeTypes]];
     return dictionary;

@@ -48,6 +48,11 @@ extern NSString * const MMXMessageKey;
 extern NSString * const MMXDidReceiveDeliveryConfirmationNotification;
 
 /**
+	Notification when receiving when an attachment's progress has changed.
+ */
+extern NSString * const MMXAttachmentUploadDidChangeValueNotification;
+
+/**
 	Key for MMUser object within the userInfo dictionary of the MMXDidReceiveDeliveryConfirmationNotification notification to whom the message was delivered.
  */
 extern NSString * const MMXRecipientKey;

@@ -16,20 +16,12 @@
  */
 
 #import <Foundation/Foundation.h>
-@import MagnetMaxCore;
+#import "MMModel.h"
 
-@interface MMXChannelSummaryResponse : MMModel
+@interface MMUserProfile : MMModel
 
-@property (nonatomic, copy) NSArray *subscribers;
+@property (nonatomic, copy) NSString *displayName;
 
-@property (nonatomic, assign) int subscriberCount;
-
-@property (nonatomic, copy) NSArray *messages;
-
-@property (nonatomic, copy) NSString *channelName;
-
-@property (nonatomic, assign) int publishedItemCount;
-
-@property (nonatomic, copy) NSString *lastPublishedTime;
+@property (nonatomic, copy) NSString *userId;
 
 @end

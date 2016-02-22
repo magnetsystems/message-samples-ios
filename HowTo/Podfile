@@ -1,8 +1,9 @@
 source 'https://github.com/CocoaPods/Specs.git'
 source 'https://github.com/magnetsystems/Specs.git'
+source 'https://github.com/magnetsystems/iOS-Distribution'
 
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'MagnetMax', '~> 2.3'
+pod 'MagnetMax', '~> 2.5.1'
 pod 'MBProgressHUD'

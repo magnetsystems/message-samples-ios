@@ -14,28 +14,17 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-#import "MMUpdateProfileRequest.h"
-#import "MMUser.h"
 
-@implementation MMUpdateProfileRequest
+#import "MMXChannelDetailResponse.h"
+#import "MMXChannel.h"
+#import "MMXMessage.h"
+#import "MMXPubSubItemChannel.h"
 
-- (instancetype)initWithUser:(MMUser *)user {
-    if (self = [super init]) {
-        self.firstName = user.firstName;
-        self.lastName = user.lastName;
-        self.email = user.email;
-        self.password = user.password.length > 0 ? user.password : nil;
-        self.extras = user.extras;
-        self.tags = user.tags;
-    }
-    
-    return self;
-}
-
+@implementation MMXChannelDetailResponse
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
-                                 @"extras": @"userAccountData",
+                                 @"userID": @"userId",
                                  };
     NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
     [attributeMappings addEntriesFromDictionary:dictionary];
@@ -45,30 +34,46 @@
 
 + (NSDictionary *)listAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
+                                                                                      @"messages" : MMXPubSubItemChannel.class,
+                                                                                      @"subscribers" : MMUserProfile.class,
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super listAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)mapAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super mapAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)enumAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-    }];
+                                                                                      }];
     [dictionary addEntriesFromDictionary:[super enumAttributeTypes]];
     return dictionary;
 }
 
 + (NSArray *)charAttributes {
     NSMutableArray *array = [NSMutableArray arrayWithArray:@[
-    ]];
+                                                             ]];
     [array addObjectsFromArray:[super charAttributes]];
     return array;
+}
+
+- (void)setMessages:(NSArray *)messages {
+    NSArray <MMXPubSubItemChannel *> *messsagesArray = messages;
+    NSMutableArray *mmxMessages = [NSMutableArray new];
+    for (id message in messsagesArray) {
+        if ([message isKindOfClass:[MMXPubSubItemChannel class]]) {
+            [mmxMessages addObject:[message toMMXMessage]];
+        } else if ([message isKindOfClass:[MMXMessage class]]) {
+            [mmxMessages addObject:message];
+        }
+    }
+    
+    _messages = mmxMessages;
 }
 
 @end

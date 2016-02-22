@@ -67,6 +67,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, readonly, nullable) NSArray <MMAttachment *> *attachments;
 
 /**
+ *  UploadProgress of attachments.
+ */
+@property(nonatomic, nullable) NSProgress *attachmentUploadProgress;
+
+/**
  *  Initializer for creating a new MMXMessage object
  *
  *  @param recipients     Set of unique recipients to send the message to

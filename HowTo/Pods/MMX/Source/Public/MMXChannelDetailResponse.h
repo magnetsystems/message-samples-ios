@@ -18,14 +18,28 @@
 #import <Foundation/Foundation.h>
 @import MagnetMaxCore;
 
-@interface MMXQueryChannelResponse : MMModel
+@class MMXUserProfile, MMXMessage, MMXChannel, MMUserProfile;
 
-@property (nonatomic, assign) int code;
+@interface MMXChannelDetailResponse : MMModel
 
-@property (nonatomic, copy) NSArray *channels;
+@property (nonatomic, copy) NSArray<MMUserProfile *> *subscribers;
 
-@property (nonatomic, copy) NSString *message;
+@property (nonatomic, assign) int subscriberCount;
 
-- (NSArray *)toMMXChannels;
+@property (nonatomic, copy) NSArray<MMXMessage *>*messages;
+
+@property (nonatomic, copy) NSString *channelName;
+
+@property (nonatomic, assign) int publishedItemCount;
+
+@property (nonatomic, copy) NSString *lastPublishedTime;
+
+@property (nonatomic, strong) MMXChannel *channel;
+
+/**
+ The unique identifer for the owner.
+ */
+@property (nonatomic, copy) NSString *userID;
+
 
 @end
