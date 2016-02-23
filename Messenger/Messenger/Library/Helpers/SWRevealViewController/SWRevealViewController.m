@@ -644,8 +644,8 @@ const int FrontViewPositionNone = 0xff;
     _frontViewPosition = FrontViewPositionLeft;
     _rearViewPosition = FrontViewPositionLeft;
     _rightViewPosition = FrontViewPositionLeft;
-    _rearViewRevealWidth = 260.0f;
-    _rearViewRevealOverdraw = 60.0f;
+    _rearViewRevealWidth = 300.0f;
+    _rearViewRevealOverdraw = 8.0f;
     _rearViewRevealDisplacement = 40.0f;
     _rightViewRevealWidth = 260.0f;
     _rightViewRevealOverdraw = 60.0f;
@@ -762,7 +762,7 @@ const int FrontViewPositionNone = 0xff;
 }
 
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     // we could have simply not implemented this, but we choose to call super to make explicit that we
     // want the default behavior.

@@ -1,32 +1,44 @@
-//
-//  DateFormatter.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 1/26/16.
-//  Copyright © 2016 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2016 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
 class DateFormatter {
     
+    
+    //MARK: Public properties
+    
+    
     let formatter = NSDateFormatter()
+    
+    
+    //MARK: - Init
+    
     
     init() {
         formatter.locale = NSLocale.currentLocale()
         formatter.timeZone = NSTimeZone(name: "GMT")
     }
     
-    func relativeDateForDate(date: NSDate) -> String {
-        return NSDateFormatter.localizedStringFromDate(date, dateStyle: .ShortStyle, timeStyle: .NoStyle)
-    }
     
-    func dayOfTheWeek(date: NSDate) -> String {
-        let dayFormatter = NSDateFormatter()
-        dayFormatter.dateFormat = "EEEE"
-        return dayFormatter.stringFromDate(date)
-    }
+    //MARK: - public Methods
     
-    func timeForDate(date: NSDate) -> String {
-        return NSDateFormatter.localizedStringFromDate(date, dateStyle: .NoStyle, timeStyle: .ShortStyle)
+    
+    func currentTimeStamp() -> String {
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        return formatter.stringFromDate(NSDate())
     }
     
     func dateForStringTime(stringTime: String) -> NSDate? {
@@ -34,9 +46,10 @@ class DateFormatter {
         return formatter.dateFromString(stringTime)
     }
     
-    func currentTimeStamp() -> String {
-        formatter.dateFormat = "yyyyMMddHHmmss"
-        return formatter.stringFromDate(NSDate())
+    func dayOfTheWeek(date: NSDate) -> String {
+        let dayFormatter = NSDateFormatter()
+        dayFormatter.dateFormat = "EEEE"
+        return dayFormatter.stringFromDate(date)
     }
     
     func displayTime(stringTime: String) -> String! {
@@ -61,5 +74,13 @@ class DateFormatter {
         }
         
         return stringTime
+    }
+    
+    func relativeDateForDate(date: NSDate) -> String {
+        return NSDateFormatter.localizedStringFromDate(date, dateStyle: .ShortStyle, timeStyle: .NoStyle)
+    }
+    
+    func timeForDate(date: NSDate) -> String {
+        return NSDateFormatter.localizedStringFromDate(date, dateStyle: .NoStyle, timeStyle: .ShortStyle)
     }
 }

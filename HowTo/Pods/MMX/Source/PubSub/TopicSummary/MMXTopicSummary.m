@@ -27,7 +27,7 @@
 	MMXTopic * topic = [[MMXTopic alloc] init];
 	NSDictionary * topicDict = summaryDict[@"topicNode"];
 	topic.topicName = topicDict[@"topicName"];
-	if (topicDict[@"userId"] && [topicDict[@"userId"] isKindOfClass:[NSNull class]]) {
+	if (topicDict[@"userId"] && ![topicDict[@"userId"] isKindOfClass:[NSNull class]]) {
 		topic.nameSpace = topicDict[@"userId"];
 	}
 	summary.topic = topic;

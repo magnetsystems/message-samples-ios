@@ -11,9 +11,9 @@ Pod::Spec.new do |s|
   s.platform = :ios, '8.0'
   s.requires_arc = true
 
-  s.resources = ['source/**/*.{bundle}']
+  s.resources = ['source/**/*.{xib,storyboard,bundle,png}']
 
-  s.source_files = 'source/**/*.{h,m,swift,xib,png}'
+  s.source_files = 'source/**/*.{h,m,swift}'
 
   s.frameworks = 'QuartzCore', 'CoreGraphics', 'CoreLocation', 'MapKit', 'UIKit', 'Foundation', 'AudioToolbox'
 

@@ -42,6 +42,7 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
         let completionHandler = { (response: NSURLResponse, responseObject: AnyObject?, error: NSError?) in
             guard let URLResponse = response as? NSHTTPURLResponse else {
                 // FIXME: Log this error
+                originalCompletionHandler?(response, responseObject, error)
                 print("Could not cast response to NSHTTPURLResponse")
                 return
 //                fatalError("Could not cast response to NSHTTPURLResponse")

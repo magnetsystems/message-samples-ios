@@ -228,7 +228,9 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                     if (!savedHATToken.isExpired) {
                         serviceAdapter.HATToken = savedHATToken.accessToken;
                         
-                        [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification object:self userInfo:nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification
+                                                                            object:self
+                                                                          userInfo:nil];
                         
                             serviceAdapter.username = MMUser.savedUser.userName;
                             [serviceAdapter registerCurrentDeviceWithSuccess:nil failure:nil];
@@ -246,6 +248,9 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                     }
                     //                    [serviceAdapter passUserTokenToRegisteredServices];
                 }
+                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification
+                                                                     object:self
+                                                                   userInfo:@{@"error" : error}];
             }];
             // We want this operation to finish before anything else.
             // FIXME: Git rid of this cast!

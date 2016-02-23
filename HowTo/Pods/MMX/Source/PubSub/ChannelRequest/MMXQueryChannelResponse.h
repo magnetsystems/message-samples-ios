@@ -26,4 +26,6 @@
 
 @property (nonatomic, copy) NSString *message;
 
+- (NSArray *)toMMXChannels;
+
 @end

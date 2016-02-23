@@ -129,34 +129,25 @@ public class MMAttachmentProgress : NSObject {
         guard let downloadURL = attachmentURL(attachmentID, userId: userIdentifier) else {
             fatalError("downloadURL should not be nil")
         }
-        let request = NSMutableURLRequest(URL: downloadURL)
+        let request = NSMutableURLRequest(URL: downloadURL, cachePolicy: .UseProtocolCachePolicy, timeoutInterval: 60 * 5)
         request.setValue("Bearer \(MMCoreConfiguration.serviceAdapter.HATToken)", forHTTPHeaderField: "Authorization")
-        request.timeoutInterval = 60 * 5
+        //        var prog = progress?.downloadProgress
+        let _ = progress?.downloadProgress
         
-        var prog = progress?.downloadProgress
-        let downloadTask = MMCoreConfiguration.serviceAdapter.backgroundSessionManager.downloadTaskWithRequest(request, progress: &prog, destination: { targetPath, response in
-            let documentsDirectoryURL = try! NSFileManager.defaultManager().URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false)
-            let destination  = documentsDirectoryURL.URLByAppendingPathComponent("\(attachmentID)_\(response.suggestedFilename!)")
-            //            let _ = try? NSFileManager.defaultManager().removeItemAtURL(destination)
-            return destination
-            
-            }) { response, filePath, error in
-                if let e = error {
-                    failure?(error: e)
-                } else {
-                    //                guard let httpResponse = response as? NSHTTPURLResponse else {
-                    //                    fatalError("response should be of type NSHTTPURLResponse")
-                    //                }
-                    //                let headers = httpResponse.allHeaderFields["Content-Type"] as! [String: AnyObject]
-                    //                var contentType = "application/octet-stream"
-                    //                if let contentTypeHeader = headers["Content-Type"] as? String {
-                    //                    contentType = contentTypeHeader
-                    //                }
-                    success?(filePath!)
-                }
+        // Mark the request as cacheable
+        NSURLProtocol.setProperty(7200, forKey: MMURLProtocol.cacheAgeKey, inRequest: request)
+        
+        let dataTask = MMCoreConfiguration.serviceAdapter.sessionManager.dataTaskWithRequest(request) { response, data, error in
+            if let e = error {
+                failure?(error: e)
+            } else {
+                let destination  = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("\(attachmentID)_\(response.suggestedFilename!)")
+                (data as? NSData)?.writeToURL(destination, atomically: true)
+                success?(destination)
+            }
         }
         
-        downloadTask.resume()
+        dataTask.resume()
     }
     
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B970E3F1C7B4DC700C3FFB2 /* check_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B970E3D1C7B4DC700C3FFB2 /* check_off.png */; };
+		8B970E401C7B4DC700C3FFB2 /* check_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B970E3E1C7B4DC700C3FFB2 /* check_on.png */; };
 		8D34CFD21C488E800004BC1C /* HowToTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34CFD11C488E800004BC1C /* HowToTests.swift */; };
 		8D34CFDD1C488E800004BC1C /* HowToUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34CFDC1C488E800004BC1C /* HowToUITests.swift */; };
 		8D34D0081C488F230004BC1C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D34CFEB1C488F230004BC1C /* AppDelegate.swift */; };
@@ -59,6 +61,8 @@
 		20285997D5C0305714A8992D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		5E5F87A4A6BC52BB2C6099BC /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		615BFDDAA190D356BBA1D83D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		8B970E3D1C7B4DC700C3FFB2 /* check_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_off.png; sourceTree = "<group>"; };
+		8B970E3E1C7B4DC700C3FFB2 /* check_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_on.png; sourceTree = "<group>"; };
 		8D34CFB91C488E800004BC1C /* HowTo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HowTo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D34CFCD1C488E800004BC1C /* HowTo.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HowTo.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D34CFD11C488E800004BC1C /* HowToTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToTests.swift; sourceTree = "<group>"; };
@@ -192,6 +196,8 @@
 		8D34D0221C488F5A0004BC1C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8B970E3D1C7B4DC700C3FFB2 /* check_off.png */,
+				8B970E3E1C7B4DC700C3FFB2 /* check_on.png */,
 				8D34CFF71C488F230004BC1C /* GoldenGateBridge1.jpg */,
 				8D34CFF81C488F230004BC1C /* GoldenGateBridge2.jpg */,
 				8D34CFFA1C488F230004BC1C /* lock-7.png */,
@@ -385,6 +391,8 @@
 				8D34D0211C488F230004BC1C /* woman-man-7.png in Resources */,
 				8D34D0141C488F230004BC1C /* lock-7.png in Resources */,
 				8D34D0151C488F230004BC1C /* MagnetMax.plist in Resources */,
+				8B970E401C7B4DC700C3FFB2 /* check_on.png in Resources */,
+				8B970E3F1C7B4DC700C3FFB2 /* check_off.png in Resources */,
 				8D34D0091C488F230004BC1C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -60,13 +60,17 @@ public extension MMUser {
         return self.userID
     }
     
+    
+    
     /**
      The unique avatar URL for the user.
      */
     public func avatarURL() -> NSURL? {
         var url : NSURL? = nil
-        if let accessToken = MMCoreConfiguration.serviceAdapter.HATToken {
-            url = MMAttachmentService.attachmentURL(avatarID(), userId: self.userID, parameters: ["access_token" : accessToken])
+        if extras["hasAvatar"] == "true" {
+            if let accessToken = MMCoreConfiguration.serviceAdapter.HATToken {
+                url = MMAttachmentService.attachmentURL(avatarID(), userId: self.userID, parameters: ["access_token" : accessToken])
+            }
         }
         
         return url
@@ -102,8 +106,20 @@ public extension MMUser {
         let attachment = MMAttachment.init(data: imageData, mimeType: "image/png")
         let metaData = ["file_id" : avatarID()]
         MMAttachmentService.upload([attachment], metaData: metaData, success: {
+            let updateProfileRequest = MMUpdateProfileRequest(user: MMUser.currentUser())
+            updateProfileRequest.password = nil
+            updateProfileRequest.extras["hasAvatar"] = "true"
+            self.extras["hasAvatar"] = "true"
+            MMUser.updateProfile(updateProfileRequest, success: { user in
+                // http://stackoverflow.com/questions/26260401/nsurlcache-does-not-clear-stored-responses-in-ios8
+//                if let avatarURL = self.avatarURL() {
+//                    let request = NSURLRequest(URL: avatarURL)
+//                    NSURLCache.sharedURLCache().removeCachedResponseForRequest(request)
+//                }
+                NSURLCache.sharedURLCache().removeAllCachedResponses()
                 success?(url: self.avatarURL())
             }, failure:failure)
+        }, failure:failure)
     }
     
     /**
@@ -255,11 +271,26 @@ public extension MMUser {
     /**
      Refreshes A Saved User
      */
-    @objc static private func refreshUser() {
+    @objc static private func refreshUser(notification : NSNotification) {
         tokenRefreshStatus = tokenRefreshStatus.union(.HasRefreshed)
         if tokenRefreshStatus.contains(.WaitingForRefresh) {
-            resumeSession()
+            if let error : NSError = notification.userInfo?["error"] as? NSError {
+                refreshUserFailed(error)
+            } else {
+                resumeSession()
+            }
         }
+    }
+
+    /**
+     Called when A Saved User failed to refresh
+     */
+    static private func refreshUserFailed(error : NSError) {
+        for i in (0..<resumeSessionCompletionBlocks.count).reverse() {
+            let completion = resumeSessionCompletionBlocks[i]
+            completion(error: error)
+        }
+        resumeSessionCompletionBlocks = []
     }
 
     static private func updateCurrentUser(user : MMUser, rememberMe : Bool) {
@@ -425,10 +456,14 @@ public extension MMUser {
         }
         let userService = MMUserService()
         userService.updateProfile(updateProfileRequest, success: { user in
+            if let currentUser = currentlyLoggedInUser {
+                user.rememberMe = currentUser.rememberMe
+            }
+            currentlyLoggedInUser = user
             success?(user: user)
-        }) { error in
-            failure?(error: error)
-        }.executeInBackground(nil)
+            }) { error in
+                failure?(error: error)
+            }.executeInBackground(nil)
     }
     
     override public func isEqual(object: AnyObject?) -> Bool {
@@ -473,7 +508,7 @@ public extension MMUser {
             static var token: dispatch_once_t = 0
         }
         dispatch_once(&Pred.token, {
-             NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshUser" , name: MMServiceAdapterDidRestoreHATTokenNotification, object: nil)
+             NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshUser:" , name: MMServiceAdapterDidRestoreHATTokenNotification, object: nil)
             })
     }
     

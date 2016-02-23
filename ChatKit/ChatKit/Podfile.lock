@@ -26,7 +26,7 @@ PODS:
   - CocoaLumberjack/Extensions (2.2.0):
     - CocoaLumberjack/Default
   - DZVideoPlayerViewController (0.4.0)
-  - FLAnimatedImage (1.0.10)
+  - FLAnimatedImage (1.0.12)
   - MagnetMax (2.4.1):
     - MagnetMaxCore (~> 2.4.1)
     - MMX (~> 2.4.1)
@@ -107,11 +107,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
-  ChatKitUI: 00688b06950317053fffec6f65d5c47953ed00d0
+  ChatKitUI: 1a836cdb23f5bbe8b4e68022d31564693ac98944
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
   DZVideoPlayerViewController: 4886c5016a632cbd94a85e6071806e4929c01653
-  FLAnimatedImage: e16a1e1cef08e4c509b47e4acbe3923f65c16135
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   MagnetMax: 6f7742fa81a93ca9b728838f30af81ff2a2152bf
   MagnetMaxCore: b78855ca50f957b9967e85e74f936bb253d82561
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e

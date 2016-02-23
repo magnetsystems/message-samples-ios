@@ -20,21 +20,6 @@ protocol UserModelDelegate : class {
 
 class UserModel : NSObject {
     var user : MMUser?
-    weak var delegate : UserModelDelegate?
-    var indexPath : NSIndexPath?
-    lazy var image : UIImage? = {
-        var imageContent : UIImage?
-//        var imageContent = UIImage.init(named: "user_default.png", inBundle: NSBundle(forClass: self.dynamicType), compatibleWithTraitCollection: nil)
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
-            if let data = NSData.init( contentsOfURL: (self.user?.avatarURL())!), let img = UIImage.init(data: data) {
-                self.image = img
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.delegate?.didDownloadMedia(self)
-                })
-            }
-        })
-        return imageContent
-    }()
 }
 
 class ContactsViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate, UserModelDelegate {
@@ -199,8 +184,8 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         }
         
         cell?.userName?.attributedText = title
-        //cell?.avatar?.image = userModel.image
-        userModel.indexPath = indexPath
+        
+        
         
         return cell!
     }

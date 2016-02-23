@@ -1,35 +1,55 @@
-//
-//  AppDelegate.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 12/23/15.
-//  Copyright © 2015 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2016 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
-import UIKit
+import AFNetworking
+import Crashlytics
+import Fabric
 import MagnetMax
+import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+
     
+    //MARK: Public properties
+    
+    
+    weak var baseViewController : UIViewController?
     var window: UIWindow?
     
     
+    //Mark: Did Finish Launching
+    
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        let URLCache = NSURLCache(memoryCapacity: 4 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024, diskPath: nil)
+        NSURLCache.setSharedURLCache(URLCache)
         
         // Initialize MagnetMax
         let configurationFile = NSBundle.mainBundle().pathForResource("MagnetMax", ofType: "plist")
         let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)
         MagnetMax.configure(configuration!)
         
-        //        MMXLogger.sharedLogger().level = .Verbose
-        //        MMXLogger.sharedLogger().startLogging()
-        
         
         let settings = UIUserNotificationSettings(forTypes: [.Badge,.Alert,.Sound], categories: nil)
         application.registerUserNotificationSettings(settings);
         
-        //is user alread logged In ?
+//        is user alread logged In ?
         setMainWindow(launchViewController())
         self.window?.makeKeyAndVisible()
         
@@ -37,43 +57,73 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             MMUser.resumeSession({ () -> Void in
                 if let navController : UINavigationController = self.rootViewController() as? UINavigationController {
                     if MMUser.sessionStatus() == .LoggedIn {
-                        if let viewController = navController.storyboard?.instantiateViewControllerWithIdentifier("SlideMenuVC") {
+                        
+                        MMX.start()
+                        
+                        if let viewController = navController.storyboard?.instantiateViewControllerWithIdentifier(vc_id_SlideMenu) as? SWRevealViewController {
                             navController.pushViewController(viewController, animated: false)
                         }
                     }
-                    self.appendToMainWindow(navController, animated: true)
+                    self.appendToMainWindow(navController, animated: false)
                 }
                 }, failure: { (error) -> Void in
-                    self.appendToMainWindow(self.rootViewController(), animated: true)
+                    self.setMainWindow(self.rootViewController())
             })
         } else {
-            appendToMainWindow(rootViewController(), animated: true)
+            setMainWindow(rootViewController())
         }
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionEnded", name: MMXUserDidLogOutNotification, object: nil)
+        AFNetworkReachabilityManager.sharedManager().setReachabilityStatusChangeBlock { (status) -> Void in
+            if status == .NotReachable {
+             NSNotificationCenter.defaultCenter().postNotificationName(kNotificationNetworkOffline, object: self)
+            }
+        }
+        AFNetworkReachabilityManager.sharedManager().startMonitoring()
+        Fabric.with([Crashlytics.self])
         return true
     }
     
-    func launchViewController() -> UIViewController {
-        let storyboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        return storyboard.instantiateViewControllerWithIdentifier("main")
-    }
     
-    func rootViewController() -> UIViewController {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        return storyboard.instantiateViewControllerWithIdentifier("baseNavigationController")
-    }
+    //Mark: Display Methods
     
-    func setMainWindow(viewController : UIViewController) {
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window?.backgroundColor = UIColor.whiteColor()
-        self.window?.rootViewController = viewController
-        
-    }
     
     func appendToMainWindow(viewController : UIViewController, animated : Bool) {
         viewController.modalTransitionStyle = .CrossDissolve
         self.window?.rootViewController?.presentViewController(viewController, animated: animated, completion: nil)
+        self.baseViewController = viewController
     }
+    
+    func launchViewController() -> UIViewController {
+        let storyboard = UIStoryboard(name: sb_id_Launch, bundle: nil)
+        return storyboard.instantiateInitialViewController()!;
+    }
+    
+    func rootViewController() -> UIViewController {
+        let storyboard = UIStoryboard(name: sb_id_Main, bundle: nil)
+        return storyboard.instantiateInitialViewController()!
+    }
+    
+    func sessionEnded() {
+        print("[SESSION]: SESSION ENDED")
+        if let mainNav = self.baseViewController as? UINavigationController {
+            print("[SESSION]: WILL DISPLAY LOGIN")
+            mainNav.popToRootViewControllerAnimated(true)
+        }
+    }
+    
+    func setMainWindow(viewController : UIViewController) {
+        if self.window == nil {
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window?.backgroundColor = UIColor.whiteColor()
+        }
+        self.window?.rootViewController = viewController
+        self.baseViewController = viewController
+    }
+    
+
+    //Mark: AppleDelegate
+    
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

@@ -17,10 +17,9 @@
 
 #import "MMModel.h"
 
-
+@class MMUser;
 
 @interface MMUpdateProfileRequest : MMModel
-
 
 @property (nonatomic, copy) NSArray *tags;
 
@@ -33,5 +32,7 @@
 @property (nonatomic, copy) NSString *password;
 
 @property (nonatomic, copy) NSDictionary *extras;
+
+- (instancetype)initWithUser:(MMUser *)user;
 
 @end

@@ -1,0 +1,222 @@
+
+//--------------------------//
+// Tue Feb  9 17:54:56 EET 2016
+//--------------------------//
+Project folder..
+/Users/vevdokimov/Projects/magnet/samples/Messenger
+----------
+/Users/vevdokimov/Projects/magnet/samples/Messenger/Podfile
+----------
+Podfile exist. Run compilation
+----------
+remove *.xcworkspace folder
+Messenger.xcworkspace
+----------
+remove 'Podfile.lock' file
+----------
+remove 'Pods' folder
+----------
+clear pods cache
+----------
+install pods
+----------
+Updating local specs repositories
+
+CocoaPods 1.0.0.beta.3 is available.
+To update use: `gem install cocoapods --pre`
+[!] This is a test version we'd love you to try.
+
+For more information see http://blog.cocoapods.org
+and the CHANGELOG for this version http://git.io/BaH8pQ.
+
+Analyzing dependencies
+Downloading dependencies
+Installing AFNetworking (2.6.1)
+Installing AFOAuth2Manager (2.2.1)
+Installing CocoaAsyncSocket (7.4.1)
+Installing CocoaLumberjack (2.2.0)
+Installing DZVideoPlayerViewController (0.4.0)
+Installing FLAnimatedImage (1.0.10)
+Installing JSQMessagesViewController (7.2.0)
+Installing JSQSystemSoundPlayer (2.0.1)
+Installing MDMCoreData (1.5.0)
+Installing MMX (2.4.1)
+Installing MMXXMPPFramework (3.6.13)
+Installing MagnetMax (2.4.1)
+Installing MagnetMaxCore (2.4.1)
+Installing Mantle (3.0.0)
+Installing NYTPhotoViewer (1.0.1)
+Generating Pods project
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `Messenger.xcworkspace` for this project from now on.
+Sending stats
+Sending stats
+Pod installation complete! There are 4 dependencies from the Podfile and 15 total pods installed.
+
+//--------------------------//
+// Wed Feb 10 22:38:57 EET 2016
+//--------------------------//
+Project folder..
+/Users/vevdokimov/Projects/magnet/samples/Messenger
+----------
+/Users/vevdokimov/Projects/magnet/samples/Messenger/Podfile
+----------
+Podfile exist. Run compilation
+----------
+remove *.xcworkspace folder
+Messenger.xcworkspace
+----------
+remove 'Podfile.lock' file
+----------
+remove 'Pods' folder
+----------
+clear pods cache
+----------
+install pods
+----------
+Updating local specs repositories
+
+CocoaPods 1.0.0.beta.3 is available.
+To update use: `gem install cocoapods --pre`
+[!] This is a test version we'd love you to try.
+
+For more information see http://blog.cocoapods.org
+and the CHANGELOG for this version http://git.io/BaH8pQ.
+
+Analyzing dependencies
+Downloading dependencies
+Installing AFNetworking (2.6.1)
+Installing AFOAuth2Manager (2.2.1)
+Installing CocoaAsyncSocket (7.4.1)
+Installing CocoaLumberjack (2.2.0)
+Installing DZVideoPlayerViewController (0.4.0)
+Installing FLAnimatedImage (1.0.10)
+Installing JSQMessagesViewController (7.2.0)
+Installing JSQSystemSoundPlayer (2.0.1)
+Installing MDMCoreData (1.5.0)
+Installing MMX (2.4.1)
+Installing MMXXMPPFramework (3.6.13)
+Installing MagnetMax (2.4.1)
+Installing MagnetMaxCore (2.4.1)
+Installing Mantle (3.0.0)
+Installing NYTPhotoViewer (1.0.1)
+Generating Pods project
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `Messenger.xcworkspace` for this project from now on.
+Sending stats
+Sending stats
+Pod installation complete! There are 4 dependencies from the Podfile and 15 total pods installed.
+
+//--------------------------//
+// Thu Feb 11 17:45:55 EET 2016
+//--------------------------//
+Project folder..
+/Users/vevdokimov/Projects/magnet/samples/Messenger
+----------
+/Users/vevdokimov/Projects/magnet/samples/Messenger/Podfile
+----------
+Podfile exist. Run compilation
+----------
+remove *.xcworkspace folder
+Messenger.xcworkspace
+----------
+remove 'Podfile.lock' file
+----------
+remove 'Pods' folder
+----------
+clear pods cache
+----------
+install pods
+----------
+Updating local specs repositories
+
+CocoaPods 1.0.0.beta.3 is available.
+To update use: `gem install cocoapods --pre`
+[!] This is a test version we'd love you to try.
+
+For more information see http://blog.cocoapods.org
+and the CHANGELOG for this version http://git.io/BaH8pQ.
+
+Analyzing dependencies
+Downloading dependencies
+Installing AFNetworking (2.6.1)
+Installing AFOAuth2Manager (2.2.1)
+Installing CocoaAsyncSocket (7.4.1)
+Installing CocoaLumberjack (2.2.0)
+Installing DZVideoPlayerViewController (0.4.0)
+Installing FLAnimatedImage (1.0.10)
+Installing JSQMessagesViewController (7.2.0)
+Installing JSQSystemSoundPlayer (2.0.1)
+Installing MDMCoreData (1.5.0)
+Installing MMX (2.4.1)
+Installing MMXXMPPFramework (3.6.13)
+Installing MagnetMax (2.4.1)
+Installing MagnetMaxCore (2.4.1)
+Installing Mantle (3.0.0)
+Installing NYTPhotoViewer (1.0.1)
+Generating Pods project
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `Messenger.xcworkspace` for this project from now on.
+Sending stats
+Sending stats
+Pod installation complete! There are 4 dependencies from the Podfile and 15 total pods installed.
+
+//--------------------------//
+// Fri Feb 12 17:06:26 EET 2016
+//--------------------------//
+Project folder..
+/Users/vevdokimov/Projects/magnet/samples/Messenger
+----------
+/Users/vevdokimov/Projects/magnet/samples/Messenger/Podfile
+----------
+Podfile exist. Run compilation
+----------
+remove *.xcworkspace folder
+Messenger.xcworkspace
+----------
+remove 'Podfile.lock' file
+----------
+remove 'Pods' folder
+----------
+clear pods cache
+----------
+install pods
+----------
+Updating local specs repositories
+
+CocoaPods 1.0.0.beta.3 is available.
+To update use: `gem install cocoapods --pre`
+[!] This is a test version we'd love you to try.
+
+For more information see http://blog.cocoapods.org
+and the CHANGELOG for this version http://git.io/BaH8pQ.
+
+Analyzing dependencies
+Downloading dependencies
+Installing AFNetworking (2.6.1)
+Installing AFOAuth2Manager (2.2.1)
+Installing CocoaAsyncSocket (7.4.1)
+Installing CocoaLumberjack (2.2.0)
+Installing Crashlytics (3.6.0)
+Installing DZVideoPlayerViewController (0.4.0)
+Installing FLAnimatedImage (1.0.10)
+Installing Fabric (1.6.5)
+Installing JSQMessagesViewController (7.2.0)
+Installing JSQSystemSoundPlayer (2.0.1)
+Installing MDMCoreData (1.5.0)
+Installing MMX (2.4.1)
+Installing MMXXMPPFramework (3.6.13)
+Installing MagnetMax (2.4.1)
+Installing MagnetMaxCore (2.4.1)
+Installing Mantle (3.0.0)
+Installing NYTPhotoViewer (1.0.1)
+Generating Pods project
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `Messenger.xcworkspace` for this project from now on.
+Sending stats
+Sending stats
+Pod installation complete! There are 6 dependencies from the Podfile and 17 total pods installed.

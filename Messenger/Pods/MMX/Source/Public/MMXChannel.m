@@ -841,7 +841,7 @@
     NSMutableDictionary *channelMap = [NSMutableDictionary new];
     
     for (MMXChannel *channel in channels) {
-        [channelMap setObject:channel forKey:channel.name];
+        [channelMap setObject:channel forKey:channel.channelID];
         MMXChannelLookupKey *channelRequestObject = [[MMXChannelLookupKey alloc] init];
         channelRequestObject.ownerUserID = channel.ownerUserID;
         channelRequestObject.privateChannel = channel.privateChannel;
@@ -854,7 +854,13 @@
     MMCall *call = [pubSubService getSummary:channelSummary
                                      success:^(NSArray<MMXChannelDetailResponse *>*response) {
                                          for (MMXChannelDetailResponse *details in response) {
-                                             details.channel = [channelMap objectForKey:details.channelName];
+                                             NSString *channelName = details.channelName;
+                                             // TODO: Use details.isPublic instead when it's implemented on the server
+                                             BOOL isPublic = (details.userID == nil);
+                                             if (!isPublic) {
+                                                 channelName = [NSString stringWithFormat:@"%@#%@", details.userID, details.channelName];
+                                             }
+                                             details.channel = [channelMap objectForKey:channelName];
                                          }
                                          if (success) {
                                              success(response);
@@ -863,7 +869,6 @@
     
     [call executeInBackground:nil];
 }
-
 
 #pragma mark - Offline
 
@@ -940,6 +945,15 @@
 }
 
 #pragma mark - Override Getters
+
+- (NSString *)channelID {
+    NSString *channelName = self.name;
+    if (!self.isPublic) {
+        channelName = [NSString stringWithFormat:@"%@#%@", self.ownerUserID, channelName];
+    }
+    
+    return channelName;
+}
 
 - (NSDate *)lastTimeActive {
     return _lastTimeActive ?: self.creationDate;

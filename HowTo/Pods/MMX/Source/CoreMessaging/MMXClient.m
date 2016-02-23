@@ -641,7 +641,7 @@ int const kReconnectionTimerInterval = 4;
 
 - (void)updatePresenceWithPriority:(NSInteger)priorityValue {
 	NSXMLElement *priority = [NSXMLElement elementWithName:@"priority" stringValue:[@(priorityValue) stringValue]];
-	XMPPPresence * presence = [XMPPPresence presenceWithType:(priorityValue >= 0) ? @"available" : @"unavailable"];
+	XMPPPresence * presence = [XMPPPresence presenceWithType:(priorityValue >= 0) ? nil : @"unavailable"];
 	[presence addChild:priority];
 	[self.xmppStream sendElement:presence];
 }
@@ -652,7 +652,7 @@ int const kReconnectionTimerInterval = 4;
 		if (shouldSuspendIncomingMessages) {
 			[self updatePresenceWithPriority:-1];
 		} else {
-			[self updatePresenceWithPriority:24];
+			[self updatePresenceWithPriority:0];
 		}
 	}
 }
@@ -817,7 +817,7 @@ int const kReconnectionTimerInterval = 4;
 	if (self.shouldSuspendIncomingMessages) {
 		[self updatePresenceWithPriority:-1];
 	} else {
-		[self updatePresenceWithPriority:24];
+		[self updatePresenceWithPriority:0];
 	}
 	[self sendArchivedMessages];
 }

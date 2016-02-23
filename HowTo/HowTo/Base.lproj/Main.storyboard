@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="evr-oH-xaO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="evr-oH-xaO">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -62,7 +62,7 @@
                                 </variation>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="se9-uj-eWx">
-                                <rect key="frame" x="279" y="220" width="41.5" height="17"/>
+                                <rect key="frame" x="279" y="220" width="42" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -589,12 +589,12 @@
                                 </segments>
                             </segmentedControl>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QdX-0O-oYH">
-                                <rect key="frame" x="20" y="144" width="560" height="30"/>
+                                <rect key="frame" x="20" y="171" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9xP-NQ-jdx">
-                                <rect key="frame" x="0.0" y="194" width="600" height="406"/>
+                                <rect key="frame" x="0.0" y="224" width="600" height="376"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChannelCellIdentifier" textLabel="ykT-Ui-ilc" style="IBUITableViewCellStyleDefault" id="u02-Vj-wJF">
@@ -622,17 +622,50 @@
                                     <outlet property="dataSource" destination="tHU-Zr-BUV" id="BcN-LL-gz9"/>
                                 </connections>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Is public" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WyU-4d-Rik">
+                                <rect key="frame" x="268" y="137" width="64" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lce-lE-xa5">
+                                <rect key="frame" x="211" y="132" width="51" height="31"/>
+                            </switch>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check_on.png" translatesAutoresizingMaskIntoConstraints="NO" id="k1Z-rH-lh3">
+                                <rect key="frame" x="240" y="137" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="5GU-fx-tG4"/>
+                                    <constraint firstAttribute="width" constant="20" id="WAy-aV-o73"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZTe-IQ-iEh">
+                                <rect key="frame" x="230" y="132" width="140" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="15Z-oK-rnl"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="selectCheckbox:" destination="tHU-Zr-BUV" eventType="touchUpInside" id="KeC-Kc-173"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="WyU-4d-Rik" firstAttribute="top" secondItem="PuK-rr-EqZ" secondAttribute="bottom" constant="13" id="1HK-XA-U2s"/>
+                            <constraint firstItem="ZTe-IQ-iEh" firstAttribute="centerX" secondItem="mgT-Z9-3io" secondAttribute="centerX" id="1Se-TN-Rl9"/>
                             <constraint firstItem="PuK-rr-EqZ" firstAttribute="top" secondItem="dQS-Gk-Z0g" secondAttribute="bottom" constant="32" id="ApP-PD-VDv"/>
-                            <constraint firstItem="QdX-0O-oYH" firstAttribute="top" secondItem="PuK-rr-EqZ" secondAttribute="bottom" constant="20" id="FbP-CV-Weg"/>
                             <constraint firstItem="FyT-eN-Ou9" firstAttribute="top" secondItem="9xP-NQ-jdx" secondAttribute="bottom" id="IFy-4F-Vyd"/>
+                            <constraint firstItem="QdX-0O-oYH" firstAttribute="top" secondItem="Lce-lE-xa5" secondAttribute="bottom" constant="8" id="Iwa-g0-zhK"/>
+                            <constraint firstItem="WyU-4d-Rik" firstAttribute="leading" secondItem="Lce-lE-xa5" secondAttribute="trailing" constant="8" id="Kpt-V8-QKh"/>
+                            <constraint firstItem="WyU-4d-Rik" firstAttribute="leading" secondItem="k1Z-rH-lh3" secondAttribute="trailing" constant="8" id="Njy-Fs-m3c"/>
                             <constraint firstAttribute="trailing" secondItem="9xP-NQ-jdx" secondAttribute="trailing" id="Poj-7O-mcz"/>
                             <constraint firstItem="PuK-rr-EqZ" firstAttribute="centerX" secondItem="mgT-Z9-3io" secondAttribute="centerX" id="S00-68-y8m"/>
+                            <constraint firstItem="k1Z-rH-lh3" firstAttribute="centerY" secondItem="WyU-4d-Rik" secondAttribute="centerY" id="ZwJ-d6-TZW"/>
                             <constraint firstItem="9xP-NQ-jdx" firstAttribute="leading" secondItem="mgT-Z9-3io" secondAttribute="leading" id="cqx-bC-PIi"/>
-                            <constraint firstItem="9xP-NQ-jdx" firstAttribute="top" secondItem="QdX-0O-oYH" secondAttribute="bottom" constant="20" id="l8O-tI-rgq"/>
+                            <constraint firstItem="Lce-lE-xa5" firstAttribute="top" secondItem="PuK-rr-EqZ" secondAttribute="bottom" constant="8" id="fFR-3s-sfX"/>
+                            <constraint firstItem="9xP-NQ-jdx" firstAttribute="top" secondItem="QdX-0O-oYH" secondAttribute="bottom" constant="23" id="l8O-tI-rgq"/>
+                            <constraint firstItem="WyU-4d-Rik" firstAttribute="centerX" secondItem="mgT-Z9-3io" secondAttribute="centerX" id="mej-dc-emD"/>
                             <constraint firstAttribute="trailingMargin" secondItem="QdX-0O-oYH" secondAttribute="trailing" id="q3l-hV-Oya"/>
+                            <constraint firstItem="ZTe-IQ-iEh" firstAttribute="top" secondItem="PuK-rr-EqZ" secondAttribute="bottom" constant="8" id="vRg-tP-jnJ"/>
                             <constraint firstAttribute="leadingMargin" secondItem="QdX-0O-oYH" secondAttribute="leading" id="xW6-sp-zN8"/>
                         </constraints>
                     </view>
@@ -644,6 +677,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="btnRemember" destination="Lce-lE-xa5" id="FUl-vx-Eyc"/>
+                        <outlet property="chbRememberMe" destination="k1Z-rH-lh3" id="GF6-JG-P5T"/>
                         <outlet property="segCtrlSearchType" destination="PuK-rr-EqZ" id="xYU-x1-oPi"/>
                         <outlet property="tvChannels" destination="9xP-NQ-jdx" id="QgS-Pc-7Ds"/>
                         <outlet property="txtfSearchParameter" destination="QdX-0O-oYH" id="kXn-Zu-jxo"/>
@@ -1363,12 +1398,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="check_on.png" width="38" height="38"/>
         <image name="message-7.png" width="30" height="30"/>
         <image name="navbar_logo" width="595" height="183"/>
         <image name="woman-man-7.png" width="29" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="RLH-GW-VQ7"/>
-        <segue reference="Dgw-OF-LGI"/>
+        <segue reference="35L-cM-5Xx"/>
     </inferredMetricsTieBreakers>
 </document>

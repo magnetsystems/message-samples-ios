@@ -27,6 +27,8 @@ class FindChannelsViewController: UIViewController, UITableViewDataSource {
     @IBOutlet weak var segCtrlSearchType: UISegmentedControl!
     @IBOutlet weak var tvChannels: UITableView!
     @IBOutlet weak var txtfSearchParameter: UITextField!
+    @IBOutlet weak var btnRemember : UISwitch!
+    @IBOutlet weak var chbRememberMe: UIImageView!
    
     
     // MARK: Public properties
@@ -49,20 +51,21 @@ class FindChannelsViewController: UIViewController, UITableViewDataSource {
         if let parameter = txtfSearchParameter.text where (parameter.isEmpty == false) {
             let limit: Int32 = 10
             let offset: Int32 = 0
+            let isPublic = btnRemember.on
             
             switch segCtrlSearchType.selectedSegmentIndex {
             case 0:
-                MMXChannel.channelForName(parameter, isPublic: true, success: { [weak self] channel in
+                MMXChannel.channelForName(parameter, isPublic: isPublic, success: { [weak self] channel in
                     self?.channels = [channel]
                 }, failure: { [weak self] error in
                     self?.channels = []
                     print("[ERROR]: \(error)")
                 })
             case 1:
-                MMXChannel.channelsStartingWith(parameter, limit: limit, offset: offset, success: { [weak self] (count, channels) in
+                MMXChannel.channelsStartingWith(parameter, isPublic: isPublic, limit: limit, offset: offset, success: { [weak self] (count, channels) in
                     self?.channels = channels
                 }, failure: { error in
-                    print("[ERROR]: \(error)")
+                        print("[ERROR]: \(error)")
                 })
             case 2:
                 let tagsArray = parameter.componentsSeparatedByString(" ")
@@ -78,6 +81,15 @@ class FindChannelsViewController: UIViewController, UITableViewDataSource {
         }
     }
     
+    @IBAction func selectCheckbox(sender: UIButton) {
+        if btnRemember.on {
+            btnRemember.on = false;
+            chbRememberMe.image = UIImage(named: "check_off");
+        } else {
+            btnRemember.on = true;
+            chbRememberMe.image = UIImage(named: "check_on");
+        }
+    }
     
     //MARK: TableView data source
     

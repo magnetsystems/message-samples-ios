@@ -62,7 +62,9 @@ import MMX
     static public func configure(configuration: MMConfiguration) {
         registerObservers()
         MMCoreConfiguration.currentConfiguration = configuration
-        serviceAdapter = MMServiceAdapter(configuration: configuration)
+        let client = MMClient()
+        client.timeoutInterval = 5
+        serviceAdapter = MMServiceAdapter(configuration: configuration, client:client)
         MMCoreConfiguration.serviceAdapter = serviceAdapter
         MMUser.delegate = self
         
