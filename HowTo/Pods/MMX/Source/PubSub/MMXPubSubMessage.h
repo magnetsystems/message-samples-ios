@@ -27,6 +27,11 @@
 @property (nonatomic, copy, readonly)	NSString *messageID;
 
 /**
+ *  The deviceID for the user's device that posted the message.
+ */
+@property (nonatomic, copy)	NSString *senderDeviceID;
+
+/**
  *  The MMXUserID for the user that posted the message.
  */
 @property (nonatomic, copy, readonly)	MMXUserID *senderUserID;
