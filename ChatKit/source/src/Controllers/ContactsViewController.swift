@@ -14,15 +14,11 @@ class UserLetterGroup : NSObject {
     var users : [UserModel] = []
 }
 
-protocol UserModelDelegate : class {
-    func didDownloadMedia(userModel: UserModel)
-}
-
 class UserModel : NSObject {
     var user : MMUser?
 }
 
-class ContactsViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate, UserModelDelegate {
+class ContactsViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
     weak var delegate: ContactsPickerControllerDelegate?
     var availableRecipients = [UserLetterGroup]()
@@ -96,14 +92,6 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         navigationItem.leftBarButtonItem = btnCancel
         navigationItem.rightBarButtonItem = btnNext
         updateNextButton()
-    }
-    
-    func didDownloadMedia(userModel: UserModel) {
-        if let indexPath = userModel.indexPath {
-            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else {
-            self.tableView.reloadData()
-        }
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
@@ -185,7 +173,10 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         
         cell?.userName?.attributedText = title
         
-        
+        let defaultImage = Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
+        if let imageView = cell?.avatar {
+        Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
+        }
         
         return cell!
     }
@@ -234,9 +225,6 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             var allUsers : [UserModel] = [UserModel]()
             for userArray in userArrays {
                 allUsers += userArray
-            }
-            for userModel in allUsers {
-                userModel.indexPath = nil
             }
             filteredRecipients = allUsers.filter { userModel in
                 let searchString = searchController.searchBar.text!.lowercaseString
@@ -315,7 +303,6 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
                     if lastName.hasPrefix(letter.uppercaseString) || lastName.hasPrefix(letter.lowercaseString) {
                         let userModel = UserModel.init()
                         userModel.user = user
-                        userModel.delegate = self
                         usersBeginWithLetter.append(userModel)
                         
                     }
@@ -323,7 +310,6 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
                     if firstName.hasPrefix(letter.uppercaseString) || firstName.hasPrefix(letter.lowercaseString) {
                         let userModel = UserModel.init()
                         userModel.user = user
-                        userModel.delegate = self
                         usersBeginWithLetter.append(userModel)
                         
                     }

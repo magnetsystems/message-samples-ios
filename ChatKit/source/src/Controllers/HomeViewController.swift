@@ -24,6 +24,10 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if MMUser.sessionStatus() != .LoggedIn {
+            assertionFailure("MUST LOGIN USER FIRST")
+        }
+        
         navigationController?.setNavigationBarHidden(false, animated: true)
         // Indicate that you are ready to receive messages now!
         MMX.start()
@@ -39,6 +43,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         searchController.searchBar.sizeToFit()
         tableView.tableHeaderView = searchController.searchBar
         tableView.reloadData()
+        
+       
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -46,6 +52,10 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         
         if let user = MMUser.currentUser() {
             self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
+        }
+        
+        if self.title?.characters.count == 1 {
+            self.title = MMUser.currentUser()?.userName
         }
         
         loadDetails()

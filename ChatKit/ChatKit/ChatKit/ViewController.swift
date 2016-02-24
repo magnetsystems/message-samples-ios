@@ -47,8 +47,10 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate {
 //            MMUser.currentUser()?.setAvatarWithURL(url!, success: { url in
             let u = MMUser.init()
             u.userName = "gogo"
-                let c = MagnetContactsPickerController(disabledUsers: [MMUser.currentUser()!])
-            c.pickerDelegate = self
+                //let c = MagnetContactsPickerController(disabledUsers: [MMUser.currentUser()!])
+           // c.pickerDelegate = self
+            let c = MagnetThreadsViewController()
+            
                 self.presentViewController(c, animated: true, completion: nil)
 //                }, failure: {error in
 //                   print("[ERROR] \(error.localizedDescription)")

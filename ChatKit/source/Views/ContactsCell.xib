@@ -15,36 +15,48 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_default.png" translatesAutoresizingMaskIntoConstraints="NO" id="fyL-9P-Vse">
-                        <rect key="frame" x="8" y="8" width="29" height="27.5"/>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BOz-Pj-7Qw">
+                        <rect key="frame" x="0.0" y="0.0" width="45" height="43.5"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_default.png" translatesAutoresizingMaskIntoConstraints="NO" id="fyL-9P-Vse">
+                                <rect key="frame" x="8" y="8" width="29" height="27.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="fyL-9P-Vse" secondAttribute="height" multiplier="46:43" id="40O-GW-GC4"/>
+                                    <constraint firstAttribute="height" constant="29" id="CQQ-qD-hUI"/>
+                                    <constraint firstAttribute="height" constant="27.5" id="TCx-tx-Idf"/>
+                                    <constraint firstAttribute="width" constant="29" id="hmk-Mz-Jol"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="40O-GW-GC4"/>
+                                        <exclude reference="CQQ-qD-hUI"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="fyL-9P-Vse" secondAttribute="height" multiplier="46:43" id="40O-GW-GC4"/>
-                            <constraint firstAttribute="height" constant="29" id="CQQ-qD-hUI"/>
-                            <constraint firstAttribute="height" constant="27.5" id="TCx-tx-Idf"/>
-                            <constraint firstAttribute="width" constant="29" id="hmk-Mz-Jol"/>
+                            <constraint firstItem="fyL-9P-Vse" firstAttribute="top" secondItem="BOz-Pj-7Qw" secondAttribute="top" constant="8" id="3I5-CS-EDF"/>
+                            <constraint firstAttribute="bottom" secondItem="fyL-9P-Vse" secondAttribute="bottom" constant="8" id="5K2-Hr-vQ4"/>
+                            <constraint firstAttribute="trailing" secondItem="fyL-9P-Vse" secondAttribute="trailing" constant="8" id="DY5-HN-WwN"/>
+                            <constraint firstItem="fyL-9P-Vse" firstAttribute="leading" secondItem="BOz-Pj-7Qw" secondAttribute="leading" constant="8" id="Pue-6i-zS9"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="40O-GW-GC4"/>
-                                <exclude reference="CQQ-qD-hUI"/>
-                            </mask>
-                        </variation>
-                    </imageView>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2f2-ck-3jf">
                         <rect key="frame" x="45" y="8" width="267" height="27.5"/>
                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="fyL-9P-Vse" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="6De-cR-Ch6"/>
-                    <constraint firstItem="fyL-9P-Vse" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="9w1-4Q-CiB"/>
+                    <constraint firstItem="BOz-Pj-7Qw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="0Sz-oo-Ce6"/>
                     <constraint firstItem="2f2-ck-3jf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="Eq6-Um-iaQ"/>
-                    <constraint firstAttribute="bottom" secondItem="fyL-9P-Vse" secondAttribute="bottom" constant="8" id="MrL-D5-QYU"/>
+                    <constraint firstItem="BOz-Pj-7Qw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="QDz-HA-7vl"/>
+                    <constraint firstItem="2f2-ck-3jf" firstAttribute="leading" secondItem="BOz-Pj-7Qw" secondAttribute="trailing" id="R9l-jL-VQC"/>
                     <constraint firstAttribute="trailing" secondItem="2f2-ck-3jf" secondAttribute="trailing" constant="8" id="aDb-gA-Kws"/>
-                    <constraint firstItem="2f2-ck-3jf" firstAttribute="leading" secondItem="fyL-9P-Vse" secondAttribute="trailing" constant="8" id="bRe-cs-rz5"/>
                     <constraint firstAttribute="bottom" secondItem="2f2-ck-3jf" secondAttribute="bottom" constant="8" id="dsN-vQ-YPn"/>
+                    <constraint firstAttribute="bottom" secondItem="BOz-Pj-7Qw" secondAttribute="bottom" id="nRU-ky-PDa"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

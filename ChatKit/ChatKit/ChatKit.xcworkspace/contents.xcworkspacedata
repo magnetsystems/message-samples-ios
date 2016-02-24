@@ -55,6 +55,13 @@
                </FileRef>
             </Group>
             <Group
+               location = "group:Utils"
+               name = "Utils">
+               <FileRef
+                  location = "group:Utils.swift">
+               </FileRef>
+            </Group>
+            <Group
                location = "group:VideoPlayer"
                name = "VideoPlayer">
                <FileRef
