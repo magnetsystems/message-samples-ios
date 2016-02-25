@@ -120,7 +120,7 @@ NSString  * const MMXMessageFailureBlockKey = @"MMXMessageFailureBlockKey";
     
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:message.messageContent
-                                                       options:NSJSONWritingPrettyPrinted
+                                                       options:kNilOptions
                                                          error:&error];
     NSString *json = [[NSString alloc] initWithData:jsonData
                                            encoding:NSUTF8StringEncoding];
