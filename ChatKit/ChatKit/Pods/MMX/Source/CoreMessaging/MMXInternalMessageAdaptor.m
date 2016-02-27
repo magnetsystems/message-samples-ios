@@ -17,6 +17,7 @@
 
 #import "XMPPIQ.h"
 #import "MMXInternalMessageAdaptor_Private.h"
+#import "MMXClient_Private.h"
 #import "MMXConstants.h"
 #import "MMXTopic_Private.h"
 #import "MMXUserID_Private.h"
@@ -255,8 +256,8 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 }
 
 + (MMXUserID *)extractSenderFromMMXMetaDict:(NSDictionary *)mmxMetaDict {
-	if (mmxMetaDict && mmxMetaDict[@"From"] && mmxMetaDict[@"From"] != [NSNull null]) {
-		NSDictionary *senderDict = mmxMetaDict[@"From"];
+	if (mmxMetaDict && mmxMetaDict[kAddressFromKey] && mmxMetaDict[kAddressFromKey] != [NSNull null]) {
+		NSDictionary *senderDict = mmxMetaDict[kAddressFromKey];
 		if (senderDict) {
 			MMXInternalAddress *address = [MMXInternalAddress new];
 			address.username = senderDict[kAddressUsernameKey];
@@ -341,7 +342,7 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
         
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.metaData
-                                                           options:NSJSONWritingPrettyPrinted
+                                                           options:kNilOptions
                                                              error:&error];
         NSString *json = [[NSString alloc] initWithData:jsonData
                                                encoding:NSUTF8StringEncoding];
@@ -371,12 +372,14 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
 		[mmxMetaDict setObject:recipientArray forKey:@"To"];
 	}
 	if (address) {
-		[mmxMetaDict setObject:[address asDictionary] forKey:@"From"];
+        // FIXME: Find a better way to propogate the deviceID to this point!
+        address.deviceID = [[MMXClient sharedClient] deviceID];
+		[mmxMetaDict setObject:[address asDictionary] forKey:kAddressFromKey];
 	}
 	
 	NSError *error;
 	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mmxMetaDict
-													   options:NSJSONWritingPrettyPrinted
+													   options:kNilOptions
 														 error:&error];
 	NSString *json = [[NSString alloc] initWithData:jsonData
 										   encoding:NSUTF8StringEncoding];

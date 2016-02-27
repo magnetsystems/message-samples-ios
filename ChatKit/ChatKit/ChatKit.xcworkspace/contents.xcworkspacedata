@@ -11,6 +11,18 @@
             location = "group:Controllers"
             name = "Controllers">
             <FileRef
+               location = "group:ChatViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ChatViewControllerChatViewControllerImagePickerExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ChatViewControllerCollectionExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:BaseViewController.swift">
+            </FileRef>
+            <FileRef
                location = "group:HomeViewController.swift">
             </FileRef>
             <FileRef
@@ -22,6 +34,9 @@
             name = "Helpers">
             <FileRef
                location = "group:Constants.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Strings.swift">
             </FileRef>
             <Group
                location = "group:DateFormatter"
@@ -440,6 +455,9 @@
             </FileRef>
          </Group>
          <FileRef
+            location = "group:ChannelDetailBaseTVCell.swift">
+         </FileRef>
+         <FileRef
             location = "group:ContactsViewController.xib">
          </FileRef>
          <FileRef
@@ -457,12 +475,24 @@
          <FileRef
             location = "group:SummaryResponseCell.xib">
          </FileRef>
+         <FileRef
+            location = "group:LoadingCell.xib">
+         </FileRef>
+         <FileRef
+            location = "group:LoadingCell.swift">
+         </FileRef>
       </Group>
+      <FileRef
+         location = "group:DefaultContactsPickerControllerDatasource.swift">
+      </FileRef>
       <FileRef
          location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/MagnetContactsPickerController.swift">
       </FileRef>
       <FileRef
          location = "group:MagnetThreadsViewController.swift">
+      </FileRef>
+      <FileRef
+         location = "group:MagnetViewController.swift">
       </FileRef>
    </Group>
    <FileRef

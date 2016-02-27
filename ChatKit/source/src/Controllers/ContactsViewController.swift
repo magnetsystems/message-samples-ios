@@ -1,16 +1,25 @@
-//
-//  ContactsViewController.swift
-//  MMChat
-//
-//  Created by Kostya Grishchenko on 1/5/16.
-//  Copyright © 2016 Kostya Grishchenko. All rights reserved.
-//
+/*
+* Copyright (c) 2016 Magnet Systems, Inc.
+* All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you
+* may not use this file except in compliance with the License. You
+* may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+* implied. See the License for the specific language governing
+* permissions and limitations under the License.
+*/
 
 import UIKit
 import MagnetMax
 
 class UserLetterGroup : NSObject {
-    var letter : String  = ""
+    var letter : Character  = "0"
     var users : [UserModel] = []
 }
 
@@ -18,26 +27,22 @@ class UserModel : NSObject {
     var user : MMUser?
 }
 
-class ContactsViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
+public protocol ControllerDatasource: class {
+    func controllerLoadMore(searchText : String?, offset : Int)
+    func controllerHasMore() -> Bool
+    func controllerSearchUpdatesContinuously() ->Bool
+}
+
+class ContactsViewController: UITableViewController, UISearchBarDelegate {
     
-    weak var delegate: ContactsPickerControllerDelegate?
+    weak var delegate : ContactsPickerControllerDelegate?
+    weak var dataSource : ControllerDatasource?
     var availableRecipients = [UserLetterGroup]()
-    var filteredRecipients = [UserModel]()
     var selectedUsers : [MMUser] = []
-    let resultSearchController = UISearchController(searchResultsController: nil)
-    private var disabledUsers : [MMUser] = []
-    
-    func reloadData() {
-        self.selectedUsers = []
-        self.tableView.reloadData()
-        resultSearchController.searchBar.text = ""
-        resultSearchController.searchBar.resignFirstResponder()
-    }
-    
-    convenience init(disabledUsers : [MMUser]) {
-        self.init()
-        self.disabledUsers = disabledUsers
-    }
+    var rightNavBtn : UIBarButtonItem?
+    var searchBar = UISearchBar()
+    var currentUserCount = 0
+    var isWaitingForData : Bool = false
     
     override func loadView() {
         super.loadView()
@@ -52,101 +57,203 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
             assertionFailure("MUST LOGIN USER FIRST")
         }
         
-        let nib = UINib.init(nibName: "ContactsCell", bundle: NSBundle(forClass: self.dynamicType))
+        var nib = UINib.init(nibName: "ContactsCell", bundle: NSBundle(forClass: self.dynamicType))
         self.tableView.registerNib(nib, forCellReuseIdentifier: "UserCellIdentifier")
+        nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: self.dynamicType))
+        self.tableView.registerNib(nib, forCellReuseIdentifier: "LoadingCellIdentifier")
         
-        resultSearchController.searchResultsUpdater = self
-        resultSearchController.dimsBackgroundDuringPresentation = false
-        resultSearchController.searchBar.sizeToFit()
-        resultSearchController.searchBar.returnKeyType = .Done
-        resultSearchController.searchBar.setShowsCancelButton(false, animated: false)
-        resultSearchController.searchBar.delegate = self
-        tableView.tableHeaderView = resultSearchController.searchBar
+        searchBar.sizeToFit()
+        searchBar.returnKeyType = .Search
+        if let dataSource = self.dataSource where dataSource.controllerSearchUpdatesContinuously() {
+            searchBar.returnKeyType = .Done
+        }
+        searchBar.setShowsCancelButton(false, animated: false)
+        searchBar.delegate = self
+        tableView.tableHeaderView = searchBar
         tableView.reloadData()
         
-        let searchQuery = "userName:*"
-        MMUser.searchUsers(searchQuery, limit: 1000, offset: 0, sort: "userName:asc", success: { users in
-            
-            var hash  : [String : MMUser] = [:]
-            
-            for user in self.disabledUsers {
-                if let userName = user.userName {
-                    hash[userName] = user
-                }
-            }
-            var tempUsers : [MMUser] = []
-            for user in users {
-                if let userName = user.userName where hash[userName] == nil {
-                    tempUsers.append(user)
-                }
-            }
-            
-            self.availableRecipients = self.createAlphabetDictionary(tempUsers)
-            self.tableView.reloadData()
-            }, failure: { error in
-                print("[ERROR]: \(error.localizedDescription)")
-        })
-        
-        let btnNext = UIBarButtonItem.init(title: "Next", style: .Plain, target: self, action: "nextAction")
-        let btnCancel = UIBarButtonItem.init(title: "Cancel", style: .Plain, target: self, action: "cancelAction")
-        navigationItem.leftBarButtonItem = btnCancel
-        navigationItem.rightBarButtonItem = btnNext
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         updateNextButton()
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        resultSearchController.dismissViewControllerAnimated(true, completion: nil)
+    func appendUsers(users : [MMUser]) {
+        appendUsers(users, reloadTable: true)
     }
     
-    @IBAction func cancelAction() {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    func appendUsers(users : [MMUser], reloadTable : Bool) {
+        isWaitingForData = false
+        currentUserCount += users.count
+        var indexPaths : [NSIndexPath] = []
+        
+        if !reloadTable {
+            self.tableView.beginUpdates()
+        }
+        
+        for user in users {
+            let char = charForUser(user)
+            
+            guard let initial = char else {
+                
+                continue
+            }
+            
+            let userModel = UserModel()
+            userModel.user = user
+            
+            //search for user group index
+            let index = self.availableRecipients.find() {
+                if $0.letter == initial {
+                    return nil
+                }
+                return $0.letter > initial
+            }
+            
+            var section = Int.max
+            var row = Int.max
+            let isNewSection = index == nil
+            
+            //if table wont be reloaded and a new section will be created, insert and flush current IndexPaths
+            if !reloadTable {
+                if isNewSection {
+                    if indexPaths.count > 0 {
+                        self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .None)
+                        self.tableView.endUpdates()
+                        self.tableView.beginUpdates()
+                        indexPaths.removeAll()
+                    }
+                }
+            }
+            
+            if !isNewSection { //not new section
+                //is contained
+                if let ind = index {
+                    section = ind
+                }
+                
+                //find where to insert
+                row = self.availableRecipients[section].users.findInsertionIndex() {
+                    return self.nameForUser($0.user!) > self.nameForUser(user)
+                }
+                
+                self.availableRecipients[section].users.insert(userModel, atIndex: row)
+                
+            } else { //is new
+                
+                row = 0
+                let userGroup = UserLetterGroup()
+                userGroup.letter = initial
+                userGroup.users = [userModel]
+                
+                //find where to insert
+                section = self.availableRecipients.findInsertionIndex() {
+                    return $0.letter > userGroup.letter
+                }
+                
+                self.availableRecipients.insert(userGroup, atIndex: section)
+                
+                if !reloadTable {
+                    self.tableView.insertSections(NSIndexSet(index: section), withRowAnimation: .None)
+                }
+            }
+            
+            //insert indexPath for cell
+            indexPaths.append(NSIndexPath(forRow: row, inSection: section))
+            
+        }
+        
+        if reloadTable {
+            self.tableView.reloadData()
+        } else if indexPaths.count > 0 {
+            self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+            self.tableView.endUpdates()
+        }
+        
+        if let dataSource = self.dataSource where dataSource.controllerHasMore()  {
+            let indexPath = NSIndexPath(forRow: 0, inSection: self.availableRecipients.count)
+            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+        }
     }
     
-    @IBAction func nextAction() {
+    func charForUser(user : MMUser) -> Character? {
+        return nameForUser(user).lowercaseString.characters.first
+    }
+    
+    func nameForUser(user : MMUser) -> String {
+        //create username
+        var name = user.userName
+        if user.lastName != nil {
+            name = user.lastName
+        } else if user.firstName != nil {
+            name = user.firstName
+        }
+        return name
+    }
+    
+    
+    func selectContacts() {
         
         delegate?.contactsControllerDidFinish(with: selectedUsers)
-        
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func reset() {
+        self.availableRecipients = []
+        self.currentUserCount = 0
+        self.tableView.reloadData()
     }
     
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if resultSearchController.active {
-            return 1
-        }
-        return availableRecipients.count
+        return availableRecipients.count + 1
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if resultSearchController.active {
-            return filteredRecipients.count
+        if tableView.numberOfSections - 1 == section {
+            return 1
         }
-        let users = availableRecipients[section].users
-        return users.count
+        return availableRecipients[section].users.count
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        if tableView.numberOfSections - 1 == indexPath.section {
+            var loadingCell = tableView.dequeueReusableCellWithIdentifier("LoadingCellIdentifier") as? LoadingCell
+            if loadingCell == nil {
+                loadingCell = LoadingCell(style: .Default, reuseIdentifier: "LoadingCellIdentifier")
+            }
+            if let dS = dataSource where dS.controllerHasMore() {
+                loadingCell?.indicator?.startAnimating()
+                
+                if !isWaitingForData {
+                    isWaitingForData = true
+                    let text = searchBar.text?.characters.count > 0 ? searchBar.text : nil
+                    dataSource?.controllerLoadMore(text, offset: currentUserCount)
+                }
+                
+            } else {
+                loadingCell?.indicator?.stopAnimating()
+            }
+            
+            return loadingCell!
+        }
+        
         var cell = tableView.dequeueReusableCellWithIdentifier("UserCellIdentifier") as! ContactsCell?
         
         if cell == nil {
-            cell = ContactsCell.init(style: .Default, reuseIdentifier: "UserCellIdentifier")
+            cell = ContactsCell(style: .Default, reuseIdentifier: "UserCellIdentifier")
         }
         
         var user: MMUser!
         var userModel : UserModel
-        if resultSearchController.active {
-            userModel = filteredRecipients[indexPath.row]
-            user = userModel.user
-        } else {
-            let users = availableRecipients[indexPath.section].users
-            userModel = users[indexPath.row]
-            user = userModel.user
-        }
-        
+        let users = availableRecipients[indexPath.section].users
+        userModel = users[indexPath.row]
+        user = userModel.user
         let selectedUsers = self.selectedUsers.filter({
-            if $0 === user {
+            if $0.userID == user.userID {
                 return true
             }
             return false
@@ -175,79 +282,73 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         
         let defaultImage = Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
         if let imageView = cell?.avatar {
-        Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
+            Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
         }
         
         return cell!
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if resultSearchController.active {
-            return ""
+        if tableView.numberOfSections - 1 == section {
+            return nil
         }
+        
         let letter = availableRecipients[section]
-        return letter.letter
+        return String(letter.letter).uppercaseString
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if resultSearchController.active {
-            if let user = filteredRecipients[indexPath.row].user {
-                addSelectedUser(user)
-            }
-        } else {
-            
-            let users = availableRecipients[indexPath.section].users
-            if  let user = users[indexPath.row].user {
-                addSelectedUser(user)
-            }
+        if indexPath.section == tableView.numberOfSections - 1 {
+            return
+        }
+        
+        let users = availableRecipients[indexPath.section].users
+        if  let user = users[indexPath.row].user {
+            addSelectedUser(user)
         }
         updateNextButton()
     }
     
     override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        if resultSearchController.active {
-            if let user = filteredRecipients[indexPath.row].user {
-                removeSelectedUser(user)
-            }
-        } else {
-            let users = availableRecipients[indexPath.section].users
-            if let user = users[indexPath.row].user {
-                removeSelectedUser(user)
-            }
+        if indexPath.section == tableView.numberOfSections - 1 {
+            return
+        }
+        let users = availableRecipients[indexPath.section].users
+        if let user = users[indexPath.row].user {
+            removeSelectedUser(user)
         }
         updateNextButton()
     }
     
+    
+    //MARK : UISCrollViewDelegate
+    
+    
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        if searchBar.isFirstResponder() {
+            searchBar.resignFirstResponder()
+        }
+    }
+    
+    
     // MARK: - UISearchResultsUpdating
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        if let userArrays = (availableRecipients as NSArray).valueForKey("users") as? [[UserModel]] {
-            var allUsers : [UserModel] = [UserModel]()
-            for userArray in userArrays {
-                allUsers += userArray
-            }
-            filteredRecipients = allUsers.filter { userModel in
-                let searchString = searchController.searchBar.text!.lowercaseString
-                if searchString.isEmpty {
-                    return true
-                }
-                if let user = userModel.user {
-                    var contains = false
-                    if let firstName = user.firstName where firstName.lowercaseString.containsString(searchString)
-                    {
-                        contains = true
-                    }else if let lastName = user.lastName where lastName.lowercaseString.containsString(searchString)
-                    {
-                        contains = true
-                    }
-                    
-                    return contains
-                }
-                return false
-            }
-            
-            tableView.reloadData()
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.characters.count == 0 {
+            self.search("")
+            return
         }
+        
+        if let dataSource = self.dataSource where dataSource.controllerSearchUpdatesContinuously() {
+            self.search(searchText)
+        }
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        self.search(searchBar.text)
     }
     
     // MARK: - Private Methods
@@ -267,61 +368,17 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         })
     }
     
+    private func search(searchString : String?) {
+        var text : String? = searchString?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        if let txt = text where txt.characters.count == 0 {
+            text = nil
+        }
+        self.isWaitingForData = true
+        self.reset()
+        dataSource?.controllerLoadMore(text, offset: 0)
+    }
+    
     private func updateNextButton() {
-        self.navigationItem.rightBarButtonItem?.enabled = selectedUsers.count > 0
+        rightNavBtn?.enabled = selectedUsers.count > 0
     }
-    
-    // MARK: - Helpers
-    
-    func createAlphabetDictionary(users: [MMUser]) -> [UserLetterGroup] {
-        var tempFirstLetterArray = [String]()
-        for user in users {
-            if  user.firstName == nil && user.lastName == nil {
-                user.firstName = user.userName
-            }
-            
-            var letterString = ""
-            if let lastName = user.lastName where lastName.isEmpty == false {
-                let index: String.Index = lastName.startIndex.advancedBy(1)
-                letterString = lastName.substringToIndex(index).uppercaseString
-            } else if let firstName = user.firstName where firstName.isEmpty == false {
-                let index: String.Index = firstName.startIndex.advancedBy(1)
-                letterString = firstName.substringToIndex(index).uppercaseString
-            }
-            if tempFirstLetterArray.contains(letterString) == false {
-                tempFirstLetterArray.append(letterString)
-            }
-        }
-        
-        tempFirstLetterArray.sortInPlace()
-        var letterGroups : [UserLetterGroup] = []
-        for letter in tempFirstLetterArray {
-            var usersBeginWithLetter = [UserModel]()
-            for user in users {
-                
-                if let lastName = user.lastName where lastName.isEmpty == false{
-                    if lastName.hasPrefix(letter.uppercaseString) || lastName.hasPrefix(letter.lowercaseString) {
-                        let userModel = UserModel.init()
-                        userModel.user = user
-                        usersBeginWithLetter.append(userModel)
-                        
-                    }
-                } else if let firstName = user.firstName where firstName.isEmpty == false {
-                    if firstName.hasPrefix(letter.uppercaseString) || firstName.hasPrefix(letter.lowercaseString) {
-                        let userModel = UserModel.init()
-                        userModel.user = user
-                        usersBeginWithLetter.append(userModel)
-                        
-                    }
-                }
-            }
-            let letterGroup = UserLetterGroup()
-            letterGroup.letter = letter
-            letterGroup.users = usersBeginWithLetter
-            letterGroups.append(letterGroup)
-        }
-        
-        return letterGroups
-    }
-    
 }

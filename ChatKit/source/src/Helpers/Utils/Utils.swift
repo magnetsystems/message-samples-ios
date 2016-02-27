@@ -41,7 +41,6 @@ class UtilsSet {
     }
 }
 
-
 class Utils: NSObject {
     
     
@@ -85,7 +84,7 @@ class Utils: NSObject {
                 Utils.loadUserAvatar(user!, toImageView: toImageView, placeholderImage: placeholderImage)
             }
             }) { (error) -> Void in
-                print("error getting users \(error)")
+                //print("error getting users \(error)")
         }
     }
     
@@ -158,7 +157,7 @@ class Utils: NSObject {
         }
         
         guard let imageUrl = url else {
-            print("no url content data")
+            //print("no url content data")
             objc_sync_enter(self.downloadObjects)
             self.downloadObjects.removeValueForKey("\(toImageView.hashValue)")
             objc_sync_exit(self.downloadObjects)
@@ -201,7 +200,7 @@ class Utils: NSObject {
             }
             }) { (operation, error) -> Void in
                 pushImageToImageView(placeholderImage, url: url)
-                print("No Image")
+                //print("No Image")
         }
         requestOperation.start()
     }
@@ -229,4 +228,57 @@ class Utils: NSObject {
         }
     }
     
+}
+
+
+extension Array {
+    
+    func findInsertionIndex(GR_TH : (Generator.Element) -> Bool) -> Int {
+        return Array.findInsertionIndex(self) { (haystack) -> Bool in
+            return GR_TH(haystack)
+        }
+    }
+    
+    func find(GR_TH : (Generator.Element) -> Bool?) -> Int? {
+        return Array.find(self) { (haystack) -> Bool? in
+            return GR_TH(haystack)
+        }
+    }
+    
+    static private func find(haystack : Array<Element>, greaterThan : (haystack : Generator.Element) -> Bool?) -> Int? {
+        //search for index of user group based on letter
+        if haystack.count == 0 {
+            return nil
+        }
+        
+        let index = haystack.count >> 0x1
+        let compare = haystack[index]
+        
+        let isGreater = greaterThan(haystack: compare)
+        if isGreater == nil {//if equal
+            return index
+        } else if let greater = isGreater where greater == true { //if greater
+            return find(Array(haystack[0..<index]), greaterThan : greaterThan)
+        }
+        
+        if let rightIndex = find(Array(haystack[index + 1..<haystack.count]), greaterThan : greaterThan) {
+            return rightIndex + index + 1
+        }
+        
+        return nil
+    }
+    
+    static private func findInsertionIndex(haystack : Array<Element>, greaterThan : ((haystack : Generator.Element) -> Bool)) -> Int {
+        if haystack.count == 0 {
+            return 0
+        }
+        let index = haystack.count >> 0x1
+        let compare = haystack[index]
+        
+        if greaterThan(haystack: compare) {
+            return findInsertionIndex(Array(haystack[0..<index]), greaterThan : greaterThan)
+        }
+        
+        return findInsertionIndex(Array(haystack[index + 1..<haystack.count]), greaterThan : greaterThan) + 1 + index
+    }
 }

@@ -223,6 +223,7 @@
 				TargetAttributes = {
 					8DDFA5AB1C6BCCF900566A4D = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = UXAB3BW444;
 					};
 					8DDFA5BF1C6BCCFA00566A4D = {
 						CreatedOnToolsVersion = 7.2;
@@ -479,11 +480,13 @@
 			baseConfigurationReference = 4CDD8162DC009364568DCE7A /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = ChatKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MG.ChatKitTest;
 				PRODUCT_NAME = ChatKitTest;
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Debug;
@@ -493,11 +496,13 @@
 			baseConfigurationReference = 461E73F29630ADA80B47885D /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = ChatKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MG.ChatKitTest;
 				PRODUCT_NAME = ChatKitTest;
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;

@@ -15,7 +15,6 @@
 * permissions and limitations under the License.
 */
 
-import JSQMessagesViewController
 import MMX
 import UIKit
 

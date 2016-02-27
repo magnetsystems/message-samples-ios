@@ -76,6 +76,7 @@
         self.userName = [decoder decodeObjectForKey:@"userName"];
         self.firstName = [decoder decodeObjectForKey:@"firstName"];
         self.lastName = [decoder decodeObjectForKey:@"lastName"];
+        self.email = [decoder decodeObjectForKey:@"email"];
         self.roles = [decoder decodeObjectForKey:@"roles"];
         self.userRealm = (MMUserRealm)[[decoder decodeObjectForKey:@"userRealm"] integerValue];
         self.extras = [decoder decodeObjectForKey:@"extras"];

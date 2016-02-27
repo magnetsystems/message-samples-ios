@@ -151,9 +151,9 @@
             }
         } else if (failure) {
             if (failure) {
-                failure([MMXClient errorWithTitle:@"Unknown Error"
-                                          message:@"An unknown error occurred."
-                                             code:500]);
+                failure([MMXClient errorWithTitle:@"Not Found"
+                                          message:@"The requested channel was not found."
+                                             code:404]);
             }
         }
     } failure:failure];
@@ -164,6 +164,17 @@
                       offset:(int)offset
                      success:(void (^)(int, NSArray <MMXChannel *>*))success
                      failure:(void (^)(NSError *))failure {
+    [self channelsStartingWith:name isPublic:YES limit:limit offset:offset success:success failure:failure];
+    
+}
+
++ (void)channelsStartingWith:(NSString *)name
+                    isPublic:(BOOL)isPublic
+                       limit:(int)limit
+                      offset:(int)offset
+                     success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
+                     failure:(nullable void (^)(NSError *error))failure {
+    
     if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
         if (failure) {
             failure([MagnetDelegate notLoggedInError]);
@@ -183,11 +194,11 @@
                                 @"limit" : @(limit),
                                 @"offset" : @(offset),
                                 @"tags" : [NSNull null],
+                                @"type":isPublic ? @"global" : @"personal",
                                 @"topicName": @{
                                         @"match": @"PREFIX",
                                         @"value": name}};
     [MMXChannel findChannelsWithDictionary:queryDict success:success failure:failure];
-    
 }
 
 + (void)findByTags:(NSSet <NSString *>*)tags
@@ -841,7 +852,7 @@
     NSMutableDictionary *channelMap = [NSMutableDictionary new];
     
     for (MMXChannel *channel in channels) {
-        [channelMap setObject:channel forKey:channel.name];
+        [channelMap setObject:channel forKey:channel.channelID];
         MMXChannelLookupKey *channelRequestObject = [[MMXChannelLookupKey alloc] init];
         channelRequestObject.ownerUserID = channel.ownerUserID;
         channelRequestObject.privateChannel = channel.privateChannel;
@@ -854,7 +865,13 @@
     MMCall *call = [pubSubService getSummary:channelSummary
                                      success:^(NSArray<MMXChannelDetailResponse *>*response) {
                                          for (MMXChannelDetailResponse *details in response) {
-                                             details.channel = [channelMap objectForKey:details.channelName];
+                                             NSString *channelName = details.channelName;
+                                             // TODO: Use details.isPublic instead when it's implemented on the server
+                                             BOOL isPublic = (details.userID == nil);
+                                             if (!isPublic) {
+                                                 channelName = [NSString stringWithFormat:@"%@#%@", details.userID, details.channelName];
+                                             }
+                                             details.channel = [channelMap objectForKey:channelName];
                                          }
                                          if (success) {
                                              success(response);
@@ -863,7 +880,6 @@
     
     [call executeInBackground:nil];
 }
-
 
 #pragma mark - Offline
 
@@ -889,19 +905,19 @@
 
 + (NSArray *)channelsFromTopics:(NSArray *)topics summaries:(NSArray *)summaries subscriptions:(NSArray *)subscriptions {
     NSMutableDictionary *channelDict = [NSMutableDictionary dictionaryWithCapacity:topics.count];
-    NSUInteger i = 0;
     for (MMXTopic *topic in topics) {
         MMXChannel *channel = [MMXChannel channelWithName:topic.topicName summary:topic.topicDescription isPublic:!topic.inUserNameSpace publishPermissions:topic.publishPermissions];
         channel.ownerUserID = topic.topicCreator.username;
         channel.isPublic = !topic.inUserNameSpace;
         channel.creationDate = topic.creationDate;
-        if (i <= ([summaries count] - 1)) {
-            MMXTopicSummary *summary = summaries[i];
-            channel.numberOfMessages = summary.numItemsPublished;
-            channel.lastTimeActive = summary.lastTimePublishedTo;
-        }
         [channelDict setObject:channel forKey:[MMXChannel channelKeyFromTopic:topic]];
-        i++;
+    }
+    for (MMXTopicSummary *sum in summaries) {
+        MMXChannel *channel = channelDict[[MMXChannel channelKeyFromTopic:sum.topic]];
+        if (channel) {
+            channel.numberOfMessages = sum.numItemsPublished;
+            channel.lastTimeActive = sum.lastTimePublishedTo;
+        }
     }
     for (MMXTopicSubscription *sub in subscriptions) {
         MMXChannel *channel = channelDict[[MMXChannel channelKeyFromTopic:sub.topic]];
@@ -917,7 +933,7 @@
         }
         
     }
-    return channelArray;
+    return channelArray.copy;
 }
 
 + (NSString *)channelKeyFromTopic:(MMXTopic *)topic {
@@ -940,6 +956,15 @@
 }
 
 #pragma mark - Override Getters
+
+- (NSString *)channelID {
+    NSString *channelName = self.name;
+    if (!self.isPublic) {
+        channelName = [NSString stringWithFormat:@"%@#%@", self.ownerUserID, channelName];
+    }
+    
+    return channelName;
+}
 
 - (NSDate *)lastTimeActive {
     return _lastTimeActive ?: self.creationDate;

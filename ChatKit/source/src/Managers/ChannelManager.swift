@@ -126,7 +126,7 @@ class ChannelManager {
     }
     
     func nameForChannel(channel: MMXChannel) -> String {
-        let key = channel.name == kAskMagnetChannel ? channel.channelID : channel.name
+        let key = channel.channelID
         
         return key
     }
