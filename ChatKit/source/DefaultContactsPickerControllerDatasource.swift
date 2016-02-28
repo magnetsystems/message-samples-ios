@@ -49,7 +49,7 @@ class DefaultContactsPickerControllerDatasource : NSObject, ContactsPickerContro
             
             if let picker = self.magnetPicker {
                 //append users, reload data or insert data
-                picker.appendUsers(picker.filterOutUsers(users))
+                picker.appendUsers(users)
             }
             
             }, failure: { error in

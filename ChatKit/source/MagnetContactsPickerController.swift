@@ -80,7 +80,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     }
     
     private func appendUsers(users : [MMUser], reloadTable : Bool) {
-        self.underlyingContactsViewController.appendUsers(users, reloadTable: reloadTable)
+        self.underlyingContactsViewController.appendUsers(self.filterOutUsers(users), reloadTable: reloadTable)
     }
     
     public func contacts() -> [[String : [MMUser]?]] {
@@ -91,7 +91,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         })
     }
     
-    public func filterOutUsers(users : [MMUser]) -> [MMUser] {
+    private func filterOutUsers(users : [MMUser]) -> [MMUser] {
         var hash  : [String : MMUser] = [:]
         for user in self.disabledUsers {
             if let userName = user.userName {
