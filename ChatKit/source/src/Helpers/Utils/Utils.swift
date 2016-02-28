@@ -231,17 +231,20 @@ class Utils: NSObject {
 }
 
 
-extension Array {
+extension Array where Element : Comparable {
     
-    func findInsertionIndex(GR_TH : (Generator.Element) -> Bool) -> Int {
+    func findInsertionIndexForSortedArray(obj : Generator.Element) -> Int {
         return Array.findInsertionIndex(self) { (haystack) -> Bool in
-            return GR_TH(haystack)
+            return haystack > obj
         }
     }
     
-    func find(GR_TH : (Generator.Element) -> Bool?) -> Int? {
+    func searchrSortedArray(obj : Generator.Element) -> Int? {
         return Array.find(self) { (haystack) -> Bool? in
-            return GR_TH(haystack)
+            if haystack == obj {
+                return nil
+            }
+            return haystack > obj
         }
     }
     
