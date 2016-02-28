@@ -303,11 +303,14 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     func didPanView(gesture : UILongPressGestureRecognizer) {
         let loc = gesture.locationInView(self.view)
         if gesture.state == .Began {
-            startPoint = loc
+            if let gestureView = gesture.view {
+                let gesturePoint = self.view.convertRect(gestureView.frame, fromView: gestureView)
+                startPoint = CGPoint(x: loc.x, y:CGRectGetMaxY(gesturePoint))
+            }
         } else if gesture.state == .Changed {
             let offsetPoint = CGPoint(x: loc.x - startPoint.x, y: loc.y - startPoint.y)
             let translate = CGAffineTransformMakeTranslation(offsetPoint.x, offsetPoint.y)
-            let scaleTrans = CGAffineTransformConcat(CGAffineTransformMakeScale(0.8, 0.8), translate)
+            let scaleTrans = CGAffineTransformScale(translate, 0.8, 0.8)
             gesture.view?.transform = scaleTrans
             gesture.view?.alpha = 0.8
         } else if gesture.state == .Ended {
