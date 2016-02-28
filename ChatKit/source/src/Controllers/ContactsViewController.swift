@@ -259,7 +259,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
                 
                 //find where to insert
                 row = self.availableRecipients[section].users.findInsertionIndex() {
-                    return self.displayNameForUser($0.user!).componentsSeparatedByString(" ").reverse().reduce("", combine: {$0 + $1}) > self.displayNameForUser(user).componentsSeparatedByString(" ").reverse().reduce("", combine: {$0 + $1})
+                    return self.displayNameForUser($0.user!).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"}) > self.displayNameForUser(user).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"})
                 }
                 
                 self.availableRecipients[section].users.insert(userModel, atIndex: row)
