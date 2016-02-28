@@ -65,4 +65,8 @@ class DefaultContactsPickerControllerDatasource : NSObject, ContactsPickerContro
     func contactControllerSearchUpdatesContinuously() ->Bool {
         return true
     }
+    
+    func contactControllerShowsSectionIndexTitles() -> Bool {
+        return magnetPicker?.contacts().count > 1
+    }
 }

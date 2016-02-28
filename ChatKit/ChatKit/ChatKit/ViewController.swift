@@ -1070,8 +1070,8 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate {
            // c.pickerDelegate = self
             let c = MagnetThreadsViewController()
             c.canChooseContacts = true
-              //self.navigationController?.pushViewController(c, animated: true)
-              self.presentViewController(c, animated: true, completion: nil)
+              self.navigationController?.pushViewController(c, animated: true)
+              //self.presentViewController(c, animated: true, completion: nil)
 //                }, failure: {error in
 //                   print("[ERROR] \(error.localizedDescription)")
 //            })

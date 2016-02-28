@@ -18,22 +18,65 @@
 import UIKit
 import MagnetMax
 
-class UserLetterGroup : NSObject {
+public class UserLetterGroup : NSObject {
     var letter : Character  = "0"
     var users : [UserModel] = []
 }
 
-class UserModel : NSObject {
+public class UserModel : NSObject {
     var user : MMUser?
 }
 
 public protocol ControllerDatasource: class {
     func controllerLoadMore(searchText : String?, offset : Int)
     func controllerHasMore() -> Bool
-    func controllerSearchUpdatesContinuously() ->Bool
+    func controllerSearchUpdatesContinuously() -> Bool
+    func controllShowsSectionIndexTitles() -> Bool
 }
 
-class ContactsViewController: UITableViewController, UISearchBarDelegate {
+public class IconView : UIView {
+    var imageView : UIImageView?
+    var title : UILabel?
+    
+    static func newIconView() -> IconView {
+        let view = IconView(frame: CGRect(x: 0, y: 0, width: 50, height: 0))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        imageView.layer.cornerRadius = imageView.frame.size.width / 2.0
+        imageView.clipsToBounds = true
+        imageView.contentMode = .ScaleAspectFill
+        imageView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
+        let imageContainer = UIView(frame: CGRect(x: 0, y: 5, width: imageView.frame.size.width, height: imageView.frame.size.height))
+        imageContainer.addSubview(imageView)
+        imageContainer.translatesAutoresizingMaskIntoConstraints = false
+        
+        let label = UILabel(frame: CGRect(x: 0, y: CGRectGetMaxY(imageContainer.frame), width: 0, height: 16))
+        label.textAlignment = .Center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFontOfSize(10)
+        label.textColor = UIColor.grayColor()
+        
+        let centerX = NSLayoutConstraint(item: imageContainer, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1, constant: 0)
+        let imageYSpace = NSLayoutConstraint(item: imageContainer, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 0)
+        let imageWidth = NSLayoutConstraint(item: imageContainer, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: imageContainer.frame.size.width)
+        let imageHeight = NSLayoutConstraint(item: imageContainer, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: imageContainer.frame.size.height)
+        
+        let labelYSpace = NSLayoutConstraint(item: label, attribute: .Top, relatedBy: .Equal, toItem: imageContainer, attribute: .Bottom, multiplier: 1, constant: 0)
+        let labelBottom = NSLayoutConstraint(item: label, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1, constant: 0)
+        let labelLeading = NSLayoutConstraint(item: label, attribute: .Leading, relatedBy: .Equal, toItem: view, attribute: .Leading, multiplier: 1, constant: 0)
+        let labelTrailing = NSLayoutConstraint(item: label, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1, constant: 0)
+        let labelHeight =  NSLayoutConstraint(item: label, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: label.frame.size.height)
+        //label constraints
+        view.addSubview(imageContainer)
+        view.addSubview(label)
+        view.addConstraints([centerX, imageYSpace, imageWidth, imageHeight, labelYSpace, labelBottom, labelLeading, labelTrailing,labelHeight])
+        view.title = label
+        view.imageView = imageView
+        return view
+    }
+}
+
+class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     
     weak var delegate : ContactsPickerControllerDelegate?
     weak var dataSource : ControllerDatasource?
@@ -43,6 +86,9 @@ class ContactsViewController: UITableViewController, UISearchBarDelegate {
     var searchBar = UISearchBar()
     var currentUserCount = 0
     var isWaitingForData : Bool = false
+    var topGuide : NSLayoutConstraint?
+    
+    @IBOutlet var contactsView : UIView!
     
     override func loadView() {
         super.loadView()
@@ -71,12 +117,84 @@ class ContactsViewController: UITableViewController, UISearchBarDelegate {
         searchBar.delegate = self
         tableView.tableHeaderView = searchBar
         tableView.reloadData()
+        self.tableView.layer.masksToBounds = true
         
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        if self.topGuide == nil {
+            if self.tableView.contentInset != UIEdgeInsetsZero {
+                let topGuide = NSLayoutConstraint(item: contactsView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1, constant: self.tableView.contentInset.top)
+                self.view.addConstraint(topGuide)
+                self.topGuide = topGuide
+                
+            } else {
+                let topGuide = NSLayoutConstraint(item: contactsView, attribute: .Top, relatedBy: .Equal, toItem: self.topLayoutGuide, attribute: .Bottom, multiplier: 1, constant: 0)
+                self.view.addConstraint(topGuide)
+                self.topGuide = topGuide
+            }
+            
+            contactsView.translatesAutoresizingMaskIntoConstraints = false
+            self.automaticallyAdjustsScrollViewInsets = false
+            self.tableView.contentInset = UIEdgeInsetsZero
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         updateNextButton()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    func updateContactsView(users : [MMUser]) {
+        
+        var leftView = contactsView
+        var leftAttribute : NSLayoutAttribute = .Leading
+        
+        for sub in contactsView.subviews {
+            sub.removeFromSuperview()
+        }
+        
+        var iconViews : [IconView] = []
+        for user in users.reverse() {
+            let view = IconView.newIconView()
+            iconViews.append(view)
+            let defaultImage = Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
+            if let imageView = view.imageView {
+                Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
+                view.title?.text = displayNameForUser(user)
+            }
+            let top = NSLayoutConstraint(item: view, attribute: .Top, relatedBy: .Equal, toItem: contactsView, attribute: .Top, multiplier: 1, constant: 8)
+            let left = NSLayoutConstraint(item: view, attribute: .Leading, relatedBy: .Equal, toItem: leftView, attribute: leftAttribute, multiplier: 1, constant: 8)
+            let bottom = NSLayoutConstraint(item: view, attribute: .Bottom, relatedBy: .Equal, toItem: contactsView, attribute: .Bottom, multiplier: 1, constant: -8)
+            let width = NSLayoutConstraint(item: view, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 50)
+            contactsView.addSubview(view)
+            contactsView.addConstraints([top,left,bottom,width])
+            leftView = view
+            leftAttribute = .Trailing
+        }
+        if leftView != contactsView {
+            let right = NSLayoutConstraint(item: leftView, attribute: .Right, relatedBy: .Equal, toItem: contactsView, attribute: .Right, multiplier: 1, constant: -8)
+            contactsView.addConstraint(right)
+        }
+        
+        if let iconView = iconViews.first {
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                iconView.transform = CGAffineTransformMakeScale(1.1, 1.1)
+                }, completion: { (_) -> Void in
+                    UIView.animateWithDuration(0.2, animations: { () -> Void in
+                        iconView.transform = CGAffineTransformIdentity
+                    })
+            })
+        }
+        if let scrollView = contactsView.superview as? UIScrollView {
+            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        }
     }
     
     func appendUsers(users : [MMUser]) {
@@ -161,7 +279,6 @@ class ContactsViewController: UITableViewController, UISearchBarDelegate {
             
             //insert indexPath for cell
             indexPaths.append(NSIndexPath(forRow: row, inSection: section))
-            
         }
         
         if reloadTable {
@@ -192,6 +309,21 @@ class ContactsViewController: UITableViewController, UISearchBarDelegate {
         return name
     }
     
+    func displayNameForUser(user : MMUser) -> String {
+        //create username
+        var name : String = ""
+        if user.firstName != nil {
+            name = "\(user.firstName) "
+        } else if user.lastName != nil {
+            name += user.lastName
+        }
+        
+        if name.characters.count == 0 {
+            name = user.userName
+        }
+        
+        return name
+    }
     
     func selectContacts() {
         
@@ -206,7 +338,7 @@ class ContactsViewController: UITableViewController, UISearchBarDelegate {
     
     // MARK: - Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return availableRecipients.count + 1
     }
     
@@ -288,7 +420,7 @@ class ContactsViewController: UITableViewController, UISearchBarDelegate {
         return cell!
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if tableView.numberOfSections - 1 == section {
             return nil
         }
@@ -297,7 +429,7 @@ class ContactsViewController: UITableViewController, UISearchBarDelegate {
         return String(letter.letter).uppercaseString
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == tableView.numberOfSections - 1 {
             return
         }
@@ -307,9 +439,10 @@ class ContactsViewController: UITableViewController, UISearchBarDelegate {
             addSelectedUser(user)
         }
         updateNextButton()
+        updateContactsView(selectedUsers)
     }
     
-    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == tableView.numberOfSections - 1 {
             return
         }
@@ -318,13 +451,22 @@ class ContactsViewController: UITableViewController, UISearchBarDelegate {
             removeSelectedUser(user)
         }
         updateNextButton()
+        updateContactsView(selectedUsers)
+    }
+    
+    func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        var indexTitles : [String]? = nil
+        if let dataSource = self.dataSource where dataSource.controllShowsSectionIndexTitles() {
+            indexTitles = availableRecipients.map({ "\($0.letter)" })
+        }
+        return indexTitles
     }
     
     
     //MARK : UISCrollViewDelegate
     
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
         
         if searchBar.isFirstResponder() {
             searchBar.resignFirstResponder()

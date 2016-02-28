@@ -51,7 +51,7 @@ class ChannelDetailBaseTVCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        self.clipsToBounds = true
         if let vNewMessageIndicator = self.vNewMessageIndicator {
             vNewMessageIndicator.layer.cornerRadius = vNewMessageIndicator.bounds.width / 2
             vNewMessageIndicator.clipsToBounds = true

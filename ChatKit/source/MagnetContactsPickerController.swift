@@ -22,14 +22,16 @@ public protocol ContactsPickerControllerDelegate: class {
     func contactsControllerDidFinish(with selectedUsers: [MMUser])
 }
 
-public protocol ContactsPickerControllerDatasource: class {
+@objc public protocol ContactsPickerControllerDatasource: class {
     func contactsControllerLoadMore(searchText : String?, offset : Int)
     func contactControllerHasMore() -> Bool
     func contactControllerSearchUpdatesContinuously() ->Bool
+    
+    optional func contactControllerShowsSectionIndexTitles() -> Bool
 }
 
 public class MagnetContactsPickerController: MagnetViewController, ControllerDatasource {
-    private var underlyingContactsViewController = ContactsViewController.init()
+    private var underlyingContactsViewController = ContactsViewController()
     private weak var barButtonCancel : UIBarButtonItem?
     private weak var barButtonNext : UIBarButtonItem?
     public weak var pickerDelegate : ContactsPickerControllerDelegate?
@@ -38,7 +40,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     private var requestNumber : Int = 0
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.automaticallyAdjustsScrollViewInsets = false
         self.underlyingContactsViewController.dataSource = self
         underlyingContactsViewController.delegate = pickerDelegate
         generateNavBars()
@@ -56,7 +58,6 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         } else {
             self.setMagnetNavBar(leftItems: [btnCancel], rightItems: [btnNext], title: self.title)
         }
-        
         underlyingContactsViewController.rightNavBtn = barButtonNext
     }
     
@@ -67,6 +68,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
             dataSource.magnetPicker = self
         }
         
+        //underlyingContactsViewController.tableView.sectionIndexColor = underlyingContactsViewController.tableView.tintColor
     }
     
     override internal func underlyingViewController() -> UIViewController? {
@@ -79,6 +81,14 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     
     private func appendUsers(users : [MMUser], reloadTable : Bool) {
         self.underlyingContactsViewController.appendUsers(users, reloadTable: reloadTable)
+    }
+    
+    public func contacts() -> [[String : [MMUser]?]] {
+        return underlyingContactsViewController.availableRecipients.map({ (group) -> [String : [MMUser]?] in
+            let letter = "\(group.letter)"
+            let users = group.users.map({$0.user}) as? [MMUser]
+            return [letter : users]
+        })
     }
     
     public func filterOutUsers(users : [MMUser]) -> [MMUser] {
@@ -166,6 +176,15 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     public func controllerSearchUpdatesContinuously() -> Bool {
         if let pickerDatasource = pickerDatasource {
             return pickerDatasource.contactControllerSearchUpdatesContinuously()
+        }
+        return false
+    }
+    
+    public func controllShowsSectionIndexTitles() -> Bool {
+        if let pickerDatasource = self.pickerDatasource {
+            if let shows = pickerDatasource.contactControllerShowsSectionIndexTitles?() {
+                return shows
+            }
         }
         return false
     }

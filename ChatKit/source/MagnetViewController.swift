@@ -17,26 +17,11 @@
 
 import UIKit
 
-public class MagnetViewController : UIViewController {
+public class MagnetViewController : MMViewController {
     
     public var magnetNavigationBar : UINavigationBar?
     public var magnetNavigationItem : UINavigationItem?
     private let navBarHeight : CGFloat = 54.0
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        self.setupViewController()
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.setupViewController()
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.setupViewController()
-    }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +43,7 @@ public class MagnetViewController : UIViewController {
         magnetNavigationBar = nav
         magnetNavigationBar?.hidden = true
     }
-    
+
     internal func setMagnetNavBar(leftItems leftItems:[UIBarButtonItem]?, rightItems:[UIBarButtonItem]?, title : String?) {
         var willHide = false
         if leftItems == nil && rightItems == nil && title == nil  {
@@ -66,7 +51,7 @@ public class MagnetViewController : UIViewController {
             willHide = true
         }
         
-        if let tableViewController = underlyingViewController() as? UITableViewController, let navBar = self.magnetNavigationBar {
+        if let tableViewController = underlyingViewController() as? MMTableViewController, let navBar = self.magnetNavigationBar {
             var currentInsets = tableViewController.tableView.contentInset
             currentInsets.top = willHide ? 0 : navBar.frame.size.height
             tableViewController.tableView.contentInset = currentInsets
@@ -81,8 +66,6 @@ public class MagnetViewController : UIViewController {
         self.magnetNavigationItem?.rightBarButtonItems = rightItems
         self.magnetNavigationItem?.title = title
     }
-    
-    func setupViewController() { }
     
     internal func underlyingViewController() -> UIViewController? {
         return nil

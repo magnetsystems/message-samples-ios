@@ -28,6 +28,12 @@
             <FileRef
                location = "group:ContactsViewController.swift">
             </FileRef>
+            <FileRef
+               location = "group:MMTableViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMViewController.swift">
+            </FileRef>
          </Group>
          <Group
             location = "group:Helpers"
