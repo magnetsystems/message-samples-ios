@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactsViewController" customModule="ChatKitUI" customModuleProvider="target">
             <connections>
                 <outlet property="contactsView" destination="gHj-EF-n6A" id="us1-Ek-Vdk"/>
+                <outlet property="contactsViewScrollView" destination="JNU-aP-1oZ" id="YLj-Pt-Iaq"/>
                 <outlet property="tableView" destination="yww-hd-TB3" id="wjJ-AJ-kkH"/>
                 <outlet property="view" destination="mYd-6q-NWw" id="Yjj-Bs-yCF"/>
             </connections>

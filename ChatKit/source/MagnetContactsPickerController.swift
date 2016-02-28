@@ -31,7 +31,7 @@ public protocol ContactsPickerControllerDelegate: class {
 }
 
 public class MagnetContactsPickerController: MagnetViewController, ControllerDatasource {
-    private var underlyingContactsViewController = ContactsViewController()
+    private let underlyingContactsViewController = ContactsViewController()
     private weak var barButtonCancel : UIBarButtonItem?
     private weak var barButtonNext : UIBarButtonItem?
     public weak var pickerDelegate : ContactsPickerControllerDelegate?
@@ -124,7 +124,6 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     
     convenience public init(disabledUsers: [MMUser]) {
         self.init()
-        self.underlyingContactsViewController = ContactsViewController.init()
         var hash  : [String : MMUser] = [:]
         for user in disabledUsers {
             if let userId = user.userID {

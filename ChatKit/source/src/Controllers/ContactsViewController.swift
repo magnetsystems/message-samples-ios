@@ -34,7 +34,7 @@ public protocol ControllerDatasource: class {
     func controllShowsSectionIndexTitles() -> Bool
 }
 
-public class IconView : UIView {
+public class IconView : UIView, UIGestureRecognizerDelegate {
     var imageView : UIImageView?
     var title : UILabel?
     weak var user : MMUser?
@@ -75,6 +75,10 @@ public class IconView : UIView {
         view.imageView = imageView
         return view
     }
+    
+    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
 }
 
 class ContactsViewController: MMTableViewController, UISearchBarDelegate {
@@ -89,8 +93,10 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     var isWaitingForData : Bool = false
     var topGuide : NSLayoutConstraint?
     var startPoint : CGPoint = CGPointZero
+    var iconViewShouldMove : Bool = false
     
     @IBOutlet var contactsView : UIView!
+    @IBOutlet var contactsViewScrollView : UIScrollView!
     
     override func loadView() {
         super.loadView()
@@ -180,7 +186,8 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             leftView = view
             leftAttribute = .Trailing
             let longPress = UILongPressGestureRecognizer(target: self, action: "didPanView:")
-            longPress.minimumPressDuration = 0.1
+            longPress.minimumPressDuration = 0.0
+            longPress.delegate = view
             view.addGestureRecognizer(longPress)
             view.user = user
         }
@@ -198,7 +205,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
                     })
             })
         }
-        if let scrollView = contactsView.superview as? UIScrollView {
+        if let scrollView = contactsViewScrollView {
             scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         }
     }
@@ -305,19 +312,28 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         if gesture.state == .Began {
             if let gestureView = gesture.view {
                 let gesturePoint = self.view.convertRect(gestureView.frame, fromView: gestureView)
-                startPoint = CGPoint(x: loc.x, y:CGRectGetMaxY(gesturePoint))
+                startPoint = CGPoint(x: loc.x + contactsViewScrollView.contentOffset.x , y:CGRectGetMaxY(gesturePoint))
+                iconViewShouldMove = false
             }
         } else if gesture.state == .Changed {
-            let offsetPoint = CGPoint(x: loc.x - startPoint.x, y: loc.y - startPoint.y)
-            let translate = CGAffineTransformMakeTranslation(offsetPoint.x, offsetPoint.y)
-            let scaleTrans = CGAffineTransformScale(translate, 0.8, 0.8)
-            gesture.view?.transform = scaleTrans
-            gesture.view?.alpha = 0.8
+            if let container = contactsViewScrollView where !CGRectContainsPoint(container.frame, loc) {
+                iconViewShouldMove = true
+                contactsViewScrollView.scrollEnabled = false
+                contactsViewScrollView.scrollEnabled = true
+            }
+            if iconViewShouldMove {
+                let offsetPoint = CGPoint(x: loc.x - startPoint.x + contactsViewScrollView.contentOffset.x, y: loc.y - startPoint.y)
+                
+                let translate = CGAffineTransformMakeTranslation(offsetPoint.x, offsetPoint.y)
+                let scaleTrans = CGAffineTransformScale(translate, 0.8, 0.8)
+                gesture.view?.transform = scaleTrans
+                gesture.view?.alpha = 0.8
+            }
         } else if gesture.state == .Ended {
             startPoint = CGPointZero
             gesture.view?.alpha = 1
             gesture.view?.transform = CGAffineTransformIdentity
-            if let container = contactsView.superview where !CGRectContainsPoint(container.frame, loc) {
+            if let container = contactsViewScrollView where !CGRectContainsPoint(container.frame, loc) {
                 if let iconView = gesture.view as? IconView {
                     if let user = iconView.user {
                         removeSelectedUser(user)
