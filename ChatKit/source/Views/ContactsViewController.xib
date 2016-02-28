@@ -25,7 +25,7 @@
                         <outlet property="delegate" destination="-1" id="9an-66-sS3"/>
                     </connections>
                 </tableView>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNU-aP-1oZ">
+                <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNU-aP-1oZ">
                     <rect key="frame" x="0.0" y="31" width="600" height="97"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gHj-EF-n6A">

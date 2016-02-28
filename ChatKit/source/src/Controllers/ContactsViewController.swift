@@ -37,6 +37,7 @@ public protocol ControllerDatasource: class {
 public class IconView : UIView {
     var imageView : UIImageView?
     var title : UILabel?
+    weak var user : MMUser?
     
     static func newIconView() -> IconView {
         let view = IconView(frame: CGRect(x: 0, y: 0, width: 50, height: 0))
@@ -87,6 +88,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     var currentUserCount = 0
     var isWaitingForData : Bool = false
     var topGuide : NSLayoutConstraint?
+    var startPoint : CGPoint = CGPointZero
     
     @IBOutlet var contactsView : UIView!
     
@@ -172,11 +174,15 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             let top = NSLayoutConstraint(item: view, attribute: .Top, relatedBy: .Equal, toItem: contactsView, attribute: .Top, multiplier: 1, constant: 8)
             let left = NSLayoutConstraint(item: view, attribute: .Leading, relatedBy: .Equal, toItem: leftView, attribute: leftAttribute, multiplier: 1, constant: 8)
             let bottom = NSLayoutConstraint(item: view, attribute: .Bottom, relatedBy: .Equal, toItem: contactsView, attribute: .Bottom, multiplier: 1, constant: -8)
-            let width = NSLayoutConstraint(item: view, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 50)
+            let width = NSLayoutConstraint(item: view, attribute: .Width, relatedBy: .LessThanOrEqual, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 70)
             contactsView.addSubview(view)
             contactsView.addConstraints([top,left,bottom,width])
             leftView = view
             leftAttribute = .Trailing
+            let longPress = UILongPressGestureRecognizer(target: self, action: "didPanView:")
+            longPress.minimumPressDuration = 0.0
+            view.addGestureRecognizer(longPress)
+            view.user = user
         }
         if leftView != contactsView {
             let right = NSLayoutConstraint(item: leftView, attribute: .Right, relatedBy: .Equal, toItem: contactsView, attribute: .Right, multiplier: 1, constant: -8)
@@ -253,7 +259,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
                 
                 //find where to insert
                 row = self.availableRecipients[section].users.findInsertionIndex() {
-                    return self.nameForUser($0.user!) > self.nameForUser(user)
+                    return self.displayNameForUser($0.user!).componentsSeparatedByString(" ").reverse().reduce("", combine: {$0 + $1}) > self.displayNameForUser(user).componentsSeparatedByString(" ").reverse().reduce("", combine: {$0 + $1})
                 }
                 
                 self.availableRecipients[section].users.insert(userModel, atIndex: row)
@@ -294,6 +300,35 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         }
     }
     
+    func didPanView(gesture : UILongPressGestureRecognizer) {
+        let loc = gesture.locationInView(self.view)
+        if gesture.state == .Began {
+            startPoint = loc
+        } else if gesture.state == .Changed {
+            let offsetPoint = CGPoint(x: loc.x - startPoint.x, y: loc.y - startPoint.y)
+            let translate = CGAffineTransformMakeTranslation(offsetPoint.x, offsetPoint.y)
+            let scaleTrans = CGAffineTransformConcat(CGAffineTransformMakeScale(0.8, 0.8), translate)
+            gesture.view?.transform = scaleTrans
+            gesture.view?.alpha = 0.8
+        } else if gesture.state == .Ended {
+            startPoint = CGPointZero
+            gesture.view?.alpha = 1
+            gesture.view?.transform = CGAffineTransformIdentity
+            if let container = contactsView.superview where !CGRectContainsPoint(container.frame, loc) {
+                if let iconView = gesture.view as? IconView {
+                    if let user = iconView.user {
+                        removeSelectedUser(user)
+                        updateContactsView(selectedUsers)
+                        updateNextButton()
+                        self.tableView.beginUpdates()
+                        self.tableView.reloadData()
+                        self.tableView.endUpdates()
+                    }
+                }
+            }
+        }
+    }
+    
     func charForUser(user : MMUser) -> Character? {
         return nameForUser(user).lowercaseString.characters.first
     }
@@ -314,7 +349,8 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         var name : String = ""
         if user.firstName != nil {
             name = "\(user.firstName) "
-        } else if user.lastName != nil {
+        }
+        if user.lastName != nil {
             name += user.lastName
         }
         
