@@ -174,13 +174,13 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             let top = NSLayoutConstraint(item: view, attribute: .Top, relatedBy: .Equal, toItem: contactsView, attribute: .Top, multiplier: 1, constant: 8)
             let left = NSLayoutConstraint(item: view, attribute: .Leading, relatedBy: .Equal, toItem: leftView, attribute: leftAttribute, multiplier: 1, constant: 8)
             let bottom = NSLayoutConstraint(item: view, attribute: .Bottom, relatedBy: .Equal, toItem: contactsView, attribute: .Bottom, multiplier: 1, constant: -8)
-            let width = NSLayoutConstraint(item: view, attribute: .Width, relatedBy: .LessThanOrEqual, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 70)
+            let width = NSLayoutConstraint(item: view, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 70)
             contactsView.addSubview(view)
             contactsView.addConstraints([top,left,bottom,width])
             leftView = view
             leftAttribute = .Trailing
             let longPress = UILongPressGestureRecognizer(target: self, action: "didPanView:")
-            longPress.minimumPressDuration = 0.0
+            longPress.minimumPressDuration = 0.1
             view.addGestureRecognizer(longPress)
             view.user = user
         }
@@ -199,7 +199,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             })
         }
         if let scrollView = contactsView.superview as? UIScrollView {
-            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         }
     }
     
