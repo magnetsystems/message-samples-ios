@@ -502,7 +502,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     
     private func removeSelectedUser(selectedUser : MMUser) {
         selectedUsers = selectedUsers.filter({
-            if $0 !== selectedUser {
+            if $0.userID != selectedUser.userID {
                 return true
             }
             
