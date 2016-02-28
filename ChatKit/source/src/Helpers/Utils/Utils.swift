@@ -124,7 +124,7 @@ class Utils: NSObject {
         
         let view : UIView = UIView(frame: CGRect(x: 0, y: 0, width: diameter, height: diameter))
         let lbl : UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: diameter, height: diameter))
-        lbl.backgroundColor = UIColor.jsq_messageBubbleBlueColor()
+        lbl.backgroundColor = MagnetControllerAppearance.tintColor
         let f = firstCharacterInString(fName).uppercaseString
         let l = firstCharacterInString(lName).uppercaseString
         lbl.font = UIFont.systemFontOfSize(diameter * 0.5)
@@ -280,5 +280,17 @@ extension Array {
         }
         
         return findInsertionIndex(Array(haystack[index + 1..<haystack.count]), greaterThan : greaterThan) + 1 + index
+    }
+}
+
+public class MagnetControllerAppearance {
+    public static var tintColor : UIColor = UIColor(hue: 210.0 / 360.0, saturation: 0.94, brightness: 1.0, alpha: 1.0)
+    public var tintColor : UIColor {
+        set {
+            self.dynamicType.tintColor = newValue
+        }
+        get {
+            return self.dynamicType.tintColor
+        }
     }
 }

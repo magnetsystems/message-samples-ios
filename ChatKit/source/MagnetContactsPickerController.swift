@@ -44,6 +44,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         self.underlyingContactsViewController.dataSource = self
         underlyingContactsViewController.delegate = pickerDelegate
         generateNavBars()
+        underlyingContactsViewController.tableView.sectionIndexColor = self.appearance.tintColor
     }
     
     private func generateNavBars() {
@@ -67,8 +68,6 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         if let dataSource = self.pickerDatasource as? DefaultContactsPickerControllerDatasource {
             dataSource.magnetPicker = self
         }
-        
-        //underlyingContactsViewController.tableView.sectionIndexColor = underlyingContactsViewController.tableView.tintColor
     }
     
     override internal func underlyingViewController() -> UIViewController? {

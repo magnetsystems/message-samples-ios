@@ -1069,6 +1069,7 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate {
                 //let c = MagnetContactsPickerController(disabledUsers: [MMUser.currentUser()!])
            // c.pickerDelegate = self
             let c = MagnetThreadsViewController()
+            c.appearance.tintColor = self.view.tintColor
             c.canChooseContacts = true
               self.navigationController?.pushViewController(c, animated: true)
               //self.presentViewController(c, animated: true, completion: nil)

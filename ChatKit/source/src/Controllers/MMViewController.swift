@@ -19,6 +19,8 @@ import UIKit
 
 public class MMViewController: UIViewController {
 
+    public var appearance = MagnetControllerAppearance()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         self.setupViewController()
