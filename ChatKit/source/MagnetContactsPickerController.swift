@@ -36,7 +36,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     private weak var barButtonNext : UIBarButtonItem?
     public weak var pickerDelegate : ContactsPickerControllerDelegate?
     public var pickerDatasource : ContactsPickerControllerDatasource? = DefaultContactsPickerControllerDatasource()
-    private var disabledUsers : [MMUser] = []
+    private var disabledUsers : [String : MMUser] = [:]
     private var requestNumber : Int = 0
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -92,17 +92,12 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     }
     
     private func filterOutUsers(users : [MMUser]) -> [MMUser] {
-        var hash  : [String : MMUser] = [:]
-        for user in self.disabledUsers {
-            if let userName = user.userName {
-                hash[userName] = user
-            }
-        }
         var tempUsers : [MMUser] = []
         for user in users {
-            print ("last Name \(user.lastName)")
-            if let userName = user.userName where hash[userName] == nil {
+            if let userId = user.userID where disabledUsers[userId] == nil {
                 tempUsers.append(user)
+            } else {
+                print ("ommit \(user.lastName)")
             }
         }
         return tempUsers
@@ -131,6 +126,13 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     convenience public init(disabledUsers: [MMUser]) {
         self.init()
         self.underlyingContactsViewController = ContactsViewController.init()
+        var hash  : [String : MMUser] = [:]
+        for user in disabledUsers {
+            if let userId = user.userID {
+                hash[userId] = user
+            }
+        }
+        self.disabledUsers = hash
     }
     
     func cancelAction() {
