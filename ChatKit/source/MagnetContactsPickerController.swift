@@ -36,6 +36,11 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     private weak var barButtonNext : UIBarButtonItem?
     public weak var pickerDelegate : ContactsPickerControllerDelegate?
     public var pickerDatasource : ContactsPickerControllerDatasource? = DefaultContactsPickerControllerDatasource()
+    
+    public var tableView : UITableView {
+       return underlyingContactsViewController.tableView
+    }
+    
     private var disabledUsers : [String : MMUser] = [:]
     private var requestNumber : Int = 0
     override public func viewDidLoad() {
