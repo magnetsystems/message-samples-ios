@@ -330,11 +330,13 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
                 gesture.view?.alpha = 0.8
             }
         } else if gesture.state == .Ended {
+            if let iconView = gesture.view as? IconView, let imageView = iconView.imageView {
+            let center = self.view.convertPoint(imageView.center, fromView: iconView)
+                
             startPoint = CGPointZero
-            gesture.view?.alpha = 1
-            gesture.view?.transform = CGAffineTransformIdentity
-            if let container = contactsViewScrollView where !CGRectContainsPoint(container.frame, loc) {
-                if let iconView = gesture.view as? IconView {
+            iconView.alpha = 1
+            iconView.transform = CGAffineTransformIdentity
+            if let container = contactsViewScrollView where !CGRectContainsPoint(container.frame, center) {
                     if let user = iconView.user {
                         removeSelectedUser(user)
                         updateContactsView(selectedUsers)
