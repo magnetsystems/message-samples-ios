@@ -235,7 +235,12 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             userModel.user = user
             
             //search for user group index
-            let index = self.availableRecipients.map({$0.letter}).searchrSortedArray(initial)
+            let index = self.availableRecipients.searchrSortedArrayWithBlock(greaterThan: {
+                if $0.letter == initial {
+                    return nil
+                }
+                return $0.letter > initial
+            })
             
             var section = Int.max
             var row = Int.max
@@ -258,11 +263,11 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
                 if let ind = index {
                     section = ind
                 }
-                let displayName = self.displayNameForUser(user).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"})
                 
-                let displayNames = self.availableRecipients[section].users.map({self.displayNameForUser($0.user!).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"})})
                 //find where to insert
-                row = displayNames.findInsertionIndexForSortedArray(displayName)
+                row = self.availableRecipients[section].users.findInsertionIndexForSortedArrayWithBlock() {
+                    return self.displayNameForUser($0.user!).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"}) > self.displayNameForUser(user).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"})
+                }
                 
                 self.availableRecipients[section].users.insert(userModel, atIndex: row)
                 
@@ -274,7 +279,9 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
                 userGroup.users = [userModel]
                 
                 //find where to insert
-                section = self.availableRecipients.map({$0.letter}).findInsertionIndexForSortedArray(userGroup.letter)
+                section = self.availableRecipients.findInsertionIndexForSortedArrayWithBlock() {
+                    return $0.letter > userGroup.letter
+                }
                 
                 self.availableRecipients.insert(userGroup, atIndex: section)
                 
