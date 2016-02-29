@@ -18,11 +18,28 @@
 import UIKit
 import MagnetMax
 
+@objc protocol HomeViewControllerDatasource: class {
+    func homeViewLoadChannels(channels : (([MMXChannel]) ->Void))
+    
+    optional func homeViewRegisterCells(tableView : UITableView)
+    optional func homeViewCellForMMXChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell?
+    optional func homeViewCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat
+}
+
+@objc  protocol HomeViewControllerDelegate: class {
+    func homeViewDidSelectChannel(channel : MMXChannel)
+    func homeViewCanLeaveChannel(channel : MMXChannel) -> Bool
+    optional func homeViewDidLeaveChannel(channel : MMXChannel)
+}
+
 class HomeViewController: UITableViewController, UISearchResultsUpdating {
     
     let searchController = UISearchController(searchResultsController: nil)
     var detailResponses : [MMXChannelDetailResponse] = []
     var filteredDetailResponses : [MMXChannelDetailResponse] = []
+    
+    var datasource : HomeViewControllerDatasource?
+    var delegate : HomeViewControllerDelegate?
     
     override func loadView() {
         super.loadView()
@@ -52,7 +69,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating {
         searchController.searchBar.sizeToFit()
         tableView.tableHeaderView = searchController.searchBar
         tableView.reloadData()
-        
+        self.datasource?.homeViewRegisterCells?(self.tableView)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -100,45 +117,34 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let detailResponse = detailsForIndexPath(indexPath)
+        
+        if let cell : UITableViewCell = self.datasource?.homeViewCellForMMXChannel?(tableView,channel :detailResponse.channel, channelDetails : detailResponse, row : indexPath.row) {
+            return cell
+        }
         let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
-        cell.detailResponse = searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
+        cell.detailResponse = detailResponse
         
         return cell
     }
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if let canLeave = self.delegate?.homeViewCanLeaveChannel(detailsForIndexPath(indexPath).channel) {
+            return canLeave
+        }
         return true
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let detailResponse = detailResponses[indexPath.row]
-        var isLastPersonInChat = false
-        if detailResponse.messages.count > 0 {
-            isLastPersonInChat = detailResponse.messages.last?.sender?.userID == MMUser.currentUser()?.userID
-        }
+        let detailResponse = detailsForIndexPath(indexPath)
         
-        if isLastPersonInChat {
-            // Current user must be the owner of the channel to delete it
-            if let chat = ChannelManager.sharedInstance.isOwnerForChat(detailResponse.channelName) {
-                let delete = UITableViewRowAction(style: .Normal, title: "Delete") { [weak self] action, index in
-                    chat.deleteWithSuccess({ _ in
-                        self?.detailResponses.removeAtIndex(index.row)
-                        tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
-                        }, failure: { error in
-                            print(error)
-                    })
-                }
-                delete.backgroundColor = UIColor.redColor()
-                return [delete]
-            }
-        }
-        
-        // Unsubscribe
         let leave = UITableViewRowAction(style: .Normal, title: "Leave") { [weak self] action, index in
-            if let chat = ChannelManager.sharedInstance.channelForName(detailResponse.channelName) {
+            if let chat = detailResponse.channel {
                 chat.unSubscribeWithSuccess({ _ in
                     self?.detailResponses.removeAtIndex(index.row)
                     tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
+                    self?.delegate?.homeViewDidLeaveChannel?(detailResponse.channel)
+                    self?.endRefreshing()
                     }, failure: { error in
                         print(error)
                 })
@@ -153,39 +159,41 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if let height = self.datasource?.homeViewCellHeightForMMXChannel?(detailsForIndexPath(indexPath).channel, row : indexPath.row) {
+            return height
+        }
         return 80.0
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.delegate?.homeViewDidSelectChannel(detailsForIndexPath(indexPath).channel)
+    }
     
     // MARK: - Helpers
     
+    private func detailsForIndexPath(indexPath : NSIndexPath) -> MMXChannelDetailResponse {
+        return searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
+    }
     
     private func loadDetails() {
-        // Get all channels the current user is subscribed to
-        MMXChannel.subscribedChannelsWithSuccess({ [weak self] channels in
-            ChannelManager.sharedInstance.channels = channels
+        self.datasource?.homeViewLoadChannels({ channels in
             if channels.count > 0 {
-                // Get details
+                // Get all channels the current user is subscribed to
                 MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
                     let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
                         let formatter = ChannelManager.sharedInstance.formatter
                         return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
                     })
-                    
-                    ChannelManager.sharedInstance.channelDetails = sortedDetails
-                    self?.detailResponses = sortedDetails
-                    self?.endRefreshing()
+                    self.detailResponses = sortedDetails
+                    self.endRefreshing()
                     }, failure: { error in
-                        self?.endRefreshing()
+                        self.endRefreshing()
                         print(error)
                 })
             } else {
-                ChannelManager.sharedInstance.channelDetails?.removeAll()
+                
             }
-            }) { [weak self] error in
-                self?.endRefreshing()
-                print(error)
-        }
+        })
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {

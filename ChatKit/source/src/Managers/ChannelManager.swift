@@ -41,11 +41,6 @@ class ChannelManager {
     
     //MARK: Public properties
     
-    
-    var channels : [MMXChannel]?
-    var channelDetails : [MMXChannelDetailResponse]?
-    var eventChannels : [MMXChannel]?
-    var eventChannelDetails : [MMXChannelDetailResponse]?
     let formatter = DateFormatter()
     
     
@@ -70,34 +65,6 @@ class ChannelManager {
         channelObservers.append(observer)
     }
     
-    func channelDetailForChannelName(name: String) -> MMXChannelDetailResponse? {
-        
-        if nil == channels || nil == channelDetails { return nil }
-        
-        if let channel = channelForName(name) {
-            for detail in channelDetails! {
-                if detail.channelName == channel.name {
-                    return detail
-                }
-            }
-        }
-        
-        return nil
-    }
-    
-    func channelForName(name: String) -> MMXChannel? {
-        
-        if nil == channels { return nil }
-        
-        for channel in channels! {
-            if channel.name == name {
-                return channel
-            }
-        }
-        
-        return nil
-    }
-   
     func getLastMessageForChannel(channel: MMXChannel) -> String? {
         let name = nameForChannel(channel)
         
@@ -112,14 +79,6 @@ class ChannelManager {
             if let interval : NSTimeInterval = NSTimeInterval(string)  {
                 return NSDate(timeIntervalSince1970: interval)
             }
-        }
-        
-        return nil
-    }
-
-    func isOwnerForChat(name: String) -> MMXChannel? {
-        if let channel = channelForName(name) where channel.ownerUserID == MMUser.currentUser()?.userID {
-            return channel
         }
         
         return nil

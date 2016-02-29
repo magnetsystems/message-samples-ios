@@ -492,10 +492,16 @@
          location = "group:DefaultContactsPickerControllerDatasource.swift">
       </FileRef>
       <FileRef
+         location = "group:DefaultChatListControllerDatasource.swift">
+      </FileRef>
+      <FileRef
          location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/MagnetContactsPickerController.swift">
       </FileRef>
       <FileRef
-         location = "group:MagnetThreadsViewController.swift">
+         location = "group:MagnetChatViewController.swift">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/MagnetChatListViewController.swift">
       </FileRef>
       <FileRef
          location = "group:MagnetViewController.swift">

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D2262211C850C12004C2568 /* UserGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2262201C850C12004C2568 /* UserGenerator.swift */; };
 		8DDFA5B01C6BCCF900566A4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DDFA5AF1C6BCCF900566A4D /* AppDelegate.swift */; };
 		8DDFA5B21C6BCCF900566A4D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DDFA5B11C6BCCF900566A4D /* ViewController.swift */; };
 		8DDFA5B51C6BCCF900566A4D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA5B31C6BCCF900566A4D /* Main.storyboard */; };
@@ -38,6 +39,7 @@
 /* Begin PBXFileReference section */
 		461E73F29630ADA80B47885D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4CDD8162DC009364568DCE7A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		8D2262201C850C12004C2568 /* UserGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserGenerator.swift; sourceTree = "<group>"; };
 		8DDFA5AC1C6BCCF900566A4D /* ChatKitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatKitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DDFA5AF1C6BCCF900566A4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DDFA5B11C6BCCF900566A4D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			children = (
 				8DE66BEE1C6D092C0009C600 /* MagnetMax.plist */,
 				8DDFA5AF1C6BCCF900566A4D /* AppDelegate.swift */,
+				8D2262201C850C12004C2568 /* UserGenerator.swift */,
 				8DDFA5B11C6BCCF900566A4D /* ViewController.swift */,
 				8DDFA5B31C6BCCF900566A4D /* Main.storyboard */,
 				8DDFA5B61C6BCCF900566A4D /* Assets.xcassets */,
@@ -338,6 +341,7 @@
 			files = (
 				8DDFA5B21C6BCCF900566A4D /* ViewController.swift in Sources */,
 				8DDFA5B01C6BCCF900566A4D /* AppDelegate.swift in Sources */,
+				8D2262211C850C12004C2568 /* UserGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,9 +18,26 @@
 import UIKit
 import MagnetMax
 
-public class MagnetThreadsViewController: MagnetViewController, ContactsPickerControllerDelegate {
-    private var underlyingThreadsViewController = HomeViewController.init()
+@objc public protocol ChatListControllerDatasource : class {
+    func chatListLoadChannels(channels : (([MMXChannel]) ->Void))
+    optional func chatListRegisterCells(tableView : UITableView)
+    optional func chatListCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell?
+    optional func chatListCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat
+}
+
+@objc public protocol ChatListControllerDelegate : class {
+    func chatListDidSelectChannel(channel : MMXChannel)
+    func chatListCanLeaveChannel(channel : MMXChannel) -> Bool
+    optional func chatListDidLeaveChannel(channel : MMXChannel)
+}
+
+public class MagnetChatListViewController: MagnetViewController, ContactsPickerControllerDelegate, HomeViewControllerDatasource, HomeViewControllerDelegate {
+    private var underlyingHomeViewController = HomeViewController.init()
     private var chooseContacts : Bool = true
+    
+    public var datasource : ChatListControllerDatasource = DefaultChatListControllerDatasource()
+    public var delegate : ChatListControllerDelegate?
+    
     public var canChooseContacts :Bool? {
         didSet {
             if let can = canChooseContacts {
@@ -33,6 +50,8 @@ public class MagnetThreadsViewController: MagnetViewController, ContactsPickerCo
     public override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        underlyingHomeViewController.datasource = self
+        underlyingHomeViewController.delegate = self
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -47,7 +66,7 @@ public class MagnetThreadsViewController: MagnetViewController, ContactsPickerCo
     }
     
     override internal func underlyingViewController() -> UIViewController? {
-        return underlyingThreadsViewController
+        return underlyingHomeViewController
     }
     
     private func generateNavBars() {
@@ -74,15 +93,60 @@ public class MagnetThreadsViewController: MagnetViewController, ContactsPickerCo
     }
     
     
+    //MARK: - HomeViewControllerDatasource
+    
+    
+    func homeViewLoadChannels(channels : (([MMXChannel]) ->Void)) {
+        self.datasource.chatListLoadChannels(channels)
+    }
+    
+    func homeViewRegisterCells(tableView : UITableView) {
+        self.datasource.chatListRegisterCells?(tableView)
+    }
+    
+    func homeViewCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
+        return self.datasource.chatListCellForMMXChannel?(tableView, channel : channel, channelDetails : channelDetails, row : row)
+    }
+    
+    func homeViewCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat {
+        if let height  = self.datasource.chatListCellHeightForMMXChannel?(channel, row : row) {
+            return height
+        }
+        return 80
+    }
+    
+    
+    //MARK: - HomeViewControllerDelegate
+    
+    
+    func homeViewCanLeaveChannel(channel: MMXChannel) -> Bool {
+        if let canLeave = self.delegate?.chatListCanLeaveChannel(channel) {
+            return canLeave
+        }
+        
+        return true
+    }
+    
+    
+    func homeViewDidLeaveChannel(channel: MMXChannel) {
+        self.delegate?.chatListDidLeaveChannel?(channel)
+    }
+    
+    
+    func homeViewDidSelectChannel(channel: MMXChannel) {
+        self.delegate?.chatListDidSelectChannel(channel)
+    }
+    
+    
     //MARK: - ContactsViewControllerDelegate
     
-
+    
     public func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
         
     }
     
     public func reloadData() {
-        underlyingThreadsViewController.refreshChannelDetail()
+        underlyingHomeViewController.refreshChannelDetail()
     }
     
     
