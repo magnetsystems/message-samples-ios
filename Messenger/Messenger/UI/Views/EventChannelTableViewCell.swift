@@ -47,9 +47,7 @@ class EventChannelTableViewCell: ChannelDetailBaseTVCell {
             
             channelDesrL.text = detailResponse.channel.summary
             
-            let subscribers : [MMUserProfile] = detailResponse.subscribers
-            
-            totalSubscribersL.text = "\(subscribers.count) Subscribers"
+            totalSubscribersL.text = "\(detailResponse.subscriberCount) Subscribers"
             
         }
     }
