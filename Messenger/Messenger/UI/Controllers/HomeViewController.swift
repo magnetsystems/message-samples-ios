@@ -136,7 +136,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             ChannelManager.sharedInstance.channels = channels
             if channels.count > 0 {
                 // Get details
-                MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 1000, success: { detailResponses in
+                MMXChannel.channelDetails(channels, numberOfMessages: 1, numberOfSubcribers: 20, success: { detailResponses in
                     let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
                         let formatter = ChannelManager.sharedInstance.formatter
                         return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
@@ -162,17 +162,18 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     func loadEventChannels(){
         
-        MMXChannel.findByTags( Set(["active"]), limit: 5, offset: 0, success: { (total, channels) -> Void in
+        MMXChannel.findByTags( Set(["active"]), limit: 5, offset: 0, success: { [weak self] total, channels in
             if channels.count > 0 {
                 let channel = channels.first
-                channel?.subscribeWithSuccess({ () -> Void in
-                    MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 1000, success: { (responseDetails) -> Void in
-                        self.actualEvents = responseDetails
-                        self.endRefreshing()
-                        }, failure: { (error) -> Void in
-                    })
+                channel?.subscribeWithSuccess({
+                    MMXChannel.channelDetails(channels, numberOfMessages: 1, numberOfSubcribers: 3, success: { (responseDetails) -> Void in
+                        self?.actualEvents = responseDetails
+                        self?.endRefreshing()
                     }, failure: { (error) -> Void in
-                        print("subscribe global error \(error)")
+                        
+                    })
+                }, failure: { (error) -> Void in
+                    print("subscribe global error \(error)")
                 })
             }
             }) { (error) -> Void in
@@ -200,6 +201,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     
     @IBAction func refreshChannelDetail() {
+        loadEventChannels()
         loadDetails()
     }
     
