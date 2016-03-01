@@ -98,6 +98,7 @@ PODS:
     - FLAnimatedImage (~> 1.0.8)
     - NYTPhotoViewer/Core
   - NYTPhotoViewer/Core (1.0.1)
+  - UIScrollView-InfiniteScroll (0.7.3)
 
 DEPENDENCIES:
   - Crashlytics
@@ -106,6 +107,7 @@ DEPENDENCIES:
   - JSQMessagesViewController
   - MagnetMax (~> 2.5.1)
   - NYTPhotoViewer (~> 1.0.0)
+  - UIScrollView-InfiniteScroll
 
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
@@ -125,5 +127,6 @@ SPEC CHECKSUMS:
   MMX: ab8bece01b6d21400a0cf85235b68c7c790acf4b
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
   NYTPhotoViewer: 98e0a54a9d28e4a980fc4b611fd5e419ca89ad74
+  UIScrollView-InfiniteScroll: b6c7d6d155dca7f9c5dd43813ecffeb301b3d50c
 
 COCOAPODS: 0.39.0

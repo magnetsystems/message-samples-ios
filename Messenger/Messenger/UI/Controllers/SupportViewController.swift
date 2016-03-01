@@ -20,13 +20,15 @@ import UIKit
 
 class SupportViewController: UITableViewController {
     
+    static let pageSize = 20
     
     //MARK: Public properties
     
     
     var supportChannels: [MMXChannel] = [];
     var supportChannelDetails: [MMXChannelDetailResponse] = [];
-    var users: [MMUser] = []
+    var users = Set<MMUser>()
+    var page = 1
     
     
     //MARK: Overrides
@@ -49,7 +51,7 @@ class SupportViewController: UITableViewController {
         
         self.navigationItem.title = kStr_Support;
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
-        self.loadDetails()
+        self.loadDetails(true)
     }
 
     override func viewWillDisappear(animated: Bool) {
@@ -62,7 +64,7 @@ class SupportViewController: UITableViewController {
     
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
-        loadDetails()
+        loadDetails(true)
     }
     
     
@@ -102,7 +104,7 @@ class SupportViewController: UITableViewController {
     
     
     @IBAction func refreshChannelDetail() {
-        loadDetails()
+        loadDetails(true)
     }
     
     @IBAction func showSideMenu(sender: UIBarButtonItem) {
@@ -118,37 +120,65 @@ class SupportViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    private func loadDetails() {
-        // Get all Ask Magnet channels
+    private func loadDetails(shouldResetResults: Bool) {
+        if shouldResetResults {
+            supportChannelDetails.removeAll()
+            page = 1
+        } else {
+            page++
+        }
+        
+        // Get all Ask Magnet channels with > 0 messages, sorted by publish date desc
         
         refreshControl?.beginRefreshing()
         
         MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
-            let channels = allChannels.filter({ $0.name == kAskMagnetChannel})
+            let channels = allChannels.filter({ $0.name == kAskMagnetChannel && $0.numberOfMessages != 0 }).sort { $0.lastTimeActive.timeIntervalSince1970 > $1.lastTimeActive.timeIntervalSince1970 }
             if channels.count > 0 {
                 self?.supportChannels = channels
-                MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 1000, success: { detailResponses in
+
+                guard let page = self?.page, pageSize = self?.dynamicType.pageSize else {
+                    fatalError("page should be set here!")
+                }
+                let paginatedChannels = Array(channels[((page - 1) * pageSize)..<(min(page * pageSize, channels.count))])
+                
+                let IDs = (paginatedChannels as NSArray).valueForKey("ownerUserID") as! [String]
+                MMUser.usersWithUserIDs(IDs, success: { [weak self] users in
+                    self?.users.unionInPlace(users)
                     
-                    let formatter = ChannelManager.sharedInstance.formatter
-                    let sortedDetails = detailResponses.sort({
-                        formatter.dateForStringTime($0.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime($1.lastPublishedTime)?.timeIntervalSince1970
-                    })
-                    
-                    self?.supportChannelDetails = sortedDetails.filter { $0.messages.count != 0 }
-                    
-                    let IDs = (channels as NSArray).valueForKey("ownerUserID") as! [String]
-                    MMUser.usersWithUserIDs(IDs, success: { [weak self] users in
-                        self?.users = users
+                    MMXChannel.channelDetails(paginatedChannels, numberOfMessages: 1, numberOfSubcribers: 3, success: { detailResponses in
+                        
+                        self?.supportChannelDetails += detailResponses
                         self?.endRefreshing()
-                        }) { (error) -> Void in
-                            print("[ERROR]: \(error)")
-                            self?.endRefreshing()
-                    }
-                    
+                        
+                        self?.tableView.removeInfiniteScroll()
+                        if self?.supportChannelDetails.count < self?.supportChannels.count {
+                            // Add infinite scroll handler
+                            self?.tableView.addInfiniteScrollWithHandler { scrollView in
+                                let tableView = scrollView as! UITableView
+                                
+                                //
+                                // fetch your data here, can be async operation,
+                                // just make sure to call finishInfiniteScroll in the end
+                                //
+                                self?.loadDetails(false)
+                                
+                                // make sure you reload tableView before calling -finishInfiniteScroll
+                                tableView.reloadData()
+                                
+                                // finish infinite scroll animation
+                                tableView.finishInfiniteScroll()
+                            }
+                        }
+                        
                     }, failure: { error in
                         print("[ERROR]: \(error)")
                         self?.endRefreshing()
-                })
+                    })
+                }) { (error) -> Void in
+                    print("[ERROR]: \(error)")
+                    self?.endRefreshing()
+                }
             }
             }) { [weak self] error in
                 print("[ERROR]: \(error)")
