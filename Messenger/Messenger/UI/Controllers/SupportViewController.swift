@@ -148,7 +148,12 @@ class SupportViewController: UITableViewController {
                     
                     MMXChannel.channelDetails(paginatedChannels, numberOfMessages: 1, numberOfSubcribers: 3, success: { detailResponses in
                         
-                        self?.supportChannelDetails += detailResponses
+                        let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
+                            let formatter = ChannelManager.sharedInstance.formatter
+                            return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
+                        })
+                        
+                        self?.supportChannelDetails += sortedDetails
                         self?.endRefreshing()
                         
                         self?.tableView.removeInfiniteScroll()
