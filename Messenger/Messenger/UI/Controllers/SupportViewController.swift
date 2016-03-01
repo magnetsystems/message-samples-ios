@@ -134,9 +134,8 @@ class SupportViewController: UITableViewController {
         
         MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
             let channels = allChannels.filter({ $0.name == kAskMagnetChannel && $0.numberOfMessages != 0 }).sort { $0.lastTimeActive.timeIntervalSince1970 > $1.lastTimeActive.timeIntervalSince1970 }
+            self?.supportChannels = channels
             if channels.count > 0 {
-                self?.supportChannels = channels
-
                 guard let page = self?.page, pageSize = self?.dynamicType.pageSize else {
                     fatalError("page should be set here!")
                 }
@@ -153,7 +152,7 @@ class SupportViewController: UITableViewController {
                             return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
                         })
                         
-                        self?.supportChannelDetails += sortedDetails
+                        self?.supportChannelDetails.appendContentsOf(sortedDetails)
                         self?.endRefreshing()
                         
                         self?.tableView.removeInfiniteScroll()

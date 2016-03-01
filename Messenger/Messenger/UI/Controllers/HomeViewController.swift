@@ -20,6 +20,7 @@ import UIKit
 
 class HomeViewController: UITableViewController, UISearchResultsUpdating, ContactsViewControllerDelegate {
     
+    static let pageSize = 20
     
     //MARK: Public properties
     
@@ -30,6 +31,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     var filteredDetailResponses : [MMXChannelDetailResponse] = []
     var notifier: NavigationNotifier?
     let searchController = UISearchController(searchResultsController: nil)
+    var page = 1
     
     
     //MARK: Overrides
@@ -84,7 +86,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         // Magnet Employees will have the magnetsupport tag
         // Hide the Ask Magnet option for Magnet employees
         askMagnet = [MMXChannelDetailResponse()]
-        loadDetails()
+        loadDetails(true)
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
     }
     
@@ -101,7 +103,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
         loadEventChannels()
-        loadDetails()
+        loadDetails(true)
     }
     
     
@@ -126,25 +128,57 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
     }
     
-    private func loadDetails() {
+    private func loadDetails(shouldResetResults: Bool) {
+        if shouldResetResults {
+            ChannelManager.sharedInstance.channels?.removeAll()
+            page = 1
+        } else {
+            page++
+        }
         
         refreshControl?.beginRefreshing()
         
         // Get all channels the current user is subscribed to
         MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
-            let channels = allChannels.filter { !$0.name.hasPrefix("global_") && $0.name != kAskMagnetChannel }
+            let channels = allChannels.filter { !$0.name.hasPrefix("global_") && $0.name != kAskMagnetChannel && $0.numberOfMessages != 0 }.sort { $0.lastTimeActive.timeIntervalSince1970 > $1.lastTimeActive.timeIntervalSince1970 }
             ChannelManager.sharedInstance.channels = channels
+            
             if channels.count > 0 {
+                guard let page = self?.page, pageSize = self?.dynamicType.pageSize else {
+                    fatalError("page should be set here!")
+                }
+                let paginatedChannels = Array(channels[((page - 1) * pageSize)..<(min(page * pageSize, channels.count))])
                 // Get details
-                MMXChannel.channelDetails(channels, numberOfMessages: 1, numberOfSubcribers: 20, success: { detailResponses in
+                MMXChannel.channelDetails(paginatedChannels, numberOfMessages: 1, numberOfSubcribers: 20, success: { detailResponses in
                     let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
                         let formatter = ChannelManager.sharedInstance.formatter
                         return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
                     })
                     
-                    ChannelManager.sharedInstance.channelDetails = sortedDetails
-                    self?.detailResponses = sortedDetails
+                    ChannelManager.sharedInstance.channelDetails?.appendContentsOf(sortedDetails)
+                    self?.detailResponses.appendContentsOf(sortedDetails)
                     self?.endRefreshing()
+                    
+                    self?.tableView.removeInfiniteScroll()
+                    if self?.detailResponses.count < ChannelManager.sharedInstance.channels?.count {
+                        // Add infinite scroll handler
+                        self?.tableView.addInfiniteScrollWithHandler { scrollView in
+                            let tableView = scrollView as! UITableView
+                            
+                            //
+                            // fetch your data here, can be async operation,
+                            // just make sure to call finishInfiniteScroll in the end
+                            //
+                            self?.loadDetails(false)
+                            
+                            // make sure you reload tableView before calling -finishInfiniteScroll
+                            tableView.reloadData()
+                            
+                            // finish infinite scroll animation
+                            tableView.finishInfiniteScroll()
+                        }
+                    }
+                    
                     }, failure: { error in
                         self?.endRefreshing()
                         print(error)
@@ -202,7 +236,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     @IBAction func refreshChannelDetail() {
         loadEventChannels()
-        loadDetails()
+        loadDetails(true)
     }
     
     @IBAction func showSideMenu(sender: UIBarButtonItem) {
