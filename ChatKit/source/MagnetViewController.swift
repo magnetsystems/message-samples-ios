@@ -16,6 +16,9 @@
 */
 
 import UIKit
+private extension MagnetViewController {
+    
+}
 
 public class MagnetViewController : MMViewController {
     
@@ -43,7 +46,7 @@ public class MagnetViewController : MMViewController {
         magnetNavigationBar = nav
         magnetNavigationBar?.hidden = true
     }
-
+    
     internal func setMagnetNavBar(leftItems leftItems:[UIBarButtonItem]?, rightItems:[UIBarButtonItem]?, title : String?) {
         var willHide = false
         if leftItems == nil && rightItems == nil && title == nil  {
@@ -51,10 +54,19 @@ public class MagnetViewController : MMViewController {
             willHide = true
         }
         
-        if let tableViewController = underlyingViewController() as? MMTableViewController, let navBar = self.magnetNavigationBar {
-            var currentInsets = tableViewController.tableView.contentInset
-            currentInsets.top = willHide ? 0 : navBar.frame.size.height
-            tableViewController.tableView.contentInset = currentInsets
+        if let navBar = self.magnetNavigationBar {
+            if let tableViewController = underlyingViewController() as? MMTableViewController {
+                var currentInsets = tableViewController.tableView.contentInset
+                currentInsets.top = willHide ? 0 : navBar.frame.size.height
+                tableViewController.tableView.contentInset = currentInsets
+            } else if let tableViewController = underlyingViewController() as? UITableViewController {
+                var currentInsets = tableViewController.tableView.contentInset
+                currentInsets.top = willHide ? 0 : navBar.frame.size.height
+                tableViewController.tableView.contentInset = currentInsets
+            } else if let jsqViewController = underlyingViewController() as? JSQMessagesViewController {
+                let top = willHide ? 0 : navBar.frame.size.height
+                jsqViewController.topContentAdditionalInset = top
+            }
         }
         
         if willHide {

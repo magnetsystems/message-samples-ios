@@ -27,9 +27,9 @@ import MagnetMax
 }
 
 @objc  protocol HomeViewControllerDelegate: class {
-    func homeViewDidSelectChannel(channel : MMXChannel)
-    func homeViewCanLeaveChannel(channel : MMXChannel) -> Bool
-    optional func homeViewDidLeaveChannel(channel : MMXChannel)
+    func homeViewDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
+    func homeViewCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
+    optional func homeViewDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
 }
 
 class HomeViewController: UITableViewController, UISearchResultsUpdating {
@@ -129,7 +129,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if let canLeave = self.delegate?.homeViewCanLeaveChannel(detailsForIndexPath(indexPath).channel) {
+        if let canLeave = self.delegate?.homeViewCanLeaveChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath)) {
             return canLeave
         }
         return true
@@ -143,7 +143,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating {
                 chat.unSubscribeWithSuccess({ _ in
                     self?.detailResponses.removeAtIndex(index.row)
                     tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
-                    self?.delegate?.homeViewDidLeaveChannel?(detailResponse.channel)
+                    self?.delegate?.homeViewDidLeaveChannel?(detailResponse.channel, channelDetails : detailResponse)
                     self?.endRefreshing()
                     }, failure: { error in
                         print(error)
@@ -166,7 +166,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.delegate?.homeViewDidSelectChannel(detailsForIndexPath(indexPath).channel)
+        self.delegate?.homeViewDidSelectChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     
     // MARK: - Helpers

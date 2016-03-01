@@ -37,4 +37,12 @@ public class MMViewController: UIViewController {
     }
 
     func setupViewController() { }
+    
+    func dismiss() {
+        self.dismissViewControllerAnimated(false, completion: nil)
+    }
+    
+    func dismissAnimated() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
 }

@@ -32,25 +32,25 @@ class ChatViewController: JSQMessagesViewController {
     var canLeaveChat = false
     let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     var messages = [Message]()
-   // var notifier : NavigationNotifier?
+    // var notifier : NavigationNotifier?
     let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
     
     
     //MARK: Overridden Properties
     
+    
     var chat : MMXChannel? {
         didSet {
             //Register for a notification to receive the message
             if let channel = chat {
-                if chat != nil && chat!.summary!.containsString("Forum") {
-                    navigationItem.title = "Forum"
-                }
-              //  notifier = NavigationNotifier(viewController: self, exceptFor: channel)
+                self.title = "chat"
+                //  notifier = NavigationNotifier(viewController: self, exceptFor: channel)
                 ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
             }
             loadMessages()
         }
     }
+    
     
     // MARK: - overrides
     
@@ -58,7 +58,6 @@ class ChatViewController: JSQMessagesViewController {
     deinit {
         // Save the last channel show
         ChannelManager.sharedInstance.removeChannelMessageObserver(self)
-        print("--------> deinit chat <---------")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -114,6 +113,7 @@ class ChatViewController: JSQMessagesViewController {
     
     
     // MARK: - Public methods
+    
     
     func hideSpinner() {
         if let activityIndicator = self.activityIndicator {
@@ -186,8 +186,14 @@ class ChatViewController: JSQMessagesViewController {
         
         alertController.addAction(sendFromCamera)
         alertController.addAction(sendFromLibrary)
-        alertController.addAction(sendLocationAction)
+        
+        if LocationManager.sharedInstance.canLocationServicesBeEnabled() {
+           alertController.addAction(sendLocationAction)
+        }
+        
         alertController.addAction(cancelAction)
+        
+        sendLocationAction.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
         
         self.presentViewController(alertController, animated: true, completion: nil)
     }
@@ -290,6 +296,6 @@ class ChatViewController: JSQMessagesViewController {
         })
     }
     
-   
+    
 }
 

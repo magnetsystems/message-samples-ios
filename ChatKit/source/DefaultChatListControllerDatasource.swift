@@ -29,7 +29,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         }
     }
     
-    public func chatListRegisterCells() {
+    public func chatListRegisterCells(tableView : UITableView) {
         //using standard cells
     }
     

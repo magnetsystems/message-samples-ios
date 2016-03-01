@@ -41,9 +41,34 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()
     }
     
+    func canLocationServicesBeEnabled() -> Bool {
+        var myDict: NSDictionary?
+        if let path = NSBundle.mainBundle().pathForResource("Info", ofType: "plist") {
+            myDict = NSDictionary(contentsOfFile: path)
+        }
+        if myDict?["NSLocationWhenInUseUsageDescription"] != nil {
+            return true
+        }
+        
+        return false
+    }
+    
+    func isLocationServicesEnabled() -> Bool {
+        
+        if CLLocationManager.locationServicesEnabled() {
+            switch(CLLocationManager.authorizationStatus()) {
+            case .NotDetermined, .Restricted, .Denied:
+                return false
+            case .AuthorizedAlways, .AuthorizedWhenInUse:
+                return true
+            }
+        }
+        
+        return false
+    }
     
     //MARK: - Public implementation
     

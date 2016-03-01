@@ -11,7 +11,7 @@ import ChatKitUI
 import MagnetMax
 
 class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatListControllerDelegate {
-   
+    var currentController : UIViewController?
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -38,11 +38,24 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
         })
     }
     
-    func chatListDidSelectChannel(channel : MMXChannel) {
+    func chatListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
         print("Selected \(channel.name)")
+        let chatViewController = MagnetChatViewController.init(channel : channel)
+        let myId = MMUser.currentUser()?.userID
+        
+        let subscribers = channelDetails.subscribers.filter({$0.userId !=  myId})
+        
+        if subscribers.count > 1 {
+            chatViewController.title = "Group"
+        } else {
+            chatViewController.title = subscribers.map({$0.displayName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
+        }
+        
+        self.navigationController?.pushViewController(chatViewController, animated: true)
+        //self.currentController?.presentViewController(chatViewController, animated: true, completion: nil)
     }
     
-    func chatListCanLeaveChannel(channel : MMXChannel) -> Bool {
+    func chatListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         return false
     }
     
@@ -57,15 +70,20 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
             //            MMUser.currentUser()?.setAvatarWithURL(url!, success: { url in
             let u = MMUser.init()
             u.userName = "gogo"
-            //let c = MagnetContactsPickerController(disabledUsers: [MMUser.currentUser()!])
+            let c = MagnetContactsPickerController()
+            if let datasource = c.pickerDatasource as? DefaultContactsPickerControllerDatasource, let user = MMUser.currentUser() {
+                datasource.preselectedUsers = [user]
+            }
             // c.pickerDelegate = self
-            let c = MagnetChatListViewController()
-            c.delegate = self
+            // let c = MagnetChatListViewController()
+            // c.delegate = self
             //            c.appearance.tintColor = self.view.tintColor
             //            c.canChooseContacts = true
             //  c.tableView.allowsSelection = false
+            c.title = "home"
             self.navigationController?.pushViewController(c, animated: true)
             //self.presentViewController(c, animated: true, completion: nil)
+            self.currentController = c
             //                }, failure: {error in
             //                   print("[ERROR] \(error.localizedDescription)")
             //            })

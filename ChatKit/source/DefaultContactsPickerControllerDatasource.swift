@@ -20,6 +20,9 @@ import MagnetMax
 
 public class DefaultContactsPickerControllerDatasource : NSObject, ContactsPickerControllerDatasource  {
     weak var magnetPicker : MagnetContactsPickerController?
+    
+    public var preselectedUsers : [MMUser] = []
+    
     private var hasMoreUsers : Bool = true
     let limit = 30
     
@@ -68,6 +71,10 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsPicke
     
     public  func contactControllerHasMore() -> Bool {
         return self.hasMoreUsers
+    }
+    
+    public func contactControllerPreselectedUsers() -> [MMUser] {
+       return preselectedUsers
     }
     
     public  func contactControllerSearchUpdatesContinuously() ->Bool {

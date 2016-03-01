@@ -152,6 +152,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        updateContactsView(self.selectedUsers)
         updateNextButton()
     }
     

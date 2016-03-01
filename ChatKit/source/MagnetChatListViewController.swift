@@ -26,9 +26,9 @@ import MagnetMax
 }
 
 @objc public protocol ChatListControllerDelegate : class {
-    func chatListDidSelectChannel(channel : MMXChannel)
-    func chatListCanLeaveChannel(channel : MMXChannel) -> Bool
-    optional func chatListDidLeaveChannel(channel : MMXChannel)
+    func chatListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
+    func chatListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
+    optional func chatListDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
 }
 
 public class MagnetChatListViewController: MagnetViewController, ContactsPickerControllerDelegate, HomeViewControllerDatasource, HomeViewControllerDelegate {
@@ -119,8 +119,8 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     //MARK: - HomeViewControllerDelegate
     
     
-    func homeViewCanLeaveChannel(channel: MMXChannel) -> Bool {
-        if let canLeave = self.delegate?.chatListCanLeaveChannel(channel) {
+    func homeViewCanLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+    if let canLeave = self.delegate?.chatListCanLeaveChannel(channel, channelDetails : channelDetails) {
             return canLeave
         }
         
@@ -128,13 +128,13 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     }
     
     
-    func homeViewDidLeaveChannel(channel: MMXChannel) {
-        self.delegate?.chatListDidLeaveChannel?(channel)
+    func homeViewDidLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
+        self.delegate?.chatListDidLeaveChannel?(channel,channelDetails : channelDetails)
     }
     
     
-    func homeViewDidSelectChannel(channel: MMXChannel) {
-        self.delegate?.chatListDidSelectChannel(channel)
+    func homeViewDidSelectChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
+        self.delegate?.chatListDidSelectChannel(channel,channelDetails : channelDetails)
     }
     
     

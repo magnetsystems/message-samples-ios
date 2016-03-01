@@ -23,6 +23,7 @@ func localizedString(string : String) ->String {
 
 
 let kStr_AttachmentFile = localizedString("Attachment file")
+let kStr_AttachmentLocation = localizedString("Attachment location")
 let kStr_AddContact = localizedString("Add a contact")
 
 

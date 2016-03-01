@@ -27,18 +27,19 @@ public protocol ContactsPickerControllerDelegate: class {
     func contactControllerHasMore() -> Bool
     func contactControllerSearchUpdatesContinuously() ->Bool
     
+    optional func contactControllerPreselectedUsers() -> [MMUser]
     optional func contactControllerShowsSectionIndexTitles() -> Bool
 }
 
 public class MagnetContactsPickerController: MagnetViewController, ControllerDatasource {
     private let underlyingContactsViewController = ContactsViewController()
-    private weak var barButtonCancel : UIBarButtonItem?
-    private weak var barButtonNext : UIBarButtonItem?
+    public private(set) var barButtonCancel : UIBarButtonItem?
+    public private(set) var barButtonNext : UIBarButtonItem?
     public weak var pickerDelegate : ContactsPickerControllerDelegate?
     public var pickerDatasource : ContactsPickerControllerDatasource? = DefaultContactsPickerControllerDatasource()
     
     public var tableView : UITableView {
-       return underlyingContactsViewController.tableView
+        return underlyingContactsViewController.tableView
     }
     
     private var disabledUsers : [String : MMUser] = [:]
@@ -50,26 +51,30 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         underlyingContactsViewController.delegate = pickerDelegate
         generateNavBars()
         underlyingContactsViewController.tableView.sectionIndexColor = self.appearance.tintColor
+        if let selectedUsers = self.pickerDatasource?.contactControllerPreselectedUsers?() {
+            underlyingContactsViewController.selectedUsers = selectedUsers
+        }
+        
     }
     
     private func generateNavBars() {
-        
-        let btnNext = UIBarButtonItem.init(title: "Next", style: .Plain, target: self, action: "nextAction")
-        let btnCancel = UIBarButtonItem.init(title: "Cancel", style: .Plain, target: self, action: "cancelAction")
-        barButtonCancel = btnCancel
-        barButtonNext = btnNext
-        if self.navigationController != nil {
-            navigationItem.rightBarButtonItem = btnNext
-            navigationItem.leftBarButtonItem = btnCancel
-        } else {
-            self.setMagnetNavBar(leftItems: [btnCancel], rightItems: [btnNext], title: self.title)
+        if let btnCancel = barButtonCancel, let btnNext = barButtonNext {
+            if self.navigationController != nil {
+                navigationItem.rightBarButtonItem = btnNext
+                navigationItem.leftBarButtonItem = btnCancel
+            } else {
+                self.setMagnetNavBar(leftItems: [btnCancel], rightItems: [btnNext], title: self.title)
+            }
+            underlyingContactsViewController.rightNavBtn = barButtonNext
         }
-        underlyingContactsViewController.rightNavBtn = barButtonNext
     }
     
     override func setupViewController() {
         self.title = "Contacts"
-        
+        let btnNext = UIBarButtonItem.init(title: "Next", style: .Plain, target: self, action: "nextAction")
+        let btnCancel = UIBarButtonItem.init(title: "Cancel", style: .Plain, target: self, action: "cancelAction")
+        barButtonCancel = btnCancel
+        barButtonNext = btnNext
         if let dataSource = self.pickerDatasource as? DefaultContactsPickerControllerDatasource {
             dataSource.magnetPicker = self
         }

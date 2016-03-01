@@ -106,7 +106,6 @@ class ChannelManager {
             let updateRequest = MMUpdateProfileRequest.init(user: user)
             updateRequest.password = nil
             MMUser.updateProfile(updateRequest, success: { (user) -> Void in
-                print("[UPDATE] SUCCEEDED")
                 }, failure: { (error) -> Void in
                     print("[UPDATE] FAILED : \(error.localizedDescription)")
             })
