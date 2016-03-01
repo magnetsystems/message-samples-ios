@@ -24,15 +24,15 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsPicke
     //MARK: Public Variables
     
     
-    weak var magnetPicker : MagnetContactsPickerController?
+    public weak var magnetPicker : MagnetContactsPickerController?
     public var preselectedUsers : [MMUser] = []
     
     
     // Private Variables
     
     
-    private var hasMoreUsers : Bool = true
-    private let limit = 30
+    public var hasMoreUsers : Bool = true
+    public let limit = 30
     
     
     //MARK Public Methods
@@ -89,7 +89,11 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsPicke
        return preselectedUsers
     }
     
-    public  func contactControllerSearchUpdatesContinuously() ->Bool {
+    public func contactControllerSearchUpdatesContinuously() ->Bool {
+        return true
+    }
+    
+    public func contactControllerShowsSectionsHeaders() -> Bool {
         return true
     }
     

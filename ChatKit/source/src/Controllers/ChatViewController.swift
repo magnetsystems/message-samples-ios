@@ -20,6 +20,20 @@ import MobileCoreServices
 import NYTPhotoViewer
 import UIKit
 
+
+//MARK: ChatViewControllerDelegate
+
+
+protocol ChatViewControllerDelegate {
+    func controllerDidCreateChannel(channel : MMXChannel)
+    func controllerDidSendMessage(message : MMXMessage)
+    func controllerDidRecieveMessage(message : MMXMessage)
+}
+
+
+//MARK: ChatViewController
+
+
 class ChatViewController: JSQMessagesViewController {
     
     
@@ -30,6 +44,7 @@ class ChatViewController: JSQMessagesViewController {
     var avatars = Dictionary<String, UIImage>()
     var avatarsDownloading = Dictionary<String, MMUser>()
     var canLeaveChat = false
+    var delegate : ChatViewControllerDelegate?
     let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     var messages = [Message]()
     // var notifier : NavigationNotifier?
@@ -141,6 +156,7 @@ class ChatViewController: JSQMessagesViewController {
         scrollToBottomAnimated(true)
         
         let finishedMessageClosure : () -> Void = {
+            self.delegate?.controllerDidRecieveMessage(mmxMessage)
             let message = Message(message: mmxMessage)
             self.messages.append(message)
             JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
@@ -223,6 +239,7 @@ class ChatViewController: JSQMessagesViewController {
         showSpinner()
         let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
         mmxMessage.sendWithSuccess( { [weak self] _ in
+            self?.delegate?.controllerDidSendMessage(mmxMessage)
             button.userInteractionEnabled = true
             self?.hideSpinner()
             }) { error in
@@ -261,6 +278,7 @@ class ChatViewController: JSQMessagesViewController {
             self?.showSpinner()
             let mmxMessage = MMXMessage(toChannel: chat, messageContent: messageContent)
             mmxMessage.sendWithSuccess( { _ in
+                self?.delegate?.controllerDidSendMessage(mmxMessage)
                 self?.hideSpinner()
                 self?.finishSendingMessageAnimated(true)
                 }) { error in
@@ -292,6 +310,7 @@ class ChatViewController: JSQMessagesViewController {
         let id = NSUUID().UUIDString
         MMXChannel.createWithName(id, summary: "[CHAT KIT]", isPublic: false, publishPermissions: .Anyone, subscribers: Set(users), success: { (channel) -> Void in
             self.chat = channel
+            self.delegate?.controllerDidCreateChannel(channel)
             completion(error: nil)
             }) { (error) -> Void in
                 completion(error: error)
@@ -348,6 +367,7 @@ class ChatViewController: JSQMessagesViewController {
             mmxMessage.addAttachment(attachment)
             self.showSpinner()
             mmxMessage.sendWithSuccess({ [weak self] _ in
+                self?.delegate?.controllerDidSendMessage(mmxMessage)
                 self?.hideSpinner()
                 }) { error in
                     self.hideSpinner()

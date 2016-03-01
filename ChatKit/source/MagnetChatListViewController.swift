@@ -37,6 +37,9 @@ import MagnetMax
     func chatListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
     func chatListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
     optional func chatListDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
+    optional func chatListWillShowChatController(chatController : MagnetChatViewController)
+    optional func chatListChannelForSubscribers(subscribers : [MMUser]) -> MMXChannel?
+    optional func chatListChannelForSubscribersWithBlock(subscribers : [MMUser], finished : ((channel : MMXChannel) -> Void)) -> Void
 }
 
 
@@ -51,6 +54,7 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     
     private var chooseContacts : Bool = true
     private var underlyingHomeViewController = HomeViewController.init()
+    private var contactsController : MagnetContactsPickerController?
     
     
     //MARK: Public Variables
@@ -126,8 +130,30 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
         }
     }
     
+    private func presentChatViewController(chatViewController : MagnetChatViewController, users : [MMUser]) {
+        let myId = MMUser.currentUser()?.userID
+        
+        let subscribers = users.filter({$0.userID !=  myId})
+        
+        if subscribers.count > 1 {
+            chatViewController.title = "Group"
+        } else {
+            chatViewController.title = subscribers.map({Utils.displayNameForUser($0)}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
+        }
+        
+        self.contactsController?.dismiss()
+        self.delegate?.chatListWillShowChatController?(chatViewController)
+        if let nav = navigationController {
+            nav.pushViewController(chatViewController, animated: true)
+        } else {
+            self.presentViewController(chatViewController, animated: true, completion: nil)
+        }
+        
+    }
+    
     
     //MARK: Public Methods
+    
     
     public func reloadData() {
         underlyingHomeViewController.refreshChannelDetail()
@@ -180,7 +206,21 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     //MARK: - ContactsViewControllerDelegate
     
     
-    public func contactsControllerDidFinish(with selectedUsers: [MMUser]) { }
+    public func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
+        var chatViewController : MagnetChatViewController!
+        if let channel = self.delegate?.chatListChannelForSubscribers?(selectedUsers) {
+            chatViewController = MagnetChatViewController.init(channel : channel)
+        }else if let listDelegate = self.delegate?.chatListChannelForSubscribersWithBlock {
+            listDelegate(selectedUsers, finished: { channel in
+                chatViewController = MagnetChatViewController.init(channel : channel)
+                self.presentChatViewController(chatViewController, users: selectedUsers)
+            })
+            return
+        } else {
+            chatViewController = MagnetChatViewController.init(recipients: selectedUsers)
+        }
+        self.presentChatViewController(chatViewController, users: selectedUsers)
+    }
     
     
     // MARK: Actions
@@ -188,15 +228,18 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     
     func addContactAction() {
         let c = MagnetContactsPickerController(disabledUsers: [MMUser.currentUser()!])
-        c.pickerDelegate = contactsPickerDelegate
-        if c.pickerDelegate == nil {
-            c.pickerDelegate = self
+        
+        if contactsPickerDelegate == nil {
+            contactsPickerDelegate = self
         }
+        c.pickerDelegate = contactsPickerDelegate
+        
         if let nav = navigationController {
             nav.pushViewController(c, animated: true)
         } else {
             self.presentViewController(c, animated: true, completion: nil)
         }
+        self.contactsController = c
     }
     
     public override func didReceiveMemoryWarning() {

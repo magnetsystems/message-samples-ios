@@ -37,6 +37,7 @@ public protocol ContactsPickerControllerDelegate: class {
     
     optional func contactControllerPreselectedUsers() -> [MMUser]
     optional func contactControllerShowsSectionIndexTitles() -> Bool
+    optional func contactControllerShowsSectionsHeaders() -> Bool
 }
 
 
@@ -49,7 +50,6 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     //Private Variables
     
     
-    private var disabledUsers : [String : MMUser] = [:]
     private var requestNumber : Int = 0
     private let underlyingContactsViewController = ContactsViewController()
     
@@ -57,8 +57,9 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     //MARK: Public Variables
     
     
-    public private(set) var barButtonCancel : UIBarButtonItem?
-    public private(set) var barButtonNext : UIBarButtonItem?
+    public var barButtonCancel : UIBarButtonItem?
+    public var barButtonNext : UIBarButtonItem?
+    public var canSearch : Bool = true
     public weak var pickerDelegate : ContactsPickerControllerDelegate?
     public var pickerDatasource : ContactsPickerControllerDatasource? = DefaultContactsPickerControllerDatasource()
     
@@ -67,7 +68,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     }
     
     
-    //MARK: Init 
+    //MARK: Init
     
     
     convenience public init(disabledUsers: [MMUser]) {
@@ -78,11 +79,12 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
                 hash[userId] = user
             }
         }
-        self.disabledUsers = hash
+        underlyingContactsViewController.disabledUsers = hash
     }
     
     
     //MARK: Overrides
+    
     
     override func setupViewController() {
         self.title = "Contacts"
@@ -95,7 +97,6 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         }
         
         self.underlyingContactsViewController.dataSource = self
-        
     }
     
     override internal func underlyingViewController() -> UIViewController? {
@@ -110,23 +111,13 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         if let selectedUsers = self.pickerDatasource?.contactControllerPreselectedUsers?() {
             underlyingContactsViewController.selectedUsers = selectedUsers
         }
+        
+        self.underlyingContactsViewController.canSearch = self.canSearch
     }
     
     
     //MARK : Private Methods
     
-    
-    private func filterOutUsers(users : [MMUser]) -> [MMUser] {
-        var tempUsers : [MMUser] = []
-        for user in users {
-            if let userId = user.userID where disabledUsers[userId] == nil {
-                tempUsers.append(user)
-            } else {
-                print ("ommit \(user.lastName)")
-            }
-        }
-        return tempUsers
-    }
     
     private func generateNavBars() {
         if let btnCancel = barButtonCancel, let btnNext = barButtonNext {
@@ -144,7 +135,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         self.requestNumber++
     }
     
-
+    
     //Public Methods
     
     
@@ -153,7 +144,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     }
     
     private func appendUsers(users : [MMUser], reloadTable : Bool) {
-        self.underlyingContactsViewController.appendUsers(self.filterOutUsers(users), reloadTable: reloadTable)
+        self.underlyingContactsViewController.appendUsers(users, reloadTable: reloadTable)
     }
     
     public func contacts() -> [[String : [MMUser]?]] {
@@ -185,11 +176,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     
     
     func cancelAction() {
-        if self.navigationController != nil {
-            self.navigationController?.popViewControllerAnimated(true)
-        } else  {
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }
+      self.dismiss()
     }
     
     func nextAction() {
@@ -206,12 +193,12 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         if searchText != nil {
             let loadingContext = self.loadingContext()
             //cool down
-            // dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
-            if loadingContext != self.loadingContext() {
-                return
-            }
-            self.pickerDatasource?.contactsControllerLoadMore(searchText, offset : offset)
-            //  })
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
+                if loadingContext != self.loadingContext() {
+                    return
+                }
+                self.pickerDatasource?.contactsControllerLoadMore(searchText, offset : offset)
+            })
         } else {
             self.pickerDatasource?.contactsControllerLoadMore(searchText, offset : offset)
         }
@@ -231,9 +218,18 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         return false
     }
     
-    public func controllShowsSectionIndexTitles() -> Bool {
+    public func controllerShowsSectionIndexTitles() -> Bool {
         if let pickerDatasource = self.pickerDatasource {
             if let shows = pickerDatasource.contactControllerShowsSectionIndexTitles?() {
+                return shows
+            }
+        }
+        return false
+    }
+    
+    public func controllerShowsSectionsHeaders() -> Bool {
+        if let pickerDatasource = self.pickerDatasource {
+            if let shows = pickerDatasource.contactControllerShowsSectionsHeaders?() {
                 return shows
             }
         }

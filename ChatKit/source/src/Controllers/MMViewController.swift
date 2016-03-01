@@ -51,10 +51,18 @@ public class MMViewController: UIViewController {
     func setupViewController() { }
     
     func dismiss() {
-        self.dismissViewControllerAnimated(false, completion: nil)
+        if self.navigationController != nil {
+            self.navigationController?.popViewControllerAnimated(false)
+        } else  {
+            self.dismissViewControllerAnimated(false, completion: nil)
+        }
     }
     
     func dismissAnimated() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        if self.navigationController != nil {
+            self.navigationController?.popViewControllerAnimated(true)
+        } else  {
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
 }

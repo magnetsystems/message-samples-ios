@@ -147,6 +147,38 @@ class Utils: NSObject {
     }
     
     
+    //MARK: User Naming {
+    
+    
+    class func displayNameForUser(user : MMUser) -> String {
+        //create username
+        var name : String = ""
+        if user.firstName != nil {
+            name = "\(user.firstName) "
+        }
+        if user.lastName != nil {
+            name += (name.characters.count > 0 ? " " : "") + user.lastName
+        }
+        
+        if name.characters.count == 0 {
+            name = user.userName
+        }
+        
+        return name
+    }
+    
+    class func nameForUser(user : MMUser) -> String {
+        //create username
+        var name = user.userName
+        if user.lastName != nil {
+            name = user.lastName
+        } else if user.firstName != nil {
+            name = user.firstName
+        }
+        return name
+    }
+    
+    
     //MARK: Private Methods
     
     

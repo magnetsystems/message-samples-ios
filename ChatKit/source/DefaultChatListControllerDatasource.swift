@@ -49,9 +49,6 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     }
     
     public func chatListCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat {
-        if row == 0 {
-            return 125
-        }
         return 80
     }
     

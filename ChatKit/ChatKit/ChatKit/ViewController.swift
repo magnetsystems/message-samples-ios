@@ -10,6 +10,82 @@ import UIKit
 import ChatKitUI
 import MagnetMax
 
+public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
+    var channel : MMXChannel?
+    
+    //MARK: ContactsPickerControllerDatasource
+    
+    
+    override public func contactsControllerLoadMore(searchText : String?, offset : Int) {
+        self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
+        //get request context
+        let loadingContext = self.magnetPicker?.loadingContext()
+        
+        self.channel?.subscribersWithLimit(Int32(self.limit), offset: Int32(offset), success: { (num, users) -> Void in
+            if loadingContext != self.magnetPicker?.loadingContext() {
+                return
+            }
+            
+            if users.count == 0 {
+                self.hasMoreUsers = false
+                self.magnetPicker?.reloadData()
+                return
+            }
+            
+            if let picker = self.magnetPicker {
+                //append users, reload data or insert data
+                picker.appendUsers(users)
+            }
+            }, failure: { _ in
+                self.magnetPicker?.reloadData()
+        })
+    }
+    
+    override public func contactControllerShowsSectionIndexTitles() -> Bool {
+        return false
+    }
+    override public func contactControllerShowsSectionsHeaders() -> Bool {
+        return false
+    }
+}
+
+extension MagnetChatViewController {
+    override public func viewDidLoad() {
+        super.viewDidLoad()
+        let rightBtn = UIBarButtonItem.init(title: "Details", style: .Plain, target: self, action: "detailsAction")
+        self.navigationItem.rightBarButtonItem = rightBtn
+        self.delegate = self
+        updateRightBtn()
+    }
+    
+    
+    
+    func chatViewDidCreateChannel(channel : MMXChannel) {
+        updateRightBtn()
+    }
+    
+    func updateRightBtn() {
+        self.navigationItem.rightBarButtonItem?.enabled = self.channel != nil
+    }
+    
+    func detailsAction() {
+        
+        if let currentUser = MMUser.currentUser() {
+            let contacts = MagnetContactsPickerController(disabledUsers: [currentUser])
+            contacts.barButtonNext = nil
+            let subDatasource = SubscribersDatasource()
+            subDatasource.magnetPicker = contacts
+            contacts.pickerDatasource = subDatasource
+            subDatasource.channel = self.channel
+            contacts.tableView.allowsSelection = false
+            contacts.canSearch = false
+            contacts.title = "In Group"
+            self.navigationController?.pushViewController(contacts, animated: true)
+        }
+        
+    }
+}
+
 class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatListControllerDelegate {
     var currentController : UIViewController?
     override func viewDidLoad() {
@@ -50,7 +126,7 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
         } else {
             chatViewController.title = subscribers.map({$0.displayName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
         }
-    
+        
         self.navigationController?.pushViewController(chatViewController, animated: true)
         //self.currentController?.presentViewController(chatViewController, animated: true, completion: nil)
     }
@@ -59,27 +135,19 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
         return true
     }
     
-//    func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
-//        if let c = currentController as? MagnetChatListViewController {
-//            if let d = c.datasource as? DefaultChatListControllerDatasource {
-//                d.createChat(from: selectedUsers)
-//            }
-//        }
-//    }
+    //    func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
+    //        if let c = currentController as? MagnetChatListViewController {
+    //            if let d = c.datasource as? DefaultChatListControllerDatasource {
+    //                d.createChat(from: selectedUsers)
+    //            }
+    //        }
+    //    }
     
     func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
-        let chatViewController = MagnetChatViewController.init(recipients: selectedUsers)
-        let myId = MMUser.currentUser()?.userID
         
-        let subscribers = selectedUsers.filter({$0.userID !=  myId})
-        
-        if subscribers.count > 1 {
-            chatViewController.title = "Group"
-        } else {
-            chatViewController.title = subscribers.map({$0.userName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
-        }
-        currentController?.navigationController?.popViewControllerAnimated(false)
-        self.navigationController?.pushViewController(chatViewController, animated: true)
+    }
+    
+    func chatListWillShowChatController(chatController : MagnetChatViewController) {
     }
     
     func login (user : MMUser) {
@@ -89,18 +157,18 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
             //            MMUser.currentUser()?.setAvatarWithURL(url!, success: { url in
             let u = MMUser.init()
             u.userName = "gogo"
-//            let c = MagnetContactsPickerController()
-//            if let datasource = c.pickerDatasource as? DefaultContactsPickerControllerDatasource, let user = MMUser.currentUser() {
-//                datasource.preselectedUsers = [user]
-//            }
+            //            let c = MagnetContactsPickerController()
+            //            if let datasource = c.pickerDatasource as? DefaultContactsPickerControllerDatasource, let user = MMUser.currentUser() {
+            //                datasource.preselectedUsers = [user]
+            //            }
             // c.pickerDelegate = self
             let c = MagnetChatListViewController()
             c.delegate = self
-            c.contactsPickerDelegate = self
+            // c.contactsPickerDelegate = self
             //            c.appearance.tintColor = self.view.tintColor
             //            c.canChooseContacts = true
             //  c.tableView.allowsSelection = false
-            c.title = "home"
+            //c.title = "home"
             self.navigationController?.pushViewController(c, animated: true)
             //self.presentViewController(c, animated: true, completion: nil)
             self.currentController = c

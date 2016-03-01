@@ -31,7 +31,8 @@ public protocol ControllerDatasource: class {
     func controllerLoadMore(searchText : String?, offset : Int)
     func controllerHasMore() -> Bool
     func controllerSearchUpdatesContinuously() -> Bool
-    func controllShowsSectionIndexTitles() -> Bool
+    func controllerShowsSectionIndexTitles() -> Bool
+    func controllerShowsSectionsHeaders() -> Bool
 }
 
 public class IconView : UIView, UIGestureRecognizerDelegate {
@@ -105,8 +106,14 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     
     
     var availableRecipients = [UserLetterGroup]()
+    var canSearch : Bool? {
+        didSet {
+            updateSearchBar()
+        }
+    }
     var currentUserCount = 0
     weak var dataSource : ControllerDatasource?
+    var disabledUsers : [String : MMUser] = [:]
     var iconViewShouldMove : Bool = false
     var isWaitingForData : Bool = false
     var selectedUsers : [MMUser] = []
@@ -154,7 +161,9 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         tableView.tableHeaderView = searchBar
         tableView.reloadData()
         self.tableView.layer.masksToBounds = true
-        
+        if self.canSearch == nil {
+            self.canSearch = true
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -183,7 +192,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             self.tableView.contentInset = UIEdgeInsetsZero
         }
     }
-
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
     }
@@ -196,9 +205,10 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         appendUsers(users, reloadTable: true)
     }
     
-    func appendUsers(users : [MMUser], reloadTable : Bool) {
+    func appendUsers(unfilteredUsers : [MMUser], reloadTable : Bool) {
         isWaitingForData = false
-        currentUserCount += users.count
+        currentUserCount += unfilteredUsers.count
+        let users = self.filterOutUsers(unfilteredUsers)
         var indexPaths : [NSIndexPath] = []
         
         if !reloadTable {
@@ -248,7 +258,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
                 
                 //find where to insert
                 row = self.availableRecipients[section].users.findInsertionIndexForSortedArrayWithBlock() {
-                    return self.displayNameForUser($0.user!).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"}) > self.displayNameForUser(user).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"})
+                    return Utils.displayNameForUser($0.user!).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"}) > Utils.displayNameForUser(user).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"})
                 }
                 
                 self.availableRecipients[section].users.insert(userModel, atIndex: row)
@@ -297,7 +307,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     
     func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
         var indexTitles : [String]? = nil
-        if let dataSource = self.dataSource where dataSource.controllShowsSectionIndexTitles() {
+        if let dataSource = self.dataSource where dataSource.controllerShowsSectionIndexTitles() {
             indexTitles = availableRecipients.map({ "\($0.letter)" })
         }
         return indexTitles
@@ -392,7 +402,9 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         if tableView.numberOfSections - 1 == section {
             return nil
         }
-        
+        if let dataSource = self.dataSource where dataSource.controllerShowsSectionIndexTitles() == false {
+            return nil
+        }
         let letter = availableRecipients[section]
         return String(letter.letter).uppercaseString
     }
@@ -499,7 +511,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             }
         }
     }
-
+    
     
     // MARK: - Private Methods
     
@@ -509,36 +521,28 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         selectedUsers.append(selectedUser)
     }
     
-   private func charForUser(user : MMUser) -> Character? {
-        return nameForUser(user).lowercaseString.characters.first
+    private func updateSearchBar() {
+        if let canSearch = self.canSearch where canSearch == true {
+            tableView.tableHeaderView = searchBar
+        } else {
+            tableView.tableHeaderView = nil
+        }
     }
     
-    private func displayNameForUser(user : MMUser) -> String {
-        //create username
-        var name : String = ""
-        if user.firstName != nil {
-            name = "\(user.firstName) "
-        }
-        if user.lastName != nil {
-            name += user.lastName
-        }
-        
-        if name.characters.count == 0 {
-            name = user.userName
-        }
-        
-        return name
+    private func charForUser(user : MMUser) -> Character? {
+        return Utils.nameForUser(user).lowercaseString.characters.first
     }
     
-    private func nameForUser(user : MMUser) -> String {
-        //create username
-        var name = user.userName
-        if user.lastName != nil {
-            name = user.lastName
-        } else if user.firstName != nil {
-            name = user.firstName
+    private func filterOutUsers(users : [MMUser]) -> [MMUser] {
+        var tempUsers : [MMUser] = []
+        for user in users {
+            if let userId = user.userID where disabledUsers[userId] == nil {
+                tempUsers.append(user)
+            } else {
+                print ("ommit \(user.lastName)")
+            }
         }
-        return name
+        return tempUsers
     }
     
     private func removeSelectedUser(selectedUser : MMUser) {
@@ -577,7 +581,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             let defaultImage = Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
             if let imageView = view.imageView {
                 Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
-                view.title?.text = displayNameForUser(user)
+                view.title?.text = Utils.displayNameForUser(user)
             }
             let top = NSLayoutConstraint(item: view, attribute: .Top, relatedBy: .Equal, toItem: contactsView, attribute: .Top, multiplier: 1, constant: 8)
             let left = NSLayoutConstraint(item: view, attribute: .Leading, relatedBy: .Equal, toItem: leftView, attribute: leftAttribute, multiplier: 1, constant: 8)
