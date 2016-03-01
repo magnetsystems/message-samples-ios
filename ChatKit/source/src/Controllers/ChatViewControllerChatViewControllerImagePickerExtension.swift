@@ -29,29 +29,13 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            
-            let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
-            let mmxMessage = MMXMessage(toChannel: chat!, messageContent: messageContent)
-            
-            if let data = UIImageJPEGRepresentation(pickedImage, 0.8) {
-                
-                let attachment = MMAttachment(data: data, mimeType: "image/jpg")
-                mmxMessage.addAttachment(attachment)
-                self.showSpinner()
-                mmxMessage.sendWithSuccess({ [weak self] _ in
-                    self?.hideSpinner()
-                    }) { error in
-                        self.hideSpinner()
-                        print(error)
-                }
-                finishSendingMessageAnimated(true)
-            }
+            sendImage(pickedImage)
         }
-        
-        dismissViewControllerAnimated(true, completion: nil)
-    }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
+    dismissViewControllerAnimated(true, completion: nil)
+}
+
+func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    dismissViewControllerAnimated(true, completion: nil)
+}
 }

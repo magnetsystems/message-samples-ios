@@ -47,14 +47,12 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     override public func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
-        self.underlyingContactsViewController.dataSource = self
-        underlyingContactsViewController.delegate = pickerDelegate
         generateNavBars()
         underlyingContactsViewController.tableView.sectionIndexColor = self.appearance.tintColor
         if let selectedUsers = self.pickerDatasource?.contactControllerPreselectedUsers?() {
             underlyingContactsViewController.selectedUsers = selectedUsers
         }
-        
+       underlyingContactsViewController.delegate = pickerDelegate
     }
     
     private func generateNavBars() {
@@ -78,6 +76,9 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         if let dataSource = self.pickerDatasource as? DefaultContactsPickerControllerDatasource {
             dataSource.magnetPicker = self
         }
+        
+        self.underlyingContactsViewController.dataSource = self
+        
     }
     
     override internal func underlyingViewController() -> UIViewController? {
@@ -152,7 +153,7 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     }
     
     func nextAction() {
-        underlyingContactsViewController.selectContacts()
+        self.pickerDelegate?.contactsControllerDidFinish(with: underlyingContactsViewController.selectedUsers)
         cancelAction()
     }
     
@@ -165,12 +166,12 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         if searchText != nil {
             let loadingContext = self.loadingContext()
             //cool down
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
+           // dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
                 if loadingContext != self.loadingContext() {
                     return
                 }
                 self.pickerDatasource?.contactsControllerLoadMore(searchText, offset : offset)
-            })
+          //  })
         } else {
             self.pickerDatasource?.contactsControllerLoadMore(searchText, offset : offset)
         }

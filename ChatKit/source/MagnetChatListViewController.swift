@@ -47,38 +47,11 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
         }
     }
     
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        underlyingHomeViewController.datasource = self
-        underlyingHomeViewController.delegate = self
-    }
+    public var contactsPickerDelegate : ContactsPickerControllerDelegate?
     
-    override public func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        generateNavBars()
-    }
     
-    override public func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.title = nil
-    }
+    //MARK: Overrides
     
-    override internal func underlyingViewController() -> UIViewController? {
-        return underlyingHomeViewController
-    }
-    
-    private func generateNavBars() {
-        if chooseContacts {
-            let rightBtn = UIBarButtonItem.init(barButtonSystemItem: .Add, target: self, action: "addContactAction")
-            if self.navigationController != nil {
-                navigationItem.rightBarButtonItem = rightBtn
-            } else {
-                self.setMagnetNavBar(leftItems: nil, rightItems: [rightBtn], title: self.title)
-            }
-        }
-    }
     
     override func setupViewController() {
         if let user = MMUser.currentUser() {
@@ -89,7 +62,48 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
             self.title = MMUser.currentUser()?.userName
         }
         
+        underlyingHomeViewController.datasource = self
+        underlyingHomeViewController.delegate = self
+        
+        if let datasource = self.datasource as? DefaultChatListControllerDatasource {
+            datasource.chatList = self
+        }
+        
         navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    override internal func underlyingViewController() -> UIViewController? {
+        return underlyingHomeViewController
+    }
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view
+    }
+    
+    override public func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        generateNavBars()
+    }
+    
+    override public func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+    
+    
+    //MARK: Private Methods
+    
+    
+    private func generateNavBars() {
+        if chooseContacts {
+            let rightBtn = UIBarButtonItem.init(barButtonSystemItem: .Add, target: self, action: "addContactAction")
+            if self.navigationController != nil {
+                navigationItem.rightBarButtonItem = rightBtn
+            } else {
+                self.setMagnetNavBar(leftItems: nil, rightItems: [rightBtn], title: self.title)
+            }
+        }
     }
     
     
@@ -120,18 +134,16 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     
     
     func homeViewCanLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
-    if let canLeave = self.delegate?.chatListCanLeaveChannel(channel, channelDetails : channelDetails) {
+        if let canLeave = self.delegate?.chatListCanLeaveChannel(channel, channelDetails : channelDetails) {
             return canLeave
         }
         
         return true
     }
     
-    
     func homeViewDidLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
         self.delegate?.chatListDidLeaveChannel?(channel,channelDetails : channelDetails)
     }
-    
     
     func homeViewDidSelectChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
         self.delegate?.chatListDidSelectChannel(channel,channelDetails : channelDetails)
@@ -139,7 +151,6 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     
     
     //MARK: - ContactsViewControllerDelegate
-    
     
     public func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
         
@@ -155,8 +166,10 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     
     func addContactAction() {
         let c = MagnetContactsPickerController(disabledUsers: [MMUser.currentUser()!])
-        c.pickerDelegate = self
-        
+        c.pickerDelegate = contactsPickerDelegate
+        if c.pickerDelegate == nil {
+            c.pickerDelegate = self
+        }
         if let nav = navigationController {
             nav.pushViewController(c, animated: true)
         } else {

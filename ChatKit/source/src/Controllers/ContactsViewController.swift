@@ -383,11 +383,6 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         return name
     }
     
-    func selectContacts() {
-        
-        delegate?.contactsControllerDidFinish(with: selectedUsers)
-    }
-    
     func reset() {
         self.availableRecipients = []
         self.currentUserCount = 0

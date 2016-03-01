@@ -51,6 +51,7 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
+    var recipients : [MMUser]?
     
     // MARK: - overrides
     
@@ -167,8 +168,6 @@ class ChatViewController: JSQMessagesViewController {
     
     override func didPressAccessoryButton(sender: UIButton!) {
         
-        guard let _ = self.chat else { return }
-        
         self.inputToolbar!.contentView!.textView?.resignFirstResponder()
         
         let alertController = UIAlertController(title: kStr_MediaMessages, message: nil, preferredStyle: .ActionSheet)
@@ -188,7 +187,7 @@ class ChatViewController: JSQMessagesViewController {
         alertController.addAction(sendFromLibrary)
         
         if LocationManager.sharedInstance.canLocationServicesBeEnabled() {
-           alertController.addAction(sendLocationAction)
+            alertController.addAction(sendLocationAction)
         }
         
         alertController.addAction(cancelAction)
@@ -200,7 +199,16 @@ class ChatViewController: JSQMessagesViewController {
     
     override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         
-        guard let channel = self.chat else { return }
+        guard let channel = self.chat else {
+            if let recipients = self.recipients where recipients.count > 0 {
+                createNewChatWithRecipients(recipients, completion: {error in
+                    if error == nil {
+                        self.didPressSendButton(button, withMessageText: text, senderId: senderId, senderDisplayName: senderDisplayName, date: date)
+                    }
+                })
+            }
+            return
+        }
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         let forcedString: String = text
@@ -229,8 +237,19 @@ class ChatViewController: JSQMessagesViewController {
     
     
     private func addLocationMediaMessage() {
+        guard let chat = self.chat else {
+            if let recipients = self.recipients where recipients.count > 0 {
+                createNewChatWithRecipients(recipients, completion: {error in
+                    if error == nil {
+                        self.addLocationMediaMessage()
+                    }
+                })
+            }
+            return
+        }
         
         LocationManager.sharedInstance.getLocation { [weak self] location in
+            
             JSQSystemSoundPlayer.jsq_playMessageSentSound()
             
             let messageContent = [
@@ -239,7 +258,7 @@ class ChatViewController: JSQMessagesViewController {
                 Constants.ContentKey.Longitude: "\(location.coordinate.longitude)"
             ]
             self?.showSpinner()
-            let mmxMessage = MMXMessage(toChannel: (self?.chat)!, messageContent: messageContent)
+            let mmxMessage = MMXMessage(toChannel: chat, messageContent: messageContent)
             mmxMessage.sendWithSuccess( { _ in
                 self?.hideSpinner()
                 self?.finishSendingMessageAnimated(true)
@@ -266,6 +285,17 @@ class ChatViewController: JSQMessagesViewController {
         imagePicker.sourceType = .PhotoLibrary
         imagePicker.mediaTypes = [kUTTypeImage as String]
         presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
+    private func createNewChatWithRecipients(users : [MMUser], completion : ((error : NSError?) -> Void)) {
+        let id = NSUUID().UUIDString
+        MMXChannel.createWithName(id, summary: "[CHAT KIT]", isPublic: false, publishPermissions: .Anyone, subscribers: Set(users), success: { (channel) -> Void in
+            self.chat = channel
+            completion(error: nil)
+            }) { (error) -> Void in
+                completion(error: error)
+                print("[ERROR] \(error.localizedDescription)")
+        }
     }
     
     private func loadMessages() {
@@ -296,6 +326,35 @@ class ChatViewController: JSQMessagesViewController {
         })
     }
     
-    
+    internal func sendImage(image : UIImage) {
+        guard let chat = self.chat else {
+            if let recipients = self.recipients where recipients.count > 0 {
+                createNewChatWithRecipients(recipients, completion: {error in
+                    if error == nil {
+                        self.sendImage(image)
+                    }
+                })
+            }
+            return
+        }
+        
+        let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
+        let mmxMessage = MMXMessage(toChannel: chat, messageContent: messageContent)
+        
+        if let data = UIImageJPEGRepresentation(image, 0.8) {
+            
+            let attachment = MMAttachment(data: data, mimeType: "image/jpg")
+            mmxMessage.addAttachment(attachment)
+            self.showSpinner()
+            mmxMessage.sendWithSuccess({ [weak self] _ in
+                self?.hideSpinner()
+                }) { error in
+                    self.hideSpinner()
+                    print(error)
+            }
+            finishSendingMessageAnimated(true)
+            
+        }
+    }
 }
 

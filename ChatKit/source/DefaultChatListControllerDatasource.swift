@@ -19,6 +19,17 @@ import UIKit
 import MagnetMax
 
 public class DefaultChatListControllerDatasource : NSObject, ChatListControllerDatasource {
+     weak var chatList : MagnetChatListViewController?
+    
+    public func createChat(from subscribers : [MMUser]) {
+    let id = NSUUID().UUIDString
+        
+      MMXChannel.createWithName(id, summary: id, isPublic: false, publishPermissions: .Anyone, subscribers: Set(subscribers), success: { (channel) -> Void in
+            self.chatList?.reloadData()
+        }) { (error) -> Void in
+            print("[ERROR] \(error.localizedDescription)")
+        }
+    }
     
     public func chatListLoadChannels(channels : (([MMXChannel]) ->Void)) {
         MMXChannel.subscribedChannelsWithSuccess({ ch in

@@ -50,17 +50,36 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
         } else {
             chatViewController.title = subscribers.map({$0.displayName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
         }
-        
+    
         self.navigationController?.pushViewController(chatViewController, animated: true)
         //self.currentController?.presentViewController(chatViewController, animated: true, completion: nil)
     }
     
     func chatListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
-        return false
+        return true
     }
     
+//    func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
+//        if let c = currentController as? MagnetChatListViewController {
+//            if let d = c.datasource as? DefaultChatListControllerDatasource {
+//                d.createChat(from: selectedUsers)
+//            }
+//        }
+//    }
+    
     func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
+        let chatViewController = MagnetChatViewController.init(recipients: selectedUsers)
+        let myId = MMUser.currentUser()?.userID
         
+        let subscribers = selectedUsers.filter({$0.userID !=  myId})
+        
+        if subscribers.count > 1 {
+            chatViewController.title = "Group"
+        } else {
+            chatViewController.title = subscribers.map({$0.userName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
+        }
+        currentController?.navigationController?.popViewControllerAnimated(false)
+        self.navigationController?.pushViewController(chatViewController, animated: true)
     }
     
     func login (user : MMUser) {
@@ -77,6 +96,7 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
             // c.pickerDelegate = self
             let c = MagnetChatListViewController()
             c.delegate = self
+            c.contactsPickerDelegate = self
             //            c.appearance.tintColor = self.view.tintColor
             //            c.canChooseContacts = true
             //  c.tableView.allowsSelection = false

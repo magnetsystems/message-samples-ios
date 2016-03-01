@@ -489,10 +489,10 @@
          </FileRef>
       </Group>
       <FileRef
-         location = "group:DefaultContactsPickerControllerDatasource.swift">
+         location = "group:DefaultChatListControllerDatasource.swift">
       </FileRef>
       <FileRef
-         location = "group:DefaultChatListControllerDatasource.swift">
+         location = "group:DefaultContactsPickerControllerDatasource.swift">
       </FileRef>
       <FileRef
          location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/MagnetContactsPickerController.swift">

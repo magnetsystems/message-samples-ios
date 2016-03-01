@@ -30,6 +30,20 @@ public class MagnetChatViewController: MagnetViewController {
         }
     }
     
+    public private(set) var recipients : [MMUser]? {
+        set {
+            underlyingChatViewController.recipients = newValue
+        }
+        get {
+            return underlyingChatViewController.recipients
+        }
+    }
+    
+    public convenience init(recipients : [MMUser]) {
+        self.init()
+        self.recipients = recipients
+    }
+    
     public convenience init(channel : MMXChannel) {
         self.init()
         self.channel = channel
@@ -48,7 +62,6 @@ public class MagnetChatViewController: MagnetViewController {
     
     override public func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.title = nil
     }
     
     override internal func underlyingViewController() -> UIViewController? {
