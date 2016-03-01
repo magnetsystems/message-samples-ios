@@ -70,13 +70,13 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
             //            MMUser.currentUser()?.setAvatarWithURL(url!, success: { url in
             let u = MMUser.init()
             u.userName = "gogo"
-            let c = MagnetContactsPickerController()
-            if let datasource = c.pickerDatasource as? DefaultContactsPickerControllerDatasource, let user = MMUser.currentUser() {
-                datasource.preselectedUsers = [user]
-            }
+//            let c = MagnetContactsPickerController()
+//            if let datasource = c.pickerDatasource as? DefaultContactsPickerControllerDatasource, let user = MMUser.currentUser() {
+//                datasource.preselectedUsers = [user]
+//            }
             // c.pickerDelegate = self
-            // let c = MagnetChatListViewController()
-            // c.delegate = self
+            let c = MagnetChatListViewController()
+            c.delegate = self
             //            c.appearance.tintColor = self.view.tintColor
             //            c.canChooseContacts = true
             //  c.tableView.allowsSelection = false

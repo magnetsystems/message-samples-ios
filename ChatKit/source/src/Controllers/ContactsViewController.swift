@@ -201,7 +201,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             UIView.animateWithDuration(0.2, animations: { () -> Void in
                 iconView.transform = CGAffineTransformMakeScale(1.1, 1.1)
                 }, completion: { (_) -> Void in
-                    UIView.animateWithDuration(0.2, animations: { () -> Void in
+                    UIView.animateWithDuration(0.4, animations: { () -> Void in
                         iconView.transform = CGAffineTransformIdentity
                     })
             })
