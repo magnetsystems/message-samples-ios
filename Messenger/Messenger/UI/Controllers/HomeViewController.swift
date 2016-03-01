@@ -131,6 +131,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     private func loadDetails(shouldResetResults: Bool) {
         if shouldResetResults {
             ChannelManager.sharedInstance.channels?.removeAll()
+            ChannelManager.sharedInstance.channelDetails?.removeAll()
+            self.detailResponses.removeAll()
             page = 1
         } else {
             page++
