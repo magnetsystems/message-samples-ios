@@ -19,14 +19,24 @@ import UIKit
 import MagnetMax
 
 public class DefaultContactsPickerControllerDatasource : NSObject, ContactsPickerControllerDatasource  {
-    weak var magnetPicker : MagnetContactsPickerController?
+   
     
+    //MARK: Public Variables
+    
+    
+    weak var magnetPicker : MagnetContactsPickerController?
     public var preselectedUsers : [MMUser] = []
     
-    private var hasMoreUsers : Bool = true
-    let limit = 30
     
-    //MARK Public
+    // Private Variables
+    
+    
+    private var hasMoreUsers : Bool = true
+    private let limit = 30
+    
+    
+    //MARK Public Methods
+    
     
     public func searchQuery(searchText : String?) -> String {
         var searchQuery = "userName:*"
@@ -37,7 +47,9 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsPicke
         return searchQuery
     }
     
+    
     //MARK: ContactsPickerControllerDatasource
+    
     
     public func contactsControllerLoadMore(searchText : String?, offset : Int) {
         

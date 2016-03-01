@@ -53,6 +53,7 @@ class ChatViewController: JSQMessagesViewController {
     
     var recipients : [MMUser]?
     
+    
     // MARK: - overrides
     
     

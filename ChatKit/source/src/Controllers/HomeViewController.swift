@@ -34,12 +34,23 @@ import MagnetMax
 
 class HomeViewController: UITableViewController, UISearchResultsUpdating {
     
-    let searchController = UISearchController(searchResultsController: nil)
-    var detailResponses : [MMXChannelDetailResponse] = []
-    var filteredDetailResponses : [MMXChannelDetailResponse] = []
+    
+    //MARK: Public Variables
+    
     
     var datasource : HomeViewControllerDatasource?
     var delegate : HomeViewControllerDelegate?
+    var detailResponses : [MMXChannelDetailResponse] = []
+    var filteredDetailResponses : [MMXChannelDetailResponse] = []
+    let searchController = UISearchController(searchResultsController: nil)
+    
+    
+    //MARK: Overrides
+    
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     override func loadView() {
         super.loadView()
@@ -85,16 +96,20 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating {
         ChannelManager.sharedInstance.removeChannelMessageObserver(self)
     }
     
+    
+    //MARK: Notifications
+    
+    
     func didReceiveMessage(mmxMessage: MMXMessage) {
         loadDetails()
     }
     
+    
+    //MARK: Actions
+    
+    
     @IBAction func refreshChannelDetail() {
         loadDetails()
-    }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     
@@ -169,10 +184,17 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating {
         self.delegate?.homeViewDidSelectChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     
-    // MARK: - Helpers
+    
+    // MARK: - Private Methods
+    
     
     private func detailsForIndexPath(indexPath : NSIndexPath) -> MMXChannelDetailResponse {
         return searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
+    }
+    
+    private func endRefreshing() {
+        refreshControl?.endRefreshing()
+        tableView.reloadData()
     }
     
     private func loadDetails() {
@@ -209,11 +231,6 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating {
             return false
         }
         
-        tableView.reloadData()
-    }
-    
-    private func endRefreshing() {
-        refreshControl?.endRefreshing()
         tableView.reloadData()
     }
     

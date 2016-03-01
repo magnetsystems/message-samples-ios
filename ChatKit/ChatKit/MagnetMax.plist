@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BaseURL</key>
-	<string>http://192.168.1.116:8443/api</string>
+	<string>http://localhost:8443/api</string>
 	<key>ClientID</key>
 	<string>b4e83cc8-f541-4bd2-8f43-34734cc59009</string>
 	<key>ClientSecret</key>

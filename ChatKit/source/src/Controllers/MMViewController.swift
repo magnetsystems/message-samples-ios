@@ -19,7 +19,15 @@ import UIKit
 
 public class MMViewController: UIViewController {
 
+    
+    //MARK: Public Variables
+    
+    
     public var appearance = MagnetControllerAppearance()
+    
+    
+    //MARK : Init
+    
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -36,6 +44,10 @@ public class MMViewController: UIViewController {
         self.setupViewController()
     }
 
+    
+    //MARK: Public Methods
+    
+    
     func setupViewController() { }
     
     func dismiss() {

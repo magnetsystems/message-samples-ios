@@ -19,16 +19,40 @@ import UIKit
 import MagnetMax
 
 public class DefaultChatListControllerDatasource : NSObject, ChatListControllerDatasource {
-     weak var chatList : MagnetChatListViewController?
+    
+    
+    //MARK : Public Variables
+    
+    
+    weak var chatList : MagnetChatListViewController?
+    
+    
+    // Public Functions
+    
     
     public func createChat(from subscribers : [MMUser]) {
-    let id = NSUUID().UUIDString
+        let id = NSUUID().UUIDString
         
-      MMXChannel.createWithName(id, summary: id, isPublic: false, publishPermissions: .Anyone, subscribers: Set(subscribers), success: { (channel) -> Void in
+        MMXChannel.createWithName(id, summary: id, isPublic: false, publishPermissions: .Anyone, subscribers: Set(subscribers), success: { (channel) -> Void in
             self.chatList?.reloadData()
-        }) { (error) -> Void in
-            print("[ERROR] \(error.localizedDescription)")
+            }) { (error) -> Void in
+                print("[ERROR] \(error.localizedDescription)")
         }
+    }
+    
+    
+    //Mark: ChatListControllerDatasource
+    
+    
+    public func chatListCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
+        return nil
+    }
+    
+    public func chatListCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat {
+        if row == 0 {
+            return 125
+        }
+        return 80
     }
     
     public func chatListLoadChannels(channels : (([MMXChannel]) ->Void)) {
@@ -42,16 +66,5 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     public func chatListRegisterCells(tableView : UITableView) {
         //using standard cells
-    }
-    
-    public func chatListCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
-        return nil
-    }
-    
-    public func chatListCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat {
-        if row == 0 {
-            return 125
-        }
-        return 80
     }
 }

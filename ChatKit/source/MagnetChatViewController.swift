@@ -19,7 +19,16 @@ import UIKit
 import MagnetMax
 
 public class MagnetChatViewController: MagnetViewController {
+    
+    
+    //MARK : Private Variables
+    
+    
     private var underlyingChatViewController = ChatViewController.init()
+    
+    
+    //MARK: Public Variables
+    
     
     public private(set) var channel : MMXChannel? {
         set {
@@ -39,14 +48,29 @@ public class MagnetChatViewController: MagnetViewController {
         }
     }
     
+    
+    //MARK: Init
+    
+    public convenience init(channel : MMXChannel) {
+        self.init()
+        self.channel = channel
+    }
+    
     public convenience init(recipients : [MMUser]) {
         self.init()
         self.recipients = recipients
     }
     
-    public convenience init(channel : MMXChannel) {
-        self.init()
-        self.channel = channel
+
+    //MARK: Overrides
+    
+    
+    override func setupViewController() {
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    override internal func underlyingViewController() -> UIViewController? {
+        return underlyingChatViewController
     }
     
     public override func viewDidLoad() {
@@ -64,9 +88,9 @@ public class MagnetChatViewController: MagnetViewController {
         super.viewWillDisappear(animated)
     }
     
-    override internal func underlyingViewController() -> UIViewController? {
-        return underlyingChatViewController
-    }
+    
+    // Private Methods
+    
     
     private func generateNavBars() {
         if self.title == nil {
@@ -77,14 +101,4 @@ public class MagnetChatViewController: MagnetViewController {
             self.setMagnetNavBar(leftItems: [btnBack], rightItems: nil, title: self.title)
         }
     }
-    
-    override func setupViewController() {
-        navigationController?.setNavigationBarHidden(false, animated: true)
-    }
-    
-    public override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 }

@@ -19,11 +19,22 @@ import UIKit
 
 class MMTableViewController: MMViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
+    //MARK: Outlets
+    
+    
     @IBOutlet var tableView : UITableView!
+    
+    
+    //MARK: Overrides
+    
     
     override func setupViewController() {
         let _ = self.view
     }
+    
+    
+    //MARK: UITableViewDelegatye
+    
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 0

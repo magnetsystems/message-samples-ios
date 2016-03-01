@@ -18,6 +18,10 @@
 import UIKit
 import MagnetMax
 
+
+//Mark: ChatListControllerDatasource
+
+
 @objc public protocol ChatListControllerDatasource : class {
     func chatListLoadChannels(channels : (([MMXChannel]) ->Void))
     optional func chatListRegisterCells(tableView : UITableView)
@@ -25,18 +29,32 @@ import MagnetMax
     optional func chatListCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat
 }
 
+
+//Mark: ChatListControllerDelegate
+
+
 @objc public protocol ChatListControllerDelegate : class {
     func chatListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
     func chatListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
     optional func chatListDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
 }
 
+
+//Mark: MagnetChatListViewController
+
+
 public class MagnetChatListViewController: MagnetViewController, ContactsPickerControllerDelegate, HomeViewControllerDatasource, HomeViewControllerDelegate {
-    private var underlyingHomeViewController = HomeViewController.init()
-    private var chooseContacts : Bool = true
     
-    public var datasource : ChatListControllerDatasource = DefaultChatListControllerDatasource()
-    public var delegate : ChatListControllerDelegate?
+    
+    //MARK: Private Variables
+    
+    
+    private var chooseContacts : Bool = true
+    private var underlyingHomeViewController = HomeViewController.init()
+    
+    
+    //MARK: Public Variables
+    
     
     public var canChooseContacts :Bool? {
         didSet {
@@ -48,6 +66,8 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     }
     
     public var contactsPickerDelegate : ContactsPickerControllerDelegate?
+    public var datasource : ChatListControllerDatasource = DefaultChatListControllerDatasource()
+    public var delegate : ChatListControllerDelegate?
     
     
     //MARK: Overrides
@@ -107,6 +127,13 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     }
     
     
+    //MARK: Public Methods
+    
+    public func reloadData() {
+        underlyingHomeViewController.refreshChannelDetail()
+    }
+    
+    
     //MARK: - HomeViewControllerDatasource
     
     
@@ -152,13 +179,8 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     
     //MARK: - ContactsViewControllerDelegate
     
-    public func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
-        
-    }
     
-    public func reloadData() {
-        underlyingHomeViewController.refreshChannelDetail()
-    }
+    public func contactsControllerDidFinish(with selectedUsers: [MMUser]) { }
     
     
     // MARK: Actions
