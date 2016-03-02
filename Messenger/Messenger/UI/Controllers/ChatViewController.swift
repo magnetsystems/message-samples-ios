@@ -168,6 +168,9 @@ class ChatViewController: JSQMessagesViewController {
         } else if recipients != nil {
             getChannelBySubscribers(recipients)
         }
+        
+        JSQMessagesCollectionViewCell.registerMenuAction(Selector("report:"))
+        UIMenuController.sharedMenuController().menuItems = [ UIMenuItem(title: "Report", action: Selector("report:")) ]
     }
     
     override func viewWillAppear(animated: Bool) {
