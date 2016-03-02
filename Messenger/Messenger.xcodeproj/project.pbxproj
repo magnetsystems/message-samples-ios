@@ -1167,7 +1167,7 @@
 				INFOPLIST_FILE = Messenger/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.demo.Messenger;
+				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.Messenger;
 				PRODUCT_NAME = Messenger;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Messenger/Messenger-Bridging-Header.h";
@@ -1191,7 +1191,7 @@
 				INFOPLIST_FILE = Messenger/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.demo.Messenger;
+				PRODUCT_BUNDLE_IDENTIFIER = com.magnet.iOS.Messenger;
 				PRODUCT_NAME = Messenger;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Messenger/Messenger-Bridging-Header.h";
