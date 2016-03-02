@@ -35,19 +35,10 @@ extension ChatViewController {
     
     override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
         if  action == Selector("report:"){
-            print("REPORT THIS POST!!!")
+            print("REPORT THIS MESSAGE!!!")
             showAdditionalMessageOptions()
         }
     }
-    
-    
-    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        if action == Selector("copy:") {
-            return true
-        }
-        return super.canPerformAction(action, withSender:sender)
-    }
-    
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
         return messages[indexPath.item]
