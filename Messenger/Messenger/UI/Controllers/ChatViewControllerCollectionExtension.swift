@@ -19,6 +19,7 @@
 
 import JSQMessagesViewController
 import NYTPhotoViewer
+import MagnetMax
 
 extension ChatViewController {
     
@@ -30,7 +31,11 @@ extension ChatViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-        return action == Selector("copy:") || action == Selector("report:")
+        if action == Selector("report:") && messages[indexPath.item].senderId() != MMUser.currentUser()?.userID {
+            return true
+        }
+        
+        return super.collectionView(collectionView, canPerformAction:action, forItemAtIndexPath:indexPath, withSender:sender)
     }
     
     override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
@@ -181,7 +186,9 @@ extension ChatViewController {
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, atIndexPath indexPath: NSIndexPath!) {
         print("Tapped avatar!")
-        showAdditionalAvatarOptions()
+        if messages[indexPath.item].senderId() != MMUser.currentUser()?.userID {
+            showAdditionalAvatarOptions()
+        }
     }
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
