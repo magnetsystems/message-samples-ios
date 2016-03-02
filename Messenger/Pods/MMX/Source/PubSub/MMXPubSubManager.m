@@ -926,26 +926,26 @@
 }
 
 - (void)topicsFromTopicSubscriptions:(NSArray *)topics
-							 success:(void (^)(NSArray *))success
-							 failure:(void (^)(NSError *))failure {
-	
-	[[MMXLogger sharedLogger] verbose:@"MMXPubSubManager summaryOfTopics. topics = %@", topics];
-	if (![self hasActiveConnection]) {
-		if (failure) {
-			dispatch_async(self.callbackQueue, ^{
-				failure([self connectionStatusError]);
-			});
-		}
-		return;
-	}
-	NSMutableArray * topicArray = @[].mutableCopy;
-	for (MMXTopicSubscription * sub in topics) {
-		[topicArray addObject:@{@"userId":sub.topic.inUserNameSpace ? sub.topic.nameSpace : [NSNull null],
-								@"topicName":sub.topic.topicName}];
-	}
-
+                             success:(void (^)(NSArray *))success
+                             failure:(void (^)(NSError *))failure {
+    
+    [[MMXLogger sharedLogger] verbose:@"MMXPubSubManager summaryOfTopics. topics = %@", topics];
+    if (![self hasActiveConnection]) {
+        if (failure) {
+            dispatch_async(self.callbackQueue, ^{
+                failure([self connectionStatusError]);
+            });
+        }
+        return;
+    }
+    NSMutableArray * topicArray = @[].mutableCopy;
+    for (MMXTopicSubscription * sub in topics) {
+        [topicArray addObject:@{@"userId":sub.topic.inUserNameSpace ? sub.topic.nameSpace : [NSNull null],
+                                @"topicName":sub.topic.topicName}];
+    }
+    
     [self topicsFromTopicDictionaries:topicArray success:success failure:failure];
- 
+    
 }
 
 - (void)topicsFromTopicDictionaries:(NSArray <NSDictionary *>*)topics

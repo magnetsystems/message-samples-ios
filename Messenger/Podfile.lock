@@ -29,10 +29,10 @@ PODS:
   - JSQMessagesViewController (7.2.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
-  - MagnetMax (2.5.1):
-    - MagnetMaxCore (~> 2.5.1)
-    - MMX (~> 2.5.1)
-  - MagnetMaxCore (2.5.1):
+  - MagnetMax (2.5.2):
+    - MagnetMaxCore (~> 2.5.2)
+    - MMX (~> 2.5.2)
+  - MagnetMaxCore (2.5.2):
     - AFNetworking/NSURLConnection (= 2.6.1)
     - AFNetworking/NSURLSession (= 2.6.1)
     - AFOAuth2Manager (= 2.2.1)
@@ -56,10 +56,10 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (2.5.1):
+  - MMX (2.5.2):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.5.1)
+    - MagnetMaxCore (~> 2.5.2)
     - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.13)
   - MMXXMPPFramework (3.6.13):
@@ -105,7 +105,7 @@ DEPENDENCIES:
   - DZVideoPlayerViewController
   - Fabric
   - JSQMessagesViewController
-  - MagnetMax (~> 2.5.1)
+  - MagnetMax (~> 2.5.2)
   - NYTPhotoViewer (~> 1.0.0)
   - UIScrollView-InfiniteScroll
 
@@ -120,11 +120,11 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  MagnetMax: bafe021aa3dc8e69d0b401f600a2059b511e1731
-  MagnetMaxCore: f9fefa87325b098751208c982d245f44453ce203
+  MagnetMax: 31ec1ac9449dbf733e0f2c345f93b0c946ff88fe
+  MagnetMaxCore: 6120c776bd2e0c2cd320f9f773a92be81a6cb290
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: ab8bece01b6d21400a0cf85235b68c7c790acf4b
+  MMX: cb3bd379bb2e7a00ae923d6acaa93fe3a23b14e7
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
   NYTPhotoViewer: 98e0a54a9d28e4a980fc4b611fd5e419ca89ad74
   UIScrollView-InfiniteScroll: b6c7d6d155dca7f9c5dd43813ecffeb301b3d50c

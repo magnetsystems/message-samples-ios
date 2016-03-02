@@ -1073,8 +1073,10 @@ int const kReconnectionTimerInterval = 4;
                 NSPredicate *usernamePredicate = [NSPredicate predicateWithFormat:@"userID = %@",pubMsg.senderUserID.username];
                 MMUser *sender = [users filteredArrayUsingPredicate:usernamePredicate].firstObject;
                 MMXMessage *channelMessage = [MMXMessage messageFromPubSubMessage:pubMsg sender:sender];
+                
                 [topicArray addObject:@{@"userId":pubMsg.topic.inUserNameSpace ? pubMsg.topic.nameSpace : [NSNull null],
                                         @"topicName":pubMsg.topic.topicName}];
+                
                 [self.pubsubManager topicsFromTopicDictionaries:topicArray success:^(NSArray *topics) {
                     [self.pubsubManager summaryOfTopics:topics since:nil until:nil success:^(NSArray *summaries) {
                         NSArray *channelArray = [MMXChannel channelsFromTopics:topics summaries:summaries subscriptions:nil];
