@@ -93,7 +93,7 @@ public class MagnetChatViewController: MagnetViewController, ChatViewControllerD
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        underlyingChatViewController.view.tintColor = self.appearance.tintColor
     }
     
     override public func viewWillAppear(animated: Bool) {

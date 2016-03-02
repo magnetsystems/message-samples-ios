@@ -114,6 +114,14 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
         })
     }
     
+    func showChatList() {
+        let c = MagnetChatListViewController()
+        c.delegate = self
+        // c.contactsPickerDelegate = self
+        c.appearance.tintColor = self.view.tintColor
+        self.navigationController?.pushViewController(c, animated: true)
+    }
+    
     func chatListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
         print("Selected \(channel.name)")
         let chatViewController = MagnetChatViewController.init(channel : channel)
@@ -162,16 +170,14 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
             //                datasource.preselectedUsers = [user]
             //            }
             // c.pickerDelegate = self
-            let c = MagnetChatListViewController()
-            c.delegate = self
-            // c.contactsPickerDelegate = self
-            //            c.appearance.tintColor = self.view.tintColor
+            
+            self.showChatList()
+            
             //            c.canChooseContacts = true
             //  c.tableView.allowsSelection = false
             //c.title = "home"
-            self.navigationController?.pushViewController(c, animated: true)
             //self.presentViewController(c, animated: true, completion: nil)
-            self.currentController = c
+            //self.currentController = c
             //                }, failure: {error in
             //                   print("[ERROR] \(error.localizedDescription)")
             //            })

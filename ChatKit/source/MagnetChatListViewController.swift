@@ -88,7 +88,7 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
         
         underlyingHomeViewController.datasource = self
         underlyingHomeViewController.delegate = self
-        
+        underlyingHomeViewController.view.tintColor = self.appearance.tintColor
         if let datasource = self.datasource as? DefaultChatListControllerDatasource {
             datasource.chatList = self
         }
