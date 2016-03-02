@@ -21,6 +21,13 @@ import MobileCoreServices
 import NYTPhotoViewer
 import UIKit
 
+//MARK: Protocol
+
+
+protocol ChatViewControllerDelegate: class {
+    func chatViewControllerDidFinish(with chat: MMXChannel, lastMessage: MMXMessage?, date: NSDate?)
+}
+
 class ChatViewController: JSQMessagesViewController {
     
     
@@ -35,6 +42,7 @@ class ChatViewController: JSQMessagesViewController {
     var messages = [Message]()
     var notifier : NavigationNotifier?
     let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
+    var delegate: ChatViewControllerDelegate?
     
     
     //MARK: Overridden Properties
@@ -175,10 +183,15 @@ class ChatViewController: JSQMessagesViewController {
         if let textView = self.inputToolbar?.contentView?.textView where textView.isFirstResponder() {
             self.inputToolbar?.contentView?.textView?.resignFirstResponder()
         }
+        let now = NSDate()
         if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage {
-            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:NSDate.init())
+            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:now) { [weak self] in
+                self?.delegate?.chatViewControllerDidFinish(with: chat, lastMessage: lastMessage, date: now)
+            }
         } else  if let chat = self.chat {
-            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, date:NSDate.init())
+            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, date:now) { [weak self] in
+                self?.delegate?.chatViewControllerDidFinish(with: chat, lastMessage: nil, date: now)
+            }
         }
     }
     

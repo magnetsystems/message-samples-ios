@@ -938,50 +938,58 @@
 		}
 		return;
 	}
-	NSError * parsingError;
 	NSMutableArray * topicArray = @[].mutableCopy;
 	for (MMXTopicSubscription * sub in topics) {
 		[topicArray addObject:@{@"userId":sub.topic.inUserNameSpace ? sub.topic.nameSpace : [NSNull null],
 								@"topicName":sub.topic.topicName}];
 	}
 
-	XMPPIQ *topicIQ = [self topicsFromTopicNamesIQ:topicArray.copy error:&parsingError];
-	if (!parsingError) {
-		[self.delegate sendIQ:topicIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
-			XMPPIQ * iq = (XMPPIQ *)obj;
-			if ([iq isErrorIQ]) {
-				if (failure) {
-					dispatch_async(self.callbackQueue, ^{
-						failure([iq errorWithTitle:@"Topic from Failure."]);
-					});
-				}
-			} else {
-				MMXTopicListResponse *response = [[MMXTopicListResponse alloc] initWithIQ:iq];
-				if (!response.error) {
-					if (success) {
-						dispatch_async(self.callbackQueue, ^{
-							success(response.topics);
-						});
-					}
-				} else {
-					if (failure) {
-						dispatch_async(self.callbackQueue, ^{
-							failure(response.error);
-						});
-					}
-				}
-			}
-			NSString* iqId = [iq elementID];
-			[self.delegate stopTrackingIQWithID:iqId];
-		}];
-	} else {
-		if (failure) {
-			dispatch_async(self.callbackQueue, ^{
-				failure(parsingError);
-			});
-		}
-	}
+    [self topicsFromTopicDictionaries:topicArray success:success failure:failure];
  
+}
+
+- (void)topicsFromTopicDictionaries:(NSArray <NSDictionary *>*)topics
+                            success:(void (^)(NSArray *))success
+                            failure:(void (^)(NSError *))failure {
+    
+    NSError * parsingError;
+    
+    XMPPIQ *topicIQ = [self topicsFromTopicNamesIQ:topics error:&parsingError];
+    if (!parsingError) {
+        [self.delegate sendIQ:topicIQ completion:^ (id obj, id <XMPPTrackingInfo> info) {
+            XMPPIQ * iq = (XMPPIQ *)obj;
+            if ([iq isErrorIQ]) {
+                if (failure) {
+                    dispatch_async(self.callbackQueue, ^{
+                        failure([iq errorWithTitle:@"Topic from Failure."]);
+                    });
+                }
+            } else {
+                MMXTopicListResponse *response = [[MMXTopicListResponse alloc] initWithIQ:iq];
+                if (!response.error) {
+                    if (success) {
+                        dispatch_async(self.callbackQueue, ^{
+                            success(response.topics);
+                        });
+                    }
+                } else {
+                    if (failure) {
+                        dispatch_async(self.callbackQueue, ^{
+                            failure(response.error);
+                        });
+                    }
+                }
+            }
+            NSString* iqId = [iq elementID];
+            [self.delegate stopTrackingIQWithID:iqId];
+        }];
+    } else {
+        if (failure) {
+            dispatch_async(self.callbackQueue, ^{
+                failure(parsingError);
+            });
+        }
+    }
 }
 
 #pragma mark - Summary of Topics
