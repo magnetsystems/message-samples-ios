@@ -46,6 +46,11 @@ class DateFormatter {
         return formatter.dateFromString(stringTime)
     }
     
+    func stringFromDate(date: NSDate) -> String {
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return formatter.stringFromDate(date)
+    }
+    
     func dayOfTheWeek(date: NSDate) -> String {
         let dayFormatter = NSDateFormatter()
         dayFormatter.dateFormat = "EEEE"

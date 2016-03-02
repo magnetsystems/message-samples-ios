@@ -38,4 +38,6 @@
 					   isPublic:(BOOL)isPublic
 			 publishPermissions:(MMXPublishPermissions)publishPermissions;
 
++ (NSArray *)channelsFromTopics:(NSArray *)topics summaries:(NSArray *)summaries subscriptions:(NSArray *)subscriptions;
+
 @end

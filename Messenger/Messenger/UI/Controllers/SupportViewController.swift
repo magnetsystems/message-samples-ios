@@ -44,27 +44,59 @@ class SupportViewController: UITableViewController {
         }
         
         tableView.registerNib(UINib(nibName: Utils.name(SupportTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(SupportTableViewCell.classForCoder()))
+        
+        loadDetails(true)
+        
+        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         self.navigationItem.title = kStr_Support;
-        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
-        self.loadDetails(true)
+//        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
+//        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+    }
+    
+    deinit {
         ChannelManager.sharedInstance.removeChannelMessageObserver(self)
     }
     
-    //Mark: Notifications
+    
+    //MARK: - Notifications
     
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
-        loadDetails(true)
+        
+        if let chat = mmxMessage.channel where mmxMessage.messageType == .Channel && chat.name == kAskMagnetChannel {
+            
+            if let chatDetailResponse = channelDetailResponseForChannel(chat) {
+                supportChannelDetails = supportChannelDetails.sort({ (detail1, detail2) -> Bool in
+                    let formatter = ChannelManager.sharedInstance.formatter
+                    return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
+                })
+                chatDetailResponse.messages = [mmxMessage]
+                chatDetailResponse.lastPublishedTime = ChannelManager.sharedInstance.formatter.stringFromDate(chat.lastTimeActive)
+                
+                tableView.reloadData()
+                
+            } else {
+                MMXChannel.channelDetails([chat], numberOfMessages: 1, numberOfSubcribers: 20, success: { [weak self] details in
+                    if details.count == 1 {
+                        self?.supportChannels.insert(chat, atIndex: 0)
+                        self?.supportChannelDetails.insert(details.first!, atIndex: 0)
+                        self?.tableView.reloadData()
+                    }
+                    }, failure: { error in
+                        //
+                })
+            }
+        }
     }
     
     
@@ -95,6 +127,7 @@ class SupportViewController: UITableViewController {
         
         if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? SupportTableViewCell {
             chatVC.chat = cell.detailResponse.channel
+            chatVC.delegate = self
             self.navigationController?.pushViewController(chatVC, animated: true)
         }
     }
@@ -119,6 +152,19 @@ class SupportViewController: UITableViewController {
         refreshControl?.endRefreshing()
         tableView.reloadData()
     }
+    
+    private func channelDetailResponseForChannel(channel: MMXChannel) -> MMXChannelDetailResponse? {
+        var chatDetailResponse: MMXChannelDetailResponse? = nil
+        
+        if let indexOfChat = supportChannelDetails.indexOf ({ detailResponse in
+            detailResponse.channel == channel
+        }) {
+            chatDetailResponse = supportChannelDetails[indexOfChat]
+        }
+        
+        return chatDetailResponse
+    }
+
     
     private func loadDetails(shouldResetResults: Bool) {
         if shouldResetResults {
@@ -203,3 +249,13 @@ class SupportViewController: UITableViewController {
     }
     
 }
+
+extension SupportViewController: ChatViewControllerDelegate {
+    
+    // MARK: - ChatViewControllerDelegate
+    
+    func chatViewControllerDidFinish(with chat: MMXChannel, lastMessage: MMXMessage?, date: NSDate?) {
+        tableView.reloadData()
+    }
+}
+
