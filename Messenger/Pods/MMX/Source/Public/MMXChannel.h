@@ -132,8 +132,27 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param offset	The offset into the results list. Used for pagination.
  *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
  *  @param failure  Block with an NSError with details about the call failure.
+
+ *  @deprecated This method has been deprecated. Use -channelsStartingWith:isPublic:limit:offset:success:failure: instead.
  */
 + (void)channelsStartingWith:(NSString *)name
+                       limit:(int)limit
+                      offset:(int)offset
+                     success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success
+                     failure:(nullable void (^)(NSError *error))failure DEPRECATED_ATTRIBUTE;
+
+/**
+ *  Method used to discover existing channels by name
+ *
+ *  @param name     The begining of the channel name you are searching for.
+ *  @param isPublic	Set to YES if it is a public channel. Will only return private channels created by the logged in user.
+ *  @param limit	The max number of items you want returned.
+ *  @param offset	The offset into the results list. Used for pagination.
+ *  @param success  Block with the number of channels that match the query and a NSArray of MMXChannels that match the criteria.
+ *  @param failure  Block with an NSError with details about the call failure.
+ */
++ (void)channelsStartingWith:(NSString *)name
+                    isPublic:(BOOL)isPublic
                        limit:(int)limit
                       offset:(int)offset
                      success:(nullable void (^)(int totalCount, NSArray <MMXChannel *>*channels))success

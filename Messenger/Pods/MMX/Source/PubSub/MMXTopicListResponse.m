@@ -41,23 +41,7 @@
                     NSMutableArray * topicArray = @[].mutableCopy;
                     for (NSDictionary * dict in (NSArray *)parsedJson) {
                         if (dict && [MMXUtils objectIsValidString:dict[@"topicName"]]) {
-                            //isCollection
-                            MMXTopic * topic = [[MMXTopic alloc] init];
-							if (dict[@"userId"] && [MMXUtils objectIsValidString:dict[@"userId"]]) {
-								topic.nameSpace = dict[@"userId"];
-							}
-							if (dict[@"creationDate"] && ![dict[@"creationDate"] isKindOfClass:[NSNull class]]) {
-								topic.creationDate = [MMXUtils dateFromiso8601Format:dict[@"creationDate"]];
-							}
-							if (dict[@"creator"] && ![dict[@"creator"] isKindOfClass:[NSNull class]]) {
-								NSString * username = [MMXUserID stripUsername:dict[@"creator"]];
-								if ([MMXUtils objectIsValidString:username]) {
-									topic.topicCreator = [MMXUserID userIDWithUsername:[username jidUnescapedString]];
-								}
-							}
-                            topic.topicName = dict[@"topicName"];
-                            topic.topicDescription = dict[@"description"];
-                            topic.isCollection = [dict[@"isCollection"] boolValue];
+                            MMXTopic *topic = [MMXTopic topicFromQueryResult:dict];
                             [topicArray addObject:topic];
                         }
                     }

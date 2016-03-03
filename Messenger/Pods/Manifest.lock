@@ -25,14 +25,14 @@ PODS:
     - Fabric (~> 1.6.3)
   - DZVideoPlayerViewController (0.4.0)
   - Fabric (1.6.6)
-  - FLAnimatedImage (1.0.11)
+  - FLAnimatedImage (1.0.12)
   - JSQMessagesViewController (7.2.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
-  - MagnetMax (2.5.1):
-    - MagnetMaxCore (~> 2.5.1)
-    - MMX (~> 2.5.1)
-  - MagnetMaxCore (2.5.1):
+  - MagnetMax (2.5.2):
+    - MagnetMaxCore (~> 2.5.2)
+    - MMX (~> 2.5.2)
+  - MagnetMaxCore (2.5.2):
     - AFNetworking/NSURLConnection (= 2.6.1)
     - AFNetworking/NSURLSession (= 2.6.1)
     - AFOAuth2Manager (= 2.2.1)
@@ -56,10 +56,10 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (2.5.1):
+  - MMX (2.5.2):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.5.1)
+    - MagnetMaxCore (~> 2.5.2)
     - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.13)
   - MMXXMPPFramework (3.6.13):
@@ -98,14 +98,16 @@ PODS:
     - FLAnimatedImage (~> 1.0.8)
     - NYTPhotoViewer/Core
   - NYTPhotoViewer/Core (1.0.1)
+  - UIScrollView-InfiniteScroll (0.7.3)
 
 DEPENDENCIES:
   - Crashlytics
   - DZVideoPlayerViewController
   - Fabric
   - JSQMessagesViewController
-  - MagnetMax (~> 2.5.1)
+  - MagnetMax (~> 2.5.2)
   - NYTPhotoViewer (~> 1.0.0)
+  - UIScrollView-InfiniteScroll
 
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
@@ -115,15 +117,16 @@ SPEC CHECKSUMS:
   Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
   DZVideoPlayerViewController: 4886c5016a632cbd94a85e6071806e4929c01653
   Fabric: 1abc1e59f11fa39ede6f690ef7309d8563e3ec59
-  FLAnimatedImage: 8c79566df04f8ff07438076cea43839f7dcd261c
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  MagnetMax: e3aa16c9eb3843b9cb9e65d125de6679fdc438cb
-  MagnetMaxCore: 4beee03119b3af0da11137b3db951dbb2f1c0f0e
+  MagnetMax: 31ec1ac9449dbf733e0f2c345f93b0c946ff88fe
+  MagnetMaxCore: 6120c776bd2e0c2cd320f9f773a92be81a6cb290
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: 7b6db0ce520bbb017e36c36759f0e87ddceef27e
+  MMX: cb3bd379bb2e7a00ae923d6acaa93fe3a23b14e7
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
   NYTPhotoViewer: 98e0a54a9d28e4a980fc4b611fd5e419ca89ad74
+  UIScrollView-InfiniteScroll: b6c7d6d155dca7f9c5dd43813ecffeb301b3d50c
 
 COCOAPODS: 0.39.0

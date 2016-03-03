@@ -20,6 +20,7 @@ import UIKit
 
 class HomeViewController: UITableViewController, UISearchResultsUpdating, ContactsViewControllerDelegate {
     
+    static let pageSize = 20
     
     //MARK: Public properties
     
@@ -30,6 +31,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     var filteredDetailResponses : [MMXChannelDetailResponse] = []
     var notifier: NavigationNotifier?
     let searchController = UISearchController(searchResultsController: nil)
+    var page = 1
     
     
     //MARK: Overrides
@@ -75,23 +77,30 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         tableView.registerNib(UINib(nibName: Utils.name(EventChannelTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(EventChannelTableViewCell.classForCoder()))
         tableView.registerNib(UINib(nibName: Utils.name(AskMagnetTableViewCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(AskMagnetTableViewCell.classForCoder()))
         tableView.registerNib(UINib(nibName: Utils.name(CreateChatCell.classForCoder()), bundle: nil), forCellReuseIdentifier: Utils.name(CreateChatCell.classForCoder()))
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
         
         loadEventChannels()
         // Magnet Employees will have the magnetsupport tag
         // Hide the Ask Magnet option for Magnet employees
         askMagnet = [MMXChannelDetailResponse()]
-        loadDetails()
+        loadDetails(true)
+        
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+//        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.title = nil
         
+//        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+    }
+    
+    deinit {
         ChannelManager.sharedInstance.removeChannelMessageObserver(self)
     }
     
@@ -100,8 +109,32 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
-        loadEventChannels()
-        loadDetails()
+        
+        if let chat = mmxMessage.channel where mmxMessage.messageType == .Channel && chat.name != kAskMagnetChannel  {
+            
+            if let (chatDetailResponse, indexSet) = channelDetailResponseForChannel(chat) {
+                if indexSet.firstIndex == 2 {
+                    detailResponses = detailResponses.sort({ (detail1, detail2) -> Bool in
+                        let formatter = ChannelManager.sharedInstance.formatter
+                        return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
+                    })
+                }
+                chatDetailResponse.messages = [mmxMessage]
+                chatDetailResponse.lastPublishedTime = ChannelManager.sharedInstance.formatter.stringFromDate(chat.lastTimeActive)
+                
+                tableView.reloadData()
+                
+            } else {
+                MMXChannel.channelDetails([chat], numberOfMessages: 1, numberOfSubcribers: 20, success: { [weak self] details in
+                    if details.count == 1 {
+                        self?.detailResponses.insert(details.first!, atIndex: 0)
+                        self?.tableView.reloadData()
+                    }
+                }, failure: { error in
+                    //
+                })
+            }
+        }
     }
     
     
@@ -126,25 +159,59 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         }
     }
     
-    private func loadDetails() {
+    private func loadDetails(shouldResetResults: Bool) {
+        if shouldResetResults {
+            ChannelManager.sharedInstance.channels?.removeAll()
+            ChannelManager.sharedInstance.channelDetails?.removeAll()
+            self.detailResponses.removeAll()
+            page = 1
+        } else {
+            page++
+        }
         
         refreshControl?.beginRefreshing()
         
         // Get all channels the current user is subscribed to
         MMXChannel.subscribedChannelsWithSuccess({ [weak self] allChannels in
-            let channels = allChannels.filter { !$0.name.hasPrefix("global_") && $0.name != kAskMagnetChannel }
+            let channels = allChannels.filter { !$0.name.hasPrefix("global_") && $0.name != kAskMagnetChannel && $0.numberOfMessages != 0 }.sort { $0.lastTimeActive.timeIntervalSince1970 > $1.lastTimeActive.timeIntervalSince1970 }
             ChannelManager.sharedInstance.channels = channels
+            
             if channels.count > 0 {
+                guard let page = self?.page, pageSize = self?.dynamicType.pageSize else {
+                    fatalError("page should be set here!")
+                }
+                let paginatedChannels = Array(channels[((page - 1) * pageSize)..<(min(page * pageSize, channels.count))])
                 // Get details
-                MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 1000, success: { detailResponses in
+                MMXChannel.channelDetails(paginatedChannels, numberOfMessages: 1, numberOfSubcribers: 20, success: { detailResponses in
                     let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
                         let formatter = ChannelManager.sharedInstance.formatter
                         return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
                     })
                     
-                    ChannelManager.sharedInstance.channelDetails = sortedDetails
-                    self?.detailResponses = sortedDetails
+                    ChannelManager.sharedInstance.channelDetails?.appendContentsOf(sortedDetails)
+                    self?.detailResponses.appendContentsOf(sortedDetails)
                     self?.endRefreshing()
+                    
+                    self?.tableView.removeInfiniteScroll()
+                    if self?.detailResponses.count < ChannelManager.sharedInstance.channels?.count {
+                        // Add infinite scroll handler
+                        self?.tableView.addInfiniteScrollWithHandler { scrollView in
+                            let tableView = scrollView as! UITableView
+                            
+                            //
+                            // fetch your data here, can be async operation,
+                            // just make sure to call finishInfiniteScroll in the end
+                            //
+                            self?.loadDetails(false)
+                            
+                            // make sure you reload tableView before calling -finishInfiniteScroll
+                            tableView.reloadData()
+                            
+                            // finish infinite scroll animation
+                            tableView.finishInfiniteScroll()
+                        }
+                    }
+                    
                     }, failure: { error in
                         self?.endRefreshing()
                         print(error)
@@ -162,17 +229,18 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     func loadEventChannels(){
         
-        MMXChannel.findByTags( Set(["active"]), limit: 5, offset: 0, success: { (total, channels) -> Void in
+        MMXChannel.findByTags( Set(["active"]), limit: 5, offset: 0, success: { [weak self] total, channels in
             if channels.count > 0 {
                 let channel = channels.first
-                channel?.subscribeWithSuccess({ () -> Void in
-                    MMXChannel.channelDetails(channels, numberOfMessages: 100, numberOfSubcribers: 1000, success: { (responseDetails) -> Void in
-                        self.actualEvents = responseDetails
-                        self.endRefreshing()
-                        }, failure: { (error) -> Void in
-                    })
+                channel?.subscribeWithSuccess({
+                    MMXChannel.channelDetails(channels, numberOfMessages: 1, numberOfSubcribers: 3, success: { (responseDetails) -> Void in
+                        self?.actualEvents = responseDetails
+                        self?.endRefreshing()
                     }, failure: { (error) -> Void in
-                        print("subscribe global error \(error)")
+                        
+                    })
+                }, failure: { (error) -> Void in
+                    print("subscribe global error \(error)")
                 })
             }
             }) { (error) -> Void in
@@ -200,7 +268,8 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
     
     
     @IBAction func refreshChannelDetail() {
-        loadDetails()
+        loadEventChannels()
+        loadDetails(true)
     }
     
     @IBAction func showSideMenu(sender: UIBarButtonItem) {
@@ -325,6 +394,7 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         } else {
             
             if let chatVC = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_Chat) as? ChatViewController,let cell = tableView.cellForRowAtIndexPath(indexPath) as? ChannelDetailBaseTVCell {
+                chatVC.delegate = self
                 if indexPath.section != 2 {
                     // Ask Magnet channel
                     if indexPath.section == 1 {
@@ -343,7 +413,6 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
             }
         }
     }
-    
     
     //MARK: - ContactsViewControllerDelegate
     
@@ -379,5 +448,37 @@ class HomeViewController: UITableViewController, UISearchResultsUpdating, Contac
         tableView.reloadData()
     }
     
+    private func channelDetailResponseForChannel(channel: MMXChannel) -> (MMXChannelDetailResponse, NSIndexSet)? {
+        var chatDetailResponse: MMXChannelDetailResponse? = nil
+        var indexSet: NSIndexSet? = nil
+
+        if channel == actualEvents.first?.channel {
+            chatDetailResponse = actualEvents.first
+            indexSet = NSIndexSet(index: 0)
+        } else if let indexOfChat = detailResponses.indexOf ({ detailResponse in
+            detailResponse.channel == channel
+        }) {
+            chatDetailResponse = detailResponses[indexOfChat]
+            indexSet = NSIndexSet(index: 2)
+        } else if channel == askMagnet.first?.channel {
+            chatDetailResponse = askMagnet.first
+            indexSet = NSIndexSet(index: 1)
+        }
+        
+        if let chatDetailResponse = chatDetailResponse, let indexSet = indexSet {
+            return (chatDetailResponse, indexSet)
+        }
+        
+        return nil
+    }
+    
 }
 
+extension HomeViewController: ChatViewControllerDelegate {
+    
+    // MARK: - ChatViewControllerDelegate
+    
+    func chatViewControllerDidFinish(with chat: MMXChannel, lastMessage: MMXMessage?, date: NSDate?) {
+        tableView.reloadData()
+    }
+}

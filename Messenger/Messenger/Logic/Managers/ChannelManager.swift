@@ -131,11 +131,11 @@ class ChannelManager {
         return key
     }
     
-    func saveLastViewTimeForChannel(channel: MMXChannel, date : NSDate) {
-        saveLastViewTimeForChannel(channel, message: nil, date: date)
+    func saveLastViewTimeForChannel(channel: MMXChannel, date : NSDate, completion:(() -> ())?) {
+        saveLastViewTimeForChannel(channel, message: nil, date: date, completion: completion)
     }
     
-    func saveLastViewTimeForChannel(channel: MMXChannel, message : MMXMessage?, date : NSDate) {
+    func saveLastViewTimeForChannel(channel: MMXChannel, message : MMXMessage?, date : NSDate, completion:(() -> ())?) {
         let name = nameForChannel(channel)
         
         if let user = MMUser.currentUser() {
@@ -148,8 +148,9 @@ class ChannelManager {
             updateRequest.password = nil
             MMUser.updateProfile(updateRequest, success: { (user) -> Void in
                 print("[UPDATE] SUCCEEDED")
-                }, failure: { (error) -> Void in
-                    print("[UPDATE] FAILED : \(error.localizedDescription)")
+                completion?()
+            }, failure: { (error) -> Void in
+                print("[UPDATE] FAILED : \(error.localizedDescription)")
             })
         }
     }

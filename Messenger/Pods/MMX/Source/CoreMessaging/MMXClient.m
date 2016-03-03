@@ -53,6 +53,7 @@
 #import "NSString+XEP_0106.h"
 
 #import "MMUser+Addressable.h"
+#import "MMXChannel_Private.h"
 
 #import <AssertMacros.h>
 
@@ -547,7 +548,7 @@ int const kReconnectionTimerInterval = 4;
     
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:ackDictionary
-                                                       options:NSJSONWritingPrettyPrinted
+                                                       options:kNilOptions
                                                          error:&error];
     NSString *json = [[NSString alloc] initWithData:jsonData
                                            encoding:NSUTF8StringEncoding];
@@ -1067,14 +1068,29 @@ int const kReconnectionTimerInterval = 4;
     NSArray *usernames = [[messageArray valueForKey:@"senderUserID"] valueForKey:@"username"];
     if (usernames && usernames.count) {
         [MMUser usersWithUserIDs:usernames success:^(NSArray *users) {
+            NSMutableArray *topicArray = [NSMutableArray arrayWithCapacity:messageArray.count];
             for (MMXPubSubMessage *pubMsg in messageArray) {
                 NSPredicate *usernamePredicate = [NSPredicate predicateWithFormat:@"userID = %@",pubMsg.senderUserID.username];
                 MMUser *sender = [users filteredArrayUsingPredicate:usernamePredicate].firstObject;
                 MMXMessage *channelMessage = [MMXMessage messageFromPubSubMessage:pubMsg sender:sender];
-                [[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveMessageNotification
-                                                                    object:nil
-                                                                  userInfo:@{MMXMessageKey:channelMessage}];
                 
+                [topicArray addObject:@{@"userId":pubMsg.topic.inUserNameSpace ? pubMsg.topic.nameSpace : [NSNull null],
+                                        @"topicName":pubMsg.topic.topicName}];
+                
+                [self.pubsubManager topicsFromTopicDictionaries:topicArray success:^(NSArray *topics) {
+                    [self.pubsubManager summaryOfTopics:topics since:nil until:nil success:^(NSArray *summaries) {
+                        NSArray *channelArray = [MMXChannel channelsFromTopics:topics summaries:summaries subscriptions:nil];
+                        channelMessage.channel = channelArray.firstObject;
+                        channelMessage.channel.isSubscribed = YES;
+                        [[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveMessageNotification
+                                                                            object:nil
+                                                                          userInfo:@{MMXMessageKey:channelMessage}];
+                    } failure:^(NSError *error) {
+                        [[MMLogger sharedLogger] error:@"Failed to get channel when trying to fully-hydrate it\n%@",error];
+                    }];
+                } failure:^(NSError *error) {
+                    [[MMLogger sharedLogger] error:@"Failed to fully-hydrate topic\n%@",error];
+                }];
             }
         } failure:^(NSError * error) {
             [[MMLogger sharedLogger] error:@"Failed to get users for MMXMessages from Channels\n%@",error];

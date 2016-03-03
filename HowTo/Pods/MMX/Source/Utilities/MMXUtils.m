@@ -47,7 +47,7 @@
     }
 	
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
-                                                       options:NSJSONWritingPrettyPrinted
+                                                       options:kNilOptions
                                                          error:error];
     NSString *json = [[NSString alloc] initWithData:jsonData
                                            encoding:NSUTF8StringEncoding];
@@ -76,7 +76,7 @@
     }
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
-                                                       options:NSJSONWritingPrettyPrinted
+                                                       options:kNilOptions
                                                          error:error];
     NSString *json = [[NSString alloc] initWithData:jsonData
                                            encoding:NSUTF8StringEncoding];
@@ -116,7 +116,7 @@
 
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:metaData
-                                                           options:NSJSONWritingPrettyPrinted
+                                                           options:kNilOptions
                                                              error:&error];
         NSString *json = [[NSString alloc] initWithData:jsonData
                                                encoding:NSUTF8StringEncoding];

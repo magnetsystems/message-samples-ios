@@ -94,12 +94,12 @@ SPEC CHECKSUMS:
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
-  MagnetMax: e3aa16c9eb3843b9cb9e65d125de6679fdc438cb
-  MagnetMaxCore: 4beee03119b3af0da11137b3db951dbb2f1c0f0e
+  MagnetMax: bafe021aa3dc8e69d0b401f600a2059b511e1731
+  MagnetMaxCore: f9fefa87325b098751208c982d245f44453ce203
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: 7b6db0ce520bbb017e36c36759f0e87ddceef27e
+  MMX: ab8bece01b6d21400a0cf85235b68c7c790acf4b
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
 
 COCOAPODS: 0.39.0

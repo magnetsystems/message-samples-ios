@@ -81,6 +81,7 @@
 			if (senderID) {
 				msg.senderUserID = senderID;
 			}
+            msg.senderDeviceID = mmxMetaDict[kAddressFromKey][kAddressDeviceIDKey];
 		}
 		[messageArray addObject:msg];
 	}
