@@ -10,14 +10,18 @@
   "authors": {
     "Magnet Systems, Inc.": "support@magnet.com"
   },
+  "source": {
+    "git": "https://github.com/magnetsystems/message-samples-ios.git",
+    "branch": "ChatKit"
+  },
   "platforms": {
     "ios": "8.0"
   },
   "requires_arc": true,
   "resources": [
-    "source/**/*.{xib,storyboard,bundle,png}"
+    "ChatKit/source/**/*.{xib,storyboard,bundle,png}"
   ],
-  "source_files": "source/**/*.{h,m,swift}",
+  "source_files": "ChatKit/source/**/*.{h,m,swift}",
   "frameworks": [
     "QuartzCore",
     "CoreGraphics",
