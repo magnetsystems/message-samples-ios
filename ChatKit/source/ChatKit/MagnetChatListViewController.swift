@@ -22,54 +22,46 @@ import MagnetMax
 //Mark: ChatListControllerDatasource
 
 
-@objc public protocol ChatListControllerDatasource : class {
-    func chatListLoadChannels(channels : (([MMXChannel]) ->Void))
-    optional func chatListRegisterCells(tableView : UITableView)
-    optional func chatListCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell?
-    optional func chatListCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat
+@objc public protocol ChatListControllerDatasource : ChannelListDatasource {
+    func listLoadChannels(channels : (([MMXChannel]) ->Void))
+    optional func listRegisterCells(tableView : UITableView)
+    optional func listCellForMMXChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell?
+    optional func listCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat
 }
 
 
 //Mark: ChatListControllerDelegate
 
 
-@objc public protocol ChatListControllerDelegate : class {
-    func chatListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
-    func chatListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
-    optional func chatListDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
-    optional func chatListWillShowChatController(chatController : MagnetChatViewController)
-    optional func chatListChannelForSubscribers(subscribers : [MMUser]) -> MMXChannel?
-    optional func chatListChannelForSubscribersWithBlock(subscribers : [MMUser], finished : ((channel : MMXChannel) -> Void)) -> Void
+@objc public protocol ChatListControllerDelegate : ChannelListDelegate {
+    
+    func listDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
+    func listCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
+    optional func listDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
+    
+    optional func listWillShowChatController(chatController : MagnetChatViewController)
+    optional func listChannelForSubscribers(subscribers : [MMUser]) -> MMXChannel?
+    optional func listChannelForSubscribersWithBlock(subscribers : [MMUser], finished : ((channel : MMXChannel) -> Void)) -> Void
 }
 
 
 //Mark: MagnetChatListViewController
 
 
-public class MagnetChatListViewController: MagnetViewController, ContactsPickerControllerDelegate, HomeViewControllerDatasource, HomeViewControllerDelegate {
+public class MagnetChatListViewController: HomeViewController, ContactsControllerDelegate, ChannelListDatasource, ChannelListDelegate {
     
     
     //MARK: Private Variables
     
     
     private var chooseContacts : Bool = true
-    private var underlyingHomeViewController = HomeViewController.init()
     private var contactsController : MagnetContactsPickerController?
     
     
     //MARK: Public Variables
     
     
-    public var canChooseContacts :Bool? {
-        didSet {
-            if let can = canChooseContacts {
-                chooseContacts = can
-                generateNavBars()
-            }
-        }
-    }
-    
-    public var contactsPickerDelegate : ContactsPickerControllerDelegate?
+    public var contactsPickerDelegate : ContactsControllerDelegate?
     public var datasource : ChatListControllerDatasource = DefaultChatListControllerDatasource()
     public var delegate : ChatListControllerDelegate?
     
@@ -77,7 +69,9 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     //MARK: Overrides
     
     
-    override func setupViewController() {
+    override public func setupViewController() {
+        super.setupViewController()
+        
         if let user = MMUser.currentUser() {
             self.title = "\(user.firstName ?? "") \(user.lastName ?? "")"
         }
@@ -86,33 +80,26 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
             self.title = MMUser.currentUser()?.userName
         }
         
-        underlyingHomeViewController.datasource = self
-        underlyingHomeViewController.delegate = self
-        underlyingHomeViewController.view.tintColor = self.appearance.tintColor
+        self.view.tintColor = self.appearance.tintColor
         if let datasource = self.datasource as? DefaultChatListControllerDatasource {
             datasource.chatList = self
         }
         
         navigationController?.setNavigationBarHidden(false, animated: true)
-    }
-    
-    override internal func underlyingViewController() -> UIViewController? {
-        return underlyingHomeViewController
+        self.delegateProxy = self
+        self.datasourceProxy = self
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view
+        
+        self.view.tintColor = self.appearance.tintColor
     }
     
-    override public func viewWillAppear(animated: Bool) {
+    public override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         generateNavBars()
-    }
-    
-    override public func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
     }
     
     
@@ -142,7 +129,7 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
         }
         
         self.contactsController?.dismiss()
-        self.delegate?.chatListWillShowChatController?(chatViewController)
+        self.delegate?.listWillShowChatController?(chatViewController)
         if let nav = navigationController {
             nav.pushViewController(chatViewController, animated: true)
         } else {
@@ -156,27 +143,27 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     
     
     public func reloadData() {
-        underlyingHomeViewController.refreshChannelDetail()
+        self.refreshChannelDetail()
     }
     
     
     //MARK: - HomeViewControllerDatasource
     
     
-    func homeViewLoadChannels(channels : (([MMXChannel]) ->Void)) {
-        self.datasource.chatListLoadChannels(channels)
+    public func listLoadChannels(channels : (([MMXChannel]) ->Void)) {
+        self.datasource.listLoadChannels(channels)
     }
     
-    func homeViewRegisterCells(tableView : UITableView) {
-        self.datasource.chatListRegisterCells?(tableView)
+    public func listRegisterCells(tableView : UITableView) {
+        self.datasource.listRegisterCells?(tableView)
     }
     
-    func homeViewCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
-        return self.datasource.chatListCellForMMXChannel?(tableView, channel : channel, channelDetails : channelDetails, row : row)
+    public func listCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
+        return self.datasource.listCellForMMXChannel?(tableView, channel : channel, channelDetails : channelDetails, row : row)
     }
     
-    func homeViewCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat {
-        if let height  = self.datasource.chatListCellHeightForMMXChannel?(channel, row : row) {
+    public func listCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat {
+        if let height  = self.datasource.listCellHeightForMMXChannel?(channel, row : row) {
             return height
         }
         return 80
@@ -186,20 +173,20 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     //MARK: - HomeViewControllerDelegate
     
     
-    func homeViewCanLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
-        if let canLeave = self.delegate?.chatListCanLeaveChannel(channel, channelDetails : channelDetails) {
+    public func listCanLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+        if let canLeave = self.delegate?.listCanLeaveChannel(channel, channelDetails : channelDetails) {
             return canLeave
         }
         
         return true
     }
     
-    func homeViewDidLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
-        self.delegate?.chatListDidLeaveChannel?(channel,channelDetails : channelDetails)
+    public func listDidLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
+        self.delegate?.listDidLeaveChannel?(channel,channelDetails : channelDetails)
     }
     
-    func homeViewDidSelectChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
-        self.delegate?.chatListDidSelectChannel(channel,channelDetails : channelDetails)
+    public func listDidSelectChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
+        self.delegate?.listDidSelectChannel(channel,channelDetails : channelDetails)
     }
     
     
@@ -208,9 +195,9 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
     
     public func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
         var chatViewController : MagnetChatViewController!
-        if let channel = self.delegate?.chatListChannelForSubscribers?(selectedUsers) {
+        if let channel = self.delegate?.listChannelForSubscribers?(selectedUsers) {
             chatViewController = MagnetChatViewController.init(channel : channel)
-        }else if let listDelegate = self.delegate?.chatListChannelForSubscribersWithBlock {
+        }else if let listDelegate = self.delegate?.listChannelForSubscribersWithBlock {
             listDelegate(selectedUsers, finished: { channel in
                 chatViewController = MagnetChatViewController.init(channel : channel)
                 self.presentChatViewController(chatViewController, users: selectedUsers)
@@ -232,7 +219,7 @@ public class MagnetChatListViewController: MagnetViewController, ContactsPickerC
         if contactsPickerDelegate == nil {
             contactsPickerDelegate = self
         }
-        c.pickerDelegate = contactsPickerDelegate
+        c.delegate = contactsPickerDelegate
         
         if let nav = navigationController {
             nav.pushViewController(c, animated: true)

@@ -18,128 +18,73 @@
 import UIKit
 import MagnetMax
 
+
+//MARK: UserLetterGroup
+
+
 public class UserLetterGroup : NSObject {
     var letter : Character  = "0"
     var users : [UserModel] = []
 }
 
+
+//MARK: UserModel
+
+
 public class UserModel : NSObject {
     var user : MMUser?
-}
-
-public protocol ControllerDatasource: class {
-    func controllerLoadMore(searchText : String?, offset : Int)
-    func controllerHasMore() -> Bool
-    func controllerSearchUpdatesContinuously() -> Bool
-    func controllerShowsSectionIndexTitles() -> Bool
-    func controllerShowsSectionsHeaders() -> Bool
-}
-
-public class IconView : UIView, UIGestureRecognizerDelegate {
-    
-    
-    //MARK: Public Variables
-    
-    
-    var imageView : UIImageView?
-    var title : UILabel?
-    weak var user : MMUser?
-    
-    
-    //MARK: Creation
-    
-    
-    static func newIconView() -> IconView {
-        let view = IconView(frame: CGRect(x: 0, y: 0, width: 50, height: 0))
-        view.translatesAutoresizingMaskIntoConstraints = false
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-        imageView.layer.cornerRadius = imageView.frame.size.width / 2.0
-        imageView.clipsToBounds = true
-        imageView.contentMode = .ScaleAspectFill
-        imageView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
-        let imageContainer = UIView(frame: CGRect(x: 0, y: 5, width: imageView.frame.size.width, height: imageView.frame.size.height))
-        imageContainer.addSubview(imageView)
-        imageContainer.translatesAutoresizingMaskIntoConstraints = false
-        
-        let label = UILabel(frame: CGRect(x: 0, y: CGRectGetMaxY(imageContainer.frame), width: 0, height: 16))
-        label.textAlignment = .Center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFontOfSize(10)
-        label.textColor = UIColor.grayColor()
-        
-        let centerX = NSLayoutConstraint(item: imageContainer, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1, constant: 0)
-        let imageYSpace = NSLayoutConstraint(item: imageContainer, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 0)
-        let imageWidth = NSLayoutConstraint(item: imageContainer, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: imageContainer.frame.size.width)
-        let imageHeight = NSLayoutConstraint(item: imageContainer, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: imageContainer.frame.size.height)
-        
-        let labelYSpace = NSLayoutConstraint(item: label, attribute: .Top, relatedBy: .Equal, toItem: imageContainer, attribute: .Bottom, multiplier: 1, constant: 0)
-        let labelBottom = NSLayoutConstraint(item: label, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1, constant: 0)
-        let labelLeading = NSLayoutConstraint(item: label, attribute: .Leading, relatedBy: .Equal, toItem: view, attribute: .Leading, multiplier: 1, constant: 0)
-        let labelTrailing = NSLayoutConstraint(item: label, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1, constant: 0)
-        let labelHeight =  NSLayoutConstraint(item: label, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: label.frame.size.height)
-        //label constraints
-        view.addSubview(imageContainer)
-        view.addSubview(label)
-        view.addConstraints([centerX, imageYSpace, imageWidth, imageHeight, labelYSpace, labelBottom, labelLeading, labelTrailing,labelHeight])
-        view.title = label
-        view.imageView = imageView
-        return view
-    }
-    
-    
-    //MARK: Action
-    
-    
-    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
 }
 
 
 //MARK: Contacts Class
 
 
-class ContactsViewController: MMTableViewController, UISearchBarDelegate {
+public class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     
     
     //MARK: Public Variables
     
-    
-    var availableRecipients = [UserLetterGroup]()
-    var canSearch : Bool? {
+    public var canSearch : Bool? {
         didSet {
             updateSearchBar()
         }
     }
-    var currentUserCount = 0
-    weak var dataSource : ControllerDatasource?
-    var disabledUsers : [String : MMUser] = [:]
-    var iconViewShouldMove : Bool = false
-    var isWaitingForData : Bool = false
-    var selectedUsers : [MMUser] = []
-    var rightNavBtn : UIBarButtonItem?
-    var startPoint : CGPoint = CGPointZero
-    var searchBar = UISearchBar()
-    var topGuide : NSLayoutConstraint?
+    
+    public var iconViewShouldMove : Bool = false
+    public internal(set) var selectedUsers : [MMUser] = []
+    public private(set) var searchBar = UISearchBar()
+    
+    
+    //MARK: Internal Variables
+    
+    
+    internal var availableRecipients = [UserLetterGroup]()
+    internal var currentUserCount = 0
+    internal weak var datasourceProxy : ContactsControllerDatasource?
+    internal weak var delegateProxy : ContactsControllerDelegate?
+    internal var disabledUsers : [String : MMUser] = [:]
+    internal var isWaitingForData : Bool = false
+    internal var startPoint : CGPoint = CGPointZero
+    internal var topGuide : NSLayoutConstraint?
     
     
     //MARK: IBOutlets
     
     
-    @IBOutlet var contactsView : UIView!
-    @IBOutlet var contactsViewScrollView : UIScrollView!
+    @IBOutlet internal var contactsView : UIView!
+    @IBOutlet internal var contactsViewScrollView : UIScrollView!
     
     
     //MARK: Overrides
     
     
-    override func loadView() {
+    override public func loadView() {
         super.loadView()
         let nib = UINib.init(nibName: "ContactsViewController", bundle: NSBundle(forClass: self.dynamicType))
         nib.instantiateWithOwner(self, options: nil)
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         if MMUser.sessionStatus() != .LoggedIn {
@@ -153,7 +98,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         
         searchBar.sizeToFit()
         searchBar.returnKeyType = .Search
-        if let dataSource = self.dataSource where dataSource.controllerSearchUpdatesContinuously() {
+        if let dataSource = self.datasourceProxy where dataSource.controllerSearchUpdatesContinuously() {
             searchBar.returnKeyType = .Done
         }
         searchBar.setShowsCancelButton(false, animated: false)
@@ -166,13 +111,12 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         updateContactsView(self.selectedUsers)
-        updateNextButton()
     }
     
-    override func viewWillLayoutSubviews() {
+    override public func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
         if self.topGuide == nil {
@@ -193,19 +137,15 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-    }
+    
+    //MARK: public Methods
     
     
-    //MARK: Public Methods
-    
-    
-    func appendUsers(users : [MMUser]) {
+    public func appendUsers(users : [MMUser]) {
         appendUsers(users, reloadTable: true)
     }
     
-    func appendUsers(unfilteredUsers : [MMUser], reloadTable : Bool) {
+    public func appendUsers(unfilteredUsers : [MMUser], reloadTable : Bool) {
         isWaitingForData = false
         currentUserCount += unfilteredUsers.count
         let users = self.filterOutUsers(unfilteredUsers)
@@ -293,25 +233,41 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             self.tableView.endUpdates()
         }
         
-        if let dataSource = self.dataSource where dataSource.controllerHasMore()  {
+        if let dataSource = datasourceProxy where dataSource.controllerHasMore()  {
             let indexPath = NSIndexPath(forRow: 0, inSection: self.availableRecipients.count)
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
         }
     }
     
-    func reset() {
+    public func reset() {
         self.availableRecipients = []
         self.currentUserCount = 0
         self.tableView.reloadData()
     }
     
-    func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
-        var indexTitles : [String]? = nil
-        if let dataSource = self.dataSource where dataSource.controllerShowsSectionIndexTitles() {
-            indexTitles = availableRecipients.map({ "\($0.letter)" })
+    
+    // MARK: - UISearchResultsUpdating
+    
+    
+    public func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.characters.count == 0 {
+            self.search("")
+            return
         }
-        return indexTitles
+        
+        if let dataSource = datasourceProxy where dataSource.controllerSearchUpdatesContinuously() {
+            self.search(searchText)
+        }
     }
+    
+    public func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        self.search(searchBar.text)
+    }
+    
+}
+
+public extension ContactsViewController {
     
     
     // MARK: - Table view data source
@@ -321,27 +277,35 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         return availableRecipients.count + 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        var indexTitles : [String]? = nil
+        if let showsSection = datasourceProxy?.contactControllerShowsSectionIndexTitles?() where showsSection == true {
+            indexTitles = availableRecipients.map({ "\($0.letter)" })
+        }
+        return indexTitles
+    }
+    
+    override public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView.numberOfSections - 1 == section {
             return 1
         }
         return availableRecipients[section].users.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         if tableView.numberOfSections - 1 == indexPath.section {
             var loadingCell = tableView.dequeueReusableCellWithIdentifier("LoadingCellIdentifier") as? LoadingCell
             if loadingCell == nil {
                 loadingCell = LoadingCell(style: .Default, reuseIdentifier: "LoadingCellIdentifier")
             }
-            if let dS = dataSource where dS.controllerHasMore() {
+            if let dS = datasourceProxy where dS.controllerHasMore() {
                 loadingCell?.indicator?.startAnimating()
                 
                 if !isWaitingForData {
                     isWaitingForData = true
                     let text = searchBar.text?.characters.count > 0 ? searchBar.text : nil
-                    dataSource?.controllerLoadMore(text, offset: currentUserCount)
+                    dS.controllerLoadMore(text, offset: currentUserCount)
                 }
                 
             } else {
@@ -402,7 +366,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         if tableView.numberOfSections - 1 == section {
             return nil
         }
-        if let dataSource = self.dataSource where dataSource.controllerShowsSectionIndexTitles() == false {
+        if let showsSection = datasourceProxy?.contactControllerShowsSectionIndexTitles?() where showsSection == false {
             return nil
         }
         let letter = availableRecipients[section]
@@ -418,7 +382,6 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         if  let user = users[indexPath.row].user {
             addSelectedUser(user)
         }
-        updateNextButton()
         updateContactsView(selectedUsers)
     }
     
@@ -430,15 +393,18 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         if let user = users[indexPath.row].user {
             removeSelectedUser(user)
         }
-        updateNextButton()
         updateContactsView(selectedUsers)
     }
+}
+
+
+private extension ContactsViewController {
     
     
     //MARK : UISCrollViewDelegate
     
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    private func scrollViewDidScroll(scrollView: UIScrollView) {
         
         if searchBar.isFirstResponder() {
             searchBar.resignFirstResponder()
@@ -446,30 +412,10 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     }
     
     
-    // MARK: - UISearchResultsUpdating
-    
-    
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.characters.count == 0 {
-            self.search("")
-            return
-        }
-        
-        if let dataSource = self.dataSource where dataSource.controllerSearchUpdatesContinuously() {
-            self.search(searchText)
-        }
-    }
-    
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        self.search(searchBar.text)
-    }
-    
-    
     //MARK: Actions
     
     
-    func didPanView(gesture : UILongPressGestureRecognizer) {
+    @objc private func didPanView(gesture : UILongPressGestureRecognizer) {
         let loc = gesture.locationInView(self.view)
         if gesture.state == .Began {
             if let gestureView = gesture.view {
@@ -502,7 +448,6 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
                     if let user = iconView.user {
                         removeSelectedUser(user)
                         updateContactsView(selectedUsers)
-                        updateNextButton()
                         self.tableView.beginUpdates()
                         self.tableView.reloadData()
                         self.tableView.endUpdates()
@@ -519,6 +464,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
     private func addSelectedUser(selectedUser : MMUser) {
         removeSelectedUser(selectedUser)
         selectedUsers.append(selectedUser)
+        self.delegateProxy?.contactsControllerSelectedUser?(selectedUser)
     }
     
     private func updateSearchBar() {
@@ -553,6 +499,8 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
             
             return false
         })
+        
+        self.delegateProxy?.contactsControllerUnSelectedUser?(selectedUser)
     }
     
     private func search(searchString : String?) {
@@ -562,7 +510,7 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         }
         self.isWaitingForData = true
         self.reset()
-        dataSource?.controllerLoadMore(text, offset: 0)
+        datasourceProxy?.controllerLoadMore(text, offset: 0)
     }
     
     private func updateContactsView(users : [MMUser]) {
@@ -616,7 +564,5 @@ class ContactsViewController: MMTableViewController, UISearchBarDelegate {
         }
     }
     
-    private func updateNextButton() {
-        rightNavBtn?.enabled = selectedUsers.count > 0
-    }
 }
+

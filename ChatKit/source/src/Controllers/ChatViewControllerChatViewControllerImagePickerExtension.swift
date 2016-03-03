@@ -24,7 +24,7 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
     //MARK: UIImagePickerControllerDelegate
     
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
@@ -35,7 +35,7 @@ extension ChatViewController: UIImagePickerControllerDelegate, UINavigationContr
     dismissViewControllerAnimated(true, completion: nil)
 }
 
-func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+public func imagePickerControllerDidCancel(picker: UIImagePickerController) {
     dismissViewControllerAnimated(true, completion: nil)
 }
 }

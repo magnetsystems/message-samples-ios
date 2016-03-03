@@ -21,40 +21,16 @@ import NYTPhotoViewer
 import UIKit
 
 
-//MARK: ChatViewControllerDelegate
-
-
-protocol ChatViewControllerDelegate {
-    func controllerDidCreateChannel(channel : MMXChannel)
-    func controllerDidSendMessage(message : MMXMessage)
-    func controllerDidRecieveMessage(message : MMXMessage)
-}
-
-
 //MARK: ChatViewController
 
 
-class ChatViewController: JSQMessagesViewController {
+public class ChatViewController: MMJSQViewController {
     
     
-    //MARK: Public properties
+    //MARK: Public Properties
     
     
-    var activityIndicator : UIActivityIndicatorView?
-    var avatars = Dictionary<String, UIImage>()
-    var avatarsDownloading = Dictionary<String, MMUser>()
-    var canLeaveChat = false
-    var delegate : ChatViewControllerDelegate?
-    let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
-    var messages = [Message]()
-    // var notifier : NavigationNotifier?
-    let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
-    
-    
-    //MARK: Overridden Properties
-    
-    
-    var chat : MMXChannel? {
+    public internal(set) var chat : MMXChannel? {
         didSet {
             //Register for a notification to receive the message
             if let channel = chat {
@@ -66,8 +42,28 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    var recipients : [MMUser]?
     
+    public var incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
+    public var mmxMessages : [MMXMessage] {
+        get {
+            return self.messages.map({$0.underlyingMessage})
+        }
+    }
+    
+    // var notifier : NavigationNotifier?
+    public var outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
+    public internal(set) var recipients : [MMUser]?
+    
+    
+    //MARK: Internal properties
+    
+    
+    internal var activityIndicator : UIActivityIndicatorView?
+    internal var avatars = Dictionary<String, UIImage>()
+    internal var avatarsDownloading = Dictionary<String, MMUser>()
+    internal var canLeaveChat = false
+    internal var delegateProxy : ChatViewControllerDelegate?
+    internal var messages = [Message]()
     
     // MARK: - overrides
     
@@ -78,7 +74,7 @@ class ChatViewController: JSQMessagesViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    override func didReceiveMemoryWarning() {
+    override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
         var newMessages:[Message] = []
@@ -88,7 +84,7 @@ class ChatViewController: JSQMessagesViewController {
         messages = newMessages
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         
         guard let user = MMUser.currentUser() else {
@@ -108,14 +104,14 @@ class ChatViewController: JSQMessagesViewController {
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override public func viewWillAppear(animated: Bool) {
         // Prevent bottom scrolling in super class before appearing
         self.automaticallyScrollsToMostRecentMessage = false
         super.viewWillAppear(animated)
         self.automaticallyScrollsToMostRecentMessage = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override public func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
         if let textView = self.inputToolbar?.contentView?.textView where textView.isFirstResponder() {
@@ -132,7 +128,7 @@ class ChatViewController: JSQMessagesViewController {
     // MARK: - Public methods
     
     
-    func hideSpinner() {
+    public func hideSpinner() {
         if let activityIndicator = self.activityIndicator {
             activityIndicator.tag = max(activityIndicator.tag - 1, 0)
             if activityIndicator.tag == 0 {
@@ -141,7 +137,7 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    func showSpinner() {
+    public func showSpinner() {
         self.activityIndicator?.tag++
         self.activityIndicator?.startAnimating()
     }
@@ -150,13 +146,13 @@ class ChatViewController: JSQMessagesViewController {
     // MARK: - Notifications
     
     
-    func didReceiveMessage(mmxMessage: MMXMessage) {
+    @objc private func didReceiveMessage(mmxMessage: MMXMessage) {
         //Show the typing indicator to be shown
         // Scroll to actually view the indicator
         scrollToBottomAnimated(true)
         
         let finishedMessageClosure : () -> Void = {
-            self.delegate?.controllerDidRecieveMessage(mmxMessage)
+            self.delegateProxy?.chatDidRecieveMessage(mmxMessage)
             let message = Message(message: mmxMessage)
             self.messages.append(message)
             JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
@@ -183,7 +179,7 @@ class ChatViewController: JSQMessagesViewController {
     //MARK: Actions
     
     
-    override func didPressAccessoryButton(sender: UIButton!) {
+    override public func didPressAccessoryButton(sender: UIButton!) {
         
         self.inputToolbar!.contentView!.textView?.resignFirstResponder()
         
@@ -214,7 +210,7 @@ class ChatViewController: JSQMessagesViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
+    override public func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         
         guard let channel = self.chat else {
             if let recipients = self.recipients where recipients.count > 0 {
@@ -239,7 +235,7 @@ class ChatViewController: JSQMessagesViewController {
         showSpinner()
         let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
         mmxMessage.sendWithSuccess( { [weak self] _ in
-            self?.delegate?.controllerDidSendMessage(mmxMessage)
+            self?.delegateProxy?.chatDidSendMessage(mmxMessage)
             button.userInteractionEnabled = true
             self?.hideSpinner()
             }) { error in
@@ -249,6 +245,42 @@ class ChatViewController: JSQMessagesViewController {
         }
         finishSendingMessageAnimated(true)
     }
+    
+    public func sendImage(image : UIImage) {
+        guard let chat = self.chat else {
+            if let recipients = self.recipients where recipients.count > 0 {
+                createNewChatWithRecipients(recipients, completion: {error in
+                    if error == nil {
+                        self.sendImage(image)
+                    }
+                })
+            }
+            return
+        }
+        
+        let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
+        let mmxMessage = MMXMessage(toChannel: chat, messageContent: messageContent)
+        
+        if let data = UIImageJPEGRepresentation(image, 0.8) {
+            
+            let attachment = MMAttachment(data: data, mimeType: "image/jpg")
+            mmxMessage.addAttachment(attachment)
+            self.showSpinner()
+            mmxMessage.sendWithSuccess({ [weak self] _ in
+                self?.delegateProxy?.chatDidSendMessage(mmxMessage)
+                self?.hideSpinner()
+                }) { error in
+                    self.hideSpinner()
+                    print(error)
+            }
+            finishSendingMessageAnimated(true)
+            
+        }
+    }
+}
+
+
+private extension ChatViewController {
     
     
     // MARK: Private Methods
@@ -278,7 +310,7 @@ class ChatViewController: JSQMessagesViewController {
             self?.showSpinner()
             let mmxMessage = MMXMessage(toChannel: chat, messageContent: messageContent)
             mmxMessage.sendWithSuccess( { _ in
-                self?.delegate?.controllerDidSendMessage(mmxMessage)
+                self?.delegateProxy?.chatDidSendMessage(mmxMessage)
                 self?.hideSpinner()
                 self?.finishSendingMessageAnimated(true)
                 }) { error in
@@ -310,7 +342,7 @@ class ChatViewController: JSQMessagesViewController {
         let id = NSUUID().UUIDString
         MMXChannel.createWithName(id, summary: "[CHAT KIT]", isPublic: false, publishPermissions: .Anyone, subscribers: Set(users), success: { (channel) -> Void in
             self.chat = channel
-            self.delegate?.controllerDidCreateChannel(channel)
+            self.delegateProxy?.chatDidCreateChannel(channel)
             completion(error: nil)
             }) { (error) -> Void in
                 completion(error: error)
@@ -344,38 +376,6 @@ class ChatViewController: JSQMessagesViewController {
             }, failure: { error in
                 print("[ERROR]: \(error)")
         })
-    }
-    
-    internal func sendImage(image : UIImage) {
-        guard let chat = self.chat else {
-            if let recipients = self.recipients where recipients.count > 0 {
-                createNewChatWithRecipients(recipients, completion: {error in
-                    if error == nil {
-                        self.sendImage(image)
-                    }
-                })
-            }
-            return
-        }
-        
-        let messageContent = [Constants.ContentKey.Type: MessageType.Photo.rawValue]
-        let mmxMessage = MMXMessage(toChannel: chat, messageContent: messageContent)
-        
-        if let data = UIImageJPEGRepresentation(image, 0.8) {
-            
-            let attachment = MMAttachment(data: data, mimeType: "image/jpg")
-            mmxMessage.addAttachment(attachment)
-            self.showSpinner()
-            mmxMessage.sendWithSuccess({ [weak self] _ in
-                self?.delegate?.controllerDidSendMessage(mmxMessage)
-                self?.hideSpinner()
-                }) { error in
-                    self.hideSpinner()
-                    print(error)
-            }
-            finishSendingMessageAnimated(true)
-            
-        }
     }
 }
 

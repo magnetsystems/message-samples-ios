@@ -23,46 +23,28 @@ import MagnetMax
 
 
 @objc public protocol MagnetChatViewControllerDelegate : class {
-    optional func chatViewDidCreateChannel(channel : MMXChannel)
-    optional func chatViewDidSendMessage(message : MMXMessage)
-    optional func chatViewDidRecieveMessage(message : MMXMessage)
+    optional func chatDidCreateChannel(channel : MMXChannel)
+    optional func chatDidSendMessage(message : MMXMessage)
+    optional func chatDidRecieveMessage(message : MMXMessage)
 }
 
 
 //MARK: MagnetChatViewController
 
 
-public class MagnetChatViewController: MagnetViewController, ChatViewControllerDelegate, MagnetChatViewControllerDelegate {
-    
-    
-    //MARK : Private Variables
-    
-    
-    private var underlyingChatViewController = ChatViewController.init()
+public class MagnetChatViewController: ChatViewController, ChatViewControllerDelegate {
     
     
     //MARK: Public Variables
     
     
-    public private(set) var channel : MMXChannel? {
-        set {
-            underlyingChatViewController.chat = newValue
-        }
+    public var channel : MMXChannel? {
         get {
-            return underlyingChatViewController.chat
+            return chat
         }
     }
     
     public var delegate : MagnetChatViewControllerDelegate?
-    
-    public private(set) var recipients : [MMUser]? {
-        set {
-            underlyingChatViewController.recipients = newValue
-        }
-        get {
-            return underlyingChatViewController.recipients
-        }
-    }
     
     
     //MARK: Init
@@ -70,7 +52,7 @@ public class MagnetChatViewController: MagnetViewController, ChatViewControllerD
     
     public convenience init(channel : MMXChannel) {
         self.init()
-        self.channel = channel
+        self.chat = channel
     }
     
     public convenience init(recipients : [MMUser]) {
@@ -82,18 +64,17 @@ public class MagnetChatViewController: MagnetViewController, ChatViewControllerD
     //MARK: Overrides
     
     
-    override func setupViewController() {
+    override public func setupViewController() {
+        super.setupViewController()
+        
         navigationController?.setNavigationBarHidden(false, animated: true)
-        underlyingChatViewController.delegate = self
-    }
-    
-    override internal func underlyingViewController() -> UIViewController? {
-        return underlyingChatViewController
+        self.delegateProxy = self
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        underlyingChatViewController.view.tintColor = self.appearance.tintColor
+        
+        self.view.tintColor = self.appearance.tintColor
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -102,18 +83,11 @@ public class MagnetChatViewController: MagnetViewController, ChatViewControllerD
         generateNavBars()
     }
     
-    override public func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
     
     // Private Methods
     
     
-    private func generateNavBars() {
-        if self.title == nil {
-            self.title = underlyingChatViewController.title
-        }
+    public func generateNavBars() {
         if self.navigationController == nil {
             let btnBack = UIBarButtonItem.init(title: "Back", style: .Plain, target: self, action: "dismiss")
             self.setMagnetNavBar(leftItems: [btnBack], rightItems: nil, title: self.title)
@@ -124,15 +98,14 @@ public class MagnetChatViewController: MagnetViewController, ChatViewControllerD
     //MARK:  ChatViewControllerDelegate
     
     
-    func controllerDidCreateChannel(channel : MMXChannel) {
-        self.delegate?.chatViewDidCreateChannel?(channel)
+    public func chatDidCreateChannel(channel : MMXChannel) {
+        self.delegate?.chatDidCreateChannel?(channel)
     }
     
-    func controllerDidSendMessage(message : MMXMessage) {
-        self.delegate?.chatViewDidSendMessage?(message)
+    public func chatDidSendMessage(message : MMXMessage) {
+        self.delegate?.chatDidSendMessage?(message)
     }
-    
-    func controllerDidRecieveMessage(message : MMXMessage) {
-        self.delegate?.chatViewDidRecieveMessage?(message)
+    public func chatDidRecieveMessage(message : MMXMessage) {
+        self.delegate?.chatDidRecieveMessage?(message)
     }
 }

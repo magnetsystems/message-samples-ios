@@ -17,30 +17,36 @@
 
 import UIKit
 
-class MMTableViewController: MMViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+public class MMTableViewController: MMViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+    
+    //Mark: 
+    public var refreshControl : UIRefreshControl? = UIRefreshControl()
+    
     
     //MARK: Outlets
     
     
-    @IBOutlet var tableView : UITableView!
+    @IBOutlet public var tableView : UITableView!
     
     
     //MARK: Overrides
     
-    
-    override func setupViewController() {
-        let _ = self.view
+    override public func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if let refreshControl = self.refreshControl {
+        refreshControl.backgroundColor = UIColor.clearColor()
+        tableView.addSubview(refreshControl)
+        }
     }
-    
     
     //MARK: UITableViewDelegatye
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 0
     }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         return UITableViewCell()
     }
 }

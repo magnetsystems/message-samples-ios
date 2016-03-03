@@ -18,40 +18,26 @@
 import UIKit
 import MagnetMax
 
-
-//MARK:ContactsPickerControllerDelegate
-
-
-public protocol ContactsPickerControllerDelegate: class {
-    func contactsControllerDidFinish(with selectedUsers: [MMUser])
-}
-
-
-//MARK: ContactsPickerControllerDatasource
-
-
-@objc public protocol ContactsPickerControllerDatasource: class {
-    func contactsControllerLoadMore(searchText : String?, offset : Int)
-    func contactControllerHasMore() -> Bool
-    func contactControllerSearchUpdatesContinuously() ->Bool
-    
-    optional func contactControllerPreselectedUsers() -> [MMUser]
+@objc public protocol MagnetContactsControllerDatasource: ContactsControllerDatasource {
+    func controllerLoadMore(searchText : String?, offset : Int)
+    func controllerHasMore() -> Bool
+    func controllerSearchUpdatesContinuously() -> Bool
     optional func contactControllerShowsSectionIndexTitles() -> Bool
     optional func contactControllerShowsSectionsHeaders() -> Bool
+    optional func contactControllerPreselectedUsers() -> [MMUser]
 }
 
 
 //MARK: MagnetContactsPickerController
 
 
-public class MagnetContactsPickerController: MagnetViewController, ControllerDatasource {
+public class MagnetContactsPickerController: ContactsViewController, ContactsControllerDatasource,ContactsControllerDelegate {
     
     
     //Private Variables
     
     
     private var requestNumber : Int = 0
-    private let underlyingContactsViewController = ContactsViewController()
     
     
     //MARK: Public Variables
@@ -59,14 +45,8 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
     
     public var barButtonCancel : UIBarButtonItem?
     public var barButtonNext : UIBarButtonItem?
-    public var canSearch : Bool = true
-    public weak var pickerDelegate : ContactsPickerControllerDelegate?
-    public var pickerDatasource : ContactsPickerControllerDatasource? = DefaultContactsPickerControllerDatasource()
-    
-    public var tableView : UITableView {
-        return underlyingContactsViewController.tableView
-    }
-    
+    public weak var delegate : ContactsControllerDelegate?
+    public var datasource : MagnetContactsControllerDatasource? = DefaultContactsPickerControllerDatasource()
     
     //MARK: Init
     
@@ -79,40 +59,45 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
                 hash[userId] = user
             }
         }
-        underlyingContactsViewController.disabledUsers = hash
+        self.disabledUsers = hash
     }
     
     
     //MARK: Overrides
     
     
-    override func setupViewController() {
+    override public func setupViewController() {
+        self.refreshControl = nil
+        
+        super.setupViewController()
+        
         self.title = "Contacts"
         let btnNext = UIBarButtonItem.init(title: "Next", style: .Plain, target: self, action: "nextAction")
         let btnCancel = UIBarButtonItem.init(title: "Cancel", style: .Plain, target: self, action: "cancelAction")
         barButtonCancel = btnCancel
         barButtonNext = btnNext
-        if let dataSource = self.pickerDatasource as? DefaultContactsPickerControllerDatasource {
+        
+        if let dataSource = self.datasource as? DefaultContactsPickerControllerDatasource {
             dataSource.magnetPicker = self
         }
-        
-        self.underlyingContactsViewController.dataSource = self
-    }
-    
-    override internal func underlyingViewController() -> UIViewController? {
-        return underlyingContactsViewController
+        self.delegateProxy = self
+        self.datasourceProxy = self
     }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        self.automaticallyAdjustsScrollViewInsets = false
-        generateNavBars()
-        underlyingContactsViewController.tableView.sectionIndexColor = self.appearance.tintColor
-        if let selectedUsers = self.pickerDatasource?.contactControllerPreselectedUsers?() {
-            underlyingContactsViewController.selectedUsers = selectedUsers
+        if let selectedUsers = self.datasource?.contactControllerPreselectedUsers?() {
+            self.selectedUsers = selectedUsers
         }
+        self.view.tintColor = self.appearance.tintColor
+        self.controllerLoadMore(nil, offset: 0)
+    }
+    
+    override public func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
-        self.underlyingContactsViewController.canSearch = self.canSearch
+        generateNavBars()
+        self.updateButtonItems()
     }
     
     
@@ -127,28 +112,25 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
             } else {
                 self.setMagnetNavBar(leftItems: [btnCancel], rightItems: [btnNext], title: self.title)
             }
-            underlyingContactsViewController.rightNavBtn = barButtonNext
         }
     }
     
+    
     private func newLoadingContext() {
         self.requestNumber++
+    }
+    
+    private func updateButtonItems() {
+        self.magnetNavigationItem?.rightBarButtonItem?.enabled = self.selectedUsers.count > 0
+        self.navigationItem.rightBarButtonItem?.enabled = self.selectedUsers.count > 0
     }
     
     
     //Public Methods
     
     
-    public func appendUsers(users : [MMUser]) {
-        appendUsers(users, reloadTable : true)
-    }
-    
-    private func appendUsers(users : [MMUser], reloadTable : Bool) {
-        self.underlyingContactsViewController.appendUsers(users, reloadTable: reloadTable)
-    }
-    
     public func contacts() -> [[String : [MMUser]?]] {
-        return underlyingContactsViewController.availableRecipients.map({ (group) -> [String : [MMUser]?] in
+        return self.availableRecipients.map({ (group) -> [String : [MMUser]?] in
             let letter = "\(group.letter)"
             let users = group.users.map({$0.user}) as? [MMUser]
             return [letter : users]
@@ -163,25 +145,31 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         self.appendUsers([])
     }
     
-    public func reset() {
-        underlyingContactsViewController.reset()
-    }
-    
-    private func pageForNext() {
-        pickerDatasource?.contactsControllerLoadMore(nil, offset : 0)
-    }
-    
     
     //MARK: Actions
     
     
     func cancelAction() {
-      self.dismiss()
+        self.dismiss()
     }
     
     func nextAction() {
-        self.pickerDelegate?.contactsControllerDidFinish(with: underlyingContactsViewController.selectedUsers)
+        self.delegate?.contactsControllerDidFinish?(with: self.selectedUsers)
         cancelAction()
+    }
+    
+    
+    //MARK: ControllerDelegate
+    
+    
+    public func contactsControllerSelectedUser(user: MMUser) {
+        self.updateButtonItems()
+        self.delegate?.contactsControllerSelectedUser?(user)
+    }
+    
+    public func contactsControllerUnSelectedUser(user: MMUser) {
+        self.updateButtonItems()
+        self.delegate?.contactsControllerUnSelectedUser?(user)
     }
     
     
@@ -197,29 +185,29 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
                 if loadingContext != self.loadingContext() {
                     return
                 }
-                self.pickerDatasource?.contactsControllerLoadMore(searchText, offset : offset)
+                self.datasource?.controllerLoadMore(searchText, offset : offset)
             })
         } else {
-            self.pickerDatasource?.contactsControllerLoadMore(searchText, offset : offset)
+            self.datasource?.controllerLoadMore(searchText, offset : offset)
         }
     }
     
     public func controllerHasMore() -> Bool {
-        if let pickerDatasource = pickerDatasource {
-            return pickerDatasource.contactControllerHasMore()
+        if let pickerDatasource = self.datasource {
+            return pickerDatasource.controllerHasMore()
         }
         return false
     }
     
     public func controllerSearchUpdatesContinuously() -> Bool {
-        if let pickerDatasource = pickerDatasource {
-            return pickerDatasource.contactControllerSearchUpdatesContinuously()
+        if let pickerDatasource = self.datasource {
+            return pickerDatasource.controllerSearchUpdatesContinuously()
         }
         return false
     }
     
-    public func controllerShowsSectionIndexTitles() -> Bool {
-        if let pickerDatasource = self.pickerDatasource {
+    public func contactControllerShowsSectionIndexTitles() -> Bool {
+        if let pickerDatasource = self.datasource {
             if let shows = pickerDatasource.contactControllerShowsSectionIndexTitles?() {
                 return shows
             }
@@ -227,12 +215,14 @@ public class MagnetContactsPickerController: MagnetViewController, ControllerDat
         return false
     }
     
-    public func controllerShowsSectionsHeaders() -> Bool {
-        if let pickerDatasource = self.pickerDatasource {
+    public func contactControllerShowsSectionsHeaders() -> Bool {
+        if let pickerDatasource = self.datasource {
             if let shows = pickerDatasource.contactControllerShowsSectionsHeaders?() {
                 return shows
             }
         }
         return false
     }
+    
+    
 }

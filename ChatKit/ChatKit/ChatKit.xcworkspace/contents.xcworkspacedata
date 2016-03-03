@@ -10,6 +10,13 @@
          <Group
             location = "group:Controllers"
             name = "Controllers">
+            <Group
+               location = "container:"
+               name = "DatasourcesAndDelegates">
+               <FileRef
+                  location = "group:../source/src/Controllers/DatasourcesAndDelegates/DatasourcesAndDelegates.swift">
+               </FileRef>
+            </Group>
             <FileRef
                location = "group:ChatViewController.swift">
             </FileRef>
@@ -33,6 +40,9 @@
             </FileRef>
             <FileRef
                location = "group:MMViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMJSQViewController.swift">
             </FileRef>
          </Group>
          <Group
@@ -473,6 +483,9 @@
             location = "group:ContactsCell.xib">
          </FileRef>
          <FileRef
+            location = "group:IconView.swift">
+         </FileRef>
+         <FileRef
             location = "group:HomeViewController.xib">
          </FileRef>
          <FileRef
@@ -488,24 +501,28 @@
             location = "group:LoadingCell.swift">
          </FileRef>
       </Group>
-      <FileRef
-         location = "group:DefaultChatListControllerDatasource.swift">
-      </FileRef>
-      <FileRef
-         location = "group:DefaultContactsPickerControllerDatasource.swift">
-      </FileRef>
-      <FileRef
-         location = "group:MagnetChatViewController.swift">
-      </FileRef>
-      <FileRef
-         location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/MagnetContactsPickerController.swift">
-      </FileRef>
-      <FileRef
-         location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/MagnetChatListViewController.swift">
-      </FileRef>
-      <FileRef
-         location = "group:MagnetViewController.swift">
-      </FileRef>
+      <Group
+         location = "container:"
+         name = "ChatKit">
+         <FileRef
+            location = "group:../source/ChatKit/ChatKitUI.h">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/DefaultChatListControllerDatasource.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/DefaultContactsPickerControllerDatasource.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/MagnetChatListViewController.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/MagnetChatViewController.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/MagnetContactsPickerController.swift">
+         </FileRef>
+      </Group>
    </Group>
    <FileRef
       location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/ChatKit/ChatKitTest.xcodeproj">

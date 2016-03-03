@@ -17,15 +17,7 @@
 
 import UIKit
 
-public protocol MMViewControllerProtocol : class {
-    var appearance : MagnetControllerAppearance { get }
-    func setMagnetNavBar(leftItems leftItems:[UIBarButtonItem]?, rightItems:[UIBarButtonItem]?, title : String?)
-    func setupViewController()
-    func dismiss()
-    func dismissAnimated()
-}
-
-public class MMViewController: UIViewController, MMViewControllerProtocol {
+public class MMJSQViewController: JSQMessagesViewController, MMViewControllerProtocol {
     
     
     //MARK: Public Variables
@@ -36,7 +28,7 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
     public var magnetNavigationItem : UINavigationItem?
     
     
-    //Private Variables
+    //MARK: PRivate Variables
     
     
     private let navBarHeight : CGFloat = 54.0
@@ -50,7 +42,7 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
         self.setupViewController()
     }
     
-    required public init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setupViewController()
     }
@@ -72,11 +64,9 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
         }
         
         if let navBar = self.magnetNavigationBar {
-            if let tableViewController = self as? MMTableViewController {
-                var currentInsets = tableViewController.tableView.contentInset
-                currentInsets.top = willHide ? 0 : navBar.frame.size.height
-                tableViewController.tableView.contentInset = currentInsets
-            }
+            let jsqViewController = self as JSQMessagesViewController
+            let top = willHide ? 0 : navBar.frame.size.height
+            jsqViewController.topContentAdditionalInset = top
         }
         
         if willHide {
@@ -88,7 +78,7 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
         self.magnetNavigationItem?.rightBarButtonItems = rightItems
         self.magnetNavigationItem?.title = title
     }
-
+    
     public func setupViewController() {
         if let _ = self.view { }
         

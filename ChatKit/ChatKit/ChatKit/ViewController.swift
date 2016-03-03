@@ -15,8 +15,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
     
     //MARK: ContactsPickerControllerDatasource
     
-    
-    override public func contactsControllerLoadMore(searchText : String?, offset : Int) {
+    override public func controllerLoadMore(searchText : String?, offset : Int) {
         self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
         //get request context
         let loadingContext = self.magnetPicker?.loadingContext()
@@ -49,22 +48,18 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
     }
 }
 
-extension MagnetChatViewController {
+public extension MagnetChatViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         let rightBtn = UIBarButtonItem.init(title: "Details", style: .Plain, target: self, action: "detailsAction")
         self.navigationItem.rightBarButtonItem = rightBtn
-        self.delegate = self
+        let del =  MyContactsClass()
+        del.magnetChat = self
+        self.delegate = del
         updateRightBtn()
     }
     
-    
-    
-    func chatViewDidCreateChannel(channel : MMXChannel) {
-        updateRightBtn()
-    }
-    
-    func updateRightBtn() {
+    public func updateRightBtn() {
         self.navigationItem.rightBarButtonItem?.enabled = self.channel != nil
     }
     
@@ -75,7 +70,7 @@ extension MagnetChatViewController {
             contacts.barButtonNext = nil
             let subDatasource = SubscribersDatasource()
             subDatasource.magnetPicker = contacts
-            contacts.pickerDatasource = subDatasource
+            contacts.datasource = subDatasource
             subDatasource.channel = self.channel
             contacts.tableView.allowsSelection = false
             contacts.canSearch = false
@@ -86,7 +81,16 @@ extension MagnetChatViewController {
     }
 }
 
-class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatListControllerDelegate {
+
+public class MyContactsClass : MagnetChatViewControllerDelegate {
+    var magnetChat : MagnetChatViewController?
+    @objc public func chatDidCreateChannel(channel : MMXChannel) {
+        magnetChat?.updateRightBtn()
+    }
+}
+
+
+class ViewController: UIViewController, ContactsControllerDelegate, ChatListControllerDelegate {
     var currentController : UIViewController?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,10 +123,12 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
         c.delegate = self
         // c.contactsPickerDelegate = self
         c.appearance.tintColor = self.view.tintColor
+        currentController = c
         self.navigationController?.pushViewController(c, animated: true)
+        //self.presentViewController(c, animated: true, completion: nil)
     }
     
-    func chatListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
+    func listDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
         print("Selected \(channel.name)")
         let chatViewController = MagnetChatViewController.init(channel : channel)
         let myId = MMUser.currentUser()?.userID
@@ -134,12 +140,17 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
         } else {
             chatViewController.title = subscribers.map({$0.displayName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
         }
+        chatViewController.outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.greenColor())
+        
+        if let c = currentController as? MagnetChatListViewController {
+            c.reloadData()
+        }
         
         self.navigationController?.pushViewController(chatViewController, animated: true)
         //self.currentController?.presentViewController(chatViewController, animated: true, completion: nil)
     }
     
-    func chatListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+    func listCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         return true
     }
     
@@ -155,7 +166,7 @@ class ViewController: UIViewController, ContactsPickerControllerDelegate, ChatLi
         
     }
     
-    func chatListWillShowChatController(chatController : MagnetChatViewController) {
+    func listWillShowChatController(chatController : MagnetChatViewController) {
     }
     
     func login (user : MMUser) {
