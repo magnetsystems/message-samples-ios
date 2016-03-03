@@ -22,33 +22,15 @@ import MagnetMax
 //Mark: ChatListControllerDatasource
 
 
-@objc public protocol ChatListControllerDatasource : ChannelListDatasource {
-    func listLoadChannels(channels : (([MMXChannel]) ->Void))
-    optional func listRegisterCells(tableView : UITableView)
-    optional func listCellForMMXChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell?
-    optional func listCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat
-}
 
 
-//Mark: ChatListControllerDelegate
 
-
-@objc public protocol ChatListControllerDelegate : ChannelListDelegate {
-    
-    func listDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
-    func listCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
-    optional func listDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
-    
-    optional func listWillShowChatController(chatController : MagnetChatViewController)
-    optional func listChannelForSubscribers(subscribers : [MMUser]) -> MMXChannel?
-    optional func listChannelForSubscribersWithBlock(subscribers : [MMUser], finished : ((channel : MMXChannel) -> Void)) -> Void
-}
 
 
 //Mark: MagnetChatListViewController
 
 
-public class MagnetChatListViewController: HomeViewController, ContactsControllerDelegate, ChannelListDatasource, ChannelListDelegate {
+public class MagnetChatListViewController: HomeViewController, ContactsControllerDelegate {
     
     
     //MARK: Private Variables
@@ -86,8 +68,6 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
         }
         
         navigationController?.setNavigationBarHidden(false, animated: true)
-        self.delegateProxy = self
-        self.datasourceProxy = self
     }
     
     public override func viewDidLoad() {
@@ -129,7 +109,7 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
         }
         
         self.contactsController?.dismiss()
-        self.delegate?.listWillShowChatController?(chatViewController)
+        self.delegate?.mmxListWillShowChatController?(chatViewController)
         if let nav = navigationController {
             nav.pushViewController(chatViewController, animated: true)
         } else {
@@ -147,57 +127,53 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
     }
     
     
-    //MARK: - HomeViewControllerDatasource
+    //MARK: - Data Method Overrides
     
     
-    public func listLoadChannels(channels : (([MMXChannel]) ->Void)) {
-        self.datasource.listLoadChannels(channels)
-    }
-    
-    public func listRegisterCells(tableView : UITableView) {
-        self.datasource.listRegisterCells?(tableView)
-    }
-    
-    public func listCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
-        return self.datasource.listCellForMMXChannel?(tableView, channel : channel, channelDetails : channelDetails, row : row)
-    }
-    
-    public func listCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat {
-        if let height  = self.datasource.listCellHeightForMMXChannel?(channel, row : row) {
-            return height
-        }
-        return 80
-    }
-    
-    
-    //MARK: - HomeViewControllerDelegate
-    
-    
-    public func listCanLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
-        if let canLeave = self.delegate?.listCanLeaveChannel(channel, channelDetails : channelDetails) {
+    override public func canLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+        if let canLeave = self.delegate?.mmxListCanLeaveChannel(channel, channelDetails : channelDetails) {
             return canLeave
         }
         
         return true
     }
     
-    public func listDidLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
-        self.delegate?.listDidLeaveChannel?(channel,channelDetails : channelDetails)
+    override public func cellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
+        return self.datasource.mmxListCellForMMXChannel?(tableView, channel : channel, channelDetails : channelDetails, row : row)
     }
     
-    public func listDidSelectChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) {
-        self.delegate?.listDidSelectChannel(channel,channelDetails : channelDetails)
+    override public func cellHeightForChannel(channel: MMXChannel, channelDetails: MMXChannelDetailResponse, row: Int) -> CGFloat {
+        if let height  = self.datasource.mmxListCellHeightForMMXChannel?(channel, channelDetails: channelDetails, row : row) {
+            return height
+        }
+        return 80
+    }
+    
+    override public func loadChannels(channelBlock: ((channels: [MMXChannel]) -> Void)) {
+        self.datasource.mmxListLoadChannels(channelBlock)
+    }
+    
+    override public func onChannelDidLeave(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
+        self.delegate?.mmxListDidLeaveChannel?(channel,channelDetails : channelDetails)
+    }
+    
+    override public func onChannelDidSelect(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
+        self.delegate?.mmxListDidSelectChannel(channel,channelDetails : channelDetails)
+    }
+    
+    override public func registerCells(tableView : UITableView) {
+        self.datasource.mmxListRegisterCells?(tableView)
     }
     
     
     //MARK: - ContactsViewControllerDelegate
     
     
-    public func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
+    public func mmxContactsControllerDidFinish(with selectedUsers: [MMUser]) {
         var chatViewController : MagnetChatViewController!
-        if let channel = self.delegate?.listChannelForSubscribers?(selectedUsers) {
+        if let channel = self.delegate?.mmxListChannelForSubscribers?(selectedUsers) {
             chatViewController = MagnetChatViewController.init(channel : channel)
-        }else if let listDelegate = self.delegate?.listChannelForSubscribersWithBlock {
+        }else if let listDelegate = self.delegate?.mmxListChannelForSubscribersWithBlock {
             listDelegate(selectedUsers, finished: { channel in
                 chatViewController = MagnetChatViewController.init(channel : channel)
                 self.presentChatViewController(chatViewController, users: selectedUsers)

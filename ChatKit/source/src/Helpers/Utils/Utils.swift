@@ -264,6 +264,12 @@ class Utils: NSObject {
 
 extension Array {
     
+    func findInsertionIndexForSortedArray<T : Comparable>(mappedObject : ((obj : Generator.Element) -> T), object :  T) -> Int {
+            return  self.findInsertionIndexForSortedArrayWithBlock() { (haystack) -> Bool in
+                return mappedObject(obj: haystack) > object
+            }
+    }
+    
     func findInsertionIndexForSortedArrayWithBlock(greaterThan GR_TH : (Generator.Element) -> Bool) -> Int {
         return Array.findInsertionIndex(self) { (haystack) -> Bool in
             return GR_TH(haystack)
@@ -273,6 +279,16 @@ extension Array {
     func searchrSortedArrayWithBlock(greaterThan GR_TH : (Generator.Element) -> Bool?) -> Int? {
         return Array.find(self) { (haystack) -> Bool? in
             return GR_TH(haystack)
+        }
+    }
+    
+    func searchrSortedArray<T : Comparable>(mappedObject : ((obj : Generator.Element) -> T), object :  T) -> Int? {
+        return self.searchrSortedArrayWithBlock() { (haystack) -> Bool? in
+            let mapped = mappedObject(obj: haystack)
+            if mapped == object {
+                return nil
+            }
+            return mapped > object
         }
     }
     

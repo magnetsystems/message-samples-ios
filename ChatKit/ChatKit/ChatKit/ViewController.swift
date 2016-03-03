@@ -15,7 +15,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
     
     //MARK: ContactsPickerControllerDatasource
     
-    override public func controllerLoadMore(searchText : String?, offset : Int) {
+    override public func mmxControllerLoadMore(searchText : String?, offset : Int) {
         self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
         //get request context
         let loadingContext = self.magnetPicker?.loadingContext()
@@ -40,28 +40,42 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
         })
     }
     
-    override public func contactControllerShowsSectionIndexTitles() -> Bool {
+    override public func mmxContactsControllerShowsSectionIndexTitles() -> Bool {
         return false
     }
-    override public func contactControllerShowsSectionsHeaders() -> Bool {
+    override public func mmxContactsControllerShowsSectionsHeaders() -> Bool {
         return false
     }
 }
 
-public extension MagnetChatViewController {
+extension MagnetChatViewController : ChatViewControllerDelegate {
     override public func viewDidLoad() {
         super.viewDidLoad()
         let rightBtn = UIBarButtonItem.init(title: "Details", style: .Plain, target: self, action: "detailsAction")
         self.navigationItem.rightBarButtonItem = rightBtn
-        let del =  MyContactsClass()
-        del.magnetChat = self
-        self.delegate = del
+        self.delegate = self
+    }
+    
+    override public func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         updateRightBtn()
     }
     
     public func updateRightBtn() {
         self.navigationItem.rightBarButtonItem?.enabled = self.channel != nil
     }
+    
+    public func chatDidCreateChannel(channel : MMXChannel) {
+        self.updateRightBtn()
+    }
+    
+    public func mmxChatDidCreateChannel(channel : MMXChannel) {
+        updateRightBtn()
+    }
+    
+    public func mmxChatDidSendMessage(message : MMXMessage) { }
+    
+    public func mmxChatDidRecieveMessage(message : MMXMessage) { }
     
     func detailsAction() {
         
@@ -81,13 +95,6 @@ public extension MagnetChatViewController {
     }
 }
 
-
-public class MyContactsClass : MagnetChatViewControllerDelegate {
-    var magnetChat : MagnetChatViewController?
-    @objc public func chatDidCreateChannel(channel : MMXChannel) {
-        magnetChat?.updateRightBtn()
-    }
-}
 
 
 class ViewController: UIViewController, ContactsControllerDelegate, ChatListControllerDelegate {
@@ -128,7 +135,7 @@ class ViewController: UIViewController, ContactsControllerDelegate, ChatListCont
         //self.presentViewController(c, animated: true, completion: nil)
     }
     
-    func listDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
+    func mmxListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
         print("Selected \(channel.name)")
         let chatViewController = MagnetChatViewController.init(channel : channel)
         let myId = MMUser.currentUser()?.userID
@@ -150,7 +157,7 @@ class ViewController: UIViewController, ContactsControllerDelegate, ChatListCont
         //self.currentController?.presentViewController(chatViewController, animated: true, completion: nil)
     }
     
-    func listCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+    func mmxListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         return true
     }
     
@@ -162,11 +169,11 @@ class ViewController: UIViewController, ContactsControllerDelegate, ChatListCont
     //        }
     //    }
     
-    func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
+    func mmxContactsControllerDidFinish(with selectedUsers: [MMUser]) {
         
     }
     
-    func listWillShowChatController(chatController : MagnetChatViewController) {
+    func mmxListWillShowChatController(chatController : MagnetChatViewController) {
     }
     
     func login (user : MMUser) {

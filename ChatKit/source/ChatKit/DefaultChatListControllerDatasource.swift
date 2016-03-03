@@ -44,15 +44,15 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     //Mark: ChatListControllerDatasource
     
     
-    public func listCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
+    public func mmxListCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
         return nil
     }
     
-    public func listCellHeightForMMXChannel(channel : MMXChannel, row : Int) -> CGFloat {
+    public func mmxListCellHeightForMMXChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> CGFloat {
         return 80
     }
     
-    public func listLoadChannels(channels : (([MMXChannel]) ->Void)) {
+    public func mmxListLoadChannels(channels : (([MMXChannel]) ->Void)) {
         MMXChannel.subscribedChannelsWithSuccess({ ch in
             // set channels
             channels(ch)
@@ -61,7 +61,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         }
     }
     
-    public func listRegisterCells(tableView : UITableView) {
+    public func mmxListRegisterCells(tableView : UITableView) {
         //using standard cells
     }
 }

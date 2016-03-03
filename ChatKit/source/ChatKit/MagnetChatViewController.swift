@@ -22,17 +22,11 @@ import MagnetMax
 //MARK: MagnetChatViewControllerDelegate
 
 
-@objc public protocol MagnetChatViewControllerDelegate : class {
-    optional func chatDidCreateChannel(channel : MMXChannel)
-    optional func chatDidSendMessage(message : MMXMessage)
-    optional func chatDidRecieveMessage(message : MMXMessage)
-}
-
 
 //MARK: MagnetChatViewController
 
 
-public class MagnetChatViewController: ChatViewController, ChatViewControllerDelegate {
+public class MagnetChatViewController: ChatViewController {
     
     
     //MARK: Public Variables
@@ -44,7 +38,7 @@ public class MagnetChatViewController: ChatViewController, ChatViewControllerDel
         }
     }
     
-    public var delegate : MagnetChatViewControllerDelegate?
+    public var delegate : ChatViewControllerDelegate?
     
     
     //MARK: Init
@@ -68,7 +62,6 @@ public class MagnetChatViewController: ChatViewController, ChatViewControllerDel
         super.setupViewController()
         
         navigationController?.setNavigationBarHidden(false, animated: true)
-        self.delegateProxy = self
     }
     
     public override func viewDidLoad() {
@@ -95,17 +88,18 @@ public class MagnetChatViewController: ChatViewController, ChatViewControllerDel
     }
     
     
-    //MARK:  ChatViewControllerDelegate
+    //MARK:  DataMethod Overrides
     
     
-    public func chatDidCreateChannel(channel : MMXChannel) {
-        self.delegate?.chatDidCreateChannel?(channel)
+    override public func onChannelCreated(mmxChannel: MMXChannel) {
+        self.delegate?.mmxChatDidCreateChannel(mmxChannel)
     }
     
-    public func chatDidSendMessage(message : MMXMessage) {
-        self.delegate?.chatDidSendMessage?(message)
+    override public func onMessageRecived(mmxMessage: MMXMessage) {
+        self.delegate?.mmxChatDidRecieveMessage(mmxMessage)
     }
-    public func chatDidRecieveMessage(message : MMXMessage) {
-        self.delegate?.chatDidRecieveMessage?(message)
+    
+    override public func onMessageSent(mmxMessage: MMXMessage) {
+        self.delegate?.mmxChatDidSendMessage(mmxMessage)
     }
 }

@@ -60,8 +60,6 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
     
     internal var availableRecipients = [UserLetterGroup]()
     internal var currentUserCount = 0
-    internal weak var datasourceProxy : ContactsControllerDatasource?
-    internal weak var delegateProxy : ContactsControllerDelegate?
     internal var disabledUsers : [String : MMUser] = [:]
     internal var isWaitingForData : Bool = false
     internal var startPoint : CGPoint = CGPointZero
@@ -98,7 +96,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
         
         searchBar.sizeToFit()
         searchBar.returnKeyType = .Search
-        if let dataSource = self.datasourceProxy where dataSource.controllerSearchUpdatesContinuously() {
+        if self.shouldUpdateSearchContinuously() {
             searchBar.returnKeyType = .Done
         }
         searchBar.setShowsCancelButton(false, animated: false)
@@ -167,12 +165,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
             userModel.user = user
             
             //search for user group index
-            let index = self.availableRecipients.searchrSortedArrayWithBlock(greaterThan: {
-                if $0.letter == initial {
-                    return nil
-                }
-                return $0.letter > initial
-            })
+            let index = self.availableRecipients.searchrSortedArray({$0.letter}, object: initial)
             
             var section = Int.max
             var row = Int.max
@@ -197,9 +190,8 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
                 }
                 
                 //find where to insert
-                row = self.availableRecipients[section].users.findInsertionIndexForSortedArrayWithBlock() {
-                    return Utils.displayNameForUser($0.user!).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"}) > Utils.displayNameForUser(user).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"})
-                }
+                let userDisplayName = Utils.displayNameForUser(user).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"})
+                row = self.availableRecipients[section].users.findInsertionIndexForSortedArray({Utils.displayNameForUser($0.user!).lowercaseString.componentsSeparatedByString(" ").reduce("", combine: {"\($1) \($0)"})}, object: userDisplayName)
                 
                 self.availableRecipients[section].users.insert(userModel, atIndex: row)
                 
@@ -211,9 +203,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
                 userGroup.users = [userModel]
                 
                 //find where to insert
-                section = self.availableRecipients.findInsertionIndexForSortedArrayWithBlock() {
-                    return $0.letter > userGroup.letter
-                }
+                section = self.availableRecipients.findInsertionIndexForSortedArray({$0.letter}, object: userGroup.letter)
                 
                 self.availableRecipients.insert(userGroup, atIndex: section)
                 
@@ -233,11 +223,33 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
             self.tableView.endUpdates()
         }
         
-        if let dataSource = datasourceProxy where dataSource.controllerHasMore()  {
+        if hasMore()  {
             let indexPath = NSIndexPath(forRow: 0, inSection: self.availableRecipients.count)
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
         }
     }
+    
+    public func hasMore() -> Bool {
+        return false
+    }
+    
+    public func loadMore(searchText : String?, offset : Int) { }
+    
+    public func shouldShowIndexTitles() -> Bool {
+        return true
+    }
+    
+    public func shouldShowHeaderTitles() -> Bool {
+        return true
+    }
+    
+    public func shouldUpdateSearchContinuously() -> Bool {
+        return true
+    }
+    
+    public func onUserSelected(user : MMUser) { }
+    
+    public func onUserDeselected(user : MMUser) { }
     
     public func reset() {
         self.availableRecipients = []
@@ -255,7 +267,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
             return
         }
         
-        if let dataSource = datasourceProxy where dataSource.controllerSearchUpdatesContinuously() {
+        if self.shouldUpdateSearchContinuously() {
             self.search(searchText)
         }
     }
@@ -279,7 +291,7 @@ public extension ContactsViewController {
     
     func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
         var indexTitles : [String]? = nil
-        if let showsSection = datasourceProxy?.contactControllerShowsSectionIndexTitles?() where showsSection == true {
+        if shouldShowIndexTitles() {
             indexTitles = availableRecipients.map({ "\($0.letter)" })
         }
         return indexTitles
@@ -299,13 +311,13 @@ public extension ContactsViewController {
             if loadingCell == nil {
                 loadingCell = LoadingCell(style: .Default, reuseIdentifier: "LoadingCellIdentifier")
             }
-            if let dS = datasourceProxy where dS.controllerHasMore() {
+            if self.hasMore() {
                 loadingCell?.indicator?.startAnimating()
                 
                 if !isWaitingForData {
                     isWaitingForData = true
                     let text = searchBar.text?.characters.count > 0 ? searchBar.text : nil
-                    dS.controllerLoadMore(text, offset: currentUserCount)
+                    loadMore(text, offset: currentUserCount)
                 }
                 
             } else {
@@ -366,7 +378,7 @@ public extension ContactsViewController {
         if tableView.numberOfSections - 1 == section {
             return nil
         }
-        if let showsSection = datasourceProxy?.contactControllerShowsSectionIndexTitles?() where showsSection == false {
+        if !shouldShowHeaderTitles() {
             return nil
         }
         let letter = availableRecipients[section]
@@ -464,7 +476,7 @@ private extension ContactsViewController {
     private func addSelectedUser(selectedUser : MMUser) {
         removeSelectedUser(selectedUser)
         selectedUsers.append(selectedUser)
-        self.delegateProxy?.contactsControllerSelectedUser?(selectedUser)
+        onUserSelected(selectedUser)
     }
     
     private func updateSearchBar() {
@@ -500,7 +512,7 @@ private extension ContactsViewController {
             return false
         })
         
-        self.delegateProxy?.contactsControllerUnSelectedUser?(selectedUser)
+        onUserDeselected(selectedUser)
     }
     
     private func search(searchString : String?) {
@@ -510,7 +522,7 @@ private extension ContactsViewController {
         }
         self.isWaitingForData = true
         self.reset()
-        datasourceProxy?.controllerLoadMore(text, offset: 0)
+        loadMore(text, offset: 0)
     }
     
     private func updateContactsView(users : [MMUser]) {

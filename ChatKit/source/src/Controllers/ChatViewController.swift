@@ -62,7 +62,6 @@ public class ChatViewController: MMJSQViewController {
     internal var avatars = Dictionary<String, UIImage>()
     internal var avatarsDownloading = Dictionary<String, MMUser>()
     internal var canLeaveChat = false
-    internal var delegateProxy : ChatViewControllerDelegate?
     internal var messages = [Message]()
     
     // MARK: - overrides
@@ -137,6 +136,12 @@ public class ChatViewController: MMJSQViewController {
         }
     }
     
+    public func onChannelCreated(mmxChannel: MMXChannel) { }
+    
+    public func onMessageRecived(mmxMessage: MMXMessage) { }
+    
+    public func onMessageSent(mmxMessage: MMXMessage) { }
+    
     public func showSpinner() {
         self.activityIndicator?.tag++
         self.activityIndicator?.startAnimating()
@@ -152,7 +157,7 @@ public class ChatViewController: MMJSQViewController {
         scrollToBottomAnimated(true)
         
         let finishedMessageClosure : () -> Void = {
-            self.delegateProxy?.chatDidRecieveMessage(mmxMessage)
+            self.onMessageRecived(mmxMessage)
             let message = Message(message: mmxMessage)
             self.messages.append(message)
             JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
@@ -234,8 +239,10 @@ public class ChatViewController: MMJSQViewController {
         
         showSpinner()
         let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
-        mmxMessage.sendWithSuccess( { [weak self] _ in
-            self?.delegateProxy?.chatDidSendMessage(mmxMessage)
+        mmxMessage.sendWithSuccess( { [weak self, weak mmxMessage] _ in
+            if let message = mmxMessage {
+                self?.onMessageSent(message)
+            }
             button.userInteractionEnabled = true
             self?.hideSpinner()
             }) { error in
@@ -266,8 +273,10 @@ public class ChatViewController: MMJSQViewController {
             let attachment = MMAttachment(data: data, mimeType: "image/jpg")
             mmxMessage.addAttachment(attachment)
             self.showSpinner()
-            mmxMessage.sendWithSuccess({ [weak self] _ in
-                self?.delegateProxy?.chatDidSendMessage(mmxMessage)
+            mmxMessage.sendWithSuccess({ [weak self, weak mmxMessage] _ in
+                if let message = mmxMessage {
+                    self?.onMessageSent(message)
+                }
                 self?.hideSpinner()
                 }) { error in
                     self.hideSpinner()
@@ -309,8 +318,10 @@ private extension ChatViewController {
             ]
             self?.showSpinner()
             let mmxMessage = MMXMessage(toChannel: chat, messageContent: messageContent)
-            mmxMessage.sendWithSuccess( { _ in
-                self?.delegateProxy?.chatDidSendMessage(mmxMessage)
+            mmxMessage.sendWithSuccess( {[weak mmxMessage] _ in
+                if let message = mmxMessage {
+                    self?.onMessageSent(message)
+                }
                 self?.hideSpinner()
                 self?.finishSendingMessageAnimated(true)
                 }) { error in
@@ -342,7 +353,7 @@ private extension ChatViewController {
         let id = NSUUID().UUIDString
         MMXChannel.createWithName(id, summary: "[CHAT KIT]", isPublic: false, publishPermissions: .Anyone, subscribers: Set(users), success: { (channel) -> Void in
             self.chat = channel
-            self.delegateProxy?.chatDidCreateChannel(channel)
+            self.onChannelCreated(channel)
             completion(error: nil)
             }) { (error) -> Void in
                 completion(error: error)

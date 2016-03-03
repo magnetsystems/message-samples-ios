@@ -10,13 +10,6 @@
          <Group
             location = "group:Controllers"
             name = "Controllers">
-            <Group
-               location = "container:"
-               name = "DatasourcesAndDelegates">
-               <FileRef
-                  location = "group:../source/src/Controllers/DatasourcesAndDelegates/DatasourcesAndDelegates.swift">
-               </FileRef>
-            </Group>
             <FileRef
                location = "group:ChatViewController.swift">
             </FileRef>
@@ -504,6 +497,13 @@
       <Group
          location = "container:"
          name = "ChatKit">
+         <Group
+            location = "group:../source/ChatKit/DatasourcesAndDelegates"
+            name = "DatasourcesAndDelegates">
+            <FileRef
+               location = "group:DatasourcesAndDelegates.swift">
+            </FileRef>
+         </Group>
          <FileRef
             location = "group:../source/ChatKit/ChatKitUI.h">
          </FileRef>

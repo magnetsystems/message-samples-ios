@@ -25,8 +25,6 @@ public class HomeViewController: MMTableViewController, UISearchResultsUpdating 
     //MARK: Internal Variables
     
     
-    internal var datasourceProxy : ChannelListDatasource?
-    internal var delegateProxy : ChannelListDelegate?
     internal var detailResponses : [MMXChannelDetailResponse] = []
     internal var filteredDetailResponses : [MMXChannelDetailResponse] = []
     internal let searchController = UISearchController(searchResultsController: nil)
@@ -66,7 +64,7 @@ public class HomeViewController: MMTableViewController, UISearchResultsUpdating 
         searchController.searchBar.sizeToFit()
         tableView.tableHeaderView = searchController.searchBar
         tableView.reloadData()
-        self.datasourceProxy?.listRegisterCells?(self.tableView)
+        registerCells(self.tableView)
         
         refreshControl?.addTarget(self, action: "refreshChannelDetail", forControlEvents: .ValueChanged)
     }
@@ -83,6 +81,30 @@ public class HomeViewController: MMTableViewController, UISearchResultsUpdating 
         
         ChannelManager.sharedInstance.removeChannelMessageObserver(self)
     }
+    
+    
+    // MARK: Public Methods
+    
+    
+    public func registerCells(tableView: UITableView) { }
+    
+    public func canLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+        return true
+    }
+    
+    public func cellForMMXChannel(tableView: UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
+        return nil
+    }
+    
+    public func cellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> CGFloat {
+        return 80
+    }
+    
+    public func loadChannels(channelBlock : ((channels :[MMXChannel]) -> Void)) {}
+    
+    public func onChannelDidLeave(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
+    
+    public func onChannelDidSelect(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
     
     
     //MARK: Notifications
@@ -144,7 +166,7 @@ public extension HomeViewController {
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let detailResponse = detailsForIndexPath(indexPath)
         
-        if let cell : UITableViewCell = self.datasourceProxy?.listCellForMMXChannel?(tableView,channel :detailResponse.channel, channelDetails : detailResponse, row : indexPath.row) {
+        if let cell : UITableViewCell = cellForMMXChannel(tableView,channel :detailResponse.channel, channelDetails : detailResponse, row : indexPath.row) {
             return cell
         }
         let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
@@ -154,10 +176,7 @@ public extension HomeViewController {
     }
     
     public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if let canLeave = self.delegateProxy?.listCanLeaveChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath)) {
-            return canLeave
-        }
-        return true
+        return canLeaveChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     
     public func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
@@ -168,7 +187,7 @@ public extension HomeViewController {
                 chat.unSubscribeWithSuccess({ _ in
                     self?.detailResponses.removeAtIndex(index.row)
                     tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
-                    self?.delegateProxy?.listDidLeaveChannel?(detailResponse.channel, channelDetails : detailResponse)
+                    self?.onChannelDidLeave(detailResponse.channel, channelDetails : detailResponse)
                     self?.endRefreshing()
                     }, failure: { error in
                         print(error)
@@ -184,14 +203,11 @@ public extension HomeViewController {
     }
     
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if let height = self.datasourceProxy?.listCellHeightForMMXChannel?(detailsForIndexPath(indexPath).channel, row : indexPath.row) {
-            return height
-        }
-        return 80.0
+        return cellHeightForChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath), row : indexPath.row)
     }
     
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.delegateProxy?.listDidSelectChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
+        onChannelDidSelect(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
 }
 
@@ -212,7 +228,7 @@ private extension HomeViewController {
     }
     
     private func loadDetails() {
-        self.datasourceProxy?.listLoadChannels({ channels in
+        loadChannels({ channels in
             if channels.count > 0 {
                 // Get all channels the current user is subscribed to
                 MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in

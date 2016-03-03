@@ -18,20 +18,11 @@
 import UIKit
 import MagnetMax
 
-@objc public protocol MagnetContactsControllerDatasource: ContactsControllerDatasource {
-    func controllerLoadMore(searchText : String?, offset : Int)
-    func controllerHasMore() -> Bool
-    func controllerSearchUpdatesContinuously() -> Bool
-    optional func contactControllerShowsSectionIndexTitles() -> Bool
-    optional func contactControllerShowsSectionsHeaders() -> Bool
-    optional func contactControllerPreselectedUsers() -> [MMUser]
-}
-
 
 //MARK: MagnetContactsPickerController
 
 
-public class MagnetContactsPickerController: ContactsViewController, ContactsControllerDatasource,ContactsControllerDelegate {
+public class MagnetContactsPickerController: ContactsViewController {
     
     
     //Private Variables
@@ -46,7 +37,8 @@ public class MagnetContactsPickerController: ContactsViewController, ContactsCon
     public var barButtonCancel : UIBarButtonItem?
     public var barButtonNext : UIBarButtonItem?
     public weak var delegate : ContactsControllerDelegate?
-    public var datasource : MagnetContactsControllerDatasource? = DefaultContactsPickerControllerDatasource()
+    public var datasource : ContactsControllerDatasource? = DefaultContactsPickerControllerDatasource()
+    
     
     //MARK: Init
     
@@ -80,17 +72,15 @@ public class MagnetContactsPickerController: ContactsViewController, ContactsCon
         if let dataSource = self.datasource as? DefaultContactsPickerControllerDatasource {
             dataSource.magnetPicker = self
         }
-        self.delegateProxy = self
-        self.datasourceProxy = self
     }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        if let selectedUsers = self.datasource?.contactControllerPreselectedUsers?() {
+        if let selectedUsers = self.datasource?.mmxContactsControllerPreselectedUsers?() {
             self.selectedUsers = selectedUsers
         }
         self.view.tintColor = self.appearance.tintColor
-        self.controllerLoadMore(nil, offset: 0)
+        loadMore(nil, offset: 0)
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -114,7 +104,6 @@ public class MagnetContactsPickerController: ContactsViewController, ContactsCon
             }
         }
     }
-    
     
     private func newLoadingContext() {
         self.requestNumber++
@@ -154,29 +143,22 @@ public class MagnetContactsPickerController: ContactsViewController, ContactsCon
     }
     
     func nextAction() {
-        self.delegate?.contactsControllerDidFinish?(with: self.selectedUsers)
+        self.delegate?.mmxContactsControllerDidFinish?(with: self.selectedUsers)
         cancelAction()
     }
     
     
-    //MARK: ControllerDelegate
+    //MARK: - Data Method Overrides
     
     
-    public func contactsControllerSelectedUser(user: MMUser) {
-        self.updateButtonItems()
-        self.delegate?.contactsControllerSelectedUser?(user)
+    override public func hasMore() -> Bool {
+        if let pickerDatasource = self.datasource {
+            return pickerDatasource.mmxControllerHasMore()
+        }
+        return false
     }
     
-    public func contactsControllerUnSelectedUser(user: MMUser) {
-        self.updateButtonItems()
-        self.delegate?.contactsControllerUnSelectedUser?(user)
-    }
-    
-    
-    //MARK: ControllerDatasouce
-    
-    
-    public func controllerLoadMore(searchText : String?, offset : Int) {
+    override public func loadMore(searchText : String?, offset : Int) {
         newLoadingContext()
         if searchText != nil {
             let loadingContext = self.loadingContext()
@@ -185,44 +167,45 @@ public class MagnetContactsPickerController: ContactsViewController, ContactsCon
                 if loadingContext != self.loadingContext() {
                     return
                 }
-                self.datasource?.controllerLoadMore(searchText, offset : offset)
+                self.datasource?.mmxControllerLoadMore(searchText, offset : offset)
             })
         } else {
-            self.datasource?.controllerLoadMore(searchText, offset : offset)
+            self.datasource?.mmxControllerLoadMore(searchText, offset : offset)
         }
     }
     
-    public func controllerHasMore() -> Bool {
-        if let pickerDatasource = self.datasource {
-            return pickerDatasource.controllerHasMore()
-        }
-        return false
+    override public func onUserDeselected(user: MMUser) {
+        self.updateButtonItems()
+        self.delegate?.mmxContactsControllerUnSelectedUser?(user)
     }
     
-    public func controllerSearchUpdatesContinuously() -> Bool {
-        if let pickerDatasource = self.datasource {
-            return pickerDatasource.controllerSearchUpdatesContinuously()
-        }
-        return false
+    override public func onUserSelected(user: MMUser) {
+        self.updateButtonItems()
+        self.delegate?.mmxContactsControllerSelectedUser?(user)
     }
     
-    public func contactControllerShowsSectionIndexTitles() -> Bool {
+    override public func shouldShowHeaderTitles() -> Bool {
         if let pickerDatasource = self.datasource {
-            if let shows = pickerDatasource.contactControllerShowsSectionIndexTitles?() {
+            if let shows = pickerDatasource.mmxContactsControllerShowsSectionsHeaders?() {
                 return shows
             }
         }
         return false
     }
     
-    public func contactControllerShowsSectionsHeaders() -> Bool {
+    override public func shouldShowIndexTitles() -> Bool {
         if let pickerDatasource = self.datasource {
-            if let shows = pickerDatasource.contactControllerShowsSectionsHeaders?() {
+            if let shows = pickerDatasource.mmxContactsControllerShowsSectionIndexTitles?() {
                 return shows
             }
         }
         return false
     }
     
-    
+    override public func shouldUpdateSearchContinuously() -> Bool {
+        if let pickerDatasource = self.datasource {
+            return pickerDatasource.mmxControllerSearchUpdatesContinuously()
+        }
+        return false
+    }
 }

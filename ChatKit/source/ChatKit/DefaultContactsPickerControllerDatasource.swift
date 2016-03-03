@@ -18,7 +18,7 @@
 import UIKit
 import MagnetMax
 
-public class DefaultContactsPickerControllerDatasource : NSObject, MagnetContactsControllerDatasource {
+public class DefaultContactsPickerControllerDatasource : NSObject, ContactsControllerDatasource {
     
     
     //MARK: Public Variables
@@ -51,7 +51,7 @@ public class DefaultContactsPickerControllerDatasource : NSObject, MagnetContact
     //MARK: Generic ControllerDatasource
     
     
-    public func controllerLoadMore(searchText : String?, offset : Int) {
+    public func mmxControllerLoadMore(searchText : String?, offset : Int) {
         
         let searchQuery = self.searchQuery(searchText)
         
@@ -81,11 +81,11 @@ public class DefaultContactsPickerControllerDatasource : NSObject, MagnetContact
         })
     }
     
-    public  func controllerHasMore() -> Bool {
+    public  func mmxControllerHasMore() -> Bool {
         return self.hasMoreUsers
     }
     
-    public func controllerSearchUpdatesContinuously() ->Bool {
+    public func mmxControllerSearchUpdatesContinuously() ->Bool {
         return true
     }
     
@@ -93,15 +93,15 @@ public class DefaultContactsPickerControllerDatasource : NSObject, MagnetContact
     //MARK: ContactsPickerControllerDatasource
     
     
-    public func contactControllerPreselectedUsers() -> [MMUser] {
+    public func mmxContactsControllerPreselectedUsers() -> [MMUser] {
         return preselectedUsers
     }
     
-    public func contactControllerShowsSectionsHeaders() -> Bool {
+    public func mmxContactsControllerShowsSectionsHeaders() -> Bool {
         return true
     }
     
-    public  func contactControllerShowsSectionIndexTitles() -> Bool {
+    public  func mmxContactsControllerShowsSectionIndexTitles() -> Bool {
         return magnetPicker?.contacts().count > 1
     }
     
