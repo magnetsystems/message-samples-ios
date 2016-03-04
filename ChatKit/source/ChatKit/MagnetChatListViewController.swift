@@ -67,8 +67,12 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
         
         navigationController?.setNavigationBarHidden(false, animated: true)
         self.datasource = DefaultChatListControllerDatasource()
+        self.delegate = DefaultChatListControllerDelegate()
         if let datasource = self.datasource as? DefaultChatListControllerDatasource {
             datasource.chatList = self
+        }
+        if let delegate = self.delegate as? DefaultChatListControllerDelegate {
+            delegate.chatList = self
         }
         self.reset()
     }
@@ -210,7 +214,7 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
         if let channel = self.delegate?.mmxListChannelForSubscribers?(selectedUsers) {
             chatViewController = MagnetChatViewController.init(channel : channel)
         }else if let listDelegate = self.delegate?.mmxListChannelForSubscribersWithBlock {
-            listDelegate(selectedUsers, finished: { channel in
+            listDelegate(selectedUsers, completionBlock: { channel in
                 chatViewController = MagnetChatViewController.init(channel : channel)
                 self.presentChatViewController(chatViewController, users: selectedUsers)
             })

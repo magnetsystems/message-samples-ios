@@ -98,7 +98,7 @@ extension MagnetChatViewController : ChatViewControllerDelegate {
 
 
 
-class ViewController: UIViewController, ContactsControllerDelegate, ChatListControllerDelegate {
+class ViewController: UIViewController {
     var currentController : UIViewController?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,7 +127,7 @@ class ViewController: UIViewController, ContactsControllerDelegate, ChatListCont
     
     func showChatList() {
         let c = MagnetChatListViewController()
-        c.delegate = self
+        //c.delegate = self
         // c.contactsPickerDelegate = self
         c.appearance.tintColor = self.view.tintColor
         currentController = c
@@ -135,47 +135,7 @@ class ViewController: UIViewController, ContactsControllerDelegate, ChatListCont
         //self.presentViewController(c, animated: true, completion: nil)
     }
     
-    func mmxListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
-        print("Selected \(channel.name)")
-        let chatViewController = MagnetChatViewController.init(channel : channel)
-        let myId = MMUser.currentUser()?.userID
         
-        let subscribers = channelDetails.subscribers.filter({$0.userId !=  myId})
-        
-        if subscribers.count > 1 {
-            chatViewController.title = "Group"
-        } else {
-            chatViewController.title = subscribers.map({$0.displayName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
-        }
-        chatViewController.outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(self.view.tintColor)
-        
-        if let c = currentController as? MagnetChatListViewController {
-            c.reloadData()
-        }
-        
-        self.navigationController?.pushViewController(chatViewController, animated: true)
-        //self.currentController?.presentViewController(chatViewController, animated: true, completion: nil)
-    }
-    
-    func mmxListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
-        return true
-    }
-    
-    //    func contactsControllerDidFinish(with selectedUsers: [MMUser]) {
-    //        if let c = currentController as? MagnetChatListViewController {
-    //            if let d = c.datasource as? DefaultChatListControllerDatasource {
-    //                d.createChat(from: selectedUsers)
-    //            }
-    //        }
-    //    }
-    
-    func mmxContactsControllerDidFinish(with selectedUsers: [MMUser]) {
-        
-    }
-    
-    func mmxListWillShowChatController(chatController : MagnetChatViewController) {
-    }
-    
     func login (user : MMUser) {
         let cred = NSURLCredential.init(user: user.userName, password: user.password, persistence: .None)
         MMUser.login(cred, rememberMe: false, success: {

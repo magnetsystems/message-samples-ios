@@ -70,7 +70,7 @@ import UIKit
     optional func mmxListDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
     optional func mmxListWillShowChatController(chatController : MagnetChatViewController)
     optional func mmxListChannelForSubscribers(subscribers : [MMUser]) -> MMXChannel?
-    optional func mmxListChannelForSubscribersWithBlock(subscribers : [MMUser], finished : ((channel : MMXChannel) -> Void)) -> Void
+    optional func mmxListChannelForSubscribersWithBlock(subscribers : [MMUser], completionBlock : ((channel : MMXChannel) -> Void)) -> Void
 }
 
 
