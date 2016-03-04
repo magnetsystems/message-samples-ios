@@ -460,6 +460,9 @@
             location = "container:"
             name = "images">
             <FileRef
+               location = "group:../source/Views/images/user_group_clear_sm.png">
+            </FileRef>
+            <FileRef
                location = "group:../source/Views/images/user_group_clear.png">
             </FileRef>
             <FileRef
@@ -480,6 +483,9 @@
          </FileRef>
          <FileRef
             location = "group:IconView.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMViews.swift">
          </FileRef>
          <FileRef
             location = "group:HomeViewController.xib">

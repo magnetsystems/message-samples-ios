@@ -119,9 +119,5 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
             ivMessageIcon.layer.cornerRadius = ivMessageIcon.bounds.width / 2
             ivMessageIcon.clipsToBounds = true
         }
-        if let avatar = self.avatarView {
-            avatar.layer.cornerRadius = 44 / 2.0
-            avatar.layer.masksToBounds = true
-        }
     }
 }

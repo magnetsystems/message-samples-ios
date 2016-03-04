@@ -25,7 +25,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="Wednesday" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0vs-b6-irg" userLabel="lastTime">
-                        <rect key="frame" x="504" y="10" width="70" height="17"/>
+                        <rect key="frame" x="514" y="10" width="70" height="17"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="70" id="Ifc-JO-azv"/>
                         </constraints>
@@ -34,13 +34,16 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Subscribers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rjI-SV-YdM">
-                        <rect key="frame" x="30" y="8" width="466" height="18"/>
+                        <rect key="frame" x="74" y="8" width="432" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="width" priority="900" constant="466" id="18D-K1-BX6"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Uf-I0-hUm" userLabel="message">
-                        <rect key="frame" x="30" y="26" width="562" height="40"/>
+                        <rect key="frame" x="74" y="26" width="518" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="6kz-X5-ilD"/>
                         </constraints>
@@ -49,7 +52,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="›" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dSy-4I-2ff">
-                        <rect key="frame" x="582" y="8" width="10" height="21"/>
+                        <rect key="frame" x="592" y="8" width="0.0" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="rqx-J0-adI"/>
                         </constraints>
@@ -58,19 +61,19 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xEP-aB-llU">
-                        <rect key="frame" x="22" y="35" width="0.0" height="0.0"/>
+                        <rect key="frame" x="22" y="13" width="44" height="44"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wYc-k9-5hJ">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="900" verticalCompressionResistancePriority="900" translatesAutoresizingMaskIntoConstraints="NO" id="wYc-k9-5hJ" customClass="MMRoundedImageView" customModule="ChatKitUI" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" priority="750" id="3yo-UQ-5ms"/>
+                                    <constraint firstAttribute="width" secondItem="wYc-k9-5hJ" secondAttribute="height" multiplier="1:1" id="CyS-uq-Ote"/>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="44" id="EyY-fw-iX2"/>
+                                    <constraint firstAttribute="width" constant="44" placeholder="YES" id="cEt-to-3Vg"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="44" id="9xp-kF-n3E"/>
-                            <constraint firstAttribute="width" secondItem="xEP-aB-llU" secondAttribute="height" multiplier="1:1" priority="900" id="LTu-rM-p1Q"/>
                             <constraint firstAttribute="bottom" secondItem="wYc-k9-5hJ" secondAttribute="bottom" id="Olr-3W-dlg"/>
                             <constraint firstItem="wYc-k9-5hJ" firstAttribute="top" secondItem="xEP-aB-llU" secondAttribute="top" id="cfM-y7-O2R"/>
                             <constraint firstAttribute="trailing" secondItem="wYc-k9-5hJ" secondAttribute="trailing" id="t4i-7F-IRM"/>
@@ -80,10 +83,8 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="xEP-aB-llU" firstAttribute="centerY" secondItem="Nff-BY-JZJ" secondAttribute="centerY" id="46C-dj-mEn"/>
-                    <constraint firstItem="2Uf-I0-hUm" firstAttribute="leading" secondItem="rjI-SV-YdM" secondAttribute="leading" id="6g8-3N-7XX"/>
                     <constraint firstItem="2Uf-I0-hUm" firstAttribute="top" secondItem="rjI-SV-YdM" secondAttribute="bottom" id="AJc-B5-m5d"/>
                     <constraint firstItem="xEP-aB-llU" firstAttribute="leading" secondItem="us6-QV-OcO" secondAttribute="trailing" constant="4" id="CCP-y5-sfh"/>
-                    <constraint firstItem="rjI-SV-YdM" firstAttribute="leading" secondItem="us6-QV-OcO" secondAttribute="trailing" constant="8" id="DVo-b8-MEM"/>
                     <constraint firstItem="2Uf-I0-hUm" firstAttribute="leading" secondItem="rjI-SV-YdM" secondAttribute="leading" id="DqE-OK-F3Q"/>
                     <constraint firstAttribute="leadingMargin" secondItem="us6-QV-OcO" secondAttribute="leading" id="JwC-98-0le"/>
                     <constraint firstItem="rjI-SV-YdM" firstAttribute="leading" secondItem="xEP-aB-llU" secondAttribute="trailing" constant="8" id="No9-4R-lfD"/>
@@ -95,15 +96,7 @@
                     <constraint firstAttribute="trailing" secondItem="dSy-4I-2ff" secondAttribute="trailing" constant="8" id="iHS-GH-PUC"/>
                     <constraint firstAttribute="trailingMargin" secondItem="2Uf-I0-hUm" secondAttribute="trailing" id="lnT-P6-wil"/>
                     <constraint firstItem="dSy-4I-2ff" firstAttribute="top" secondItem="Nff-BY-JZJ" secondAttribute="top" constant="8" id="mjb-N9-MEi"/>
-                    <constraint firstAttribute="topMargin" secondItem="0vs-b6-irg" secondAttribute="top" id="zbR-LT-hgd"/>
                 </constraints>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="DVo-b8-MEM"/>
-                        <exclude reference="6g8-3N-7XX"/>
-                        <exclude reference="zbR-LT-hgd"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <connections>
