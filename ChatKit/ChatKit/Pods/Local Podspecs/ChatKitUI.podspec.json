@@ -1,6 +1,6 @@
 {
   "name": "ChatKitUI",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "license": {
     "type": "Apache 2.0"
   },
@@ -38,7 +38,7 @@
   },
   "subspecs": [
     {
-      "name": "Core",
+      "name": "UI_Core",
       "source_files": [
         "ChatKit/source/src/**/*.{h,m,swift}",
         "ChatKit/source/Views/**/*.{h,m,swift}"
@@ -56,11 +56,11 @@
       }
     },
     {
-      "name": "UI",
+      "name": "Public",
       "source_files": "ChatKit/source/ChatKit/**/*.{h,m,swift}",
       "dependencies": {
-        "ChatKitUI/Core": [
-
+        "ChatKitUI/UI_Core": [
+          "0.6.0"
         ]
       }
     }
