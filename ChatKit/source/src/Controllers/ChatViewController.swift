@@ -64,6 +64,7 @@ public class ChatViewController: MMJSQViewController {
     internal var canLeaveChat = false
     internal var messages = [Message]()
     
+    
     // MARK: - overrides
     
     
