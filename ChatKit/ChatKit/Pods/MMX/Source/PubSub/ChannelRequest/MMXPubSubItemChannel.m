@@ -63,7 +63,7 @@
     
     NSMutableDictionary *dictionary = @{
                                         @"messageID" : self.messageID,
-                                        @"messageContent" : self.messageContent
+                                        @"messageContent" : self.messageContent ? : @{}
                                         }.mutableCopy;
 
     if (self.publisher.userId) {

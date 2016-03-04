@@ -51,6 +51,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
 extension MagnetChatViewController : ChatViewControllerDelegate {
     override public func viewDidLoad() {
         super.viewDidLoad()
+       
         let rightBtn = UIBarButtonItem.init(title: "Details", style: .Plain, target: self, action: "detailsAction")
         self.navigationItem.rightBarButtonItem = rightBtn
         self.delegate = self
@@ -102,8 +103,7 @@ class ViewController: UIViewController, ContactsControllerDelegate, ChatListCont
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        //generateUsers()
+         //UserGenerator.generateUsers()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -111,7 +111,7 @@ class ViewController: UIViewController, ContactsControllerDelegate, ChatListCont
         
         let user = MMUser.init()
         user.password = "gogogo"
-        user.userName = "bob@bob.com"
+        user.userName = "bobbob"
         user.firstName = "bob"
         user.lastName = "smith"
         user.register({ user in
@@ -147,7 +147,7 @@ class ViewController: UIViewController, ContactsControllerDelegate, ChatListCont
         } else {
             chatViewController.title = subscribers.map({$0.displayName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
         }
-        chatViewController.outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.greenColor())
+        chatViewController.outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(self.view.tintColor)
         
         if let c = currentController as? MagnetChatListViewController {
             c.reloadData()

@@ -19,9 +19,10 @@ Pod::Spec.new do |s|
 
   s.xcconfig       =  { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2', 'OTHER_LDFLAGS' => '-ObjC', 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES','ENABLE_BITCODE' => 'NO'}
 
-  s.dependency 'MagnetMax', '~> 2.5.1'
+  s.dependency 'MagnetMax', '~> 2.5.2'
   s.dependency 'NYTPhotoViewer' , '~> 1.1.0'
   s.dependency 'DZVideoPlayerViewController'
+  s.dependency 'UIScrollView-InfiniteScroll'
 
 end
 

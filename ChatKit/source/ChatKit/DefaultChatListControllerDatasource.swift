@@ -25,7 +25,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     
     weak var chatList : MagnetChatListViewController?
-    
+     public var hasMoreUsers : Bool = true
     
     // Public Functions
     
@@ -43,6 +43,29 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     //Mark: ChatListControllerDatasource
     
+    public  func mmxControllerHasMore() -> Bool {
+        return self.hasMoreUsers
+    }
+    
+    public func mmxControllerSearchUpdatesContinuously() ->Bool {
+        return true
+    }
+    
+    public func mmxControllerLoadMore(searchText : String?, offset : Int) {
+        //get request context
+        let loadingContext = chatList?.loadingContext()
+        MMXChannel.subscribedChannelsWithSuccess({ ch in
+            //check if the request is still valid
+            if loadingContext != self.chatList?.loadingContext() {
+                return
+            }
+            
+            self.hasMoreUsers = false
+            self.chatList?.appendChannels(ch)
+            }) { error in
+                print(error)
+        }
+    }
     
     public func mmxListCellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
         return nil
@@ -52,14 +75,6 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         return 80
     }
     
-    public func mmxListLoadChannels(channels : (([MMXChannel]) ->Void)) {
-        MMXChannel.subscribedChannelsWithSuccess({ ch in
-            // set channels
-            channels(ch)
-            }) { error in
-                print(error)
-        }
-    }
     
     public func mmxListRegisterCells(tableView : UITableView) {
         //using standard cells

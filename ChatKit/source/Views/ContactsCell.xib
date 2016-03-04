@@ -38,9 +38,16 @@
                         <constraints>
                             <constraint firstItem="fyL-9P-Vse" firstAttribute="top" secondItem="BOz-Pj-7Qw" secondAttribute="top" constant="8" id="3I5-CS-EDF"/>
                             <constraint firstAttribute="bottom" secondItem="fyL-9P-Vse" secondAttribute="bottom" constant="8" id="5K2-Hr-vQ4"/>
+                            <constraint firstItem="fyL-9P-Vse" firstAttribute="centerY" secondItem="BOz-Pj-7Qw" secondAttribute="centerY" id="Aea-N2-XiA"/>
                             <constraint firstAttribute="trailing" secondItem="fyL-9P-Vse" secondAttribute="trailing" constant="8" id="DY5-HN-WwN"/>
                             <constraint firstItem="fyL-9P-Vse" firstAttribute="leading" secondItem="BOz-Pj-7Qw" secondAttribute="leading" constant="8" id="Pue-6i-zS9"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="3I5-CS-EDF"/>
+                                <exclude reference="5K2-Hr-vQ4"/>
+                            </mask>
+                        </variation>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2f2-ck-3jf">
                         <rect key="frame" x="45" y="8" width="267" height="27.5"/>

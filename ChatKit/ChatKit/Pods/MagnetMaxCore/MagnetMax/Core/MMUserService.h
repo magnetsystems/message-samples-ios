@@ -24,7 +24,7 @@
 @class MMRefreshTokenRequest;
 @class MMUpdateProfileRequest;
 
-
+NS_ASSUME_NONNULL_BEGIN
 @protocol MMUserServiceProtocol <NSObject>
 
 @optional
@@ -139,3 +139,4 @@
 @interface MMUserService : MMService<MMUserServiceProtocol>
 
 @end
+NS_ASSUME_NONNULL_END

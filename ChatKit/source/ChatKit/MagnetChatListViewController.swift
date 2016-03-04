@@ -38,13 +38,14 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
     
     private var chooseContacts : Bool = true
     private var contactsController : MagnetContactsPickerController?
+    private var requestNumber : Int = 0
     
     
     //MARK: Public Variables
     
     
     public var contactsPickerDelegate : ContactsControllerDelegate?
-    public var datasource : ChatListControllerDatasource = DefaultChatListControllerDatasource()
+    public var datasource : ChatListControllerDatasource?
     public var delegate : ChatListControllerDelegate?
     
     
@@ -63,11 +64,13 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
         }
         
         self.view.tintColor = self.appearance.tintColor
+        
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        self.datasource = DefaultChatListControllerDatasource()
         if let datasource = self.datasource as? DefaultChatListControllerDatasource {
             datasource.chatList = self
         }
-        
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        self.reset()
     }
     
     public override func viewDidLoad() {
@@ -97,6 +100,14 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
         }
     }
     
+    public func loadingContext() -> Int {
+        return self.requestNumber
+    }
+    
+    private func newLoadingContext() {
+        self.requestNumber++
+    }
+    
     private func presentChatViewController(chatViewController : MagnetChatViewController, users : [MMUser]) {
         let myId = MMUser.currentUser()?.userID
         
@@ -123,7 +134,7 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
     
     
     public func reloadData() {
-        self.refreshChannelDetail()
+        self.appendChannels([])
     }
     
     
@@ -139,18 +150,37 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
     }
     
     override public func cellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
-        return self.datasource.mmxListCellForMMXChannel?(tableView, channel : channel, channelDetails : channelDetails, row : row)
+        return self.datasource?.mmxListCellForMMXChannel?(tableView, channel : channel, channelDetails : channelDetails, row : row)
     }
     
     override public func cellHeightForChannel(channel: MMXChannel, channelDetails: MMXChannelDetailResponse, row: Int) -> CGFloat {
-        if let height  = self.datasource.mmxListCellHeightForMMXChannel?(channel, channelDetails: channelDetails, row : row) {
+        if let height  = self.datasource?.mmxListCellHeightForMMXChannel?(channel, channelDetails: channelDetails, row : row) {
             return height
         }
         return 80
     }
     
-    override public func loadChannels(channelBlock: ((channels: [MMXChannel]) -> Void)) {
-        self.datasource.mmxListLoadChannels(channelBlock)
+    override public func hasMore() -> Bool {
+        if let listDatasource = self.datasource {
+            return listDatasource.mmxControllerHasMore()
+        }
+        return false
+    }
+    
+    override public func loadMore(searchText: String?, offset: Int) {
+        newLoadingContext()
+        if searchText != nil {
+            let loadingContext = self.loadingContext()
+            //cool down
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
+                if loadingContext != self.loadingContext() {
+                    return
+                }
+                self.datasource?.mmxControllerLoadMore(searchText, offset : offset)
+            })
+        } else {
+            self.datasource?.mmxControllerLoadMore(searchText, offset : offset)
+        }
     }
     
     override public func onChannelDidLeave(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
@@ -162,9 +192,15 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
     }
     
     override public func registerCells(tableView : UITableView) {
-        self.datasource.mmxListRegisterCells?(tableView)
+        self.datasource?.mmxListRegisterCells?(tableView)
     }
     
+    override public func shouldUpdateSearchContinuously() -> Bool {
+        if let datasource = self.datasource {
+            return datasource.mmxControllerSearchUpdatesContinuously()
+        }
+        return false
+    }
     
     //MARK: - ContactsViewControllerDelegate
     

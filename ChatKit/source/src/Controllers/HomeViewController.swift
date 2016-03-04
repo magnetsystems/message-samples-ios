@@ -19,18 +19,30 @@ import UIKit
 import MagnetMax
 
 
-public class HomeViewController: MMTableViewController, UISearchResultsUpdating {
+public class HomeViewController: MMTableViewController, UISearchBarDelegate {
+    
+    
+    //MARK: Public Variables
+    
+    
+    public var canSearch : Bool? {
+        didSet {
+            updateSearchBar()
+        }
+    }
+    
+    public private(set) var searchBar = UISearchBar()
     
     
     //MARK: Internal Variables
     
     
+    internal var currentDetailCount = 0
     internal var detailResponses : [MMXChannelDetailResponse] = []
-    internal var filteredDetailResponses : [MMXChannelDetailResponse] = []
-    internal let searchController = UISearchController(searchResultsController: nil)
     
     
     //MARK: Overrides
+    
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -59,34 +71,55 @@ public class HomeViewController: MMTableViewController, UISearchResultsUpdating 
         self.tableView.registerNib(nib, forCellReuseIdentifier: "SummaryResponseCell")
         
         // Add search bar
-        searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.sizeToFit()
-        tableView.tableHeaderView = searchController.searchBar
-        tableView.reloadData()
-        registerCells(self.tableView)
+        searchBar.sizeToFit()
+        searchBar.returnKeyType = .Search
+        if self.shouldUpdateSearchContinuously() {
+            searchBar.returnKeyType = .Done
+        }
+        searchBar.setShowsCancelButton(false, animated: false)
+        searchBar.delegate = self
+        tableView.tableHeaderView = searchBar
+        self.tableView.layer.masksToBounds = true
+        if self.canSearch == nil {
+            self.canSearch = true
+        }
         
+        registerCells(self.tableView)
+        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
         refreshControl?.addTarget(self, action: "refreshChannelDetail", forControlEvents: .ValueChanged)
     }
     
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        loadDetails()
-        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
     }
     
     override public func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+        resignSearchBar()
     }
     
     
     // MARK: Public Methods
     
     
-    public func registerCells(tableView: UITableView) { }
+    public func appendChannels(mmxChannels : [MMXChannel]) {
+        if mmxChannels.count > 0 {
+            self.beginRefreshing()
+            // Get all channels the current user is subscribed to
+            MMXChannel.channelDetails(mmxChannels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
+                self.currentDetailCount += mmxChannels.count
+                self.detailResponses.appendContentsOf(detailResponses)
+                self.detailResponses = self.sortChannelDetails(self.detailResponses)
+                self.endDataLoad()
+                }, failure: { error in
+                    self.endDataLoad()
+                    print(error)
+            })
+        } else {
+            self.endDataLoad()
+        }
+    }
     
     public func canLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         return true
@@ -100,18 +133,55 @@ public class HomeViewController: MMTableViewController, UISearchResultsUpdating 
         return 80
     }
     
-    public func loadChannels(channelBlock : ((channels :[MMXChannel]) -> Void)) {}
+    public func hasMore()->Bool {
+        return false
+    }
+    
+    public func loadMore(searchText : String?, offset : Int) { }
     
     public func onChannelDidLeave(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
     
     public func onChannelDidSelect(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
+    
+    public func registerCells(tableView: UITableView) { }
+    
+    public func reset() {
+        self.tableView.removeInfiniteScroll()
+        self.detailResponses = []
+        self.currentDetailCount = 0
+        self.tableView.reloadData()
+        self.loadMore(self.searchBar.text, offset: self.currentDetailCount)
+    }
+    
+    public func shouldUpdateSearchContinuously() -> Bool {
+        return true
+    }
+    
+    public func sortChannelDetails(channelDetails : [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
+        return detailsOrderByDate(channelDetails)
+    }
     
     
     //MARK: Notifications
     
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
-        loadDetails()
+        if let channel = mmxMessage.channel {
+            var hasChannel = false
+            for var i = 0; i < detailResponses.count; i++ {
+                let details = detailResponses[i]
+                if details.channel.channelID == channel.channelID {
+                    hasChannel = true
+                    let indexPath = NSIndexPath(forRow: i, inSection: 0)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                    break
+                }
+            }
+            
+            if !hasChannel {
+                self.appendChannels([channel])
+            }
+        }
     }
     
     
@@ -119,7 +189,7 @@ public class HomeViewController: MMTableViewController, UISearchResultsUpdating 
     
     
     @IBAction func refreshChannelDetail() {
-        loadDetails()
+        reset()
     }
     
     
@@ -131,35 +201,46 @@ public class HomeViewController: MMTableViewController, UISearchResultsUpdating 
     }
     
     
-    //MARK: Search Controller Delegate
+    // MARK: - UISearchResultsUpdating
     
     
-    public func updateSearchResultsForSearchController(searchController: UISearchController) {
-        let searchString = searchController.searchBar.text!.lowercaseString
-        filteredDetailResponses = detailResponses.filter {
-            for subscriber in $0.subscribers {
-                let name = subscriber.displayName
-                if name.lowercaseString.containsString(searchString.lowercaseString) || searchString.characters.count == 0 {
-                    return true
-                }
-            }
-            
-            return false
+    public func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    public func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
+    
+    public func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.characters.count == 0 {
+            self.search("")
+            return
         }
         
-        tableView.reloadData()
+        if self.shouldUpdateSearchContinuously() {
+            self.search(searchText)
+        }
     }
+    
+    public func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.setShowsCancelButton(false, animated: true)
+        self.search(searchBar.text)
+    }
+    
 }
 
 
+
 public extension HomeViewController {
+    
+    
     // MARK: - Table view data source
     
     
     override public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.active {
-            return filteredDetailResponses.count
-        }
         return detailResponses.count
     }
     
@@ -209,6 +290,13 @@ public extension HomeViewController {
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         onChannelDidSelect(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
+    
+    public override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesBegan(touches, withEvent: event)
+        if searchBar.isFirstResponder() {
+            searchBar.resignFirstResponder()
+        }
+    }
 }
 
 
@@ -218,8 +306,33 @@ private extension HomeViewController {
     // MARK: - Private Methods
     
     
+    private func beginRefreshing() {
+        self.refreshControl?.beginRefreshing()
+    }
+    
     private func detailsForIndexPath(indexPath : NSIndexPath) -> MMXChannelDetailResponse {
-        return searchController.active ? filteredDetailResponses[indexPath.row] : detailResponses[indexPath.row]
+        return  detailResponses[indexPath.row]
+    }
+    
+    private func detailsOrderByDate(channelDetails : [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
+        let sortedDetails = channelDetails.sort({ (detail1, detail2) -> Bool in
+            let formatter = ChannelManager.sharedInstance.formatter
+            return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
+        })
+        return sortedDetails
+    }
+    
+    private func endDataLoad() {
+        self.endRefreshing()
+        self.tableView.finishInfiniteScroll()
+        self.tableView.removeInfiniteScroll()
+        if self.hasMore() {
+            self.tableView.addInfiniteScrollWithHandler({ [weak self] _ in
+                if let weakSelf = self {
+                    weakSelf.loadMore(weakSelf.searchBar.text, offset: weakSelf.currentDetailCount)
+                }
+                })
+        }
     }
     
     private func endRefreshing() {
@@ -227,26 +340,27 @@ private extension HomeViewController {
         tableView.reloadData()
     }
     
-    private func loadDetails() {
-        loadChannels({ channels in
-            if channels.count > 0 {
-                // Get all channels the current user is subscribed to
-                MMXChannel.channelDetails(channels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
-                    let sortedDetails = detailResponses.sort({ (detail1, detail2) -> Bool in
-                        let formatter = ChannelManager.sharedInstance.formatter
-                        return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
-                    })
-                    self.detailResponses = sortedDetails
-                    self.endRefreshing()
-                    }, failure: { error in
-                        self.endRefreshing()
-                        print(error)
-                })
-            } else {
-                
-            }
-        })
+    private func resignSearchBar() {
+        if searchBar.isFirstResponder() {
+            searchBar.resignFirstResponder()
+        }
+        searchBar.setShowsCancelButton(false, animated: true)
     }
     
+    private func search(searchString : String?) {
+        var text : String? = searchString?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        if let txt = text where txt.characters.count == 0 {
+            text = nil
+        }
+        self.reset()
+    }
+    
+    private func updateSearchBar() {
+        if let canSearch = self.canSearch where canSearch == true {
+            tableView.tableHeaderView = searchBar
+        } else {
+            tableView.tableHeaderView = nil
+        }
+    }
 }
 

@@ -66,7 +66,6 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
             
             if users.count == 0 {
                 self.hasMoreUsers = false
-                self.magnetPicker?.reloadData()
                 return
             }
             

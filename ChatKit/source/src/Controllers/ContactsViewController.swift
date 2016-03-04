@@ -17,7 +17,7 @@
 
 import UIKit
 import MagnetMax
-
+import UIScrollView_InfiniteScroll
 
 //MARK: UserLetterGroup
 
@@ -39,7 +39,7 @@ public class UserModel : NSObject {
 //MARK: Contacts Class
 
 
-public class ContactsViewController: MMTableViewController, UISearchBarDelegate {
+public class ContactsViewController: MMTableViewController, UISearchBarDelegate, UIGestureRecognizerDelegate {
     
     
     //MARK: Public Variables
@@ -61,7 +61,6 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
     internal var availableRecipients = [UserLetterGroup]()
     internal var currentUserCount = 0
     internal var disabledUsers : [String : MMUser] = [:]
-    internal var isWaitingForData : Bool = false
     internal var startPoint : CGPoint = CGPointZero
     internal var topGuide : NSLayoutConstraint?
     
@@ -114,6 +113,12 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
         updateContactsView(self.selectedUsers)
     }
     
+    override public func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        resignSearchBar()
+    }
+    
     override public func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -144,7 +149,6 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
     }
     
     public func appendUsers(unfilteredUsers : [MMUser], reloadTable : Bool) {
-        isWaitingForData = false
         currentUserCount += unfilteredUsers.count
         let users = self.filterOutUsers(unfilteredUsers)
         var indexPaths : [NSIndexPath] = []
@@ -223,9 +227,20 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
             self.tableView.endUpdates()
         }
         
+        tableView.finishInfiniteScroll()
+        tableView.removeInfiniteScroll()
         if hasMore()  {
-            let indexPath = NSIndexPath(forRow: 0, inSection: self.availableRecipients.count)
-            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            tableView.addInfiniteScrollWithHandler({[weak self] _ in
+                if let weakSelf = self {
+                    weakSelf.loadMore(weakSelf.searchBar.text, offset: weakSelf.currentUserCount)
+                }
+                })
+        }
+    }
+    
+    public func endSearch() {
+        if searchBar.isFirstResponder() {
+            searchBar.resignFirstResponder()
         }
     }
     
@@ -252,14 +267,25 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
     public func onUserDeselected(user : MMUser) { }
     
     public func reset() {
+        self.tableView.removeInfiniteScroll()
         self.availableRecipients = []
         self.currentUserCount = 0
         self.tableView.reloadData()
+        self.loadMore(self.searchBar.text, offset: self.currentUserCount)
     }
     
     
     // MARK: - UISearchResultsUpdating
     
+    
+    public func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    public func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
     
     public func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.characters.count == 0 {
@@ -273,8 +299,8 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate 
     }
     
     public func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
         self.search(searchBar.text)
+        self.resignSearchBar()
     }
     
 }
@@ -286,7 +312,7 @@ public extension ContactsViewController {
     
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return availableRecipients.count + 1
+        return availableRecipients.count
     }
     
     func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
@@ -298,35 +324,10 @@ public extension ContactsViewController {
     }
     
     override public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView.numberOfSections - 1 == section {
-            return 1
-        }
         return availableRecipients[section].users.count
     }
     
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        if tableView.numberOfSections - 1 == indexPath.section {
-            var loadingCell = tableView.dequeueReusableCellWithIdentifier("LoadingCellIdentifier") as? LoadingCell
-            if loadingCell == nil {
-                loadingCell = LoadingCell(style: .Default, reuseIdentifier: "LoadingCellIdentifier")
-            }
-            if self.hasMore() {
-                loadingCell?.indicator?.startAnimating()
-                
-                if !isWaitingForData {
-                    isWaitingForData = true
-                    let text = searchBar.text?.characters.count > 0 ? searchBar.text : nil
-                    loadMore(text, offset: currentUserCount)
-                }
-                
-            } else {
-                loadingCell?.indicator?.stopAnimating()
-            }
-            
-            return loadingCell!
-        }
-        
         var cell = tableView.dequeueReusableCellWithIdentifier("UserCellIdentifier") as! ContactsCell?
         
         if cell == nil {
@@ -375,9 +376,6 @@ public extension ContactsViewController {
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView.numberOfSections - 1 == section {
-            return nil
-        }
         if !shouldShowHeaderTitles() {
             return nil
         }
@@ -386,10 +384,6 @@ public extension ContactsViewController {
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == tableView.numberOfSections - 1 {
-            return
-        }
-        
         let users = availableRecipients[indexPath.section].users
         if  let user = users[indexPath.row].user {
             addSelectedUser(user)
@@ -398,9 +392,6 @@ public extension ContactsViewController {
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == tableView.numberOfSections - 1 {
-            return
-        }
         let users = availableRecipients[indexPath.section].users
         if let user = users[indexPath.row].user {
             removeSelectedUser(user)
@@ -411,17 +402,6 @@ public extension ContactsViewController {
 
 
 private extension ContactsViewController {
-    
-    
-    //MARK : UISCrollViewDelegate
-    
-    
-    private func scrollViewDidScroll(scrollView: UIScrollView) {
-        
-        if searchBar.isFirstResponder() {
-            searchBar.resignFirstResponder()
-        }
-    }
     
     
     //MARK: Actions
@@ -479,14 +459,6 @@ private extension ContactsViewController {
         onUserSelected(selectedUser)
     }
     
-    private func updateSearchBar() {
-        if let canSearch = self.canSearch where canSearch == true {
-            tableView.tableHeaderView = searchBar
-        } else {
-            tableView.tableHeaderView = nil
-        }
-    }
-    
     private func charForUser(user : MMUser) -> Character? {
         return Utils.nameForUser(user).lowercaseString.characters.first
     }
@@ -501,6 +473,13 @@ private extension ContactsViewController {
             }
         }
         return tempUsers
+    }
+    
+    private func resignSearchBar() {
+        if searchBar.isFirstResponder() {
+            searchBar.resignFirstResponder()
+        }
+        searchBar.setShowsCancelButton(false, animated: true)
     }
     
     private func removeSelectedUser(selectedUser : MMUser) {
@@ -520,7 +499,6 @@ private extension ContactsViewController {
         if let txt = text where txt.characters.count == 0 {
             text = nil
         }
-        self.isWaitingForData = true
         self.reset()
         loadMore(text, offset: 0)
     }
@@ -576,5 +554,12 @@ private extension ContactsViewController {
         }
     }
     
+    private func updateSearchBar() {
+        if let canSearch = self.canSearch where canSearch == true {
+            tableView.tableHeaderView = searchBar
+        } else {
+            tableView.tableHeaderView = nil
+        }
+    }
 }
 

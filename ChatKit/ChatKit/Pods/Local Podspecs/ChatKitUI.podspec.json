@@ -39,12 +39,15 @@
   },
   "dependencies": {
     "MagnetMax": [
-      "~> 2.5.1"
+      "~> 2.5.2"
     ],
     "NYTPhotoViewer": [
       "~> 1.1.0"
     ],
     "DZVideoPlayerViewController": [
+
+    ],
+    "UIScrollView-InfiniteScroll": [
 
     ]
   }

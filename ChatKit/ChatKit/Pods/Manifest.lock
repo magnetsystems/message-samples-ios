@@ -14,8 +14,9 @@ PODS:
     - AFNetworking/NSURLConnection (~> 2.2)
   - ChatKitUI (0.0.0):
     - DZVideoPlayerViewController
-    - MagnetMax (~> 2.5.1)
+    - MagnetMax (~> 2.5.2)
     - NYTPhotoViewer (~> 1.1.0)
+    - UIScrollView-InfiniteScroll
   - CocoaAsyncSocket (7.4.1)
   - CocoaLumberjack (2.2.0):
     - CocoaLumberjack/Default (= 2.2.0)
@@ -27,10 +28,10 @@ PODS:
     - CocoaLumberjack/Default
   - DZVideoPlayerViewController (0.4.0)
   - FLAnimatedImage (1.0.12)
-  - MagnetMax (2.5.1):
-    - MagnetMaxCore (~> 2.5.1)
-    - MMX (~> 2.5.1)
-  - MagnetMaxCore (2.5.1):
+  - MagnetMax (2.5.2):
+    - MagnetMaxCore (~> 2.5.2)
+    - MMX (~> 2.5.2)
+  - MagnetMaxCore (2.5.2):
     - AFNetworking/NSURLConnection (= 2.6.1)
     - AFNetworking/NSURLSession (= 2.6.1)
     - AFOAuth2Manager (= 2.2.1)
@@ -54,10 +55,10 @@ PODS:
     - MDMCoreData/MDMCoreDataCore
   - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
     - MDMCoreData/MDMCoreDataCore
-  - MMX (2.5.1):
+  - MMX (2.5.2):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.5.1)
+    - MagnetMaxCore (~> 2.5.2)
     - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.13)
   - MMXXMPPFramework (3.6.13):
@@ -96,6 +97,7 @@ PODS:
     - FLAnimatedImage (~> 1.0.8)
     - NYTPhotoViewer/Core
   - NYTPhotoViewer/Core (1.1.0)
+  - UIScrollView-InfiniteScroll (0.7.3)
 
 DEPENDENCIES:
   - ChatKitUI (from `../../`)
@@ -107,17 +109,18 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
-  ChatKitUI: 96e777d312165db1cce4aa1def86c57661473a15
+  ChatKitUI: 97cb085181bbf65ac57d5d2e3d8485a7795ee000
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
   DZVideoPlayerViewController: 4886c5016a632cbd94a85e6071806e4929c01653
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  MagnetMax: bafe021aa3dc8e69d0b401f600a2059b511e1731
-  MagnetMaxCore: f9fefa87325b098751208c982d245f44453ce203
+  MagnetMax: 31ec1ac9449dbf733e0f2c345f93b0c946ff88fe
+  MagnetMaxCore: 6120c776bd2e0c2cd320f9f773a92be81a6cb290
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: ab8bece01b6d21400a0cf85235b68c7c790acf4b
+  MMX: cb3bd379bb2e7a00ae923d6acaa93fe3a23b14e7
   MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
+  UIScrollView-InfiniteScroll: b6c7d6d155dca7f9c5dd43813ecffeb301b3d50c
 
 COCOAPODS: 0.39.0

@@ -37,7 +37,7 @@ public class MagnetContactsPickerController: ContactsViewController {
     public var barButtonCancel : UIBarButtonItem?
     public var barButtonNext : UIBarButtonItem?
     public weak var delegate : ContactsControllerDelegate?
-    public var datasource : ContactsControllerDatasource? = DefaultContactsPickerControllerDatasource()
+    public var datasource : ContactsControllerDatasource?
     
     
     //MARK: Init
@@ -69,9 +69,11 @@ public class MagnetContactsPickerController: ContactsViewController {
         barButtonCancel = btnCancel
         barButtonNext = btnNext
         
+        self.datasource = DefaultContactsPickerControllerDatasource()
         if let dataSource = self.datasource as? DefaultContactsPickerControllerDatasource {
             dataSource.magnetPicker = self
         }
+        self.reset()
     }
     
     override public func viewDidLoad() {

@@ -52,8 +52,7 @@ import UIKit
 //MARK: ChannelListDatasource
 
 
-@objc public protocol ChatListControllerDatasource : class {
-    func mmxListLoadChannels(channels : (([MMXChannel]) ->Void))
+@objc public protocol ChatListControllerDatasource : ControllerDatasource {
     
     optional func mmxListRegisterCells(tableView : UITableView)
     optional func mmxListCellForMMXChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell?
