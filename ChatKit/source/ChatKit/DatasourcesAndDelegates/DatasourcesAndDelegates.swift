@@ -43,9 +43,11 @@ import UIKit
 
 
 @objc public protocol ContactsControllerDatasource: ControllerDatasource {
+    optional func mmxContactsControllerImageForUser(imageView : UIImageView, user : MMUser)
     optional func mmxContactsControllerShowsSectionIndexTitles() -> Bool
     optional func mmxContactsControllerShowsSectionsHeaders() -> Bool
     optional func mmxContactsControllerPreselectedUsers() -> [MMUser]
+    
 }
 
 
@@ -57,6 +59,7 @@ import UIKit
     optional func mmxListRegisterCells(tableView : UITableView)
     optional func mmxListCellForMMXChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell?
     optional func mmxListCellHeightForMMXChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> CGFloat
+    optional func mmxListImageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse)
 }
 
 

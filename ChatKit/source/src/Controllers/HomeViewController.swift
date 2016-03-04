@@ -133,6 +133,10 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         return 80
     }
     
+    public func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
+    imageView.image = nil
+    }
+    
     public func hasMore()->Bool {
         return false
     }
@@ -179,6 +183,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
                             if channelDetail.channel.channelID == channelID && oldChannelDetail.channel.channelID ==  channelID {
                                 self.detailResponses.removeAtIndex(i)
                                 self.detailResponses.insert(channelDetail, atIndex: i)
+                                self.detailResponses = self.sortChannelDetails(self.detailResponses)
                             }
                         }
                         self.tableView.reloadData()
@@ -263,6 +268,10 @@ public extension HomeViewController {
         }
         let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
         cell.detailResponse = detailResponse
+        
+        if let imageView = cell.avatarView {
+        imageForChannelDetails(imageView, channelDetails: detailResponse)
+        }
         
         return cell
     }

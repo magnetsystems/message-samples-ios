@@ -25,7 +25,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     
     weak var chatList : MagnetChatListViewController?
-     public var hasMoreUsers : Bool = true
+    public var hasMoreUsers : Bool = true
     
     // Public Functions
     
@@ -64,6 +64,36 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
             self.chatList?.appendChannels(ch)
             }) { error in
                 print(error)
+        }
+    }
+    
+    public func mmxListImageForChannelDetails(imageView: UIImageView, channelDetails: MMXChannelDetailResponse) {
+        if channelDetails.subscriberCount > 2 {
+            let image = UIImage(named: "user_group_clear.png", inBundle: NSBundle(identifier: "org.cocoapods.ChatKitUI"), compatibleWithTraitCollection: nil)
+            imageView.backgroundColor = chatList?.appearance.tintColor
+            imageView.image = image
+        } else {
+            if let userProfile = channelDetails.subscribers.first {
+                let tmpUser = MMUser()
+                tmpUser.extras = ["hasAvatar" : "true"]
+                var firstName = ""
+                var lastName = ""
+                let nameComponents = userProfile.displayName.componentsSeparatedByString(" ")
+                if let name = nameComponents.first {
+                    firstName = name
+                }
+                
+                if let name = nameComponents.last {
+                    lastName = name
+                }
+                
+                tmpUser.firstName = ""
+                tmpUser.lastName = ""
+                tmpUser.userName = userProfile.displayName
+                tmpUser.userID = userProfile.userId
+                let defaultImage = Utils.noAvatarImageForUser(firstName, lastName: lastName)
+                Utils.loadImageWithUrl(tmpUser.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
+            }
         }
     }
     

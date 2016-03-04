@@ -460,7 +460,10 @@
             location = "container:"
             name = "images">
             <FileRef
-               location = "group:../source/Views/images/user_default.png">
+               location = "group:../source/Views/images/user_group_clear.png">
+            </FileRef>
+            <FileRef
+               location = "group:../source/Views/images/user_group.png">
             </FileRef>
          </Group>
          <FileRef

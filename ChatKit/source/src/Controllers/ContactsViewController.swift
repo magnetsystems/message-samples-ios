@@ -248,6 +248,11 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         return false
     }
     
+    public func imageForUser(imageView : UIImageView, user : MMUser) {
+        let defaultImage = Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
+        Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
+    }
+    
     public func loadMore(searchText : String?, offset : Int) { }
     
     public func shouldShowIndexTitles() -> Bool {
@@ -366,12 +371,9 @@ public extension ContactsViewController {
         }
         
         cell?.userName?.attributedText = title
-        
-        let defaultImage = Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
         if let imageView = cell?.avatar {
-            Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
+        imageForUser(imageView, user: user)
         }
-        
         return cell!
     }
     

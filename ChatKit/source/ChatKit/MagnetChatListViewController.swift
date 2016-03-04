@@ -123,7 +123,7 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
         } else {
             chatViewController.title = subscribers.map({Utils.displayNameForUser($0)}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
         }
-        
+        chatViewController.outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(self.view.tintColor)
         self.contactsController?.dismiss()
         self.delegate?.mmxListWillShowChatController?(chatViewController)
         if let nav = navigationController {
@@ -163,6 +163,14 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
             return height
         }
         return 80
+    }
+    
+    override public func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
+        if let imgForDetails = self.datasource?.mmxListImageForChannelDetails {
+            imgForDetails(imageView, channelDetails: channelDetails)
+        } else {
+            super.imageForChannelDetails(imageView, channelDetails: channelDetails)
+        }
     }
     
     override public func hasMore() -> Bool {

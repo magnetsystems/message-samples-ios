@@ -152,6 +152,13 @@ public class MagnetContactsPickerController: ContactsViewController {
     
     //MARK: - Data Method Overrides
     
+    override public func imageForUser(imageView: UIImageView, user: MMUser) {
+        if let imgForUser = self.datasource?.mmxContactsControllerImageForUser {
+            imgForUser(imageView, user: user)
+        } else {
+            super.imageForUser(imageView, user: user)
+        }
+    }
     
     override public func hasMore() -> Bool {
         if let pickerDatasource = self.datasource {

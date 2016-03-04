@@ -34,13 +34,13 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Subscribers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rjI-SV-YdM">
-                        <rect key="frame" x="26" y="8" width="470" height="18"/>
+                        <rect key="frame" x="30" y="8" width="466" height="18"/>
                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Uf-I0-hUm" userLabel="message">
-                        <rect key="frame" x="26" y="26" width="566" height="40"/>
+                        <rect key="frame" x="30" y="26" width="562" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="6kz-X5-ilD"/>
                         </constraints>
@@ -57,12 +57,36 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xEP-aB-llU">
+                        <rect key="frame" x="22" y="35" width="0.0" height="0.0"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wYc-k9-5hJ">
+                                <constraints>
+                                    <constraint firstAttribute="width" priority="750" id="3yo-UQ-5ms"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="44" id="EyY-fw-iX2"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="44" id="9xp-kF-n3E"/>
+                            <constraint firstAttribute="width" secondItem="xEP-aB-llU" secondAttribute="height" multiplier="1:1" priority="900" id="LTu-rM-p1Q"/>
+                            <constraint firstAttribute="bottom" secondItem="wYc-k9-5hJ" secondAttribute="bottom" id="Olr-3W-dlg"/>
+                            <constraint firstItem="wYc-k9-5hJ" firstAttribute="top" secondItem="xEP-aB-llU" secondAttribute="top" id="cfM-y7-O2R"/>
+                            <constraint firstAttribute="trailing" secondItem="wYc-k9-5hJ" secondAttribute="trailing" id="t4i-7F-IRM"/>
+                            <constraint firstItem="wYc-k9-5hJ" firstAttribute="leading" secondItem="xEP-aB-llU" secondAttribute="leading" id="tPi-bf-71T"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="xEP-aB-llU" firstAttribute="centerY" secondItem="Nff-BY-JZJ" secondAttribute="centerY" id="46C-dj-mEn"/>
                     <constraint firstItem="2Uf-I0-hUm" firstAttribute="leading" secondItem="rjI-SV-YdM" secondAttribute="leading" id="6g8-3N-7XX"/>
                     <constraint firstItem="2Uf-I0-hUm" firstAttribute="top" secondItem="rjI-SV-YdM" secondAttribute="bottom" id="AJc-B5-m5d"/>
+                    <constraint firstItem="xEP-aB-llU" firstAttribute="leading" secondItem="us6-QV-OcO" secondAttribute="trailing" constant="4" id="CCP-y5-sfh"/>
                     <constraint firstItem="rjI-SV-YdM" firstAttribute="leading" secondItem="us6-QV-OcO" secondAttribute="trailing" constant="8" id="DVo-b8-MEM"/>
+                    <constraint firstItem="2Uf-I0-hUm" firstAttribute="leading" secondItem="rjI-SV-YdM" secondAttribute="leading" id="DqE-OK-F3Q"/>
                     <constraint firstAttribute="leadingMargin" secondItem="us6-QV-OcO" secondAttribute="leading" id="JwC-98-0le"/>
+                    <constraint firstItem="rjI-SV-YdM" firstAttribute="leading" secondItem="xEP-aB-llU" secondAttribute="trailing" constant="8" id="No9-4R-lfD"/>
                     <constraint firstItem="0vs-b6-irg" firstAttribute="leading" secondItem="rjI-SV-YdM" secondAttribute="trailing" constant="8" id="U8i-Q2-tBo"/>
                     <constraint firstItem="dSy-4I-2ff" firstAttribute="leading" secondItem="0vs-b6-irg" secondAttribute="trailing" constant="8" id="WH5-8D-DBs"/>
                     <constraint firstItem="dSy-4I-2ff" firstAttribute="centerY" secondItem="0vs-b6-irg" secondAttribute="centerY" id="Xa5-X4-lru"/>
@@ -75,18 +99,21 @@
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
+                        <exclude reference="DVo-b8-MEM"/>
+                        <exclude reference="6g8-3N-7XX"/>
                         <exclude reference="zbR-LT-hgd"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <connections>
+                <outlet property="avatarView" destination="wYc-k9-5hJ" id="7Rm-Iz-r9P"/>
                 <outlet property="lblLastTime" destination="0vs-b6-irg" id="hyF-A0-tuH"/>
                 <outlet property="lblMessage" destination="2Uf-I0-hUm" id="uBO-4S-7eS"/>
                 <outlet property="lblSubscribers" destination="rjI-SV-YdM" id="b9l-n8-oSE"/>
                 <outlet property="vNewMessageIndicator" destination="us6-QV-OcO" id="Puo-nv-qHN"/>
             </connections>
-            <point key="canvasLocation" x="155" y="349"/>
+            <point key="canvasLocation" x="153" y="302"/>
         </tableViewCell>
     </objects>
 </document>

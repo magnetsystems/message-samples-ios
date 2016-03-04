@@ -111,7 +111,7 @@ class ViewController: UIViewController {
         
         let user = MMUser.init()
         user.password = "gogogo"
-        user.userName = "user3"
+        user.userName = "user5"
         user.firstName = "auser"
         user.lastName = "smith"
         user.register({ u in

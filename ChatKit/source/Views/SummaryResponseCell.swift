@@ -34,6 +34,7 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
     @IBOutlet weak var lblSubscribers : UILabel?
     @IBOutlet weak var lblLastTime : UILabel?
     @IBOutlet weak var lblMessage : UILabel?
+    @IBOutlet weak var avatarView : UIImageView?
     
     
     //MARK: Overridden Properties
@@ -113,9 +114,14 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         if let ivMessageIcon = ivMessageIcon {
             ivMessageIcon.layer.cornerRadius = ivMessageIcon.bounds.width / 2
             ivMessageIcon.clipsToBounds = true
+        }
+        if let avatar = self.avatarView {
+            avatar.layer.cornerRadius = 44 / 2.0
+            avatar.layer.masksToBounds = true
         }
     }
 }
