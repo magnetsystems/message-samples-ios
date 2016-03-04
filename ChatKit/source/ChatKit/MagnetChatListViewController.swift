@@ -19,14 +19,6 @@ import UIKit
 import MagnetMax
 
 
-//Mark: ChatListControllerDatasource
-
-
-
-
-
-
-
 //Mark: MagnetChatListViewController
 
 

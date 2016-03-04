@@ -19,10 +19,6 @@ import UIKit
 import MagnetMax
 
 
-//MARK: MagnetChatViewControllerDelegate
-
-
-
 //MARK: MagnetChatViewController
 
 

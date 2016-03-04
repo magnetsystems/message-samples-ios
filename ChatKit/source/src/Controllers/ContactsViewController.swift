@@ -17,7 +17,6 @@
 
 import UIKit
 import MagnetMax
-import UIScrollView_InfiniteScroll
 
 //MARK: UserLetterGroup
 

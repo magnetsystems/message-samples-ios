@@ -1,6 +1,6 @@
 {
   "name": "ChatKitUI",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "license": {
     "type": "Apache 2.0"
   },
@@ -21,7 +21,6 @@
   "resources": [
     "ChatKit/source/**/*.{xib,storyboard,bundle,png}"
   ],
-  "source_files": "ChatKit/source/**/*.{h,m,swift}",
   "frameworks": [
     "QuartzCore",
     "CoreGraphics",
@@ -37,15 +36,33 @@
     "CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES": "YES",
     "ENABLE_BITCODE": "NO"
   },
-  "dependencies": {
-    "MagnetMax": [
-      "~> 2.5.2"
-    ],
-    "NYTPhotoViewer": [
-      "~> 1.1.0"
-    ],
-    "DZVideoPlayerViewController": [
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": [
+        "ChatKit/source/src/**/*.{h,m,swift}",
+        "ChatKit/source/Views/**/*.{h,m,swift}"
+      ],
+      "dependencies": {
+        "MagnetMax": [
+          "~> 2.5.2"
+        ],
+        "NYTPhotoViewer": [
+          "~> 1.1.0"
+        ],
+        "DZVideoPlayerViewController": [
 
-    ]
-  }
+        ]
+      }
+    },
+    {
+      "name": "UI",
+      "source_files": "ChatKit/source/ChatKit/**/*.{h,m,swift}",
+      "dependencies": {
+        "ChatKitUI/Core": [
+
+        ]
+      }
+    }
+  ]
 }
