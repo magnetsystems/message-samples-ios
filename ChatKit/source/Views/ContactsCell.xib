@@ -18,7 +18,7 @@
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BOz-Pj-7Qw">
                         <rect key="frame" x="0.0" y="0.0" width="45" height="43.5"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_default.png" translatesAutoresizingMaskIntoConstraints="NO" id="fyL-9P-Vse">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fyL-9P-Vse">
                                 <rect key="frame" x="8" y="8" width="29" height="27.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="fyL-9P-Vse" secondAttribute="height" multiplier="46:43" id="40O-GW-GC4"/>
@@ -72,7 +72,4 @@
             </connections>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="user_default.png" width="89" height="89"/>
-    </resources>
 </document>
