@@ -44,6 +44,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     
     //MARK: Public Variables
     
+    
     public var canSearch : Bool? {
         didSet {
             updateSearchBar()

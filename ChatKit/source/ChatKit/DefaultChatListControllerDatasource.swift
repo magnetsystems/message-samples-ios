@@ -27,6 +27,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     weak var chatList : MagnetChatListViewController?
     public var hasMoreUsers : Bool = true
     
+    
     // Public Functions
     
     
@@ -42,6 +43,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     
     //Mark: ChatListControllerDatasource
+    
     
     public  func mmxControllerHasMore() -> Bool {
         return self.hasMoreUsers

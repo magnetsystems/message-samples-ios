@@ -36,6 +36,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
     
     //MARK: Overrides
     
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,6 +53,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
     public func isWithinLoadingBoundary() -> Bool {
         return tableView.contentOffset.y > (tableView.contentSize.height - (tableView.frame.size.height * CGFloat(numberOfPagesToLoadAhead)))
     }
+    
     
     //MARK: UITableViewDelegatye
     
