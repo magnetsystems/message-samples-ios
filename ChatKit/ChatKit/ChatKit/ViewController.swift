@@ -111,10 +111,10 @@ class ViewController: UIViewController {
         
         let user = MMUser.init()
         user.password = "gogogo"
-        user.userName = "bobbob"
-        user.firstName = "bob"
+        user.userName = "user3"
+        user.firstName = "auser"
         user.lastName = "smith"
-        user.register({ user in
+        user.register({ u in
             self.login(user)
             }, failure: { error in
                 if error.code == 409 {

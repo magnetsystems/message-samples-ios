@@ -172,8 +172,19 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
                 let details = detailResponses[i]
                 if details.channel.channelID == channel.channelID {
                     hasChannel = true
-                    let indexPath = NSIndexPath(forRow: i, inSection: 0)
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                    let channelID = details.channel.channelID
+                    MMXChannel.channelDetails([channel], numberOfMessages: 10, numberOfSubcribers: 10, success: { responses in
+                        if let channelDetail = responses.first {
+                            let oldChannelDetail = self.detailResponses[i]
+                            if channelDetail.channel.channelID == channelID && oldChannelDetail.channel.channelID ==  channelID {
+                                self.detailResponses.removeAtIndex(i)
+                                self.detailResponses.insert(channelDetail, atIndex: i)
+                            }
+                        }
+                        self.tableView.reloadData()
+                        }, failure: { (error) -> Void in
+                            //Error
+                    })
                     break
                 }
             }
