@@ -333,14 +333,6 @@ public extension HomeViewController {
         return [leave]
     }
     
-    public func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
-            return
-        }
-        
-        //TODO: Handle action
-    }
-    
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
             return 80
