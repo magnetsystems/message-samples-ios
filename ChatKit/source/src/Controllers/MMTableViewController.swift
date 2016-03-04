@@ -19,8 +19,13 @@ import UIKit
 
 public class MMTableViewController: MMViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
-    //Mark: 
+    
+    //Mark: Public Methods
+    
+    
     public var refreshControl : UIRefreshControl? = UIRefreshControl()
+    public private(set) var infiniteLoading : InfiniteLoading = InfiniteLoading()
+    public var numberOfPagesToLoadAhead = 3
     
     
     //MARK: Outlets
@@ -35,9 +40,17 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         super.viewDidLoad()
         
         if let refreshControl = self.refreshControl {
-        refreshControl.backgroundColor = UIColor.clearColor()
-        tableView.addSubview(refreshControl)
+            refreshControl.backgroundColor = UIColor.clearColor()
+            tableView.addSubview(refreshControl)
         }
+    }
+    
+    public func isLastSection(section : Int) -> Bool {
+        return self.tableView.numberOfSections - 1 == section
+    }
+    
+    public func isWithinLoadingBoundary() -> Bool {
+        return tableView.contentOffset.y > (tableView.contentSize.height - (tableView.frame.size.height * CGFloat(numberOfPagesToLoadAhead)))
     }
     
     //MARK: UITableViewDelegatye

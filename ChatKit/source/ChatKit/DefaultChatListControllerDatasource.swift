@@ -52,6 +52,8 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     }
     
     public func mmxControllerLoadMore(searchText : String?, offset : Int) {
+        
+        self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
         //get request context
         let loadingContext = chatList?.loadingContext()
         MMXChannel.subscribedChannelsWithSuccess({ ch in

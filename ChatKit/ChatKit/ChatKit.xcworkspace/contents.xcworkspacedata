@@ -95,6 +95,13 @@
                   location = "group:VideoPlayerViewController.xib">
                </FileRef>
             </Group>
+            <Group
+               location = "container:"
+               name = "InfiniteLoading">
+               <FileRef
+                  location = "group:../source/src/Helpers/InfiniteLoading/InfiniteLoading.swift">
+               </FileRef>
+            </Group>
          </Group>
          <Group
             location = "group:JSQMessagesViewController"

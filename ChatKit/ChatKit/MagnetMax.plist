@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BaseURL</key>
-	<string>http://Lorenzo-Stantons-MacBook-Pro.local:8443/api</string>
+	<string>http://localhost:8443/api</string>
 	<key>ClientID</key>
 	<string>3952ec7e-e3a1-4233-a222-468cde01017c</string>
 	<key>ClientSecret</key>

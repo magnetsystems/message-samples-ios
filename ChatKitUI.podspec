@@ -22,7 +22,6 @@ Pod::Spec.new do |s|
   s.dependency 'MagnetMax', '~> 2.5.2'
   s.dependency 'NYTPhotoViewer' , '~> 1.1.0'
   s.dependency 'DZVideoPlayerViewController'
-  s.dependency 'UIScrollView-InfiniteScroll'
 
 end
 

@@ -67,8 +67,10 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         // Handling disconnection
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
         
-        let nib = UINib.init(nibName: "SummaryResponseCell", bundle: NSBundle(forClass: self.dynamicType))
+        var nib = UINib.init(nibName: "SummaryResponseCell", bundle: NSBundle(forClass: self.dynamicType))
         self.tableView.registerNib(nib, forCellReuseIdentifier: "SummaryResponseCell")
+        nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: self.dynamicType))
+        self.tableView.registerNib(nib, forCellReuseIdentifier: "LoadingCellIdentifier")
         
         // Add search bar
         searchBar.sizeToFit()
@@ -87,6 +89,12 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         registerCells(self.tableView)
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
         refreshControl?.addTarget(self, action: "refreshChannelDetail", forControlEvents: .ValueChanged)
+        
+        infiniteLoading.onUpdate() { [weak self] in
+            if let weakSelf = self {
+                weakSelf.loadMore(weakSelf.searchBar.text, offset: weakSelf.currentDetailCount)
+            }
+        }
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -134,7 +142,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     }
     
     public func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
-    imageView.image = nil
+        imageView.image = nil
     }
     
     public func hasMore()->Bool {
@@ -150,10 +158,8 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     public func registerCells(tableView: UITableView) { }
     
     public func reset() {
-        self.tableView.removeInfiniteScroll()
         self.detailResponses = []
         self.currentDetailCount = 0
-        self.tableView.reloadData()
         self.loadMore(self.searchBar.text, offset: self.currentDetailCount)
     }
     
@@ -256,13 +262,35 @@ public extension HomeViewController {
     // MARK: - Table view data source
     
     
+    public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        let sections = 1 + (infiniteLoading.isFinished ? 0 : 1)
+        
+        return sections
+    }
+    
     override public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isLastSection(section) && !infiniteLoading.isFinished {
+            return 1
+        }
         return detailResponses.count
     }
     
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let detailResponse = detailsForIndexPath(indexPath)
         
+        if !infiniteLoading.isFinished && isLastSection(indexPath.section) {
+            var cell = tableView.dequeueReusableCellWithIdentifier("LoadingCellIdentifier") as! LoadingCell?
+            if cell == nil {
+                cell = LoadingCell(style: .Default, reuseIdentifier: "LoadingCellIdentifier")
+            }
+            cell?.indicator?.startAnimating()
+            return cell!
+        }
+        
+        if (isWithinLoadingBoundary()) {
+            infiniteLoading.setNeedsUpdate()
+        }
+        
+        let detailResponse = detailsForIndexPath(indexPath)
         if let cell : UITableViewCell = cellForMMXChannel(tableView,channel :detailResponse.channel, channelDetails : detailResponse, row : indexPath.row) {
             return cell
         }
@@ -270,17 +298,23 @@ public extension HomeViewController {
         cell.detailResponse = detailResponse
         
         if let imageView = cell.avatarView {
-        imageForChannelDetails(imageView, channelDetails: detailResponse)
+            imageForChannelDetails(imageView, channelDetails: detailResponse)
         }
         
         return cell
     }
     
     public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
+            return false
+        }
         return canLeaveChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     
     public func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
+            return nil
+        }
         let detailResponse = detailsForIndexPath(indexPath)
         
         let leave = UITableViewRowAction(style: .Normal, title: "Leave") { [weak self] action, index in
@@ -300,14 +334,25 @@ public extension HomeViewController {
     }
     
     public func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
+            return
+        }
         
+        //TODO: Handle action
     }
     
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
+            return 80
+        }
+        
         return cellHeightForChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath), row : indexPath.row)
     }
     
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
+            return
+        }
         onChannelDidSelect(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     
@@ -343,16 +388,14 @@ private extension HomeViewController {
     }
     
     private func endDataLoad() {
-        self.endRefreshing()
-        self.tableView.finishInfiniteScroll()
-        self.tableView.removeInfiniteScroll()
-        if self.hasMore() {
-            self.tableView.addInfiniteScrollWithHandler({ [weak self] _ in
-                if let weakSelf = self {
-                    weakSelf.loadMore(weakSelf.searchBar.text, offset: weakSelf.currentDetailCount)
-                }
-                })
+        if !self.hasMore() {
+            infiniteLoading.stopUpdating()
+        } else {
+            infiniteLoading.startUpdating()
         }
+        
+        infiniteLoading.finishUpdating()
+        self.endRefreshing()
     }
     
     private func endRefreshing() {
