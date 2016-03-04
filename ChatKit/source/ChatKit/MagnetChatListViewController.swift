@@ -75,6 +75,7 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
             delegate.chatList = self
         }
         self.reset()
+        self.canSearch = false
     }
     
     public override func viewDidLoad() {
