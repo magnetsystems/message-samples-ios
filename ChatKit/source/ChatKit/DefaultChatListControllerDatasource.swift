@@ -77,25 +77,30 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
             imageView.backgroundColor = chatList?.appearance.tintColor
             imageView.image = image
         } else {
-            if let userProfile = channelDetails.subscribers.first {
+            var subscribers = channelDetails.subscribers.filter({$0.userId != MMUser.currentUser()?.userID})
+            if subscribers.count == 0 {
+                subscribers = channelDetails.subscribers
+            }
+            if let userProfile = subscribers.first {
                 let tmpUser = MMUser()
                 tmpUser.extras = ["hasAvatar" : "true"]
-                var firstName = ""
-                var lastName = ""
+                
+                var fName : String?
+                var lName : String?
                 let nameComponents = userProfile.displayName.componentsSeparatedByString(" ")
-                if let name = nameComponents.first {
-                    firstName = name
+                if let lastName = nameComponents.last where nameComponents.count > 1 {
+                    lName = lastName
                 }
                 
-                if let name = nameComponents.last {
-                    lastName = name
+                if let firstName = nameComponents.first {
+                    fName = firstName
                 }
                 
                 tmpUser.firstName = ""
                 tmpUser.lastName = ""
                 tmpUser.userName = userProfile.displayName
                 tmpUser.userID = userProfile.userId
-                let defaultImage = Utils.noAvatarImageForUser(firstName, lastName: lastName)
+                let defaultImage = Utils.noAvatarImageForUser(fName, lastName: lName)
                 Utils.loadImageWithUrl(tmpUser.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
             }
         }
