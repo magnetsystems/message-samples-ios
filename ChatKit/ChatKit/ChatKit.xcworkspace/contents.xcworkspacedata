@@ -514,10 +514,10 @@
          location = "container:"
          name = "ChatKit">
          <Group
-            location = "group:../source/ChatKit/DatasourcesAndDelegates"
-            name = "DatasourcesAndDelegates">
+            location = "group:../source/ChatKit/MMProtocols"
+            name = "MMProtocols">
             <FileRef
-               location = "group:DatasourcesAndDelegates.swift">
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMProtocols/MMChatKitProtocols.swift">
             </FileRef>
          </Group>
          <FileRef

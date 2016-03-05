@@ -26,6 +26,8 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     weak var chatList : MagnetChatListViewController?
     public var hasMoreUsers : Bool = true
+    public private(set) var channels : [MMXChannel] = []
+    public let limit = 30
     
     
     // Public Functions
@@ -38,6 +40,21 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
             self.chatList?.reloadData()
             }) { (error) -> Void in
                 print("[ERROR] \(error.localizedDescription)")
+        }
+    }
+    
+    public func subscribedChannels(completion : ((channels : [MMXChannel]) -> Void)) {
+        if self.channels.count > 0 {
+            completion(channels: self.channels)
+            
+            return
+        }
+        MMXChannel.subscribedChannelsWithSuccess({ ch in
+            self.channels = ch
+            completion(channels: self.channels)
+            }) { error in
+                print(error)
+                completion(channels: [])
         }
     }
     
@@ -58,17 +75,19 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
         //get request context
         let loadingContext = chatList?.loadingContext()
-        MMXChannel.subscribedChannelsWithSuccess({ ch in
-            //check if the request is still valid
+        subscribedChannels({ channels in
             if loadingContext != self.chatList?.loadingContext() {
                 return
             }
+            var offsetChannels : [MMXChannel] = []
+            if offset < channels.count {
+                offsetChannels = Array(channels[offset..<min((offset + self.limit), channels.count)])
+            } else {
+                self.hasMoreUsers = false
+            }
             
-            self.hasMoreUsers = false
-            self.chatList?.appendChannels(ch)
-            }) { error in
-                print(error)
-        }
+            self.chatList?.appendChannels(offsetChannels)
+        })
     }
     
     public func mmxListImageForChannelDetails(imageView: UIImageView, channelDetails: MMXChannelDetailResponse) {
