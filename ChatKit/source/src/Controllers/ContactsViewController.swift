@@ -219,7 +219,17 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     }
     
     public func imageForUser(imageView : UIImageView, user : MMUser) {
-        let defaultImage = Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
+        var fName : String?
+        var lName : String?
+        let nameComponents = Utils.displayNameForUser(user).componentsSeparatedByString(" ")
+        if let lastName = nameComponents.last where nameComponents.count > 1 {
+            lName = lastName
+        }
+        
+        if let firstName = nameComponents.first {
+            fName = firstName
+        }
+        let defaultImage = Utils.noAvatarImageForUser(fName, lastName: lName)
         Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
     }
     
@@ -343,17 +353,16 @@ public extension ContactsViewController {
         
         let attributes = [NSFontAttributeName : UIFont.boldSystemFontOfSize((cell?.userName?.font.pointSize)!)]
         var title = NSAttributedString()
-        if let lastName = user.lastName where lastName.isEmpty == false {
+        let nameComponents = Utils.displayNameForUser(user).componentsSeparatedByString(" ").reverse()
+        
+        if let lastName = nameComponents.first {
             title = NSAttributedString(string: lastName, attributes: attributes)
         }
-        if let firstName = user.firstName where firstName.isEmpty == false {
-            if let lastName = user.lastName where lastName.isEmpty == false{
-                let firstPart = NSMutableAttributedString(string: "\(firstName) ")
-                firstPart.appendAttributedString(title)
-                title = firstPart
-            } else {
-                title = NSAttributedString(string: firstName, attributes: attributes)
-            }
+        
+        if let firstName = nameComponents.last where nameComponents.count > 1 {
+            let firstPart = NSMutableAttributedString(string: "\(firstName) ")
+            firstPart.appendAttributedString(title)
+            title = firstPart
         }
         
         cell?.userName?.attributedText = title
@@ -510,9 +519,8 @@ private extension ContactsViewController {
         for user in users.reverse() {
             let view = IconView.newIconView()
             iconViews.append(view)
-            let defaultImage = Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName)
             if let imageView = view.imageView {
-                Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
+                imageForUser(imageView, user: user)
                 view.title?.text = Utils.displayNameForUser(user)
             }
             let top = NSLayoutConstraint(item: view, attribute: .Top, relatedBy: .Equal, toItem: contactsView, attribute: .Top, multiplier: 1, constant: 8)
