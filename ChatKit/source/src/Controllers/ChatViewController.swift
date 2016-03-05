@@ -101,7 +101,7 @@ public class ChatViewController: MMJSQViewController {
         
         senderId = user.userID
         senderDisplayName = user.firstName
-        
+        saveLastTimeViewed()
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -117,11 +117,7 @@ public class ChatViewController: MMJSQViewController {
         if let textView = self.inputToolbar?.contentView?.textView where textView.isFirstResponder() {
             self.inputToolbar?.contentView?.textView?.resignFirstResponder()
         }
-        if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage {
-            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:NSDate.init())
-        } else  if let chat = self.chat {
-            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, date:NSDate.init())
-        }
+        saveLastTimeViewed()
     }
     
     
@@ -142,6 +138,14 @@ public class ChatViewController: MMJSQViewController {
     public func onMessageRecived(mmxMessage: MMXMessage) { }
     
     public func onMessageSent(mmxMessage: MMXMessage) { }
+    
+    public func saveLastTimeViewed() {
+        if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage {
+            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:NSDate.init())
+        } else  if let chat = self.chat {
+            ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, date:NSDate.init())
+        }
+    }
     
     public func showSpinner() {
         self.activityIndicator?.tag++

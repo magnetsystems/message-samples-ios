@@ -99,6 +99,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     
     override public func viewWillDisappear(animated: Bool) {
