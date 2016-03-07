@@ -17,9 +17,24 @@
 
 #import "MMXAddressable.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @interface MMUser (Addressable) <MMXAddressable>
 
 //MMXAddressable Protocol
 @property (nonatomic, readonly) MMXInternalAddress *address;
 
+
+// TODO: Move these somewhere else
++ (void)blockUsers:(NSSet <MMUser *>*)usersToBlock
+           success:(nullable void (^)())success
+           failure:(nullable void (^)(NSError *error))failure;
+
++ (void)unblockUsers:(NSSet <MMUser *>*)usersToUnblock
+            success:(nullable void (^)())success
+            failure:(nullable void (^)(NSError *error))failure;
+
++ (void)blockedUsersWithSuccess:(nullable void (^)(NSArray <MMUser *>*users))success
+                        failure:(nullable void (^)(NSError *error))failure;
+
 @end
+NS_ASSUME_NONNULL_END

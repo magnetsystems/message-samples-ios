@@ -38,10 +38,10 @@ class AvatarImage: JSQMessagesAvatarImage {
                     let data = NSData(contentsOfURL:url!)
                     dispatch_async(dispatch_get_main_queue()) {
                         if data?.length > 0 {
-                            print("data \(data?.length)")
+//                            print("data \(data?.length)")
                             self.avatarImage = UIImage(data: data!)
                         } else {
-                            print("no url content data")
+//                            print("no url content data")
                             self.avatarImage = Utils.noAvatarImageForUser(user!)
                         }
                     }

@@ -30,6 +30,10 @@
 @class MMXConfiguration;
 @class MMXInternalMessageAdaptor;
 @class CLLocation;
+@class XMPPPrivacy;
+@class MMXPrivacyManager;
+@class MMXPrivacyOperation;
+@class MMXPrivacyListOperation;
 
 /**
  *  Values representing the connection status of the MMXClient.
@@ -174,6 +178,11 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
  *  Current instance of the MMXPubSubManager. See MMXPubSubManager.h for usage.
  */
 @property (nonatomic, readonly) MMXPubSubManager * pubsubManager;
+
+/**
+ *  Current instance of the MMXPrivacyManager. See MMXPrivacyManager.h for usage.
+ */
+@property (nonatomic, readonly) MMXPrivacyManager *privacyManager;
 
 /**
  *  The callback dispatch queue. Value is initially set to the main queue.
@@ -340,3 +349,32 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
 - (void)closeConnectionAndInvalidateUserData;
 
 @end
+
+//NS_ASSUME_NONNULL_BEGIN
+@interface MMXPrivacyManager : NSObject
+
+- (void)blockUsers:(NSSet <MMUser *>*)usersToBlock
+           success:(/*nullable */void (^)())success
+           failure:(/*nullable */void (^)(NSError *error))failure;
+
+- (void)unblockUsers:(NSSet <MMUser *>*)usersToBlock
+             success:(/*nullable */void (^)())success
+             failure:(/*nullable */void (^)(NSError *error))failure;
+
+- (void)blockedUsersWithSuccess:(/*nullable */void (^)(NSArray <MMUser *>*users))success
+                        failure:(/*nullable */void (^)(NSError *error))failure;
+
+@property (nonatomic, strong) XMPPPrivacy *xmppPrivacy;
+
+@property (nonatomic, strong) NSArray *defaultList;
+
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
+
+@property (nonatomic, strong) MMXPrivacyListOperation *retrievePrivacyListOperation;
+
+@property (nonatomic, strong) MMXPrivacyOperation *currentlyExecutingOperation;
+
+- (NSString *)defaultListName;
+
+@end
+//NS_ASSUME_NONNULL_END

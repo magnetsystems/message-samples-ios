@@ -61,34 +61,37 @@ PODS:
     - CocoaLumberjack (~> 2.2)
     - MagnetMaxCore (~> 2.5.2)
     - MDMCoreData (= 1.5.0)
-    - MMXXMPPFramework (= 3.6.13)
-  - MMXXMPPFramework (3.6.13):
-    - MMXXMPPFramework/Core (= 3.6.13)
-    - MMXXMPPFramework/CoreDataStorage (= 3.6.13)
-    - MMXXMPPFramework/Reconnect (= 3.6.13)
-    - MMXXMPPFramework/Roster (= 3.6.13)
-    - MMXXMPPFramework/XEP-0060 (= 3.6.13)
-    - MMXXMPPFramework/XEP-0082 (= 3.6.13)
-    - MMXXMPPFramework/XEP-0106 (= 3.6.13)
-    - MMXXMPPFramework/XEP-0203 (= 3.6.13)
-  - MMXXMPPFramework/Core (3.6.13):
+    - MMXXMPPFramework (= 3.6.14)
+  - MMXXMPPFramework (3.6.14):
+    - MMXXMPPFramework/Core (= 3.6.14)
+    - MMXXMPPFramework/CoreDataStorage (= 3.6.14)
+    - MMXXMPPFramework/Reconnect (= 3.6.14)
+    - MMXXMPPFramework/Roster (= 3.6.14)
+    - MMXXMPPFramework/XEP-0016 (= 3.6.14)
+    - MMXXMPPFramework/XEP-0060 (= 3.6.14)
+    - MMXXMPPFramework/XEP-0082 (= 3.6.14)
+    - MMXXMPPFramework/XEP-0106 (= 3.6.14)
+    - MMXXMPPFramework/XEP-0203 (= 3.6.14)
+  - MMXXMPPFramework/Core (3.6.14):
     - CocoaAsyncSocket (~> 7.4.1)
     - CocoaLumberjack (~> 2.2)
-  - MMXXMPPFramework/CoreDataStorage (3.6.13):
+  - MMXXMPPFramework/CoreDataStorage (3.6.14):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/Reconnect (3.6.13):
+  - MMXXMPPFramework/Reconnect (3.6.14):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/Roster (3.6.13):
+  - MMXXMPPFramework/Roster (3.6.14):
     - MMXXMPPFramework/Core
     - MMXXMPPFramework/CoreDataStorage
     - MMXXMPPFramework/XEP-0203
-  - MMXXMPPFramework/XEP-0060 (3.6.13):
+  - MMXXMPPFramework/XEP-0016 (3.6.14):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/XEP-0082 (3.6.13):
+  - MMXXMPPFramework/XEP-0060 (3.6.14):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/XEP-0106 (3.6.13):
+  - MMXXMPPFramework/XEP-0082 (3.6.14):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/XEP-0203 (3.6.13):
+  - MMXXMPPFramework/XEP-0106 (3.6.14):
+    - MMXXMPPFramework/Core
+  - MMXXMPPFramework/XEP-0203 (3.6.14):
     - MMXXMPPFramework/Core
     - MMXXMPPFramework/XEP-0082
   - NYTPhotoViewer (1.0.1):
@@ -124,8 +127,8 @@ SPEC CHECKSUMS:
   MagnetMaxCore: 6120c776bd2e0c2cd320f9f773a92be81a6cb290
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
   MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: cb3bd379bb2e7a00ae923d6acaa93fe3a23b14e7
-  MMXXMPPFramework: fd2c0a9450082cc25270bf9f8b1aec7b67e7a21e
+  MMX: 6faf48b7844e2eb5ea209c141a69ab64666f93dd
+  MMXXMPPFramework: 1ad19789891ca7989f909545f60661002c4fe1e9
   NYTPhotoViewer: 98e0a54a9d28e4a980fc4b611fd5e419ca89ad74
   UIScrollView-InfiniteScroll: b6c7d6d155dca7f9c5dd43813ecffeb301b3d50c
 
