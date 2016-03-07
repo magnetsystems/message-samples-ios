@@ -95,6 +95,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
                 weakSelf.loadMore(weakSelf.searchBar.text, offset: weakSelf.currentDetailCount)
             }
         }
+        self.resignOnBackgroundTouch()
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -347,13 +348,6 @@ public extension HomeViewController {
             return
         }
         onChannelDidSelect(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
-    }
-    
-    public override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesBegan(touches, withEvent: event)
-        if searchBar.isFirstResponder() {
-            searchBar.resignFirstResponder()
-        }
     }
 }
 

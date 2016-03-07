@@ -24,7 +24,7 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
     //MARK: Public Variables
     
     
-    public weak var magnetPicker : MagnetContactsPickerController?
+    public weak var magnetPicker : MMXContactsPickerController?
     public var preselectedUsers : [MMUser] = []
     
     

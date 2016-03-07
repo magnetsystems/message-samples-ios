@@ -48,7 +48,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
     }
 }
 
-extension MagnetChatViewController : ChatViewControllerDelegate {
+extension MMXChatViewController : ChatViewControllerDelegate {
     override public func viewDidLoad() {
         super.viewDidLoad()
        
@@ -81,7 +81,7 @@ extension MagnetChatViewController : ChatViewControllerDelegate {
     func detailsAction() {
         
         if let currentUser = MMUser.currentUser() {
-            let contacts = MagnetContactsPickerController(disabledUsers: [currentUser])
+            let contacts = MMXContactsPickerController(disabledUsers: [currentUser])
             contacts.barButtonNext = nil
             let subDatasource = SubscribersDatasource()
             subDatasource.magnetPicker = contacts
@@ -126,7 +126,7 @@ class ViewController: UIViewController {
     }
     
     func showChatList() {
-        let c = MagnetChatListViewController()
+        let c = MMXChatListViewController()
         //c.delegate = self
         // c.contactsPickerDelegate = self
         c.appearance.tintColor = self.view.tintColor

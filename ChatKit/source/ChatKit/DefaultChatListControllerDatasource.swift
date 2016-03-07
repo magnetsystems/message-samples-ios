@@ -24,7 +24,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     //MARK : Public Variables
     
     
-    weak var chatList : MagnetChatListViewController?
+    weak var chatList : MMXChatListViewController?
     public var hasMoreUsers : Bool = true
     public private(set) var channels : [MMXChannel] = []
     public let limit = 30

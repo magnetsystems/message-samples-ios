@@ -18,7 +18,7 @@
 import DZVideoPlayerViewController
 import MagnetMax
 
-class VideoPlayerViewController: BaseViewController, DZVideoPlayerViewControllerDelegate {
+class VideoPlayerViewController: UIViewController, DZVideoPlayerViewControllerDelegate {
     
     
     //MARK: Public properties

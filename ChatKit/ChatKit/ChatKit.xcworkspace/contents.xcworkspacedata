@@ -20,7 +20,7 @@
                location = "group:ChatViewControllerCollectionExtension.swift">
             </FileRef>
             <FileRef
-               location = "group:BaseViewController.swift">
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/ViewControllerExtensions.swift">
             </FileRef>
             <FileRef
                location = "group:HomeViewController.swift">
@@ -533,13 +533,13 @@
             location = "group:../source/ChatKit/DefaultContactsPickerControllerDatasource.swift">
          </FileRef>
          <FileRef
-            location = "group:../source/ChatKit/MagnetChatListViewController.swift">
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMXChatListViewController.swift">
          </FileRef>
          <FileRef
-            location = "group:../source/ChatKit/MagnetChatViewController.swift">
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMXChatViewController.swift">
          </FileRef>
          <FileRef
-            location = "group:../source/ChatKit/MagnetContactsPickerController.swift">
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMXContactsPickerController.swift">
          </FileRef>
       </Group>
    </Group>

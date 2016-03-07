@@ -22,14 +22,14 @@ import MagnetMax
 //Mark: MagnetChatListViewController
 
 
-public class MagnetChatListViewController: HomeViewController, ContactsControllerDelegate {
+public class MMXChatListViewController: HomeViewController, ContactsControllerDelegate {
     
     
     //MARK: Private Variables
     
     
     private var chooseContacts : Bool = true
-    private var contactsController : MagnetContactsPickerController?
+    private var contactsController : MMXContactsPickerController?
     private var requestNumber : Int = 0
     
     
@@ -105,7 +105,7 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
         self.requestNumber++
     }
     
-    private func presentChatViewController(chatViewController : MagnetChatViewController, users : [MMUser]) {
+    private func presentChatViewController(chatViewController : MMXChatViewController, users : [MMUser]) {
         let myId = MMUser.currentUser()?.userID
         
         let subscribers = users.filter({$0.userID !=  myId})
@@ -211,17 +211,17 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
     
     
     public func mmxContactsControllerDidFinish(with selectedUsers: [MMUser]) {
-        var chatViewController : MagnetChatViewController!
+        var chatViewController : MMXChatViewController!
         if let channel = self.delegate?.mmxListChannelForSubscribers?(selectedUsers) {
-            chatViewController = MagnetChatViewController.init(channel : channel)
+            chatViewController = MMXChatViewController.init(channel : channel)
         }else if let listDelegate = self.delegate?.mmxListChannelForSubscribersWithBlock {
             listDelegate(selectedUsers, completionBlock: { channel in
-                chatViewController = MagnetChatViewController.init(channel : channel)
+                chatViewController = MMXChatViewController.init(channel : channel)
                 self.presentChatViewController(chatViewController, users: selectedUsers)
             })
             return
         } else {
-            chatViewController = MagnetChatViewController.init(recipients: selectedUsers)
+            chatViewController = MMXChatViewController.init(recipients: selectedUsers)
         }
         self.presentChatViewController(chatViewController, users: selectedUsers)
     }
@@ -231,7 +231,7 @@ public class MagnetChatListViewController: HomeViewController, ContactsControlle
     
     
     func addContactAction() {
-        let c = MagnetContactsPickerController(disabledUsers: [MMUser.currentUser()!])
+        let c = MMXContactsPickerController(disabledUsers: [MMUser.currentUser()!])
         
         if contactsPickerDelegate == nil {
             contactsPickerDelegate = self

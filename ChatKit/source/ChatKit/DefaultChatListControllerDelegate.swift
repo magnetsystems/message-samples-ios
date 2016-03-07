@@ -24,7 +24,7 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
     //MARK : Public Variables
     
     
-    weak var chatList : MagnetChatListViewController?
+    weak var chatList : MMXChatListViewController?
     
     
     //MARK: ChatListControllerDelegate
@@ -32,7 +32,7 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
     
     public func mmxListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
         
-        let chatViewController = MagnetChatViewController.init(channel : channel)
+        let chatViewController = MMXChatViewController.init(channel : channel)
         let myId = MMUser.currentUser()?.userID
         
         let subscribers = channelDetails.subscribers.filter({$0.userId !=  myId})
@@ -44,8 +44,10 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
         }
         chatViewController.outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(self.chatList?.view.tintColor)
         
-        
-        chatList?.reloadData()
+        //Delays cell deselection from reloading data - not necessary
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
+            self.chatList?.reloadData()
+        })
         
         if self.chatList?.navigationController != nil {
             self.chatList?.navigationController?.pushViewController(chatViewController, animated: true)
@@ -62,7 +64,7 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
         
     }
     
-    public func mmxListWillShowChatController(chatController : MagnetChatViewController) {
+    public func mmxListWillShowChatController(chatController : MMXChatViewController) {
     }
     
     

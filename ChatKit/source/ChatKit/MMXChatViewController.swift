@@ -22,7 +22,7 @@ import MagnetMax
 //MARK: MagnetChatViewController
 
 
-public class MagnetChatViewController: ChatViewController {
+public class MMXChatViewController: ChatViewController {
     
     
     //MARK: Public Variables
