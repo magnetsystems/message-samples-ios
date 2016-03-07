@@ -83,6 +83,10 @@ let kStr_UsernameTitle = localizedString("Username taken")
 
 let kStr_Yes = localizedString("Yes")
 
-
+let kStr_AdditionalOptions = localizedString("Additional Options")
+let kStr_BlockUser = localizedString("Block User")
+let kStr_BlockUserConfirmation = localizedString("Are you sure you want to block this user? You will no longer be able to receive messages from them.")
+let kStr_Report = localizedString("Report")
+let kStr_ReportConfirmation = localizedString("Are you sure you want to report this message?")
 
 

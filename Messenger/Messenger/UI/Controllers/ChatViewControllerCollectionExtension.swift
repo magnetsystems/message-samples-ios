@@ -19,12 +19,31 @@
 
 import JSQMessagesViewController
 import NYTPhotoViewer
+import MagnetMax
 
 extension ChatViewController {
     
     
     //MARK: - overridden JSQMessagesViewController methods
     
+    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
+        if action == Selector("report:") && messages[indexPath.item].senderId() != MMUser.currentUser()?.userID {
+            return true
+        }
+        
+        return super.collectionView(collectionView, canPerformAction:action, forItemAtIndexPath:indexPath, withSender:sender)
+    }
+    
+    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
+        if  action == Selector("report:"){
+            print("REPORT THIS MESSAGE!!!")
+            showAdditionalMessageOptions()
+        }
+    }
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
         return messages[indexPath.item]
@@ -167,6 +186,9 @@ extension ChatViewController {
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, atIndexPath indexPath: NSIndexPath!) {
         print("Tapped avatar!")
+        if messages[indexPath.item].senderId() != MMUser.currentUser()?.userID {
+            showAdditionalAvatarOptions()
+        }
     }
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
@@ -198,5 +220,32 @@ extension ChatViewController {
     override func collectionView(collectionView: JSQMessagesCollectionView!, didTapCellAtIndexPath indexPath: NSIndexPath!, touchLocation: CGPoint) {
     }
     
+    // MARK: - Private implementation
+    
+    private func showAdditionalAvatarOptions() {
+        let alertController = UIAlertController(title: kStr_AdditionalOptions, message: nil, preferredStyle: .ActionSheet)
+        
+        let blockUser = UIAlertAction(title: kStr_BlockUser, style: .Destructive) { _ in
+            let confirmationAlert = Popup(message: kStr_BlockUserConfirmation, title: kStr_BlockUser, closeTitle: kStr_No)
+            let okAction = UIAlertAction(title: kStr_Yes, style: .Default) { _ in
+            }
+            confirmationAlert.addAction(okAction)
+            confirmationAlert.presentForController(self)
+        }
+        let cancelAction = UIAlertAction(title: kStr_Cancel, style: .Cancel) { _ in }
+        
+        alertController.addAction(blockUser)
+        alertController.addAction(cancelAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    private func showAdditionalMessageOptions() {
+        let confirmationAlert = Popup(message: kStr_ReportConfirmation, title: kStr_Report, closeTitle: kStr_No)
+        let okAction = UIAlertAction(title: kStr_Yes, style: .Default) { _ in
+        }
+        confirmationAlert.addAction(okAction)
+        confirmationAlert.presentForController(self)
+    }
 }
 
