@@ -135,11 +135,11 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         return true
     }
     
-    public func cellForMMXChannel(tableView: UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
+    public func cellForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell? {
         return nil
     }
     
-    public func cellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> CGFloat {
+    public func cellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat {
         return 80
     }
     
@@ -293,7 +293,7 @@ public extension HomeViewController {
         }
         
         let detailResponse = detailsForIndexPath(indexPath)
-        if let cell : UITableViewCell = cellForMMXChannel(tableView,channel :detailResponse.channel, channelDetails : detailResponse, row : indexPath.row) {
+        if let cell : UITableViewCell = cellForChannel(detailResponse.channel, channelDetails : detailResponse, indexPath : indexPath) {
             return cell
         }
         let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
@@ -340,7 +340,7 @@ public extension HomeViewController {
             return 80
         }
         
-        return cellHeightForChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath), row : indexPath.row)
+        return cellHeightForChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath), indexPath : indexPath)
     }
     
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

@@ -208,6 +208,14 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         self.tableView.reloadData()
     }
     
+    public func cellForUser(user : MMUser, indexPath : NSIndexPath) -> UITableViewCell?{
+        return nil
+    }
+    
+    public func cellHeightForUser(user : MMUser, indexPath : NSIndexPath) -> CGFloat {
+        return 50
+    }
+    
     public func endSearch() {
         if searchBar.isFirstResponder() {
             searchBar.resignFirstResponder()
@@ -335,11 +343,16 @@ public extension ContactsViewController {
             cell = ContactsCell(style: .Default, reuseIdentifier: "UserCellIdentifier")
         }
         
-        var user: MMUser!
-        var userModel : UserModel
+        
+        
         let users = availableRecipients[indexPath.section].users
-        userModel = users[indexPath.row]
-        user = userModel.user
+        let userModel : UserModel = users[indexPath.row]
+        let user: MMUser = userModel.user!
+        
+        if let cell : UITableViewCell = cellForUser(user, indexPath : indexPath) {
+            return cell
+        }
+        
         let selectedUsers = self.selectedUsers.filter({
             if $0.userID == user.userID {
                 return true
@@ -370,6 +383,18 @@ public extension ContactsViewController {
             imageForUser(imageView, user: user)
         }
         return cell!
+    }
+    
+    public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if !infiniteLoading.isFinished && isLastSection(indexPath.section){
+            return 80
+        }
+        
+        let users = availableRecipients[indexPath.section].users
+        let userModel : UserModel = users[indexPath.row]
+        let user: MMUser = userModel.user!
+        
+        return cellHeightForUser(user, indexPath : indexPath)
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

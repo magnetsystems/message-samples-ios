@@ -146,15 +146,15 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         return true
     }
     
-    override public func cellForMMXChannel(tableView : UITableView,channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> UITableViewCell? {
-        return self.datasource?.mmxListCellForMMXChannel?(tableView, channel : channel, channelDetails : channelDetails, row : row)
+    override public func cellForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell? {
+        return self.datasource?.mmxListCellForChannel?(tableView, channel : channel, channelDetails : channelDetails, indexPath : indexPath)
     }
     
-    override public func cellHeightForChannel(channel: MMXChannel, channelDetails: MMXChannelDetailResponse, row: Int) -> CGFloat {
-        if let height  = self.datasource?.mmxListCellHeightForMMXChannel?(channel, channelDetails: channelDetails, row : row) {
+    override public func cellHeightForChannel(channel: MMXChannel, channelDetails: MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat {
+        if let height  = self.datasource?.mmxListCellHeightForChannel?(channel, channelDetails: channelDetails, indexPath : indexPath) {
             return height
         }
-        return 80
+        return super.cellHeightForChannel(channel, channelDetails: channelDetails, indexPath: indexPath)
     }
     
     override public func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {

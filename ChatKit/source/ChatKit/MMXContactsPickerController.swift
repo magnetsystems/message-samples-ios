@@ -153,6 +153,17 @@ public class MMXContactsPickerController: ContactsViewController {
     //MARK: - Data Method Overrides
     
     
+    override public func cellForUser(user: MMUser, indexPath: NSIndexPath) -> UITableViewCell? {
+        return self.datasource?.mmxContactsCellForUser?(tableView, user: user, indexPath: indexPath)
+    }
+    
+    override public func cellHeightForUser(user: MMUser, indexPath: NSIndexPath) -> CGFloat {
+        if let height = self.datasource?.mmxContactsCellHeightForUser?(user, indexPath: indexPath) {
+            return height
+        }
+        return super.cellHeightForUser(user, indexPath: indexPath)
+    }
+    
     override public func imageForUser(imageView: UIImageView, user: MMUser) {
         if let imgForUser = self.datasource?.mmxContactsControllerImageForUser {
             imgForUser(imageView, user: user)
