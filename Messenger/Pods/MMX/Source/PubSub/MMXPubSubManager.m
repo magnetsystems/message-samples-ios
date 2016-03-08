@@ -929,7 +929,7 @@
                              success:(void (^)(NSArray *))success
                              failure:(void (^)(NSError *))failure {
     
-//    [[MMXLogger sharedLogger] verbose:@"MMXPubSubManager summaryOfTopics. topics = %@", topics];
+    [[MMXLogger sharedLogger] verbose:@"MMXPubSubManager summaryOfTopics. topics = %@", topics];
     if (![self hasActiveConnection]) {
         if (failure) {
             dispatch_async(self.callbackQueue, ^{
@@ -1016,7 +1016,7 @@
                 success:(void (^)(NSArray *))success
                 failure:(void (^)(NSError *))failure {
     
-//	[[MMXLogger sharedLogger] verbose:@"MMXPubSubManager summaryOfTopics. topics = %@", topics];
+	[[MMXLogger sharedLogger] verbose:@"MMXPubSubManager summaryOfTopics. topics = %@", topics];
     if (![self hasActiveConnection]) {
         if (failure) {
 			dispatch_async(self.callbackQueue, ^{

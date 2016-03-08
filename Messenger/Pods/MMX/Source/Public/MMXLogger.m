@@ -18,14 +18,12 @@
 /* A lot of code below is taken from AFNetworkActivityLogger.m */
 
 @import CocoaLumberjack;
-#import "XMPPLogging.h"
 #import "MMXLogger.h"
 #import <objc/runtime.h>
 
-#undef LOG_LEVEL_DEF // Undefine first only if needed
-#define LOG_LEVEL_DEF xmppLogLevel
+//#undef LOG_LEVEL_DEF // Undefine first only if needed
+//#define LOG_LEVEL_DEF myLibLogLevel
 //static const int myLibLogLevel = LOG_LEVEL_VERBOSE;
-//xmppLogLevel = ddLogLevel;
 
 NSString * const MMXLoggingConfigKeyRollingFrequency = @"rollingFrequencyInMin";
 int const MMXLoggingConfigDefaultRollingFrequency = 86400;  // 60 * 60 * 24 = one day
@@ -36,7 +34,7 @@ int const MMXLoggingConfigDefaultMaximumFileSize = 2048;  // 2M
 NSString * const MMXLoggingConfigKeyMaximumNumberOfLogFiles = @"maximumNumberOfLogFiles";
 int const MMXLoggingConfigDefaultMaximumNumberOfLogFiles = 7;
 
-static int xmppLogLevel;
+static int ddLogLevel;
 static DDFileLogger *fileLogger;
 
 @interface MMXLogger ()
@@ -99,7 +97,7 @@ static DDFileLogger *fileLogger;
 }
 
 - (void)error:(NSString *)message args:(va_list)args {
-    XMPPLogError(@"[ERROR] %@", [[NSString alloc] initWithFormat:message arguments:args]);
+    DDLogError(@"[ERROR] %@", [[NSString alloc] initWithFormat:message arguments:args]);
 }
 
 - (void)warn:(NSString *)message, ... {
@@ -110,7 +108,7 @@ static DDFileLogger *fileLogger;
 }
 
 - (void)warn:(NSString *)message args:(va_list)args {
-    XMPPLogWarn(@"[WARN] %@", [[NSString alloc] initWithFormat:message arguments:args]);
+    DDLogWarn(@"[WARN] %@", [[NSString alloc] initWithFormat:message arguments:args]);
 }
 
 - (void)info:(NSString *)message, ... {
@@ -121,7 +119,7 @@ static DDFileLogger *fileLogger;
 }
 
 - (void)info:(NSString *)message args:(va_list)args {
-    XMPPLogInfo(@"[INFO] %@", [[NSString alloc] initWithFormat:message arguments:args]);
+    DDLogInfo(@"[INFO] %@", [[NSString alloc] initWithFormat:message arguments:args]);
 }
 
 - (void)debug:(NSString *)message, ... {
@@ -132,8 +130,7 @@ static DDFileLogger *fileLogger;
 }
 
 - (void)debug:(NSString *)message args:(va_list)args {
-    // FIXME:
-    XMPPLogVerbose(@"[DEBUG] %@", [[NSString alloc] initWithFormat:message arguments:args]);
+    DDLogDebug(@"[DEBUG] %@", [[NSString alloc] initWithFormat:message arguments:args]);
 }
 
 - (void)verbose:(NSString *)message, ... {
@@ -144,7 +141,7 @@ static DDFileLogger *fileLogger;
 }
 
 - (void)verbose:(NSString *)message args:(va_list)args {
-    XMPPLogVerbose(@"[VERBOSE] %@", [[NSString alloc] initWithFormat:message arguments:args]);
+    DDLogVerbose(@"[VERBOSE] %@", [[NSString alloc] initWithFormat:message arguments:args]);
 }
 
 #pragma mark - Private implementation
@@ -152,27 +149,27 @@ static DDFileLogger *fileLogger;
 - (void)setupLogging {
     switch (self.level) {
         case MMXLoggerLevelOff:{
-            xmppLogLevel = XMPP_LOG_LEVEL_OFF;
+            ddLogLevel = DDLogLevelOff;
             break;
         }
         case MMXLoggerLevelVerbose: {
-            xmppLogLevel = XMPP_LOG_LEVEL_VERBOSE;
+            ddLogLevel = DDLogLevelVerbose;
             break;
         }
         case MMXLoggerLevelDebug:{
-            xmppLogLevel = XMPP_LOG_LEVEL_INFO;
+            ddLogLevel = DDLogLevelDebug;
             break;
         }
         case MMXLoggerLevelInfo:{
-            xmppLogLevel = XMPP_LOG_LEVEL_INFO;
+            ddLogLevel = DDLogLevelInfo;
             break;
         }
         case MMXLoggerLevelWarn:{
-            xmppLogLevel = XMPP_LOG_LEVEL_WARN;
+            ddLogLevel = DDLogLevelWarning;
             break;
         }
         case MMXLoggerLevelError:{
-            xmppLogLevel = XMPP_LOG_LEVEL_ERROR;
+            ddLogLevel = DDLogLevelError;
             break;
         }
     }

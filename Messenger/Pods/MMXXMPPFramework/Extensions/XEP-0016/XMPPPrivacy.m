@@ -222,8 +222,7 @@ typedef enum XMPPPrivacyQueryInfoType {
 	
 	NSString *uuid = [xmppStream generateUUID];
 	XMPPIQ *iq = [XMPPIQ iqWithType:@"get" to:nil elementID:uuid child:query];
-//    [iq addAttributeWithName:@"from" stringValue: @"ff80808152d8371e0152d844aa6f0005%c6vikkfdz1k@mmx/3CC01282-023D-4579-8BA8-BD4B08872794"];
-    
+	
 	[xmppStream sendElement:iq];
 	
 	XMPPPrivacyQueryInfo *qi = [XMPPPrivacyQueryInfo queryInfoWithType:FetchList];

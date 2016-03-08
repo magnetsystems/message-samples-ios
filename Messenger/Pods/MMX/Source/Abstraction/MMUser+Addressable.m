@@ -19,34 +19,12 @@
 #import "NSString+XEP_0106.h"
 #import "MMXInternalAddress.h"
 
-#import "MMXClient_Private.h"
-#import "XMPPPrivacy.h"
-#import "MMXConfiguration.h"
-
 @implementation MMUser (Addressable)
 
 - (MMXInternalAddress *)address {
 	MMXInternalAddress *address = [MMXInternalAddress new];
 	address.username = [self.userID jidEscapedString];
 	return address;
-}
-
-+ (void)blockUsers:(NSSet <MMUser *>*)usersToBlock
-           success:(nullable void (^)())success
-           failure:(nullable void (^)(NSError *error))failure {
-    
-    [[MMXClient sharedClient].privacyManager blockUsers:usersToBlock success:success failure:failure];
-}
-
-+ (void)unblockUsers:(NSSet <MMUser *>*)usersToUnblock
-             success:(nullable void (^)())success
-             failure:(nullable void (^)(NSError *error))failure {
-    [[MMXClient sharedClient].privacyManager unblockUsers:usersToUnblock success:success failure:failure];
-}
-
-+ (void)blockedUsersWithSuccess:(nullable void (^)(NSArray <MMUser *>*users))success
-                        failure:(nullable void (^)(NSError *error))failure {
-    [[MMXClient sharedClient].privacyManager blockedUsersWithSuccess:success failure:failure];
 }
 
 @end
