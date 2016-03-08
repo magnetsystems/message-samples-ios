@@ -230,8 +230,9 @@ extension ChatViewController {
         let blockUser = UIAlertAction(title: kStr_BlockUser, style: .Destructive) { _ in
             let confirmationAlert = Popup(message: kStr_BlockUserConfirmation, title: kStr_BlockUser, closeTitle: kStr_No)
             let okAction = UIAlertAction(title: kStr_Yes, style: .Default) { _ in
-                MMUser.blockUsers([user], success: {
+                MMUser.blockUsers([user], success: { [weak self] in
                     print("blocked \(user.userName)")
+                    self?.loadMessages()
                 }, failure: { error in
                     //
                 })

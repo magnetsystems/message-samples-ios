@@ -395,7 +395,7 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    private func loadMessages() {
+    func loadMessages() {
         
         guard let channel = self.chat else { return }
         
