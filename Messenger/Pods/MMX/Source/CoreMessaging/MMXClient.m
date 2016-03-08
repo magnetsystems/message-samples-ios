@@ -1329,6 +1329,8 @@ typedef NS_ENUM(NSInteger, MMXPrivacyOperationType){
 
 @property (nonatomic, assign) BOOL wasUnsuccessful;
 
+@property (nonatomic, assign) NSUInteger postUpdateCount;
+
 @end
 
 @implementation MMXPrivacyOperation
@@ -1408,7 +1410,7 @@ typedef NS_ENUM(NSInteger, MMXPrivacyOperationType){
 //            break;
 //        }
 //    }
-    
+    self.postUpdateCount = defaultList.count;
     [self.privacyManager.xmppPrivacy setListWithName:listName items:defaultList];
 }
 
@@ -1494,7 +1496,11 @@ typedef NS_ENUM(NSInteger, MMXPrivacyOperationType){
                     break;
                     
                 case MMXPrivacyOperationTypeUnblock:
-                    [self.currentlyExecutingOperation finish];
+                    // We dont get the updated list since the list is considered as deleted
+                    if (self.currentlyExecutingOperation.postUpdateCount == 0) {
+                        self.defaultList = @[];
+                        [self.currentlyExecutingOperation finish];
+                    }
                     break;
             }
         }
