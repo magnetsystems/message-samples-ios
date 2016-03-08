@@ -27,7 +27,7 @@ extension ChatViewController {
     
     
     override public func collectionView(collectionView: JSQMessagesCollectionView!, header headerView: JSQMessagesLoadEarlierHeaderView!, didTapLoadEarlierMessagesButton sender: UIButton!) {
-        loadMore(self.chat, offset: self.currentMessageCount)
+        infiniteLoading.setNeedsUpdate()
     }
     
     override public func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {

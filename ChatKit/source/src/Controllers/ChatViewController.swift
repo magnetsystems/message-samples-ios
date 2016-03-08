@@ -43,8 +43,9 @@ public class ChatViewController: MMJSQViewController {
     }
     
     public var currentMessageCount = 0
-    
     public var incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
+    public private(set) var infiniteLoading : InfiniteLoading = InfiniteLoading()
+    
     public var mmxMessages : [MMXMessage] {
         get {
             return self.messages.map({$0.underlyingMessage})
@@ -104,6 +105,12 @@ public class ChatViewController: MMJSQViewController {
         senderDisplayName = user.firstName
         saveLastTimeViewed()
         self.collectionView?.loadEarlierMessagesHeaderTextColor = self.view.tintColor
+        infiniteLoading.onUpdate({
+            [weak self] in
+            if let weakSelf = self {
+                weakSelf.loadMore(weakSelf.chat, offset: weakSelf.currentMessageCount)
+            }
+            })
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -148,6 +155,12 @@ public class ChatViewController: MMJSQViewController {
         
         collectionView?.reloadData()
         self.showLoadEarlierMessagesHeader = self.hasMore() && !self.loadsContinuously()
+        self.infiniteLoading.finishUpdating()
+        if !self.hasMore() {
+            self.infiniteLoading.stopUpdating()
+        } else {
+            infiniteLoading.startUpdating()
+        }
     }
     
     public func hasMore() -> Bool { return false }
