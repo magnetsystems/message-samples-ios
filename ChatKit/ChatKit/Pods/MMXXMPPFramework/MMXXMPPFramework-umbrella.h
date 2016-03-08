@@ -14,7 +14,7 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
- 
+
 #import <UIKit/UIKit.h>
 
 #import "XMPPFramework.h"
@@ -79,6 +79,7 @@
 #import "XMPPDateTimeProfiles.h"
 #import "NSString+XEP_0106.h"
 #import "NSXMLElement+XEP_0203.h"
+#import "XMPPPrivacy.h"
 
 FOUNDATION_EXPORT double Magnet_XMPPFrameworkVersionNumber;
 FOUNDATION_EXPORT const unsigned char Magnet_XMPPFrameworkVersionString[];

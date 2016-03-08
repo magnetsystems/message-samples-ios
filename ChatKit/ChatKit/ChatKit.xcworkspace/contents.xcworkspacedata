@@ -530,6 +530,9 @@
             location = "group:../source/ChatKit/DefaultChatListControllerDelegate.swift">
          </FileRef>
          <FileRef
+            location = "group:../source/ChatKit/DefaultChatViewControllerDatasource.swift">
+         </FileRef>
+         <FileRef
             location = "group:../source/ChatKit/DefaultContactsPickerControllerDatasource.swift">
          </FileRef>
          <FileRef

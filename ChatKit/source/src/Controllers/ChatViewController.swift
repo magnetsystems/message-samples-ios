@@ -42,6 +42,7 @@ public class ChatViewController: MMJSQViewController {
         }
     }
     
+    public var currentMessageCount = 0
     
     public var incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     public var mmxMessages : [MMXMessage] {
@@ -102,6 +103,7 @@ public class ChatViewController: MMJSQViewController {
         senderId = user.userID
         senderDisplayName = user.firstName
         saveLastTimeViewed()
+        self.collectionView?.loadEarlierMessagesHeaderTextColor = self.view.tintColor
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -124,6 +126,32 @@ public class ChatViewController: MMJSQViewController {
     // MARK: - Public methods
     
     
+    public func append(mmxMessages : [MMXMessage]) {
+        if mmxMessages.count > 0 {
+            currentMessageCount += mmxMessages.count
+            let mappedMessages : [Message] = mmxMessages.map({
+                let message = Message(message: $0)
+                if message.isMediaMessage() {
+                    message.mediaCompletionBlock = { [weak self, weak message] () in
+                        if let weakSelf = self, let weakMessage = message {
+                            if let index = weakSelf.messages.indexOf(weakMessage) {
+                                weakSelf.collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+                            }
+                        }
+                    }
+                }
+                return message
+            })
+            self.messages.appendContentsOf(mappedMessages)
+            self.messages = self.sort(messages)
+        }
+        
+        collectionView?.reloadData()
+        self.showLoadEarlierMessagesHeader = self.hasMore() && !self.loadsContinuously()
+    }
+    
+    public func hasMore() -> Bool { return false }
+    
     public func hideSpinner() {
         if let activityIndicator = self.activityIndicator {
             activityIndicator.tag = max(activityIndicator.tag - 1, 0)
@@ -133,11 +161,21 @@ public class ChatViewController: MMJSQViewController {
         }
     }
     
+    public func loadsContinuously() -> Bool { return false }
+    
+    public func loadMore(channel : MMXChannel?, offset: Int) { }
+    
     public func onChannelCreated(mmxChannel: MMXChannel) { }
     
     public func onMessageRecived(mmxMessage: MMXMessage) { }
     
     public func onMessageSent(mmxMessage: MMXMessage) { }
+    
+    public func reset() {
+        self.messages = []
+        self.currentMessageCount = 0
+        self.loadMore(self.chat, offset: self.currentMessageCount)
+    }
     
     public func saveLastTimeViewed() {
         if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage {
@@ -152,6 +190,14 @@ public class ChatViewController: MMJSQViewController {
         self.activityIndicator?.startAnimating()
     }
     
+    public func sort(messages : [Message]) -> [Message] {
+        return messages.sort({
+            if let date = $0.0.underlyingMessage.timestamp, let date1 = $0.1.underlyingMessage.timestamp {
+                return date.compare(date1) == .OrderedAscending
+            }
+            return false
+        })
+    }
     
     // MARK: - Notifications
     
@@ -367,31 +413,7 @@ private extension ChatViewController {
     }
     
     private func loadMessages() {
-        
-        guard let channel = self.chat else { return }
-        
-        let dateComponents = NSDateComponents()
-        dateComponents.year = -1
-        
-        let theCalendar = NSCalendar.currentCalendar()
-        let now = NSDate()
-        let dayAgo = theCalendar.dateByAddingComponents(dateComponents, toDate: now, options: NSCalendarOptions(rawValue: 0))
-        
-        channel.messagesBetweenStartDate(dayAgo, endDate: now, limit: 100, offset: 0, ascending: true, success: { [weak self] _ , messages in
-            self?.messages = messages.map({ mmxMessage in
-                let message = Message(message: mmxMessage)
-                if message.isMediaMessage() {
-                    message.mediaCompletionBlock = { [weak self] () in
-                        self?.collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forItem: messages.indexOf(mmxMessage)!, inSection: 0)])
-                    }
-                }
-                return message
-            })
-            self?.collectionView?.reloadData()
-            self?.scrollToBottomAnimated(false)
-            }, failure: { error in
-                print("[ERROR]: \(error)")
-        })
+        loadMore(nil, offset: 0)
     }
 }
 

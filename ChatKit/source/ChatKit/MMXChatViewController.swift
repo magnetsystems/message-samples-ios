@@ -25,6 +25,13 @@ import MagnetMax
 public class MMXChatViewController: ChatViewController {
     
     
+    //Private Variables
+    
+    
+    private var requestNumber : Int = 0
+    
+    
+    
     //MARK: Public Variables
     
     
@@ -35,6 +42,7 @@ public class MMXChatViewController: ChatViewController {
     }
     
     public var delegate : ChatViewControllerDelegate?
+    public var datasource : ChatViewControllerDatasource?
     
     
     //MARK: Init
@@ -51,6 +59,44 @@ public class MMXChatViewController: ChatViewController {
     }
     
     
+    //MARK: Public Methods
+    
+    
+    public func generateNavBars() {
+        if self.navigationController == nil {
+            let btnBack = UIBarButtonItem.init(title: "Back", style: .Plain, target: self, action: "dismiss")
+            self.setMagnetNavBar(leftItems: [btnBack], rightItems: nil, title: self.title)
+        }
+    }
+    
+    public override func hasMore() -> Bool {
+        if let datasource = self.datasource {
+            return datasource.mmxControllerHasMore()
+        }
+        return super.hasMore()
+    }
+    
+    public func loadingContext() -> Int {
+        return self.requestNumber
+    }
+    
+    override public func loadsContinuously() -> Bool {
+        if let datasource = self.datasource {
+            return datasource.mmxControllerLoadsContinuously()
+        }
+        
+        return super.loadsContinuously()
+    }
+    
+    override public func loadMore(channel : MMXChannel?, offset: Int) {
+        self.datasource?.mmxControllerLoadMore(channel, offset: offset)
+    }
+    
+    private func newLoadingContext() {
+        self.requestNumber++
+    }
+    
+    
     //MARK: Overrides
     
     
@@ -58,6 +104,11 @@ public class MMXChatViewController: ChatViewController {
         super.setupViewController()
         
         navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        self.datasource = DefaultChatViewControllerDatasource()
+        if let datasource = self.datasource as? DefaultChatViewControllerDatasource {
+            datasource.controller = self
+        }
     }
     
     public override func viewDidLoad() {
@@ -70,17 +121,6 @@ public class MMXChatViewController: ChatViewController {
         super.viewWillAppear(animated)
         
         generateNavBars()
-    }
-    
-    
-    // Private Methods
-    
-    
-    public func generateNavBars() {
-        if self.navigationController == nil {
-            let btnBack = UIBarButtonItem.init(title: "Back", style: .Plain, target: self, action: "dismiss")
-            self.setMagnetNavBar(leftItems: [btnBack], rightItems: nil, title: self.title)
-        }
     }
     
     

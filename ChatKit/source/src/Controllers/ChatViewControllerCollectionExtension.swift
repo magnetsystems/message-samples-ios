@@ -19,11 +19,16 @@
 
 import NYTPhotoViewer
 
+
 extension ChatViewController {
     
     
     //MARK: - overridden JSQMessagesViewController methods
     
+    
+    override public func collectionView(collectionView: JSQMessagesCollectionView!, header headerView: JSQMessagesLoadEarlierHeaderView!, didTapLoadEarlierMessagesButton sender: UIButton!) {
+        loadMore(self.chat, offset: self.currentMessageCount)
+    }
     
     override public func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
         return messages[indexPath.item]
@@ -158,10 +163,6 @@ extension ChatViewController {
     
     override public func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
         return 0.0
-    }
-    
-    override public func collectionView(collectionView: JSQMessagesCollectionView!, header headerView: JSQMessagesLoadEarlierHeaderView!, didTapLoadEarlierMessagesButton sender: UIButton!) {
-        print("Load earlier messages!")
     }
     
     override public func collectionView(collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, atIndexPath indexPath: NSIndexPath!) {

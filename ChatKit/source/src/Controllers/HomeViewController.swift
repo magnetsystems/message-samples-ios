@@ -120,7 +120,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
             MMXChannel.channelDetails(mmxChannels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
                 self.currentDetailCount += mmxChannels.count
                 self.detailResponses.appendContentsOf(detailResponses)
-                self.detailResponses = self.sortChannelDetails(self.detailResponses)
+                self.detailResponses = self.sort(self.detailResponses)
                 self.endDataLoad()
                 }, failure: { error in
                     self.endDataLoad()
@@ -169,7 +169,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         return true
     }
     
-    public func sortChannelDetails(channelDetails : [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
+    public func sort(channelDetails : [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
         return detailsOrderByDate(channelDetails)
     }
     
@@ -191,7 +191,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
                             if channelDetail.channel.channelID == channelID && oldChannelDetail.channel.channelID ==  channelID {
                                 self.detailResponses.removeAtIndex(i)
                                 self.detailResponses.insert(channelDetail, atIndex: i)
-                                self.detailResponses = self.sortChannelDetails(self.detailResponses)
+                                self.detailResponses = self.sort(self.detailResponses)
                             }
                         }
                         self.tableView.reloadData()

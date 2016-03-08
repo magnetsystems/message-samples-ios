@@ -18,7 +18,7 @@
 import MMX
 import UIKit
 
-class Message : NSObject, JSQMessageData {
+public class Message : NSObject, JSQMessageData {
     
     
     //MARK: Public properties
@@ -104,7 +104,7 @@ class Message : NSObject, JSQMessageData {
     
     //MARK: - Public implementation
     
-    func date() -> NSDate! {
+   public func date() -> NSDate! {
         if let date = underlyingMessage.timestamp {
             return date
         }
@@ -112,27 +112,27 @@ class Message : NSObject, JSQMessageData {
         return NSDate()
     }
     
-    func isMediaMessage() -> Bool {
+    public func isMediaMessage() -> Bool {
         return (type != MessageType.Text)
     }
     
-    func messageHash() -> UInt {
+    public func messageHash() -> UInt {
         return UInt(abs(underlyingMessage.messageID!.hash))
     }
     
-    func senderId() -> String! {
+    public func senderId() -> String! {
         return underlyingMessage.sender!.userID
     }
     
-    func senderDisplayName() -> String! {
+    public func senderDisplayName() -> String! {
         return (underlyingMessage.sender!.firstName != nil && underlyingMessage.sender!.lastName != nil) ? "\(underlyingMessage.sender!.firstName) \(underlyingMessage.sender!.lastName)" : underlyingMessage.sender!.userName
     }
     
-    func text() -> String! {
+    public func text() -> String! {
         return underlyingMessage.messageContent[Constants.ContentKey.Message]! as String
     }
     
-    func media() -> JSQMessageMediaData! {
+    public func media() -> JSQMessageMediaData! {
         return mediaContent
     }
     
@@ -140,7 +140,7 @@ class Message : NSObject, JSQMessageData {
     //MARK: Overrides
     
     
-    override var description: String {
+    public override var description: String {
         return "senderId is \(senderId()), messageContent is \(underlyingMessage.messageContent)"
     }
     

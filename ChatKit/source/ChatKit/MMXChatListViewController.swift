@@ -200,12 +200,12 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         self.datasource?.mmxListRegisterCells?(tableView)
     }
     
-    override public func sortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
+    override public func sort(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
         if let details = self.datasource?.mmxListSortChannelDetails?(channelDetails) {
             return details
         }
         
-        return super.sortChannelDetails(channelDetails)
+        return super.sort(channelDetails)
     }
     
     override public func shouldUpdateSearchContinuously() -> Bool {
