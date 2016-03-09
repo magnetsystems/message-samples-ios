@@ -88,18 +88,22 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
         self.magnetNavigationItem?.rightBarButtonItems = rightItems
         self.magnetNavigationItem?.title = title
     }
-
+    
     public func setupViewController() {
-        if let _ = self.view { }
+        if #available(iOS 9.0, *) {
+            self.loadViewIfNeeded()
+        } else {
+           if let _ = self.view { }
+        }
         
-            let nav = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.navBarHeight))
-            nav.autoresizingMask = .FlexibleWidth
-            self.view.addSubview(nav)
-            let navItem = UINavigationItem()
-            nav.items = [navItem]
-            magnetNavigationItem = navItem
-            magnetNavigationBar = nav
-            magnetNavigationBar?.hidden = true
+        let nav = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.navBarHeight))
+        nav.autoresizingMask = .FlexibleWidth
+        self.view.addSubview(nav)
+        let navItem = UINavigationItem()
+        nav.items = [navItem]
+        magnetNavigationItem = navItem
+        magnetNavigationBar = nav
+        magnetNavigationBar?.hidden = true
     }
     
     public func dismiss() {
