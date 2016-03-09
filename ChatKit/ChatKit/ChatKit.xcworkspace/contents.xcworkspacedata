@@ -45,7 +45,7 @@
                location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Helpers/ChatUIConstants.swift">
             </FileRef>
             <FileRef
-               location = "group:Strings.swift">
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Helpers/ChatUIStrings.swift">
             </FileRef>
             <Group
                location = "group:DateFormatter"
