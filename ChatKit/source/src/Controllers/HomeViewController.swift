@@ -49,7 +49,6 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     }
     
     override public func loadView() {
-        super.loadView()
         let nib = UINib.init(nibName: "HomeViewController", bundle: NSBundle(forClass: self.dynamicType))
         nib.instantiateWithOwner(self, options: nil)
     }

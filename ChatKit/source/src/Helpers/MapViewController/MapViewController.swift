@@ -31,7 +31,6 @@ public class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     override public func loadView() {
-        super.loadView()
         let nib = UINib.init(nibName: "MapViewController", bundle: NSBundle(forClass: self.dynamicType))
         nib.instantiateWithOwner(self, options: nil)
     }

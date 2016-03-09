@@ -35,7 +35,6 @@ public class VideoPlayerViewController: UIViewController, DZVideoPlayerViewContr
 
    
     override public func loadView() {
-        super.loadView()
         let nib = UINib.init(nibName: "VideoPlayerViewController", bundle: NSBundle(forClass: self.dynamicType))
         nib.instantiateWithOwner(self, options: nil)
     }

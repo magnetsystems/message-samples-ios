@@ -76,7 +76,6 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     
     
     override public func loadView() {
-        super.loadView()
         let nib = UINib.init(nibName: "ContactsViewController", bundle: NSBundle(forClass: self.dynamicType))
         nib.instantiateWithOwner(self, options: nil)
     }
