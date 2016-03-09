@@ -35,6 +35,8 @@ public class MMXChatViewController: ChatViewController {
     //MARK: Public Variables
     
     
+    public var showDetails = true
+    
     public var channel : MMXChannel? {
         get {
             return chat
@@ -55,7 +57,7 @@ public class MMXChatViewController: ChatViewController {
     
     public override var chat  : MMXChannel? {
         didSet {
-             useNavigationBarNotifier = true
+            useNavigationBarNotifier = true
         }
     }
     
@@ -63,7 +65,7 @@ public class MMXChatViewController: ChatViewController {
     
     
     public override init() {
-       useNavigationBarNotifier = false
+        useNavigationBarNotifier = false
         super.init()
     }
     
@@ -121,6 +123,10 @@ public class MMXChatViewController: ChatViewController {
         if let datasource = self.datasource as? DefaultChatViewControllerDatasource {
             datasource.controller = self
         }
+        self.delegate = DefaultChatViewControllerDelegate()
+        if let delegate = self.delegate as? DefaultChatViewControllerDelegate {
+            delegate.controller = self
+        }
     }
     
     public override func viewDidLoad() {
@@ -131,7 +137,44 @@ public class MMXChatViewController: ChatViewController {
     
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-
+        
+        generateNavBars()
+    }
+    
+    
+    //MARK: Private Methods
+    
+    
+    private func generateNavBars() {
+        if showDetails {
+            let rightBtn = UIBarButtonItem.init(title: "Details", style: .Plain, target: self, action: "detailsAction")
+            self.navigationItem.rightBarButtonItem = rightBtn
+            if channel == nil {
+                self.navigationItem.rightBarButtonItem?.enabled = false
+            }
+        }
+    }
+    
+    
+    //MARK: Actions
+    
+    
+    func detailsAction() {
+        
+        if let currentUser = MMUser.currentUser() {
+            let contacts = MMXContactsPickerController(disabledUsers: [currentUser])
+            contacts.barButtonNext = nil
+            let subDatasource = SubscribersDatasource()
+            subDatasource.magnetPicker = contacts
+            contacts.datasource = subDatasource
+            subDatasource.channel = self.channel
+            subDatasource.chatViewController = self
+            contacts.tableView.allowsSelection = false
+            contacts.canSearch = false
+            contacts.title = "In Group"
+            self.navigationController?.pushViewController(contacts, animated: true)
+        }
+        
     }
     
     

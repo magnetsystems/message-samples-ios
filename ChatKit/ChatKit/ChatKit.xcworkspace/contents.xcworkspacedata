@@ -543,6 +543,9 @@
             location = "group:../source/ChatKit/DefaultChatViewControllerDatasource.swift">
          </FileRef>
          <FileRef
+            location = "group:../source/ChatKit/DefaultChatViewControllerDelegate.swift">
+         </FileRef>
+         <FileRef
             location = "group:../source/ChatKit/DefaultContactsPickerControllerDatasource.swift">
          </FileRef>
          <FileRef
@@ -553,6 +556,9 @@
          </FileRef>
          <FileRef
             location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMXContactsPickerController.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/SubscribersDatasource.swift">
          </FileRef>
       </Group>
    </Group>

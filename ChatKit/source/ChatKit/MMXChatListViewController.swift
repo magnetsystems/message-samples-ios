@@ -28,14 +28,13 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
     //MARK: Private Variables
     
     
-    private var chooseContacts : Bool = true
     private var contactsController : MMXContactsPickerController?
     private var requestNumber : Int = 0
     
     
     //MARK: Public Variables
     
-    
+    public var chooseContacts : Bool = true
     public var contactsPickerDelegate : ContactsControllerDelegate?
     public var datasource : ChatListControllerDatasource?
     public var delegate : ChatListControllerDelegate?
