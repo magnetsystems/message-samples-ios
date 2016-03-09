@@ -26,6 +26,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
     public var refreshControl : UIRefreshControl? = UIRefreshControl()
     public private(set) var infiniteLoading : InfiniteLoading = InfiniteLoading()
     public var numberOfPagesToLoadAhead = 3
+    public var footers : [String] = []
     
     
     //MARK: Outlets
@@ -48,6 +49,25 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
     
     public func isLastSection(section : Int) -> Bool {
         return self.tableView.numberOfSections - 1 == section
+    }
+    
+    public func isFooterSection(section : Int) -> Bool {
+        let numberOfSections = self.tableView.numberOfSections
+        guard footers.count > 0 && section < numberOfSections  else {
+            return false
+        }
+        return  numberOfSections - footers.count <= section
+    }
+    
+    public func idenitfierForFooterSection(section : Int) -> String? {
+        guard isFooterSection(section)  else {
+            return nil
+        }
+        
+        let numberOfSections = self.tableView.numberOfSections
+        let index = section - (numberOfSections - footers.count)
+        
+        return footers[index]
     }
     
     public func isWithinLoadingBoundary() -> Bool {

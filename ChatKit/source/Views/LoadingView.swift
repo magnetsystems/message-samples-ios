@@ -17,22 +17,23 @@
 
 import UIKit
 
-class LoadingCell: UITableViewCell {
+public class LoadingView : UIView {
     
     
-    @IBOutlet weak var indicator : UIActivityIndicatorView?
+    public var indicator : UIActivityIndicatorView?
     
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
-        // Initialization code
+        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        indicator.frame = frame
+        indicator.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
+        self.addSubview(indicator)
+        self.indicator = indicator
     }
-
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
 }

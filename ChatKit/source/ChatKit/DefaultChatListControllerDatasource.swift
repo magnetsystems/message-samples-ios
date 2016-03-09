@@ -128,7 +128,6 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         return 80
     }
     
-    
     public func mmxListRegisterCells(tableView : UITableView) {
         //using standard cells
     }

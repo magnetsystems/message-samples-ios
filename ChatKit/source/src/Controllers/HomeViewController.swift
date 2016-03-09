@@ -57,6 +57,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
+        self.footers = ["USER_DEFINED","LOADING"]
         if MMUser.sessionStatus() != .LoggedIn {
             assertionFailure("MUST LOGIN USER FIRST")
         }
@@ -173,6 +174,10 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         return detailsOrderByDate(channelDetails)
     }
     
+    public func tableViewFooter() -> UIView? {
+        return nil
+    }
+    
     
     //MARK: Notifications
     
@@ -265,28 +270,17 @@ public extension HomeViewController {
     
     
     public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        let sections = 1 + (infiniteLoading.isFinished ? 0 : 1)
-        
-        return sections
+        return 1 + self.footers.count
     }
     
     override public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isLastSection(section) && !infiniteLoading.isFinished {
-            return 1
+        if isFooterSection(section) {
+            return 0
         }
         return detailResponses.count
     }
     
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        if !infiniteLoading.isFinished && isLastSection(indexPath.section) {
-            var cell = tableView.dequeueReusableCellWithIdentifier("LoadingCellIdentifier") as! LoadingCell?
-            if cell == nil {
-                cell = LoadingCell(style: .Default, reuseIdentifier: "LoadingCellIdentifier")
-            }
-            cell?.indicator?.startAnimating()
-            return cell!
-        }
         
         if (isWithinLoadingBoundary()) {
             infiniteLoading.setNeedsUpdate()
@@ -307,16 +301,10 @@ public extension HomeViewController {
     }
     
     public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
-            return false
-        }
         return canLeaveChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     
     public func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
-            return nil
-        }
         let detailResponse = detailsForIndexPath(indexPath)
         
         let leave = UITableViewRowAction(style: .Normal, title: "Leave") { [weak self] action, index in
@@ -336,18 +324,33 @@ public extension HomeViewController {
     }
     
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
-            return 80
-        }
-        
         return cellHeightForChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath), indexPath : indexPath)
     }
     
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if isLastSection(indexPath.section) && !infiniteLoading.isFinished {
-            return
-        }
         onChannelDidSelect(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
+    }
+    
+    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if idenitfierForFooterSection(section) == "LOADING"  &&  !infiniteLoading.isFinished {
+            let view = LoadingView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+            view.indicator?.startAnimating()
+            return view
+        } else if idenitfierForFooterSection(section) == "USER_DEFINED" &&  tableViewFooter() != nil {
+            return tableViewFooter()
+        }
+        
+        return nil
+    }
+    
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if idenitfierForFooterSection(section) == "LOADING" &&  !infiniteLoading.isFinished {
+            return 50.0
+        } else if idenitfierForFooterSection(section) == "USER_DEFINED" &&  tableViewFooter() != nil {
+            return 50.0
+        }
+        
+        return 0.0
     }
 }
 

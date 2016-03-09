@@ -213,6 +213,10 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         return false
     }
     
+    override public func tableViewFooter() -> UIView? {
+        return self.datasource?.mmxTableViewFooter?()
+    }
+
     
     //MARK: - ContactsViewControllerDelegate
     

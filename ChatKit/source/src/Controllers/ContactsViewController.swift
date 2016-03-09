@@ -84,6 +84,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     public override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.footers = ["USER_DEFINED", "LOADING"]
         if MMUser.sessionStatus() != .LoggedIn {
             assertionFailure("MUST LOGIN USER FIRST")
         }
@@ -255,7 +256,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         self.loadMore(self.searchBar.text, offset: self.currentUserCount)
     }
     
-    public func tableViewFooter () -> UIView? {
+    public func tableViewFooter() -> UIView? {
         return nil
     }
     
@@ -296,7 +297,7 @@ public extension ContactsViewController {
     
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return availableRecipients.count + (infiniteLoading.isFinished ? 0 : 1)
+        return availableRecipients.count + self.footers.count
     }
     
     func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
@@ -308,22 +309,13 @@ public extension ContactsViewController {
     }
     
     override public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !infiniteLoading.isFinished && isLastSection(section) {
-            return 1
+        if isFooterSection(section) {
+            return 0
         }
         return availableRecipients[section].users.count
     }
     
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        if !infiniteLoading.isFinished && isLastSection(indexPath.section) {
-            var cell = tableView.dequeueReusableCellWithIdentifier("LoadingCellIdentifier") as! LoadingCell?
-            if cell == nil {
-                cell = LoadingCell(style: .Default, reuseIdentifier: "LoadingCellIdentifier")
-            }
-            cell?.indicator?.startAnimating()
-            return cell!
-        }
         
         if (isWithinLoadingBoundary()) {
             infiniteLoading.setNeedsUpdate()
@@ -378,9 +370,6 @@ public extension ContactsViewController {
     }
     
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if !infiniteLoading.isFinished && isLastSection(indexPath.section){
-            return 80
-        }
         
         let users = availableRecipients[indexPath.section].users
         let userModel : UserModel = users[indexPath.row]
@@ -390,7 +379,7 @@ public extension ContactsViewController {
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if !infiniteLoading.isFinished && isLastSection(section) || !shouldShowHeaderTitles() {
+        if isFooterSection(section) || !shouldShowHeaderTitles()  {
             return nil
         }
         let letter = availableRecipients[section]
@@ -398,23 +387,28 @@ public extension ContactsViewController {
     }
     
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if !infiniteLoading.isFinished && isLastSection(section + 1) || infiniteLoading.isFinished && isLastSection(section) {
+        if idenitfierForFooterSection(section) == "LOADING"  &&  !infiniteLoading.isFinished {
+            let view = LoadingView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+            view.indicator?.startAnimating()
+            return view
+        } else if idenitfierForFooterSection(section) == "USER_DEFINED" &&  tableViewFooter() != nil {
             return tableViewFooter()
         }
+        
         return nil
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if (!infiniteLoading.isFinished && isLastSection(section + 1) || infiniteLoading.isFinished && isLastSection(section)) && tableViewFooter() != nil {
+        if idenitfierForFooterSection(section) == "LOADING" &&  !infiniteLoading.isFinished {
+            return 50.0
+        } else if idenitfierForFooterSection(section) == "USER_DEFINED" &&  tableViewFooter() != nil {
             return 50.0
         }
+        
         return 0.0
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if !infiniteLoading.isFinished && isLastSection(indexPath.section) {
-            return
-        }
         let users = availableRecipients[indexPath.section].users
         if  let user = users[indexPath.row].user {
             addSelectedUser(user)
@@ -423,9 +417,6 @@ public extension ContactsViewController {
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        if !infiniteLoading.isFinished && isLastSection(indexPath.section) {
-            return
-        }
         let users = availableRecipients[indexPath.section].users
         if let user = users[indexPath.row].user {
             removeSelectedUser(user)

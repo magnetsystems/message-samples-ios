@@ -516,6 +516,9 @@
          <FileRef
             location = "group:LoadingCell.swift">
          </FileRef>
+         <FileRef
+            location = "group:LoadingView.swift">
+         </FileRef>
       </Group>
       <Group
          location = "container:"
