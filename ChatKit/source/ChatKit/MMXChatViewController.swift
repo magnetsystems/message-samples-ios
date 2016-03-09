@@ -85,13 +85,6 @@ public class MMXChatViewController: ChatViewController {
     //MARK: Public Methods
     
     
-    public func generateNavBars() {
-        if self.navigationController == nil {
-            let btnBack = UIBarButtonItem.init(title: "Back", style: .Plain, target: self, action: "dismiss")
-            self.setMagnetNavBar(leftItems: [btnBack], rightItems: nil, title: self.title)
-        }
-    }
-    
     public override func hasMore() -> Bool {
         if let datasource = self.datasource {
             return datasource.mmxControllerHasMore()
@@ -138,8 +131,7 @@ public class MMXChatViewController: ChatViewController {
     
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        generateNavBars()
+
     }
     
     

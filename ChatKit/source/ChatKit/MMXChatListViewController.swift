@@ -89,11 +89,7 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
     private func generateNavBars() {
         if chooseContacts {
             let rightBtn = UIBarButtonItem.init(barButtonSystemItem: .Add, target: self, action: "addContactAction")
-            if self.navigationController != nil {
-                navigationItem.rightBarButtonItem = rightBtn
-            } else {
-                self.setMagnetNavBar(leftItems: nil, rightItems: [rightBtn], title: self.title)
-            }
+            navigationItem.rightBarButtonItem = rightBtn
         }
     }
     

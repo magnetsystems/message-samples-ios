@@ -112,6 +112,13 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
                 weakSelf.loadMore(weakSelf.searchBar.text, offset: weakSelf.currentUserCount)
             }
         }
+        
+        let topGuide = NSLayoutConstraint(item: contactsView, attribute: .Top, relatedBy: .Equal, toItem: self.topLayoutGuide, attribute: .Bottom, multiplier: 1, constant: 0)
+        self.view.addConstraint(topGuide)
+        self.topGuide = topGuide
+        contactsView.translatesAutoresizingMaskIntoConstraints = false
+        self.automaticallyAdjustsScrollViewInsets = false
+        self.tableView.contentInset = UIEdgeInsetsZero
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -123,27 +130,6 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         super.viewWillDisappear(animated)
         
         resignSearchBar()
-    }
-    
-    override public func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        if self.topGuide == nil {
-            if self.tableView.contentInset != UIEdgeInsetsZero {
-                let topGuide = NSLayoutConstraint(item: contactsView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1, constant: self.tableView.contentInset.top)
-                self.view.addConstraint(topGuide)
-                self.topGuide = topGuide
-                
-            } else {
-                let topGuide = NSLayoutConstraint(item: contactsView, attribute: .Top, relatedBy: .Equal, toItem: self.topLayoutGuide, attribute: .Bottom, multiplier: 1, constant: 0)
-                self.view.addConstraint(topGuide)
-                self.topGuide = topGuide
-            }
-            
-            contactsView.translatesAutoresizingMaskIntoConstraints = false
-            self.automaticallyAdjustsScrollViewInsets = false
-            self.tableView.contentInset = UIEdgeInsetsZero
-        }
     }
     
     
@@ -202,6 +188,9 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
             infiniteLoading.stopUpdating()
         } else {
             infiniteLoading.startUpdating()
+            if users.count == 0 {
+                infiniteLoading.setNeedsUpdate()
+            }
         }
         
         infiniteLoading.finishUpdating()
@@ -266,6 +255,9 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         self.loadMore(self.searchBar.text, offset: self.currentUserCount)
     }
     
+    public func tableViewFooter () -> UIView? {
+        return nil
+    }
     
     // MARK: - UISearchResultsUpdating
     
@@ -403,6 +395,20 @@ public extension ContactsViewController {
         }
         let letter = availableRecipients[section]
         return String(letter.letter).uppercaseString
+    }
+    
+    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if !infiniteLoading.isFinished && isLastSection(section + 1) || infiniteLoading.isFinished && isLastSection(section) {
+            return tableViewFooter()
+        }
+        return nil
+    }
+    
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if (!infiniteLoading.isFinished && isLastSection(section + 1) || infiniteLoading.isFinished && isLastSection(section)) && tableViewFooter() != nil {
+            return 50.0
+        }
+        return 0.0
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

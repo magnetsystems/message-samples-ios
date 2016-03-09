@@ -426,7 +426,32 @@ private extension ChatViewController {
     }
     
     private func loadMessages() {
-        loadMore(nil, offset: 0)
+        
+        guard let channel = self.chat else { return }
+        
+        let dateComponents = NSDateComponents()
+        dateComponents.year = -1
+        
+        let theCalendar = NSCalendar.currentCalendar()
+        let now = NSDate()
+        let dayAgo = theCalendar.dateByAddingComponents(dateComponents, toDate: now, options: NSCalendarOptions(rawValue: 0))
+        
+        channel.messagesBetweenStartDate(dayAgo, endDate: now, limit: 100, offset: 0, ascending: true, success: { [weak self] _ , messages in
+            self?.messages = messages.map({ mmxMessage in
+                let message = Message(message: mmxMessage)
+                if message.isMediaMessage() {
+                    message.mediaCompletionBlock = { [weak self] () in
+                        self?.collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forItem: messages.indexOf(mmxMessage)!, inSection: 0)])
+                    }
+                }
+                return message
+            })
+            self?.collectionView?.reloadData()
+            self?.scrollToBottomAnimated(false)
+            }, failure: { error in
+                print("[ERROR]: \(error)")
+        })
     }
+
 }
 

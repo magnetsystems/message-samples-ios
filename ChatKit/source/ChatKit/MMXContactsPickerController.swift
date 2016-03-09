@@ -98,12 +98,8 @@ public class MMXContactsPickerController: ContactsViewController {
     
     private func generateNavBars() {
         if let btnCancel = barButtonCancel, let btnNext = barButtonNext {
-            if self.navigationController != nil {
                 navigationItem.rightBarButtonItem = btnNext
                 navigationItem.leftBarButtonItem = btnCancel
-            } else {
-                self.setMagnetNavBar(leftItems: [btnCancel], rightItems: [btnNext], title: self.title)
-            }
         }
     }
     
@@ -228,5 +224,9 @@ public class MMXContactsPickerController: ContactsViewController {
             return pickerDatasource.mmxControllerSearchUpdatesContinuously()
         }
         return false
+    }
+    
+    override public func tableViewFooter() -> UIView? {
+        return self.datasource?.mmxTableViewFooter?()
     }
 }

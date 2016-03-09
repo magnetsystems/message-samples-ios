@@ -44,6 +44,7 @@ import UIKit
 
 @objc public protocol ContactsControllerDatasource: ControllerDatasource {
     optional func mmxContactsCellForUser(tableView : UITableView, user : MMUser, indexPath : NSIndexPath) -> UITableViewCell?
+    optional func mmxTableViewFooter() -> UIView?
     optional func mmxContactsCellHeightForUser(user : MMUser, indexPath : NSIndexPath) -> CGFloat
     optional func mmxContactsControllerImageForUser(imageView : UIImageView, user : MMUser)
     optional func mmxContactsControllerShowsSectionIndexTitles() -> Bool

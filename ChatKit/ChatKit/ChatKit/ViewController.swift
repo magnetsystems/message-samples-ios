@@ -10,9 +10,9 @@ import UIKit
 import ChatKitUI
 import MagnetMax
 
-public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
+public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, ContactsControllerDelegate {
     var channel : MMXChannel?
-    
+    var chatViewController : MMXChatViewController?
     //MARK: ContactsPickerControllerDatasource
     
     override public func mmxControllerLoadMore(searchText : String?, offset : Int) {
@@ -46,12 +46,46 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
     override public func mmxContactsControllerShowsSectionsHeaders() -> Bool {
         return false
     }
+    
+    func mmxTableViewFooter() -> UIView? {
+        let button = UIButton(type: .Custom)
+        button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        button.setTitle("Add Contacts +", forState: .Normal)
+        button.titleLabel?.textAlignment = .Center
+        button.addTarget(self, action: "addContacts", forControlEvents: .TouchUpInside)
+        return button
+    }
+    
+    func addContacts() {
+        
+        self.channel?.subscribersWithLimit(1000, offset: 0, success: { (num, users) -> Void in
+            let contacts = MMXContactsPickerController(disabledUsers: users)
+            contacts.delegate = self
+            self.chatViewController?.navigationController?.pushViewController(contacts, animated: true)
+            
+            }, failure: { error in
+                
+        })
+    }
+    
+    public func mmxContactsControllerDidFinish(with selectedUsers: [MMUser]) {
+        if selectedUsers.count > 0 {
+            self.channel?.addSubscribers(selectedUsers, success: { _ in
+                if let chatViewController = self.chatViewController {
+                    chatViewController.title = "Group"
+                    chatViewController.navigationController?.popToViewController(chatViewController, animated: true)
+                }
+                }, failure: {error in
+                    
+            })
+        }
+    }
 }
 
 extension MMXChatViewController : ChatViewControllerDelegate {
     override public func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         let rightBtn = UIBarButtonItem.init(title: "Details", style: .Plain, target: self, action: "detailsAction")
         self.navigationItem.rightBarButtonItem = rightBtn
         self.delegate = self
@@ -87,6 +121,7 @@ extension MMXChatViewController : ChatViewControllerDelegate {
             subDatasource.magnetPicker = contacts
             contacts.datasource = subDatasource
             subDatasource.channel = self.channel
+            subDatasource.chatViewController = self
             contacts.tableView.allowsSelection = false
             contacts.canSearch = false
             contacts.title = "In Group"
@@ -103,7 +138,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-         //UserGenerator.generateUsers()
+        //UserGenerator.generateUsers()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -136,7 +171,7 @@ class ViewController: UIViewController {
         //self.presentViewController(c, animated: true, completion: nil)
     }
     
-        
+    
     func login (user : MMUser) {
         let cred = NSURLCredential.init(user: user.userName, password: user.password, persistence: .None)
         MMUser.login(cred, rememberMe: false, success: {
