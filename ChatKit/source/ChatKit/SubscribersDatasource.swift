@@ -89,7 +89,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
         if selectedUsers.count > 0 {
             self.channel?.addSubscribers(selectedUsers, success: { _ in
                 if let chatViewController = self.chatViewController {
-                    chatViewController.title = "Group"
+                    chatViewController.title = CKStrings.kStr_Group
                     chatViewController.navigationController?.popToViewController(chatViewController, animated: true)
                 }
                 }, failure: {error in

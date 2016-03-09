@@ -171,7 +171,7 @@ public class MMXChatViewController: ChatViewController {
             subDatasource.chatViewController = self
             contacts.tableView.allowsSelection = false
             contacts.canSearch = false
-            contacts.title = "In Group"
+            contacts.title = CKStrings.kStr_Subscribers
             self.navigationController?.pushViewController(contacts, animated: true)
         }
         

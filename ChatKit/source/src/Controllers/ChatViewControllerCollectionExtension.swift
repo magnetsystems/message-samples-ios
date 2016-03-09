@@ -179,7 +179,12 @@ extension ChatViewController {
             switch message.type {
             case .Text: break
             case .Location:
-                self.performSegueWithIdentifier(kSegueShowMap, sender: message.media())
+                
+                if let locationItem = message.mediaContent as? JSQLocationMediaItem {
+                    let viewController = MapViewController()
+                    viewController.location = locationItem.coordinate
+                    presentViewController(viewController, animated: true, completion: nil)
+                }
             case .Photo:
                 let photoItem = message.media() as! JSQPhotoMediaItem
                 let photo = Photo(photo: photoItem.image)
@@ -187,7 +192,7 @@ extension ChatViewController {
                 presentViewController(viewer, animated: true, completion: nil)
             case .Video:
                 if let attachment = message.underlyingMessage.attachments?.first where attachment.name != nil {
-                    let videoVC = VideoPlayerViewController(nibName: vc_id_VideoPlayer, bundle: nil)
+                    let videoVC = VideoPlayerViewController()
                     videoVC.attachment = attachment
                     presentViewController(videoVC, animated: true, completion: nil)
                 }

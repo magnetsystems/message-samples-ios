@@ -18,7 +18,7 @@
 import DZVideoPlayerViewController
 import MagnetMax
 
-class VideoPlayerViewController: UIViewController, DZVideoPlayerViewControllerDelegate {
+public class VideoPlayerViewController: UIViewController, DZVideoPlayerViewControllerDelegate {
     
     
     //MARK: Public properties
@@ -34,15 +34,21 @@ class VideoPlayerViewController: UIViewController, DZVideoPlayerViewControllerDe
     //MARK: Overrides
 
    
-    override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
+    override public func loadView() {
+        super.loadView()
+        let nib = UINib.init(nibName: "VideoPlayerViewController", bundle: NSBundle(forClass: self.dynamicType))
+        nib.instantiateWithOwner(self, options: nil)
+    }
+    
+   public override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
         return .None
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+   public override func prefersStatusBarHidden() -> Bool {
         return hideStatusBar
     }
     
-    override func viewDidLoad() {
+   public override func viewDidLoad() {
         super.viewDidLoad()
         
         //Show player
@@ -66,7 +72,7 @@ class VideoPlayerViewController: UIViewController, DZVideoPlayerViewControllerDe
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+   public override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         // Show Status Bar
         hideStatusBar = false
@@ -81,7 +87,7 @@ class VideoPlayerViewController: UIViewController, DZVideoPlayerViewControllerDe
     //MARK: Public Methods
     
     
-    func startPlay() {
+    public func startPlay() {
         self.videoPlayerViewController.activityIndicatorView?.stopAnimating()
         self.videoPlayerViewController.videoURL = fileURL
         self.videoPlayerViewController.prepareAndPlayAutomatically(true)
@@ -91,12 +97,12 @@ class VideoPlayerViewController: UIViewController, DZVideoPlayerViewControllerDe
     //MARK: - DZVideoPlayerViewControllerDelegate
     
     
-    func playerDoneButtonTouched() {
+    public func playerDoneButtonTouched() {
         self.videoContainerView.videoPlayerViewController.stop()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func playerFailedToLoadAssetWithError(error: NSError!) {
+    public func playerFailedToLoadAssetWithError(error: NSError!) {
         showAlert(error.localizedDescription, title: "Error", closeTitle: "Close") { [weak self] _ in
             self?.dismissViewControllerAnimated(true, completion: nil)
         }

@@ -15,23 +15,15 @@
 * permissions and limitations under the License.
 */
 
-import UIKit
+import Foundation
 
-public class Timestamp: NSObject {
+struct Constants {
     
-    public let date: NSDate
-    
-    public init(date: NSDate) {
-        self.date = date
-    }
-    
-    public required convenience init(coder aDecoder: NSCoder) {
-        let date = aDecoder.decodeObjectForKey("date") as! NSDate
-        self.init(date: date)
-    }
-    
-    public func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(date, forKey: "date")
+    struct ContentKey {
+        static let Latitude = "latitude"
+        static let Longitude = "longitude"
+        static let Message = "message"
+        static let Type = "type"
     }
     
 }

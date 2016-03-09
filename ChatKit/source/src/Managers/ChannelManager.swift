@@ -36,12 +36,12 @@ public class ChannelManager {
     //MARK: Static properties
     
     
-    static let sharedInstance = ChannelManager()
+    public static let sharedInstance = ChannelManager()
     
     
     //MARK: Public properties
     
-    let formatter = DateFormatter()
+    public let formatter = DateFormatter()
     
     
     //MARK: Private properties
@@ -65,13 +65,13 @@ public class ChannelManager {
         channelObservers.append(observer)
     }
     
-    func getLastMessageForChannel(channel: MMXChannel) -> String? {
+    public func getLastMessageForChannel(channel: MMXChannel) -> String? {
         let name = nameForChannel(channel)
         
         return MMUser.currentUser()?.extras["\(name)_last_message_id"]
     }
     
-    func getLastViewTimeForChannel(channel: MMXChannel) -> NSDate? {
+    public func getLastViewTimeForChannel(channel: MMXChannel) -> NSDate? {
         
         let name = nameForChannel(channel)
         
@@ -84,7 +84,7 @@ public class ChannelManager {
         return nil
     }
     
-    func nameForChannel(channel: MMXChannel) -> String {
+    public func nameForChannel(channel: MMXChannel) -> String {
         let key = channel.channelID
         
         return key

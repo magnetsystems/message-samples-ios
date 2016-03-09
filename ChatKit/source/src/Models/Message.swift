@@ -24,9 +24,9 @@ public class Message : NSObject, JSQMessageData {
     //MARK: Public properties
     
     
-    private(set) var isDownloaded : Bool = false
-    var mediaCompletionBlock: JSQLocationMediaItemCompletionBlock?
-    private(set) var underlyingMessage: MMXMessage {
+    public private(set) var isDownloaded : Bool = false
+    public var mediaCompletionBlock: JSQLocationMediaItemCompletionBlock?
+    public private(set) var underlyingMessage: MMXMessage {
         didSet {
             switch self.type {
             case .Text:
@@ -41,7 +41,7 @@ public class Message : NSObject, JSQMessageData {
         }
     }
     
-    lazy var mediaContent: JSQMessageMediaData! = {
+    public lazy var mediaContent: JSQMessageMediaData! = {
         
         switch self.type {
         case .Text:
@@ -89,7 +89,7 @@ public class Message : NSObject, JSQMessageData {
         }
     }()
     
-    lazy var type: MessageType = {
+    public lazy var type: MessageType = {
         return MessageType(rawValue: self.underlyingMessage.messageContent["type"]!)
         }()!
     
@@ -97,14 +97,14 @@ public class Message : NSObject, JSQMessageData {
     //MARK: init
     
     
-    init(message: MMXMessage) {
+    public init(message: MMXMessage) {
         self.underlyingMessage = message
     }
     
     
     //MARK: - Public implementation
     
-   public func date() -> NSDate! {
+    public func date() -> NSDate! {
         if let date = underlyingMessage.timestamp {
             return date
         }
@@ -146,13 +146,13 @@ public class Message : NSObject, JSQMessageData {
     
 }
 
-enum MessageType: String, CustomStringConvertible {
+public enum MessageType: String, CustomStringConvertible {
     case Text = "text"
     case Location = "location"
     case Photo = "photo"
     case Video = "video"
     
-    var description: String {
+    public var description: String {
         
         switch self {
             

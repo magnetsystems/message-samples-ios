@@ -307,7 +307,7 @@ public extension HomeViewController {
     public func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         let detailResponse = detailsForIndexPath(indexPath)
         
-        let leave = UITableViewRowAction(style: .Normal, title: "Leave") { [weak self] action, index in
+        let leave = UITableViewRowAction(style: .Normal, title: CKStrings.kStr_Leave) { [weak self] action, index in
             if let chat = detailResponse.channel {
                 chat.unSubscribeWithSuccess({ _ in
                     self?.detailResponses.removeAtIndex(index.row)

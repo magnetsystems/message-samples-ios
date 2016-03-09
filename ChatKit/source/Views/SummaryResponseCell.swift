@@ -62,9 +62,9 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
             lblSubscribers?.text = subscribersTitle
             
             if let messages = detailResponse.messages, content = messages.last?.messageContent {
-                lblMessage?.text = content[Constants.ContentKey.Message] ?? kStr_AttachmentFile
+                lblMessage?.text = content[Constants.ContentKey.Message] ?? CKStrings.kStr_AttachmentFile
                 if content[Constants.ContentKey.Longitude] != nil {
-                    lblMessage?.text = kStr_AttachmentLocation
+                    lblMessage?.text = CKStrings.kStr_AttachmentLocation
                 }
             } else {
                 lblMessage?.text = ""

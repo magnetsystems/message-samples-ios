@@ -1,7 +1,6 @@
 #import <UIKit/UIKit.h>
 
 #import "ChatKitUI.h"
-#import "SWRevealViewController.h"
 #import "JSQSystemSoundPlayer+JSQMessages.h"
 #import "NSBundle+JSQMessages.h"
 #import "NSString+JSQMessages.h"

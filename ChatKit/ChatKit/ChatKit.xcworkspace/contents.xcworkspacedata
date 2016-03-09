@@ -42,7 +42,7 @@
             location = "group:Helpers"
             name = "Helpers">
             <FileRef
-               location = "group:Constants.swift">
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Helpers/ChatUIConstants.swift">
             </FileRef>
             <FileRef
                location = "group:Strings.swift">
@@ -73,16 +73,6 @@
                name = "Popup">
                <FileRef
                   location = "group:Popup.swift">
-               </FileRef>
-            </Group>
-            <Group
-               location = "group:SWRevealViewController"
-               name = "SWRevealViewController">
-               <FileRef
-                  location = "group:SWRevealViewController.h">
-               </FileRef>
-               <FileRef
-                  location = "group:SWRevealViewController.m">
                </FileRef>
             </Group>
             <Group
@@ -518,6 +508,9 @@
          </FileRef>
          <FileRef
             location = "group:LoadingView.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MapViewController.xib">
          </FileRef>
       </Group>
       <Group

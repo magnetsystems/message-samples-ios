@@ -252,18 +252,18 @@ public class ChatViewController: MMJSQViewController {
         
         self.inputToolbar!.contentView!.textView?.resignFirstResponder()
         
-        let alertController = UIAlertController(title: kStr_MediaMessages, message: nil, preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: CKStrings.kStr_MediaMessages, message: nil, preferredStyle: .ActionSheet)
         
-        let sendFromCamera = UIAlertAction(title: kStr_TakePhotoOrVideo, style: .Default) { (_) in
+        let sendFromCamera = UIAlertAction(title: CKStrings.kStr_TakePhotoOrVideo, style: .Default) { (_) in
             self.addMediaMessageFromCamera()
         }
-        let sendFromLibrary = UIAlertAction(title: kStr_PhotoLib, style: .Default) { (_) in
+        let sendFromLibrary = UIAlertAction(title: CKStrings.kStr_PhotoLib, style: .Default) { (_) in
             self.addMediaMessageFromLibrary()
         }
-        let sendLocationAction = UIAlertAction(title: kStr_SendLoc, style: .Default) { (_) in
+        let sendLocationAction = UIAlertAction(title: CKStrings.kStr_SendLoc, style: .Default) { (_) in
             self.addLocationMediaMessage()
         }
-        let cancelAction = UIAlertAction(title: kStr_Cancel, style: .Cancel) { (_) in }
+        let cancelAction = UIAlertAction(title: CKStrings.kStr_Cancel, style: .Cancel) { (_) in }
         
         alertController.addAction(sendFromCamera)
         alertController.addAction(sendFromLibrary)

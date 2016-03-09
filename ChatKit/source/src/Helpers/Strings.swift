@@ -17,73 +17,48 @@
 
 import Foundation
 
-func localizedString(string : String) ->String {
+public class CKStrings {
+    
+public class func localizedString(string : String) ->String {
     return NSLocalizedString(string, comment: "")
 }
 
+public static let kStr_AttachmentFile = CKStrings.localizedString("Attachment file")
+public static let kStr_AttachmentLocation = CKStrings.localizedString("Attachment location")
+public static let kStr_AddContact = CKStrings.localizedString("Add a contact")
 
-let kStr_AttachmentFile = localizedString("Attachment file")
-let kStr_AttachmentLocation = localizedString("Attachment location")
-let kStr_AddContact = localizedString("Add a contact")
+public static let kStr_Cancel = CKStrings.localizedString("Cancel")
+public static let kStr_Close = CKStrings.localizedString("Close")
+public static let kStr_CouldntLogin = CKStrings.localizedString("Couldn't log in")
+public static let kStr_CouldntRegisterTitle = CKStrings.localizedString("Couldn't register")
 
+public static let kStr_Delete = CKStrings.localizedString("Delete")
 
-let kStr_Cancel = localizedString("Cancel")
-let kStr_Close = localizedString("Close")
-let kStr_CouldntLogin = localizedString("Couldn't log in")
-let kStr_CouldntRegisterTitle = localizedString("Couldn't register")
+public static let kStr_EmailPassNotFound = CKStrings.localizedString("Username and password not found.\n Please try again.")
+public static let kStr_EnterEmail = CKStrings.localizedString("Please enter your email")
+public static let kStr_EnterFirstLastName = CKStrings.localizedString("Please enter your first and last name")
+public static let kStr_EnterPasswordAndVerify = CKStrings.localizedString("Please enter your password and verify your password again")
+public static let kStr_EnterPasswordLength = CKStrings.localizedString("Please enter at least 6 characters")
+public static let kStr_Events = CKStrings.localizedString("Events")
 
+public static let kStr_Group = CKStrings.localizedString("Group")
 
-let kStr_Delete = localizedString("Delete")
+public static let kStr_Subscribers = CKStrings.localizedString("In Group")
 
+public static let kStr_Leave = CKStrings.localizedString("Leave")
 
-let kStr_EmailPassNotFound = localizedString("Username and password not found.\n Please try again.")
-let kStr_EnterEmail = localizedString("Please enter your email")
-let kStr_EnterFirstLastName = localizedString("Please enter your first and last name")
-let kStr_EnterPasswordAndVerify = localizedString("Please enter your password and verify your password again")
-let kStr_EnterPasswordLength = localizedString("Please enter at least 6 characters")
-let kStr_Events = localizedString("Events")
+public static let kStr_MediaMessages = CKStrings.localizedString("Media Messages")
 
+public static let kStr_No = CKStrings.localizedString("No")
+public static let kStr_NoInternetError = CKStrings.localizedString("Please check your internet connection and try again")
+public static let kStr_NoInternetErrorTitle = CKStrings.localizedString("No internet")
 
-let kStr_FieldRequired = localizedString("Field required")
-let kStr_FillEmailPass = localizedString("Please fill in email and password")
+public static let kStr_PhotoLib = CKStrings.localizedString("Photo Library")
 
+public static let kStr_SendLoc = CKStrings.localizedString("Send Location")
+public static let kStr_TakePhotoOrVideo = CKStrings.localizedString("Take Photo")
 
-let kStr_Group = localizedString("Group")
-
-
-let kStr_Leave = localizedString("Leave")
-
-
-let kStr_MediaMessages = localizedString("Media Messages")
-
-
-let kStr_NewMessage = localizedString("New message")
-let kStr_No = localizedString("No")
-let kStr_NoInternetError = localizedString("Please check your internet connection and try again")
-let kStr_NoInternetErrorTitle = localizedString("No internet")
-
-
-let kStr_PasssNotMatch = localizedString("Passwords do not match")
-let kStr_PasswordShort = localizedString("Password too short")
-let kStr_PhotoLib = localizedString("Photo Library")
-let kStr_PleaseTryAgain = localizedString("Please try agian")
-
-
-let kStr_SendLoc = localizedString("Send Location")
-let kStr_SignOut = localizedString("Sign out")
-let kStr_SignOutAsk = localizedString("Do you want sign out?")
-let kStr_Support = localizedString("Support")
-
-
-let kStr_TakePhotoOrVideo = localizedString("Take Photo")
-
-
-let kStr_UsernameTaken = localizedString("Sorry, that username is already taken. Please select a new username and try again.")
-let kStr_UsernameTitle = localizedString("Username taken")
-
-
-let kStr_Yes = localizedString("Yes")
-
-
+public static let kStr_Yes = CKStrings.localizedString("Yes")
+}
 
 

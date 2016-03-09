@@ -40,7 +40,7 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
         let subscribers = channelDetails.subscribers.filter({$0.userId !=  myId})
         
         if subscribers.count > 1 {
-            chatViewController.title = "Group"
+            chatViewController.title = CKStrings.kStr_Group
         } else {
             chatViewController.title = subscribers.map({$0.displayName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
         }

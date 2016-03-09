@@ -18,13 +18,13 @@
 import CoreLocation
 import UIKit
 
-class LocationManager: NSObject, CLLocationManagerDelegate {
+public class LocationManager: NSObject, CLLocationManagerDelegate {
     
     
     //MARK: Static properties
     
     
-    static let sharedInstance = LocationManager()
+    public static let sharedInstance = LocationManager()
     
     
     //MARK: Private properties
@@ -44,7 +44,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
     }
     
-    func canLocationServicesBeEnabled() -> Bool {
+    public func canLocationServicesBeEnabled() -> Bool {
         var myDict: NSDictionary?
         if let path = NSBundle.mainBundle().pathForResource("Info", ofType: "plist") {
             myDict = NSDictionary(contentsOfFile: path)
@@ -56,7 +56,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         return false
     }
     
-    func isLocationServicesEnabled() -> Bool {
+    public func isLocationServicesEnabled() -> Bool {
         
         if CLLocationManager.locationServicesEnabled() {
             switch(CLLocationManager.authorizationStatus()) {
@@ -73,19 +73,19 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     //MARK: - Public implementation
     
     
-    func getLocation(handler: ((CLLocation) -> Void)?) {
+    public func getLocation(handler: ((CLLocation) -> Void)?) {
         if handler != nil {
             locationHandler = handler
             locationManager.startUpdatingLocation()
         }
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    public func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         locationManager.stopUpdatingLocation()
         print("\(error.localizedFailureReason, error.localizedDescription)")
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = manager.location {
             if locationHandler != nil {
                 locationHandler!(location)

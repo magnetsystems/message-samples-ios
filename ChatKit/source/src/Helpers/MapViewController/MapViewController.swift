@@ -17,20 +17,26 @@
 
 import UIKit
 
-class MapViewController: UIViewController, MKMapViewDelegate {
+public class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     //MARK: Public properties
     
     
-    var location: CLLocationCoordinate2D!
+    public var location: CLLocationCoordinate2D!
     @IBOutlet weak var vMap: MKMapView!
     
     
     //MARK: Overrides
     
     
-    override func viewDidLoad() {
+    override public func loadView() {
+        super.loadView()
+        let nib = UINib.init(nibName: "MapViewController", bundle: NSBundle(forClass: self.dynamicType))
+        nib.instantiateWithOwner(self, options: nil)
+    }
+    
+    override public func viewDidLoad() {
         super.viewDidLoad()
         
         let regionRadius: CLLocationDistance = 1000
@@ -54,7 +60,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     //MARK: - public Methods
     
     
-    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+    public func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? MapPin {
             
             let view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
@@ -76,7 +82,7 @@ class MapPin: NSObject, MKAnnotation {
     let coordinate: CLLocationCoordinate2D
     
     
-     //MARK: Init
+    //MARK: Init
     
     
     init(coordinate: CLLocationCoordinate2D) {
