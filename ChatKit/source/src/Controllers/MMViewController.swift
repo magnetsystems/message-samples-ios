@@ -47,19 +47,21 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
     
     public init() {
         super.init(nibName: nil, bundle: nil)
-        self.setupViewController()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.setupViewController()
     }
     
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.setupViewController()
+        self.awakeFromNib()
     }
     
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        setupViewController()
+    }
     
     //MARK: Public Methods
     
@@ -90,11 +92,7 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
     }
     
     public func setupViewController() {
-        if #available(iOS 9.0, *) {
-            self.loadViewIfNeeded()
-        } else {
-           if let _ = self.view { }
-        }
+        if let _ = self.view { }
         
         let nav = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.navBarHeight))
         nav.autoresizingMask = .FlexibleWidth

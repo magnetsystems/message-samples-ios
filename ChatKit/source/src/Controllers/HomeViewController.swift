@@ -48,9 +48,12 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    override public func loadView() {
-        let nib = UINib.init(nibName: "HomeViewController", bundle: NSBundle(forClass: self.dynamicType))
-        nib.instantiateWithOwner(self, options: nil)
+    public override init() {
+        super.init(nibName: String(HomeViewController.self), bundle: NSBundle(forClass: self.dynamicType))
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     override public func viewDidLoad() {

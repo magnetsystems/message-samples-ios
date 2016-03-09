@@ -30,9 +30,13 @@ public class MapViewController: UIViewController, MKMapViewDelegate {
     //MARK: Overrides
     
     
-    override public func loadView() {
-        let nib = UINib.init(nibName: "MapViewController", bundle: NSBundle(forClass: self.dynamicType))
-        nib.instantiateWithOwner(self, options: nil)
+    public init() {
+        super.init(nibName: String(MapViewController.self), bundle: NSBundle(forClass: self.dynamicType))
+        
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     override public func viewDidLoad() {

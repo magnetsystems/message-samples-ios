@@ -75,9 +75,13 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     //MARK: Overrides
     
     
-    override public func loadView() {
-        let nib = UINib.init(nibName: "ContactsViewController", bundle: NSBundle(forClass: self.dynamicType))
-        nib.instantiateWithOwner(self, options: nil)
+    public override init() {
+        super.init(nibName: String(ContactsViewController.self), bundle: NSBundle(forClass: self.dynamicType))
+        
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     public override func viewDidLoad() {

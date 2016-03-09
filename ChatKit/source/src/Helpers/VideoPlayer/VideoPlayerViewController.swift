@@ -34,9 +34,12 @@ public class VideoPlayerViewController: UIViewController, DZVideoPlayerViewContr
     //MARK: Overrides
 
    
-    override public func loadView() {
-        let nib = UINib.init(nibName: "VideoPlayerViewController", bundle: NSBundle(forClass: self.dynamicType))
-        nib.instantiateWithOwner(self, options: nil)
+    public init() {
+        super.init(nibName: String(VideoPlayerViewController.self), bundle: NSBundle(forClass: self.dynamicType))
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
    public override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
