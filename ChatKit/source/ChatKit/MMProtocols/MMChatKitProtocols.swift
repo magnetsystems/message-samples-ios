@@ -85,7 +85,6 @@ import UIKit
 public protocol ChatViewControllerDatasource {
     func mmxControllerLoadMore(channel : MMXChannel?, offset : Int)
     func mmxControllerHasMore() -> Bool
-    func mmxControllerLoadsContinuously() -> Bool
 }
 
 

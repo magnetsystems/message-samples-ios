@@ -33,6 +33,8 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
     public func mmxListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
         
         let chatViewController = MMXChatViewController.init(channel : channel)
+        chatViewController.view.tintColor = chatList?.view.tintColor
+        
         let myId = MMUser.currentUser()?.userID
         
         let subscribers = channelDetails.subscribers.filter({$0.userId !=  myId})

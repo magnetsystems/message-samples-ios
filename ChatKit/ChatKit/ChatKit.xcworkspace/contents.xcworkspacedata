@@ -62,6 +62,13 @@
                </FileRef>
             </Group>
             <Group
+               location = "group:Notifiers"
+               name = "Notifiers">
+               <FileRef
+                  location = "group:NavigationNotifier.swift">
+               </FileRef>
+            </Group>
+            <Group
                location = "group:Popup"
                name = "Popup">
                <FileRef

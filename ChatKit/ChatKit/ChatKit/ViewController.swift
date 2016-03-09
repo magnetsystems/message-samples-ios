@@ -111,8 +111,8 @@ class ViewController: UIViewController {
         
         let user = MMUser.init()
         user.password = "gogogo"
-        user.userName = "user6"
-        user.firstName = "auser"
+        user.userName = "usesad"
+        user.firstName = "newUser"
         user.lastName = "smith"
         user.register({ u in
             self.login(user)
@@ -130,6 +130,7 @@ class ViewController: UIViewController {
         //c.delegate = self
         // c.contactsPickerDelegate = self
         c.appearance.tintColor = self.view.tintColor
+        c.view.tintColor = c.appearance.tintColor
         currentController = c
         self.navigationController?.pushViewController(c, animated: true)
         //self.presentViewController(c, animated: true, completion: nil)

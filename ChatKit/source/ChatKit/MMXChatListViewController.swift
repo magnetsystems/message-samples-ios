@@ -106,6 +106,8 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
     }
     
     private func presentChatViewController(chatViewController : MMXChatViewController, users : [MMUser]) {
+        chatViewController.view.tintColor = self.view.tintColor
+        
         let myId = MMUser.currentUser()?.userID
         
         let subscribers = users.filter({$0.userID !=  myId})

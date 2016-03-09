@@ -52,7 +52,7 @@ public class ChatViewController: MMJSQViewController {
         }
     }
     
-    // var notifier : NavigationNotifier?
+    public var navigationBarNotifier : NavigationNotifier?
     public var outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
     public internal(set) var recipients : [MMUser]?
     
@@ -104,7 +104,7 @@ public class ChatViewController: MMJSQViewController {
         senderId = user.userID
         senderDisplayName = user.firstName
         saveLastTimeViewed()
-        self.collectionView?.loadEarlierMessagesHeaderTextColor = self.view.tintColor
+        
         infiniteLoading.onUpdate({
             [weak self] in
             if let weakSelf = self {
@@ -118,6 +118,8 @@ public class ChatViewController: MMJSQViewController {
         self.automaticallyScrollsToMostRecentMessage = false
         super.viewWillAppear(animated)
         self.automaticallyScrollsToMostRecentMessage = true
+        self.navigationBarNotifier?.label?.textColor = self.view.tintColor
+        self.collectionView?.loadEarlierMessagesHeaderTextColor = self.view.tintColor
     }
     
     override public func viewWillDisappear(animated: Bool) {
@@ -154,7 +156,7 @@ public class ChatViewController: MMJSQViewController {
         }
         
         collectionView?.reloadData()
-        self.showLoadEarlierMessagesHeader = self.hasMore() && !self.loadsContinuously()
+        self.showLoadEarlierMessagesHeader = self.hasMore()
         self.infiniteLoading.finishUpdating()
         if !self.hasMore() {
             self.infiniteLoading.stopUpdating()
@@ -173,8 +175,6 @@ public class ChatViewController: MMJSQViewController {
             }
         }
     }
-    
-    public func loadsContinuously() -> Bool { return false }
     
     public func loadMore(channel : MMXChannel?, offset: Int) { }
     

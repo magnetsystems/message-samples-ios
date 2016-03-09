@@ -43,10 +43,29 @@ public class MMXChatViewController: ChatViewController {
     
     public var delegate : ChatViewControllerDelegate?
     public var datasource : ChatViewControllerDatasource?
+    public var useNavigationBarNotifier : Bool? {
+        didSet {
+            if useNavigationBarNotifier == true {
+                navigationBarNotifier = NavigationNotifier(viewController: self, exceptFor: self.channel)
+            } else {
+                navigationBarNotifier = nil
+            }
+        }
+    }
     
+    public override var chat  : MMXChannel? {
+        didSet {
+             useNavigationBarNotifier = true
+        }
+    }
     
     //MARK: Init
     
+    
+    public override init() {
+       useNavigationBarNotifier = false
+        super.init()
+    }
     
     public convenience init(channel : MMXChannel) {
         self.init()
@@ -56,6 +75,10 @@ public class MMXChatViewController: ChatViewController {
     public convenience init(recipients : [MMUser]) {
         self.init()
         self.recipients = recipients
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     
@@ -78,14 +101,6 @@ public class MMXChatViewController: ChatViewController {
     
     public func loadingContext() -> Int {
         return self.requestNumber
-    }
-    
-    override public func loadsContinuously() -> Bool {
-        if let datasource = self.datasource {
-            return datasource.mmxControllerLoadsContinuously()
-        }
-        
-        return super.loadsContinuously()
     }
     
     override public func loadMore(channel : MMXChannel?, offset: Int) {
@@ -128,6 +143,7 @@ public class MMXChatViewController: ChatViewController {
     
     
     override public func onChannelCreated(mmxChannel: MMXChannel) {
+        self.useNavigationBarNotifier = true
         self.delegate?.mmxChatDidCreateChannel(mmxChannel)
     }
     

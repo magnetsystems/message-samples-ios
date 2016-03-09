@@ -44,11 +44,6 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     }
     
     public func subscribedChannels(completion : ((channels : [MMXChannel]) -> Void)) {
-        if self.channels.count > 0 {
-            completion(channels: self.channels)
-            
-            return
-        }
         MMXChannel.subscribedChannelsWithSuccess({ ch in
             self.channels = ch
             completion(channels: self.channels)

@@ -58,9 +58,5 @@ public class DefaultChatViewControllerDatasource : NSObject, ChatViewControllerD
     public func mmxControllerHasMore() -> Bool {
         return self.hasMoreUsers
     }
-    
-    public func mmxControllerLoadsContinuously() -> Bool {
-        return false
-    }
 }
 

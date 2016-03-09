@@ -31,37 +31,61 @@ public class InfiniteLoading {
     
     private var isWaiting = false
     private var loadMoreBlocks : [(() -> Void)] = []
+    private let lock = NSLock()
+    private var queue : dispatch_queue_t = dispatch_queue_create("infLD", nil)
     
     
     //MARK: Public Methods
     
     
     public func setNeedsUpdate() {
-        if isWaiting || isFinished {
-            return
-        }
-        
-        isWaiting = true
-        
-        for loadMoreBlock in loadMoreBlocks {
-            loadMoreBlock()
-        }
+        dispatch_async(queue, {
+            self.lock.lock()
+            if self.isWaiting || self.isFinished {
+                self.lock.unlock()
+                return
+            }
+            
+            self.isWaiting = true
+            dispatch_sync(dispatch_get_main_queue(), {
+                for loadMoreBlock in self.loadMoreBlocks {
+                    loadMoreBlock()
+                }
+            })
+            self.lock.unlock()
+        })
     }
     
     public func onUpdate(loadMore : (() -> Void)) {
-        loadMoreBlocks.append(loadMore)
+        dispatch_async(queue, {
+            self.lock.lock()
+            self.loadMoreBlocks.append(loadMore)
+            self.lock.unlock()
+        })
     }
     
     public func finishUpdating() {
-        isWaiting = false
+        dispatch_async(queue, {
+            self.lock.lock()
+            self.isWaiting = false
+            self.lock.unlock()
+        })
     }
     
     public func startUpdating () {
-        isFinished = false
+        dispatch_async(queue, {
+            self.lock.lock()
+            self.isFinished = false
+            self.lock.unlock()
+        })
     }
     
     public func stopUpdating() {
-        isFinished = true
-        isWaiting = false
+        dispatch_async(queue, {
+            self.lock.lock()
+            self.isFinished = true
+            self.isWaiting = false
+            self.lock.unlock()
+        })
     }
 }
