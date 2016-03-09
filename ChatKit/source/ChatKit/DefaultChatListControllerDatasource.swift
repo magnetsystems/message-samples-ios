@@ -81,7 +81,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
                 self.hasMoreUsers = false
             }
             
-            self.chatList?.appendChannels(offsetChannels)
+            self.chatList?.append(offsetChannels)
         })
     }
     

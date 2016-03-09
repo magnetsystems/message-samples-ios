@@ -33,7 +33,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource {
             
             if let picker = self.magnetPicker {
                 //append users, reload data or insert data
-                picker.appendUsers(users)
+                picker.append(users)
             }
             }, failure: { _ in
                 self.magnetPicker?.reloadData()

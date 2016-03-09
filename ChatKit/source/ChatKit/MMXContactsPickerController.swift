@@ -133,7 +133,7 @@ public class MMXContactsPickerController: ContactsViewController {
     }
     
     public func reloadData() {
-        self.appendUsers([])
+        self.append([])
     }
     
     

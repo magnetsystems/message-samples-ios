@@ -133,7 +133,7 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
     
     
     public func reloadData() {
-        self.appendChannels([])
+        self.append([])
     }
     
     

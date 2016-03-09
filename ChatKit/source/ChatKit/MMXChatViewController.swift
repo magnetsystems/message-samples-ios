@@ -111,6 +111,10 @@ public class MMXChatViewController: ChatViewController {
         self.requestNumber++
     }
     
+    public func reloadData() {
+        self.append([])
+    }
+    
     
     //MARK: Overrides
     

@@ -113,7 +113,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     // MARK: Public Methods
     
     
-    public func appendChannels(mmxChannels : [MMXChannel]) {
+    public func append(mmxChannels : [MMXChannel]) {
         if mmxChannels.count > 0 {
             self.beginRefreshing()
             // Get all channels the current user is subscribed to
@@ -203,7 +203,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
             }
             
             if !hasChannel {
-                self.appendChannels([channel])
+                self.append([channel])
             }
         }
     }

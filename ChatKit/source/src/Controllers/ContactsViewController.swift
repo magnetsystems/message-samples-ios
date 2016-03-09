@@ -150,7 +150,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     //MARK: public Methods
     
     
-    public func appendUsers(unfilteredUsers : [MMUser]) {
+    public func append(unfilteredUsers : [MMUser]) {
         currentUserCount += unfilteredUsers.count
         let users = self.filterOutUsers(unfilteredUsers)
         
