@@ -30,7 +30,7 @@ class ChannelObserver {
 }
 
 
-class ChannelManager {
+public class ChannelManager {
     
     
     //MARK: Static properties
@@ -53,7 +53,7 @@ class ChannelManager {
     //MARK: - Public implementation
     
     
-    func addChannelMessageObserver(target : AnyObject, channel : MMXChannel?, selector : Selector) {
+    public func addChannelMessageObserver(target : AnyObject, channel : MMXChannel?, selector : Selector) {
         if let ch = channel {
             removeChannelMessageObserver(target, channel: ch)
         }
@@ -90,11 +90,11 @@ class ChannelManager {
         return key
     }
     
-    func saveLastViewTimeForChannel(channel: MMXChannel, date : NSDate) {
+    public func saveLastViewTimeForChannel(channel: MMXChannel, date : NSDate) {
         saveLastViewTimeForChannel(channel, message: nil, date: date)
     }
     
-    func saveLastViewTimeForChannel(channel: MMXChannel, message : MMXMessage?, date : NSDate) {
+    public func saveLastViewTimeForChannel(channel: MMXChannel, message : MMXMessage?, date : NSDate) {
         let name = nameForChannel(channel)
         
         if let user = MMUser.currentUser() {
@@ -112,7 +112,7 @@ class ChannelManager {
         }
     }
     
-    func removeChannelMessageObserver(object : AnyObject) {
+    public func removeChannelMessageObserver(object : AnyObject) {
         
         channelObservers = channelObservers.filter({
             if $0.object !== object && $0.object != nil {

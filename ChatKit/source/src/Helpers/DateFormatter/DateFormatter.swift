@@ -15,13 +15,13 @@
 * permissions and limitations under the License.
 */
 
-class DateFormatter {
+public class DateFormatter {
     
     
     //MARK: Public properties
     
     
-    let formatter = NSDateFormatter()
+    public let formatter = NSDateFormatter()
     
     
     //MARK: - Init
@@ -36,23 +36,23 @@ class DateFormatter {
     //MARK: - public Methods
     
     
-    func currentTimeStamp() -> String {
+    public func currentTimeStamp() -> String {
         formatter.dateFormat = "yyyyMMddHHmmss"
         return formatter.stringFromDate(NSDate())
     }
     
-    func dateForStringTime(stringTime: String) -> NSDate? {
+    public func dateForStringTime(stringTime: String) -> NSDate? {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         return formatter.dateFromString(stringTime)
     }
     
-    func dayOfTheWeek(date: NSDate) -> String {
+    public func dayOfTheWeek(date: NSDate) -> String {
         let dayFormatter = NSDateFormatter()
         dayFormatter.dateFormat = "EEEE"
         return dayFormatter.stringFromDate(date)
     }
     
-    func displayTime(stringTime: String) -> String! {
+    public func displayTime(stringTime: String) -> String! {
         let now = NSDate()
         
         let components = NSCalendar.currentCalendar().components([.Day , .Month, .Year ], fromDate: now)
@@ -76,11 +76,11 @@ class DateFormatter {
         return stringTime
     }
     
-    func relativeDateForDate(date: NSDate) -> String {
+    public func relativeDateForDate(date: NSDate) -> String {
         return NSDateFormatter.localizedStringFromDate(date, dateStyle: .ShortStyle, timeStyle: .NoStyle)
     }
     
-    func timeForDate(date: NSDate) -> String {
+    public func timeForDate(date: NSDate) -> String {
         return NSDateFormatter.localizedStringFromDate(date, dateStyle: .NoStyle, timeStyle: .ShortStyle)
     }
 }

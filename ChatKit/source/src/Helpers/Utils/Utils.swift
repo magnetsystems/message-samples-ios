@@ -41,7 +41,7 @@ class UtilsSet {
     }
 }
 
-class Utils: NSObject {
+public class Utils: NSObject {
     
     
     //MARK: Private Properties
@@ -53,28 +53,28 @@ class Utils: NSObject {
     //MARK: Image Loading
     
     
-    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?) {
+    public static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?) {
         loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, completion: nil)
     }
     
-    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?,  onlyShowAfterDownload:Bool) {
+    public static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?,  onlyShowAfterDownload:Bool) {
         loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, onlyShowAfterDownload:onlyShowAfterDownload, completion: nil)
     }
     
-    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, completion : ((image : UIImage?)->Void)?) {
+    public static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, completion : ((image : UIImage?)->Void)?) {
         loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage,  onlyShowAfterDownload: placeholderImage == nil, completion: completion)
     }
     
-    static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?,  onlyShowAfterDownload:Bool, completion : ((image : UIImage?)->Void)?) {
+    public static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?,  onlyShowAfterDownload:Bool, completion : ((image : UIImage?)->Void)?) {
         imageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage,  onlyShowAfterDownload: onlyShowAfterDownload, completion: completion)
     }
     
-    static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage?) {
+    public static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage?) {
         
         loadImageWithUrl(user.avatarURL(), toImageView: toImageView, placeholderImage: placeholderImage)
     }
     
-    static func loadUserAvatarByUserID(userID : String, toImageView: UIImageView, placeholderImage:UIImage?) {
+    public static func loadUserAvatarByUserID(userID : String, toImageView: UIImageView, placeholderImage:UIImage?) {
         
         toImageView.image = placeholderImage
         
@@ -92,23 +92,23 @@ class Utils: NSObject {
     //MARK: User Avatar Generation
     
     
-    static func firstCharacterInString(s: String) -> String {
+    public static func firstCharacterInString(s: String) -> String {
         if s == "" {
             return ""
         }
         return s.substringWithRange(Range<String.Index>(start: s.startIndex, end: s.endIndex.advancedBy(-(s.characters.count - 1))))
     }
     
-    class func name(name: AnyClass) -> String {
+    public class func name(name: AnyClass) -> String {
         let ident:String = NSStringFromClass(name).componentsSeparatedByString(".").last!
         return ident
     }
     
-    static func noAvatarImageForUser(user : MMUser) -> UIImage {
+    public static func noAvatarImageForUser(user : MMUser) -> UIImage {
         return Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName ?? "")
     }
     
-    static func noAvatarImageForUser(firstName : String?, lastName:String?) -> UIImage {
+   public static func noAvatarImageForUser(firstName : String?, lastName:String?) -> UIImage {
         var fName = ""
         var lName = ""
         
@@ -138,7 +138,7 @@ class Utils: NSObject {
         return image
     }
     
-    class func resizeImage(image:UIImage, toSize:CGSize) -> UIImage {
+    public class func resizeImage(image:UIImage, toSize:CGSize) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(toSize, false, 0.0);
         image.drawInRect(CGRect(x: 0, y: 0, width: toSize.width, height: toSize.height))
         let newImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -150,7 +150,7 @@ class Utils: NSObject {
     //MARK: User Naming {
     
     
-    class func displayNameForUser(user : MMUser) -> String {
+    public class func displayNameForUser(user : MMUser) -> String {
         //create username
         var name : String = ""
         if user.firstName != nil {
@@ -167,7 +167,7 @@ class Utils: NSObject {
         return name
     }
     
-    class func nameForUser(user : MMUser) -> String {
+    public class func nameForUser(user : MMUser) -> String {
         //create username
         var name = user.userName
         if user.lastName != nil {

@@ -17,7 +17,7 @@
 
 import UIKit
 
-class Popup: NSObject {
+public class Popup: NSObject {
     
     
     //MARK: Private properties
@@ -29,7 +29,7 @@ class Popup: NSObject {
     //MARK: Init
     
     
-    init(message :String, title :String, closeTitle :String, handler:((UIAlertAction) -> Void)? = nil) {
+  public init(message :String, title :String, closeTitle :String, handler:((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         let closeAction = UIAlertAction(title: closeTitle, style: .Cancel, handler: handler)
         alert.addAction(closeAction)
@@ -41,11 +41,11 @@ class Popup: NSObject {
     //MARK: Public Methods
     
     
-    func addAction(action: UIAlertAction) {
+   public func addAction(action: UIAlertAction) {
         alertController.addAction(action)
     }
     
-    func presentForController(controller: UIViewController) {
+    public func presentForController(controller: UIViewController) {
         controller.presentViewController(alertController, animated: true, completion: nil)
     }
 }
