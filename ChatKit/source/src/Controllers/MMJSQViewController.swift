@@ -39,6 +39,7 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
     
     public init() {
         super.init(nibName: nil, bundle: nil)
+        setupViewController()
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -47,7 +48,7 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
     
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        super.awakeFromNib()
+        setupViewController()
     }
     
     
@@ -83,12 +84,6 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
     }
     
     public func setupViewController() {
-        if #available(iOS 9.0, *) {
-            self.loadViewIfNeeded()
-        } else {
-            if let _ = self.view { }
-        }
-        
         let nav = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.navBarHeight))
         nav.autoresizingMask = .FlexibleWidth
         self.view.addSubview(nav)

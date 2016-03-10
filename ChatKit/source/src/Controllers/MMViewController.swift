@@ -47,6 +47,7 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
     
     public init() {
         super.init(nibName: nil, bundle: nil)
+        setupViewController()
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -55,7 +56,7 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
     
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.awakeFromNib()
+        setupViewController()
     }
     
     public override func awakeFromNib() {
