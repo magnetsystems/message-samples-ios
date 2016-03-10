@@ -39,22 +39,25 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
     
     public init() {
         super.init(nibName: nil, bundle: nil)
-        self.setupViewController()
     }
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.setupViewController()
     }
     
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.setupViewController()
+        super.awakeFromNib()
     }
     
     
     //MARK: Public Methods
     
+    
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        setupViewController()
+    }
     
     public func setMagnetNavBar(leftItems leftItems:[UIBarButtonItem]?, rightItems:[UIBarButtonItem]?, title : String?) {
         var willHide = false

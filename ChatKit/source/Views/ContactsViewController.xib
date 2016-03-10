@@ -7,8 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactsViewController" customModule="ChatKitUI" customModuleProvider="target">
             <connections>
-                <outlet property="contactsView" destination="gHj-EF-n6A" id="us1-Ek-Vdk"/>
-                <outlet property="contactsViewScrollView" destination="JNU-aP-1oZ" id="YLj-Pt-Iaq"/>
+                <outlet property="contactsViewScrollView" destination="JNU-aP-1oZ" id="cmX-Yg-MbZ"/>
                 <outlet property="tableView" destination="yww-hd-TB3" id="wjJ-AJ-kkH"/>
                 <outlet property="view" destination="mYd-6q-NWw" id="Yjj-Bs-yCF"/>
             </connections>
@@ -18,47 +17,66 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="yww-hd-TB3">
-                    <rect key="frame" x="0.0" y="128" width="600" height="472"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="7cG-l2-Isw"/>
-                        <outlet property="delegate" destination="-1" id="9an-66-sS3"/>
-                    </connections>
-                </tableView>
-                <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNU-aP-1oZ">
-                    <rect key="frame" x="0.0" y="31" width="600" height="97"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LGa-Cz-kta" customClass="ContactsTableContainerView" customModule="ChatKitUI" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gHj-EF-n6A">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="97"/>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="yww-hd-TB3">
+                            <rect key="frame" x="0.0" y="117" width="600" height="483"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="7cG-l2-Isw"/>
+                                <outlet property="delegate" destination="-1" id="9an-66-sS3"/>
+                            </connections>
+                        </tableView>
+                        <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNU-aP-1oZ" customClass="ContactsView" customModule="ChatKitUI" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="20" width="600" height="97"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gHj-EF-n6A">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="97"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="97" placeholder="YES" id="FmG-Pb-RJc"/>
+                                        <constraint firstAttribute="height" priority="998" id="sw6-1B-9zI"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="97" placeholder="YES" id="FmG-Pb-RJc"/>
-                                <constraint firstAttribute="height" priority="998" id="sw6-1B-9zI"/>
+                                <constraint firstAttribute="trailing" secondItem="gHj-EF-n6A" secondAttribute="trailing" priority="998" id="Kyb-mm-q42"/>
+                                <constraint firstItem="gHj-EF-n6A" firstAttribute="height" secondItem="JNU-aP-1oZ" secondAttribute="height" id="RaX-Tw-7nR"/>
+                                <constraint firstAttribute="bottom" secondItem="gHj-EF-n6A" secondAttribute="bottom" priority="998" id="Ydz-m5-2Vu"/>
+                                <constraint firstItem="gHj-EF-n6A" firstAttribute="leading" secondItem="JNU-aP-1oZ" secondAttribute="leading" id="buW-rA-Vri"/>
+                                <constraint firstItem="gHj-EF-n6A" firstAttribute="centerX" secondItem="JNU-aP-1oZ" secondAttribute="centerX" placeholder="YES" id="fqD-Zf-o34"/>
+                                <constraint firstItem="gHj-EF-n6A" firstAttribute="centerY" secondItem="JNU-aP-1oZ" secondAttribute="centerY" placeholder="YES" id="k3B-mz-eN4"/>
+                                <constraint firstItem="gHj-EF-n6A" firstAttribute="top" secondItem="JNU-aP-1oZ" secondAttribute="top" id="rRi-9W-rqm"/>
                             </constraints>
-                        </view>
+                            <connections>
+                                <outlet property="contentView" destination="gHj-EF-n6A" id="dVd-1k-s9h"/>
+                            </connections>
+                        </scrollView>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="gHj-EF-n6A" secondAttribute="trailing" priority="998" id="Kyb-mm-q42"/>
-                        <constraint firstItem="gHj-EF-n6A" firstAttribute="height" secondItem="JNU-aP-1oZ" secondAttribute="height" id="RaX-Tw-7nR"/>
-                        <constraint firstAttribute="bottom" secondItem="gHj-EF-n6A" secondAttribute="bottom" priority="998" id="Ydz-m5-2Vu"/>
-                        <constraint firstItem="gHj-EF-n6A" firstAttribute="leading" secondItem="JNU-aP-1oZ" secondAttribute="leading" id="buW-rA-Vri"/>
-                        <constraint firstItem="gHj-EF-n6A" firstAttribute="centerX" secondItem="JNU-aP-1oZ" secondAttribute="centerX" placeholder="YES" id="fqD-Zf-o34"/>
-                        <constraint firstItem="gHj-EF-n6A" firstAttribute="centerY" secondItem="JNU-aP-1oZ" secondAttribute="centerY" placeholder="YES" id="k3B-mz-eN4"/>
-                        <constraint firstItem="gHj-EF-n6A" firstAttribute="top" secondItem="JNU-aP-1oZ" secondAttribute="top" id="rRi-9W-rqm"/>
+                        <constraint firstItem="JNU-aP-1oZ" firstAttribute="top" secondItem="LGa-Cz-kta" secondAttribute="top" constant="20" placeholder="YES" id="34y-Rb-h7S"/>
+                        <constraint firstAttribute="trailing" secondItem="JNU-aP-1oZ" secondAttribute="trailing" id="J3f-P9-GsI"/>
+                        <constraint firstItem="yww-hd-TB3" firstAttribute="leading" secondItem="LGa-Cz-kta" secondAttribute="leading" id="MCo-Ct-XMV"/>
+                        <constraint firstItem="yww-hd-TB3" firstAttribute="top" secondItem="JNU-aP-1oZ" secondAttribute="bottom" id="Tfb-TA-Dx0"/>
+                        <constraint firstItem="JNU-aP-1oZ" firstAttribute="leading" secondItem="LGa-Cz-kta" secondAttribute="leading" id="d7n-bZ-RZH"/>
+                        <constraint firstAttribute="trailing" secondItem="yww-hd-TB3" secondAttribute="trailing" id="fsX-q9-pdj"/>
+                        <constraint firstAttribute="bottom" secondItem="yww-hd-TB3" secondAttribute="bottom" id="iC3-qn-xRO"/>
                     </constraints>
-                </scrollView>
+                    <connections>
+                        <outlet property="contactsView" destination="JNU-aP-1oZ" id="lNB-3J-35J"/>
+                        <outlet property="parentViewController" destination="-1" id="NDY-ar-cpD"/>
+                    </connections>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="JNU-aP-1oZ" firstAttribute="leading" secondItem="mYd-6q-NWw" secondAttribute="leading" id="JHi-IK-0c3"/>
-                <constraint firstAttribute="trailing" secondItem="yww-hd-TB3" secondAttribute="trailing" id="MRw-Wu-dtk"/>
-                <constraint firstAttribute="bottom" secondItem="yww-hd-TB3" secondAttribute="bottom" id="MsU-Mp-1U0"/>
-                <constraint firstItem="JNU-aP-1oZ" firstAttribute="top" secondItem="mYd-6q-NWw" secondAttribute="top" constant="31" placeholder="YES" id="QoR-jU-Pd2"/>
-                <constraint firstAttribute="trailing" secondItem="JNU-aP-1oZ" secondAttribute="trailing" id="qLV-DM-v5x"/>
-                <constraint firstItem="yww-hd-TB3" firstAttribute="top" secondItem="JNU-aP-1oZ" secondAttribute="bottom" id="vra-PZ-7Ph"/>
-                <constraint firstItem="yww-hd-TB3" firstAttribute="leading" secondItem="mYd-6q-NWw" secondAttribute="leading" id="zVu-gR-J9g"/>
+                <constraint firstItem="LGa-Cz-kta" firstAttribute="top" secondItem="mYd-6q-NWw" secondAttribute="top" id="JoT-Eo-zhp"/>
+                <constraint firstItem="LGa-Cz-kta" firstAttribute="leading" secondItem="mYd-6q-NWw" secondAttribute="leading" id="aA8-Dm-iHU"/>
+                <constraint firstAttribute="trailing" secondItem="LGa-Cz-kta" secondAttribute="trailing" id="ant-2Z-MNJ"/>
+                <constraint firstAttribute="bottom" secondItem="LGa-Cz-kta" secondAttribute="bottom" id="zkL-Hc-Pz3"/>
             </constraints>
             <point key="canvasLocation" x="-16" y="13"/>
         </view>

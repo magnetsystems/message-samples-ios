@@ -486,6 +486,12 @@
             location = "group:ContactsCell.xib">
          </FileRef>
          <FileRef
+            location = "group:ContactsTableContainerView.swift">
+         </FileRef>
+         <FileRef
+            location = "group:ContactsView.swift">
+         </FileRef>
+         <FileRef
             location = "group:IconView.swift">
          </FileRef>
          <FileRef

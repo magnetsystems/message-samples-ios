@@ -29,11 +29,6 @@ class AcceptAnyTouchDelegate : NSObject, UIGestureRecognizerDelegate {
     }
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-        if let _ = touch.view as? UITextField {
-            return false
-        } else if let _ = touch.view as? UITextView {
-            return false
-        }
         return true
     }
 }
@@ -45,11 +40,11 @@ extension UIViewController  {
     
     
     public func resignOnBackgroundTouch() -> Void {
-        let onTouch = UILongPressGestureRecognizer.init(target: self, action: "didTouch:")
-        onTouch.delegate = AcceptAnyTouchDelegate.sharedDelegate
-        onTouch.minimumPressDuration = 0.0
-        onTouch.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(onTouch)
+        let onGesture = UISwipeGestureRecognizer.init(target: self, action: "didGesture:")
+        onGesture.delegate = AcceptAnyTouchDelegate.sharedDelegate
+        onGesture.direction = [.Down, .Up]
+        onGesture.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(onGesture)
     }
     
     public func showAlert(message :String, title :String, closeTitle :String, handler:((UIAlertAction) -> Void)? = nil) {
@@ -61,7 +56,8 @@ extension UIViewController  {
     //MARK: - private Methods
     
     
-    @objc private func didTouch(tap : UILongPressGestureRecognizer) {
+    @objc private func didGesture(gesture : UISwipeGestureRecognizer) {
+        
         resignFirstResponder(self.view)
     }
     

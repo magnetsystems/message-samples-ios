@@ -62,14 +62,12 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     internal var currentUserCount = 0
     internal var disabledUsers : [String : MMUser] = [:]
     internal var startPoint : CGPoint = CGPointZero
-    internal var topGuide : NSLayoutConstraint?
     
     
     //MARK: IBOutlets
     
     
-    @IBOutlet internal var contactsView : UIView!
-    @IBOutlet internal var contactsViewScrollView : UIScrollView!
+    @IBOutlet internal var contactsViewScrollView : ContactsView?
     
     
     //MARK: Overrides
@@ -116,11 +114,6 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
                 weakSelf.loadMore(weakSelf.searchBar.text, offset: weakSelf.currentUserCount)
             }
         }
-        
-        let topGuide = NSLayoutConstraint(item: contactsView, attribute: .Top, relatedBy: .Equal, toItem: self.topLayoutGuide, attribute: .Bottom, multiplier: 1, constant: 0)
-        self.view.addConstraint(topGuide)
-        self.topGuide = topGuide
-        contactsView.translatesAutoresizingMaskIntoConstraints = false
         self.automaticallyAdjustsScrollViewInsets = false
         self.tableView.contentInset = UIEdgeInsetsZero
     }
@@ -436,41 +429,43 @@ private extension ContactsViewController {
     
     
     @objc private func didPanView(gesture : UILongPressGestureRecognizer) {
-        let loc = gesture.locationInView(self.view)
-        if gesture.state == .Began {
-            if let gestureView = gesture.view {
-                let gesturePoint = self.view.convertRect(gestureView.frame, fromView: gestureView)
-                startPoint = CGPoint(x: loc.x + contactsViewScrollView.contentOffset.x , y:CGRectGetMaxY(gesturePoint))
-                iconViewShouldMove = false
-            }
-        } else if gesture.state == .Changed {
-            if let container = contactsViewScrollView where !CGRectContainsPoint(container.frame, loc) {
-                iconViewShouldMove = true
-                contactsViewScrollView.scrollEnabled = false
-                contactsViewScrollView.scrollEnabled = true
-            }
-            if iconViewShouldMove {
-                let offsetPoint = CGPoint(x: loc.x - startPoint.x + contactsViewScrollView.contentOffset.x, y: loc.y - startPoint.y)
-                
-                let translate = CGAffineTransformMakeTranslation(offsetPoint.x, offsetPoint.y)
-                let scaleTrans = CGAffineTransformScale(translate, 0.8, 0.8)
-                gesture.view?.transform = scaleTrans
-                gesture.view?.alpha = 0.8
-            }
-        } else if gesture.state == .Ended {
-            if let iconView = gesture.view as? IconView, let imageView = iconView.imageView {
-                let center = self.view.convertPoint(imageView.center, fromView: iconView)
-                
-                startPoint = CGPointZero
-                iconView.alpha = 1
-                iconView.transform = CGAffineTransformIdentity
-                if let container = contactsViewScrollView where !CGRectContainsPoint(container.frame, center) {
-                    if let user = iconView.user {
-                        removeSelectedUser(user)
-                        updateContactsView(selectedUsers)
-                        self.tableView.beginUpdates()
-                        self.tableView.reloadData()
-                        self.tableView.endUpdates()
+        if let contactsViewScrollView = self.contactsViewScrollView {
+            let loc = gesture.locationInView(self.view)
+            if gesture.state == .Began {
+                if let gestureView = gesture.view {
+                    let gesturePoint = self.view.convertRect(gestureView.frame, fromView: gestureView)
+                    startPoint = CGPoint(x: loc.x + contactsViewScrollView.contentOffset.x , y:CGRectGetMaxY(gesturePoint))
+                    iconViewShouldMove = false
+                }
+            } else if gesture.state == .Changed {
+                if !CGRectContainsPoint(contactsViewScrollView.frame, loc) {
+                    iconViewShouldMove = true
+                    contactsViewScrollView.scrollEnabled = false
+                    contactsViewScrollView.scrollEnabled = true
+                }
+                if iconViewShouldMove {
+                    let offsetPoint = CGPoint(x: loc.x - startPoint.x + contactsViewScrollView.contentOffset.x, y: loc.y - startPoint.y)
+                    
+                    let translate = CGAffineTransformMakeTranslation(offsetPoint.x, offsetPoint.y)
+                    let scaleTrans = CGAffineTransformScale(translate, 0.8, 0.8)
+                    gesture.view?.transform = scaleTrans
+                    gesture.view?.alpha = 0.8
+                }
+            } else if gesture.state == .Ended {
+                if let iconView = gesture.view as? IconView, let imageView = iconView.imageView {
+                    let center = self.view.convertPoint(imageView.center, fromView: iconView)
+                    
+                    startPoint = CGPointZero
+                    iconView.alpha = 1
+                    iconView.transform = CGAffineTransformIdentity
+                    if !CGRectContainsPoint(contactsViewScrollView.frame, center) {
+                        if let user = iconView.user {
+                            removeSelectedUser(user)
+                            updateContactsView(selectedUsers)
+                            self.tableView.beginUpdates()
+                            self.tableView.reloadData()
+                            self.tableView.endUpdates()
+                        }
                     }
                 }
             }
@@ -533,51 +528,54 @@ private extension ContactsViewController {
     
     private func updateContactsView(users : [MMUser]) {
         
-        var leftView = contactsView
-        var leftAttribute : NSLayoutAttribute = .Leading
-        
-        for sub in contactsView.subviews {
-            sub.removeFromSuperview()
-        }
-        
-        var iconViews : [IconView] = []
-        for user in users.reverse() {
-            let view = IconView.newIconView()
-            iconViews.append(view)
-            if let imageView = view.imageView {
-                imageForUser(imageView, user: user)
-                view.title?.text = Utils.displayNameForUser(user)
+        if let contactsView = self.contactsViewScrollView?.contentView {
+            
+            var leftView = contactsView
+            var leftAttribute : NSLayoutAttribute = .Leading
+            
+            for sub in contactsView.subviews {
+                sub.removeFromSuperview()
             }
-            let top = NSLayoutConstraint(item: view, attribute: .Top, relatedBy: .Equal, toItem: contactsView, attribute: .Top, multiplier: 1, constant: 8)
-            let left = NSLayoutConstraint(item: view, attribute: .Leading, relatedBy: .Equal, toItem: leftView, attribute: leftAttribute, multiplier: 1, constant: 8)
-            let bottom = NSLayoutConstraint(item: view, attribute: .Bottom, relatedBy: .Equal, toItem: contactsView, attribute: .Bottom, multiplier: 1, constant: -8)
-            let width = NSLayoutConstraint(item: view, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 70)
-            contactsView.addSubview(view)
-            contactsView.addConstraints([top,left,bottom,width])
-            leftView = view
-            leftAttribute = .Trailing
-            let longPress = UILongPressGestureRecognizer(target: self, action: "didPanView:")
-            longPress.minimumPressDuration = 0.0
-            longPress.delegate = view
-            view.addGestureRecognizer(longPress)
-            view.user = user
-        }
-        if leftView != contactsView {
-            let right = NSLayoutConstraint(item: leftView, attribute: .Right, relatedBy: .Equal, toItem: contactsView, attribute: .Right, multiplier: 1, constant: -8)
-            contactsView.addConstraint(right)
-        }
-        
-        if let iconView = iconViews.first {
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                iconView.transform = CGAffineTransformMakeScale(1.1, 1.1)
-                }, completion: { (_) -> Void in
-                    UIView.animateWithDuration(0.4, animations: { () -> Void in
-                        iconView.transform = CGAffineTransformIdentity
-                    })
-            })
-        }
-        if let scrollView = contactsViewScrollView {
-            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+            
+            var iconViews : [IconView] = []
+            for user in users.reverse() {
+                let view = IconView.newIconView()
+                iconViews.append(view)
+                if let imageView = view.imageView {
+                    imageForUser(imageView, user: user)
+                    view.title?.text = Utils.displayNameForUser(user)
+                }
+                let top = NSLayoutConstraint(item: view, attribute: .Top, relatedBy: .Equal, toItem: contactsView, attribute: .Top, multiplier: 1, constant: 8)
+                let left = NSLayoutConstraint(item: view, attribute: .Leading, relatedBy: .Equal, toItem: leftView, attribute: leftAttribute, multiplier: 1, constant: 8)
+                let bottom = NSLayoutConstraint(item: view, attribute: .Bottom, relatedBy: .Equal, toItem: contactsView, attribute: .Bottom, multiplier: 1, constant: -8)
+                let width = NSLayoutConstraint(item: view, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 70)
+                contactsView.addSubview(view)
+                contactsView.addConstraints([top,left,bottom,width])
+                leftView = view
+                leftAttribute = .Trailing
+                let longPress = UILongPressGestureRecognizer(target: self, action: "didPanView:")
+                longPress.minimumPressDuration = 0.0
+                longPress.delegate = view
+                view.addGestureRecognizer(longPress)
+                view.user = user
+            }
+            if leftView != contactsView {
+                let right = NSLayoutConstraint(item: leftView, attribute: .Right, relatedBy: .Equal, toItem: contactsView, attribute: .Right, multiplier: 1, constant: -8)
+                contactsView.addConstraint(right)
+            }
+            
+            if let iconView = iconViews.first {
+                UIView.animateWithDuration(0.2, animations: { () -> Void in
+                    iconView.transform = CGAffineTransformMakeScale(1.1, 1.1)
+                    }, completion: { (_) -> Void in
+                        UIView.animateWithDuration(0.4, animations: { () -> Void in
+                            iconView.transform = CGAffineTransformIdentity
+                        })
+                })
+            }
+            if let scrollView = contactsViewScrollView {
+                scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+            }
         }
     }
     

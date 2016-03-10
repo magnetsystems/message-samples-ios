@@ -74,6 +74,12 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         return tableView.contentOffset.y > (tableView.contentSize.height - (tableView.frame.size.height * CGFloat(numberOfPagesToLoadAhead)))
     }
     
+    public override func setupViewController() {
+        super.setupViewController()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
     
     //MARK: UITableViewDelegatye
     
