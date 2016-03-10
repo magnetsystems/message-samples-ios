@@ -111,6 +111,11 @@ public class ChatViewController: MMJSQViewController {
                 weakSelf.loadMore(weakSelf.chat, offset: weakSelf.currentMessageCount)
             }
             })
+        
+        // Indicate that you are ready to receive messages now!
+        MMX.start()
+        // Handling disconnection
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -242,6 +247,14 @@ public class ChatViewController: MMJSQViewController {
         } else {
             finishedMessageClosure()
         }
+    }
+    
+    
+    // MARK: - Notification handler
+    
+    
+    private func didDisconnect(notification: NSNotification) {
+        MMX.stop()
     }
     
     
