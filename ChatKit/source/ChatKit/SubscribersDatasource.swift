@@ -61,6 +61,10 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
     }
     
     func mmxTableViewFooter() -> UIView? {
+        guard let channel = self.channel where channel.ownerUserID == MMUser.currentUser()?.userID else {
+            return nil
+        }
+        
         let button = UIButton(type: .Custom)
         button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
         button.setTitle("Add Contacts +", forState: .Normal)
