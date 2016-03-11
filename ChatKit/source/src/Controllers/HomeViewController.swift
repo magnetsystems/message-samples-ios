@@ -49,7 +49,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     }
     
     public override init() {
-        super.init(nibName: String(HomeViewController.self), bundle: NSBundle(forClass: self.dynamicType))
+        super.init(nibName: String(HomeViewController.self), bundle: NSBundle(forClass: HomeViewController.self))
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -70,9 +70,9 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         // Handling disconnection
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
         
-        var nib = UINib.init(nibName: "SummaryResponseCell", bundle: NSBundle(forClass: self.dynamicType))
+        var nib = UINib.init(nibName: "SummaryResponseCell", bundle: NSBundle(forClass: HomeViewController.self))
         self.tableView.registerNib(nib, forCellReuseIdentifier: "SummaryResponseCell")
-        nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: self.dynamicType))
+        nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: HomeViewController.self))
         self.tableView.registerNib(nib, forCellReuseIdentifier: "LoadingCellIdentifier")
         
         // Add search bar

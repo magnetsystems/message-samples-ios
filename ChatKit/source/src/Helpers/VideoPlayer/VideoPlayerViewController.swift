@@ -35,7 +35,7 @@ public class VideoPlayerViewController: UIViewController, DZVideoPlayerViewContr
 
    
     public init() {
-        super.init(nibName: String(VideoPlayerViewController.self), bundle: NSBundle(forClass: self.dynamicType))
+        super.init(nibName: String(VideoPlayerViewController.self), bundle: NSBundle(forClass: VideoPlayerViewController.self))
     }
     
     required public init?(coder aDecoder: NSCoder) {

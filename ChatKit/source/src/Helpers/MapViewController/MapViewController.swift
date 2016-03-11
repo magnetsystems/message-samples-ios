@@ -31,7 +31,7 @@ public class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     public init() {
-        super.init(nibName: String(MapViewController.self), bundle: NSBundle(forClass: self.dynamicType))
+        super.init(nibName: String(MapViewController.self), bundle: NSBundle(forClass: MapViewController.self))
         
     }
     
