@@ -59,7 +59,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         return  numberOfSections - footers.count <= section
     }
     
-    public func idenitfierForFooterSection(section : Int) -> String? {
+    public func identifierForFooterSection(section : Int) -> String? {
         guard isFooterSection(section)  else {
             return nil
         }
