@@ -34,11 +34,11 @@ Here are the default delegates and datasources.
 * **DefaultContactsPickerControllerDatasource.swift**
 
 
-**All data comes from these classes.**
+**All data come from these classes.**
 
 An example of a custom designed datasource is **SubscribersDatasource.swift**.
 The chat view screen contains a “details” button by default. The button takes you to 
-A screen where you can view the subscribers in a chat. This details screen is made from the contacts picker with a custom data source.  
+a screen where you can view the subscribers in a chat. This "details" screen is made using the contacts picker with a custom data source.  
 
 ## Feedback
 
