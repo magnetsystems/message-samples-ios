@@ -2,7 +2,7 @@
 
 ChatKit contains three main public classes:
 
-### *Note : Subclass these classes if needed not their Super classes*
+ *Note : Subclass these classes if needed not their Super classes*
 
 * **MMXChatListViewController** – displays channel summaries
     * Delegate – ChatListControllerDelegate
