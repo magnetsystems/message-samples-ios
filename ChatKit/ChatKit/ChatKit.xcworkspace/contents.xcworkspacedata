@@ -530,7 +530,7 @@
             </FileRef>
          </Group>
          <FileRef
-            location = "group:../source/ChatKit/ChatKitUI.h">
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/ChatKit.h">
          </FileRef>
          <FileRef
             location = "group:../source/ChatKit/DefaultChatListControllerDatasource.swift">

@@ -1,6 +1,0 @@
-framework module ChatKitUI {
-  umbrella header "ChatKitUI-umbrella.h"
-
-  export *
-  module * { export * }
-}

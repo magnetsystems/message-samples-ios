@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import ChatKitUI
+import ChatKit
 import MagnetMax
 
 

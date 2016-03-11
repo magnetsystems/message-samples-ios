@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-#import "ChatKitUI.h"
+#import "ChatKit.h"
 #import "JSQSystemSoundPlayer+JSQMessages.h"
 #import "NSBundle+JSQMessages.h"
 #import "NSString+JSQMessages.h"
@@ -48,6 +48,6 @@
 #import "JSQMessagesTypingIndicatorFooterView.h"
 #import "JSQSystemSoundPlayer.h"
 
-FOUNDATION_EXPORT double ChatKitUIVersionNumber;
-FOUNDATION_EXPORT const unsigned char ChatKitUIVersionString[];
+FOUNDATION_EXPORT double ChatKitVersionNumber;
+FOUNDATION_EXPORT const unsigned char ChatKitVersionString[];
 

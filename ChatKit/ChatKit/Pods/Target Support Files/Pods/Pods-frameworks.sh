@@ -86,7 +86,7 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/AFNetworking.framework"
   install_framework "Pods/AFOAuth2Manager.framework"
-  install_framework "Pods/ChatKitUI.framework"
+  install_framework "Pods/ChatKit.framework"
   install_framework "Pods/CocoaAsyncSocket.framework"
   install_framework "Pods/CocoaLumberjack.framework"
   install_framework "Pods/DZVideoPlayerViewController.framework"
@@ -102,7 +102,7 @@ fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/AFNetworking.framework"
   install_framework "Pods/AFOAuth2Manager.framework"
-  install_framework "Pods/ChatKitUI.framework"
+  install_framework "Pods/ChatKit.framework"
   install_framework "Pods/CocoaAsyncSocket.framework"
   install_framework "Pods/CocoaLumberjack.framework"
   install_framework "Pods/DZVideoPlayerViewController.framework"

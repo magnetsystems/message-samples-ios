@@ -272,7 +272,7 @@ THE SOFTWARE.
    limitations under the License.
 </string>
 			<key>Title</key>
-			<string>ChatKitUI</string>
+			<string>ChatKit</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

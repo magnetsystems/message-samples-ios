@@ -46,7 +46,7 @@
         <!--Contacts Picker Controller-->
         <scene sceneID="UPH-Jt-PXE">
             <objects>
-                <viewController storyboardIdentifier="home" useStoryboardIdentifierAsRestorationIdentifier="YES" id="maq-vi-REm" customClass="MMXContactsPickerController" customModule="ChatKitUI" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="home" useStoryboardIdentifierAsRestorationIdentifier="YES" id="maq-vi-REm" customClass="MMXContactsPickerController" customModule="ChatKit" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="W6t-Te-fFf"/>
                         <viewControllerLayoutGuide type="bottom" id="pH3-aI-j8Q"/>
