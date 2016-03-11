@@ -39,8 +39,8 @@ class ViewController: UIViewController {
     }
     
     func showChatList() {
-       //let c = MMXChatListViewController()
-        let c : UIViewController! = self.storyboard?.instantiateViewControllerWithIdentifier("home")
+       let c = MMXChatListViewController()
+        //let c : UIViewController! = self.storyboard?.instantiateViewControllerWithIdentifier("home")
         //c.delegate = self
         // c.contactsPickerDelegate = self
 //        c.appearance.tintColor = self.view.tintColor

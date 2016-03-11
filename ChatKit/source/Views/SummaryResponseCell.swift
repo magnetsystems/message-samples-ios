@@ -18,6 +18,36 @@
 import MagnetMax
 import UIKit
 
+
+//MARK: SummaryResponseImageView
+
+
+class SummaryResponseImageView : MMRoundedImageView {
+    
+    
+    //MARK: Public properties
+    
+    
+    @IBOutlet var imageMinWidth : NSLayoutConstraint?
+    
+    
+    //MARK: Overrides
+    
+    
+    override func updateConstraints() {
+        if self.image != nil {
+            imageMinWidth?.constant = 40.0
+        } else {
+            imageMinWidth?.constant = 0.0
+        }
+        super.updateConstraints()
+    }
+}
+
+
+//MARK: SummaryResponseCell
+
+
 class SummaryResponseCell: ChannelDetailBaseTVCell {
     
     

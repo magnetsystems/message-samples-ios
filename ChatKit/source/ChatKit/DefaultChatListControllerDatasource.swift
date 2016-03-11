@@ -87,7 +87,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     public func mmxListImageForChannelDetails(imageView: UIImageView, channelDetails: MMXChannelDetailResponse) {
         if channelDetails.subscriberCount > 2 {
-            let image = UIImage(named: "user_group_clear.png", inBundle: NSBundle(identifier: "org.cocoapods.ChatKitUI"), compatibleWithTraitCollection: nil)
+            let image = UIImage(named: "user_group_clear.png", inBundle: NSBundle(forClass: DefaultChatListControllerDatasource.self), compatibleWithTraitCollection: nil)
             imageView.backgroundColor = chatList?.appearance.tintColor
             imageView.image = image
         } else {
