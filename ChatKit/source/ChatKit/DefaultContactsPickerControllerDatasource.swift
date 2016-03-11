@@ -24,7 +24,7 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
     //MARK: Public Variables
     
     
-    public weak var magnetPicker : MMXContactsPickerController?
+    public weak var controller : MMXContactsPickerController?
     public var preselectedUsers : [MMUser] = []
     
     
@@ -57,27 +57,27 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
         
         self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
         //get request context
-        let loadingContext = magnetPicker?.loadingContext()
+        let loadingContext = controller?.loadingContext()
         MMUser.searchUsers(searchQuery, limit: limit, offset: offset, sort: "lastName:asc", success: { users in
             //check if the request is still valid
-            if loadingContext != self.magnetPicker?.loadingContext() {
+            if loadingContext != self.controller?.loadingContext() {
                 return
             }
             
             if users.count == 0 {
                 self.hasMoreUsers = false
-                self.magnetPicker?.reloadData()
+                self.controller?.reloadData()
                 return
             }
             
-            if let picker = self.magnetPicker {
+            if let picker = self.controller {
                 //append users, reload data or insert data
                 picker.append(users)
             }
             
             }, failure: { error in
                 print("[ERROR]: \(error.localizedDescription)")
-                self.magnetPicker?.reloadData()
+                self.controller?.reloadData()
         })
     }
     
@@ -102,7 +102,7 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
     }
     
     public  func mmxContactsControllerShowsSectionIndexTitles() -> Bool {
-        return magnetPicker?.contacts().count > 1
+        return controller?.contacts().count > 1
     }
     
 }

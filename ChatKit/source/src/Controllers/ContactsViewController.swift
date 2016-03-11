@@ -322,7 +322,7 @@ public extension ContactsViewController {
         if cell == nil {
             cell = ContactsCell(style: .Default, reuseIdentifier: "UserCellIdentifier")
         }
-        
+        cell?.backgroundColor = cellBackgroundColor
         
         
         let users = availableRecipients[indexPath.section].users

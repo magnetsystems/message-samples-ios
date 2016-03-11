@@ -28,16 +28,23 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
     //MARK: Private Variables
     
     
-    private var contactsController : MMXContactsPickerController?
+    
     private var requestNumber : Int = 0
     
     
     //MARK: Public Variables
     
     public var chooseContacts : Bool = true
-    public var contactsPickerDelegate : ContactsControllerDelegate?
     public var datasource : ChatListControllerDatasource?
     public var delegate : ChatListControllerDelegate?
+    
+    
+    //These can be overridden to inject datasources, delegates and other customizations into the variable on didSet
+    
+    
+    public weak var currentChatViewController : MMXChatViewController?
+    public weak var currentContactsViewController : MMXContactsPickerController?
+    
     
     
     //MARK: Overrides
@@ -60,10 +67,10 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         self.datasource = DefaultChatListControllerDatasource()
         self.delegate = DefaultChatListControllerDelegate()
         if let datasource = self.datasource as? DefaultChatListControllerDatasource {
-            datasource.chatList = self
+            datasource.controller = self
         }
         if let delegate = self.delegate as? DefaultChatListControllerDelegate {
-            delegate.chatList = self
+            delegate.controller = self
         }
         self.reset()
         self.canSearch = false
@@ -100,7 +107,12 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         self.requestNumber++
     }
     
-    private func presentChatViewController(chatViewController : MMXChatViewController, users : [MMUser]) {
+    
+    //MARK: Public Methods
+    
+    
+    public func presentChatViewController(chatViewController : MMXChatViewController, users : [MMUser]) {
+        
         chatViewController.view.tintColor = self.view.tintColor
         
         let myId = MMUser.currentUser()?.userID
@@ -108,24 +120,20 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         let subscribers = users.filter({$0.userID !=  myId})
         
         if subscribers.count > 1 {
-            chatViewController.title = "Group"
+            chatViewController.title = CKStrings.kStr_Group
         } else {
             chatViewController.title = subscribers.map({Utils.displayNameForUser($0)}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
         }
-        chatViewController.outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(self.view.tintColor)
-        self.contactsController?.dismiss()
-        self.delegate?.mmxListWillShowChatController?(chatViewController)
-        if let nav = navigationController {
-            nav.pushViewController(chatViewController, animated: true)
-        } else {
-            self.presentViewController(chatViewController, animated: true, completion: nil)
-        }
+        chatViewController.outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(chatViewController.view.tintColor)
         
+        self.currentChatViewController = chatViewController
+        if let chatVC = self.currentChatViewController {
+            self.delegate?.mmxListWillShowChatController?(chatVC)
+            if let nav = navigationController {
+                nav.pushViewController(chatVC, animated: true)
+            }
+        }
     }
-    
-    
-    //MARK: Public Methods
-    
     
     public func reloadData() {
         self.append([])
@@ -215,12 +223,15 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
     override public func tableViewFooter() -> UIView? {
         return self.datasource?.mmxTableViewFooter?()
     }
-
+    
     
     //MARK: - ContactsViewControllerDelegate
     
     
     public func mmxContactsControllerDidFinish(with selectedUsers: [MMUser]) {
+        
+        self.currentContactsViewController?.dismiss()
+        
         var chatViewController : MMXChatViewController!
         if let channel = self.delegate?.mmxListChannelForSubscribers?(selectedUsers) {
             chatViewController = MMXChatViewController.init(channel : channel)
@@ -241,19 +252,19 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
     
     
     func addContactAction() {
-        let c = MMXContactsPickerController(disabledUsers: [MMUser.currentUser()!])
         
-        if contactsPickerDelegate == nil {
-            contactsPickerDelegate = self
+        if let currentUser = MMUser.currentUser() {
+            let contactsViewController = MMXContactsPickerController(disabledUsers: [currentUser])
+            contactsViewController.delegate = self
+            
+            self.currentContactsViewController = contactsViewController
+            
+            if let nav = navigationController, let contactsVC = self.currentContactsViewController {
+                nav.pushViewController(contactsVC, animated: true)
+            }
+            
         }
-        c.delegate = contactsPickerDelegate
         
-        if let nav = navigationController {
-            nav.pushViewController(c, animated: true)
-        } else {
-            self.presentViewController(c, animated: true, completion: nil)
-        }
-        self.contactsController = c
     }
     
     public override func didReceiveMemoryWarning() {

@@ -51,7 +51,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     public override init() {
         super.init(nibName: String(HomeViewController.self), bundle: NSBundle(forClass: HomeViewController.self))
     }
-
+    
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -160,6 +160,35 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     
     public func onChannelDidSelect(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
     
+    public func refreshChannel(channel : MMXChannel) -> Bool {
+        
+        var hasChannel = false
+        
+        for var i = 0; i < detailResponses.count; i++ {
+            let details = detailResponses[i]
+            if details.channel.channelID == channel.channelID {
+                hasChannel = true
+                let channelID = details.channel.channelID
+                MMXChannel.channelDetails([channel], numberOfMessages: 10, numberOfSubcribers: 10, success: { responses in
+                    if let channelDetail = responses.first {
+                        let oldChannelDetail = self.detailResponses[i]
+                        if channelDetail.channel.channelID == channelID && oldChannelDetail.channel.channelID ==  channelID {
+                            self.detailResponses.removeAtIndex(i)
+                            self.detailResponses.insert(channelDetail, atIndex: i)
+                            self.detailResponses = self.sort(self.detailResponses)
+                        }
+                    }
+                    self.tableView.reloadData()
+                    }, failure: { (error) -> Void in
+                        //Error
+                })
+                break
+            }
+        }
+        
+        return hasChannel
+    }
+    
     public func registerCells(tableView: UITableView) { }
     
     public func reset() {
@@ -186,30 +215,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     
     func didReceiveMessage(mmxMessage: MMXMessage) {
         if let channel = mmxMessage.channel {
-            var hasChannel = false
-            for var i = 0; i < detailResponses.count; i++ {
-                let details = detailResponses[i]
-                if details.channel.channelID == channel.channelID {
-                    hasChannel = true
-                    let channelID = details.channel.channelID
-                    MMXChannel.channelDetails([channel], numberOfMessages: 10, numberOfSubcribers: 10, success: { responses in
-                        if let channelDetail = responses.first {
-                            let oldChannelDetail = self.detailResponses[i]
-                            if channelDetail.channel.channelID == channelID && oldChannelDetail.channel.channelID ==  channelID {
-                                self.detailResponses.removeAtIndex(i)
-                                self.detailResponses.insert(channelDetail, atIndex: i)
-                                self.detailResponses = self.sort(self.detailResponses)
-                            }
-                        }
-                        self.tableView.reloadData()
-                        }, failure: { (error) -> Void in
-                            //Error
-                    })
-                    break
-                }
-            }
-            
-            if !hasChannel {
+            if !refreshChannel(channel) {
                 self.append([channel])
             }
         }
@@ -293,6 +299,7 @@ public extension HomeViewController {
             return cell
         }
         let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
+        cell.backgroundColor = cellBackgroundColor
         cell.detailResponse = detailResponse
         
         if let imageView = cell.avatarView {

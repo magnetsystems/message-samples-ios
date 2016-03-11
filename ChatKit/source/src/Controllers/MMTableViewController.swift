@@ -27,6 +27,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
     public private(set) var infiniteLoading : InfiniteLoading = InfiniteLoading()
     public var numberOfPagesToLoadAhead = 3
     public var footers : [String] = []
+    public var cellBackgroundColor : UIColor = UIColor.clearColor()
     
     
     //MARK: Outlets

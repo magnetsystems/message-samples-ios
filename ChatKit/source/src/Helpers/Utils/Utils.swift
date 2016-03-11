@@ -154,7 +154,7 @@ public class Utils: NSObject {
         //create username
         var name : String = ""
         if user.firstName != nil {
-            name = "\(user.firstName) "
+            name = "\(user.firstName)"
         }
         if user.lastName != nil {
             name += (name.characters.count > 0 ? " " : "") + user.lastName

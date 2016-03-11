@@ -10,6 +10,46 @@ import UIKit
 import ChatKit
 import MagnetMax
 
+public class MyChatListController : MMXChatListViewController {
+    
+    var _chatViewController : MMXChatViewController?
+    public override weak var currentChatViewController : MMXChatViewController? {
+        set {
+            var controller : MMXChatViewController?
+            if let channel = newValue?.channel {
+                controller = MyChatViewController(channel: channel)
+            } else if let users = newValue?.recipients {
+                controller = MyChatViewController(recipients: users)
+            }
+            _chatViewController = controller
+        }
+        
+        get {
+            return _chatViewController
+        }
+    }
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = UIColor.purpleColor()
+        self.cellBackgroundColor = UIColor.orangeColor()
+    }
+}
+
+public class MyChatViewController : MMXChatViewController {
+    
+    override public var currentDetailsViewController : MMXContactsPickerController? {
+        didSet {
+            currentDetailsViewController?.tableView.backgroundColor = UIColor.orangeColor()
+        }
+    }
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        self.collectionView?.backgroundColor = UIColor.yellowColor()
+    }
+}
+
 
 class ViewController: UIViewController {
     var currentController : UIViewController?
@@ -39,13 +79,13 @@ class ViewController: UIViewController {
     }
     
     func showChatList() {
-       let c = MMXChatListViewController()
+        let c = MyChatListController()
         //let c : UIViewController! = self.storyboard?.instantiateViewControllerWithIdentifier("home")
         //c.delegate = self
         // c.contactsPickerDelegate = self
-//        c.appearance.tintColor = self.view.tintColor
-//        c.canSearch = true
-       // c.view.tintColor = c.appearance.tintColor
+        //        c.appearance.tintColor = self.view.tintColor
+        //        c.canSearch = true
+        // c.view.tintColor = c.appearance.tintColor
         currentController = c
         self.navigationController?.pushViewController(c, animated: true)
         //self.presentViewController(c, animated: true, completion: nil)

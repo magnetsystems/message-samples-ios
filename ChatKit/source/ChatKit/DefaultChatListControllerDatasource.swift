@@ -24,7 +24,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     //MARK : Public Variables
     
     
-    weak var chatList : MMXChatListViewController?
+    public weak var controller : MMXChatListViewController?
     public var hasMoreUsers : Bool = true
     public private(set) var channels : [MMXChannel] = []
     public let limit = 30
@@ -37,7 +37,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         let id = NSUUID().UUIDString
         
         MMXChannel.createWithName(id, summary: id, isPublic: false, publishPermissions: .Anyone, subscribers: Set(subscribers), success: { (channel) -> Void in
-            self.chatList?.reloadData()
+            self.controller?.reloadData()
             }) { (error) -> Void in
                 print("[ERROR] \(error.localizedDescription)")
         }
@@ -69,9 +69,9 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         
         self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
         //get request context
-        let loadingContext = chatList?.loadingContext()
+        let loadingContext = controller?.loadingContext()
         subscribedChannels({ channels in
-            if loadingContext != self.chatList?.loadingContext() {
+            if loadingContext != self.controller?.loadingContext() {
                 return
             }
             var offsetChannels : [MMXChannel] = []
@@ -81,14 +81,14 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
                 self.hasMoreUsers = false
             }
             
-            self.chatList?.append(offsetChannels)
+            self.controller?.append(offsetChannels)
         })
     }
     
     public func mmxListImageForChannelDetails(imageView: UIImageView, channelDetails: MMXChannelDetailResponse) {
         if channelDetails.subscriberCount > 2 {
             let image = UIImage(named: "user_group_clear.png", inBundle: NSBundle(forClass: DefaultChatListControllerDatasource.self), compatibleWithTraitCollection: nil)
-            imageView.backgroundColor = chatList?.appearance.tintColor
+            imageView.backgroundColor = controller?.appearance.tintColor
             imageView.image = image
         } else {
             var subscribers = channelDetails.subscribers.filter({$0.userId != MMUser.currentUser()?.userID})

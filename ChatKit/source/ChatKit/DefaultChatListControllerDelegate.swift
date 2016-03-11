@@ -24,7 +24,7 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
     //MARK : Public Variables
     
     
-    weak var chatList : MMXChatListViewController?
+    public weak var controller : MMXChatListViewController?
     
     
     //MARK: ChatListControllerDelegate
@@ -33,29 +33,29 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
     public func mmxListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) {
         
         let chatViewController = MMXChatViewController.init(channel : channel)
-        chatViewController.view.tintColor = chatList?.view.tintColor
+        chatViewController.view.tintColor = controller?.view.tintColor
         
         let myId = MMUser.currentUser()?.userID
         
         let subscribers = channelDetails.subscribers.filter({$0.userId !=  myId})
-        
-        if subscribers.count > 1 {
-            chatViewController.title = CKStrings.kStr_Group
-        } else {
-            chatViewController.title = subscribers.map({$0.displayName}).reduce("", combine: {$0 == "" ? $1 : $0 + ", " + $1})
-        }
-        chatViewController.outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(self.chatList?.view.tintColor)
-        
-        //Delays cell deselection from reloading data - not necessary
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
-            self.chatList?.reloadData()
+        let users : [MMUser] = subscribers.map({
+        let user = MMUser()
+            user.firstName = ""
+            user.lastName = ""
+            user.userName = $0.displayName
+            user.userID = $0.userId
+            
+            return user
         })
         
-        if self.chatList?.navigationController != nil {
-            self.chatList?.navigationController?.pushViewController(chatViewController, animated: true)
-        } else {
-            self.chatList?.presentViewController(chatViewController, animated: true, completion: nil)
-        }
+         self.controller?.presentChatViewController(chatViewController, users:  users)
+    
+        //Delays cell deselection from reloading data - not necessary
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
+            self.controller?.reloadData()
+        })
+        
+       
     }
     
     public func mmxListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {

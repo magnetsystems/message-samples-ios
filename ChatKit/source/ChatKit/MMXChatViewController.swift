@@ -35,8 +35,6 @@ public class MMXChatViewController: ChatViewController {
     //MARK: Public Variables
     
     
-    public var showDetails = true
-    
     public var channel : MMXChannel? {
         get {
             return chat
@@ -45,6 +43,8 @@ public class MMXChatViewController: ChatViewController {
     
     public var delegate : ChatViewControllerDelegate?
     public var datasource : ChatViewControllerDatasource?
+    public var showDetails = true
+    
     public var useNavigationBarNotifier : Bool? {
         didSet {
             if useNavigationBarNotifier == true {
@@ -60,6 +60,14 @@ public class MMXChatViewController: ChatViewController {
             useNavigationBarNotifier = true
         }
     }
+    
+    
+    //These can be overridden to inject datasources, delegates and other customizations into the variable on didSet
+    
+    
+    public weak var currentDetailsViewController : MMXContactsPickerController?
+    public weak var currentSubscribersDataSource : SubscribersDatasource?
+    
     
     //MARK: Init
     
@@ -162,19 +170,33 @@ public class MMXChatViewController: ChatViewController {
     func detailsAction() {
         
         if let currentUser = MMUser.currentUser() {
-            let contacts = MMXContactsPickerController(disabledUsers: [currentUser])
-            contacts.barButtonNext = nil
+            let detailsViewController = MMXContactsPickerController(disabledUsers: [currentUser])
+            
+            detailsViewController.barButtonNext = nil
             let subDatasource = SubscribersDatasource()
-            subDatasource.magnetPicker = contacts
-            contacts.datasource = subDatasource
+            subDatasource.controller = detailsViewController
             subDatasource.channel = self.channel
             subDatasource.chatViewController = self
-            contacts.tableView.allowsSelection = false
-            contacts.canSearch = false
-            contacts.title = CKStrings.kStr_Subscribers
-            self.navigationController?.pushViewController(contacts, animated: true)
+            
+            if let viewControllers  = self.navigationController?.viewControllers where viewControllers.count > 1  {
+                if let lastViewController = viewControllers[viewControllers.count - 2] as? MMXChatListViewController {
+                    subDatasource.chatListViewController = lastViewController
+                }
+            }
+            
+            detailsViewController.tableView.allowsSelection = false
+            detailsViewController.canSearch = false
+            detailsViewController.title = CKStrings.kStr_Subscribers
+            
+            self.currentDetailsViewController = detailsViewController
+            self.currentSubscribersDataSource = subDatasource
+            
+            detailsViewController.datasource = self.currentSubscribersDataSource
+            
+            if let detailsVC = self.currentDetailsViewController {
+                self.navigationController?.pushViewController(detailsVC, animated: true)
+            }
         }
-        
     }
     
     

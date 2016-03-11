@@ -34,7 +34,6 @@ public class ChatViewController: MMJSQViewController {
         didSet {
             //Register for a notification to receive the message
             if let channel = chat {
-                self.title = "chat"
                 //  notifier = NavigationNotifier(viewController: self, exceptFor: channel)
                 ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
             }
@@ -92,7 +91,7 @@ public class ChatViewController: MMJSQViewController {
         guard let user = MMUser.currentUser() else {
             return
         }
-        
+        self.title = "chat"
         let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .Gray)
         activityIndicator.hidesWhenStopped = true
         let indicator = UIBarButtonItem(customView: activityIndicator)

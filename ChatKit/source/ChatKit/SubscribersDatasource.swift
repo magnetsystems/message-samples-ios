@@ -22,7 +22,14 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
     
     
     public var channel : MMXChannel?
-    public  var chatViewController : MMXChatViewController?
+    public weak var chatViewController : MMXChatViewController?
+    public weak var chatListViewController : MMXChatListViewController?
+    
+    
+    //These can be overridden to inject datasources, delegates and other customizations into the variable on didSet
+    
+    
+    public var currentContactsPickerViewController : MMXContactsPickerController?
     
     
     //MARK: ContactsPickerControllerDatasource
@@ -31,25 +38,25 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
     override public func mmxControllerLoadMore(searchText : String?, offset : Int) {
         self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
         //get request context
-        let loadingContext = self.magnetPicker?.loadingContext()
+        let loadingContext = self.controller?.loadingContext()
         
         self.channel?.subscribersWithLimit(Int32(self.limit), offset: Int32(offset), success: { (num, users) -> Void in
-            if loadingContext != self.magnetPicker?.loadingContext() {
+            if loadingContext != self.controller?.loadingContext() {
                 return
             }
             
             if users.count == 0 {
                 self.hasMoreUsers = false
-                self.magnetPicker?.reloadData()
+                self.controller?.reloadData()
                 return
             }
             
-            if let picker = self.magnetPicker {
+            if let picker = self.controller {
                 //append users, reload data or insert data
                 picker.append(users)
             }
             }, failure: { _ in
-                self.magnetPicker?.reloadData()
+                self.controller?.reloadData()
         })
     }
     
@@ -78,6 +85,9 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
         self.channel?.subscribersWithLimit(1000, offset: 0, success: { (num, users) -> Void in
             let contacts = MMXContactsPickerController(disabledUsers: users)
             contacts.delegate = self
+            
+            self.currentContactsPickerViewController = contacts
+            
             self.chatViewController?.navigationController?.pushViewController(contacts, animated: true)
             
             }, failure: { error in
@@ -92,6 +102,9 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
     public func mmxContactsControllerDidFinish(with selectedUsers: [MMUser]) {
         if selectedUsers.count > 0 {
             self.channel?.addSubscribers(selectedUsers, success: { _ in
+                if let channel = self.channel {
+                    self.chatListViewController?.refreshChannel(channel)
+                }
                 if let chatViewController = self.chatViewController {
                     chatViewController.title = CKStrings.kStr_Group
                     chatViewController.navigationController?.popToViewController(chatViewController, animated: true)

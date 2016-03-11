@@ -71,7 +71,7 @@ public class MMXContactsPickerController: ContactsViewController {
         
         self.datasource = DefaultContactsPickerControllerDatasource()
         if let dataSource = self.datasource as? DefaultContactsPickerControllerDatasource {
-            dataSource.magnetPicker = self
+            dataSource.controller = self
         }
         self.reset()
     }
@@ -108,7 +108,6 @@ public class MMXContactsPickerController: ContactsViewController {
     }
     
     private func updateButtonItems() {
-        self.magnetNavigationItem?.rightBarButtonItem?.enabled = self.selectedUsers.count > 0
         self.navigationItem.rightBarButtonItem?.enabled = self.selectedUsers.count > 0
     }
     
