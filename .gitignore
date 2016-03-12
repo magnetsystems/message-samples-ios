@@ -17,7 +17,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 build-*/
-*.framework
+#*.framework
 #*.bundle
 .idea/
 Documentation/

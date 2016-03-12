@@ -54,6 +54,8 @@
 
 #import "MMUser+Addressable.h"
 #import "MMXChannel_Private.h"
+#import "XMPPPrivacy.h"
+#import "MMXPrivacyManager.h"
 
 #import <AssertMacros.h>
 
@@ -81,6 +83,7 @@ int const kReconnectionTimerInterval = 4;
 @interface MMXClient () <XMPPStreamDelegate, XMPPReconnectDelegate, MMXPubSubManagerDelegate>
 
 @property (nonatomic, readwrite) MMXPubSubManager * pubsubManager;
+@property (nonatomic, readwrite) MMXPrivacyManager *privacyManager;
 @property (nonatomic, strong) XMPPReconnect * xmppReconnect;
 @property (nonatomic, assign) NSUInteger messageNumber;
 @property (nonatomic, assign) NSUInteger reconnectionTryCount;
@@ -205,6 +208,16 @@ int const kReconnectionTimerInterval = 4;
 	[self.xmppReconnect activate:self.xmppStream];
 	self.xmppReconnect.reconnectTimerInterval = kReconnectionTimerInterval;
 	
+    if (self.privacyManager.xmppPrivacy != nil) {
+        [self.privacyManager.xmppPrivacy removeDelegate:self.privacyManager delegateQueue:self.mmxQueue];
+        [self.privacyManager.xmppPrivacy deactivate];
+    } else {
+        self.privacyManager.xmppPrivacy = [[XMPPPrivacy alloc] init];
+    }
+    [self.privacyManager.xmppPrivacy addDelegate:self.privacyManager delegateQueue:self.mmxQueue];
+    [self.privacyManager.xmppPrivacy activate:self.xmppStream];
+
+    
 	[self updateConnectionStatus:MMXConnectionStatusConnecting error:nil];
 
 	NSMutableString *userWithAppId = [[NSMutableString alloc] initWithString:[self.username jidEscapedString]];
@@ -214,7 +227,7 @@ int const kReconnectionTimerInterval = 4;
     NSString *host = self.configuration.baseURL.host;
 
     [self.xmppStream setMyJID:[XMPPJID jidWithUser:userWithAppId
-											domain:@"mmx"
+											domain:self.configuration.domain
 										  resource:self.deviceID]];
 
     [self.xmppStream setHostName:host];
@@ -327,7 +340,7 @@ int const kReconnectionTimerInterval = 4;
 	return [NSString stringWithFormat:@"%@-%ld",[MMXClient sessionIdentifier],(unsigned long)self.messageNumber];
 }
 
-#pragma mark - PubSub Manager
+#pragma mark - Overriden getters
 
 - (MMXPubSubManager *)pubsubManager {
     if (!_pubsubManager) {
@@ -336,6 +349,12 @@ int const kReconnectionTimerInterval = 4;
     return _pubsubManager;
 }
 
+- (MMXPrivacyManager *)privacyManager {
+    if (!_privacyManager) {
+        _privacyManager = [[MMXPrivacyManager alloc] init];
+    }
+    return _privacyManager;
+}
 
 #pragma mark - GeoLocation methods
 

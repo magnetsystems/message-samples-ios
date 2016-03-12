@@ -47,6 +47,8 @@
 #import "MMXQueryFilter_Private.h"
 #import "MMXInternal_Private.h"
 #import "MMXOAuthPlatformAuthentication.h"
+#import "MMXPrivacyManager.h"
+#import "MMUser+Privacy.h"
 #import "MMX.h"
 #import "MMXChannel.h"
 #import "MMXChannelDetailResponse.h"

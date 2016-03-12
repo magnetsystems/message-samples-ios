@@ -40,10 +40,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let URLCache = NSURLCache(memoryCapacity: 4 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024, diskPath: nil)
         NSURLCache.setSharedURLCache(URLCache)
         
+        MMXLogger.sharedLogger().level = .Verbose
+        MMXLogger.sharedLogger().startLogging()
+        
         // Initialize MagnetMax
         let configurationFile = NSBundle.mainBundle().pathForResource("MagnetMax", ofType: "plist")
         let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)
         MagnetMax.configure(configuration!)
+       // MagnetMax.configureWithBaseURL("http://localhost:8443/api/", clientID: "0936cd71-1112-4013-92f8-855ade8a7c83", clientSecret: "xdlUYIpwsdDuO3nKSQ6lGy_TVvDdv7YFli0-YYI1E_8")
         
         
         let settings = UIUserNotificationSettings(forTypes: [.Badge,.Alert,.Sound], categories: nil)

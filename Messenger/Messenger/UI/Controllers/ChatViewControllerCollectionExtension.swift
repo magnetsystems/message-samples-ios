@@ -187,7 +187,9 @@ extension ChatViewController {
     override func collectionView(collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, atIndexPath indexPath: NSIndexPath!) {
         print("Tapped avatar!")
         if messages[indexPath.item].senderId() != MMUser.currentUser()?.userID {
-            showAdditionalAvatarOptions()
+            if let sender = messages[indexPath.item].underlyingMessage.sender {
+                showAdditionalAvatarOptions(sender)
+            }
         }
     }
     
@@ -222,12 +224,18 @@ extension ChatViewController {
     
     // MARK: - Private implementation
     
-    private func showAdditionalAvatarOptions() {
+    private func showAdditionalAvatarOptions(user: MMUser) {
         let alertController = UIAlertController(title: kStr_AdditionalOptions, message: nil, preferredStyle: .ActionSheet)
         
         let blockUser = UIAlertAction(title: kStr_BlockUser, style: .Destructive) { _ in
             let confirmationAlert = Popup(message: kStr_BlockUserConfirmation, title: kStr_BlockUser, closeTitle: kStr_No)
             let okAction = UIAlertAction(title: kStr_Yes, style: .Default) { _ in
+                MMUser.blockUsers([user], success: { [weak self] in
+                    print("blocked \(user.userName)")
+                    self?.loadMessages()
+                }, failure: { error in
+                    //
+                })
             }
             confirmationAlert.addAction(okAction)
             confirmationAlert.presentForController(self)

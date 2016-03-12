@@ -52,6 +52,7 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     let placeholderAvatarImage = UIImage(named: "user_default")
     let resultSearchController = UISearchController(searchResultsController: nil)
     var selectedUsers : [MMUser] = []
+    var blockedUsers: [MMUser] = []
     
     
     //MARK: Overrides
@@ -74,15 +75,20 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         tableView.reloadData()
         
         let searchQuery = "userName:*"
-        MMUser.searchUsers(searchQuery, limit: 100, offset: 0, sort: "userName:asc", success: { [weak self] users in
+        MMUser.searchUsers(searchQuery, limit: 1000, offset: 0, sort: "userName:asc", success: { [weak self] users in
             var tempUsers = users
             if let index = tempUsers.indexOf(MMUser.currentUser()!) {
                 tempUsers.removeAtIndex(index)
             }
             self?.availableRecipients = self!.createAlphabetDictionary(tempUsers)
-            self?.tableView.reloadData()
+            MMUser.blockedUsersWithSuccess({ [weak self] blockedUsers in
+                self?.blockedUsers = blockedUsers
+                self?.tableView.reloadData()
             }, failure: { error in
                 print("[ERROR]: \(error.localizedDescription)")
+            })
+        }, failure: { error in
+            print("[ERROR]: \(error.localizedDescription)")
         })
     }
     
@@ -147,9 +153,9 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
         }
         
         let attributes = [NSFontAttributeName : UIFont.boldSystemFontOfSize((cell.textLabel?.font.pointSize)!)]
-        var title = NSAttributedString()
+        var title = NSMutableAttributedString()
         if let lastName = user.lastName where lastName.isEmpty == false {
-            title = NSAttributedString(string: lastName, attributes: attributes)
+            title = NSMutableAttributedString(string: lastName, attributes: attributes)
         }
         if let firstName = user.firstName where firstName.isEmpty == false {
             if let lastName = user.lastName where lastName.isEmpty == false{
@@ -157,10 +163,18 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
                 firstPart.appendAttributedString(title)
                 title = firstPart
             } else {
-                title = NSAttributedString(string: firstName, attributes: attributes)
+                title = NSMutableAttributedString(string: firstName, attributes: attributes)
             }
         }
         
+        if (blockedUsers.contains(user)) {
+//            cell.userInteractionEnabled = false;
+            cell.profileText?.enabled = false;
+            title.appendAttributedString(NSAttributedString(string: " \(kStr_BlockedUser)"))
+        } else {
+//            cell.userInteractionEnabled = true;
+            cell.profileText?.enabled = true;
+        }
         cell.profileText?.attributedText = title
         let borderSize:CGFloat = 37.0
         let placeHolderImage = Utils.noAvatarImageForUser(user)
@@ -186,16 +200,50 @@ class ContactsViewController: UITableViewController, UISearchResultsUpdating, UI
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let user: MMUser
         if resultSearchController.active {
-            let user = filteredRecipients[indexPath.row]
-            addSelectedUser(user)
+            user = filteredRecipients[indexPath.row]
         } else {
-            
             let users = availableRecipients[indexPath.section].users
-            let user = users[indexPath.row]
-            addSelectedUser(user)
+            user = users[indexPath.row]
         }
-        updateNextButton()
+        if (blockedUsers.contains(user)) {
+            if !resultSearchController.active {
+                showUnblockUserDialog(user)
+            }
+        } else {
+            addSelectedUser(user)
+            updateNextButton()
+        }
+    }
+    
+    private func showUnblockUserDialog(user: MMUser) {
+        let alertController = UIAlertController(title: kStr_AdditionalOptions, message: nil, preferredStyle: .ActionSheet)
+        
+        let blockUser = UIAlertAction(title: kStr_UnblockUser, style: .Destructive) { _ in
+            let confirmationAlert = Popup(message: kStr_UnblockUserConfirmation, title: kStr_UnblockUser, closeTitle: kStr_No)
+            let okAction = UIAlertAction(title: kStr_Yes, style: .Default) { _ in
+                MMUser.unblockUsers([user], success: { [weak self] in
+                    print("unblocked \(user.userName)")
+                    if let userIndex = self?.blockedUsers.indexOf(user) {
+                        self?.blockedUsers.removeAtIndex(userIndex)
+                        self?.addSelectedUser(user)
+                        self?.updateNextButton()
+                        self?.tableView.reloadData()
+                    }
+                }, failure: { error in
+                    print("[ERROR]: \(error.localizedDescription)")
+                })
+            }
+            confirmationAlert.addAction(okAction)
+            confirmationAlert.presentForController(self)
+        }
+        let cancelAction = UIAlertAction(title: kStr_Cancel, style: .Cancel) { _ in }
+        
+        alertController.addAction(blockUser)
+        alertController.addAction(cancelAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {

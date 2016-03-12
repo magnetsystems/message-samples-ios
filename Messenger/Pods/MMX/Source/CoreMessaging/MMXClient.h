@@ -30,6 +30,7 @@
 @class MMXConfiguration;
 @class MMXInternalMessageAdaptor;
 @class CLLocation;
+@class MMXPrivacyManager;
 
 /**
  *  Values representing the connection status of the MMXClient.
@@ -174,6 +175,11 @@ typedef NS_ENUM(NSInteger, MMXConnectionStatus){
  *  Current instance of the MMXPubSubManager. See MMXPubSubManager.h for usage.
  */
 @property (nonatomic, readonly) MMXPubSubManager * pubsubManager;
+
+/**
+ *  Current instance of the MMXPrivacyManager. See MMXPrivacyManager.h for usage.
+ */
+@property (nonatomic, readonly) MMXPrivacyManager *privacyManager;
 
 /**
  *  The callback dispatch queue. Value is initially set to the main queue.
