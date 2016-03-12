@@ -193,6 +193,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     
     public func reset() {
         self.detailResponses = []
+        self.tableView.reloadData()
         self.currentDetailCount = 0
         self.loadMore(self.searchBar.text, offset: self.currentDetailCount)
     }
