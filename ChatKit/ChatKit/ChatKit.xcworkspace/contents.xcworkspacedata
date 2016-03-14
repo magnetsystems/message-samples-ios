@@ -81,6 +81,12 @@
                <FileRef
                   location = "group:Utils.swift">
                </FileRef>
+               <FileRef
+                  location = "group:MMAsyncBlockOperation.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:UtilsCache.swift">
+               </FileRef>
             </Group>
             <Group
                location = "group:VideoPlayer"

@@ -44,26 +44,10 @@ PODS:
   - Mantle (3.0.0):
     - Mantle/extobjc (= 3.0.0)
   - Mantle/extobjc (3.0.0)
-  - MDMCoreData (1.5.0):
-    - MDMCoreData/MDMCoreDataCore (= 1.5.0)
-    - MDMCoreData/MDMFetchedResultsCollectionDataSource (= 1.5.0)
-    - MDMCoreData/MDMFetchedResultsTableDataSource (= 1.5.0)
-    - MDMCoreData/MDMPersistenceController (= 1.5.0)
-    - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (= 1.5.0)
-  - MDMCoreData/MDMCoreDataCore (1.5.0)
-  - MDMCoreData/MDMFetchedResultsCollectionDataSource (1.5.0):
-    - MDMCoreData/MDMCoreDataCore
-  - MDMCoreData/MDMFetchedResultsTableDataSource (1.5.0):
-    - MDMCoreData/MDMCoreDataCore
-  - MDMCoreData/MDMPersistenceController (1.5.0):
-    - MDMCoreData/MDMCoreDataCore
-  - MDMCoreData/NSManagedObject+MDMCoreDataAdditions (1.5.0):
-    - MDMCoreData/MDMCoreDataCore
   - MMX (2.5.2):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
     - MagnetMaxCore (~> 2.5.2)
-    - MDMCoreData (= 1.5.0)
     - MMXXMPPFramework (= 3.6.14)
   - MMXXMPPFramework (3.6.14):
     - MMXXMPPFramework/Core (= 3.6.14)
@@ -123,8 +107,7 @@ SPEC CHECKSUMS:
   MagnetMax: 31ec1ac9449dbf733e0f2c345f93b0c946ff88fe
   MagnetMaxCore: 6120c776bd2e0c2cd320f9f773a92be81a6cb290
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
-  MDMCoreData: 402f754cda90865026a209243f1667824e775649
-  MMX: 6faf48b7844e2eb5ea209c141a69ab64666f93dd
+  MMX: 78b0f5f1d56cb688b4996ef410592993f069a1c0
   MMXXMPPFramework: 09675867f84daf6e6dffce10a738c11885cccde1
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
 
