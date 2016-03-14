@@ -20,10 +20,10 @@ import Foundation
 public class MMAsyncBlockOperation : MMAsynchronousOperation {
     
     
-    //Mark: Public variables
+    //Mark: Private variables
     
     
-    var block : ((operation : MMAsynchronousOperation) -> Void)
+    private var block : ((operation : MMAsynchronousOperation) -> Void)
     
     
     //Mark: Overrides
@@ -35,15 +35,12 @@ public class MMAsyncBlockOperation : MMAsynchronousOperation {
     }
     
     public override func execute() {
-        
-        let weakClosure = { [weak self] in
+        { [weak self] in
             if let weakSelf = self where !weakSelf.cancelled {
                 weakSelf.block(operation: weakSelf)
             } else {
                 self?.finish()
             }
-        }
-        
-        weakClosure()
+        }()
     }
 }
