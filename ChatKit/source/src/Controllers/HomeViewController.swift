@@ -133,6 +133,8 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         }
     }
     
+    public func cellDidCreate(cell : UITableViewCell) { }
+    
     public func canLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         return true
     }
@@ -307,6 +309,8 @@ public extension HomeViewController {
         
         let detailResponse = detailsForIndexPath(indexPath)
         if let cell : UITableViewCell = cellForChannel(detailResponse.channel, channelDetails : detailResponse, indexPath : indexPath) {
+            cellDidCreate(cell)
+            
             return cell
         }
         let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
@@ -316,6 +320,7 @@ public extension HomeViewController {
         if let imageView = cell.avatarView {
             imageForChannelDetails(imageView, channelDetails: detailResponse)
         }
+        cellDidCreate(cell)
         
         return cell
     }

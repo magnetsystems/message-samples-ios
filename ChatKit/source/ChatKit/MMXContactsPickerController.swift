@@ -148,6 +148,10 @@ public class MMXContactsPickerController: ContactsViewController {
     //MARK: - Data Method Overrides
     
     
+    override public func cellDidCreate(cell: UITableViewCell) {
+        self.datasource?.mmxContactsDidCreateCell?(cell)
+    }
+    
     override public func cellForUser(user: MMUser, indexPath: NSIndexPath) -> UITableViewCell? {
         return self.datasource?.mmxContactsCellForUser?(tableView, user: user, indexPath: indexPath)
     }

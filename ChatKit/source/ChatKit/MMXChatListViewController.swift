@@ -151,6 +151,10 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         return true
     }
     
+    override public func cellDidCreate(cell: UITableViewCell) {
+        self.datasource?.mmxListDidCreateCell?(cell)
+    }
+    
     override public func cellForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell? {
         return self.datasource?.mmxListCellForChannel?(tableView, channel : channel, channelDetails : channelDetails, indexPath : indexPath)
     }

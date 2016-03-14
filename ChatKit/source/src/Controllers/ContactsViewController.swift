@@ -194,6 +194,8 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         self.tableView.reloadData()
     }
     
+    public func cellDidCreate(cell : UITableViewCell) { }
+    
     public func cellForUser(user : MMUser, indexPath : NSIndexPath) -> UITableViewCell?{
         return nil
     }
@@ -341,6 +343,8 @@ public extension ContactsViewController {
         let user: MMUser = userModel.user!
         
         if let cell : UITableViewCell = cellForUser(user, indexPath : indexPath) {
+            cellDidCreate(cell)
+            
             return cell
         }
         
@@ -373,6 +377,8 @@ public extension ContactsViewController {
         if let imageView = cell?.avatar {
             imageForUser(imageView, user: user)
         }
+        cellDidCreate(cell!)
+        
         return cell!
     }
     
