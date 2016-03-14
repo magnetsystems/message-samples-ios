@@ -15,7 +15,6 @@
 * permissions and limitations under the License.
 */
 
-import AFNetworking
 import MagnetMax
 import UIKit
 
@@ -29,15 +28,43 @@ extension UIImage {
     }
 }
 
-class UtilsSet {
+class UtilsImageOperation : MMAsyncBlockOperation {
     
-    var completionBlocks : [((image : UIImage?)->Void)] = []
-    var set : Set<UIImageView> = Set()
     
-    func addCompletionBlock(completion : ((image : UIImage?)->Void)?) {
-        if let completion = completion {
-            completionBlocks.append(completion)
+    //Mark: Public variables
+    
+    var url : NSURL?
+    weak var imageView : UIImageView?
+}
+
+
+public class UtilsImageCache : UtilsCache {
+    
+    
+    //Mark: Public variables
+    
+    
+    public var maxImageCacheSize : Int = 4194304 //2^22 = 4mb
+    
+    
+    public static var sharedCache : UtilsImageCache = {
+        let cache = UtilsImageCache()
+        return cache
+    }()
+    
+    
+    public func setImage(image : UIImage, forURL : NSURL) {
+        let data = UIImagePNGRepresentation(image)
+        var size = 0
+        if let len = data?.length {
+            size = len
         }
+        
+        self.setObject(image, forURL: forURL, cost:size)
+    }
+    
+    public func imageForUrl(url : NSURL) -> UIImage? {
+        return self.objectForURL(url) as? UIImage
     }
 }
 
@@ -47,8 +74,14 @@ public class Utils: NSObject {
     //MARK: Private Properties
     
     
-    private static var downloadObjects : [String : String] = [:]
-    private static var loadingURLs : [String : UtilsSet] = [:]
+    private static var queue : NSOperationQueue = {
+        let queue = NSOperationQueue()
+        queue.underlyingQueue = dispatch_queue_create("operation - images", nil)
+        queue.maxConcurrentOperationCount = 10
+        
+        return queue
+    }()
+    
     
     //MARK: Image Loading
     
@@ -108,7 +141,7 @@ public class Utils: NSObject {
         return Utils.noAvatarImageForUser(user.firstName, lastName: user.lastName ?? "")
     }
     
-   public static func noAvatarImageForUser(firstName : String?, lastName:String?) -> UIImage {
+    public static func noAvatarImageForUser(firstName : String?, lastName:String?) -> UIImage {
         var fName = ""
         var lName = ""
         
@@ -184,80 +217,73 @@ public class Utils: NSObject {
     
     private static func imageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, onlyShowAfterDownload:Bool, completion : ((image : UIImage?)->Void)?) {
         
-        if  !onlyShowAfterDownload {
-            toImageView.image = placeholderImage
+        for operation in queue.operations {
+            if let imageOperation = operation as? UtilsImageOperation {
+                if imageOperation.imageView == toImageView {
+                    imageOperation.cancel()
+                }
+            }
         }
         
         guard let imageUrl = url else {
             //print("no url content data")
-            objc_sync_enter(self.downloadObjects)
-            self.downloadObjects.removeValueForKey("\(toImageView.hashValue)")
-            objc_sync_exit(self.downloadObjects)
+            if  !onlyShowAfterDownload {
+                toImageView.image = placeholderImage
+            }
+            
             completion?(image: nil)
+            
             return
         }
         
-        //TODO: ADD API
-        
-        //track image View
-        
-        objc_sync_enter(self.downloadObjects)
-        self.downloadObjects["\(toImageView.hashValue)"] = url?.path
-        objc_sync_exit(self.downloadObjects)
-        
-        if let urlPath = url?.path {
-            objc_sync_enter(self.loadingURLs)
-            
-            if self.loadingURLs[urlPath] == nil {
-                self.loadingURLs[urlPath] = UtilsSet()
-            }
-            self.loadingURLs[urlPath]?.set.insert(toImageView)
-            self.loadingURLs[urlPath]?.addCompletionBlock(completion)
-            if self.loadingURLs[urlPath]?.set.count > 1 {
-                objc_sync_exit(self.loadingURLs)
-                return
-            } else {
-                objc_sync_exit(self.loadingURLs)
-            }
+        if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
+            toImageView.image = image
+            return
         }
         
-        let requestOperation = AFHTTPRequestOperation(request: NSURLRequest(URL: imageUrl))
-        requestOperation.responseSerializer = AFImageResponseSerializer();
-        requestOperation.setCompletionBlockWithSuccess({ (operation, response) -> Void in
-            if let img = response as? UIImage {
-                //if last request on image view
-                pushImageToImageView(img, url: url)
-            } else {
-                pushImageToImageView(placeholderImage, url: url)
-            }
-            }) { (operation, error) -> Void in
-                pushImageToImageView(placeholderImage, url: url)
-                //print("No Image")
+        if  !onlyShowAfterDownload {
+            toImageView.image = placeholderImage
         }
-        requestOperation.start()
+        
+        let imageOperation = UtilsImageOperation(with: { operation in
+            if let imageOperation = operation as? UtilsImageOperation {
+                
+                if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
+                    toImageView.image = image
+                    return
+                }
+                
+                var image  : UIImage?
+                if  let imageData = NSData(contentsOfURL: imageUrl) {
+                    image = UIImage(data: imageData)
+                }
+                dispatch_async(dispatch_get_main_queue(), {
+                    let image = imageForImageView(imageOperation, image: image, placeholderImage: placeholderImage)
+                    completion?(image: image)
+                })
+                imageOperation.finish()
+            }
+        })
+        
+        imageOperation.imageView = toImageView
+        imageOperation.url = url
+        
+        self.queue.addOperation(imageOperation)
     }
     
-    private static func pushImageToImageView(image : UIImage?, url : NSURL?) {
-        objc_sync_enter(self.loadingURLs)
-        if let urlPath = url?.path, let loadingURLObject = self.loadingURLs[urlPath] {
-            let imageViews = loadingURLObject.set
-            for imageView in imageViews {
-                if self.downloadObjects["\(imageView.hashValue)"]  == url?.path {
-                    objc_sync_enter(self.downloadObjects)
-                    self.downloadObjects.removeValueForKey("\(imageView.hashValue)")
-                    if image != nil {
-                        imageView.image = image
-                    }
-                    objc_sync_exit(self.downloadObjects)
-                }
-            }
-            let completionBlocks = loadingURLObject.completionBlocks
-            for block in completionBlocks {
-                block(image:image)
-            }
-            self.loadingURLs.removeValueForKey(urlPath)
-            objc_sync_exit(self.loadingURLs)
+    static func imageForImageView(operation : UtilsImageOperation, image : UIImage?, placeholderImage : UIImage? ) -> UIImage? {
+        if let url = operation.url, let img = image {
+            UtilsImageCache.sharedCache.setImage(img, forURL: url)
         }
+        
+        if !operation.cancelled {
+            if let img = image {
+                operation.imageView?.image = img
+            } else {
+                operation.imageView?.image = placeholderImage
+            }
+        }
+        return operation.imageView?.image
     }
     
 }
@@ -265,9 +291,9 @@ public class Utils: NSObject {
 extension Array {
     
     func findInsertionIndexForSortedArray<T : Comparable>(mappedObject : ((obj : Generator.Element) -> T), object :  T) -> Int {
-            return  self.findInsertionIndexForSortedArrayWithBlock() { (haystack) -> Bool in
-                return mappedObject(obj: haystack) > object
-            }
+        return  self.findInsertionIndexForSortedArrayWithBlock() { (haystack) -> Bool in
+            return mappedObject(obj: haystack) > object
+        }
     }
     
     func findInsertionIndexForSortedArrayWithBlock(greaterThan GR_TH : (Generator.Element) -> Bool) -> Int {
