@@ -177,6 +177,14 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         return false
     }
     
+    override public func heightForFooter(index: Int) -> CGFloat {
+        if let height = self.datasource?.mmxTableViewFooterHeight?(index) {
+            return height
+        }
+        
+        return 0.0
+    }
+    
     override public func loadMore(searchText: String?, offset: Int) {
         newLoadingContext()
         if searchText != nil {
@@ -191,6 +199,14 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         } else {
             self.datasource?.mmxControllerLoadMore(searchText, offset : offset)
         }
+    }
+    
+    override public func numberOfFooters() -> Int {
+        if let number = self.datasource?.mmxTableViewNumberOfFooters?() {
+            return number
+        }
+        
+        return 0
     }
     
     override public func onChannelDidLeave(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
@@ -220,8 +236,12 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         return false
     }
     
-    override public func tableViewFooter() -> UIView? {
-        return self.datasource?.mmxTableViewFooter?()
+    override public func tableViewFooter(index: Int) -> UIView {
+        if let footer = self.datasource?.mmxTableViewFooter?(index) {
+            return footer
+        }
+        
+        return super.tableViewFooter(index)
     }
     
     

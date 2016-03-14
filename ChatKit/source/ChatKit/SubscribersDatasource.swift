@@ -67,19 +67,6 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
         return false
     }
     
-    func mmxTableViewFooter() -> UIView? {
-        guard let channel = self.channel where channel.ownerUserID == MMUser.currentUser()?.userID else {
-            return nil
-        }
-        
-        let button = UIButton(type: .Custom)
-        button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
-        button.setTitle("Add Contacts +", forState: .Normal)
-        button.titleLabel?.textAlignment = .Center
-        button.addTarget(self, action: "addContacts", forControlEvents: .TouchUpInside)
-        return button
-    }
-    
     func addContacts() {
         
         self.channel?.subscribersWithLimit(1000, offset: 0, success: { (num, users) -> Void in
@@ -93,6 +80,31 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
             }, failure: { error in
                 
         })
+    }
+    
+    
+    //MARK: MMTableViewFooterDatasource
+    
+    
+    func mmxTableViewNumberOfFooters() -> Int {
+        guard let channel = self.channel where channel.ownerUserID == MMUser.currentUser()?.userID else {
+            return 0
+        }
+        
+        return 1
+    }
+    
+    func mmxTableViewFooterHeight(index: Int) -> CGFloat {
+       return 50.0
+    }
+    
+    func mmxTableViewFooter(index : Int) -> UIView {
+        let button = UIButton(type: .Custom)
+        button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        button.setTitle("Add Contacts +", forState: .Normal)
+        button.titleLabel?.textAlignment = .Center
+        button.addTarget(self, action: "addContacts", forControlEvents: .TouchUpInside)
+        return button
     }
     
     

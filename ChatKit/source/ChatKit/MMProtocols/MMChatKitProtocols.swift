@@ -42,28 +42,38 @@ import UIKit
 //MARK: ContactsControllerDatasource
 
 
-@objc public protocol ContactsControllerDatasource: ControllerDatasource {
+@objc public protocol ContactsControllerDatasource: ControllerDatasource, MMTableViewFooterDatasource {
     optional func mmxContactsCellForUser(tableView : UITableView, user : MMUser, indexPath : NSIndexPath) -> UITableViewCell?
     optional func mmxContactsCellHeightForUser(user : MMUser, indexPath : NSIndexPath) -> CGFloat
     optional func mmxContactsControllerImageForUser(imageView : UIImageView, user : MMUser)
     optional func mmxContactsControllerShowsSectionIndexTitles() -> Bool
     optional func mmxContactsControllerShowsSectionsHeaders() -> Bool
     optional func mmxContactsControllerPreselectedUsers() -> [MMUser]
-    optional func mmxTableViewFooter() -> UIView?
+}
+
+
+//Mark: MMTableViewFooterDatasource
+
+
+@objc public protocol MMTableViewFooterDatasource {
+    
+    optional func mmxTableViewFooter(index : Int) -> UIView
+    optional func mmxTableViewFooterHeight(index : Int) -> CGFloat
+    optional func mmxTableViewNumberOfFooters() -> Int
+    
 }
 
 
 //MARK: ChannelListDatasource
 
 
-@objc public protocol ChatListControllerDatasource : ControllerDatasource {
+@objc public protocol ChatListControllerDatasource : ControllerDatasource, MMTableViewFooterDatasource {
     
     optional func mmxListRegisterCells(tableView : UITableView)
     optional func mmxListCellForChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell?
     optional func mmxListCellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat
     optional func mmxListImageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse)
     optional func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse]
-    optional func mmxTableViewFooter() -> UIView?
 }
 
 

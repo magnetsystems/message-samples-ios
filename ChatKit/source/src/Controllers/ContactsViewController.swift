@@ -85,7 +85,6 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.footers = ["USER_DEFINED", "LOADING"]
         if MMUser.sessionStatus() != .LoggedIn {
             assertionFailure("MUST LOGIN USER FIRST")
         }
@@ -120,6 +119,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
         updateContactsView(self.selectedUsers)
     }
     
@@ -212,6 +212,10 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         return false
     }
     
+    public func heightForFooter(index : Int) -> CGFloat {
+        return 0.0
+    }
+    
     public func imageForUser(imageView : UIImageView, user : MMUser) {
         var fName : String?
         var lName : String?
@@ -228,6 +232,8 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     }
     
     public func loadMore(searchText : String?, offset : Int) { }
+    
+    public func numberOfFooters() -> Int { return 0 }
     
     public func shouldShowIndexTitles() -> Bool {
         return true
@@ -252,8 +258,8 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         self.loadMore(self.searchBar.text, offset: self.currentUserCount)
     }
     
-    public func tableViewFooter() -> UIView? {
-        return nil
+    public func tableViewFooter(index : Int) -> UIView {
+        return UIView()
     }
     
     // MARK: - UISearchResultsUpdating
@@ -293,6 +299,11 @@ public extension ContactsViewController {
     
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        self.footers = ["LOADING"]
+        for var i = 0; i < self.numberOfFooters(); i++ {
+            self.footers.insert( "USER_DEFINED", atIndex: 0)
+        }
+        
         return availableRecipients.count + self.footers.count
     }
     
@@ -387,8 +398,10 @@ public extension ContactsViewController {
             let view = LoadingView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
             view.indicator?.startAnimating()
             return view
-        } else if identifierForFooterSection(section) == "USER_DEFINED" &&  tableViewFooter() != nil {
-            return tableViewFooter()
+        } else if identifierForFooterSection(section) == "USER_DEFINED" {
+            if let index = footerSectionIndex(section) {
+                return tableViewFooter(index)
+            }
         }
         
         return nil
@@ -397,8 +410,10 @@ public extension ContactsViewController {
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if identifierForFooterSection(section) == "LOADING" &&  !infiniteLoading.isFinished {
             return 50.0
-        } else if identifierForFooterSection(section) == "USER_DEFINED" &&  tableViewFooter() != nil {
-            return 50.0
+        } else if identifierForFooterSection(section) == "USER_DEFINED" {
+            if let index = footerSectionIndex(section) {
+                return self.heightForFooter(index)
+            }
         }
         
         return 0.0

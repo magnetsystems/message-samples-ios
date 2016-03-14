@@ -59,7 +59,6 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        self.footers = ["USER_DEFINED","LOADING"]
         if MMUser.sessionStatus() != .LoggedIn {
             assertionFailure("MUST LOGIN USER FIRST")
         }
@@ -146,6 +145,10 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         return 80
     }
     
+    public func heightForFooter(index : Int) -> CGFloat {
+        return 0.0
+    }
+    
     public func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
         imageView.image = nil
     }
@@ -155,6 +158,8 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     }
     
     public func loadMore(searchText : String?, offset : Int) { }
+    
+    public func numberOfFooters() -> Int { return 0 }
     
     public func onChannelDidLeave(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
     
@@ -206,8 +211,8 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         return detailsOrderByDate(channelDetails)
     }
     
-    public func tableViewFooter() -> UIView? {
-        return nil
+    public func tableViewFooter(index : Int) -> UIView {
+        return UIView()
     }
     
     
@@ -279,6 +284,11 @@ public extension HomeViewController {
     
     
     public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        self.footers = ["LOADING"]
+        for var i = 0; i < self.numberOfFooters(); i++ {
+            self.footers.insert( "USER_DEFINED", atIndex: 0)
+        }
+        
         return 1 + self.footers.count
     }
     
@@ -346,8 +356,10 @@ public extension HomeViewController {
             let view = LoadingView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
             view.indicator?.startAnimating()
             return view
-        } else if identifierForFooterSection(section) == "USER_DEFINED" &&  tableViewFooter() != nil {
-            return tableViewFooter()
+        } else if identifierForFooterSection(section) == "USER_DEFINED" {
+            if let index = footerSectionIndex(section) {
+                return tableViewFooter(index)
+            }
         }
         
         return nil
@@ -356,10 +368,11 @@ public extension HomeViewController {
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if identifierForFooterSection(section) == "LOADING" &&  !infiniteLoading.isFinished {
             return 50.0
-        } else if identifierForFooterSection(section) == "USER_DEFINED" &&  tableViewFooter() != nil {
-            return 50.0
+        } else if identifierForFooterSection(section) == "USER_DEFINED" {
+            if let index = footerSectionIndex(section) {
+                return self.heightForFooter(index)
+            }
         }
-        
         return 0.0
     }
 }

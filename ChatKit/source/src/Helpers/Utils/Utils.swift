@@ -33,6 +33,7 @@ class UtilsImageOperation : MMAsyncBlockOperation {
     
     //Mark: Public variables
     
+    
     var url : NSURL?
     weak var imageView : UIImageView?
 }
@@ -180,7 +181,7 @@ public class Utils: NSObject {
     }
     
     
-    //MARK: User Naming {
+    //MARK: User Naming
     
     
     public class func displayNameForUser(user : MMUser) -> String {
@@ -219,7 +220,7 @@ public class Utils: NSObject {
         
         for operation in queue.operations {
             if let imageOperation = operation as? UtilsImageOperation {
-                if imageOperation.imageView == toImageView {
+                if imageOperation.imageView === toImageView {
                     imageOperation.cancel()
                 }
             }

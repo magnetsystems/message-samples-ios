@@ -71,6 +71,17 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         return footers[index]
     }
     
+    public func footerSectionIndex(section : Int) -> Int? {
+        guard isFooterSection(section)  else {
+            return nil
+        }
+        
+        let numberOfSections = self.tableView.numberOfSections
+        let index = section - (numberOfSections - footers.count)
+        
+        return index
+    }
+    
     public func isWithinLoadingBoundary() -> Bool {
         return tableView.contentOffset.y > (tableView.contentSize.height - (tableView.frame.size.height * CGFloat(numberOfPagesToLoadAhead)))
     }
