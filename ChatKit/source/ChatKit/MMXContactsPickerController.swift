@@ -69,7 +69,9 @@ public class MMXContactsPickerController: ContactsViewController {
         barButtonCancel = btnCancel
         barButtonNext = btnNext
         
-        self.datasource = DefaultContactsPickerControllerDatasource()
+        if self.datasource == nil {
+            self.datasource = DefaultContactsPickerControllerDatasource()
+        }
         if let dataSource = self.datasource as? DefaultContactsPickerControllerDatasource {
             dataSource.controller = self
         }

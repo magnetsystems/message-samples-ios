@@ -21,16 +21,21 @@ protocol ContactsCellDelegate : class {
     func didSelectContactsCellAvatar(cell : ContactsCell)
 }
 
-class ContactsCell: UITableViewCell {
+public class ContactsCell: UITableViewCell {
     
     
     //MARK: Public Properties
     
     
-    @IBOutlet var avatar : UIImageView?
+    @IBOutlet public var avatar : UIImageView?
+    @IBOutlet public var userName : UILabel?
+    public var user : MMUser?
+    
+    
+    //MARK: Internal properties
+    
+    
     weak var delegate : ContactsCellDelegate?
-    @IBOutlet var userName : UILabel?
-    var user : MMUser?
     
     
     //MARK: Actions
@@ -40,7 +45,7 @@ class ContactsCell: UITableViewCell {
         self.delegate?.didSelectContactsCellAvatar(self)
     }
     
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         
         let tap = UITapGestureRecognizer(target: self, action: "didSelectAvatar")
@@ -54,11 +59,4 @@ class ContactsCell: UITableViewCell {
             avatar.clipsToBounds = true
         }
     }
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
-    
 }

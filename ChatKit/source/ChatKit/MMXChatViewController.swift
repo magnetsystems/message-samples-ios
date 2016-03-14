@@ -127,11 +127,15 @@ public class MMXChatViewController: ChatViewController {
         
         navigationController?.setNavigationBarHidden(false, animated: true)
         
-        self.datasource = DefaultChatViewControllerDatasource()
+        if self.datasource == nil {
+            self.datasource = DefaultChatViewControllerDatasource()
+        }
         if let datasource = self.datasource as? DefaultChatViewControllerDatasource {
             datasource.controller = self
         }
-        self.delegate = DefaultChatViewControllerDelegate()
+        if self.delegate == nil {
+            self.delegate = DefaultChatViewControllerDelegate()
+        }
         if let delegate = self.delegate as? DefaultChatViewControllerDelegate {
             delegate.controller = self
         }

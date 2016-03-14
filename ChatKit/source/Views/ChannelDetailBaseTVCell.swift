@@ -18,7 +18,7 @@
 import MagnetMax
 import UIKit
 
-class ChannelDetailBaseTVCell: UITableViewCell {
+public class ChannelDetailBaseTVCell: UITableViewCell {
     
     
     //MARK: Public properties
@@ -30,7 +30,7 @@ class ChannelDetailBaseTVCell: UITableViewCell {
         }
     }
     
-    @IBOutlet weak var vNewMessageIndicator : UIView?
+    @IBOutlet public weak var vNewMessageIndicator : UIView?
 
     
     //MARK: Static Methods
@@ -49,7 +49,7 @@ class ChannelDetailBaseTVCell: UITableViewCell {
     //MARK: Overrides
     
     
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         self.clipsToBounds = true
         if let vNewMessageIndicator = self.vNewMessageIndicator {

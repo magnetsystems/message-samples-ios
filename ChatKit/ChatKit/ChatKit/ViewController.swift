@@ -10,6 +10,15 @@ import UIKit
 import ChatKit
 import MagnetMax
 
+public class ChatListDatasource : DefaultChatListControllerDatasource {
+    public func mmxListDidCreateCell(cell: UITableViewCell) {
+        if let sumCell = cell as? SummaryResponseCell {
+            sumCell.lblMessage?.textColor = UIColor.whiteColor()
+            sumCell.lblSubscribers?.textColor = UIColor.whiteColor()
+        }
+    }
+}
+
 public class MyChatListController : MMXChatListViewController {
     
     var _chatViewController : MMXChatViewController?
@@ -33,6 +42,7 @@ public class MyChatListController : MMXChatListViewController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.purpleColor()
         self.cellBackgroundColor = UIColor.orangeColor()
+        self.datasource = ChatListDatasource()
     }
 }
 

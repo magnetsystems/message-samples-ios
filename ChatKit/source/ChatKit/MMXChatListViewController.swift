@@ -64,8 +64,12 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         self.view.tintColor = self.appearance.tintColor
         
         navigationController?.setNavigationBarHidden(false, animated: true)
-        self.datasource = DefaultChatListControllerDatasource()
-        self.delegate = DefaultChatListControllerDelegate()
+        if self.datasource == nil {
+            self.datasource = DefaultChatListControllerDatasource()
+        }
+        if self.delegate == nil {
+            self.delegate = DefaultChatListControllerDelegate()
+        }
         if let datasource = self.datasource as? DefaultChatListControllerDatasource {
             datasource.controller = self
         }

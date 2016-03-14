@@ -53,24 +53,29 @@ protocol SummaryResponseCellDelegate : class {
 //MARK: SummaryResponseCell
 
 
-class SummaryResponseCell: ChannelDetailBaseTVCell {
+public class SummaryResponseCell: ChannelDetailBaseTVCell {
     
     
     //MARK: Static properties
     
     
-    static var images : [String : UIImage] = [:]
+    public static var images : [String : UIImage] = [:]
     
     
     //MARK: Public properties
     
     
-    @IBOutlet weak var avatarView : UIImageView?
+    @IBOutlet public weak var avatarView : UIImageView?
+    @IBOutlet public  weak var ivMessageIcon : UIImageView?
+    @IBOutlet public weak var lblSubscribers : UILabel?
+    @IBOutlet public weak var lblLastTime : UILabel?
+    @IBOutlet public weak var lblMessage : UILabel?
+    
+    
+    //MARK: Internal properties
+    
+    
     weak var delegate : SummaryResponseCellDelegate?
-    @IBOutlet weak var ivMessageIcon : UIImageView?
-    @IBOutlet weak var lblSubscribers : UILabel?
-    @IBOutlet weak var lblLastTime : UILabel?
-    @IBOutlet weak var lblMessage : UILabel?
     
     
     //MARK: Overridden Properties
@@ -122,7 +127,7 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
     //MARK: Overrides
     
     
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         
         let tap = UITapGestureRecognizer(target: self, action: "didSelectAvatar")
