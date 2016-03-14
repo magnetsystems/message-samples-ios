@@ -85,10 +85,6 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        if MMUser.sessionStatus() != .LoggedIn {
-            assertionFailure("MUST LOGIN USER FIRST")
-        }
-        
         var nib = UINib.init(nibName: "ContactsCell", bundle: NSBundle(forClass: ContactsViewController.self))
         self.tableView.registerNib(nib, forCellReuseIdentifier: "UserCellIdentifier")
         nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: ContactsViewController.self))

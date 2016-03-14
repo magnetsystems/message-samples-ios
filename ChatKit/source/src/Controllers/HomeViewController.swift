@@ -59,10 +59,6 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate, Sum
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        if MMUser.sessionStatus() != .LoggedIn {
-            assertionFailure("MUST LOGIN USER FIRST")
-        }
-        
         self.tableView.allowsMultipleSelection = false
         // Indicate that you are ready to receive messages now!
         MMX.start()

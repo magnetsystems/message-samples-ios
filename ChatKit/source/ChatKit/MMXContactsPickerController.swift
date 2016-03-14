@@ -88,6 +88,8 @@ public class MMXContactsPickerController: ContactsViewController {
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        assert(self.navigationController != nil, "MMXContactsPickerController must be presented using a Navagation Controller")
+        
         generateNavBars()
         self.updateButtonItems()
     }

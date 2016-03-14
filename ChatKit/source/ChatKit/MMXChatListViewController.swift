@@ -85,6 +85,8 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
     public override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        assert(self.navigationController != nil, "MMXChatListViewController must be presented using a Navagation Controller")
+        
         generateNavBars()
     }
     

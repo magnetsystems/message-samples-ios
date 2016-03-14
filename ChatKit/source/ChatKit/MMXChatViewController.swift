@@ -146,6 +146,8 @@ public class MMXChatViewController: ChatViewController {
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        assert(self.navigationController != nil, "MMXChatViewController must be presented using a Navagation Controller")
+        
         generateNavBars()
     }
     
