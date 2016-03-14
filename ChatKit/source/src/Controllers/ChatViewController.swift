@@ -169,6 +169,8 @@ public class ChatViewController: MMJSQViewController {
         }
     }
     
+    public func didSelectUserAvatar(user : MMUser) { }
+    
     public func hasMore() -> Bool { return false }
     
     public func hideSpinner() {

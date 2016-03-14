@@ -166,7 +166,10 @@ extension ChatViewController {
     }
     
     override public func collectionView(collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, atIndexPath indexPath: NSIndexPath!) {
-        print("Tapped avatar!")
+        let message = messages[indexPath.item]
+        if let user = message.underlyingMessage.sender {
+            didSelectUserAvatar(user)
+        }
     }
     
     override public func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {

@@ -166,6 +166,10 @@ public class MMXChatListViewController: HomeViewController, ContactsControllerDe
         return super.cellHeightForChannel(channel, channelDetails: channelDetails, indexPath: indexPath)
     }
     
+    override public func didSelectUserAvatar(user: MMUser) {
+        self.delegate?.mmxAvatarDidClick?(user)
+    }
+    
     override public func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
         if let imgForDetails = self.datasource?.mmxListImageForChannelDetails {
             imgForDetails(imageView, channelDetails: channelDetails)

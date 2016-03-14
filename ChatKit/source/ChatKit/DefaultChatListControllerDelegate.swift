@@ -69,5 +69,8 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
     public func mmxListWillShowChatController(chatController : MMXChatViewController) {
     }
     
+    public func mmxAvatarDidClick(user: MMUser) {
+        print("[Clicked] \(user.userName) - Avatar! - DefaultChatListControllerDelegate")
+    }
     
 }

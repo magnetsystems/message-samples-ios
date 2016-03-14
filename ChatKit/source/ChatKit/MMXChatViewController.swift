@@ -203,6 +203,10 @@ public class MMXChatViewController: ChatViewController {
     //MARK:  DataMethod Overrides
     
     
+    override public func didSelectUserAvatar(user: MMUser) {
+        self.delegate?.mmxAvatarDidClick?(user)
+    }
+    
     override public func onChannelCreated(mmxChannel: MMXChannel) {
         self.useNavigationBarNotifier = true
         self.delegate?.mmxChatDidCreateChannel(mmxChannel)

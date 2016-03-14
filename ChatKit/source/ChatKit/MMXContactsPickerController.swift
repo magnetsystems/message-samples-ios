@@ -163,6 +163,10 @@ public class MMXContactsPickerController: ContactsViewController {
         return super.cellHeightForUser(user, indexPath: indexPath)
     }
     
+    override public func didSelectUserAvatar(user: MMUser) {
+        self.delegate?.mmxAvatarDidClick?(user)
+    }
+    
     override public func imageForUser(imageView: UIImageView, user: MMUser) {
         if let imgForUser = self.datasource?.mmxContactsControllerImageForUser {
             imgForUser(imageView, user: user)

@@ -45,6 +45,11 @@ class SummaryResponseImageView : MMRoundedImageView {
 }
 
 
+protocol SummaryResponseCellDelegate : class {
+    func didSelectSummaryCellAvatar(cell : SummaryResponseCell)
+}
+
+
 //MARK: SummaryResponseCell
 
 
@@ -60,11 +65,12 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
     //MARK: Public properties
     
     
+    @IBOutlet weak var avatarView : UIImageView?
+    weak var delegate : SummaryResponseCellDelegate?
     @IBOutlet weak var ivMessageIcon : UIImageView?
     @IBOutlet weak var lblSubscribers : UILabel?
     @IBOutlet weak var lblLastTime : UILabel?
     @IBOutlet weak var lblMessage : UILabel?
-    @IBOutlet weak var avatarView : UIImageView?
     
     
     //MARK: Overridden Properties
@@ -101,41 +107,15 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
             }
             
             lblLastTime?.text = ChannelManager.sharedInstance.formatter.displayTime(detailResponse.lastPublishedTime!)
-            if detailResponse.subscribers.count > 2 {
-                ivMessageIcon?.image = UIImage(named: "user_group.png")
-            } else if let userProfile = subscribers.first {
-                let tmpUser = MMUser()
-                tmpUser.extras = ["hasAvatar" : "true"]
-                tmpUser.firstName = ""
-                tmpUser.lastName = ""
-                tmpUser.userName = userProfile.displayName
-                tmpUser.userID = userProfile.userId
-                let nameComponents = userProfile.displayName.componentsSeparatedByString(" ")
-                if let firstName = nameComponents.first {
-                    tmpUser.firstName = firstName
-                }
-                
-                if nameComponents.count > 1 {
-                    tmpUser.lastName = nameComponents[1]
-                }
-                
-                if let avatarImage = self.ivMessageIcon {
-                    if let image = SummaryResponseCell.images[tmpUser.userID] {
-                        avatarImage.image = image
-                    } else {
-                        avatarImage.image = nil
-                        let placeHolderImage = Utils.noAvatarImageForUser(tmpUser)
-                        if let url = tmpUser.avatarURL() {
-                            Utils.loadImageWithUrl(url, toImageView: avatarImage, placeholderImage: placeHolderImage, onlyShowAfterDownload: true, completion: { image in
-                                SummaryResponseCell.images[tmpUser.userID] = image
-                            })
-                        } else {
-                            avatarImage.image = placeHolderImage
-                        }
-                    }
-                }
-            }
         }
+    }
+    
+    
+    //MARK: Actions
+    
+    
+    func didSelectAvatar() {
+        self.delegate?.didSelectSummaryCellAvatar(self)
     }
     
     
@@ -144,6 +124,12 @@ class SummaryResponseCell: ChannelDetailBaseTVCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        let tap = UITapGestureRecognizer(target: self, action: "didSelectAvatar")
+        tap.cancelsTouchesInView = true
+        tap.delaysTouchesBegan = true
+        self.avatarView?.userInteractionEnabled = true
+        self.avatarView?.addGestureRecognizer(tap)
         
         if let ivMessageIcon = ivMessageIcon {
             ivMessageIcon.layer.cornerRadius = ivMessageIcon.bounds.width / 2

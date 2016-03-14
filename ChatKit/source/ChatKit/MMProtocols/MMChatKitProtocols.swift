@@ -19,10 +19,18 @@ import MagnetMax
 import UIKit
 
 
+//MARK: MMXAvatarDelegate
+
+
+@objc public protocol MMXAvatarDelegate: class {
+   optional func mmxAvatarDidClick(user : MMUser)
+}
+
+
 //MARK: ContactsControllerDelegate
 
 
-@objc public protocol ContactsControllerDelegate: class {
+@objc public protocol ContactsControllerDelegate: class, MMXAvatarDelegate {
     optional func mmxContactsControllerDidFinish(with selectedUsers: [MMUser])
     optional func mmxContactsControllerSelectedUser(user: MMUser)
     optional func mmxContactsControllerUnSelectedUser(user: MMUser)
@@ -82,7 +90,7 @@ import UIKit
 //Mark: ChatListControllerDelegate
 
 
-@objc public protocol ChatListControllerDelegate : class {
+@objc public protocol ChatListControllerDelegate : class, MMXAvatarDelegate {
     func mmxListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
     func mmxListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
     
@@ -105,7 +113,7 @@ public protocol ChatViewControllerDatasource {
 //MARK: ChatViewControllerDelegate
 
 
-public protocol ChatViewControllerDelegate {
+public protocol ChatViewControllerDelegate : class, MMXAvatarDelegate {
     func mmxChatDidCreateChannel(channel : MMXChannel)
     func mmxChatDidSendMessage(message : MMXMessage)
     func mmxChatDidRecieveMessage(message : MMXMessage)

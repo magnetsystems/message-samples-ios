@@ -18,12 +18,17 @@
 import MagnetMax
 import UIKit
 
+protocol IconViewDelegate : class {
+    func didSelectIconViewAvatar(view : IconView)
+}
+
 public class IconView : UIView, UIGestureRecognizerDelegate {
     
     
     //MARK: Public Variables
     
     
+    weak var delegate : IconViewDelegate?
     var imageView : UIImageView?
     var title : UILabel?
     weak var user : MMUser?
@@ -66,9 +71,20 @@ public class IconView : UIView, UIGestureRecognizerDelegate {
         view.addConstraints([centerX, imageYSpace, imageWidth, imageHeight, labelYSpace, labelBottom, labelLeading, labelTrailing,labelHeight])
         view.title = label
         view.imageView = imageView
+        
+        let tap = UITapGestureRecognizer(target: view, action: "didTapAvatar:")
+        tap.cancelsTouchesInView = true
+        tap.delaysTouchesBegan = true
+        view.imageView?.userInteractionEnabled = true
+        view.imageView?.addGestureRecognizer(tap)
+        
         return view
     }
     
+    
+    func didTapAvatar(gesture : UITapGestureRecognizer) {
+        self.delegate?.didSelectIconViewAvatar(self)
+    }
     
     //MARK: Action
     

@@ -37,4 +37,9 @@ public class DefaultChatViewControllerDelegate : ChatViewControllerDelegate {
     public func mmxChatDidSendMessage(message : MMXMessage) { }
     
     public func mmxChatDidRecieveMessage(message : MMXMessage) { }
+    
+    @objc public func mmxAvatarDidClick(user: MMUser) {
+        print("[Clicked] \(user.userName) - Avatar! - DefaultChatViewControllerDelegate")
+    }
+    
 }

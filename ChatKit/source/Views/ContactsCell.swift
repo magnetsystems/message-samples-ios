@@ -17,12 +17,37 @@
 
 import UIKit
 
+protocol ContactsCellDelegate : class {
+    func didSelectContactsCellAvatar(cell : ContactsCell)
+}
+
 class ContactsCell: UITableViewCell {
-    @IBOutlet var userName : UILabel?
+    
+    
+    //MARK: Public Properties
+    
+    
     @IBOutlet var avatar : UIImageView?
+    weak var delegate : ContactsCellDelegate?
+    @IBOutlet var userName : UILabel?
+    var user : MMUser?
+    
+    
+    //MARK: Actions
+    
+    
+    func didSelectAvatar() {
+        self.delegate?.didSelectContactsCellAvatar(self)
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        let tap = UITapGestureRecognizer(target: self, action: "didSelectAvatar")
+        tap.cancelsTouchesInView = true
+        tap.delaysTouchesBegan = true
+        self.avatar?.userInteractionEnabled = true
+        self.avatar?.addGestureRecognizer(tap)
         
         if let avatar = self.avatar {
             avatar.layer.cornerRadius = avatar.frame.size.width / 2.0

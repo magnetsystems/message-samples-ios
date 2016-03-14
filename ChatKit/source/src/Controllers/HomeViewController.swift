@@ -19,7 +19,7 @@ import UIKit
 import MagnetMax
 
 
-public class HomeViewController: MMTableViewController, UISearchBarDelegate {
+public class HomeViewController: MMTableViewController, UISearchBarDelegate, SummaryResponseCellDelegate {
     
     
     //MARK: Public Variables
@@ -146,6 +146,8 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
     public func cellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat {
         return 80
     }
+    
+    public func didSelectUserAvatar(user : MMUser) { }
     
     public func heightForFooter(index : Int) -> CGFloat {
         return 0.0
@@ -275,9 +277,23 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate {
         self.search(searchBar.text)
     }
     
+    
+    //MARK: SummaryResponseCellDelegate
+    
+    
+    func didSelectSummaryCellAvatar(cell: SummaryResponseCell) {
+        if let user = cell.detailResponse.subscribers.first {
+            MMUser.usersWithUserIDs([user.userId], success: {
+                users in
+                if let user = users.first {
+                    self.didSelectUserAvatar(user)
+                }
+                }, failure: { error in
+                    print("[Error] Retrieving User")
+            })
+        }
+    }
 }
-
-
 
 public extension HomeViewController {
     
@@ -316,7 +332,7 @@ public extension HomeViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
         cell.backgroundColor = cellBackgroundColor
         cell.detailResponse = detailResponse
-        
+        cell.delegate = self
         if let imageView = cell.avatarView {
             imageForChannelDetails(imageView, channelDetails: detailResponse)
         }

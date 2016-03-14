@@ -38,7 +38,7 @@ public class UserModel : NSObject {
 //MARK: Contacts Class
 
 
-public class ContactsViewController: MMTableViewController, UISearchBarDelegate, UIGestureRecognizerDelegate {
+public class ContactsViewController: MMTableViewController, UISearchBarDelegate, UIGestureRecognizerDelegate, ContactsCellDelegate, IconViewDelegate {
     
     
     //MARK: Public Variables
@@ -204,6 +204,8 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         return 50
     }
     
+    public func didSelectUserAvatar(user : MMUser) { }
+    
     public func endSearch() {
         if searchBar.isFirstResponder() {
             searchBar.resignFirstResponder()
@@ -292,6 +294,24 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         self.resignSearchBar()
     }
     
+    
+    //MARK: ContactsCellDelegate
+    
+    
+    func didSelectContactsCellAvatar(cell: ContactsCell) {
+        if let user = cell.user {
+            self.didSelectUserAvatar(user)
+        }
+    }
+    
+    //MARK: IconViewDelegate
+    
+    
+    func didSelectIconViewAvatar(view: IconView) {
+        if let user = view.user {
+            self.didSelectUserAvatar(user)
+        }
+    }
 }
 
 public extension ContactsViewController {
@@ -377,6 +397,8 @@ public extension ContactsViewController {
         if let imageView = cell?.avatar {
             imageForUser(imageView, user: user)
         }
+        cell?.delegate = self
+        cell?.user = user
         cellDidCreate(cell!)
         
         return cell!
@@ -579,7 +601,9 @@ private extension ContactsViewController {
                 longPress.delegate = view
                 view.addGestureRecognizer(longPress)
                 view.user = user
+                view.delegate = self
             }
+            
             if leftView != contactsView {
                 let right = NSLayoutConstraint(item: leftView, attribute: .Right, relatedBy: .Equal, toItem: contactsView, attribute: .Right, multiplier: 1, constant: -8)
                 contactsView.addConstraint(right)
