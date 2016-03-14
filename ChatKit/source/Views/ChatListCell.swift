@@ -19,10 +19,10 @@ import MagnetMax
 import UIKit
 
 
-//MARK: SummaryResponseImageView
+//MARK: ChatListCellImageView
 
 
-class SummaryResponseImageView : MMRoundedImageView {
+class ChatListCellImageView : MMRoundedImageView {
     
     
     //MARK: Public properties
@@ -45,15 +45,15 @@ class SummaryResponseImageView : MMRoundedImageView {
 }
 
 
-protocol SummaryResponseCellDelegate : class {
-    func didSelectSummaryCellAvatar(cell : SummaryResponseCell)
+protocol ChatListCellDelegate : class {
+    func didSelectCellAvatar(cell : ChatListCell)
 }
 
 
-//MARK: SummaryResponseCell
+//MARK: ChatListCell
 
 
-public class SummaryResponseCell: ChannelDetailBaseTVCell {
+public class ChatListCell: ChannelDetailBaseTVCell {
     
     
     //MARK: Static properties
@@ -75,7 +75,7 @@ public class SummaryResponseCell: ChannelDetailBaseTVCell {
     //MARK: Internal properties
     
     
-    weak var delegate : SummaryResponseCellDelegate?
+    weak var delegate : ChatListCellDelegate?
     
     
     //MARK: Overridden Properties
@@ -120,7 +120,7 @@ public class SummaryResponseCell: ChannelDetailBaseTVCell {
     
     
     func didSelectAvatar() {
-        self.delegate?.didSelectSummaryCellAvatar(self)
+        self.delegate?.didSelectCellAvatar(self)
     }
     
     

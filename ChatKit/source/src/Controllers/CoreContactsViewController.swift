@@ -38,7 +38,7 @@ public class UserModel : NSObject {
 //MARK: Contacts Class
 
 
-public class ContactsViewController: MMTableViewController, UISearchBarDelegate, UIGestureRecognizerDelegate, ContactsCellDelegate, IconViewDelegate {
+public class CoreContactsViewController: MMTableViewController, UISearchBarDelegate, UIGestureRecognizerDelegate, ContactsCellDelegate, ContactsBubbleViewDelegate {
     
     
     //MARK: Public Variables
@@ -50,7 +50,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         }
     }
     
-    public var iconViewShouldMove : Bool = false
+    public var contactsBubbleViewShouldMove : Bool = false
     public internal(set) var selectedUsers : [MMUser] = []
     public private(set) var searchBar = UISearchBar()
     
@@ -74,7 +74,7 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     
     
     public override init() {
-        super.init(nibName: String(ContactsViewController.self), bundle: NSBundle(forClass: ContactsViewController.self))
+        super.init(nibName: String(CoreContactsViewController.self), bundle: NSBundle(forClass: CoreContactsViewController.self))
         
     }
     
@@ -85,9 +85,9 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        var nib = UINib.init(nibName: "ContactsCell", bundle: NSBundle(forClass: ContactsViewController.self))
+        var nib = UINib.init(nibName: "ContactsCell", bundle: NSBundle(forClass: CoreContactsViewController.self))
         self.tableView.registerNib(nib, forCellReuseIdentifier: "UserCellIdentifier")
-        nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: ContactsViewController.self))
+        nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: CoreContactsViewController.self))
         self.tableView.registerNib(nib, forCellReuseIdentifier: "LoadingCellIdentifier")
         
         searchBar.sizeToFit()
@@ -300,17 +300,17 @@ public class ContactsViewController: MMTableViewController, UISearchBarDelegate,
         }
     }
     
-    //MARK: IconViewDelegate
+    //MARK: BubbleViewDelegate
     
     
-    func didSelectIconViewAvatar(view: IconView) {
+    func didSelectBubbleViewAvatar(view: ContactsBubbleView) {
         if let user = view.user {
             self.didSelectUserAvatar(user)
         }
     }
 }
 
-public extension ContactsViewController {
+public extension CoreContactsViewController {
     
     
     // MARK: - Table view data source
@@ -461,7 +461,7 @@ public extension ContactsViewController {
 }
 
 
-private extension ContactsViewController {
+private extension CoreContactsViewController {
     
     
     //MARK: Actions
@@ -474,15 +474,15 @@ private extension ContactsViewController {
                 if let gestureView = gesture.view {
                     let gesturePoint = self.view.convertRect(gestureView.frame, fromView: gestureView)
                     startPoint = CGPoint(x: loc.x + contactsViewScrollView.contentOffset.x , y:CGRectGetMaxY(gesturePoint))
-                    iconViewShouldMove = false
+                    contactsBubbleViewShouldMove = false
                 }
             } else if gesture.state == .Changed {
                 if !CGRectContainsPoint(contactsViewScrollView.frame, loc) {
-                    iconViewShouldMove = true
+                    contactsBubbleViewShouldMove = true
                     contactsViewScrollView.scrollEnabled = false
                     contactsViewScrollView.scrollEnabled = true
                 }
-                if iconViewShouldMove {
+                if contactsBubbleViewShouldMove {
                     let offsetPoint = CGPoint(x: loc.x - startPoint.x + contactsViewScrollView.contentOffset.x, y: loc.y - startPoint.y)
                     
                     let translate = CGAffineTransformMakeTranslation(offsetPoint.x, offsetPoint.y)
@@ -491,14 +491,14 @@ private extension ContactsViewController {
                     gesture.view?.alpha = 0.8
                 }
             } else if gesture.state == .Ended {
-                if let iconView = gesture.view as? IconView, let imageView = iconView.imageView {
-                    let center = self.view.convertPoint(imageView.center, fromView: iconView)
+                if let bubbleView = gesture.view as? ContactsBubbleView, let imageView = bubbleView.imageView {
+                    let center = self.view.convertPoint(imageView.center, fromView: bubbleView)
                     
                     startPoint = CGPointZero
-                    iconView.alpha = 1
-                    iconView.transform = CGAffineTransformIdentity
+                    bubbleView.alpha = 1
+                    bubbleView.transform = CGAffineTransformIdentity
                     if !CGRectContainsPoint(contactsViewScrollView.frame, center) {
-                        if let user = iconView.user {
+                        if let user = bubbleView.user {
                             removeSelectedUser(user)
                             updateContactsView(selectedUsers)
                             self.tableView.beginUpdates()
@@ -576,10 +576,10 @@ private extension ContactsViewController {
                 sub.removeFromSuperview()
             }
             
-            var iconViews : [IconView] = []
+            var bubbleViews : [ContactsBubbleView] = []
             for user in users.reverse() {
-                let view = IconView.newIconView()
-                iconViews.append(view)
+                let view = ContactsBubbleView.newBubbleView()
+                bubbleViews.append(view)
                 if let imageView = view.imageView {
                     imageForUser(imageView, user: user)
                     view.title?.text = Utils.displayNameForUser(user)
@@ -605,12 +605,12 @@ private extension ContactsViewController {
                 contactsView.addConstraint(right)
             }
             
-            if let iconView = iconViews.first {
+            if let bubbleView = bubbleViews.first {
                 UIView.animateWithDuration(0.2, animations: { () -> Void in
-                    iconView.transform = CGAffineTransformMakeScale(1.1, 1.1)
+                    bubbleView.transform = CGAffineTransformMakeScale(1.1, 1.1)
                     }, completion: { (_) -> Void in
                         UIView.animateWithDuration(0.4, animations: { () -> Void in
-                            iconView.transform = CGAffineTransformIdentity
+                            bubbleView.transform = CGAffineTransformIdentity
                         })
                 })
             }

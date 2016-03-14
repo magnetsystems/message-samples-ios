@@ -18,17 +18,17 @@
 import MagnetMax
 import UIKit
 
-protocol IconViewDelegate : class {
-    func didSelectIconViewAvatar(view : IconView)
+protocol ContactsBubbleViewDelegate : class {
+    func didSelectBubbleViewAvatar(view : ContactsBubbleView)
 }
 
-public class IconView : UIView, UIGestureRecognizerDelegate {
+public class ContactsBubbleView : UIView, UIGestureRecognizerDelegate {
     
     
     //MARK: Public Variables
     
     
-    weak var delegate : IconViewDelegate?
+    weak var delegate : ContactsBubbleViewDelegate?
     var imageView : UIImageView?
     var title : UILabel?
     weak var user : MMUser?
@@ -37,8 +37,8 @@ public class IconView : UIView, UIGestureRecognizerDelegate {
     //MARK: Creation
     
     
-    static func newIconView() -> IconView {
-        let view = IconView(frame: CGRect(x: 0, y: 0, width: 50, height: 0))
+    static func newBubbleView() -> ContactsBubbleView {
+        let view = ContactsBubbleView(frame: CGRect(x: 0, y: 0, width: 50, height: 0))
         view.translatesAutoresizingMaskIntoConstraints = false
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         imageView.layer.cornerRadius = imageView.frame.size.width / 2.0
@@ -83,7 +83,7 @@ public class IconView : UIView, UIGestureRecognizerDelegate {
     
     
     func didTapAvatar(gesture : UITapGestureRecognizer) {
-        self.delegate?.didSelectIconViewAvatar(self)
+        self.delegate?.didSelectBubbleViewAvatar(self)
     }
     
     //MARK: Action

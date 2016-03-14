@@ -24,7 +24,7 @@ import UIKit
 //MARK: ChatViewController
 
 
-public class ChatViewController: MMJSQViewController {
+public class CoreChatViewController: MMJSQViewController {
     
     
     //MARK: Public Properties
@@ -367,7 +367,7 @@ public class ChatViewController: MMJSQViewController {
 }
 
 
-private extension ChatViewController {
+private extension CoreChatViewController {
     
     
     // MARK: Private Methods

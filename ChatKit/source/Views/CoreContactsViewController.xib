@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactsViewController" customModule="ChatKit" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CoreContactsViewController" customModule="ChatKit" customModuleProvider="target">
             <connections>
                 <outlet property="contactsViewScrollView" destination="JNU-aP-1oZ" id="cmX-Yg-MbZ"/>
                 <outlet property="tableView" destination="yww-hd-TB3" id="wjJ-AJ-kkH"/>

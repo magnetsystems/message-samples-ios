@@ -11,7 +11,13 @@
             location = "group:Controllers"
             name = "Controllers">
             <FileRef
-               location = "group:ChatViewController.swift">
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/CoreChatListViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/CoreChatViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/CoreContactsViewController.swift">
             </FileRef>
             <FileRef
                location = "group:ChatViewControllerChatViewControllerImagePickerExtension.swift">
@@ -20,13 +26,7 @@
                location = "group:ChatViewControllerCollectionExtension.swift">
             </FileRef>
             <FileRef
-               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/ViewControllerExtensions.swift">
-            </FileRef>
-            <FileRef
-               location = "group:HomeViewController.swift">
-            </FileRef>
-            <FileRef
-               location = "group:ContactsViewController.swift">
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/ChatKitViewControllerExtensions.swift">
             </FileRef>
             <FileRef
                location = "group:MMTableViewController.swift">
@@ -483,7 +483,7 @@
             location = "group:ChannelDetailBaseTVCell.swift">
          </FileRef>
          <FileRef
-            location = "group:ContactsViewController.xib">
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/CoreContactsViewController.xib">
          </FileRef>
          <FileRef
             location = "group:ContactsCell.swift">
@@ -498,19 +498,19 @@
             location = "group:ContactsView.swift">
          </FileRef>
          <FileRef
-            location = "group:IconView.swift">
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/ContactsBubbleView.swift">
          </FileRef>
          <FileRef
             location = "group:MMViews.swift">
          </FileRef>
          <FileRef
-            location = "group:HomeViewController.xib">
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/CoreChatListViewController.xib">
          </FileRef>
          <FileRef
-            location = "group:SummaryResponseCell.swift">
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/ChatListCell.swift">
          </FileRef>
          <FileRef
-            location = "group:SummaryResponseCell.xib">
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/ChatListCell.xib">
          </FileRef>
          <FileRef
             location = "group:LoadingCell.xib">

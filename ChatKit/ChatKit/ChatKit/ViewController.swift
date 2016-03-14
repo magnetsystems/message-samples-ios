@@ -12,7 +12,7 @@ import MagnetMax
 
 public class ChatListDatasource : DefaultChatListControllerDatasource {
     public func mmxListDidCreateCell(cell: UITableViewCell) {
-        if let sumCell = cell as? SummaryResponseCell {
+        if let sumCell = cell as? ChatListCell {
             sumCell.lblMessage?.textColor = UIColor.whiteColor()
             sumCell.lblSubscribers?.textColor = UIColor.whiteColor()
         }

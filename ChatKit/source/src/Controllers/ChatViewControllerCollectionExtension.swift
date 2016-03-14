@@ -20,7 +20,7 @@
 import NYTPhotoViewer
 
 
-extension ChatViewController {
+extension CoreChatViewController {
     
     
     //MARK: - overridden JSQMessagesViewController methods

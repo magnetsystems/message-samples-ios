@@ -22,7 +22,7 @@ import MagnetMax
 //MARK: MagnetContactsPickerController
 
 
-public class MMXContactsPickerController: ContactsViewController {
+public class MMXContactsPickerController: CoreContactsViewController {
     
     
     //Private Variables

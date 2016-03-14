@@ -18,7 +18,7 @@
 
 import MagnetMax
 
-extension ChatViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension CoreChatViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     
     //MARK: UIImagePickerControllerDelegate

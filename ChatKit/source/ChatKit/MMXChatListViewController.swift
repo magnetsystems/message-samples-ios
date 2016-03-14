@@ -22,7 +22,7 @@ import MagnetMax
 //Mark: MagnetChatListViewController
 
 
-public class MMXChatListViewController: HomeViewController, ContactsControllerDelegate {
+public class MMXChatListViewController: CoreChatListViewController, ContactsControllerDelegate {
     
     
     //MARK: Private Variables

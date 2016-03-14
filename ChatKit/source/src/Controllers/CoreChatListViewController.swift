@@ -19,7 +19,7 @@ import UIKit
 import MagnetMax
 
 
-public class HomeViewController: MMTableViewController, UISearchBarDelegate, SummaryResponseCellDelegate {
+public class CoreChatListViewController: MMTableViewController, UISearchBarDelegate, ChatListCellDelegate {
     
     
     //MARK: Public Variables
@@ -49,7 +49,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate, Sum
     }
     
     public override init() {
-        super.init(nibName: String(HomeViewController.self), bundle: NSBundle(forClass: HomeViewController.self))
+        super.init(nibName: String(CoreChatListViewController.self), bundle: NSBundle(forClass: CoreChatListViewController.self))
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -65,9 +65,9 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate, Sum
         // Handling disconnection
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
         
-        var nib = UINib.init(nibName: "SummaryResponseCell", bundle: NSBundle(forClass: HomeViewController.self))
-        self.tableView.registerNib(nib, forCellReuseIdentifier: "SummaryResponseCell")
-        nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: HomeViewController.self))
+        var nib = UINib.init(nibName: "ChatListCell", bundle: NSBundle(forClass: CoreChatListViewController.self))
+        self.tableView.registerNib(nib, forCellReuseIdentifier: "ChatListCell")
+        nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: CoreChatListViewController.self))
         self.tableView.registerNib(nib, forCellReuseIdentifier: "LoadingCellIdentifier")
         
         // Add search bar
@@ -274,10 +274,10 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate, Sum
     }
     
     
-    //MARK: SummaryResponseCellDelegate
+    //MARK: ChatListCellDelegate
     
     
-    func didSelectSummaryCellAvatar(cell: SummaryResponseCell) {
+    func didSelectCellAvatar(cell: ChatListCell) {
         if let user = cell.detailResponse.subscribers.first {
             MMUser.usersWithUserIDs([user.userId], success: {
                 users in
@@ -291,7 +291,7 @@ public class HomeViewController: MMTableViewController, UISearchBarDelegate, Sum
     }
 }
 
-public extension HomeViewController {
+public extension CoreChatListViewController {
     
     
     // MARK: - Table view data source
@@ -325,7 +325,7 @@ public extension HomeViewController {
             
             return cell
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier("SummaryResponseCell", forIndexPath: indexPath) as! SummaryResponseCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("ChatListCell", forIndexPath: indexPath) as! ChatListCell
         cell.backgroundColor = cellBackgroundColor
         cell.detailResponse = detailResponse
         cell.delegate = self
@@ -395,7 +395,7 @@ public extension HomeViewController {
 }
 
 
-private extension HomeViewController {
+private extension CoreChatListViewController {
     
     
     // MARK: - Private Methods
