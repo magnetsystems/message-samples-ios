@@ -110,6 +110,7 @@
 		8DDFA5A11C659F7400566A4D /* message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA59D1C659F7400566A4D /* message@2x.png */; };
 		8DDFA5A21C659F7400566A4D /* messages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA59E1C659F7400566A4D /* messages@2x.png */; };
 		8DFC78F51C62D59F008FB312 /* NavigationNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC78F41C62D59F008FB312 /* NavigationNotifier.swift */; };
+		9C9A9F521C93AA69000A2DD0 /* MessengerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A9F511C93AA69000A2DD0 /* MessengerUITests.swift */; };
 		C9BF0143BBC1E4E412BF8629 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6622CC48F4FE90AA03DBE8F9 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -120,6 +121,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8B2E53C91C2AC31900C9AC47;
 			remoteInfo = MMChat;
+		};
+		9C9A9F541C93AA69000A2DD0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8B2E53C21C2AC31900C9AC47 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8B2E53C91C2AC31900C9AC47;
+			remoteInfo = Messenger;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -235,6 +243,9 @@
 		8DDFA59E1C659F7400566A4D /* messages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messages@2x.png"; sourceTree = "<group>"; };
 		8DFC78F41C62D59F008FB312 /* NavigationNotifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationNotifier.swift; sourceTree = "<group>"; };
 		9B1845AFF91157CEDCC1D6E3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		9C9A9F4F1C93AA69000A2DD0 /* MessengerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessengerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C9A9F511C93AA69000A2DD0 /* MessengerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessengerUITests.swift; sourceTree = "<group>"; };
+		9C9A9F531C93AA69000A2DD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D530003B360E31447A1F6A63 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -250,6 +261,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8B2E53DB1C2AC31900C9AC47 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9C9A9F4C1C93AA69000A2DD0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -530,6 +548,7 @@
 			children = (
 				8B2E53CC1C2AC31900C9AC47 /* Messenger */,
 				8B2E53E11C2AC31900C9AC47 /* MessengerTests */,
+				9C9A9F501C93AA69000A2DD0 /* MessengerUITests */,
 				8B2E53CB1C2AC31900C9AC47 /* Products */,
 				E34B15ABF8CC1C3FB094E241 /* Pods */,
 				72D70E5961C7F3A180077AC3 /* Frameworks */,
@@ -541,6 +560,7 @@
 			children = (
 				8B2E53CA1C2AC31900C9AC47 /* Messenger.app */,
 				8B2E53DE1C2AC31900C9AC47 /* Messenger.xctest */,
+				9C9A9F4F1C93AA69000A2DD0 /* MessengerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -758,6 +778,15 @@
 			name = Contacts;
 			sourceTree = "<group>";
 		};
+		9C9A9F501C93AA69000A2DD0 /* MessengerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				9C9A9F511C93AA69000A2DD0 /* MessengerUITests.swift */,
+				9C9A9F531C93AA69000A2DD0 /* Info.plist */,
+			);
+			path = MessengerUITests;
+			sourceTree = "<group>";
+		};
 		E34B15ABF8CC1C3FB094E241 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -809,6 +838,24 @@
 			productReference = 8B2E53DE1C2AC31900C9AC47 /* Messenger.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		9C9A9F4E1C93AA69000A2DD0 /* MessengerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9C9A9F581C93AA69000A2DD0 /* Build configuration list for PBXNativeTarget "MessengerUITests" */;
+			buildPhases = (
+				9C9A9F4B1C93AA69000A2DD0 /* Sources */,
+				9C9A9F4C1C93AA69000A2DD0 /* Frameworks */,
+				9C9A9F4D1C93AA69000A2DD0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9C9A9F551C93AA69000A2DD0 /* PBXTargetDependency */,
+			);
+			name = MessengerUITests;
+			productName = MessengerUITests;
+			productReference = 9C9A9F4F1C93AA69000A2DD0 /* MessengerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -824,6 +871,10 @@
 					};
 					8B2E53DD1C2AC31900C9AC47 = {
 						CreatedOnToolsVersion = 7.2;
+						TestTargetID = 8B2E53C91C2AC31900C9AC47;
+					};
+					9C9A9F4E1C93AA69000A2DD0 = {
+						CreatedOnToolsVersion = 7.2.1;
 						TestTargetID = 8B2E53C91C2AC31900C9AC47;
 					};
 				};
@@ -843,6 +894,7 @@
 			targets = (
 				8B2E53C91C2AC31900C9AC47 /* Messenger */,
 				8B2E53DD1C2AC31900C9AC47 /* MessengerTests */,
+				9C9A9F4E1C93AA69000A2DD0 /* MessengerUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -916,6 +968,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8B2E53DC1C2AC31900C9AC47 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9C9A9F4D1C93AA69000A2DD0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1041,6 +1100,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9C9A9F4B1C93AA69000A2DD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C9A9F521C93AA69000A2DD0 /* MessengerUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1048,6 +1115,11 @@
 			isa = PBXTargetDependency;
 			target = 8B2E53C91C2AC31900C9AC47 /* Messenger */;
 			targetProxy = 8B2E53DF1C2AC31900C9AC47 /* PBXContainerItemProxy */;
+		};
+		9C9A9F551C93AA69000A2DD0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8B2E53C91C2AC31900C9AC47 /* Messenger */;
+			targetProxy = 9C9A9F541C93AA69000A2DD0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1224,6 +1296,30 @@
 			};
 			name = Release;
 		};
+		9C9A9F561C93AA69000A2DD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MessengerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = PCP.MessengerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Messenger;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		9C9A9F571C93AA69000A2DD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MessengerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = PCP.MessengerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Messenger;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1253,6 +1349,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		9C9A9F581C93AA69000A2DD0 /* Build configuration list for PBXNativeTarget "MessengerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9C9A9F561C93AA69000A2DD0 /* Debug */,
+				9C9A9F571C93AA69000A2DD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
