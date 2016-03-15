@@ -19,6 +19,8 @@ import UIKit
 import MagnetMax
 
 public class DefaultChatViewControllerDatasource : NSObject, ChatViewControllerDatasource {
+    
+    
     //MARK: Public Variables
     
     
