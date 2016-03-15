@@ -122,7 +122,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
                 self.detailResponses.appendContentsOf(detailResponses)
                 self.detailResponses = self.sort(self.detailResponses)
                 self.endDataLoad()
-                DDLogVerbose("[Retrieve] channel details succeeded")
+                DDLogVerbose("[Retrieved] channel details succeeded")
                 }, failure: { error in
                     self.endDataLoad()
                     DDLogError("[Error] - retrieving channel details - \(error.localizedDescription)")
