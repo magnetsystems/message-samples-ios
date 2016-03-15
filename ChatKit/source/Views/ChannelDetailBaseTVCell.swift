@@ -21,7 +21,7 @@ import UIKit
 public class ChannelDetailBaseTVCell: UITableViewCell {
     
     
-    //MARK: Public properties
+    //MARK: internal properties
     
     
     var detailResponse : MMXChannelDetailResponse? {

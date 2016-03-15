@@ -20,7 +20,7 @@ import UIKit
 public class LoadingView : UIView {
     
     
-    public var indicator : UIActivityIndicatorView?
+    public internal(set) var indicator : UIActivityIndicatorView?
     
     
     override init(frame: CGRect) {

@@ -27,9 +27,9 @@ public class ContactsCell: UITableViewCell {
     //MARK: Public Properties
     
     
-    @IBOutlet public var avatar : UIImageView?
-    @IBOutlet public var userName : UILabel?
-    public var user : MMUser?
+    @IBOutlet public private(set) var avatar : UIImageView?
+    @IBOutlet public private(set)var userName : UILabel?
+    public internal(set) var user : MMUser?
     
     
     //MARK: Internal properties

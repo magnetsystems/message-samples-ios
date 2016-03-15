@@ -25,7 +25,7 @@ import UIKit
 class ChatListCellImageView : MMRoundedImageView {
     
     
-    //MARK: Public properties
+    //MARK: Internal properties
     
     
     @IBOutlet var imageMinWidth : NSLayoutConstraint?
@@ -56,20 +56,14 @@ protocol ChatListCellDelegate : class {
 public class ChatListCell: ChannelDetailBaseTVCell {
     
     
-    //MARK: Static properties
-    
-    
-    public static var images : [String : UIImage] = [:]
-    
-    
     //MARK: Public properties
     
     
-    @IBOutlet public weak var avatarView : UIImageView?
-    @IBOutlet public  weak var ivMessageIcon : UIImageView?
-    @IBOutlet public weak var lblSubscribers : UILabel?
-    @IBOutlet public weak var lblLastTime : UILabel?
-    @IBOutlet public weak var lblMessage : UILabel?
+    @IBOutlet public private(set) weak var avatarView : UIImageView?
+    @IBOutlet public private(set) weak var ivMessageIcon : UIImageView?
+    @IBOutlet public private(set) weak var lblSubscribers : UILabel?
+    @IBOutlet public private(set) weak var lblLastTime : UILabel?
+    @IBOutlet public private(set) weak var lblMessage : UILabel?
     
     
     //MARK: Internal properties

@@ -20,11 +20,12 @@ import UIKit
 public class ContactsTableContainerView: UIView {
     
     
-    //MARK: Public Variables
+    //MARK: Internal Variables
     
     
     @IBOutlet weak var contactsView : ContactsView?
     @IBOutlet weak var parentViewController : UIViewController?
+    
     
     //MARK: Overrides
     
