@@ -78,7 +78,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
             self.chatViewController?.navigationController?.pushViewController(contacts, animated: true)
             
             }, failure: { error in
-                
+           
         })
     }
     
@@ -104,6 +104,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
         button.setTitle("Add Contacts +", forState: .Normal)
         button.titleLabel?.textAlignment = .Center
         button.addTarget(self, action: "addContacts", forControlEvents: .TouchUpInside)
+        
         return button
     }
     

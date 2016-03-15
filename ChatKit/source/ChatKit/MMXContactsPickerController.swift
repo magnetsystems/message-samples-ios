@@ -232,6 +232,10 @@ public class MMXContactsPickerController: CoreContactsViewController {
         self.delegate?.mmxContactsControllerSelectedUser?(user)
     }
     
+    override public func registerCells(tableView: UITableView) {
+        self.datasource?.mmxContactsControllerRegisterCells?(tableView)
+    }
+    
     override public func shouldShowHeaderTitles() -> Bool {
         if let pickerDatasource = self.datasource {
             if let shows = pickerDatasource.mmxContactsControllerShowsSectionsHeaders?() {

@@ -23,7 +23,11 @@ import UIKit
 
 
 @objc public protocol MMXAvatarDelegate: class {
-   optional func mmxAvatarDidClick(user : MMUser)
+    
+    
+    optional func mmxAvatarDidClick(user : MMUser)
+    
+    
 }
 
 
@@ -31,9 +35,13 @@ import UIKit
 
 
 @objc public protocol ContactsControllerDelegate: class, MMXAvatarDelegate {
+    
+    
     optional func mmxContactsControllerDidFinish(with selectedUsers: [MMUser])
     optional func mmxContactsControllerSelectedUser(user: MMUser)
     optional func mmxContactsControllerUnSelectedUser(user: MMUser)
+    
+    
 }
 
 
@@ -41,9 +49,13 @@ import UIKit
 
 
 @objc public protocol ControllerDatasource: class {
-    func mmxControllerLoadMore(searchText : String?, offset : Int)
+    
+    
     func mmxControllerHasMore() -> Bool
+    func mmxControllerLoadMore(searchText : String?, offset : Int)
     func mmxControllerSearchUpdatesContinuously() -> Bool
+    
+    
 }
 
 
@@ -51,13 +63,18 @@ import UIKit
 
 
 @objc public protocol ContactsControllerDatasource: ControllerDatasource, MMTableViewFooterDatasource {
+    
+    
     optional func mmxContactsCellForUser(tableView : UITableView, user : MMUser, indexPath : NSIndexPath) -> UITableViewCell?
     optional func mmxContactsCellHeightForUser(user : MMUser, indexPath : NSIndexPath) -> CGFloat
+     optional func mmxContactsControllerImageForUser(imageView : UIImageView, user : MMUser)
     optional func mmxContactsDidCreateCell(cell : UITableViewCell) -> Void
-    optional func mmxContactsControllerImageForUser(imageView : UIImageView, user : MMUser)
+    optional func mmxContactsControllerRegisterCells(tableView : UITableView)
     optional func mmxContactsControllerShowsSectionIndexTitles() -> Bool
     optional func mmxContactsControllerShowsSectionsHeaders() -> Bool
     optional func mmxContactsControllerPreselectedUsers() -> [MMUser]
+    
+    
 }
 
 
@@ -66,9 +83,11 @@ import UIKit
 
 @objc public protocol MMTableViewFooterDatasource {
     
+    
     optional func mmxTableViewFooter(index : Int) -> UIView
     optional func mmxTableViewFooterHeight(index : Int) -> CGFloat
     optional func mmxTableViewNumberOfFooters() -> Int
+    
     
 }
 
@@ -78,12 +97,16 @@ import UIKit
 
 @objc public protocol ChatListControllerDatasource : ControllerDatasource, MMTableViewFooterDatasource {
     
-    optional func mmxListRegisterCells(tableView : UITableView)
+    
+    
     optional func mmxListCellForChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell?
     optional func mmxListDidCreateCell(cell : UITableViewCell) -> Void
     optional func mmxListCellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat
     optional func mmxListImageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse)
+    optional func mmxListRegisterCells(tableView : UITableView)
     optional func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse]
+    
+    
 }
 
 
@@ -91,13 +114,18 @@ import UIKit
 
 
 @objc public protocol ChatListControllerDelegate : class, MMXAvatarDelegate {
+    
+    
     func mmxListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
     func mmxListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
+    
     
     optional func mmxListDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
     optional func mmxListWillShowChatController(chatController : MMXChatViewController)
     optional func mmxListChannelForSubscribers(subscribers : [MMUser]) -> MMXChannel?
     optional func mmxListChannelForSubscribersWithBlock(subscribers : [MMUser], completionBlock : ((channel : MMXChannel) -> Void)) -> Void
+    
+    
 }
 
 
@@ -105,8 +133,12 @@ import UIKit
 
 
 public protocol ChatViewControllerDatasource {
+    
+    
     func mmxControllerLoadMore(channel : MMXChannel?, offset : Int)
     func mmxControllerHasMore() -> Bool
+    
+    
 }
 
 
@@ -114,7 +146,11 @@ public protocol ChatViewControllerDatasource {
 
 
 public protocol ChatViewControllerDelegate : class, MMXAvatarDelegate {
+    
+    
     func mmxChatDidCreateChannel(channel : MMXChannel)
     func mmxChatDidSendMessage(message : MMXMessage)
     func mmxChatDidRecieveMessage(message : MMXMessage)
+    
+    
 }
