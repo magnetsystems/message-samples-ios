@@ -15,6 +15,7 @@
 * permissions and limitations under the License.
 */
 
+import MagnetMax
 import UIKit
 
 protocol ContactsCellDelegate : class {
