@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name               =  'ChatKit'
-  s.version            =  '1.0.0'
+  s.version            =  '1.0.1'
   s.license            =  { :type => 'Apache 2.0' }
   s.summary            =  'iOS framework for developing apps using the Magnet Message platform.'
   s.description        =  'Magnet Message is a powerful, open source mobile messaging framework enabling real-time user engagement for your mobile apps. Send relevant and targeted communications to customers or employees. Enhance your mobile app with actionable notifications, alerts, in-app events, two-way interactions and more. Get started and get coding in minutes!'
