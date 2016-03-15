@@ -1,6 +1,6 @@
 {
   "name": "ChatKit",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "license": {
     "type": "Apache 2.0"
   },
@@ -12,7 +12,7 @@
   },
   "source": {
     "git": "https://github.com/magnetsystems/message-samples-ios.git",
-    "branch": "ChatKit"
+    "tag": "tag-chatkit-1.0.0"
   },
   "platforms": {
     "ios": "8.0"

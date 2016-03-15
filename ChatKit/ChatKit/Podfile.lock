@@ -12,12 +12,12 @@ PODS:
   - AFNetworking/Serialization (2.6.1)
   - AFOAuth2Manager (2.2.1):
     - AFNetworking/NSURLConnection (~> 2.2)
-  - ChatKit (0.6.0):
-    - ChatKit/Public (= 0.6.0)
+  - ChatKit (1.0.0):
+    - ChatKit/Public (= 1.0.0)
+    - ChatKit/UI_Core (= 1.0.0)
+  - ChatKit/Public (1.0.0):
     - ChatKit/UI_Core (= 0.6.0)
-  - ChatKit/Public (0.6.0):
-    - ChatKit/UI_Core (= 0.6.0)
-  - ChatKit/UI_Core (0.6.0):
+  - ChatKit/UI_Core (1.0.0):
     - DZVideoPlayerViewController
     - MagnetMax (~> 2.5.2)
     - NYTPhotoViewer (~> 1.1.0)
@@ -99,7 +99,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
-  ChatKit: 16e719c873084e0fc3fb9366ebdc25977cc0fd9c
+  ChatKit: 44828b9824a4ec4399d037eec997d5eef977c7db
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
   DZVideoPlayerViewController: 4886c5016a632cbd94a85e6071806e4929c01653
