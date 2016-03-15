@@ -24,23 +24,19 @@
                             <constraint firstAttribute="height" constant="10" id="h03-tB-ZAq"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="Wednesday" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="j2J-jQ-2Xs" userLabel="lastTime">
-                        <rect key="frame" x="514" y="10" width="70" height="17"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="70" id="1eC-LM-TMk"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Subscribers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1if-y8-iAH">
-                        <rect key="frame" x="74" y="8" width="432" height="18"/>
+                        <rect key="frame" x="74" y="8" width="422" height="18"/>
                         <constraints>
                             <constraint firstAttribute="width" priority="900" constant="466" id="EUV-Hn-Amy"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="EUV-Hn-Amy"/>
+                            </mask>
+                        </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RTg-dN-Fyc" userLabel="message">
                         <rect key="frame" x="74" y="26" width="518" height="40"/>
@@ -51,8 +47,8 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="›" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VF5-Ld-y5q">
-                        <rect key="frame" x="592" y="8" width="0.0" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="700" verticalHuggingPriority="700" text="›" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VF5-Ld-y5q">
+                        <rect key="frame" x="582" y="8" width="10" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="75J-BM-u4R"/>
                         </constraints>
@@ -84,7 +80,17 @@
                             <constraint firstItem="Vcf-9x-Mp0" firstAttribute="leading" secondItem="qQG-Ra-hP1" secondAttribute="leading" id="wYY-Mn-6NS"/>
                         </constraints>
                     </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="Wednesday" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="j2J-jQ-2Xs" userLabel="lastTime">
+                        <rect key="frame" x="504" y="10" width="70" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="1eC-LM-TMk"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="RTg-dN-Fyc" secondAttribute="trailing" id="2ex-P9-gLy"/>
                     <constraint firstItem="RTg-dN-Fyc" firstAttribute="top" secondItem="1if-y8-iAH" secondAttribute="bottom" id="4Kn-1I-DZk"/>
