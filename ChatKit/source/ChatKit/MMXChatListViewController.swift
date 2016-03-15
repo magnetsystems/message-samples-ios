@@ -30,7 +30,6 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     //MARK: Private Variables
     
     
-    
     private var requestNumber : Int = 0
     
     
