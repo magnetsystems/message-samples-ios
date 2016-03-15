@@ -208,6 +208,8 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         self.loadMore(self.searchBar.text, offset: self.currentDetailCount)
     }
     
+    public func shouldAppendChannel(channel : MMXChannel) -> Bool { return true }
+    
     public func shouldUpdateSearchContinuously() -> Bool {
         return true
     }
@@ -228,7 +230,9 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         DDLogVerbose("[Message] message recieved [CoreChatListViewController]")
         if let channel = mmxMessage.channel {
             if !refreshChannel(channel) {
-                self.append([channel])
+                if self.shouldAppendChannel(channel) {
+                    self.append([channel])
+                }
             }
         }
     }

@@ -106,6 +106,7 @@ import MagnetMax
     optional func mmxListImageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse)
     optional func mmxListRegisterCells(tableView : UITableView)
     optional func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse]
+    optional func mmxListShouldAppendNewChannel(channel : MMXChannel) -> Bool
     
     
 }

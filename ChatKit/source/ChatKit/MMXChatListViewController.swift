@@ -248,6 +248,14 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         return super.sort(channelDetails)
     }
     
+    override public func shouldAppendChannel(channel: MMXChannel) -> Bool {
+        if let append = self.datasource?.mmxListShouldAppendNewChannel?(channel) {
+            return append
+        }
+        
+        return super.shouldAppendChannel(channel)
+    }
+    
     override public func shouldUpdateSearchContinuously() -> Bool {
         if let datasource = self.datasource {
             return datasource.mmxControllerSearchUpdatesContinuously()
