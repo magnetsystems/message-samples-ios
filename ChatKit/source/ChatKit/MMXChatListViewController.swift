@@ -146,8 +146,12 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     }
     
     
-    //MARK: - Data Method Overrides
+    //MARK: - Core Method Overrides
     
+    
+    override public func append(mmxChannels: [MMXChannel]) {
+        super.append(mmxChannels)
+    }
     
     override public func canLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         if let canLeave = self.delegate?.mmxListCanLeaveChannel(channel, channelDetails : channelDetails) {

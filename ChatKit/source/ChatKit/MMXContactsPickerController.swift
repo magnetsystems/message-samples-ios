@@ -149,8 +149,12 @@ public class MMXContactsPickerController: CoreContactsViewController {
     }
     
     
-    //MARK: - Data Method Overrides
+    //MARK: - Core Method Overrides
     
+    
+    override public func append(unfilteredUsers: [MMUser]) {
+        super.append(unfilteredUsers)
+    }
     
     override public func cellDidCreate(cell: UITableViewCell) {
         self.datasource?.mmxContactsDidCreateCell?(cell)

@@ -206,8 +206,12 @@ public class MMXChatViewController: CoreChatViewController {
     }
     
     
-    //MARK:  DataMethod Overrides
+    //MARK: - Core Method Overrides
     
+    
+    override public func append(mmxMessages: [MMXMessage]) {
+        super.append(mmxMessages)
+    }
     
     override public func didSelectUserAvatar(user: MMUser) {
         self.delegate?.mmxAvatarDidClick?(user)
