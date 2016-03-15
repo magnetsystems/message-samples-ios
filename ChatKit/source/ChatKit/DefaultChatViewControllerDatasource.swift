@@ -16,6 +16,8 @@
 */
 
 import UIKit
+
+import CocoaLumberjack
 import MagnetMax
 
 public class DefaultChatViewControllerDatasource : NSObject, ChatViewControllerDatasource {
@@ -34,7 +36,7 @@ public class DefaultChatViewControllerDatasource : NSObject, ChatViewControllerD
     
     public func mmxControllerLoadMore(channel : MMXChannel?, offset : Int) {
         guard let channel = controller?.chat else { return }
-      
+        
         //get request context
         let loadingContext = controller?.loadingContext()
         
@@ -52,8 +54,9 @@ public class DefaultChatViewControllerDatasource : NSObject, ChatViewControllerD
             if offset == 0 {
                 self?.controller?.scrollToBottomAnimated(false)
             }
+            DDLogError("[Retrieved Messages] - (\(messages.count))")
             }, failure: { error in
-                print("[ERROR]: \(error)")
+                DDLogError("[Error] - \(error.localizedDescription)")
         })
     }
     

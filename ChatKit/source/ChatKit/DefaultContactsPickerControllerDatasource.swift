@@ -16,6 +16,8 @@
 */
 
 import UIKit
+
+import CocoaLumberjack
 import MagnetMax
 
 public class DefaultContactsPickerControllerDatasource : NSObject, ContactsControllerDatasource {
@@ -43,6 +45,7 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
         if let text = searchText {
             searchQuery = "userName:*\(text)* OR firstName:*\(text)* OR lastName:*\(text)*"
         }
+        DDLogError("[SearchQuery] - \(searchQuery)")
         
         return searchQuery
     }
@@ -74,9 +77,9 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
                 //append users, reload data or insert data
                 picker.append(users)
             }
-            
+            DDLogError("[Append] -  Users - \(users.count)")
             }, failure: { error in
-                print("[ERROR]: \(error.localizedDescription)")
+                DDLogError("[Error] - \(error.localizedDescription)")
                 self.controller?.reloadData()
         })
     }

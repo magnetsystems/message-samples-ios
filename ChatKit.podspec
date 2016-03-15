@@ -24,6 +24,7 @@ Pod::Spec.new do |s|
     ss.dependency 'MagnetMax', '~> 2.5.2'
     ss.dependency 'NYTPhotoViewer' , '~> 1.1.0'
     ss.dependency 'DZVideoPlayerViewController'
+    ss.dependency 'CocoaLumberjack/Swift'
   end
 
   s.subspec 'Public' do |ss|

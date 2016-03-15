@@ -15,10 +15,12 @@
 * permissions and limitations under the License.
 */
 
+import UIKit
+
 import MagnetMax
 import MobileCoreServices
 import NYTPhotoViewer
-import UIKit
+
 
 
 //MARK: ChatViewController

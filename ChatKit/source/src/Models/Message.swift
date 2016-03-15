@@ -15,8 +15,9 @@
 * permissions and limitations under the License.
 */
 
-import MMX
 import UIKit
+
+import MMX
 
 public class Message : NSObject, JSQMessageData {
     

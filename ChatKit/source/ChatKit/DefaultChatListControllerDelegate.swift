@@ -16,6 +16,8 @@
 */
 
 import UIKit
+
+import CocoaLumberjack
 import MagnetMax
 
 public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDelegate {
@@ -70,7 +72,7 @@ public class DefaultChatListControllerDelegate : NSObject, ChatListControllerDel
     }
     
     public func mmxAvatarDidClick(user: MMUser) {
-        print("[Clicked] \(user.userName) - Avatar! - DefaultChatListControllerDelegate")
+        DDLogInfo("[Clicked] \(user.userName) - Avatar! - DefaultChatListControllerDelegate")
     }
     
 }

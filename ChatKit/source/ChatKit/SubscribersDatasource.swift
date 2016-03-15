@@ -16,6 +16,8 @@
 */
 
 import UIKit
+
+import CocoaLumberjack
 import MagnetMax
 
 public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, ContactsControllerDelegate {
@@ -55,7 +57,9 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
                 //append users, reload data or insert data
                 picker.append(users)
             }
-            }, failure: { _ in
+            DDLogVerbose("[Append] - users appended \(users)")
+            }, failure: { error in
+                DDLogError("[Error] - Load More - \(error)")
                 self.controller?.reloadData()
         })
     }
@@ -76,9 +80,9 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
             self.currentContactsPickerViewController = contacts
             
             self.chatViewController?.navigationController?.pushViewController(contacts, animated: true)
-            
+            DDLogVerbose("[Presenting Contacts]")
             }, failure: { error in
-           
+                DDLogError("[Error] - \(error.localizedDescription)")
         })
     }
     
@@ -95,7 +99,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
     }
     
     func mmxTableViewFooterHeight(index: Int) -> CGFloat {
-       return 50.0
+        return 50.0
     }
     
     func mmxTableViewFooter(index : Int) -> UIView {
@@ -122,8 +126,9 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
                     chatViewController.title = CKStrings.kStr_Group
                     chatViewController.navigationController?.popToViewController(chatViewController, animated: true)
                 }
+                DDLogVerbose("[Added Users] - \(selectedUsers)")
                 }, failure: {error in
-                    
+                    DDLogError("[Error] - \(error.localizedDescription)")
             })
         }
     }

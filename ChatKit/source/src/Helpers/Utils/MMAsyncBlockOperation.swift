@@ -15,8 +15,9 @@
 * permissions and limitations under the License.
 */
 
-import MagnetMax
 import Foundation
+
+import MagnetMax
 
 public class MMAsyncBlockOperation : MMAsynchronousOperation {
     

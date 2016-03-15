@@ -15,8 +15,9 @@
 * permissions and limitations under the License.
 */
 
-import MagnetMax
 import UIKit
+
+import MagnetMax
 
 public class NotifierListener : NSObject {
     override init() {

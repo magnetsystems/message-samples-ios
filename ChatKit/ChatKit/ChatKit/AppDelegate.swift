@@ -20,6 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)
         MagnetMax.configure(configuration!)
         
+        DDLog.addLogger(DDTTYLogger.sharedInstance()) // TTY = Xcode console
+        DDLog.addLogger(DDASLLogger.sharedInstance()) // ASL = Apple System Logs
+        
         // Override point for customization after application launch.
         return true
     }

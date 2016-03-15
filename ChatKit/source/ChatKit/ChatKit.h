@@ -16,4 +16,8 @@
  */
 
 @import UIKit;
+
 @import MagnetMax;
+
+#define LOG_LEVEL_DEF ddLogLevel
+#import <CocoaLumberjack/CocoaLumberjack.h>

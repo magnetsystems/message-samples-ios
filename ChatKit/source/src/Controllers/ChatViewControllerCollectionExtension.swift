@@ -16,9 +16,7 @@
 * permissions and limitations under the License.
 */
 
-
 import NYTPhotoViewer
-
 
 extension CoreChatViewController {
     

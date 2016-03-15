@@ -52,6 +52,9 @@
         ],
         "DZVideoPlayerViewController": [
 
+        ],
+        "CocoaLumberjack/Swift": [
+
         ]
       }
     },

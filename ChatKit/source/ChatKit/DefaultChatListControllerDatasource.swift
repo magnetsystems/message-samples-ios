@@ -16,6 +16,8 @@
 */
 
 import UIKit
+
+import CocoaLumberjack
 import MagnetMax
 
 public class DefaultChatListControllerDatasource : NSObject, ChatListControllerDatasource {
@@ -38,8 +40,9 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         
         MMXChannel.createWithName(id, summary: id, isPublic: false, publishPermissions: .Anyone, subscribers: Set(subscribers), success: { (channel) -> Void in
             self.controller?.reloadData()
+            DDLogError("[Channel Created] - (\(channel.name))")
             }) { (error) -> Void in
-                print("[ERROR] \(error.localizedDescription)")
+                DDLogError("[Error] - \(error.localizedDescription)")
         }
     }
     
@@ -47,9 +50,10 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         MMXChannel.subscribedChannelsWithSuccess({ ch in
             self.channels = ch
             completion(channels: self.channels)
+            DDLogError("[Retireved] - Channels (\(self.channels.count))")
             }) { error in
-                print(error)
                 completion(channels: [])
+                DDLogError("[Error] - \(error.localizedDescription)")
         }
     }
     
