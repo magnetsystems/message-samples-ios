@@ -54,7 +54,7 @@ public class DefaultChatViewControllerDatasource : NSObject, ChatViewControllerD
             if offset == 0 {
                 self?.controller?.scrollToBottomAnimated(false)
             }
-            DDLogError("[Retrieved Messages] - (\(messages.count))")
+            DDLogVerbose("[Retrieved Messages] - (\(messages.count))")
             }, failure: { error in
                 DDLogError("[Error] - \(error.localizedDescription)")
         })

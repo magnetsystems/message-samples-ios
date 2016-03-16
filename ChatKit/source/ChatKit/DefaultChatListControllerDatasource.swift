@@ -40,7 +40,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         
         MMXChannel.createWithName(id, summary: id, isPublic: false, publishPermissions: .Anyone, subscribers: Set(subscribers), success: { (channel) -> Void in
             self.controller?.reloadData()
-            DDLogError("[Channel Created] - (\(channel.name))")
+            DDLogVerbose("[Channel Created] - (\(channel.name))")
             }) { (error) -> Void in
                 DDLogError("[Error] - \(error.localizedDescription)")
         }
@@ -50,7 +50,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         MMXChannel.subscribedChannelsWithSuccess({ ch in
             self.channels = ch
             completion(channels: self.channels)
-            DDLogError("[Retireved] - Channels (\(self.channels.count))")
+            DDLogVerbose("[Retireved] - Channels (\(self.channels.count))")
             }) { error in
                 completion(channels: [])
                 DDLogError("[Error] - \(error.localizedDescription)")

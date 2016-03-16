@@ -45,7 +45,7 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
         if let text = searchText {
             searchQuery = "userName:*\(text)* OR firstName:*\(text)* OR lastName:*\(text)*"
         }
-        DDLogError("[SearchQuery] - \(searchQuery)")
+        DDLogInfo("[SearchQuery] - \(searchQuery)")
         
         return searchQuery
     }
@@ -77,7 +77,7 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
                 //append users, reload data or insert data
                 picker.append(users)
             }
-            DDLogError("[Append] -  Users - \(users.count)")
+            DDLogVerbose("[Append] -  Users - \(users.count)")
             }, failure: { error in
                 DDLogError("[Error] - \(error.localizedDescription)")
                 self.controller?.reloadData()
