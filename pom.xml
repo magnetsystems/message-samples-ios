@@ -45,7 +45,7 @@
                                 <exec executable="zip" dir="${basedir}">
                                     <arg value="-r" />
                                     <arg value="-y" />
-                                    <arg value="${basedir}/target/ios-samples/Messenger.zip" />
+                                    <arg value="${basedir}/target/ios-samples/messenger-ios.zip" />
                                     <arg value="Messenger" />
                                 </exec>
                                 <exec executable="zip" dir="${basedir}">
