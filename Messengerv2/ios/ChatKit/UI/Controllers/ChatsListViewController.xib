@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatsListViewController">
+            <connections>
+                <outlet property="cancelBBI" destination="meB-R5-KfH" id="4sM-e0-pqy"/>
+                <outlet property="channelsTable" destination="y0q-oA-4DF" id="IUi-KU-0Aj"/>
+                <outlet property="createBBI" destination="EU3-Lk-GSU" id="j2H-0y-lbx"/>
+                <outlet property="view" destination="Eah-Le-vrZ" id="do1-DI-6Nr"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="Eah-Le-vrZ">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="y0q-oA-4DF">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="gRh-uo-fyt"/>
+                        <outlet property="delegate" destination="-1" id="ks2-Tu-HSr"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="y0q-oA-4DF" firstAttribute="top" secondItem="Eah-Le-vrZ" secondAttribute="top" id="43o-UY-zqf"/>
+                <constraint firstItem="y0q-oA-4DF" firstAttribute="leading" secondItem="Eah-Le-vrZ" secondAttribute="leading" id="7fU-Xc-gNs"/>
+                <constraint firstAttribute="bottom" secondItem="y0q-oA-4DF" secondAttribute="bottom" id="Rom-FY-0KH"/>
+                <constraint firstAttribute="trailing" secondItem="y0q-oA-4DF" secondAttribute="trailing" id="lqq-DE-F0I"/>
+            </constraints>
+            <point key="canvasLocation" x="215" y="314"/>
+        </view>
+        <barButtonItem title="Cancel" id="meB-R5-KfH" userLabel="left_cancel">
+            <connections>
+                <action selector="leftBtnPress:" destination="-1" id="eVf-9T-qyk"/>
+            </connections>
+        </barButtonItem>
+        <barButtonItem title="Create" id="EU3-Lk-GSU" userLabel="right_create">
+            <connections>
+                <action selector="rightBtnPress:" destination="-1" id="yfe-1l-gN6"/>
+            </connections>
+        </barButtonItem>
+    </objects>
+</document>

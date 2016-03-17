@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignInViewController">
+            <connections>
+                <outlet property="checkboxIV" destination="nGm-UM-VTv" id="h4r-Dy-F48"/>
+                <outlet property="loginTF" destination="WS4-j6-UFN" id="axL-Yj-WyN"/>
+                <outlet property="logoHeightLC" destination="as0-ye-Teq" id="nPH-a0-3aE"/>
+                <outlet property="logoIV" destination="hCi-dK-9u5" id="NCg-bH-AkX"/>
+                <outlet property="logoToTopLC" destination="Q62-rh-Pa6" id="YPs-wR-dxx"/>
+                <outlet property="logoWidthLC" destination="NYW-5Z-ZV3" id="Naz-9i-9pT"/>
+                <outlet property="passwordTF" destination="7e1-QL-LFW" id="tQc-IL-rqj"/>
+                <outlet property="rememberCheckboxContent" destination="Buc-eo-u7M" id="484-L6-0g0"/>
+                <outlet property="view" destination="QIh-x8-fYG" id="DYO-a2-lCH"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="QIh-x8-fYG">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WS4-j6-UFN">
+                    <rect key="frame" x="40" y="226" width="520" height="30"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="qu1-A5-jDs"/>
+                    </connections>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7e1-QL-LFW">
+                    <rect key="frame" x="40" y="264" width="520" height="30"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="d71-ax-fcp"/>
+                    </connections>
+                </textField>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Buc-eo-u7M">
+                    <rect key="frame" x="219" y="302" width="162" height="40"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remember me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="79S-DP-T72">
+                            <rect key="frame" x="42" y="9" width="112" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chb_deselect.png" translatesAutoresizingMaskIntoConstraints="NO" id="nGm-UM-VTv">
+                            <rect key="frame" x="8" y="10" width="20" height="20"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="20" id="9Fl-GE-2TY"/>
+                                <constraint firstAttribute="width" constant="20" id="ll9-MV-3EK"/>
+                            </constraints>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yVg-kf-sqZ" userLabel="chbBtn">
+                            <rect key="frame" x="0.0" y="0.0" width="162" height="40"/>
+                            <connections>
+                                <action selector="checkboxTap:" destination="-1" eventType="touchUpInside" id="xsV-pF-QN8"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="yVg-kf-sqZ" secondAttribute="bottom" id="AJr-Jc-QD1"/>
+                        <constraint firstItem="yVg-kf-sqZ" firstAttribute="top" secondItem="Buc-eo-u7M" secondAttribute="top" id="GSA-11-0jk"/>
+                        <constraint firstItem="nGm-UM-VTv" firstAttribute="top" secondItem="Buc-eo-u7M" secondAttribute="top" constant="10" id="RPN-OS-Qah"/>
+                        <constraint firstItem="79S-DP-T72" firstAttribute="leading" secondItem="nGm-UM-VTv" secondAttribute="trailing" constant="14" id="Wdi-Vo-vly"/>
+                        <constraint firstAttribute="bottom" secondItem="nGm-UM-VTv" secondAttribute="bottom" constant="10" id="YvK-hj-BMA"/>
+                        <constraint firstAttribute="trailing" secondItem="79S-DP-T72" secondAttribute="trailing" constant="8" id="aHY-va-MWY"/>
+                        <constraint firstAttribute="trailing" secondItem="yVg-kf-sqZ" secondAttribute="trailing" id="jqe-aT-TGi"/>
+                        <constraint firstItem="79S-DP-T72" firstAttribute="centerY" secondItem="nGm-UM-VTv" secondAttribute="centerY" id="pc7-qC-Bhm"/>
+                        <constraint firstItem="yVg-kf-sqZ" firstAttribute="leading" secondItem="Buc-eo-u7M" secondAttribute="leading" id="sq5-9w-wBl"/>
+                        <constraint firstItem="nGm-UM-VTv" firstAttribute="leading" secondItem="Buc-eo-u7M" secondAttribute="leading" constant="8" id="xgb-Dp-vmh"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mn1-PM-htm">
+                    <rect key="frame" x="40" y="350" width="520" height="30"/>
+                    <state key="normal" title="Sign in"/>
+                    <connections>
+                        <action selector="submit:" destination="-1" eventType="touchUpInside" id="Eko-4n-WbJ"/>
+                    </connections>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hCi-dK-9u5">
+                    <rect key="frame" x="260" y="120" width="80" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="80" id="NYW-5Z-ZV3"/>
+                        <constraint firstAttribute="height" constant="80" id="as0-ye-Teq"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="7e1-QL-LFW" firstAttribute="leading" secondItem="QIh-x8-fYG" secondAttribute="leading" constant="40" id="2uU-bS-NKr"/>
+                <constraint firstItem="7e1-QL-LFW" firstAttribute="top" secondItem="WS4-j6-UFN" secondAttribute="bottom" constant="8" id="4U6-f3-omm"/>
+                <constraint firstAttribute="trailing" secondItem="WS4-j6-UFN" secondAttribute="trailing" constant="40" id="7Fo-3Q-05j"/>
+                <constraint firstItem="mn1-PM-htm" firstAttribute="leading" secondItem="QIh-x8-fYG" secondAttribute="leading" constant="40" id="DQ0-GW-8Bu"/>
+                <constraint firstItem="Buc-eo-u7M" firstAttribute="top" secondItem="7e1-QL-LFW" secondAttribute="bottom" constant="8" id="IPI-TL-dox"/>
+                <constraint firstItem="hCi-dK-9u5" firstAttribute="top" secondItem="QIh-x8-fYG" secondAttribute="top" constant="120" id="Q62-rh-Pa6"/>
+                <constraint firstAttribute="trailing" secondItem="mn1-PM-htm" secondAttribute="trailing" constant="40" id="Sgt-qw-8Qb"/>
+                <constraint firstAttribute="trailing" secondItem="7e1-QL-LFW" secondAttribute="trailing" constant="40" id="aEi-rv-GWV"/>
+                <constraint firstItem="mn1-PM-htm" firstAttribute="top" secondItem="Buc-eo-u7M" secondAttribute="bottom" constant="8" id="dfV-8v-GQU"/>
+                <constraint firstItem="Buc-eo-u7M" firstAttribute="centerX" secondItem="QIh-x8-fYG" secondAttribute="centerX" id="liR-la-HSH"/>
+                <constraint firstItem="hCi-dK-9u5" firstAttribute="centerX" secondItem="QIh-x8-fYG" secondAttribute="centerX" id="mU5-Tz-L94"/>
+                <constraint firstItem="WS4-j6-UFN" firstAttribute="leading" secondItem="QIh-x8-fYG" secondAttribute="leading" constant="40" id="pWS-xX-YrD"/>
+                <constraint firstItem="WS4-j6-UFN" firstAttribute="top" secondItem="hCi-dK-9u5" secondAttribute="bottom" constant="26" id="uWf-Pp-mRb"/>
+            </constraints>
+            <point key="canvasLocation" x="415" y="446"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="chb_deselect.png" width="40" height="30"/>
+    </resources>
+</document>
