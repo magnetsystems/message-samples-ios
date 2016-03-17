@@ -8,6 +8,12 @@
 
 #import "CHKBaseViewController.h"
 
-@interface ChatViewController : CHKBaseViewController
+@import MagnetMax;
+
+@interface ChatViewController : CHKBaseViewController <UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, strong) MMXChannel *chatChannel;
+
+@property (nonatomic, copy) NSString *titleString; // default - description of channel
 
 @end

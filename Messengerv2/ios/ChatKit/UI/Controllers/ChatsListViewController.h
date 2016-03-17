@@ -37,11 +37,9 @@
 - (void)didPressChatCreate;
 
 /**
- *  Chat cell interaction on select
- *
- *  @param indexPath indexPath for selected chat cell.
+ *  Chat channel interaction on select
  */
-- (void)shouldOpenChatForCellAtIndex:(NSIndexPath*)indexPath;
+- (void)shouldOpenChatChannel:(MMXChannel*)channel;
 
 /**
  *  NavBar title customization.

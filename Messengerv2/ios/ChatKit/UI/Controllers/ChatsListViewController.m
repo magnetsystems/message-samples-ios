@@ -9,6 +9,7 @@
 #import "ChatsListViewController.h"
 
 #import "ContactsViewController.h"
+#import "ChatViewController.h"
 
 #import "ChannelCell.h"
 
@@ -37,14 +38,16 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTableDataUI) name:MMXDidReceiveChannelInviteNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageIncome:) name:MMXDidReceiveMessageNotification object:nil];
+   
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendError:) name:MMXMessageSendErrorNotification object:nil];
     
 }
 
 - (void)setupUI
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTableDataUI) name:MMXDidReceiveChannelInviteNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageIncome:) name:MMXDidReceiveMessageNotification object:nil];
+    
     if (self.navigationController) {
         self.navigationItem.leftBarButtonItems = [self leftBarButtonItems];
         self.navigationItem.rightBarButtonItems = [self rightBarButtonItems];
@@ -134,8 +137,21 @@
 }
 
 
-- (void)shouldOpenChatForCellAtIndex:(NSIndexPath *)indexPath
+- (void)shouldOpenChatChannel:(MMXChannel*)channel;
 {
+    if (channel) {
+        if (self.navigationController) {
+            ChatViewController *vc = [ChatViewController new];
+            vc.chatChannel = channel;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        } else {
+            ChatViewController *vc = [ChatViewController new];
+            vc.chatChannel = channel;
+            [self.presentingViewController presentViewController:vc animated:YES completion:nil];
+        }
+    }
+    
     NSLog(@"Activated shouldOpenChatForCellAtIndex. You should override this method to catch this interaction.");
 }
 
@@ -172,7 +188,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self shouldOpenChatForCellAtIndex:indexPath];
+    if (_presentingChannels.count) {
+        MMXChannel *channel = _presentingChannels[indexPath.row];
+        [self shouldOpenChatChannel:channel];
+    }
+    
 }
 
 #pragma mark Actions

@@ -40,6 +40,6 @@
 /**
  *  NavBar right bar button item onPress interaction hook.
  */
-- (void)shouldCreateChatWithSelectedUsers:(NSArray* <MMUser*>)users;
+- (void)shouldCreateChatWithSelectedUsers:(NSArray <MMUser*> *)users;
 
 @end
