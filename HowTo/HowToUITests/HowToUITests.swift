@@ -191,7 +191,7 @@ class HowToUITests: XCTestCase {
     // MARK: - Publish / Subscribe
     
     func test05CreatePublicChannel() {
-        print("test04ChatSendMessage")
+        print("test05CreatePublicChannel")
         let app = XCUIApplication()
         enterCredentials(userName, password: password)
         
@@ -258,35 +258,10 @@ class HowToUITests: XCTestCase {
     }
     
     func test06PublishSubscribe_AllSubscribed() {
-        print("test04ChatSendMessage")
+        print("test06PublishSubscribe_AllSubscribed")
         let seconds : UInt64 = 5
         let app = XCUIApplication()
         toPublishSubscribe()
-        
-//        enterCredentials(userName, password: password)
-//        
-//        /*
-//        Login
-//        */
-//        
-//        app.buttons["Login"].tap()
-//        let loginExpectation = self.expectationWithDescription("Login expactation")
-//        
-//        //Wait some time for login callback
-//        let seconds : UInt64 = 5
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-//            loginExpectation.fulfill()
-//        })
-//        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
-//        
-//        /*
-//        Publish/Subscribe
-//        Create public and private channels before
-//        */
-//        
-//        let tablesQuery = app.tables
-//        tablesQuery.staticTexts["Publish/Subscribe"].tap()
-//        XCTAssert(app.navigationBars["Publish / Subscribe"].exists)
         
         let tablesQuery = app.tables
         tablesQuery.staticTexts["Subscribed channels"].tap()
@@ -304,12 +279,11 @@ class HowToUITests: XCTestCase {
     }
     
     func test07PublishSubscribe_AllPublic() {
-        print("test04ChatSendMessage")
+        print("test07PublishSubscribe_AllPublic")
         let seconds : UInt64 = 5
         let app = XCUIApplication()
         toPublishSubscribe()
         
-        //app.navigationBars["Subscribed channels"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
         let tablesQuery = app.tables
         tablesQuery.staticTexts["All public channels"].tap()
         XCTAssert(app.navigationBars["All public channels"].exists)
@@ -330,21 +304,67 @@ class HowToUITests: XCTestCase {
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
     }
     
+    func test08PublishSubscribe_MyPrivate() {
+        print("test07PublishSubscribe_AllPublic")
+        let seconds : UInt64 = 5
+        let app = XCUIApplication()
+        toPublishSubscribe()
         
-        // Following is beyond public channel
-//        app.navigationBars["All public channels"].buttons["Back"].tap()
-//        
-//        tablesQuery.staticTexts["My private channels"].tap()
-//        XCTAssert(app.navigationBars["My private channels"].exists)
-//        
-//        let myPrivateExpactation = self.expectationWithDescription("My private channels expactation")
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-//            XCTAssert(app.tables.cells.count > 0, "Should see channels")
-//            myPrivateExpactation.fulfill()
-//        })
-//        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
-//        
-//        // Next - check one of the channels
+        let tablesQuery = app.tables
+        
+        tablesQuery.staticTexts["My private channels"].tap()
+        XCTAssert(app.navigationBars["My private channels"].exists)
+
+        let myPrivateExpectation = self.expectationWithDescription("My private channels expactation")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            XCTAssert(app.tables.cells.count > 0, "Should see channels")
+            tablesQuery.staticTexts[self.userName].tap()
+            let messageTextField = app.textFields["Message"]    //Send Message
+            messageTextField.tap()
+            messageTextField.typeText("Automated")
+            app.navigationBars[self.userName].buttons["Send"].tap()
+            sleep(5)
+            XCTAssert(app.tables.cells.count > 0, "Should see messages") //Validate fetch messages not empty
+            myPrivateExpectation.fulfill()
+        })
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+    }
+    
+    func test09PublishSubscribe_Subscribers() {
+        print("test09PublishSubscribe_Subscribers")
+        let seconds : UInt64 = 5
+        let app = XCUIApplication()
+        toPublishSubscribe()
+        
+        let tablesQuery = app.tables
+        tablesQuery.staticTexts["All public channels"].tap()
+        XCTAssert(app.navigationBars["All public channels"].exists)
+        
+        //let subscriberListExpectation = self.expectationWithDescription("All public channels expectation")
+        //Wait some time for callback
+        //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            XCTAssert(app.tables.cells.count > 0, "Should see channels")
+            tablesQuery.staticTexts["public "].tap()
+            app.tabBars.buttons["Subscribers"].tap()
+            XCTAssert(app.navigationBars["Subscribers"].exists, "Subscribers screen is not showing")
+            XCTAssertTrue(app.tables.staticTexts[self.userName].exists)
+        
+        //subscriberListExpectation.fulfill()
+        
+        //Temp Test
+        let inviteExpectation = self.expectationWithDescription("Invite expectation")
+        app.navigationBars["Subscribers"].buttons["Invite"].tap()
+        app.alerts["Invite user"].collectionViews.buttons["Send"].tap() //Confirm invite send
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            XCTAssert(app.alerts["Invite"].exists, "Should see invite alert")
+            app.alerts["Invite"].collectionViews.buttons["Accept"].tap()
+            inviteExpectation.fulfill()
+        })
+        //
+        //})
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+    }
+
 //        
 //        XCTAssert(app.tables.cells.staticTexts[userName].exists, "Private channel with your name should exist")
 //        app.tables.cells.staticTexts[userName].tap()
@@ -626,6 +646,7 @@ class HowToUITests: XCTestCase {
         
         app.buttons["Login"].tap()
         let loginExpectation = self.expectationWithDescription("Login expactation")
+        
         //Wait some time for login callback
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             loginExpectation.fulfill()
@@ -742,5 +763,28 @@ class HowToUITests: XCTestCase {
         let tablesQuery = app.tables
         tablesQuery.staticTexts["Publish/Subscribe"].tap()
         XCTAssert(app.navigationBars["Publish / Subscribe"].exists)
-        
-    }}
+    }
+    
+//    func test() {
+//        
+//        let app = XCUIApplication()
+//        let usernameTextField = app.textFields["Username"]
+//        usernameTextField.tap()
+//        usernameTextField.typeText("pchan")
+//        
+//        let passwordSecureTextField = app.secureTextFields["Password"]
+//        passwordSecureTextField.tap()
+//        passwordSecureTextField.typeText("test")
+//        app.buttons["Login"].tap()
+//        
+//        let tablesQuery = app.tables
+//        tablesQuery.staticTexts["Publish/Subscribe"].tap()
+//        tablesQuery.staticTexts["All public channels"].tap()
+//        tablesQuery.staticTexts["public"].tap()
+//        app.tabBars.buttons["Subscribers"].tap()
+//        app.navigationBars["Subscribers"].buttons["Invite"].tap()
+//        app.alerts["Invite user"].collectionViews.buttons["Send"].tap()
+//        app.alerts["Invite"].collectionViews.buttons["Accept"].tap()
+//        
+//    }
+}
