@@ -314,7 +314,87 @@ class MessengerUITests: XCTestCase {
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
     }
     
+    //Test8 Positive scenario - Logout existing user of the app
+//    func test8LogoutExistingUser()
+//    {
+//        let app = XCUIApplication()
+//        let alexGordymanNavigationBar = XCUIApplication().navigationBars["Alex Gordyman"]
+//        
+//        alexGordymanNavigationBar.buttons["menu"].tap()
+//        
+//        let signOutStaticText = app.tables.staticTexts["Sign out"]
+//        signOutStaticText.tap()
+//        
+//        let collectionViewsQuery = app.alerts["Sign out"].collectionViews
+//        collectionViewsQuery.buttons["No"].tap()
+//        signOutStaticText.tap()
+//        collectionViewsQuery.buttons["Yes"].tap()
+//        
+//        
+//        let logoutexpectation = self.expectationWithDescription("Logout time out.")
+//        //waiting for time (10 sec) to logout callback
+//        let seconds : UInt64 = 10
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+//            XCTAssert(app.navigationBars.staticTexts["Alex Gordyman"].exists)
+//            XCTAssert(app.tables.staticTexts["Sign out"].exists)
+//            XCTAssert(app.alerts["Sign out"].exists)
+//            XCTAssert(app.staticTexts["Do you want to sign out?"].exists)
+//            XCTAssert(app.alerts.collectionViews.buttons["No"].exists)
+//            collectionViewsQuery.buttons["No"].tap()
+//            XCTAssert(app.alerts.collectionViews.buttons["Yes"].exists)
+//            collectionViewsQuery.buttons["Yes"].tap()
+//            logoutexpectation.fulfill()
+//        })
+//
+//        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+//
+//    }
     
+    //Test9 Positive scenario - Register a new user with valid data
+    func test9RegisterANewUser()
+    {
+        let app = XCUIApplication()
+        app.buttons["Create account"].tap()
+        
+        let firstNameTextField = app.textFields["First name"]
+        firstNameTextField.tap()
+        firstNameTextField.typeText("AutomationTest6")
+        
+        let lastNameTextField = app.textFields["Last name"]
+        lastNameTextField.tap()
+        lastNameTextField.typeText("User4")
+        
+        let emailAddressTextField = app.textFields["Email Address"]
+        emailAddressTextField.tap()
+        emailAddressTextField.typeText("test6@automation.gmail.com")
+        
+        
+        let passwordSecureTextField = app.secureTextFields["Password"]
+        passwordSecureTextField.tap()
+        passwordSecureTextField.typeText("Temp1234%")
+        
+        let passwordAgainSecureTextField = app.secureTextFields["Password again"]
+        passwordAgainSecureTextField.tap()
+        passwordAgainSecureTextField.typeText("Temp1234%")
+        
+        app.navigationBars["Register"].buttons["Register"].tap()
+        
+        let expectation = self.expectationWithDescription("Registration timed out.")
+        
+        XCTAssert(app.activityIndicators.count == 1, "Should show activityIndicator")
+        
+        //waiting for time (7 sec) to register callback
+        let seconds : UInt64 = 7
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            //a few checks, related to success registration
+            XCTAssertFalse(app.navigationBars.buttons["Register"].exists)
+            XCTAssert(app.navigationBars["My Profile"].exists)
+            expectation.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+    }
+
 }
 
 
