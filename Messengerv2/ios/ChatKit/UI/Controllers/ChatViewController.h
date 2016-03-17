@@ -6,8 +6,8 @@
 //  Copyright © 2016 Vladimir Yevdokimov. All rights reserved.
 //
 
-#import <JSQMessagesViewController/JSQMessagesViewController.h>
+#import "CHKBaseViewController.h"
 
-@interface ChatViewController : JSQMessagesViewController
+@interface ChatViewController : CHKBaseViewController
 
 @end
