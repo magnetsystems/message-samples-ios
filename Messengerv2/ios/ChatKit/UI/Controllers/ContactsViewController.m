@@ -8,6 +8,8 @@
 
 #import "ContactsViewController.h"
 
+#import "ChatViewController.h"
+
 @interface ContactsViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *contactsTable;
@@ -21,7 +23,6 @@
 @implementation ContactsViewController
 #pragma mark - Class Methods
 
-
 + (UINib *)nib
 {
     return [UINib nibWithNibName:NSStringFromClass([ContactsViewController class])
@@ -33,7 +34,6 @@
     if (self.navigationController) {
         self.navigationItem.leftBarButtonItems = [self leftBarButtonItems];
         self.navigationItem.rightBarButtonItems = [self rightBarButtonItems];
-        
         self.navigationItem.title = [self titleString];
     }
 }
@@ -65,17 +65,58 @@
 
 - (NSArray *)rightBarButtonItems
 {
-    return _createBBI?@[_createBBI]:@[];
+    if (_createBBI) {
+        _createBBI.enabled = NO;
+        return @[_createBBI];
+    } else {
+        return @[];
+    }
 }
+
 - (NSString *)titleString
 {
     return @"Contacts";
 }
 
 
-- (void)shouldCreateChatWithSelectedUsers:(NSArray* <MMUser*>)users;
+- (void)shouldCreateChatWithSelectedUsers:(NSArray <MMUser*> *)users;
 {
-    NSLog(@"Activated didPressRightBarButtonItem. You should override this method to catch this interaction.");
+    NSString *channelName = [NSString stringWithFormat:@"chat-%@",[NSUUID UUID].UUIDString];
+    NSString *description = (users.count>1)?@"GroupChat":@"PersonalChat";
+    
+    [MMXChannel createWithName:channelName summary:description isPublic:(users.count>1)?YES:NO publishPermissions:MMXPublishPermissionsSubscribers subscribers:[NSSet setWithArray:users] success:^(MMXChannel * _Nonnull channel) {
+        
+        if (channel) {
+            if (self.navigationController) {
+                NSMutableArray *vcs = self.navigationController.viewControllers.mutableCopy;
+                ChatViewController *vc = [ChatViewController new];
+                vc.chatChannel = channel;
+                
+                NSInteger index = 0;
+                NSArray *iterVcs = [NSArray arrayWithArray:vcs];
+                for (UIViewController *vcc in iterVcs) {
+                    if ([vcc isKindOfClass:self.class]) {
+                        index = [iterVcs indexOfObject:vcc];
+                    }
+                }
+                [vcs insertObject:vc atIndex:index];
+                self.navigationController.viewControllers = vcs;
+                [self leftBtnPress:nil];
+                
+            } else {
+                [self dismissViewControllerAnimated:YES completion:^{
+                    ChatViewController *vc = [ChatViewController new];
+                    vc.chatChannel = channel;
+                    [self.presentingViewController presentViewController:vc animated:YES completion:nil];
+                }];
+            }
+        }
+        
+    } failure:^(NSError * _Nonnull error) {
+        NSLog(@"Chat create error %@",error);
+    }];
+    
+    NSLog(@"Activated didPressRightBarButtonItem. You may override this method to catch this interaction.");
 }
 
 #pragma mark - Life Cycle
@@ -114,6 +155,21 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_createBBI) {
+        if ([tableView indexPathsForSelectedRows].count == 0) {
+            _createBBI.enabled = NO;
+        }
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_createBBI) {
+        _createBBI.enabled = YES;
+    }
+}
 
 #pragma mark Actions
 
