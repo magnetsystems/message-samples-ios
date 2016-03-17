@@ -27,7 +27,8 @@
 @implementation ChatsListViewController
 
 + (UINib*)nib {
-    return [UINib nibWithNibName:NSStringFromClass([ChatsListViewController class]) bundle:nil];
+    return [UINib nibWithNibName:NSStringFromClass([ChatsListViewController class])
+                          bundle:[NSBundle bundleForClass:[ChatsListViewController class]]];
 }
 
 #pragma mark - UI and Loading

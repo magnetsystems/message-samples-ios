@@ -27,7 +27,8 @@
 @implementation SignInViewController
 
 + (UINib*)nib {
-    return [UINib nibWithNibName:NSStringFromClass([SignInViewController class]) bundle:nil];
+    return [UINib nibWithNibName:NSStringFromClass([SignInViewController class])
+                          bundle:[NSBundle bundleForClass:[SignInViewController class]]];
 }
 
 - (void)setupUI
