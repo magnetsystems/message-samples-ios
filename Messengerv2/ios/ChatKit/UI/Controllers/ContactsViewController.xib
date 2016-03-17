@@ -36,7 +36,15 @@
             </constraints>
             <point key="canvasLocation" x="337" y="324"/>
         </view>
-        <barButtonItem title="Cancel" id="PEx-PZ-nIs" userLabel="left_cancel"/>
-        <barButtonItem title="Create" id="R7f-L8-TNs" userLabel="right_create"/>
+        <barButtonItem title="Cancel" id="PEx-PZ-nIs" userLabel="left_cancel">
+            <connections>
+                <action selector="leftBtnPress:" destination="-1" id="t33-KI-vir"/>
+            </connections>
+        </barButtonItem>
+        <barButtonItem title="Create" id="R7f-L8-TNs" userLabel="right_create">
+            <connections>
+                <action selector="rightBtnPress:" destination="-1" id="TCJ-cR-nr5"/>
+            </connections>
+        </barButtonItem>
     </objects>
 </document>

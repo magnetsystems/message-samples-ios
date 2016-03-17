@@ -8,7 +8,7 @@
 
 #import "CHKBaseViewController.h"
 
-@import MagnetMaxCore;
+@import MagnetMax;
 
 @interface ContactsViewController : CHKBaseViewController <UITableViewDelegate, UITableViewDataSource>
 
@@ -31,15 +31,15 @@
 @property (nonatomic, strong) NSArray <MMUser*> *contacts;
 
 /**
- *  NavBar right bar button item onPress interaction hook.
- */
-- (void)didPressRightBarButtonItem;
-
-/**
  *  NavBar title customization.
  *
- *  @return String value. Default value "Chats List". Nullable.
+ *  String value. Default value "Chats List". Nullable.
  */
-- (NSString*)titleString;
+@property (nonatomic, copy) NSString *titleString;
+
+/**
+ *  NavBar right bar button item onPress interaction hook.
+ */
+- (void)shouldCreateChatWithSelectedUsers:(NSArray* <MMUser*>)users;
 
 @end

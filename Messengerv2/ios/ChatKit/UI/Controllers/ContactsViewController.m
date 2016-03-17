@@ -73,7 +73,7 @@
 }
 
 
-- (void)didPressRightBarButtonItem
+- (void)shouldCreateChatWithSelectedUsers:(NSArray* <MMUser*>)users;
 {
     NSLog(@"Activated didPressRightBarButtonItem. You should override this method to catch this interaction.");
 }
@@ -93,6 +93,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        
         cell.imageView.image = [UIImage imageNamed:@"user_default"];
     }
     MMUser *user = _presentingUsers[indexPath.row];
@@ -109,7 +110,42 @@
             });
         }
     });
+    
     return cell;
+}
+
+
+#pragma mark Actions
+
+- (IBAction)rightBtnPress:(UIBarButtonItem*)sender
+{
+    NSArray *indexPaths = [_contactsTable indexPathsForSelectedRows];
+    
+    NSMutableArray *selectedUsers = @[].mutableCopy;
+    for (NSIndexPath *path in indexPaths) {
+        [selectedUsers addObject:_presentingUsers[path.row]];
+    }
+    
+    [self shouldCreateChatWithSelectedUsers:selectedUsers];
+}
+
+- (IBAction)leftBtnPress:(UIBarButtonItem*)sender
+{
+    if (self.presentingViewController) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else if (self.navigationController) {
+        if (self.navigationController.presentingViewController) {
+            if (self.navigationController.viewControllers.count == 1) {
+                
+                [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+            } else {
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            }
+        } else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
 }
 
 @end

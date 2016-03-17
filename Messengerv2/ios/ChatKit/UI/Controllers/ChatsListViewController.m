@@ -41,7 +41,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageIncome:) name:MMXDidReceiveMessageNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageSendError:) name:MMXMessageSendErrorNotification object:nil];
     
-    self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)setupUI
@@ -51,6 +50,8 @@
         self.navigationItem.rightBarButtonItems = [self rightBarButtonItems];
         
         self.navigationItem.title = [self titleString];
+        self.navigationController.navigationBarHidden = NO;
+
     }
 }
 
