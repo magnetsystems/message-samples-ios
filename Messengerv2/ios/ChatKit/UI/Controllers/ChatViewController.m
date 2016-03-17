@@ -42,7 +42,7 @@
     
     NSDate *endDate = [NSDate dateWithTimeIntervalSince1970:([NSDate date].timeIntervalSince1970 - 24*60*60)];
     
-    [_chatChannel messagesBetweenStartDate:[NSDate date] endDate:endDate limit:1000 offset:0 ascending:YES success:^(int totalCount, NSArray<MMXMessage *> * _Nonnull messages) {
+    [_chatChannel messagesBetweenStartDate:endDate endDate:[NSDate date] limit:1000 offset:0 ascending:YES success:^(int totalCount, NSArray<MMXMessage *> * _Nonnull messages) {
         _presentingMessages = messages.mutableCopy;
         [_chatTable reloadData];
     } failure:^(NSError * _Nonnull error) {
