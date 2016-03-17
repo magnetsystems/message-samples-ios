@@ -28,6 +28,7 @@
 		7A73D3111C8DD8D80078EC47 /* ChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3101C8DD8D80078EC47 /* ChatsListViewController.m */; };
 		7A73D3141C8DDA420078EC47 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3131C8DDA420078EC47 /* ChatViewController.m */; };
 		7A73D31B1C8DFA410078EC47 /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A73D31A1C8DFA410078EC47 /* MagnetMax.plist */; };
+		7A8E8C461C9B563F00AA9545 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A8E8C451C9B563F00AA9545 /* ChatViewController.xib */; };
 		7AA578301C9078F9005EB630 /* AuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5782F1C9078F9005EB630 /* AuthManager.m */; };
 		7AA578331C908697005EB630 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA578321C908697005EB630 /* ContactsViewController.m */; };
 		7AA578351C9086B4005EB630 /* ContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7AA578341C9086B4005EB630 /* ContactsViewController.xib */; };
@@ -67,6 +68,7 @@
 		7A73D3121C8DDA420078EC47 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = UI/Controllers/ChatViewController.h; sourceTree = "<group>"; };
 		7A73D3131C8DDA420078EC47 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = UI/Controllers/ChatViewController.m; sourceTree = "<group>"; };
 		7A73D31A1C8DFA410078EC47 /* MagnetMax.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MagnetMax.plist; sourceTree = "<group>"; };
+		7A8E8C451C9B563F00AA9545 /* ChatViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChatViewController.xib; path = UI/Controllers/ChatViewController.xib; sourceTree = "<group>"; };
 		7AA5782E1C9078F9005EB630 /* AuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthManager.h; sourceTree = "<group>"; };
 		7AA5782F1C9078F9005EB630 /* AuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthManager.m; sourceTree = "<group>"; };
 		7AA578311C908697005EB630 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContactsViewController.h; path = UI/Controllers/ContactsViewController.h; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 				7A0667261C99ED4600822EC3 /* SignInViewController.xib */,
 				7AA578361C9086D8005EB630 /* ChatsListViewController.xib */,
 				7AA578341C9086B4005EB630 /* ContactsViewController.xib */,
+				7A8E8C451C9B563F00AA9545 /* ChatViewController.xib */,
 				7A73D3081C8DD8BF0078EC47 /* user_default.png */,
 				7A73D3091C8DD8BF0078EC47 /* user_group.png */,
 				7A1C6D461C98A4F000FAB31E /* chb_deselect.png */,
@@ -307,6 +310,7 @@
 			files = (
 				7A06672C1C99F46A00822EC3 /* icon.png in Resources */,
 				7AA578371C9086D8005EB630 /* ChatsListViewController.xib in Resources */,
+				7A8E8C461C9B563F00AA9545 /* ChatViewController.xib in Resources */,
 				7A2E9F321C874A52000BC70C /* LaunchScreen.storyboard in Resources */,
 				7A2E9F2F1C874A52000BC70C /* Assets.xcassets in Resources */,
 				7AA578351C9086B4005EB630 /* ContactsViewController.xib in Resources */,
