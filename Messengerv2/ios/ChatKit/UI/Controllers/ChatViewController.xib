@@ -35,7 +35,7 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ehV-p5-VBV">
                                 <rect key="frame" x="20" y="2" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="icon.png"/>
+                                <state key="normal" image="CHKAssets.bundle/clip.png"/>
                                 <connections>
                                     <action selector="attachData:" destination="-1" eventType="touchUpInside" id="AGe-DE-miu"/>
                                 </connections>
@@ -87,6 +87,6 @@
         </barButtonItem>
     </objects>
     <resources>
-        <image name="icon.png" width="180" height="180"/>
+        <image name="CHKAssets.bundle/clip.png" width="180" height="180"/>
     </resources>
 </document>
