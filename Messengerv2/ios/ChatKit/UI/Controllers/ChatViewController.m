@@ -8,7 +8,7 @@
 
 #import "ChatViewController.h"
 
-@interface ChatViewController ()
+@interface ChatViewController ()<UIWebViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *chatTable;
 
@@ -274,7 +274,7 @@
                                                                   215)];
     webV.scalesPageToFit = YES;
     webV.scrollView.scrollEnabled = NO;
-    
+    webV.delegate = self;
     webV.layer.cornerRadius = 10;
     webV.layer.masksToBounds = YES;
     webV.backgroundColor = [UIColor grayColor];
@@ -350,4 +350,29 @@
         _btmLC.constant = 0;
     }];
 }
+
+
+#pragma mark - UIWebViewDelegate
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    if ([request.URL.scheme isEqualToString:@"inapp"]) {
+        NSString *message = @"n/a";
+        if ([request.URL.host isEqualToString:@"nocancel"]) {
+            message = @"No, cancel";
+            // do capture action
+        } else if ([request.URL.host isEqualToString:@"yesagree"]) {
+            message = @"Yes, I agree";
+        }
+        MMXMessage *msg = [MMXMessage messageToChannel:_chatChannel messageContent:@{@"type" : @"text",
+                                                                                     @"message" : message}];
+                [msg sendWithSuccess:^(NSSet<NSString *> * _Nonnull invalidUsers) {
+        } failure:^(NSError * _Nonnull error) {
+        }];
+
+        return NO;
+    }
+    return YES;
+}
+
+
 @end
