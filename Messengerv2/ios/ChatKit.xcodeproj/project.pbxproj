@@ -10,20 +10,14 @@
 		270992925BF65A336C487E89 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9ACF9791F7A3ADAF0E61DEE /* Pods.framework */; };
 		7A0667271C99ED4600822EC3 /* SignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A0667261C99ED4600822EC3 /* SignInViewController.xib */; };
 		7A06672A1C99F01D00822EC3 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0667291C99F01D00822EC3 /* LoginVC.m */; };
-		7A06672C1C99F46A00822EC3 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A06672B1C99F46A00822EC3 /* icon.png */; };
-		7A06672E1C99F53F00822EC3 /* logo_magnet.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A06672D1C99F53F00822EC3 /* logo_magnet.png */; };
 		7A1C6D421C988E5F00FAB31E /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C6D411C988E5F00FAB31E /* SignInViewController.m */; };
 		7A1C6D451C98A11E00FAB31E /* CHKBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C6D441C98A11E00FAB31E /* CHKBaseViewController.m */; };
-		7A1C6D481C98A4F000FAB31E /* chb_deselect.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C6D461C98A4F000FAB31E /* chb_deselect.png */; };
-		7A1C6D491C98A4F000FAB31E /* chb_select.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C6D471C98A4F000FAB31E /* chb_select.png */; };
 		7A2E9F241C874A52000BC70C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2E9F231C874A52000BC70C /* main.m */; };
 		7A2E9F271C874A52000BC70C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2E9F261C874A52000BC70C /* AppDelegate.m */; };
 		7A2E9F2D1C874A52000BC70C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A2E9F2B1C874A52000BC70C /* Main.storyboard */; };
 		7A2E9F2F1C874A52000BC70C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2E9F2E1C874A52000BC70C /* Assets.xcassets */; };
 		7A2E9F321C874A52000BC70C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A2E9F301C874A52000BC70C /* LaunchScreen.storyboard */; };
 		7A73D3071C8DD8B30078EC47 /* ChatListSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3061C8DD8B30078EC47 /* ChatListSettings.m */; };
-		7A73D30A1C8DD8BF0078EC47 /* user_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A73D3081C8DD8BF0078EC47 /* user_default.png */; };
-		7A73D30B1C8DD8BF0078EC47 /* user_group.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A73D3091C8DD8BF0078EC47 /* user_group.png */; };
 		7A73D30E1C8DD8CB0078EC47 /* ChannelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D30D1C8DD8CB0078EC47 /* ChannelCell.m */; };
 		7A73D3111C8DD8D80078EC47 /* ChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3101C8DD8D80078EC47 /* ChatsListViewController.m */; };
 		7A73D3141C8DDA420078EC47 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3131C8DDA420078EC47 /* ChatViewController.m */; };
@@ -34,6 +28,7 @@
 		7AA578331C908697005EB630 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA578321C908697005EB630 /* ContactsViewController.m */; };
 		7AA578351C9086B4005EB630 /* ContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7AA578341C9086B4005EB630 /* ContactsViewController.xib */; };
 		7AA578371C9086D8005EB630 /* ChatsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7AA578361C9086D8005EB630 /* ChatsListViewController.xib */; };
+		7AD10B161C9C9A6400BBB746 /* CHKAsssets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7AD10B151C9C9A6400BBB746 /* CHKAsssets.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,14 +37,10 @@
 		7A0667261C99ED4600822EC3 /* SignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SignInViewController.xib; path = UI/Controllers/SignInViewController.xib; sourceTree = "<group>"; };
 		7A0667281C99F01D00822EC3 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		7A0667291C99F01D00822EC3 /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
-		7A06672B1C99F46A00822EC3 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = UI/Sources/icon.png; sourceTree = "<group>"; };
-		7A06672D1C99F53F00822EC3 /* logo_magnet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo_magnet.png; path = UI/Sources/logo_magnet.png; sourceTree = "<group>"; };
 		7A1C6D401C988E5F00FAB31E /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignInViewController.h; path = UI/Controllers/SignInViewController.h; sourceTree = "<group>"; };
 		7A1C6D411C988E5F00FAB31E /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignInViewController.m; path = UI/Controllers/SignInViewController.m; sourceTree = "<group>"; };
 		7A1C6D431C98A11E00FAB31E /* CHKBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CHKBaseViewController.h; path = UI/Controllers/CHKBaseViewController.h; sourceTree = "<group>"; };
 		7A1C6D441C98A11E00FAB31E /* CHKBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CHKBaseViewController.m; path = UI/Controllers/CHKBaseViewController.m; sourceTree = "<group>"; };
-		7A1C6D461C98A4F000FAB31E /* chb_deselect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = chb_deselect.png; path = UI/Sources/chb_deselect.png; sourceTree = "<group>"; };
-		7A1C6D471C98A4F000FAB31E /* chb_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = chb_select.png; path = UI/Sources/chb_select.png; sourceTree = "<group>"; };
 		7A2E9F1F1C874A52000BC70C /* ChatKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A2E9F231C874A52000BC70C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7A2E9F251C874A52000BC70C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -60,8 +51,6 @@
 		7A2E9F331C874A52000BC70C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7A73D3051C8DD8B30078EC47 /* ChatListSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatListSettings.h; path = UI/Objects/ChatListSettings.h; sourceTree = "<group>"; };
 		7A73D3061C8DD8B30078EC47 /* ChatListSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatListSettings.m; path = UI/Objects/ChatListSettings.m; sourceTree = "<group>"; };
-		7A73D3081C8DD8BF0078EC47 /* user_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = user_default.png; path = UI/Sources/user_default.png; sourceTree = "<group>"; };
-		7A73D3091C8DD8BF0078EC47 /* user_group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = user_group.png; path = UI/Sources/user_group.png; sourceTree = "<group>"; };
 		7A73D30C1C8DD8CB0078EC47 /* ChannelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChannelCell.h; path = UI/Prototypes/ChannelCell.h; sourceTree = "<group>"; };
 		7A73D30D1C8DD8CB0078EC47 /* ChannelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChannelCell.m; path = UI/Prototypes/ChannelCell.m; sourceTree = "<group>"; };
 		7A73D30F1C8DD8D80078EC47 /* ChatsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatsListViewController.h; path = UI/Controllers/ChatsListViewController.h; sourceTree = "<group>"; };
@@ -78,6 +67,8 @@
 		7AA578321C908697005EB630 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContactsViewController.m; path = UI/Controllers/ContactsViewController.m; sourceTree = "<group>"; };
 		7AA578341C9086B4005EB630 /* ContactsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactsViewController.xib; path = UI/Controllers/ContactsViewController.xib; sourceTree = "<group>"; };
 		7AA578361C9086D8005EB630 /* ChatsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChatsListViewController.xib; path = UI/Controllers/ChatsListViewController.xib; sourceTree = "<group>"; };
+		7AD10B141C9C97CF00BBB746 /* YVChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YVChatKit.h; sourceTree = "<group>"; };
+		7AD10B151C9C9A6400BBB746 /* CHKAsssets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CHKAsssets.bundle; path = UI/Sources/CHKAsssets.bundle; sourceTree = "<group>"; };
 		F9ACF9791F7A3ADAF0E61DEE /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -181,6 +172,7 @@
 		7A3BD4151C8750CE00F072AC /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7AD10B141C9C97CF00BBB746 /* YVChatKit.h */,
 				7A9A08DB1C9C8D4000D641E4 /* CHKUtils.h */,
 				7A9A08DC1C9C8D4000D641E4 /* CHKUtils.m */,
 				7A1C6D3E1C988DB400FAB31E /* ViewControllers */,
@@ -239,16 +231,11 @@
 		7A73D3001C8DD7B20078EC47 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				7A06672D1C99F53F00822EC3 /* logo_magnet.png */,
-				7A06672B1C99F46A00822EC3 /* icon.png */,
 				7A0667261C99ED4600822EC3 /* SignInViewController.xib */,
 				7AA578361C9086D8005EB630 /* ChatsListViewController.xib */,
 				7AA578341C9086B4005EB630 /* ContactsViewController.xib */,
 				7A8E8C451C9B563F00AA9545 /* ChatViewController.xib */,
-				7A73D3081C8DD8BF0078EC47 /* user_default.png */,
-				7A73D3091C8DD8BF0078EC47 /* user_group.png */,
-				7A1C6D461C98A4F000FAB31E /* chb_deselect.png */,
-				7A1C6D471C98A4F000FAB31E /* chb_select.png */,
+				7AD10B151C9C9A6400BBB746 /* CHKAsssets.bundle */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -313,20 +300,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A06672C1C99F46A00822EC3 /* icon.png in Resources */,
 				7AA578371C9086D8005EB630 /* ChatsListViewController.xib in Resources */,
 				7A8E8C461C9B563F00AA9545 /* ChatViewController.xib in Resources */,
 				7A2E9F321C874A52000BC70C /* LaunchScreen.storyboard in Resources */,
 				7A2E9F2F1C874A52000BC70C /* Assets.xcassets in Resources */,
 				7AA578351C9086B4005EB630 /* ContactsViewController.xib in Resources */,
+				7AD10B161C9C9A6400BBB746 /* CHKAsssets.bundle in Resources */,
 				7A73D31B1C8DFA410078EC47 /* MagnetMax.plist in Resources */,
-				7A73D30A1C8DD8BF0078EC47 /* user_default.png in Resources */,
 				7A2E9F2D1C874A52000BC70C /* Main.storyboard in Resources */,
-				7A1C6D491C98A4F000FAB31E /* chb_select.png in Resources */,
 				7A0667271C99ED4600822EC3 /* SignInViewController.xib in Resources */,
-				7A1C6D481C98A4F000FAB31E /* chb_deselect.png in Resources */,
-				7A06672E1C99F53F00822EC3 /* logo_magnet.png in Resources */,
-				7A73D30B1C8DD8BF0078EC47 /* user_group.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
