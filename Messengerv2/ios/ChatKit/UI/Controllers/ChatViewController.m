@@ -246,6 +246,7 @@
         
         contentV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,
                                                             bubbleContent.frame.size.height + 20)];
+        
         //avatar
         CGRect avatarRect = CGRectZero;
         if (selfMessage) {
@@ -281,9 +282,9 @@
         buble.layer.masksToBounds = YES;
         [contentV addSubview:buble];
         
-        bubbleContent.frame = CGRectMake(5, 5, bubbleContent.frame.size.width, bubbleContent.frame.size.height);
         [buble addSubview:bubbleContent];
-        
+        bubbleContent.frame = CGRectMake(5, 5, bubbleContent.frame.size.width, bubbleContent.frame.size.height);
+
     }
     return contentV;
 }
