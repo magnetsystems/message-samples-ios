@@ -28,7 +28,7 @@
 		7AA578331C908697005EB630 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA578321C908697005EB630 /* ContactsViewController.m */; };
 		7AA578351C9086B4005EB630 /* ContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7AA578341C9086B4005EB630 /* ContactsViewController.xib */; };
 		7AA578371C9086D8005EB630 /* ChatsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7AA578361C9086D8005EB630 /* ChatsListViewController.xib */; };
-		7AD10B161C9C9A6400BBB746 /* CHKAsssets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7AD10B151C9C9A6400BBB746 /* CHKAsssets.bundle */; };
+		7ADFB04B1C9CB9F00064AB50 /* CHKAssets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7ADFB04A1C9CB9F00064AB50 /* CHKAssets.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,8 +67,8 @@
 		7AA578321C908697005EB630 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContactsViewController.m; path = UI/Controllers/ContactsViewController.m; sourceTree = "<group>"; };
 		7AA578341C9086B4005EB630 /* ContactsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactsViewController.xib; path = UI/Controllers/ContactsViewController.xib; sourceTree = "<group>"; };
 		7AA578361C9086D8005EB630 /* ChatsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChatsListViewController.xib; path = UI/Controllers/ChatsListViewController.xib; sourceTree = "<group>"; };
-		7AD10B141C9C97CF00BBB746 /* YVChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YVChatKit.h; sourceTree = "<group>"; };
-		7AD10B151C9C9A6400BBB746 /* CHKAsssets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CHKAsssets.bundle; path = UI/Sources/CHKAsssets.bundle; sourceTree = "<group>"; };
+		7ADFB04A1C9CB9F00064AB50 /* CHKAssets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CHKAssets.bundle; path = UI/CHKAssets.bundle; sourceTree = "<group>"; };
+		7ADFB04C1C9CBA170064AB50 /* YVChatKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YVChatKit.h; path = UI/YVChatKit.h; sourceTree = "<group>"; };
 		F9ACF9791F7A3ADAF0E61DEE /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -172,7 +172,7 @@
 		7A3BD4151C8750CE00F072AC /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				7AD10B141C9C97CF00BBB746 /* YVChatKit.h */,
+				7ADFB04C1C9CBA170064AB50 /* YVChatKit.h */,
 				7A9A08DB1C9C8D4000D641E4 /* CHKUtils.h */,
 				7A9A08DC1C9C8D4000D641E4 /* CHKUtils.m */,
 				7A1C6D3E1C988DB400FAB31E /* ViewControllers */,
@@ -231,11 +231,11 @@
 		7A73D3001C8DD7B20078EC47 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				7ADFB04A1C9CB9F00064AB50 /* CHKAssets.bundle */,
 				7A0667261C99ED4600822EC3 /* SignInViewController.xib */,
 				7AA578361C9086D8005EB630 /* ChatsListViewController.xib */,
 				7AA578341C9086B4005EB630 /* ContactsViewController.xib */,
 				7A8E8C451C9B563F00AA9545 /* ChatViewController.xib */,
-				7AD10B151C9C9A6400BBB746 /* CHKAsssets.bundle */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -305,7 +305,7 @@
 				7A2E9F321C874A52000BC70C /* LaunchScreen.storyboard in Resources */,
 				7A2E9F2F1C874A52000BC70C /* Assets.xcassets in Resources */,
 				7AA578351C9086B4005EB630 /* ContactsViewController.xib in Resources */,
-				7AD10B161C9C9A6400BBB746 /* CHKAsssets.bundle in Resources */,
+				7ADFB04B1C9CB9F00064AB50 /* CHKAssets.bundle in Resources */,
 				7A73D31B1C8DFA410078EC47 /* MagnetMax.plist in Resources */,
 				7A2E9F2D1C874A52000BC70C /* Main.storyboard in Resources */,
 				7A0667271C99ED4600822EC3 /* SignInViewController.xib in Resources */,
