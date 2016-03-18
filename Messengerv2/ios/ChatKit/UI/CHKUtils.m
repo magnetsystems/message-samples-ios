@@ -19,8 +19,10 @@
 
 + (id)chk_imageNamed:(NSString *)name
 {
-    NSBundle *bundle = [CHKUtils chk_bundle];
-    NSString *path = [bundle pathForResource:name ofType:@"png" inDirectory:@"Sources"];
+    NSString *bundleResourcePath = [CHKUtils chk_bundle].resourcePath;
+    NSString *assetPath = [bundleResourcePath stringByAppendingPathComponent:@"CHKAssets.bundle"];
+    NSBundle *bundle = [NSBundle bundleWithPath:assetPath];
+    NSString *path = [bundle pathForResource:name ofType:@"png"];
     return [UIImage imageWithContentsOfFile:path];
 }
 
