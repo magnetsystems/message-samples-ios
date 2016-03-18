@@ -10,7 +10,17 @@
 
 @import MagnetMax;
 
-@interface ChatViewController : CHKBaseViewController <UITableViewDelegate, UITableViewDataSource>
+@protocol ChatViewControllerDelegate <NSObject>
+
+@optional
+- (void)messageWillBeSend;
+- (void)messageDidSent;
+- (void)messageFailedTotSend:(NSError*)error;
+
+
+@end
+
+@interface ChatViewController : CHKBaseViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate,ChatViewControllerDelegate>
 
 @property (nonatomic, strong) MMXChannel *chatChannel;
 
