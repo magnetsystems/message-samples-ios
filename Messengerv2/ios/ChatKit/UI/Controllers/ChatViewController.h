@@ -18,6 +18,7 @@
 - (void)messageFailedTotSend:(NSError*)error;
 
 - (UIView*)messageBubbleContentViewForMessage:(MMXMessage*)message maxBubbleWidth:(CGFloat)bubbleWidth;
+- (CGFloat)messageBubbleContentHeightForMessage:(MMXMessage*)message;
 
 @end
 

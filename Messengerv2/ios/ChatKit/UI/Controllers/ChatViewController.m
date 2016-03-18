@@ -144,11 +144,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height = 44;
-    MMXMessage *msg = _presentingMessages[indexPath.row];
     
-    UIView *view = [self contentCellViewForMessage:msg];
-    height = view.frame.size.height;
-
+    MMXMessage *msg = _presentingMessages[indexPath.row];
+    height = [self messageBubbleContentHeightForMessage:msg] + 20;
+    
     return height;
 }
 
@@ -212,6 +211,26 @@
         }
     }
     return resultView;
+}
+
+- (CGFloat)messageBubbleContentHeightForMessage:(MMXMessage *)message
+{
+    CGFloat height = 24;
+    if (message) {
+        NSDictionary *content = message.messageContent;
+        if (content[@"type"]) {
+            if ([content[@"type"] isEqualToString:@"web_template"]) {
+                height = 220;
+            } else  if ([content[@"type"] isEqualToString:@"text"]){
+                height = [self textCellContentForMessage:message].frame.size.height;
+            } else if ([content[@"type"] isEqualToString:@"photo"]) {
+                height = [self imageCellContentForMessage:message].frame.size.height;
+            }
+        } else {
+            height = [self textCellContentForMessage:message].frame.size.height;
+        }
+    }
+    return height;
 }
 
 - (UIView*)contentCellViewForMessage:(MMXMessage*)message
