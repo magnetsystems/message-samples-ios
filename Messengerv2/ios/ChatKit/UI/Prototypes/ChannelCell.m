@@ -30,7 +30,7 @@
     if (_channel.subscribers) {
             NSMutableArray *usernames = @[].mutableCopy;
         
-            if (_channel.subscribers.count) {
+            if (_channel.subscribers.count > 2) {
                 self.imageView.image = [CHKUtils chk_imageNamed:@"user_group"];
             } else {
                 self.imageView.image = [CHKUtils chk_imageNamed:@"user_default"];

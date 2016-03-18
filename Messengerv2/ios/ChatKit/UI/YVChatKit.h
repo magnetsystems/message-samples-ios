@@ -11,6 +11,8 @@
 
 #import "CHKUtils.h"
 #import "ChannelCell.h"
-#import "SignIn"
+#import "SignInViewController.h"
+#import "ChatsListViewController.h"
+#import "ContactsViewController.h"
 
 #endif /* YVChatKit_h */
