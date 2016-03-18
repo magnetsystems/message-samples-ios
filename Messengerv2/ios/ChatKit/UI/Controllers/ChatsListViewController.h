@@ -37,6 +37,10 @@
 - (void)didPressChatCreate;
 
 /**
+ *  NavBar left bar button item onPress interaction hook.
+ */
+- (void)didPressCancel;
+/**
  *  Chat channel interaction on select
  */
 - (void)shouldOpenChatChannel:(MMXChannel*)channel;

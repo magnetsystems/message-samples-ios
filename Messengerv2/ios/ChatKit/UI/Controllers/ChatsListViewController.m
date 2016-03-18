@@ -22,6 +22,8 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *channelsTable;
 
+@property (nonatomic, strong) UIRefreshControl *tableRefreshControl;
+
 
 @end
 
@@ -48,6 +50,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTableDataUI) name:MMXDidReceiveChannelInviteNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageIncome:) name:MMXDidReceiveMessageNotification object:nil];
     
+    _tableRefreshControl = [UIRefreshControl new];
+    [_channelsTable addSubview:_tableRefreshControl];
+    [_tableRefreshControl addTarget:self action:@selector(loadChannels) forControlEvents:UIControlEventValueChanged];
+
+    
     if (self.navigationController) {
         self.navigationItem.leftBarButtonItems = [self leftBarButtonItems];
         self.navigationItem.rightBarButtonItems = [self rightBarButtonItems];
@@ -65,14 +72,7 @@
         [_channelsTable reloadData];
     } else {
         //loading default subscribed channels
-        [MMXChannel subscribedChannelsWithSuccess:^(NSArray<MMXChannel *> * _Nonnull channels) {
-            _channels = channels;
-            _presentingChannels = _channels.mutableCopy;
-            [_channelsTable reloadData];
-            
-        } failure:^(NSError * _Nonnull error) {
-            NSLog(@"some error due loading default channels \n%@",error);
-        }];
+        [self loadChannels];
     }
 }
 
@@ -83,6 +83,7 @@
 
 - (void)messageIncome:(NSNotification*)notification
 {
+    [self loadChannels];
     NSLog(@"Got message income notification\n %@",notification);
 }
 
@@ -110,6 +111,27 @@
         UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
         
         [self presentViewController:nc animated:YES completion:nil];
+    }
+}
+
+- (void)didPressCancel
+{
+    NSLog(@"Activated didPressCancel. You should override this method to catch this interaction.");
+
+    if (self.presentingViewController) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else if (self.navigationController) {
+        if (self.navigationController.presentingViewController) {
+            if (self.navigationController.viewControllers.count == 1) {
+                
+                [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+            } else {
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            }
+        } else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -156,6 +178,20 @@
 }
 
 #pragma mark - Life Cycle
+
+- (void)loadChannels
+{
+    [MMXChannel subscribedChannelsWithSuccess:^(NSArray<MMXChannel *> * _Nonnull channels) {
+        [_tableRefreshControl endRefreshing];
+        _channels = channels;
+        _presentingChannels = _channels.mutableCopy;
+        [_channelsTable reloadData];
+        
+    } failure:^(NSError * _Nonnull error) {
+        [_tableRefreshControl endRefreshing];
+        NSLog(@"some error due loading default channels \n%@",error);
+    }];
+}
 
 #pragma mark UITableViewDelegate, UITableViewDataSource
 
@@ -204,21 +240,7 @@
 
 - (IBAction)leftBtnPress:(UIBarButtonItem*)sender
 {
-    if (self.presentingViewController) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } else if (self.navigationController) {
-        if (self.navigationController.presentingViewController) {
-            if (self.navigationController.viewControllers.count == 1) {
-                
-                [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-            } else {
-                [self.navigationController popViewControllerAnimated:YES];
-                
-            }
-        } else {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }
+    [self didPressCancel];
 }
 
 @end

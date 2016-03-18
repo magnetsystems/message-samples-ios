@@ -194,6 +194,26 @@
 
 #pragma mark - Content processing
 
+- (UIView*)messageBubbleContentViewForMessage:(MMXMessage*)message maxBubbleWidth:(CGFloat)bubbleWidth;
+{
+    UIView *resultView = nil;
+    if (message) {
+        NSDictionary *content = message.messageContent;
+        if (content[@"type"]) {
+            if ([content[@"type"] isEqualToString:@"web_template"]) {
+                resultView = [self webCellContentForMessage:message];
+            } else  if ([content[@"type"] isEqualToString:@"text"]){
+                resultView = [self textCellContentForMessage:message];
+            } else if ([content[@"type"] isEqualToString:@"photo"]) {
+                resultView = [self imageCellContentForMessage:message];
+            }
+        } else {
+            resultView = [self textCellContentForMessage:message];
+        }
+    }
+    return resultView;
+}
+
 - (UIView*)contentCellViewForMessage:(MMXMessage*)message
 {
     BOOL selfMessage = [message.sender.userID isEqualToString:[MMUser currentUser].userID];
@@ -202,20 +222,8 @@
     UIView * contentV = nil;
     
     if (message) {
-        NSDictionary *content = message.messageContent;
         // bubble content
-        if (content[@"type"]) {
-            if ([content[@"type"] isEqualToString:@"web_template"]) {
-                bubbleContent = [self webCellContentForMessage:message];
-            } else  if ([content[@"type"] isEqualToString:@"text"]){
-                bubbleContent = [self textCellContentForMessage:message];
-            } else if ([content[@"type"] isEqualToString:@"photo"]) {
-                bubbleContent = [self imageCellContentForMessage:message];
-            }
-        } else {
-            bubbleContent = [self textCellContentForMessage:message];
-        }
-        
+        bubbleContent = [self messageBubbleContentViewForMessage:message maxBubbleWidth:self.view.frame.size.width-2*45];        
         
         contentV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,
                                                             bubbleContent.frame.size.height + 20)];
@@ -275,6 +283,7 @@
     webV.scalesPageToFit = YES;
     webV.scrollView.scrollEnabled = NO;
     webV.delegate = self;
+    
     webV.layer.cornerRadius = 10;
     webV.layer.masksToBounds = YES;
     webV.backgroundColor = [UIColor grayColor];
@@ -353,6 +362,16 @@
 
 
 #pragma mark - UIWebViewDelegate
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    NSLog(@"did start load web");
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    NSLog(@"did fail to load web %@",error);
+}
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     if ([request.URL.scheme isEqualToString:@"inapp"]) {
