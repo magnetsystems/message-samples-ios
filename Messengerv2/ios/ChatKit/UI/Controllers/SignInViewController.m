@@ -8,6 +8,8 @@
 
 #import "SignInViewController.h"
 
+#import "CHKUtils.h"
+
 @interface SignInViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *logoIV;
@@ -35,7 +37,7 @@
 {
     self.loginPlaceholder = @"login/email";
     self.passwordPlaceholder = @"password";
-    self.logoIV.image = [UIImage imageNamed:@"logo_magnet"];
+    self.logoIV.image = [CHKUtils chk_imageNamed:@"logo_magnet"];
     self.rememberMe = YES;
     self.navigationController.navigationBarHidden = YES;
 }
@@ -79,9 +81,9 @@
     _rememberMe = rememberMe;
     
     if (_rememberMe) {
-        _checkboxIV.image = [UIImage imageNamed:@"chb_select"];
+        _checkboxIV.image = [CHKUtils chk_imageNamed:@"chb_select"];
     } else {
-        _checkboxIV.image = [UIImage imageNamed:@"chb_deselect"];
+        _checkboxIV.image = [CHKUtils chk_imageNamed:@"chb_deselect"];
     }
 }
 

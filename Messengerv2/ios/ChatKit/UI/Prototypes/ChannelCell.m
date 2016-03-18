@@ -8,6 +8,8 @@
 
 #import "ChannelCell.h"
 
+#import "CHKUtils.h"
+
 @implementation ChannelCell
 
 
@@ -23,15 +25,15 @@
 {
     _channel = channel;
     
-    self.imageView.image = [UIImage imageNamed:@"user_default"];
+    self.imageView.image = [CHKUtils chk_imageNamed:@"user_default"];
     
     if (_channel.subscribers) {
             NSMutableArray *usernames = @[].mutableCopy;
         
             if (_channel.subscribers.count) {
-                self.imageView.image = [UIImage imageNamed:@"user_group"];
+                self.imageView.image = [CHKUtils chk_imageNamed:@"user_group"];
             } else {
-                self.imageView.image = [UIImage imageNamed:@"user_default"];
+                self.imageView.image = [CHKUtils chk_imageNamed:@"user_default"];
             }
             
             for (MMUser* user in _channel.subscribers) {
@@ -46,9 +48,9 @@
         self.textLabel.text = _channel.summary;
         [_channel subscribersWithLimit:100 offset:0 success:^(int totalCount, NSArray<MMUser *> * _Nonnull subscribers) {
         if (subscribers.count) {
-            self.imageView.image = [UIImage imageNamed:@"user_group"];
+            self.imageView.image = [CHKUtils chk_imageNamed:@"user_group"];
         } else {
-            self.imageView.image = [UIImage imageNamed:@"user_default"];
+            self.imageView.image = [CHKUtils chk_imageNamed:@"user_default"];
         }
         } failure:^(NSError * _Nonnull error) {
         
