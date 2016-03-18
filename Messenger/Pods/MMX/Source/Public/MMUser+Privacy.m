@@ -18,6 +18,7 @@
 #import "MMUser+Privacy.h"
 #import "MMXClient.h"
 #import "MMXPrivacyManager.h"
+#import "MMXConstants.h"
 
 @implementation MMUser (Privacy)
 
@@ -25,18 +26,44 @@
            success:(nullable void (^)())success
            failure:(nullable void (^)(NSError *error))failure {
     
-    [[MMXClient sharedClient].privacyManager blockUsers:usersToBlock success:success failure:failure];
+    if ([self currentUser] != nil) {
+        [[MMXClient sharedClient].privacyManager blockUsers:usersToBlock success:success failure:failure];
+    } else {
+        if (failure) {
+            failure([self unauthorizedError]);
+        }
+    }
 }
 
 + (void)unblockUsers:(NSSet <MMUser *>*)usersToUnblock
              success:(nullable void (^)())success
              failure:(nullable void (^)(NSError *error))failure {
-    [[MMXClient sharedClient].privacyManager unblockUsers:usersToUnblock success:success failure:failure];
+    if ([self currentUser] != nil) {
+        [[MMXClient sharedClient].privacyManager unblockUsers:usersToUnblock success:success failure:failure];
+    } else {
+        if (failure) {
+            failure([self unauthorizedError]);
+        }
+    }
 }
 
 + (void)blockedUsersWithSuccess:(nullable void (^)(NSArray <MMUser *>*users))success
                         failure:(nullable void (^)(NSError *error))failure {
-    [[MMXClient sharedClient].privacyManager blockedUsersWithSuccess:success failure:failure];
+    if ([self currentUser] != nil) {
+        [[MMXClient sharedClient].privacyManager blockedUsersWithSuccess:success failure:failure];
+    } else {
+        if (failure) {
+            failure([self unauthorizedError]);
+        }
+    }
+}
+
+#pragma mark - Private implementation
+
++ (NSError *)unauthorizedError {
+    return [NSError errorWithDomain:MMXErrorDomain
+                               code:401
+                           userInfo:nil];
 }
 
 @end

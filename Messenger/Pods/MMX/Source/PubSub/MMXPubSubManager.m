@@ -35,7 +35,6 @@
 #import "DDXML.h"
 #import "MMXUtils.h"
 #import "MMXMessageUtils.h"
-#import "MMXDataModel.h"
 #import "MMXLogger.h"
 #import "MMXAssert.h"
 #import "MMXTopicSubscribersResponse.h"
@@ -1107,18 +1106,9 @@
 	
 	if (![self hasActiveConnection]) {
         if (failure) {
-            NSString * errorMessage = @"Your message was queued and will be sent the next time you log in.";
-            if (![self hasNecessaryConfigurationAndCredentialToSend]) {
-                errorMessage = @"You have not provided enough infomation in your configuration or credentials to be able to send a message";
-			} else {
-				if (message.timestamp == nil) {
-					message.timestamp = [NSDate date];
-				}
-				[[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:self.delegate.username];
-			}
-			dispatch_async(self.callbackQueue, ^{
-				failure([MMXClient errorWithTitle:@"Not currently connected." message:errorMessage code:503]);
-			});
+            dispatch_async(self.callbackQueue, ^{
+                failure([self connectionStatusError]);
+            });
         }
         return;
     }
@@ -1594,15 +1584,6 @@
     }
 }
 
-
-#pragma mark - Archive Message
-
-- (void)archiveMessage:(MMXPubSubMessage *)message error:(NSError **)error {
-    NSString * username = [self validFullUsernameForCurrentUser];
-    if (username) {
-        [[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:username];
-    }
-}
 
 #pragma mark - Helper Methods
 
