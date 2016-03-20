@@ -110,6 +110,7 @@
 		8DDFA5A11C659F7400566A4D /* message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA59D1C659F7400566A4D /* message@2x.png */; };
 		8DDFA5A21C659F7400566A4D /* messages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DDFA59E1C659F7400566A4D /* messages@2x.png */; };
 		8DFC78F51C62D59F008FB312 /* NavigationNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFC78F41C62D59F008FB312 /* NavigationNotifier.swift */; };
+		9C7E176E1C9CD31500D80E5C /* UIRefreshControlTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7E176C1C9C84E000D80E5C /* UIRefreshControlTesting.swift */; };
 		9C9A9F521C93AA69000A2DD0 /* MessengerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A9F511C93AA69000A2DD0 /* MessengerUITests.swift */; };
 		C9BF0143BBC1E4E412BF8629 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6622CC48F4FE90AA03DBE8F9 /* Pods.framework */; };
 /* End PBXBuildFile section */
@@ -243,6 +244,7 @@
 		8DDFA59E1C659F7400566A4D /* messages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messages@2x.png"; sourceTree = "<group>"; };
 		8DFC78F41C62D59F008FB312 /* NavigationNotifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationNotifier.swift; sourceTree = "<group>"; };
 		9B1845AFF91157CEDCC1D6E3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		9C7E176C1C9C84E000D80E5C /* UIRefreshControlTesting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIRefreshControlTesting.swift; sourceTree = "<group>"; };
 		9C9A9F4F1C93AA69000A2DD0 /* MessengerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessengerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9A9F511C93AA69000A2DD0 /* MessengerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessengerUITests.swift; sourceTree = "<group>"; };
 		9C9A9F531C93AA69000A2DD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -783,6 +785,7 @@
 			children = (
 				9C9A9F511C93AA69000A2DD0 /* MessengerUITests.swift */,
 				9C9A9F531C93AA69000A2DD0 /* Info.plist */,
+				9C7E176C1C9C84E000D80E5C /* UIRefreshControlTesting.swift */,
 			);
 			path = MessengerUITests;
 			sourceTree = "<group>";
@@ -1083,6 +1086,7 @@
 				8B0EC58A1C723DC9004CCDA0 /* SupportViewController.swift in Sources */,
 				8B6AA87D1C3C3BB100DE3C42 /* DetailsViewController.swift in Sources */,
 				8D4413FC1C769DE30008314B /* ChatViewControllerCollectionExtension.swift in Sources */,
+				9C7E176E1C9CD31500D80E5C /* UIRefreshControlTesting.swift in Sources */,
 				8B8E803C1C2AE733008D8C43 /* RegisterViewController.swift in Sources */,
 				8B8E80331C2ACAC8008D8C43 /* BaseViewController.swift in Sources */,
 				8D4413F61C74FBA90008314B /* Errors.swift in Sources */,
@@ -1301,6 +1305,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = MessengerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = PCP.MessengerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = Messenger;
@@ -1313,6 +1318,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = MessengerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = PCP.MessengerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = Messenger;
@@ -1357,6 +1363,7 @@
 				9C9A9F571C93AA69000A2DD0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
