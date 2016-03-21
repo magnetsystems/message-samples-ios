@@ -48,7 +48,7 @@
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chb_deselect.png" translatesAutoresizingMaskIntoConstraints="NO" id="nGm-UM-VTv">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nGm-UM-VTv">
                             <rect key="frame" x="8" y="10" width="20" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="9Fl-GE-2TY"/>
@@ -110,7 +110,4 @@
             <point key="canvasLocation" x="415" y="446"/>
         </view>
     </objects>
-    <resources>
-        <image name="chb_deselect.png" width="40" height="30"/>
-    </resources>
 </document>
