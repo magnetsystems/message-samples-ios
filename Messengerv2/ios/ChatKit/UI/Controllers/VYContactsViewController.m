@@ -1,16 +1,16 @@
 //
-//  ContactsViewController.m
+//  VYContactsViewController.m
 //  ChatKit
 //
 //  Created by Vladimir Yevdokimov on 3/9/16.
 //  Copyright © 2016 Vladimir Yevdokimov. All rights reserved.
 //
 
-#import "ContactsViewController.h"
+#import "VYContactsViewController.h"
 
-#import "ChatViewController.h"
+#import "VYChatViewController.h"
 
-@interface ContactsViewController ()
+@interface VYContactsViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *contactsTable;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelBBI;
@@ -20,13 +20,13 @@
 
 @end
 
-@implementation ContactsViewController
+@implementation VYContactsViewController
 #pragma mark - Class Methods
 
 + (UINib *)nib
 {
-    return [UINib nibWithNibName:NSStringFromClass([ContactsViewController class])
-                          bundle:[NSBundle bundleForClass:[ContactsViewController class]]];
+    return [UINib nibWithNibName:NSStringFromClass([VYContactsViewController class])
+                          bundle:[NSBundle bundleForClass:[VYContactsViewController class]]];
 }
 
 - (void)setupUI
@@ -89,7 +89,7 @@
         if (channel) {
             if (self.navigationController) {
                 NSMutableArray *vcs = self.navigationController.viewControllers.mutableCopy;
-                ChatViewController *vc = [ChatViewController new];
+                VYChatViewController *vc = [VYChatViewController new];
                 vc.chatChannel = channel;
                 
                 NSInteger index = 0;
@@ -105,7 +105,7 @@
                 
             } else {
                 [self dismissViewControllerAnimated:YES completion:^{
-                    ChatViewController *vc = [ChatViewController new];
+                    VYChatViewController *vc = [VYChatViewController new];
                     vc.chatChannel = channel;
                     [self.presentingViewController presentViewController:vc animated:YES completion:nil];
                 }];

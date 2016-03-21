@@ -6,8 +6,8 @@
 //  Copyright © 2016 Vladimir Yevdokimov. All rights reserved.
 //
 
-#import "SignInViewController.h"
+#import "VYSignInViewController.h"
 
-@interface LoginVC : SignInViewController
+@interface LoginVC : VYSignInViewController
 
 @end

@@ -6,11 +6,11 @@
 //  Copyright © 2016 Vladimir Yevdokimov. All rights reserved.
 //
 
-#import "ChannelCell.h"
+#import "VYChannelCell.h"
 
 #import "CHKUtils.h"
 
-@implementation ChannelCell
+@implementation VYChannelCell
 
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -56,10 +56,6 @@
         
         }];
     }
-    
-    
-    
-    
 }
 
 @end

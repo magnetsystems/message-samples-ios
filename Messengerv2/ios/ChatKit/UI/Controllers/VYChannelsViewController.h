@@ -11,7 +11,7 @@
 @import MagnetMax;
 
 
-@interface ChatsListViewController : CHKBaseViewController <UITableViewDelegate, UITableViewDataSource>
+@interface VYChannelsViewController : CHKBaseViewController <UITableViewDelegate, UITableViewDataSource>
 
 /**
  *  Defines if Search bar will be visible. and enabled for searching.
@@ -40,6 +40,7 @@
  *  NavBar left bar button item onPress interaction hook.
  */
 - (void)didPressCancel;
+
 /**
  *  Chat channel interaction on select
  */

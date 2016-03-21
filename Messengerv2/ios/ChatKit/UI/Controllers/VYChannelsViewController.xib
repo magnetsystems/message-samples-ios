@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatsListViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VYChannelsViewController">
             <connections>
                 <outlet property="cancelBBI" destination="meB-R5-KfH" id="4sM-e0-pqy"/>
                 <outlet property="channelsTable" destination="y0q-oA-4DF" id="IUi-KU-0Aj"/>

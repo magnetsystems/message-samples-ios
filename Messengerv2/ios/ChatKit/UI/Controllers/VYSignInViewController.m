@@ -6,11 +6,11 @@
 //  Copyright © 2016 Vladimir Yevdokimov. All rights reserved.
 //
 
-#import "SignInViewController.h"
+#import "VYSignInViewController.h"
 
 #import "CHKUtils.h"
 
-@interface SignInViewController ()<UITextFieldDelegate>
+@interface VYSignInViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *logoIV;
 
@@ -26,11 +26,11 @@
 
 @end
 
-@implementation SignInViewController
+@implementation VYSignInViewController
 
 + (UINib*)nib {
-    return [UINib nibWithNibName:NSStringFromClass([SignInViewController class])
-                          bundle:[NSBundle bundleForClass:[SignInViewController class]]];
+    return [UINib nibWithNibName:NSStringFromClass([VYSignInViewController class])
+                          bundle:[NSBundle bundleForClass:[VYSignInViewController class]]];
 }
 
 - (void)setupUI

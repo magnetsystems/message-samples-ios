@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactsViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VYContactsViewController">
             <connections>
                 <outlet property="cancelBBI" destination="PEx-PZ-nIs" id="L4g-E3-daM"/>
                 <outlet property="contactsTable" destination="eOE-sp-ppY" id="M2T-dL-zQ6"/>

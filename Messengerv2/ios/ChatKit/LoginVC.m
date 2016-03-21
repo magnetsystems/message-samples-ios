@@ -8,7 +8,7 @@
 
 #import "LoginVC.h"
 
-#import "ChatsListViewController.h"
+#import "VYChannelsViewController.h"
 
 #import "AuthManager.h"
 #import "SVProgressHUD.h"
@@ -37,7 +37,7 @@
     [super viewWillAppear:animated];
     
     self.passwordPlaceholder = @"my custom pass";
-    self.logoImage = [UIImage imageNamed:@"icon"];
+    self.logoImage = [UIImage imageNamed:@"qr"];
     self.minimupPasswordLength = 3;
 }
 
@@ -65,7 +65,7 @@
 
     [MagnetMax initModule:[MMX sharedInstance] success:^{
         [SVProgressHUD dismiss];
-        ChatsListViewController *vc = [ChatsListViewController new];
+        VYChannelsViewController *vc = [VYChannelsViewController new];
         
         UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
         

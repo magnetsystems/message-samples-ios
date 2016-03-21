@@ -1,14 +1,14 @@
 //
-//  ChatViewController.m
+//  VYChatViewController.m
 //  ChatKit
 //
 //  Created by Vladimir Yevdokimov on 3/7/16.
 //  Copyright © 2016 Vladimir Yevdokimov. All rights reserved.
 //
 
-#import "ChatViewController.h"
+#import "VYChatViewController.h"
 
-@interface ChatViewController ()<UIWebViewDelegate>
+@interface VYChatViewController ()<UIWebViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *chatTable;
 
@@ -26,13 +26,13 @@
 
 @end
 
-@implementation ChatViewController
+@implementation VYChatViewController
 
 
 + (UINib *)nib
 {
-    return [UINib nibWithNibName:NSStringFromClass([ChatViewController class])
-                          bundle:[NSBundle bundleForClass:[ChatViewController class]]];
+    return [UINib nibWithNibName:NSStringFromClass([VYChatViewController class])
+                          bundle:[NSBundle bundleForClass:[VYChatViewController class]]];
 }
 
 #pragma mark - Interface Methods
@@ -85,9 +85,7 @@
 
 - (IBAction)leftBtnPress:(UIBarButtonItem*)sender
 {
-    if (self.presentingViewController) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } else if (self.navigationController) {
+    if (self.navigationController) {
         if (self.navigationController.presentingViewController) {
             if (self.navigationController.viewControllers.count == 1) {
                 
@@ -99,6 +97,8 @@
         } else {
             [self.navigationController popViewControllerAnimated:YES];
         }
+    } else if (self.presentingViewController) {
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

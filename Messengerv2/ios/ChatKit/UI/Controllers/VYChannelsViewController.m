@@ -6,14 +6,14 @@
 //  Copyright © 2016 Vladimir Yevdokimov. All rights reserved.
 //
 
-#import "ChatsListViewController.h"
+#import "VYChannelsViewController.h"
 
-#import "ContactsViewController.h"
-#import "ChatViewController.h"
+#import "VYContactsViewController.h"
+#import "VYChatViewController.h"
 
-#import "ChannelCell.h"
+#import "VYChannelCell.h"
 
-@interface ChatsListViewController ()
+@interface VYChannelsViewController ()
 
 @property (nonatomic,strong) NSMutableArray <MMXChannel*> *presentingChannels;
 
@@ -27,11 +27,11 @@
 
 @end
 
-@implementation ChatsListViewController
+@implementation VYChannelsViewController
 
 + (UINib*)nib {
-    return [UINib nibWithNibName:NSStringFromClass([ChatsListViewController class])
-                          bundle:[NSBundle bundleForClass:[ChatsListViewController class]]];
+    return [UINib nibWithNibName:NSStringFromClass([VYChannelsViewController class])
+                          bundle:[NSBundle bundleForClass:[VYChannelsViewController class]]];
 }
 
 #pragma mark - UI and Loading
@@ -103,7 +103,7 @@
 {
     NSLog(@"Activated didPressChatCreate. You should override this method to catch this interaction.");
     
-    ContactsViewController *vc = [ContactsViewController new];
+    VYContactsViewController *vc = [VYContactsViewController new];
     
     if (self.navigationController) {
         [self.navigationController pushViewController:vc animated:YES];
@@ -118,9 +118,7 @@
 {
     NSLog(@"Activated didPressCancel. You should override this method to catch this interaction.");
 
-    if (self.presentingViewController) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } else if (self.navigationController) {
+    if (self.navigationController) {
         if (self.navigationController.presentingViewController) {
             if (self.navigationController.viewControllers.count == 1) {
                 
@@ -132,6 +130,8 @@
         } else {
             [self.navigationController popViewControllerAnimated:YES];
         }
+    } else if (self.presentingViewController) {
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
@@ -163,12 +163,12 @@
 {
     if (channel) {
         if (self.navigationController) {
-            ChatViewController *vc = [ChatViewController new];
+            VYChatViewController *vc = [VYChatViewController new];
             vc.chatChannel = channel;
             [self.navigationController pushViewController:vc animated:YES];
             
         } else {
-            ChatViewController *vc = [ChatViewController new];
+            VYChatViewController *vc = [VYChatViewController new];
             vc.chatChannel = channel;
             [self.presentingViewController presentViewController:vc animated:YES completion:nil];
         }
@@ -197,10 +197,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *identifier = NSStringFromClass([ChannelCell class]);
-    ChannelCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    NSString *identifier = NSStringFromClass([VYChannelCell class]);
+    VYChannelCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell) {
-        cell = [[ChannelCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        cell = [[VYChannelCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     cell.channel = _presentingChannels[indexPath.row];
     

@@ -8,37 +8,39 @@
 
 /* Begin PBXBuildFile section */
 		270992925BF65A336C487E89 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9ACF9791F7A3ADAF0E61DEE /* Pods.framework */; };
-		7A0667271C99ED4600822EC3 /* SignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A0667261C99ED4600822EC3 /* SignInViewController.xib */; };
+		7A0667271C99ED4600822EC3 /* VYSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A0667261C99ED4600822EC3 /* VYSignInViewController.xib */; };
 		7A06672A1C99F01D00822EC3 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0667291C99F01D00822EC3 /* LoginVC.m */; };
-		7A1C6D421C988E5F00FAB31E /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C6D411C988E5F00FAB31E /* SignInViewController.m */; };
+		7A1C6D421C988E5F00FAB31E /* VYSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C6D411C988E5F00FAB31E /* VYSignInViewController.m */; };
 		7A1C6D451C98A11E00FAB31E /* CHKBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C6D441C98A11E00FAB31E /* CHKBaseViewController.m */; };
 		7A2E9F241C874A52000BC70C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2E9F231C874A52000BC70C /* main.m */; };
 		7A2E9F271C874A52000BC70C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2E9F261C874A52000BC70C /* AppDelegate.m */; };
 		7A2E9F2D1C874A52000BC70C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A2E9F2B1C874A52000BC70C /* Main.storyboard */; };
 		7A2E9F2F1C874A52000BC70C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2E9F2E1C874A52000BC70C /* Assets.xcassets */; };
 		7A2E9F321C874A52000BC70C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A2E9F301C874A52000BC70C /* LaunchScreen.storyboard */; };
+		7A48F0981CA058EE00BA9657 /* VYChatMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A48F0971CA058EE00BA9657 /* VYChatMessageCell.m */; };
+		7A48F09C1CA061A100BA9657 /* qr.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A48F09B1CA061A100BA9657 /* qr.png */; };
 		7A73D3071C8DD8B30078EC47 /* ChatListSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3061C8DD8B30078EC47 /* ChatListSettings.m */; };
-		7A73D30E1C8DD8CB0078EC47 /* ChannelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D30D1C8DD8CB0078EC47 /* ChannelCell.m */; };
-		7A73D3111C8DD8D80078EC47 /* ChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3101C8DD8D80078EC47 /* ChatsListViewController.m */; };
-		7A73D3141C8DDA420078EC47 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3131C8DDA420078EC47 /* ChatViewController.m */; };
+		7A73D30E1C8DD8CB0078EC47 /* VYChannelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D30D1C8DD8CB0078EC47 /* VYChannelCell.m */; };
+		7A73D3111C8DD8D80078EC47 /* VYChannelsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3101C8DD8D80078EC47 /* VYChannelsViewController.m */; };
+		7A73D3141C8DDA420078EC47 /* VYChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A73D3131C8DDA420078EC47 /* VYChatViewController.m */; };
 		7A73D31B1C8DFA410078EC47 /* MagnetMax.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A73D31A1C8DFA410078EC47 /* MagnetMax.plist */; };
-		7A8E8C461C9B563F00AA9545 /* ChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A8E8C451C9B563F00AA9545 /* ChatViewController.xib */; };
+		7A8E8C461C9B563F00AA9545 /* VYChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A8E8C451C9B563F00AA9545 /* VYChatViewController.xib */; };
 		7A9A08DD1C9C8D4000D641E4 /* CHKUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9A08DC1C9C8D4000D641E4 /* CHKUtils.m */; };
 		7AA578301C9078F9005EB630 /* AuthManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5782F1C9078F9005EB630 /* AuthManager.m */; };
-		7AA578331C908697005EB630 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA578321C908697005EB630 /* ContactsViewController.m */; };
-		7AA578351C9086B4005EB630 /* ContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7AA578341C9086B4005EB630 /* ContactsViewController.xib */; };
-		7AA578371C9086D8005EB630 /* ChatsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7AA578361C9086D8005EB630 /* ChatsListViewController.xib */; };
+		7AA578331C908697005EB630 /* VYContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA578321C908697005EB630 /* VYContactsViewController.m */; };
+		7AA578351C9086B4005EB630 /* VYContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7AA578341C9086B4005EB630 /* VYContactsViewController.xib */; };
+		7AA578371C9086D8005EB630 /* VYChannelsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7AA578361C9086D8005EB630 /* VYChannelsViewController.xib */; };
 		7ADFB04B1C9CB9F00064AB50 /* CHKAssets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7ADFB04A1C9CB9F00064AB50 /* CHKAssets.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3BB87177935A1C87CFA6E5A6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		6F3E915A51CF7BC62FEA87DD /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		7A0667261C99ED4600822EC3 /* SignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SignInViewController.xib; path = UI/Controllers/SignInViewController.xib; sourceTree = "<group>"; };
+		7A0667261C99ED4600822EC3 /* VYSignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = VYSignInViewController.xib; path = UI/Controllers/VYSignInViewController.xib; sourceTree = "<group>"; };
 		7A0667281C99F01D00822EC3 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		7A0667291C99F01D00822EC3 /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
-		7A1C6D401C988E5F00FAB31E /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignInViewController.h; path = UI/Controllers/SignInViewController.h; sourceTree = "<group>"; };
-		7A1C6D411C988E5F00FAB31E /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignInViewController.m; path = UI/Controllers/SignInViewController.m; sourceTree = "<group>"; };
+		7A1C6D401C988E5F00FAB31E /* VYSignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VYSignInViewController.h; path = UI/Controllers/VYSignInViewController.h; sourceTree = "<group>"; };
+		7A1C6D411C988E5F00FAB31E /* VYSignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VYSignInViewController.m; path = UI/Controllers/VYSignInViewController.m; sourceTree = "<group>"; };
 		7A1C6D431C98A11E00FAB31E /* CHKBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CHKBaseViewController.h; path = UI/Controllers/CHKBaseViewController.h; sourceTree = "<group>"; };
 		7A1C6D441C98A11E00FAB31E /* CHKBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CHKBaseViewController.m; path = UI/Controllers/CHKBaseViewController.m; sourceTree = "<group>"; };
 		7A2E9F1F1C874A52000BC70C /* ChatKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,24 +51,27 @@
 		7A2E9F2E1C874A52000BC70C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7A2E9F311C874A52000BC70C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7A2E9F331C874A52000BC70C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A48F0961CA058EE00BA9657 /* VYChatMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VYChatMessageCell.h; path = UI/Prototypes/VYChatMessageCell.h; sourceTree = "<group>"; };
+		7A48F0971CA058EE00BA9657 /* VYChatMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VYChatMessageCell.m; path = UI/Prototypes/VYChatMessageCell.m; sourceTree = "<group>"; };
+		7A48F09B1CA061A100BA9657 /* qr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qr.png; sourceTree = "<group>"; };
 		7A73D3051C8DD8B30078EC47 /* ChatListSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatListSettings.h; path = UI/Objects/ChatListSettings.h; sourceTree = "<group>"; };
 		7A73D3061C8DD8B30078EC47 /* ChatListSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatListSettings.m; path = UI/Objects/ChatListSettings.m; sourceTree = "<group>"; };
-		7A73D30C1C8DD8CB0078EC47 /* ChannelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChannelCell.h; path = UI/Prototypes/ChannelCell.h; sourceTree = "<group>"; };
-		7A73D30D1C8DD8CB0078EC47 /* ChannelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChannelCell.m; path = UI/Prototypes/ChannelCell.m; sourceTree = "<group>"; };
-		7A73D30F1C8DD8D80078EC47 /* ChatsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatsListViewController.h; path = UI/Controllers/ChatsListViewController.h; sourceTree = "<group>"; };
-		7A73D3101C8DD8D80078EC47 /* ChatsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatsListViewController.m; path = UI/Controllers/ChatsListViewController.m; sourceTree = "<group>"; };
-		7A73D3121C8DDA420078EC47 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = UI/Controllers/ChatViewController.h; sourceTree = "<group>"; };
-		7A73D3131C8DDA420078EC47 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = UI/Controllers/ChatViewController.m; sourceTree = "<group>"; };
+		7A73D30C1C8DD8CB0078EC47 /* VYChannelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VYChannelCell.h; path = UI/Prototypes/VYChannelCell.h; sourceTree = "<group>"; };
+		7A73D30D1C8DD8CB0078EC47 /* VYChannelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VYChannelCell.m; path = UI/Prototypes/VYChannelCell.m; sourceTree = "<group>"; };
+		7A73D30F1C8DD8D80078EC47 /* VYChannelsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VYChannelsViewController.h; path = UI/Controllers/VYChannelsViewController.h; sourceTree = "<group>"; };
+		7A73D3101C8DD8D80078EC47 /* VYChannelsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VYChannelsViewController.m; path = UI/Controllers/VYChannelsViewController.m; sourceTree = "<group>"; };
+		7A73D3121C8DDA420078EC47 /* VYChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VYChatViewController.h; path = UI/Controllers/VYChatViewController.h; sourceTree = "<group>"; };
+		7A73D3131C8DDA420078EC47 /* VYChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VYChatViewController.m; path = UI/Controllers/VYChatViewController.m; sourceTree = "<group>"; };
 		7A73D31A1C8DFA410078EC47 /* MagnetMax.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MagnetMax.plist; sourceTree = "<group>"; };
-		7A8E8C451C9B563F00AA9545 /* ChatViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChatViewController.xib; path = UI/Controllers/ChatViewController.xib; sourceTree = "<group>"; };
+		7A8E8C451C9B563F00AA9545 /* VYChatViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = VYChatViewController.xib; path = UI/Controllers/VYChatViewController.xib; sourceTree = "<group>"; };
 		7A9A08DB1C9C8D4000D641E4 /* CHKUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CHKUtils.h; path = UI/CHKUtils.h; sourceTree = "<group>"; };
 		7A9A08DC1C9C8D4000D641E4 /* CHKUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CHKUtils.m; path = UI/CHKUtils.m; sourceTree = "<group>"; };
 		7AA5782E1C9078F9005EB630 /* AuthManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthManager.h; sourceTree = "<group>"; };
 		7AA5782F1C9078F9005EB630 /* AuthManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthManager.m; sourceTree = "<group>"; };
-		7AA578311C908697005EB630 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContactsViewController.h; path = UI/Controllers/ContactsViewController.h; sourceTree = "<group>"; };
-		7AA578321C908697005EB630 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContactsViewController.m; path = UI/Controllers/ContactsViewController.m; sourceTree = "<group>"; };
-		7AA578341C9086B4005EB630 /* ContactsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactsViewController.xib; path = UI/Controllers/ContactsViewController.xib; sourceTree = "<group>"; };
-		7AA578361C9086D8005EB630 /* ChatsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChatsListViewController.xib; path = UI/Controllers/ChatsListViewController.xib; sourceTree = "<group>"; };
+		7AA578311C908697005EB630 /* VYContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VYContactsViewController.h; path = UI/Controllers/VYContactsViewController.h; sourceTree = "<group>"; };
+		7AA578321C908697005EB630 /* VYContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VYContactsViewController.m; path = UI/Controllers/VYContactsViewController.m; sourceTree = "<group>"; };
+		7AA578341C9086B4005EB630 /* VYContactsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = VYContactsViewController.xib; path = UI/Controllers/VYContactsViewController.xib; sourceTree = "<group>"; };
+		7AA578361C9086D8005EB630 /* VYChannelsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = VYChannelsViewController.xib; path = UI/Controllers/VYChannelsViewController.xib; sourceTree = "<group>"; };
 		7ADFB04A1C9CB9F00064AB50 /* CHKAssets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CHKAssets.bundle; path = UI/CHKAssets.bundle; sourceTree = "<group>"; };
 		7ADFB04C1C9CBA170064AB50 /* YVChatKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YVChatKit.h; path = UI/YVChatKit.h; sourceTree = "<group>"; };
 		F9ACF9791F7A3ADAF0E61DEE /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,8 +122,8 @@
 		7A1C6D3F1C988E4300FAB31E /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
-				7A1C6D401C988E5F00FAB31E /* SignInViewController.h */,
-				7A1C6D411C988E5F00FAB31E /* SignInViewController.m */,
+				7A1C6D401C988E5F00FAB31E /* VYSignInViewController.h */,
+				7A1C6D411C988E5F00FAB31E /* VYSignInViewController.m */,
 			);
 			name = SignIn;
 			sourceTree = "<group>";
@@ -144,6 +149,7 @@
 		7A2E9F211C874A52000BC70C /* ChatKit */ = {
 			isa = PBXGroup;
 			children = (
+				7A48F09B1CA061A100BA9657 /* qr.png */,
 				7A73D31A1C8DFA410078EC47 /* MagnetMax.plist */,
 				7A2E9F251C874A52000BC70C /* AppDelegate.h */,
 				7A2E9F261C874A52000BC70C /* AppDelegate.m */,
@@ -177,8 +183,8 @@
 				7A9A08DC1C9C8D4000D641E4 /* CHKUtils.m */,
 				7A1C6D3E1C988DB400FAB31E /* ViewControllers */,
 				7A3BD41C1C88D22B00F072AC /* Objects */,
-				7A73D3001C8DD7B20078EC47 /* Sources */,
 				7A73D2FC1C8DD34E0078EC47 /* Prototypes */,
+				7A73D3001C8DD7B20078EC47 /* Sources */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -186,8 +192,8 @@
 		7A3BD4161C8750DD00F072AC /* ChatsList */ = {
 			isa = PBXGroup;
 			children = (
-				7A73D30F1C8DD8D80078EC47 /* ChatsListViewController.h */,
-				7A73D3101C8DD8D80078EC47 /* ChatsListViewController.m */,
+				7A73D30F1C8DD8D80078EC47 /* VYChannelsViewController.h */,
+				7A73D3101C8DD8D80078EC47 /* VYChannelsViewController.m */,
 			);
 			name = ChatsList;
 			sourceTree = "<group>";
@@ -195,8 +201,8 @@
 		7A3BD4171C8750F200F072AC /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
-				7AA578311C908697005EB630 /* ContactsViewController.h */,
-				7AA578321C908697005EB630 /* ContactsViewController.m */,
+				7AA578311C908697005EB630 /* VYContactsViewController.h */,
+				7AA578321C908697005EB630 /* VYContactsViewController.m */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -204,8 +210,8 @@
 		7A3BD4181C8750FD00F072AC /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				7A73D3121C8DDA420078EC47 /* ChatViewController.h */,
-				7A73D3131C8DDA420078EC47 /* ChatViewController.m */,
+				7A73D3121C8DDA420078EC47 /* VYChatViewController.h */,
+				7A73D3131C8DDA420078EC47 /* VYChatViewController.m */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -222,8 +228,10 @@
 		7A73D2FC1C8DD34E0078EC47 /* Prototypes */ = {
 			isa = PBXGroup;
 			children = (
-				7A73D30C1C8DD8CB0078EC47 /* ChannelCell.h */,
-				7A73D30D1C8DD8CB0078EC47 /* ChannelCell.m */,
+				7A73D30C1C8DD8CB0078EC47 /* VYChannelCell.h */,
+				7A73D30D1C8DD8CB0078EC47 /* VYChannelCell.m */,
+				7A48F0961CA058EE00BA9657 /* VYChatMessageCell.h */,
+				7A48F0971CA058EE00BA9657 /* VYChatMessageCell.m */,
 			);
 			name = Prototypes;
 			sourceTree = "<group>";
@@ -232,10 +240,10 @@
 			isa = PBXGroup;
 			children = (
 				7ADFB04A1C9CB9F00064AB50 /* CHKAssets.bundle */,
-				7A0667261C99ED4600822EC3 /* SignInViewController.xib */,
-				7AA578361C9086D8005EB630 /* ChatsListViewController.xib */,
-				7AA578341C9086B4005EB630 /* ContactsViewController.xib */,
-				7A8E8C451C9B563F00AA9545 /* ChatViewController.xib */,
+				7A0667261C99ED4600822EC3 /* VYSignInViewController.xib */,
+				7AA578361C9086D8005EB630 /* VYChannelsViewController.xib */,
+				7AA578341C9086B4005EB630 /* VYContactsViewController.xib */,
+				7A8E8C451C9B563F00AA9545 /* VYChatViewController.xib */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -300,15 +308,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7AA578371C9086D8005EB630 /* ChatsListViewController.xib in Resources */,
-				7A8E8C461C9B563F00AA9545 /* ChatViewController.xib in Resources */,
+				7AA578371C9086D8005EB630 /* VYChannelsViewController.xib in Resources */,
+				7A48F09C1CA061A100BA9657 /* qr.png in Resources */,
+				7A8E8C461C9B563F00AA9545 /* VYChatViewController.xib in Resources */,
 				7A2E9F321C874A52000BC70C /* LaunchScreen.storyboard in Resources */,
 				7A2E9F2F1C874A52000BC70C /* Assets.xcassets in Resources */,
-				7AA578351C9086B4005EB630 /* ContactsViewController.xib in Resources */,
+				7AA578351C9086B4005EB630 /* VYContactsViewController.xib in Resources */,
 				7ADFB04B1C9CB9F00064AB50 /* CHKAssets.bundle in Resources */,
 				7A73D31B1C8DFA410078EC47 /* MagnetMax.plist in Resources */,
 				7A2E9F2D1C874A52000BC70C /* Main.storyboard in Resources */,
-				7A0667271C99ED4600822EC3 /* SignInViewController.xib in Resources */,
+				7A0667271C99ED4600822EC3 /* VYSignInViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,18 +376,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A1C6D421C988E5F00FAB31E /* SignInViewController.m in Sources */,
+				7A1C6D421C988E5F00FAB31E /* VYSignInViewController.m in Sources */,
 				7A06672A1C99F01D00822EC3 /* LoginVC.m in Sources */,
 				7A2E9F271C874A52000BC70C /* AppDelegate.m in Sources */,
 				7A73D3071C8DD8B30078EC47 /* ChatListSettings.m in Sources */,
-				7A73D3111C8DD8D80078EC47 /* ChatsListViewController.m in Sources */,
+				7A73D3111C8DD8D80078EC47 /* VYChannelsViewController.m in Sources */,
 				7A2E9F241C874A52000BC70C /* main.m in Sources */,
 				7AA578301C9078F9005EB630 /* AuthManager.m in Sources */,
+				7A48F0981CA058EE00BA9657 /* VYChatMessageCell.m in Sources */,
 				7A1C6D451C98A11E00FAB31E /* CHKBaseViewController.m in Sources */,
 				7A9A08DD1C9C8D4000D641E4 /* CHKUtils.m in Sources */,
-				7A73D3141C8DDA420078EC47 /* ChatViewController.m in Sources */,
-				7AA578331C908697005EB630 /* ContactsViewController.m in Sources */,
-				7A73D30E1C8DD8CB0078EC47 /* ChannelCell.m in Sources */,
+				7A73D3141C8DDA420078EC47 /* VYChatViewController.m in Sources */,
+				7AA578331C908697005EB630 /* VYContactsViewController.m in Sources */,
+				7A73D30E1C8DD8CB0078EC47 /* VYChannelCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

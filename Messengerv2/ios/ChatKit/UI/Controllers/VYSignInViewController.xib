@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignInViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VYSignInViewController">
             <connections>
                 <outlet property="checkboxIV" destination="nGm-UM-VTv" id="h4r-Dy-F48"/>
                 <outlet property="loginTF" destination="WS4-j6-UFN" id="axL-Yj-WyN"/>

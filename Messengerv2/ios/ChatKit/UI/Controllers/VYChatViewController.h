@@ -10,7 +10,7 @@
 
 @import MagnetMax;
 
-@protocol ChatViewControllerDelegate <NSObject>
+@protocol VYChatViewControllerDelegate <NSObject>
 
 @optional
 - (void)messageWillBeSend;
@@ -22,7 +22,7 @@
 
 @end
 
-@interface ChatViewController : CHKBaseViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate,ChatViewControllerDelegate>
+@interface VYChatViewController : CHKBaseViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate,VYChatViewControllerDelegate>
 
 @property (nonatomic, strong) MMXChannel *chatChannel;
 
