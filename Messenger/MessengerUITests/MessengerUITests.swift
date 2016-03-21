@@ -11,8 +11,12 @@ import XCTest
 class MessengerUITests: XCTestCase {
     
     let kExpectationsTimeout : NSTimeInterval = 60
-    let userName = "test8@automation.gmail.com"
+    let userName = "test20@automation.gmail.com"
     let password = "Temp1234%"
+    
+    let fName = "AutomationTestUser20"
+    let lName = "test"
+    let fullName = "AutomationTestUser20 test"
     let kPublicChannelTag = "public"
     let kPublicChannelName = "public"
     
@@ -36,9 +40,8 @@ class MessengerUITests: XCTestCase {
     }
     
     //Test1 Negative scenario - Login to the app with invalid credentials
-    func test1LoginWithInvalidCredentials()
+    func test01LoginWithInvalidCredentials()
     {
-        
         let app = XCUIApplication()
         let emailAddressTextField = app.textFields["Email Address"]
         emailAddressTextField.tap()
@@ -71,7 +74,7 @@ class MessengerUITests: XCTestCase {
     }
     
     //Test2 Negative scenario - Register a user with empty fields
-    func test2RegisterUserWithEmptyFields()
+    func test02RegisterUserWithEmptyFields()
     {
         let app = XCUIApplication()
         app.buttons["Create account"].tap()
@@ -97,9 +100,8 @@ class MessengerUITests: XCTestCase {
     }
     
     //Test3 Negative scenario - Register a user with empty password
-    func test3RegisterUserWithEmptyPassword()
+    func test03RegisterUserWithEmptyPassword()
     {
-        
         let app = XCUIApplication()
         app.buttons["Create account"].tap()
         
@@ -138,7 +140,7 @@ class MessengerUITests: XCTestCase {
     }
     
     //Test4 Negative scenario - Register a user with mismatch passwords
-    func test4RegisterUserWithMismatchPassword()
+    func test04RegisterUserWithMismatchPassword()
     {
         let app = XCUIApplication()
         app.buttons["Create account"].tap()
@@ -187,7 +189,7 @@ class MessengerUITests: XCTestCase {
     }
     
     //Test5 Negative scenario - Register a user with invaild email
-    func test5RegisterUserWithInvalidEmail()
+    func test05RegisterUserWithInvalidEmail()
     {
         let app = XCUIApplication()
         app.buttons["Create account"].tap()
@@ -236,31 +238,31 @@ class MessengerUITests: XCTestCase {
     }
     
     //Test6-7 Positive scenarios - Register a new user with valid data and logout of the app
-    func test6_7RegisterANewUser()
+    func test06_07RegisterANewUser()
     {
         let app = XCUIApplication()
         app.buttons["Create account"].tap()
         
         let firstNameTextField = app.textFields["First name"]
         firstNameTextField.tap()
-        firstNameTextField.typeText("AutomationTest8")
+        firstNameTextField.typeText(fName)
         
         let lastNameTextField = app.textFields["Last name"]
         lastNameTextField.tap()
-        lastNameTextField.typeText("User8")
+        lastNameTextField.typeText(lName)
         
         let emailAddressTextField = app.textFields["Email Address"]
         emailAddressTextField.tap()
-        emailAddressTextField.typeText("test8@automation.gmail.com")
+        emailAddressTextField.typeText(userName)
         
         
         let passwordSecureTextField = app.secureTextFields["Password"]
         passwordSecureTextField.tap()
-        passwordSecureTextField.typeText("Temp1234%")
+        passwordSecureTextField.typeText(password)
         
         let passwordAgainSecureTextField = app.secureTextFields["Password again"]
         passwordAgainSecureTextField.tap()
-        passwordAgainSecureTextField.typeText("Temp1234%")
+        passwordAgainSecureTextField.typeText(password)
         
         app.navigationBars["Register"].buttons["Register"].tap()
         
@@ -280,65 +282,67 @@ class MessengerUITests: XCTestCase {
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         
         /*LogOut*/
-//        XCUIApplication().navigationBars["My Profile"].buttons["Close"].tap()
-//        
-//        let AutomationTest8User8 = XCUIApplication().navigationBars["AutomationTest8 User8"]
-//        
-//        AutomationTest8User8.navigationBars["AutomationTest8 User8"].buttons["menu"].tap()
-//        
-//        
-//        let signOutStaticText = app.tables.staticTexts["Sign out"]
-//        signOutStaticText.tap()
-//        
-//        let collectionViewsQuery = app.alerts["Sign out"].collectionViews
-//        collectionViewsQuery.buttons["No"].tap()
-//        signOutStaticText.tap()
-//        collectionViewsQuery.buttons["Yes"].tap()
-//        
-//        
-//        let logoutexpectation = self.expectationWithDescription("Logout time out.")
-//        //waiting for time (10 sec) to logout callback
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-//            XCTAssert(app.navigationBars.staticTexts["Alex Gordyman"].exists)
-//            XCTAssert(app.tables.staticTexts["Sign out"].exists)
-//            XCTAssert(app.alerts["Sign out"].exists)
-//            XCTAssert(app.staticTexts["Do you want to sign out?"].exists)
-//            XCTAssert(app.alerts.collectionViews.buttons["No"].exists)
-//            collectionViewsQuery.buttons["No"].tap()
-//            XCTAssert(app.alerts.collectionViews.buttons["Yes"].exists)
-//            collectionViewsQuery.buttons["Yes"].tap()
-//            logoutexpectation.fulfill()
-//        })
-//        
-//        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        let editNavBar = XCUIApplication().navigationBars["My Profile"];
+        let buttonClose = editNavBar.buttons["Close"];
+        buttonClose.tap();
+        XCTAssert(app.navigationBars.staticTexts[fullName].exists)
+        
+        let navBar = XCUIApplication().navigationBars[fullName]
+        let menuButton = navBar.buttons["menu"]
+        menuButton.tap();
+        XCTAssert(app.tables.staticTexts["Sign out"].exists)
+        
+        let signOutStaticText = app.tables.staticTexts["Sign out"]
+        let collectionViewsQuery = app.alerts["Sign out"].collectionViews
+        
+        signOutStaticText.tap()
+        XCTAssert(app.alerts["Sign out"].exists)
+        XCTAssert(app.staticTexts["Do you want sign out?"].exists)
+        XCTAssert(app.alerts.collectionViews.buttons["No"].exists)
+        collectionViewsQuery.buttons["No"].tap()
+        
+        
+        signOutStaticText.tap()
+        XCTAssert(app.alerts.collectionViews.buttons["Yes"].exists)
+        collectionViewsQuery.buttons["Yes"].tap()
+        
+        
+        let logoutexpectation = self.expectationWithDescription("Logout time out.")
+        //waiting for time (7 sec) to logout callback
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            logoutexpectation.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
     }
     
     //Test8 Negative scenario - Register an existing user (just new created)
-    func test8RegisterAnExistingUser()
+    func test08RegisterAnExistingUser()
     {
+        
         let app = XCUIApplication()
         app.buttons["Create account"].tap()
         
         let firstNameTextField = app.textFields["First name"]
         firstNameTextField.tap()
-        firstNameTextField.typeText("AutomationTest8")
+        firstNameTextField.typeText(fName)
         
         let lastNameTextField = app.textFields["Last name"]
         lastNameTextField.tap()
-        lastNameTextField.typeText("User8")
+        lastNameTextField.typeText(lName)
         
         let emailAddressTextField = app.textFields["Email Address"]
         emailAddressTextField.tap()
-        emailAddressTextField.typeText("test8@automation.gmail.com")
+        emailAddressTextField.typeText(userName)
         
         
         let passwordSecureTextField = app.secureTextFields["Password"]
         passwordSecureTextField.tap()
-        passwordSecureTextField.typeText("Temp1234%")
+        passwordSecureTextField.typeText(password)
         
         let passwordAgainSecureTextField = app.secureTextFields["Password again"]
         passwordAgainSecureTextField.tap()
-        passwordAgainSecureTextField.typeText("Temp1234%")
+        passwordAgainSecureTextField.typeText(password)
         
         app.navigationBars["Register"].buttons["Register"].tap()
         
@@ -363,7 +367,7 @@ class MessengerUITests: XCTestCase {
     }
     
     //Test9 Positive scenario - Login to the app with valid credentials
-    func test9LoginWithValidCredentials()
+    func test09LoginWithValidCredentials()
     {
         
         let app = XCUIApplication()
@@ -375,14 +379,17 @@ class MessengerUITests: XCTestCase {
         passwordSecureTextField.tap()
         passwordSecureTextField.typeText(password)
         
+        let button = app.otherElements.containingType(.NavigationBar, identifier:"Messenger.SignInView").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Button).elementBoundByIndex(0)
+        button.tap()
+        
         let expactation = self.expectationWithDescription("Login timed out.")
         
         app.buttons["Sign in"].tap()
         
         XCTAssert(app.activityIndicators.count == 1, "activityIndicator is appeared")
         
-        //waiting for time (10 sec) to login callback
-        let seconds : UInt64 = 10
+        //waiting for time (7 sec) to login callback
+        let seconds : UInt64 = 7
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             XCTAssertFalse(app.buttons["Login"].exists, "No login button")
             XCTAssert(app.tables.searchFields["Search message by user"].exists, "Search message by user should exist")
@@ -391,36 +398,95 @@ class MessengerUITests: XCTestCase {
         
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
     }
-
+    
     //Test10 Negative scenario - Search for non existing chat by user
-//    func test10SearchForNonExistingChatByUser()
-//    {
-//        
-//        let app = XCUIApplication()
-//        app.tables.searchFields["Search message by user"].tap()
-//        
-//        app.keys["A"].tap()
-//        
-//        let searchMessageByUserSearchField = app.searchFields["Search message by user"]
-//        searchMessageByUserSearchField.typeText("A")
-//        app.keys["l"].tap()
-//        searchMessageByUserSearchField.typeText("l")
-//        app.keys["e"].tap()
-//        searchMessageByUserSearchField.typeText("e")
-//        app.keys["x"].tap()
-//        searchMessageByUserSearchField.typeText("x")
-//        app.typeText("\n")
-//        let searchchatexpectation = self.expectationWithDescription("Search chat with expectation.")
-//        //waiting for time (7 sec) to search chat
-//        let seconds : UInt64 = 7
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-//        app.buttons["Search"].tap()
-//        searchchatexpectation.fulfill()
-//        
-//        })
-//    }
+    func test10SearchForNonExistingChatByUser()
+    {
+        /* login*/
+        let app = XCUIApplication()
+        let emailAddressTextField = app.textFields["Email Address"]
+        emailAddressTextField.tap()
+        emailAddressTextField.typeText(userName)
+        
+        let passwordSecureTextField = app.secureTextFields["Password"]
+        passwordSecureTextField.tap()
+        passwordSecureTextField.typeText(password)
+        
+        let button = app.otherElements.containingType(.NavigationBar, identifier:"Messenger.SignInView").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Button).elementBoundByIndex(0)
+        button.tap()
+        
+        let expactation = self.expectationWithDescription("Login timed out.")
+        
+        app.buttons["Sign in"].tap()
+        
+        //waiting for time (5 sec) to login callback
+        let seconds : UInt64 = 5
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            expactation.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        
+        /* search for non existing user */
+        
+        app.tables.searchFields["Search message by user"].tap()
+        let searchMessageByUserSearchField = app.searchFields["Search message by user"]
+        searchMessageByUserSearchField.typeText("A")
+        searchMessageByUserSearchField.typeText("l")
+        searchMessageByUserSearchField.typeText("e")
+        searchMessageByUserSearchField.typeText("x")
+        app.buttons["Search"].tap()
+        XCTAssertFalse(app.tables.staticTexts["Alex"].exists)
+        
+    }
+    
+    //Test11 Positive scenario - Set user avatar
+    func test11SetAvatar()
+    {
+        /* login*/
+        let app = XCUIApplication()
+        let emailAddressTextField = app.textFields["Email Address"]
+        emailAddressTextField.tap()
+        emailAddressTextField.typeText(userName)
+        
+        let passwordSecureTextField = app.secureTextFields["Password"]
+        passwordSecureTextField.tap()
+        passwordSecureTextField.typeText(password)
+        
+        let button = app.otherElements.containingType(.NavigationBar, identifier:"Messenger.SignInView").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Button).elementBoundByIndex(0)
+        button.tap()
+        
+        let expactation = self.expectationWithDescription("Login timed out.")
+        
+        app.buttons["Sign in"].tap()
+        
+        //waiting for time (7 sec) to login callback
+        let seconds : UInt64 = 5
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            expactation.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        /* Set avatar */
+        
+        let navBar = app.navigationBars[fullName];
+        let buttons = navBar.buttons["menu"];
+        buttons.tap()
+        
+        let tablesQuery = app.tables
+        tablesQuery.staticTexts[fullName].tap()
+        app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Button).elementBoundByIndex(0).tap()
+        tablesQuery.buttons["Moments"].tap()
+        app.collectionViews.childrenMatchingType(.Cell).elementBoundByIndex(6).tap()
+        app.buttons["Save changes"].tap()
+        
+        let savedAlert = app.alerts["Saved"]
+        XCTAssert(savedAlert.exists)
+        XCTAssert(savedAlert.collectionViews.buttons["Close"].exists)
+        savedAlert.collectionViews.buttons["Close"].tap()
+        
+    }
 }
-
 
 
 
