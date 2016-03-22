@@ -11,12 +11,12 @@ import XCTest
 class MessengerUITests: XCTestCase {
     
     let kExpectationsTimeout : NSTimeInterval = 60
-    let userName = "test20@automation.gmail.com"
+    let userName = "test23@automation.gmail.com"
     let password = "Temp1234%"
     
-    let fName = "AutomationTestUser20"
+    let fName = "AutomationTestUser23"
     let lName = "test"
-    let fullName = "AutomationTestUser20 test"
+    let fullName = "AutomationTestUser23 test"
     let kPublicChannelTag = "public"
     let kPublicChannelName = "public"
     
@@ -385,8 +385,6 @@ class MessengerUITests: XCTestCase {
         let expactation = self.expectationWithDescription("Login timed out.")
         
         app.buttons["Sign in"].tap()
-        
-        XCTAssert(app.activityIndicators.count == 1, "activityIndicator is appeared")
         
         //waiting for time (7 sec) to login callback
         let seconds : UInt64 = 7
