@@ -99,7 +99,6 @@ import MagnetMax
 @objc public protocol ChatListControllerDatasource : ControllerDatasource, MMTableViewFooterDatasource {
     
     
-    
     optional func mmxListCellForChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell?
     optional func mmxListDidCreateCell(cell : UITableViewCell) -> Void
     optional func mmxListCellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat

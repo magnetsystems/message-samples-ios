@@ -132,43 +132,47 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         }
     }
     
-    public func cellDidCreate(cell : UITableViewCell) { }
     
-    public func canLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+    //MARK: Internal Methods
+    
+    
+    internal func cellDidCreate(cell : UITableViewCell) { }
+    
+    internal func canLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         return true
     }
     
-    public func cellForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell? {
+    internal func cellForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell? {
         return nil
     }
     
-    public func cellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat {
+    internal func cellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat {
         return 80
     }
     
-    public func didSelectUserAvatar(user : MMUser) { }
+    internal func didSelectUserAvatar(user : MMUser) { }
     
-    public func heightForFooter(index : Int) -> CGFloat {
+    internal func heightForFooter(index : Int) -> CGFloat {
         return 0.0
     }
     
-    public func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
+    internal func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
         imageView.image = nil
     }
     
-    public func hasMore()->Bool {
+    internal func hasMore()->Bool {
         return false
     }
     
-    public func loadMore(searchText : String?, offset : Int) { }
+    internal func loadMore(searchText : String?, offset : Int) { }
     
-    public func numberOfFooters() -> Int { return 0 }
+    internal func numberOfFooters() -> Int { return 0 }
     
-    public func onChannelDidLeave(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
+    internal func onChannelDidLeave(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
     
-    public func onChannelDidSelect(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
+    internal func onChannelDidSelect(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) { }
     
-    public func refreshChannel(channel : MMXChannel) -> Bool {
+    internal func refreshChannel(channel : MMXChannel) -> Bool {
         
         var hasChannel = false
         
@@ -199,26 +203,26 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         return hasChannel
     }
     
-    public func registerCells(tableView: UITableView) { }
+    internal func registerCells(tableView: UITableView) { }
     
-    public func reset() {
+    internal func reset() {
         self.detailResponses = []
         self.tableView.reloadData()
         self.currentDetailCount = 0
         self.loadMore(self.searchBar.text, offset: self.currentDetailCount)
     }
     
-    public func shouldAppendChannel(channel : MMXChannel) -> Bool { return true }
+    internal func shouldAppendChannel(channel : MMXChannel) -> Bool { return true }
     
-    public func shouldUpdateSearchContinuously() -> Bool {
+    internal func shouldUpdateSearchContinuously() -> Bool {
         return true
     }
     
-    public func sort(channelDetails : [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
+    internal func sort(channelDetails : [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
         return detailsOrderByDate(channelDetails)
     }
     
-    public func tableViewFooter(index : Int) -> UIView {
+    internal func tableViewFooter(index : Int) -> UIView {
         return UIView()
     }
     

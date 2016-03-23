@@ -154,7 +154,7 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         super.append(mmxChannels)
     }
     
-    override public func canLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+    override internal func canLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         if let canLeave = self.delegate?.mmxListCanLeaveChannel(channel, channelDetails : channelDetails) {
             return canLeave
         }
@@ -162,26 +162,26 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         return true
     }
     
-    override public func cellDidCreate(cell: UITableViewCell) {
+    override internal func cellDidCreate(cell: UITableViewCell) {
         self.datasource?.mmxListDidCreateCell?(cell)
     }
     
-    override public func cellForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell? {
+    override internal func cellForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell? {
         return self.datasource?.mmxListCellForChannel?(tableView, channel : channel, channelDetails : channelDetails, indexPath : indexPath)
     }
     
-    override public func cellHeightForChannel(channel: MMXChannel, channelDetails: MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat {
+    override internal func cellHeightForChannel(channel: MMXChannel, channelDetails: MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat {
         if let height  = self.datasource?.mmxListCellHeightForChannel?(channel, channelDetails: channelDetails, indexPath : indexPath) {
             return height
         }
         return super.cellHeightForChannel(channel, channelDetails: channelDetails, indexPath: indexPath)
     }
     
-    override public func didSelectUserAvatar(user: MMUser) {
+    override internal func didSelectUserAvatar(user: MMUser) {
         self.delegate?.mmxAvatarDidClick?(user)
     }
     
-    override public func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
+    override internal func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
         if let imgForDetails = self.datasource?.mmxListImageForChannelDetails {
             imgForDetails(imageView, channelDetails: channelDetails)
         } else {
@@ -189,14 +189,14 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         }
     }
     
-    override public func hasMore() -> Bool {
+    override internal func hasMore() -> Bool {
         if let listDatasource = self.datasource {
             return listDatasource.mmxControllerHasMore()
         }
         return false
     }
     
-    override public func heightForFooter(index: Int) -> CGFloat {
+    override internal func heightForFooter(index: Int) -> CGFloat {
         if let height = self.datasource?.mmxTableViewFooterHeight?(index) {
             return height
         }
@@ -204,7 +204,7 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         return 0.0
     }
     
-    override public func loadMore(searchText: String?, offset: Int) {
+    override internal func loadMore(searchText: String?, offset: Int) {
         newLoadingContext()
         if searchText != nil {
             let loadingContext = self.loadingContext()
@@ -220,7 +220,7 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         }
     }
     
-    override public func numberOfFooters() -> Int {
+    override internal func numberOfFooters() -> Int {
         if let number = self.datasource?.mmxTableViewNumberOfFooters?() {
             return number
         }
@@ -228,19 +228,19 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         return 0
     }
     
-    override public func onChannelDidLeave(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
+    override internal func onChannelDidLeave(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
         self.delegate?.mmxListDidLeaveChannel?(channel,channelDetails : channelDetails)
     }
     
-    override public func onChannelDidSelect(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
+    override internal func onChannelDidSelect(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
         self.delegate?.mmxListDidSelectChannel(channel,channelDetails : channelDetails)
     }
     
-    override public func registerCells(tableView : UITableView) {
+    override internal func registerCells(tableView : UITableView) {
         self.datasource?.mmxListRegisterCells?(tableView)
     }
     
-    override public func sort(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
+    override internal func sort(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
         if let details = self.datasource?.mmxListSortChannelDetails?(channelDetails) {
             return details
         }
@@ -248,7 +248,7 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         return super.sort(channelDetails)
     }
     
-    override public func shouldAppendChannel(channel: MMXChannel) -> Bool {
+    override internal func shouldAppendChannel(channel: MMXChannel) -> Bool {
         if let append = self.datasource?.mmxListShouldAppendNewChannel?(channel) {
             return append
         }
@@ -256,14 +256,14 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         return super.shouldAppendChannel(channel)
     }
     
-    override public func shouldUpdateSearchContinuously() -> Bool {
+    override internal func shouldUpdateSearchContinuously() -> Bool {
         if let datasource = self.datasource {
             return datasource.mmxControllerSearchUpdatesContinuously()
         }
         return false
     }
     
-    override public func tableViewFooter(index: Int) -> UIView {
+    override internal func tableViewFooter(index: Int) -> UIView {
         if let footer = self.datasource?.mmxTableViewFooter?(index) {
             return footer
         }
