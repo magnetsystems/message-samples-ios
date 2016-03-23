@@ -48,9 +48,9 @@ public class MyChatListController : MMXChatListViewController {
 
 public class MyChatViewController : MMXChatViewController {
     
-    override public var currentDetailsViewController : MMXContactsPickerController? {
+    override public var chatDetailsViewController : MMXContactsPickerController? {
         didSet {
-            currentDetailsViewController?.tableView.backgroundColor = UIColor.orangeColor()
+            chatDetailsViewController?.tableView.backgroundColor = UIColor.orangeColor()
         }
     }
     
@@ -59,7 +59,6 @@ public class MyChatViewController : MMXChatViewController {
         self.collectionView?.backgroundColor = UIColor.yellowColor()
     }
 }
-
 
 class ViewController: UIViewController {
     var currentController : UIViewController?
@@ -100,7 +99,6 @@ class ViewController: UIViewController {
         self.navigationController?.pushViewController(c, animated: true)
         //self.presentViewController(c, animated: true, completion: nil)
     }
-    
     
     func login (user : MMUser) {
         let cred = NSURLCredential.init(user: user.userName, password: user.password, persistence: .None)
