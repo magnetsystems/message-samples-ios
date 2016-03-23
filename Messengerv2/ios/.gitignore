@@ -1,59 +1,21 @@
-#
-# Magnet Generated project suggested .gitignore file
-# Remove, update or add entries as needed.
-#
-
-# Java
-*.ear
-*.war
-*.class
-
-#Android
-*.apk
-*.ap_
-local.properties
-*.dex
-
-#IntelliJ IDEA
-*.iws
-*.ipr
-*.iml
-.idea/
-tmp/
-
-
-# OS X , Xcode, Objective C
-build/*
-*.pbxuser
-*.mode2v3
-*.mode1v3
-*.xcworkspace
-xcuserdata
+# Xcode
 .DS_Store
-*.DS_Store
-
-# Eclipse
-.project
-.metadata
-.classpath
-.settings/
-.launch
-.externalToolBuilders/
-
-# Maven
-target/
-
-# Gradle
-.gradle
-
-# Misc
-*.out
-*~
+*.xcuserstate
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
+xcuserdata
+profile
+*.moved-aside
+DerivedData
+.idea/
+Pods
 *.lock
-*.tmp
-*.bak
-*.swp
-*~.nib
-magnet_log.*
-_
-

@@ -1,19 +1,9 @@
 source 'https://github.com/CocoaPods/Specs.git'
-#Public
-source 'https://github.com/magnetsystems/Specs'
-#Private
+source 'https://github.com/magnetsystems/Specs.git'
 source 'https://github.com/magnetsystems/iOS-Distribution'
 
-platform :ios, '8.0'
+inhibit_all_warnings!
+
 use_frameworks!
-
-pod 'MagnetMax', '~> 2.5.2'
+pod 'ChatKit'
 pod 'SVProgressHUD'
-
-#content viewers
-#pod 'NYTPhotoViewer', '~> 1.0.0'
-#pod 'DZVideoPlayerViewController'
-
-#Crashlytics integration
-#pod 'Fabric'
-#pod 'Crashlytics'
