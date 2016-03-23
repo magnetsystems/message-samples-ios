@@ -32,7 +32,6 @@
 #import "MMXMessageOptions_Private.h"
 #import "MMXMessageStateQueryResponse_Private.h"
 #import "MMXPubSubManager_Private.h"
-#import "MMXDataModel.h"
 #import "MMXUserProfile_Private.h"
 #import "MMXEndpoint.h"
 
@@ -53,6 +52,9 @@
 #import "NSString+XEP_0106.h"
 
 #import "MMUser+Addressable.h"
+#import "MMXChannel_Private.h"
+#import "XMPPPrivacy.h"
+#import "MMXPrivacyManager.h"
 
 #import <AssertMacros.h>
 
@@ -80,6 +82,7 @@ int const kReconnectionTimerInterval = 4;
 @interface MMXClient () <XMPPStreamDelegate, XMPPReconnectDelegate, MMXPubSubManagerDelegate>
 
 @property (nonatomic, readwrite) MMXPubSubManager * pubsubManager;
+@property (nonatomic, readwrite) MMXPrivacyManager *privacyManager;
 @property (nonatomic, strong) XMPPReconnect * xmppReconnect;
 @property (nonatomic, assign) NSUInteger messageNumber;
 @property (nonatomic, assign) NSUInteger reconnectionTryCount;
@@ -204,6 +207,16 @@ int const kReconnectionTimerInterval = 4;
 	[self.xmppReconnect activate:self.xmppStream];
 	self.xmppReconnect.reconnectTimerInterval = kReconnectionTimerInterval;
 	
+    if (self.privacyManager.xmppPrivacy != nil) {
+        [self.privacyManager.xmppPrivacy removeDelegate:self.privacyManager delegateQueue:self.mmxQueue];
+        [self.privacyManager.xmppPrivacy deactivate];
+    } else {
+        self.privacyManager.xmppPrivacy = [[XMPPPrivacy alloc] init];
+    }
+    [self.privacyManager.xmppPrivacy addDelegate:self.privacyManager delegateQueue:self.mmxQueue];
+    [self.privacyManager.xmppPrivacy activate:self.xmppStream];
+
+    
 	[self updateConnectionStatus:MMXConnectionStatusConnecting error:nil];
 
 	NSMutableString *userWithAppId = [[NSMutableString alloc] initWithString:[self.username jidEscapedString]];
@@ -213,7 +226,7 @@ int const kReconnectionTimerInterval = 4;
     NSString *host = self.configuration.baseURL.host;
 
     [self.xmppStream setMyJID:[XMPPJID jidWithUser:userWithAppId
-											domain:@"mmx"
+											domain:self.configuration.domain
 										  resource:self.deviceID]];
 
     [self.xmppStream setHostName:host];
@@ -326,7 +339,7 @@ int const kReconnectionTimerInterval = 4;
 	return [NSString stringWithFormat:@"%@-%ld",[MMXClient sessionIdentifier],(unsigned long)self.messageNumber];
 }
 
-#pragma mark - PubSub Manager
+#pragma mark - Overriden getters
 
 - (MMXPubSubManager *)pubsubManager {
     if (!_pubsubManager) {
@@ -335,6 +348,12 @@ int const kReconnectionTimerInterval = 4;
     return _pubsubManager;
 }
 
+- (MMXPrivacyManager *)privacyManager {
+    if (!_privacyManager) {
+        _privacyManager = [[MMXPrivacyManager alloc] init];
+    }
+    return _privacyManager;
+}
 
 #pragma mark - GeoLocation methods
 
@@ -657,88 +676,6 @@ int const kReconnectionTimerInterval = 4;
 	}
 }
 
-#pragma mark - Queued Messages
-
-- (NSArray *)queuedMessagesForType:(MMXOutboxEntryMessageType)type {
-    NSString * username  = self.xmppStream.myJID.user ?: self.username;
-    NSMutableArray * messageArray = @[].mutableCopy;
-    NSArray * archivedMessages = [[MMXDataModel sharedDataModel] outboxEntriesForUser:username outboxEntryMessageType:type];
-    for (MMXOutboxEntry * entry in archivedMessages) {
-        [[MMXLogger sharedLogger] verbose:@"MMXOutboxEntry = %@",entry];
-        MMXInternalMessageAdaptor * message = [[MMXDataModel sharedDataModel] extractMessageFromOutboxEntry:entry];
-        if (type == MMXOutboxEntryMessageTypeDefault) {
-            [messageArray addObject:[MMXOutboundMessage initWithMessage:message]];
-        } else if (type == MMXOutboxEntryMessageTypePubSub) {
-            [messageArray addObject:[MMXPubSubMessage initWithMessage:message]];
-        }
-    }
-    return messageArray.copy;
-}
-
-- (NSArray *)queuedMessages {
-    return [self queuedMessagesForType:MMXOutboxEntryMessageTypeDefault];
-}
-
-- (NSArray *)deleteQueuedMessages:(NSArray *)messages {
-    if (!messages || !messages.count) {
-        return @[];
-    } else {
-        NSMutableArray * failedArray = @[].mutableCopy;
-        for (MMXOutboundMessage * message in messages) {
-            [[MMXLogger sharedLogger] verbose:@"Deleting message with ID = %@", message.messageID];
-            if (![[MMXDataModel sharedDataModel] deleteOutboxEntryForMessage:message.messageID]) {
-                [failedArray addObject:message];
-            }
-        }
-        return failedArray.copy;
-    }
-}
-
-- (NSArray *)queuedPubSubMessages {
-    return [self queuedMessagesForType:MMXOutboxEntryMessageTypePubSub];
-}
-
-- (NSArray *)deleteQueuedPubSubMessages:(NSArray *)messages {
-    if (!messages || !messages.count) {
-        return @[];
-    } else {
-        NSMutableArray * failedArray = @[].mutableCopy;
-        for (MMXOutboundMessage * message in messages) {
-            [[MMXLogger sharedLogger] verbose:@"Deleting message with ID = %@", message.messageID];
-            if (![[MMXDataModel sharedDataModel] deleteOutboxEntryForMessage:message.messageID]) {
-                [failedArray addObject:message];
-            }
-        }
-        return failedArray.copy;
-    }
-}
-
-
-#pragma mark - Archived Messages
-
-- (void)sendArchivedMessages {
-	NSString * username  = self.xmppStream.myJID.user ?: self.username;
-    NSArray * archivedMessages = [[MMXDataModel sharedDataModel] outboxEntriesForUser:username outboxEntryMessageType:MMXOutboxEntryMessageTypeDefault];
-    for (MMXOutboxEntry * entry in archivedMessages) {
-        [[MMXLogger sharedLogger] verbose:@"MMXOutboxEntry = %@",entry];
-        MMXInternalMessageAdaptor * message = [[MMXDataModel sharedDataModel] extractMessageFromOutboxEntry:entry];
-        MMXMessageOptions * options = [[MMXDataModel sharedDataModel] extractMessageOptionsFromOutboxEntry:entry];
-        [[MMXDataModel sharedDataModel] deleteOutboxEntryForMessage:message.messageID];
-        [self sendMessage:[MMXOutboundMessage initWithMessage:message] withOptions:options];
-    }
-    NSArray * archivedPubSubMessages = [[MMXDataModel sharedDataModel] outboxEntriesForUser:username outboxEntryMessageType:MMXOutboxEntryMessageTypePubSub];
-    for (MMXOutboxEntry * entry in archivedPubSubMessages) {
-        [[MMXLogger sharedLogger] verbose:@"MMXOutboxEntry = %@",entry];
-        MMXInternalMessageAdaptor * message = [[MMXDataModel sharedDataModel] extractMessageFromOutboxEntry:entry];
-        [[MMXDataModel sharedDataModel] deleteOutboxEntryForMessage:message.messageID];
-
-		MMXPubSubMessage *pubMessage = [MMXPubSubMessage initWithMessage:message];
-		[self.pubsubManager publishPubSubMessage:pubMessage success:nil failure:^(NSError * error){
-			[[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:pubMessage username:username];
-		}];
-    }
-}
-
 #pragma mark - XMPPReconnect
 #pragma mark XMPPReconnectDelegate Callbacks
 
@@ -819,7 +756,6 @@ int const kReconnectionTimerInterval = 4;
 	} else {
 		[self updatePresenceWithPriority:0];
 	}
-	[self sendArchivedMessages];
 }
 
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
@@ -1067,14 +1003,29 @@ int const kReconnectionTimerInterval = 4;
     NSArray *usernames = [[messageArray valueForKey:@"senderUserID"] valueForKey:@"username"];
     if (usernames && usernames.count) {
         [MMUser usersWithUserIDs:usernames success:^(NSArray *users) {
+            NSMutableArray *topicArray = [NSMutableArray arrayWithCapacity:messageArray.count];
             for (MMXPubSubMessage *pubMsg in messageArray) {
                 NSPredicate *usernamePredicate = [NSPredicate predicateWithFormat:@"userID = %@",pubMsg.senderUserID.username];
                 MMUser *sender = [users filteredArrayUsingPredicate:usernamePredicate].firstObject;
                 MMXMessage *channelMessage = [MMXMessage messageFromPubSubMessage:pubMsg sender:sender];
-                [[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveMessageNotification
-                                                                    object:nil
-                                                                  userInfo:@{MMXMessageKey:channelMessage}];
                 
+                [topicArray addObject:@{@"userId":pubMsg.topic.inUserNameSpace ? pubMsg.topic.nameSpace : [NSNull null],
+                                        @"topicName":pubMsg.topic.topicName}];
+                
+                [self.pubsubManager topicsFromTopicDictionaries:topicArray success:^(NSArray *topics) {
+                    [self.pubsubManager summaryOfTopics:topics since:nil until:nil success:^(NSArray *summaries) {
+                        NSArray *channelArray = [MMXChannel channelsFromTopics:topics summaries:summaries subscriptions:nil];
+                        channelMessage.channel = channelArray.firstObject;
+                        channelMessage.channel.isSubscribed = YES;
+                        [[NSNotificationCenter defaultCenter] postNotificationName:MMXDidReceiveMessageNotification
+                                                                            object:nil
+                                                                          userInfo:@{MMXMessageKey:channelMessage}];
+                    } failure:^(NSError *error) {
+                        [[MMLogger sharedLogger] error:@"Failed to get channel when trying to fully-hydrate it\n%@",error];
+                    }];
+                } failure:^(NSError *error) {
+                    [[MMLogger sharedLogger] error:@"Failed to fully-hydrate topic\n%@",error];
+                }];
             }
         } failure:^(NSError * error) {
             [[MMLogger sharedLogger] error:@"Failed to get users for MMXMessages from Channels\n%@",error];

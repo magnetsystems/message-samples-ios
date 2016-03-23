@@ -28,7 +28,6 @@
 #import "MagnetDelegate.h"
 #import "MMXInvite_Private.h"
 #import "MMXInternalMessageAdaptor.h"
-#import "MMXDataModel.h"
 #import "MMXPubSubMessage_Private.h"
 #import "MMXPubSubService.h"
 #import "MMXMessage.h"
@@ -549,15 +548,10 @@
     msg.timestamp = [NSDate date];
     msg.messageID = messageID;
     if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-        if ([MMUser currentUser]) {
-            [self saveForOfflineAsPubSub:msg];
-            return;
-        } else {
-            if (failure) {
-                failure([MMXChannel notNotLoggedInAndNoUserError]);
-            }
-            return;
+        if (failure) {
+            failure([MMXChannel notNotLoggedInAndNoUserError]);
         }
+        return;
     }
     [[MMXClient sharedClient].pubsubManager publishPubSubMessage:msg success:^(BOOL successful, NSString *messageID) {
         if (success) {
@@ -879,12 +873,6 @@
                                      } failure:failure];
     
     [call executeInBackground:nil];
-}
-
-#pragma mark - Offline
-
-- (void)saveForOfflineAsPubSub:(MMXPubSubMessage *)message {
-    [[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:[MMUser currentUser].userName];
 }
 
 #pragma mark - Errors

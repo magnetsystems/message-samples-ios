@@ -224,33 +224,69 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
                 if (savedHATToken) {
-                    serviceAdapter.refreshToken = savedHATToken.refreshToken;
-                    if (!savedHATToken.isExpired) {
-                        serviceAdapter.HATToken = savedHATToken.accessToken;
+                    void (^tokenCompletion) () = ^{
+                        AFOAuthCredential *updatedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
+                        serviceAdapter.refreshToken = updatedHATToken.refreshToken;
+                        serviceAdapter.HATToken = updatedHATToken.accessToken;
                         
                         [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification
                                                                             object:self
                                                                           userInfo:nil];
                         
-                            serviceAdapter.username = MMUser.savedUser.userName;
-                            [serviceAdapter registerCurrentDeviceWithSuccess:nil failure:nil];
+                        serviceAdapter.username = MMUser.savedUser.userName;
+                        [serviceAdapter registerCurrentDeviceWithSuccess:nil failure:nil];
+                    };
+                    
+                    if ([savedHATToken isExpired]) {
+                        [serviceAdapter authenticateUserWithSuccess:^{
+                            tokenCompletion();
+                        } failure:^(NSError *error) {
+                            [AFOAuthCredential deleteCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
+                            serviceAdapter.HATToken = nil;
+                            
+                            NSDictionary *userInfo = @{@"error" : error};
+                            [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification
+                                                                                object:self
+                                                                              userInfo:userInfo];
+                        }];
+                    } else {
+                        tokenCompletion();
                     }
-                    //[serviceAdapter passUserTokenToRegisteredServices];
                 }
             } failure:^(NSError *error) {
                 NSDictionary *configuration = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kMMConfigurationKey];
 
                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidReceiveConfigurationNotification object:self userInfo:configuration];
                 if (savedHATToken) {
-                    serviceAdapter.refreshToken = savedHATToken.refreshToken;
-                    if (!savedHATToken.isExpired) {
-                        serviceAdapter.HATToken = savedHATToken.accessToken;
+                    void (^tokenCompletion) () = ^{
+                        AFOAuthCredential *updatedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
+                        serviceAdapter.refreshToken = updatedHATToken.refreshToken;
+                        serviceAdapter.HATToken = updatedHATToken.accessToken;
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification
+                                                                            object:self
+                                                                          userInfo:nil];
+                        
+                        serviceAdapter.username = MMUser.savedUser.userName;
+                        [serviceAdapter registerCurrentDeviceWithSuccess:nil failure:nil];
+                    };
+                    
+                    if ([savedHATToken isExpired]) {
+                        [serviceAdapter authenticateUserWithSuccess:^{
+                            tokenCompletion();
+                        } failure:^(NSError *error) {
+                            [AFOAuthCredential deleteCredentialWithIdentifier:[serviceAdapter HATTokenIdentifier]];
+                            serviceAdapter.HATToken = nil;
+                            
+                            NSDictionary *userInfo = @{@"error" : error};
+                            [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification
+                                                                                object:self
+                                                                              userInfo:userInfo];
+                        }];
+                    } else {
+                        tokenCompletion();
                     }
-                    //                    [serviceAdapter passUserTokenToRegisteredServices];
                 }
-                 [[NSNotificationCenter defaultCenter] postNotificationName:MMServiceAdapterDidRestoreHATTokenNotification
-                                                                     object:self
-                                                                   userInfo:@{@"error" : error}];
             }];
             // We want this operation to finish before anything else.
             // FIXME: Git rid of this cast!
@@ -312,6 +348,26 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
                                                                            options:NSJSONReadingMutableContainers
                                                                              error:&jsonError];
         self.HATToken = responseDictionary[@"access_token"];
+        
+        AFOAuthCredential *credential = [AFOAuthCredential credentialWithOAuthToken:[responseDictionary valueForKey:@"access_token"] tokenType:[responseDictionary valueForKey:@"token_type"]];
+        
+        
+        if (refreshToken) { // refreshToken is optional in the OAuth2 spec
+            [credential setRefreshToken:refreshToken];
+        }
+        
+        // Expiration is optional, but recommended in the OAuth2 spec. It not provide, assume distantFuture === never expires
+        NSDate *expireDate = [NSDate distantFuture];
+        id expiresIn = [responseDictionary valueForKey:@"expires_in"];
+        if (expiresIn && ![expiresIn isEqual:[NSNull null]]) {
+            expireDate = [NSDate dateWithTimeIntervalSinceNow:[expiresIn doubleValue]];
+        }
+        
+        if (expireDate) {
+            [credential setExpiration:expireDate];
+        }
+        
+        [AFOAuthCredential storeCredential:credential withIdentifier:[self HATTokenIdentifier]];
         [self registerCurrentDeviceWithSuccess:nil failure:nil];
         if (success) {
             success();
@@ -362,7 +418,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 
 - (BOOL)hasAuthToken {
     AFOAuthCredential *savedHATToken = [AFOAuthCredential retrieveCredentialWithIdentifier:[self HATTokenIdentifier]];
-    return savedHATToken && !savedHATToken.isExpired;
+    return savedHATToken;
 }
 
 + (AFOAuthCredential *)credentialFromResponseObject:(id)responseObject {

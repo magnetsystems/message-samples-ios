@@ -11,8 +11,8 @@ import XCTest
 class HowToUITests: XCTestCase {
     
     let kExpectationsTimeout : NSTimeInterval = 20
-    let userName = "kostya"
-    let password = "kostya"
+    let userName = "pchan"
+    let password = "test"
     let kPublicChannelTag = "public"
     let kPublicChannelName = "public"
     
@@ -51,7 +51,7 @@ class HowToUITests: XCTestCase {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             
             XCTAssertFalse(app.buttons["Login"].exists, "If login success - button Login should not exist")
-            XCTAssert(app.navigationBars["Features"].exists, "next screen Features should be")
+            XCTAssert(app.navigationBars["Features"].exists, "Features screen is missing")
             // Check cells on next screen
             XCTAssert(app.tables.cells.staticTexts["Chat"].exists)
             XCTAssert(app.tables.cells.staticTexts["Publish/Subscribe"].exists)
@@ -275,7 +275,6 @@ class HowToUITests: XCTestCase {
             subscribedExpectation.fulfill()
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
-        
     }
     
     func test07PublishSubscribe_AllPublic() {
@@ -297,7 +296,7 @@ class HowToUITests: XCTestCase {
             messageTextField.tap()
             messageTextField.typeText("Automated")
             app.navigationBars["public"].buttons["Send"].tap()
-            sleep(5)
+            sleep(5) //Wait for message to be sent and fetched
             XCTAssert(app.tables.cells.count > 0, "Should see messages") //Validate fetch messages not empty
             allPublicExpectation.fulfill()
         })
@@ -423,7 +422,7 @@ class HowToUITests: XCTestCase {
         app.segmentedControls.buttons["Starting with"].tap()
         textField.tap()
         deleteKey.pressForDuration(2)
-        textField.typeText("k")
+        textField.typeText("p")
         searchButton.tap()
         let searchByStartingWithPrivateExpectation = self.expectationWithDescription("Search By Starting with Private expactation")
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
@@ -479,7 +478,7 @@ class HowToUITests: XCTestCase {
         
         let usernameTextField = app.textFields["Username"]
         usernameTextField.tap()
-        usernameTextField.typeText("jake2")
+        usernameTextField.typeText("jake")
         
         let passwordSecureTextField = app.secureTextFields["Password"]
         passwordSecureTextField.tap()
@@ -745,23 +744,4 @@ class HowToUITests: XCTestCase {
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
     }
-    
-//    func temp() {
-//        
-//        let app = XCUIApplication()
-//        let usernameTextField = app.textFields["Username"]
-//        usernameTextField.tap()
-//        usernameTextField.typeText("pchan")
-//        
-//        let passwordSecureTextField = app.secureTextFields["Password"]
-//        passwordSecureTextField.tap()
-//        passwordSecureTextField.typeText("test")
-//        app.buttons["Login"].tap()
-//        
-//        let tablesQuery = app.tables
-//        tablesQuery.staticTexts["User Management"].tap()
-//        tablesQuery.staticTexts["Register"].tap()
-//        app.navigationBars["Register a new User"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
-//        
-//    }
 }
