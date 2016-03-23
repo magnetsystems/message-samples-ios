@@ -7,23 +7,40 @@ framework module MMXXMPPFramework {
 
 
 
-module libxmlModuleDevice {
+module libxmlModuleArm {
     header "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/libxml2/libxml/tree.h"
     export *
+    requires arm
 }
+
+module libxmlModuleArm64 {
+    header "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/libxml2/libxml/tree.h"
+    export *
+    requires arm64
+}
+
 
 module libxmlModuleSimulator {
     header "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/include/libxml2/libxml/tree.h"
     export *
+    requires x86
 }
 
 
-module dnsModuleDevice {
+module dnsModuleArm {
     header "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/dns_sd.h"
     export *
+    requires arm
+}
+
+module dnsModuleArm64 {
+    header "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/dns_sd.h"
+    export *
+    requires arm64
 }
 
 module dnsModuleSimulator {
     header "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/include/dns_sd.h"
     export *
+    requires x86
 }

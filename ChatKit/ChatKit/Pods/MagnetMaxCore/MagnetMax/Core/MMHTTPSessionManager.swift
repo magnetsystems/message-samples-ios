@@ -68,6 +68,7 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
                                     originalTask.resume()
                                 }) { error in
                                     print(error)
+                                    originalCompletionHandler?(response, responseObject, error)
                                 }
                             case .ExpiredHATToken:
 //                                print(request)
@@ -79,6 +80,7 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
                                         originalTask.resume()
                                     }, failure: { error in
                                         print(error)
+                                        originalCompletionHandler?(response, responseObject, error)
                                     })
                                 } else {
                                     originalCompletionHandler?(response, responseObject, error)
@@ -102,6 +104,7 @@ public class MMHTTPSessionManager: AFHTTPSessionManager {
                                 originalTask.resume()
                             }) { error in
                                 print(error)
+                                originalCompletionHandler?(response, responseObject, error)
                             }
                         }
                     }

@@ -7,7 +7,7 @@ import MagnetMax
 //Mark: MMXChatListViewController
 
 
-public protocol DEF_MMXChatListViewController : class {
+public protocol Define_MMXChatListViewController : class {
     
     //MARK: Variables
     
@@ -27,6 +27,7 @@ public protocol DEF_MMXChatListViewController : class {
     func loadingContext() -> Int
     func presentChatViewController(chatViewController : MMXChatViewController, users : [MMUser])
     func reloadData()
+    func setupViewController()
     
     //MARK: - ContactsViewControllerDelegate
     
@@ -37,7 +38,7 @@ public protocol DEF_MMXChatListViewController : class {
 //MARK: MMXContactsPickerController
 
 
-public protocol DEF_MMXContactsPickerController : class {
+public protocol Define_MMXContactsPickerController : class {
     
     //MARK: Public Variables
     
@@ -58,3 +59,34 @@ public protocol DEF_MMXContactsPickerController : class {
     func append(unfilteredUsers: [MMUser])
 }
 
+
+//MARK: MMXChatViewController
+
+
+public protocol Define_MMXChatViewController : class {
+    
+    //MARK: Public Variables
+    
+    var channel : MMXChannel?{get}
+    var currentMessageCount : Int{get set}
+    var delegate : ChatViewControllerDelegate?{get set}
+    var datasource : ChatViewControllerDatasource?{get set}
+    var incomingBubbleImageView : JSQMessagesBubbleImage!{get set}
+    var mmxMessages : [MMXMessage]{get}
+    var outgoingBubbleImageView : JSQMessagesBubbleImage!{get set}
+    var recipients : [MMUser]?{get}
+    var showDetails : Bool{get set}
+    var useNavigationBarNotifier : Bool?{get set}
+    weak var collectionView : JSQMessagesCollectionView!{get}
+    
+    //Delegate and Datasource
+    
+    weak var chatDetailsViewController : MMXContactsPickerController?{get set}
+    weak var chatDetailsDataSource : SubscribersDatasource?{get set}
+    
+    //MARK: Public Methods
+    
+    func loadingContext() -> Int
+    func reloadData()
+    func setupViewController()
+}

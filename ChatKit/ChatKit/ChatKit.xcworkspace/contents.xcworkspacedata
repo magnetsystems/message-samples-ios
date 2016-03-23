@@ -534,6 +534,9 @@
             <FileRef
                location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMProtocols/MMChatKitProtocols.swift">
             </FileRef>
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/Public_Definitions.swift">
+            </FileRef>
          </Group>
          <FileRef
             location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/ChatKit.h">

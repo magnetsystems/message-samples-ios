@@ -407,6 +407,16 @@ static int kATTACHMENTCONTEXT;
 	return YES;
 }
 
+#pragma mark - Equality
+
+- (BOOL)isEqual:(MMXMessage *)object {
+    return [self.messageID isEqualToString:object.messageID];
+}
+
+- (NSUInteger)hash {
+    return [self.messageID hash];
+}
+
 #pragma mark - Overriden getters
 
 - (NSMutableArray *)mutableAttachments {
