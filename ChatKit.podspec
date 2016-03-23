@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'UI_Core' do |ss|
     ss.source_files = ['ChatKit/source/src/**/*.{h,m,swift}','ChatKit/source/Views/**/*.{h,m,swift}']
-    ss.dependency 'MagnetMax', '~> 2.5.2'
+    ss.dependency 'MagnetMax', '~> 2.5.3'
     ss.dependency 'NYTPhotoViewer' , '~> 1.1.0'
     ss.dependency 'DZVideoPlayerViewController'
     ss.dependency 'CocoaLumberjack/Swift'
