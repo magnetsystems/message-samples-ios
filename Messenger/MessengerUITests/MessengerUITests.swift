@@ -11,22 +11,22 @@ import XCTest
 class MessengerUITests: XCTestCase {
     
     let kExpectationsTimeout : NSTimeInterval = 60
-    let userName = "test24@automation.gmail.com"
+    let userName = "test47@automation.gmail.com"
     let password = "Temp1234%"
     
-    let fName = "AutomationTestUser24"
+    let fName = "AutomationTestUser47"
     let lName = "test"
-    let fullName = "AutomationTestUser24 test"
+    let fullName = "AutomationTestUser47 test"
     //let kPublicChannelTag = "public"
     //let kPublicChannelName = "public"
     
-    let userNameTwo = "test30@automation.gmail.com"
-    let fNameTwo = "AutomationTestUser30"
-    let fullNameTwo = "AutomationTestUser30 test"
+    let userNameTwo = "test48@automation.gmail.com"
+    let fNameTwo = "AutomationTestUser48"
+    let fullNameTwo = "AutomationTestUser48 test"
     
-    let userNameThree = "test31@automation.gmail.com"
-    let fNameThree = "AutomationTestUser31"
-    let fullNameThree = "AutomationTestUser31 test"
+    let userNameThree = "test49@automation.gmail.com"
+    let fNameThree = "AutomationTestUser49"
+    let fullNameThree = "AutomationTestUser49 test"
     
     override func setUp() {
         super.setUp()
@@ -52,6 +52,14 @@ class MessengerUITests: XCTestCase {
     {
         let app = XCUIApplication()
         let emailAddressTextField = app.textFields["Email Address"]
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         emailAddressTextField.tap()
         emailAddressTextField.typeText("allextest")
         
@@ -85,8 +93,19 @@ class MessengerUITests: XCTestCase {
     func test02RegisterUserWithEmptyFields()
     {
         let app = XCUIApplication()
-        app.buttons["Create account"].tap()
-        app.navigationBars["Register"].buttons["Register"].tap()
+        let createbutton = app.buttons["Create account"]
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        createbutton.tap()
+        let registerbutton = app.navigationBars["Register"]
+        let reg = registerbutton.buttons["Register"]
+        reg.tap()
         
         let expectation = self.expectationWithDescription("Login timed out.")
         
@@ -111,7 +130,17 @@ class MessengerUITests: XCTestCase {
     func test03RegisterUserWithEmptyPassword()
     {
         let app = XCUIApplication()
-        app.buttons["Create account"].tap()
+        let createbutton = app.buttons["Create account"]
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        
+        createbutton.tap()
         
         let firstNameTextField = app.textFields["First name"]
         firstNameTextField.tap()
@@ -151,7 +180,16 @@ class MessengerUITests: XCTestCase {
     func test04RegisterUserWithMismatchPassword()
     {
         let app = XCUIApplication()
-        app.buttons["Create account"].tap()
+        let createbutton = app.buttons["Create account"]
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        createbutton.tap()
         
         let firstNameTextField = app.textFields["First name"]
         firstNameTextField.tap()
@@ -200,7 +238,16 @@ class MessengerUITests: XCTestCase {
     func test05RegisterUserWithInvalidEmail()
     {
         let app = XCUIApplication()
-        app.buttons["Create account"].tap()
+        let createbutton = app.buttons["Create account"]
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        createbutton.tap()
         
         let firstNameTextField = app.textFields["First name"]
         firstNameTextField.tap()
@@ -249,7 +296,17 @@ class MessengerUITests: XCTestCase {
     func test06_07RegisterANewUser()
     {
         let app = XCUIApplication()
-        app.buttons["Create account"].tap()
+        let createbutton = app.buttons["Create account"]
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        
+        createbutton.tap()
         
         let firstNameTextField = app.textFields["First name"]
         firstNameTextField.tap()
@@ -281,13 +338,13 @@ class MessengerUITests: XCTestCase {
         //waiting for time (7 sec) to register callback
         let seconds : UInt64 = 7
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            //a few checks, related to success registration
-            XCTAssertFalse(app.navigationBars.buttons["Register"].exists)
-            XCTAssert(app.navigationBars["My Profile"].exists)
             expectation.fulfill()
         })
         
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        //a few checks, related to success registration
+        XCTAssertFalse(app.navigationBars.buttons["Register"].exists)
+        XCTAssert(app.navigationBars["My Profile"].exists)
         
         /*LogOut*/
         let editNavBar = XCUIApplication().navigationBars["My Profile"];
@@ -329,7 +386,17 @@ class MessengerUITests: XCTestCase {
     {
         
         let app = XCUIApplication()
-        app.buttons["Create account"].tap()
+        let createbutton = app.buttons["Create account"]
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        
+        createbutton.tap()
         
         let firstNameTextField = app.textFields["First name"]
         firstNameTextField.tap()
@@ -380,6 +447,15 @@ class MessengerUITests: XCTestCase {
         
         let app = XCUIApplication()
         let emailAddressTextField = app.textFields["Email Address"]
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        
         emailAddressTextField.tap()
         emailAddressTextField.typeText(userName)
         
@@ -410,6 +486,14 @@ class MessengerUITests: XCTestCase {
     {
         /* login*/
         let app = XCUIApplication()
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         let emailAddressTextField = app.textFields["Email Address"]
         emailAddressTextField.tap()
         emailAddressTextField.typeText(userName)
@@ -442,7 +526,7 @@ class MessengerUITests: XCTestCase {
         tablesQuery.staticTexts[fullName].tap()
         app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Button).elementBoundByIndex(0).tap()
         tablesQuery.buttons["Moments"].tap()
-        app.collectionViews.childrenMatchingType(.Cell).elementBoundByIndex(6).tap()
+        app.collectionViews["PhotosGridView"].childrenMatchingType(.Cell).elementBoundByIndex(1).tap()
         app.buttons["Save changes"].tap()
         
         let savedAlert = app.alerts["Saved"]
@@ -456,6 +540,14 @@ class MessengerUITests: XCTestCase {
     {
         /* login*/
         let app = XCUIApplication()
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         let emailAddressTextField = app.textFields["Email Address"]
         emailAddressTextField.tap()
         emailAddressTextField.typeText(userName)
@@ -501,6 +593,14 @@ class MessengerUITests: XCTestCase {
     {
         /* login*/
         let app = XCUIApplication()
+        //waiting for time (2 sec) to register callback page
+        let secs : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(secs * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         let emailAddressTextField = app.textFields["Email Address"]
         emailAddressTextField.tap()
         emailAddressTextField.typeText(userName)
@@ -536,10 +636,14 @@ class MessengerUITests: XCTestCase {
         //waiting for time (5 sec) to get available contacts
         let sec : UInt64 = 5
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            app.navigationBars["Messenger.ChatView"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
             expactationcontacts.fulfill()
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        
+        
+        let messengerChatviewNavigationBar = XCUIApplication().navigationBars["Messenger.ChatView"]
+        let backButton = messengerChatviewNavigationBar.childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0)
+        backButton.tap()
         
         let expactationhome = self.expectationWithDescription("Login timed out.")
         //waiting for time (3 sec) to get home page
@@ -556,7 +660,16 @@ class MessengerUITests: XCTestCase {
     {
         /* Register User2 */
         let app = XCUIApplication()
-        app.buttons["Create account"].tap()
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        let createbutton = app.buttons["Create account"]
+        createbutton.tap()
         
         let firstNameTextField = app.textFields["First name"]
         firstNameTextField.tap()
@@ -615,7 +728,7 @@ class MessengerUITests: XCTestCase {
         
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         /* Register User3 */
-        app.buttons["Create account"].tap()
+        createbutton.tap()
         
         firstNameTextField.tap()
         firstNameTextField.typeText(fNameThree)
@@ -664,6 +777,14 @@ class MessengerUITests: XCTestCase {
     {
         /* login*/
         let app = XCUIApplication()
+        //waiting for time (2 sec) to register callback page
+        let sec : UInt64 = 2
+        let exp = self.expectationWithDescription("Page time out.")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(sec * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            exp.fulfill()
+        })
+        
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         let emailAddressTextField = app.textFields["Email Address"]
         emailAddressTextField.tap()
         emailAddressTextField.typeText(userName)
@@ -689,13 +810,13 @@ class MessengerUITests: XCTestCase {
         
         /* Create a new 1-1 chat */
         
-        let navBar = XCUIApplication().navigationBars["AutomationTestUser24 test"]
+        let navBar = XCUIApplication().navigationBars[fullName]
         let newMessage = navBar.buttons["new message"]
         newMessage.tap()
         
         let tablesQuery = XCUIApplication().tables
         tablesQuery.otherElements["T"].tap()
-        tablesQuery.staticTexts["AutomationTestUser30 test"].tap()
+        tablesQuery.staticTexts[fullNameTwo].tap()
         
         let navBarTwo = XCUIApplication().navigationBars["New message"]
         let buttonNext = navBarTwo.buttons["Next"]
@@ -719,7 +840,9 @@ class MessengerUITests: XCTestCase {
         
         /* Check channel details */
         
-        app.navigationBars["AutomationTestUser30"].buttons["Detail"].tap()
+        let navBarDetail = app.navigationBars[fNameTwo]
+        let detailbutton = navBarDetail.buttons["Detail"]
+        detailbutton.tap()
         
         let tablesQueryTwo = XCUIApplication().tables
         XCTAssert(tablesQueryTwo.staticTexts[fullName].exists)
