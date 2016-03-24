@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Public' do |ss|
     ss.source_files = 'ChatKit/source/ChatKit/**/*.{h,m,swift}'
-    ss.dependency 'ChatKit/UI_Core', '0.6.0'
+    ss.dependency 'ChatKit/UI_Core', '1.1.0'
   end
 end
 
