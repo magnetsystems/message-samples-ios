@@ -24,14 +24,14 @@ PODS:
   - Crashlytics (3.7.0):
     - Fabric (~> 1.6.3)
   - DZVideoPlayerViewController (0.4.0)
-  - Fabric (1.6.6)
+  - Fabric (1.6.7)
   - FLAnimatedImage (1.0.12)
   - JSQMessagesViewController (7.2.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
   - MagnetMax (2.5.2):
-    - MagnetMaxCore (~> 2.5.2)
-    - MMX (~> 2.5.2)
+    - MagnetMaxCore (~> 2.5)
+    - MMX (~> 2.5)
   - MagnetMaxCore (2.5.2):
     - AFNetworking/NSURLConnection (= 2.6.1)
     - AFNetworking/NSURLSession (= 2.6.1)
@@ -44,38 +44,38 @@ PODS:
   - MMX (2.5.2):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.5.2)
-    - MMXXMPPFramework (= 3.6.14)
-  - MMXXMPPFramework (3.6.14):
-    - MMXXMPPFramework/Core (= 3.6.14)
-    - MMXXMPPFramework/CoreDataStorage (= 3.6.14)
-    - MMXXMPPFramework/Reconnect (= 3.6.14)
-    - MMXXMPPFramework/Roster (= 3.6.14)
-    - MMXXMPPFramework/XEP-0016 (= 3.6.14)
-    - MMXXMPPFramework/XEP-0060 (= 3.6.14)
-    - MMXXMPPFramework/XEP-0082 (= 3.6.14)
-    - MMXXMPPFramework/XEP-0106 (= 3.6.14)
-    - MMXXMPPFramework/XEP-0203 (= 3.6.14)
-  - MMXXMPPFramework/Core (3.6.14):
+    - MagnetMaxCore (~> 2.5)
+    - MMXXMPPFramework (~> 3.6)
+  - MMXXMPPFramework (3.6.15):
+    - MMXXMPPFramework/Core (= 3.6.15)
+    - MMXXMPPFramework/CoreDataStorage (= 3.6.15)
+    - MMXXMPPFramework/Reconnect (= 3.6.15)
+    - MMXXMPPFramework/Roster (= 3.6.15)
+    - MMXXMPPFramework/XEP-0016 (= 3.6.15)
+    - MMXXMPPFramework/XEP-0060 (= 3.6.15)
+    - MMXXMPPFramework/XEP-0082 (= 3.6.15)
+    - MMXXMPPFramework/XEP-0106 (= 3.6.15)
+    - MMXXMPPFramework/XEP-0203 (= 3.6.15)
+  - MMXXMPPFramework/Core (3.6.15):
     - CocoaAsyncSocket (~> 7.4.1)
     - CocoaLumberjack (~> 2.2)
-  - MMXXMPPFramework/CoreDataStorage (3.6.14):
+  - MMXXMPPFramework/CoreDataStorage (3.6.15):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/Reconnect (3.6.14):
+  - MMXXMPPFramework/Reconnect (3.6.15):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/Roster (3.6.14):
+  - MMXXMPPFramework/Roster (3.6.15):
     - MMXXMPPFramework/Core
     - MMXXMPPFramework/CoreDataStorage
     - MMXXMPPFramework/XEP-0203
-  - MMXXMPPFramework/XEP-0016 (3.6.14):
+  - MMXXMPPFramework/XEP-0016 (3.6.15):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/XEP-0060 (3.6.14):
+  - MMXXMPPFramework/XEP-0060 (3.6.15):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/XEP-0082 (3.6.14):
+  - MMXXMPPFramework/XEP-0082 (3.6.15):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/XEP-0106 (3.6.14):
+  - MMXXMPPFramework/XEP-0106 (3.6.15):
     - MMXXMPPFramework/Core
-  - MMXXMPPFramework/XEP-0203 (3.6.14):
+  - MMXXMPPFramework/XEP-0203 (3.6.15):
     - MMXXMPPFramework/Core
     - MMXXMPPFramework/XEP-0082
   - NYTPhotoViewer (1.0.1):
@@ -92,7 +92,7 @@ DEPENDENCIES:
   - DZVideoPlayerViewController
   - Fabric
   - JSQMessagesViewController
-  - MagnetMax (~> 2.5.2)
+  - MagnetMax (~> 2.5)
   - NYTPhotoViewer (~> 1.0.0)
   - UIScrollView-InfiniteScroll
 
@@ -103,15 +103,15 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
   Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
   DZVideoPlayerViewController: 4886c5016a632cbd94a85e6071806e4929c01653
-  Fabric: 1abc1e59f11fa39ede6f690ef7309d8563e3ec59
+  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  MagnetMax: 31ec1ac9449dbf733e0f2c345f93b0c946ff88fe
-  MagnetMaxCore: 6120c776bd2e0c2cd320f9f773a92be81a6cb290
+  MagnetMax: 27fb5f7f3cb6ba50c29b721b2bd82302eeec69f8
+  MagnetMaxCore: e5c71a3665b531acb0639055d45c840682ef5885
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
-  MMX: 78b0f5f1d56cb688b4996ef410592993f069a1c0
-  MMXXMPPFramework: 09675867f84daf6e6dffce10a738c11885cccde1
+  MMX: 4189922d9d70cc254906626f35a80a6b4ca99c05
+  MMXXMPPFramework: 12ac458346387dc8a3fb157dc56db65e13be5a9b
   NYTPhotoViewer: 98e0a54a9d28e4a980fc4b611fd5e419ca89ad74
   UIScrollView-InfiniteScroll: b6c7d6d155dca7f9c5dd43813ecffeb301b3d50c
 
