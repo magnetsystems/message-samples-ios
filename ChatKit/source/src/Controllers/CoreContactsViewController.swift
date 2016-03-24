@@ -192,33 +192,33 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         self.tableView.reloadData()
     }
     
-    public func cellDidCreate(cell : UITableViewCell) { }
+    internal func cellDidCreate(cell : UITableViewCell) { }
     
-    public func cellForUser(user : MMUser, indexPath : NSIndexPath) -> UITableViewCell?{
+    internal func cellForUser(user : MMUser, indexPath : NSIndexPath) -> UITableViewCell?{
         return nil
     }
     
-    public func cellHeightForUser(user : MMUser, indexPath : NSIndexPath) -> CGFloat {
+    internal func cellHeightForUser(user : MMUser, indexPath : NSIndexPath) -> CGFloat {
         return 50
     }
     
-    public func didSelectUserAvatar(user : MMUser) { }
+    internal func didSelectUserAvatar(user : MMUser) { }
     
-    public func endSearch() {
+    internal func endSearch() {
         if searchBar.isFirstResponder() {
             searchBar.resignFirstResponder()
         }
     }
     
-    public func hasMore() -> Bool {
+    internal func hasMore() -> Bool {
         return false
     }
     
-    public func heightForFooter(index : Int) -> CGFloat {
+    internal func heightForFooter(index : Int) -> CGFloat {
         return 0.0
     }
     
-    public func imageForUser(imageView : UIImageView, user : MMUser) {
+    internal func imageForUser(imageView : UIImageView, user : MMUser) {
         var fName : String?
         var lName : String?
         let nameComponents = Utils.displayNameForUser(user).componentsSeparatedByString(" ")
@@ -233,36 +233,36 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
     }
     
-    public func loadMore(searchText : String?, offset : Int) { }
+    internal func loadMore(searchText : String?, offset : Int) { }
     
-    public func numberOfFooters() -> Int { return 0 }
+    internal func numberOfFooters() -> Int { return 0 }
     
-    public func registerCells(tableView: UITableView) { }
+    internal func registerCells(tableView: UITableView) { }
     
-    public func shouldShowIndexTitles() -> Bool {
+    internal func shouldShowIndexTitles() -> Bool {
         return true
     }
     
-    public func shouldShowHeaderTitles() -> Bool {
+    internal func shouldShowHeaderTitles() -> Bool {
         return true
     }
     
-    public func shouldUpdateSearchContinuously() -> Bool {
+    internal func shouldUpdateSearchContinuously() -> Bool {
         return true
     }
     
-    public func onUserSelected(user : MMUser) { }
+    internal func onUserSelected(user : MMUser) { }
     
-    public func onUserDeselected(user : MMUser) { }
+    internal func onUserDeselected(user : MMUser) { }
     
-    public func reset() {
+    internal func reset() {
         self.availableRecipients = []
         self.currentUserCount = 0
         self.tableView.reloadData()
         self.loadMore(self.searchBar.text, offset: self.currentUserCount)
     }
     
-    public func tableViewFooter(index : Int) -> UIView {
+    internal func tableViewFooter(index : Int) -> UIView {
         return UIView()
     }
     

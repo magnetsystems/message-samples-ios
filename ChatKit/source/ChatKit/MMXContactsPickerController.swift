@@ -120,6 +120,10 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     //Public Methods
     
     
+    override public func append(unfilteredUsers: [MMUser]) {
+        super.append(unfilteredUsers)
+    }
+    
     public func contacts() -> [[String : [MMUser]?]] {
         return self.availableRecipients.map({ (group) -> [String : [MMUser]?] in
             let letter = "\(group.letter)"
@@ -151,32 +155,28 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     
     
     //MARK: - Core Method Overrides
+
     
-    
-    override public func append(unfilteredUsers: [MMUser]) {
-        super.append(unfilteredUsers)
-    }
-    
-    override public func cellDidCreate(cell: UITableViewCell) {
+    override internal func cellDidCreate(cell: UITableViewCell) {
         self.datasource?.mmxContactsDidCreateCell?(cell)
     }
     
-    override public func cellForUser(user: MMUser, indexPath: NSIndexPath) -> UITableViewCell? {
+    override internal func cellForUser(user: MMUser, indexPath: NSIndexPath) -> UITableViewCell? {
         return self.datasource?.mmxContactsCellForUser?(tableView, user: user, indexPath: indexPath)
     }
     
-    override public func cellHeightForUser(user: MMUser, indexPath: NSIndexPath) -> CGFloat {
+    override internal func cellHeightForUser(user: MMUser, indexPath: NSIndexPath) -> CGFloat {
         if let height = self.datasource?.mmxContactsCellHeightForUser?(user, indexPath: indexPath) {
             return height
         }
         return super.cellHeightForUser(user, indexPath: indexPath)
     }
     
-    override public func didSelectUserAvatar(user: MMUser) {
+    override internal func didSelectUserAvatar(user: MMUser) {
         self.delegate?.mmxAvatarDidClick?(user)
     }
     
-    override public func imageForUser(imageView: UIImageView, user: MMUser) {
+    override internal func imageForUser(imageView: UIImageView, user: MMUser) {
         if let imgForUser = self.datasource?.mmxContactsControllerImageForUser {
             imgForUser(imageView, user: user)
         } else {
@@ -184,14 +184,14 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         }
     }
     
-    override public func hasMore() -> Bool {
+    override internal func hasMore() -> Bool {
         if let pickerDatasource = self.datasource {
             return pickerDatasource.mmxControllerHasMore()
         }
         return false
     }
     
-    override public func heightForFooter(index: Int) -> CGFloat {
+    override internal func heightForFooter(index: Int) -> CGFloat {
         if let height = self.datasource?.mmxTableViewFooterHeight?(index) {
             return height
         }
@@ -199,7 +199,7 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         return 0.0
     }
     
-    override public func loadMore(searchText : String?, offset : Int) {
+    override internal func loadMore(searchText : String?, offset : Int) {
         newLoadingContext()
         if searchText != nil {
             let loadingContext = self.loadingContext()
@@ -215,7 +215,7 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         }
     }
     
-    override public func numberOfFooters() -> Int {
+    override internal func numberOfFooters() -> Int {
         if let number = self.datasource?.mmxTableViewNumberOfFooters?() {
             return number
         }
@@ -223,21 +223,21 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         return 0
     }
     
-    override public func onUserDeselected(user: MMUser) {
+    override internal func onUserDeselected(user: MMUser) {
         self.updateButtonItems()
         self.delegate?.mmxContactsControllerUnSelectedUser?(user)
     }
     
-    override public func onUserSelected(user: MMUser) {
+    override internal func onUserSelected(user: MMUser) {
         self.updateButtonItems()
         self.delegate?.mmxContactsControllerSelectedUser?(user)
     }
     
-    override public func registerCells(tableView: UITableView) {
+    override internal func registerCells(tableView: UITableView) {
         self.datasource?.mmxContactsControllerRegisterCells?(tableView)
     }
     
-    override public func shouldShowHeaderTitles() -> Bool {
+    override internal func shouldShowHeaderTitles() -> Bool {
         if let pickerDatasource = self.datasource {
             if let shows = pickerDatasource.mmxContactsControllerShowsSectionsHeaders?() {
                 return shows
@@ -246,7 +246,7 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         return false
     }
     
-    override public func shouldShowIndexTitles() -> Bool {
+    override internal func shouldShowIndexTitles() -> Bool {
         if let pickerDatasource = self.datasource {
             if let shows = pickerDatasource.mmxContactsControllerShowsSectionIndexTitles?() {
                 return shows
@@ -255,14 +255,14 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         return false
     }
     
-    override public func shouldUpdateSearchContinuously() -> Bool {
+    override internal func shouldUpdateSearchContinuously() -> Bool {
         if let pickerDatasource = self.datasource {
             return pickerDatasource.mmxControllerSearchUpdatesContinuously()
         }
         return false
     }
     
-    override public func tableViewFooter(index: Int) -> UIView {
+    override internal func tableViewFooter(index: Int) -> UIView {
         if let footer = self.datasource?.mmxTableViewFooter?(index) {
             return footer
         }

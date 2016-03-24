@@ -26,7 +26,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
     public var refreshControl : UIRefreshControl? = UIRefreshControl()
     public private(set) var infiniteLoading : InfiniteLoading = InfiniteLoading()
     public var numberOfPagesToLoadAhead = 3
-    public var footers : [String] = []
+    public internal(set) var footers : [String] = []
     public var cellBackgroundColor : UIColor = UIColor.clearColor()
     
     
@@ -48,11 +48,11 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         }
     }
     
-    public func isLastSection(section : Int) -> Bool {
+    internal func isLastSection(section : Int) -> Bool {
         return self.tableView.numberOfSections - 1 == section
     }
     
-    public func isFooterSection(section : Int) -> Bool {
+    internal func isFooterSection(section : Int) -> Bool {
         let numberOfSections = self.tableView.numberOfSections
         guard footers.count > 0 && section < numberOfSections  else {
             return false
@@ -60,7 +60,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         return  numberOfSections - footers.count <= section
     }
     
-    public func identifierForFooterSection(section : Int) -> String? {
+    internal func identifierForFooterSection(section : Int) -> String? {
         guard isFooterSection(section)  else {
             return nil
         }
@@ -71,7 +71,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         return footers[index]
     }
     
-    public func footerSectionIndex(section : Int) -> Int? {
+    internal func footerSectionIndex(section : Int) -> Int? {
         guard isFooterSection(section)  else {
             return nil
         }
@@ -82,7 +82,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         return index
     }
     
-    public func isWithinLoadingBoundary() -> Bool {
+    internal func isWithinLoadingBoundary() -> Bool {
         return tableView.contentOffset.y > (tableView.contentSize.height - (tableView.frame.size.height * CGFloat(numberOfPagesToLoadAhead)))
     }
     
