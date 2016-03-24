@@ -32,7 +32,7 @@ public class CoreChatViewController: MMJSQViewController {
     //MARK: Public Properties
     
     
-    public internal(set) var chat : MMXChannel? {
+    internal var chat : MMXChannel? {
         didSet {
             //Register for a notification to receive the message
             if let channel = chat {
@@ -171,11 +171,11 @@ public class CoreChatViewController: MMJSQViewController {
         }
     }
     
-    public func didSelectUserAvatar(user : MMUser) { }
+    internal func didSelectUserAvatar(user : MMUser) { }
     
-    public func hasMore() -> Bool { return false }
+    internal func hasMore() -> Bool { return false }
     
-    public func hideSpinner() {
+    internal func hideSpinner() {
         if let activityIndicator = self.activityIndicator {
             activityIndicator.tag = max(activityIndicator.tag - 1, 0)
             if activityIndicator.tag == 0 {
@@ -184,21 +184,21 @@ public class CoreChatViewController: MMJSQViewController {
         }
     }
     
-    public func loadMore(channel : MMXChannel?, offset: Int) { }
+    internal func loadMore(channel : MMXChannel?, offset: Int) { }
     
-    public func onChannelCreated(mmxChannel: MMXChannel) { }
+    internal func onChannelCreated(mmxChannel: MMXChannel) { }
     
-    public func onMessageRecived(mmxMessage: MMXMessage) { }
+    internal func onMessageRecived(mmxMessage: MMXMessage) { }
     
-    public func onMessageSent(mmxMessage: MMXMessage) { }
+    internal func onMessageSent(mmxMessage: MMXMessage) { }
     
-    public func reset() {
+    internal func reset() {
         self.messages = []
         self.currentMessageCount = 0
         self.loadMore(self.chat, offset: self.currentMessageCount)
     }
     
-    public func saveLastTimeViewed() {
+    internal func saveLastTimeViewed() {
         if let chat = self.chat, let lastMessage = messages.last?.underlyingMessage {
             ChannelManager.sharedInstance.saveLastViewTimeForChannel(chat, message: lastMessage, date:NSDate.init())
         } else  if let chat = self.chat {
@@ -206,12 +206,12 @@ public class CoreChatViewController: MMJSQViewController {
         }
     }
     
-    public func showSpinner() {
+    internal func showSpinner() {
         self.activityIndicator?.tag++
         self.activityIndicator?.startAnimating()
     }
     
-    public func sort(messages : [Message]) -> [Message] {
+    internal func sort(messages : [Message]) -> [Message] {
         return messages.sort({
             if let date = $0.0.underlyingMessage.timestamp, let date1 = $0.1.underlyingMessage.timestamp {
                 return date.compare(date1) == .OrderedAscending
@@ -333,7 +333,7 @@ public class CoreChatViewController: MMJSQViewController {
         finishSendingMessageAnimated(true)
     }
     
-    public func sendImage(image : UIImage) {
+    internal func sendImage(image : UIImage) {
         guard let chat = self.chat else {
             if let recipients = self.recipients where recipients.count > 0 {
                 createNewChatWithRecipients(recipients, completion: {error in
