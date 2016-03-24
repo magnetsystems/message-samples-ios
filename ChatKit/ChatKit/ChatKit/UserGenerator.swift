@@ -21,7 +21,7 @@ class UserGenerator: NSObject {
             user.firstName = userDict["first_name"]
             user.lastName = userDict["last_name"]
             user.register({ user in
-                count++
+                count += 1
                 print("register #\(count)")
                 }, failure: { error in
                     print("[ERROR] \(error.localizedDescription)")
