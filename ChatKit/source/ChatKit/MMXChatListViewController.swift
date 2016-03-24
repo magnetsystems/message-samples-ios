@@ -118,6 +118,10 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     //MARK: Public Methods
     
     
+    override public func append(mmxChannels: [MMXChannel]) {
+        super.append(mmxChannels)
+    }
+    
     public func presentChatViewController(chatViewController : MMXChatViewController, users : [MMUser]) {
         
         chatViewController.view.tintColor = self.view.tintColor
@@ -148,11 +152,7 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     
     
     //MARK: - Core Method Overrides
-    
-    
-    override public func append(mmxChannels: [MMXChannel]) {
-        super.append(mmxChannels)
-    }
+
     
     override internal func canLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         if let canLeave = self.delegate?.mmxListCanLeaveChannel(channel, channelDetails : channelDetails) {

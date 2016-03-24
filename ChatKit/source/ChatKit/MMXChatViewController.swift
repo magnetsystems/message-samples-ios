@@ -96,6 +96,10 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     //MARK: Public Methods
     
     
+    override public func append(mmxMessages: [MMXMessage]) {
+        super.append(mmxMessages)
+    }
+    
     internal override func hasMore() -> Bool {
         if let datasource = self.datasource {
             return datasource.mmxControllerHasMore()
@@ -205,10 +209,6 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     
     //MARK: - Core Method Overrides
     
-    
-    override public func append(mmxMessages: [MMXMessage]) {
-        super.append(mmxMessages)
-    }
     
     override internal func didSelectUserAvatar(user: MMUser) {
         self.delegate?.mmxAvatarDidClick?(user)
