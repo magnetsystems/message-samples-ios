@@ -1,20 +1,20 @@
 //ChatViewControllerCollectionExtension.swift
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import NYTPhotoViewer
 
@@ -131,10 +131,10 @@ extension CoreChatViewController {
         //Each label in a cell has a `height` delegate method that corresponds to its text dataSource method
         
         /**
-        *  This logic should be consistent with what you return from `attributedTextForCellTopLabelAtIndexPath:`
-        *  The other label height delegate methods should follow similarly
-        *  Show a timestamp for every 3rd message
-        */
+         *  This logic should be consistent with what you return from `attributedTextForCellTopLabelAtIndexPath:`
+         *  The other label height delegate methods should follow similarly
+         *  Show a timestamp for every 3rd message
+         */
         if indexPath.item % 3 == 0 {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
         }
@@ -187,16 +187,19 @@ extension CoreChatViewController {
                     presentViewController(viewController, animated: true, completion: nil)
                 }
             case .Photo:
-                let photoItem = message.media() as! JSQPhotoMediaItem
-                let photo = Photo(photo: photoItem.image)
-                let viewer = NYTPhotosViewController(photos: [photo])
-                presentViewController(viewer, animated: true, completion: nil)
+                if let photoItem = message.media() as? JSQPhotoMediaItem {
+                    let photo = Photo(photo: photoItem.image)
+                    let viewer = NYTPhotosViewController(photos: [photo])
+                    presentViewController(viewer, animated: true, completion: nil)
+                }
             case .Video:
                 if let attachment = message.underlyingMessage.attachments?.first where attachment.name != nil {
                     let videoVC = VideoPlayerViewController()
                     videoVC.attachment = attachment
                     presentViewController(videoVC, animated: true, completion: nil)
                 }
+            case .Unknown:
+                break
             }
         }
     }

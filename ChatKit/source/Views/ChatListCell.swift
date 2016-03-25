@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -97,10 +97,21 @@ public class ChatListCell: ChannelDetailBaseTVCell {
             
             lblSubscribers?.text = subscribersTitle
             
-            if let messages = detailResponse.messages, content = messages.last?.messageContent {
-                lblMessage?.text = content[Constants.ContentKey.Message] ?? CKStrings.kStr_AttachmentFile
-                if content[Constants.ContentKey.Longitude] != nil {
+            if let messages = detailResponse.messages, content = messages.last?.messageContent, let message = messages.last {
+                let messageModel = Message(message: message)
+                switch messageModel.type {
+                case .Location:
                     lblMessage?.text = CKStrings.kStr_AttachmentLocation
+                case .Video, .Photo:
+                    lblMessage?.text = CKStrings.kStr_AttachmentFile
+                case .Text:
+                    lblMessage?.text = messageModel.text()
+                case .Unknown:
+                    if let text = content[Constants.ContentKey.Message] {
+                        lblMessage?.text = text as String
+                    } else {
+                        lblMessage?.text = "..."
+                    }
                 }
             } else {
                 lblMessage?.text = ""
