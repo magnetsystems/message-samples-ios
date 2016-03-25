@@ -51,7 +51,7 @@
                     <constraint firstItem="fCQ-5v-RJo" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Ofy-jd-tof"/>
                     <constraint firstItem="kl2-ES-Eax" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Pen-gS-4ma"/>
                     <constraint firstAttribute="bottom" secondItem="kl2-ES-Eax" secondAttribute="bottom" id="Yt7-AM-fAF"/>
-                    <constraint firstAttribute="bottom" secondItem="NAE-51-SsA" secondAttribute="bottom" constant="0.5" id="oCr-Zt-KQP"/>
+                    <constraint firstAttribute="bottom" secondItem="NAE-51-SsA" secondAttribute="bottom" id="oCr-Zt-KQP"/>
                     <constraint firstAttribute="trailing" secondItem="kl2-ES-Eax" secondAttribute="trailing" id="utG-uR-Csr"/>
                     <constraint firstItem="NAE-51-SsA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="wvB-Wq-1he"/>
                     <constraint firstAttribute="bottom" secondItem="fCQ-5v-RJo" secondAttribute="bottom" id="xJ5-hW-SDg"/>
@@ -60,6 +60,7 @@
             <connections>
                 <outlet property="eventImage" destination="ujf-dL-dFv" id="9yU-Eg-9CR"/>
                 <outlet property="eventLabel" destination="fCQ-5v-RJo" id="3Uj-Vu-vSs"/>
+                <outlet property="vNewMessageIndicator" destination="NAE-51-SsA" id="wO9-wn-3Gr"/>
             </connections>
             <point key="canvasLocation" x="305" y="419"/>
         </tableViewCell>
