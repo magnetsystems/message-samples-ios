@@ -311,7 +311,7 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     func addContactAction() {
         
         if let currentUser = MMUser.currentUser() {
-            let contactsViewController = MMXContactsPickerController(disabledUsers: [currentUser])
+            let contactsViewController = MMXContactsPickerController(ignoredUsers: [currentUser])
             contactsViewController.delegate = self
             
             self.currentContactsViewController = contactsViewController

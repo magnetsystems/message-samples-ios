@@ -186,7 +186,7 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     func detailsAction() {
         
         if let currentUser = MMUser.currentUser() {
-            let detailsViewController = MMXContactsPickerController(disabledUsers: [currentUser])
+            let detailsViewController = MMXContactsPickerController(ignoredUsers: [currentUser])
             
             detailsViewController.barButtonNext = nil
             let subDatasource = SubscribersDatasource()

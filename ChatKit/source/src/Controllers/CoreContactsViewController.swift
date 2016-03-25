@@ -61,7 +61,7 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
     
     internal var availableRecipients = [UserLetterGroup]()
     internal var currentUserCount = 0
-    internal var disabledUsers : [String : MMUser] = [:]
+    internal var ignoredUsers : [String : MMUser] = [:]
     internal var startPoint : CGPoint = CGPointZero
     
     
@@ -532,7 +532,7 @@ private extension CoreContactsViewController {
     private func filterOutUsers(users : [MMUser]) -> [MMUser] {
         var tempUsers : [MMUser] = []
         for user in users {
-            if let userId = user.userID where disabledUsers[userId] == nil {
+            if let userId = user.userID where ignoredUsers[userId] == nil {
                 tempUsers.append(user)
             } else {
                 print ("ommit \(user.lastName)")

@@ -29,7 +29,7 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     //MARK: Static Methods
     
     
-    static public var globallyDisabledUsers : [MMUser] = []
+    static public var globallyIgnoredUsers : [MMUser] = []
     
     
     //Private Variables
@@ -56,15 +56,15 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     //MARK: Init
     
     
-    convenience public init(disabledUsers: [MMUser]) {
+    convenience public init(ignoredUsers: [MMUser]) {
         self.init()
         var hash  : [String : MMUser] = [:]
-        for user in disabledUsers {
+        for user in ignoredUsers {
             if let userId = user.userID {
                 hash[userId] = user
             }
         }
-        self.disabledUsers = hash
+        self.ignoredUsers = hash
     }
     
     
@@ -76,13 +76,13 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         
         super.setupViewController()
         
-        var hash  = disabledUsers
-        for user in MMXContactsPickerController.globallyDisabledUsers {
+        var hash  = ignoredUsers
+        for user in MMXContactsPickerController.globallyIgnoredUsers {
             if let userId = user.userID {
                 hash[userId] = user
             }
         }
-        disabledUsers = hash
+        ignoredUsers = hash
         
         self.title = "Contacts"
         let btnNext = UIBarButtonItem.init(title: "Next", style: .Plain, target: self, action: "nextAction")
