@@ -29,7 +29,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     public weak var controller : MMXChatListViewController?
     public var hasMoreUsers : Bool = true
     public private(set) var channels : [MMXChannel] = []
-    public let limit = 30
+    public var limit = 30
     
     
     // Public Functions

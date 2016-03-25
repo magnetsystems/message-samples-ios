@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -38,11 +38,13 @@ public class Message : NSObject, JSQMessageData {
                 break
             case .Video:
                 break
+            case .Unknown:
+                break
             }
         }
     }
     
-    public lazy var mediaContent: JSQMessageMediaData! = {
+    public lazy var mediaContent: JSQMessageMediaData? = {
         
         switch self.type {
         case .Text:
@@ -87,12 +89,18 @@ public class Message : NSObject, JSQMessageData {
             self.isDownloaded  = true
             
             return videoMediaItem
+            
+        case .Unknown :
+            return nil
         }
     }()
     
     public lazy var type: MessageType = {
-        return MessageType(rawValue: self.underlyingMessage.messageContent["type"]!)
-        }()!
+        if let type = self.underlyingMessage.messageContent["type"] {
+            return MessageType(rawValue: type) ?? .Text
+        }
+        return .Unknown
+    }()
     
     
     //MARK: init
@@ -114,7 +122,7 @@ public class Message : NSObject, JSQMessageData {
     }
     
     public func isMediaMessage() -> Bool {
-        return (type != MessageType.Text)
+        return (type != .Text && type != .Unknown)
     }
     
     public func messageHash() -> UInt {
@@ -122,18 +130,24 @@ public class Message : NSObject, JSQMessageData {
     }
     
     public func senderId() -> String! {
-        return underlyingMessage.sender!.userID
+        return underlyingMessage.sender?.userID ?? ""
     }
     
     public func senderDisplayName() -> String! {
-        return (underlyingMessage.sender!.firstName != nil && underlyingMessage.sender!.lastName != nil) ? "\(underlyingMessage.sender!.firstName) \(underlyingMessage.sender!.lastName)" : underlyingMessage.sender!.userName
+        if let sender = underlyingMessage.sender {
+            return (sender.firstName != nil && sender.lastName != nil) ? "\(sender.firstName) \(sender.lastName)" : sender.userName
+        }
+        return ""
     }
     
-    public func text() -> String! {
-        return underlyingMessage.messageContent[Constants.ContentKey.Message]! as String
+    public func text() -> String {
+        if let content = underlyingMessage.messageContent[Constants.ContentKey.Message] {
+            return content as String
+        }
+        return ""
     }
     
-    public func media() -> JSQMessageMediaData! {
+    public func media() -> JSQMessageMediaData? {
         return mediaContent
     }
     
@@ -152,11 +166,11 @@ public enum MessageType: String, CustomStringConvertible {
     case Location = "location"
     case Photo = "photo"
     case Video = "video"
+    case Unknown = "Unknown"
     
     public var description: String {
         
         switch self {
-            
         case .Text:
             return "text"
         case .Location:
@@ -165,6 +179,8 @@ public enum MessageType: String, CustomStringConvertible {
             return "photo"
         case .Video:
             return "video"
+        case .Unknown :
+            return "Unknown"
         }
     }
 }

@@ -15,7 +15,9 @@ public protocol Define_MMXChatListViewController : class {
     var chooseContacts : Bool{get set}
     var datasource : ChatListControllerDatasource?{get set}
     var delegate : ChatListControllerDelegate?{get set}
-    var searchBar : UISearchBar{get}
+    //@IBOutlet - searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
+    //to hide set canSearch = false
+    var searchBar : UISearchBar?{get set}
     var tableView : UITableView!{get set}
     
     //These can be overridden to inject datasources, delegates and other customizations into the variable on didSet
@@ -53,7 +55,9 @@ public protocol Define_MMXContactsPickerController : class {
     var canSearch : Bool?{get set}
     weak var delegate : ContactsControllerDelegate?{get set}
     var datasource : ContactsControllerDatasource?{get set}
-    var searchBar : UISearchBar{get}
+    //@IBOutlet - searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
+    //to hide set canSearch = false
+    var searchBar : UISearchBar?{get set}
     
     //MARK: Initialization
     

@@ -772,7 +772,6 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (NSString *)CATTokenIdentifier {
-    NSLog(@"cat %@", [NSString stringWithFormat:@"%@.%@.%@.%@", [self appID],[self clientID], [self deviceID], MMCATTokenIdentifier]);
     return [NSString stringWithFormat:@"%@.%@.%@.%@", [self appID],[self clientID], [self deviceID], MMCATTokenIdentifier];
 }
 
@@ -786,7 +785,7 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (NSString *)deviceID {
-    return [MMServiceAdapter deviceUUID];
+    return [[UIDevice currentDevice] identifierForVendor].UUIDString;
 }
 
 @end

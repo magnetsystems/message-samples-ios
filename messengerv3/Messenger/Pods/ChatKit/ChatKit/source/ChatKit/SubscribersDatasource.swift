@@ -74,7 +74,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
     func addContacts() {
         
         self.channel?.subscribersWithLimit(1000, offset: 0, success: { (num, users) -> Void in
-            let contacts = MMXContactsPickerController(disabledUsers: users)
+            let contacts = MMXContactsPickerController(ignoredUsers: users)
             contacts.delegate = self
             
             self.currentContactsPickerViewController = contacts

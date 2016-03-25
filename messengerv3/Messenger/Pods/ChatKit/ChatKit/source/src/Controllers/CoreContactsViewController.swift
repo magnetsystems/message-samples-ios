@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -53,7 +53,9 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
     
     public var contactsBubbleViewShouldMove : Bool = false
     public internal(set) var selectedUsers : [MMUser] = []
-    public private(set) var searchBar = UISearchBar()
+    //searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
+    //to hide set canSearch = false
+    @IBOutlet public var searchBar : UISearchBar?
     
     
     //MARK: Internal Variables
@@ -61,8 +63,10 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
     
     internal var availableRecipients = [UserLetterGroup]()
     internal var currentUserCount = 0
-    internal var disabledUsers : [String : MMUser] = [:]
+    internal var ignoredUsers : [String : MMUser] = [:]
     internal var startPoint : CGPoint = CGPointZero
+    weak internal var generatedSearchBar : UISearchBar?
+    @IBOutlet var generatedSearchBarHeight : NSLayoutConstraint?
     
     
     //MARK: IBOutlets
@@ -91,14 +95,8 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         nib = UINib.init(nibName: "LoadingCell", bundle: NSBundle(forClass: CoreContactsViewController.self))
         self.tableView.registerNib(nib, forCellReuseIdentifier: "LoadingCellIdentifier")
         
-        searchBar.sizeToFit()
-        searchBar.returnKeyType = .Search
-        if self.shouldUpdateSearchContinuously() {
-            searchBar.returnKeyType = .Done
-        }
-        searchBar.setShowsCancelButton(false, animated: false)
-        searchBar.delegate = self
-        tableView.tableHeaderView = searchBar
+        initializeSearchBar()
+        
         tableView.reloadData()
         self.tableView.layer.masksToBounds = true
         if self.canSearch == nil {
@@ -107,7 +105,7 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         
         infiniteLoading.onUpdate() { [weak self] in
             if let weakSelf = self {
-                weakSelf.loadMore(weakSelf.searchBar.text, offset: weakSelf.currentUserCount)
+                weakSelf.loadMore(weakSelf.searchBar?.text, offset: weakSelf.currentUserCount)
             }
         }
         registerCells(self.tableView)
@@ -205,8 +203,10 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
     internal func didSelectUserAvatar(user : MMUser) { }
     
     internal func endSearch() {
-        if searchBar.isFirstResponder() {
-            searchBar.resignFirstResponder()
+        if let searchBar = self.searchBar {
+            if searchBar.isFirstResponder() {
+                searchBar.resignFirstResponder()
+            }
         }
     }
     
@@ -259,7 +259,7 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         self.availableRecipients = []
         self.currentUserCount = 0
         self.tableView.reloadData()
-        self.loadMore(self.searchBar.text, offset: self.currentUserCount)
+        self.loadMore(self.searchBar?.text, offset: self.currentUserCount)
     }
     
     internal func tableViewFooter(index : Int) -> UIView {
@@ -532,7 +532,7 @@ private extension CoreContactsViewController {
     private func filterOutUsers(users : [MMUser]) -> [MMUser] {
         var tempUsers : [MMUser] = []
         for user in users {
-            if let userId = user.userID where disabledUsers[userId] == nil {
+            if let userId = user.userID where ignoredUsers[userId] == nil {
                 tempUsers.append(user)
             } else {
                 print ("ommit \(user.lastName)")
@@ -541,11 +541,30 @@ private extension CoreContactsViewController {
         return tempUsers
     }
     
-    private func resignSearchBar() {
-        if searchBar.isFirstResponder() {
-            searchBar.resignFirstResponder()
+    private func initializeSearchBar() {
+        if searchBar == nil {
+            searchBar = UISearchBar()
+            searchBar?.sizeToFit()
+            tableView.tableHeaderView = searchBar
+            generatedSearchBar = searchBar
         }
-        searchBar.setShowsCancelButton(false, animated: true)
+        
+        searchBar?.returnKeyType = .Search
+        if self.shouldUpdateSearchContinuously() {
+            searchBar?.returnKeyType = .Done
+        }
+        searchBar?.setShowsCancelButton(false, animated: false)
+        
+        searchBar?.delegate = self
+    }
+    
+    private func resignSearchBar() {
+        if let searchBar = self.searchBar {
+            if searchBar.isFirstResponder() {
+                searchBar.resignFirstResponder()
+            }
+            searchBar.setShowsCancelButton(false, animated: true)
+        }
     }
     
     private func removeSelectedUser(selectedUser : MMUser) {
@@ -625,10 +644,18 @@ private extension CoreContactsViewController {
     }
     
     private func updateSearchBar() {
-        if let canSearch = self.canSearch where canSearch == true {
-            tableView.tableHeaderView = searchBar
+        if generatedSearchBar != nil {
+            if let canSearch = self.canSearch where canSearch == true {
+                tableView.tableHeaderView = generatedSearchBar
+            } else {
+                tableView.tableHeaderView = nil
+            }
         } else {
-            tableView.tableHeaderView = nil
+            if let canSearch = self.canSearch where canSearch == true {
+                generatedSearchBarHeight?.priority = 250.0
+            } else {
+                generatedSearchBarHeight?.priority = 999.0
+            }
         }
     }
 }

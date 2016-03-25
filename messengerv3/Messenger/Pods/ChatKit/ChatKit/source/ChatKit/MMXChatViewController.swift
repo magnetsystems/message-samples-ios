@@ -42,8 +42,22 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
         }
     }
     
-    public var delegate : ChatViewControllerDelegate?
-    public var datasource : ChatViewControllerDatasource?
+    public var datasource : ChatViewControllerDatasource? {
+        didSet {
+            if let datasource = self.datasource as? DefaultChatViewControllerDatasource {
+                datasource.controller = self
+            }
+        }
+    }
+    
+    public var delegate : ChatViewControllerDelegate? {
+        didSet {
+            if let delegate = self.delegate as? DefaultChatViewControllerDelegate {
+                delegate.controller = self
+            }
+        }
+    }
+    
     public var showDetails = true
     
     public var useNavigationBarNotifier : Bool? {
@@ -127,14 +141,9 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
         if self.datasource == nil {
             self.datasource = DefaultChatViewControllerDatasource()
         }
-        if let datasource = self.datasource as? DefaultChatViewControllerDatasource {
-            datasource.controller = self
-        }
+        
         if self.delegate == nil {
             self.delegate = DefaultChatViewControllerDelegate()
-        }
-        if let delegate = self.delegate as? DefaultChatViewControllerDelegate {
-            delegate.controller = self
         }
     }
     
@@ -177,7 +186,7 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     func detailsAction() {
         
         if let currentUser = MMUser.currentUser() {
-            let detailsViewController = MMXContactsPickerController(disabledUsers: [currentUser])
+            let detailsViewController = MMXContactsPickerController(ignoredUsers: [currentUser])
             
             detailsViewController.barButtonNext = nil
             let subDatasource = SubscribersDatasource()

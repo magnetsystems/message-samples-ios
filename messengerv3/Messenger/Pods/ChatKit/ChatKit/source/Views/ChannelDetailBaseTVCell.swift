@@ -22,10 +22,10 @@ import MagnetMax
 public class ChannelDetailBaseTVCell: UITableViewCell {
     
     
-    //MARK: internal properties
+    //MARK: public properties
     
     
-    var detailResponse : MMXChannelDetailResponse? {
+    public var detailResponse : MMXChannelDetailResponse? {
         didSet {
             vNewMessageIndicator?.hidden = !hasNewMessagesFromLastTime(useLastMessage : false)
         }

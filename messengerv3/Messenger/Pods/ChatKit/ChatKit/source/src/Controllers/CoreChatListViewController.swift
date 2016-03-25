@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -33,7 +33,9 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         }
     }
     
-    public private(set) var searchBar = UISearchBar()
+    //searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
+    //to hide set canSearch = false
+    @IBOutlet public var searchBar : UISearchBar?
     
     
     //MARK: Internal Variables
@@ -41,6 +43,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     
     internal var currentDetailCount = 0
     internal var detailResponses : [MMXChannelDetailResponse] = []
+    weak internal var generatedSearchBar : UISearchBar?
     
     
     //MARK: Overrides
@@ -73,14 +76,9 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         self.tableView.registerNib(nib, forCellReuseIdentifier: "LoadingCellIdentifier")
         
         // Add search bar
-        searchBar.sizeToFit()
-        searchBar.returnKeyType = .Search
-        if self.shouldUpdateSearchContinuously() {
-            searchBar.returnKeyType = .Done
-        }
-        searchBar.setShowsCancelButton(false, animated: false)
-        searchBar.delegate = self
-        tableView.tableHeaderView = searchBar
+        
+        initializeSearchBar()
+        
         self.tableView.layer.masksToBounds = true
         if self.canSearch == nil {
             self.canSearch = true
@@ -92,7 +90,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         
         infiniteLoading.onUpdate() { [weak self] in
             if let weakSelf = self {
-                weakSelf.loadMore(weakSelf.searchBar.text, offset: weakSelf.currentDetailCount)
+                weakSelf.loadMore(weakSelf.searchBar?.text, offset: weakSelf.currentDetailCount)
             }
         }
         self.resignOnBackgroundTouch()
@@ -209,7 +207,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         self.detailResponses = []
         self.tableView.reloadData()
         self.currentDetailCount = 0
-        self.loadMore(self.searchBar.text, offset: self.currentDetailCount)
+        self.loadMore(self.searchBar?.text, offset: self.currentDetailCount)
     }
     
     internal func shouldAppendChannel(channel : MMXChannel) -> Bool { return true }
@@ -447,11 +445,30 @@ private extension CoreChatListViewController {
         tableView.reloadData()
     }
     
-    private func resignSearchBar() {
-        if searchBar.isFirstResponder() {
-            searchBar.resignFirstResponder()
+    private func initializeSearchBar() {
+        if searchBar == nil {
+            searchBar = UISearchBar()
+            searchBar?.sizeToFit()
+            tableView.tableHeaderView = searchBar
+            generatedSearchBar = searchBar
         }
-        searchBar.setShowsCancelButton(false, animated: true)
+        
+        searchBar?.returnKeyType = .Search
+        if self.shouldUpdateSearchContinuously() {
+            searchBar?.returnKeyType = .Done
+        }
+        searchBar?.setShowsCancelButton(false, animated: false)
+        
+        searchBar?.delegate = self
+    }
+    
+    private func resignSearchBar() {
+        if let searchBar = self.searchBar {
+            if searchBar.isFirstResponder() {
+                searchBar.resignFirstResponder()
+            }
+            searchBar.setShowsCancelButton(false, animated: true)
+        }
     }
     
     private func search(searchString : String?) {
@@ -463,10 +480,12 @@ private extension CoreChatListViewController {
     }
     
     private func updateSearchBar() {
-        if let canSearch = self.canSearch where canSearch == true {
-            tableView.tableHeaderView = searchBar
-        } else {
-            tableView.tableHeaderView = nil
+        if generatedSearchBar != nil {
+            if let canSearch = self.canSearch where canSearch == true {
+                tableView.tableHeaderView = generatedSearchBar
+            } else {
+                tableView.tableHeaderView = nil
+            }
         }
     }
 }

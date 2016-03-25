@@ -5,4 +5,4 @@ source 'https://github.com/magnetsystems/iOS-Distribution'
 inhibit_all_warnings!
 
   use_frameworks!
-  pod 'ChatKit', '~> 1.1.0'
+  pod 'ChatKit', '~> 1.2.0'

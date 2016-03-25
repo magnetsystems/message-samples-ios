@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -24,6 +24,12 @@ import MagnetMax
 
 
 public class MMXContactsPickerController: CoreContactsViewController, Define_MMXContactsPickerController {
+    
+    
+    //MARK: Static Methods
+    
+    
+    static public var globallyIgnoredUsers : [MMUser] = []
     
     
     //Private Variables
@@ -38,21 +44,27 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     public var barButtonCancel : UIBarButtonItem?
     public var barButtonNext : UIBarButtonItem?
     public weak var delegate : ContactsControllerDelegate?
-    public var datasource : ContactsControllerDatasource?
     
+    public var datasource : ContactsControllerDatasource? {
+        didSet {
+            if let datasource = self.datasource as? DefaultContactsPickerControllerDatasource {
+                datasource.controller = self
+            }
+        }
+    }
     
     //MARK: Init
     
     
-    convenience public init(disabledUsers: [MMUser]) {
+    convenience public init(ignoredUsers: [MMUser]) {
         self.init()
         var hash  : [String : MMUser] = [:]
-        for user in disabledUsers {
+        for user in ignoredUsers {
             if let userId = user.userID {
                 hash[userId] = user
             }
         }
-        self.disabledUsers = hash
+        self.ignoredUsers = hash
     }
     
     
@@ -64,6 +76,14 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         
         super.setupViewController()
         
+        var hash  = ignoredUsers
+        for user in MMXContactsPickerController.globallyIgnoredUsers {
+            if let userId = user.userID {
+                hash[userId] = user
+            }
+        }
+        ignoredUsers = hash
+        
         self.title = "Contacts"
         let btnNext = UIBarButtonItem.init(title: "Next", style: .Plain, target: self, action: "nextAction")
         let btnCancel = UIBarButtonItem.init(title: "Cancel", style: .Plain, target: self, action: "cancelAction")
@@ -73,9 +93,7 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         if self.datasource == nil {
             self.datasource = DefaultContactsPickerControllerDatasource()
         }
-        if let dataSource = self.datasource as? DefaultContactsPickerControllerDatasource {
-            dataSource.controller = self
-        }
+        
         self.reset()
     }
     
@@ -155,7 +173,7 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     
     
     //MARK: - Core Method Overrides
-
+    
     
     override internal func cellDidCreate(cell: UITableViewCell) {
         self.datasource?.mmxContactsDidCreateCell?(cell)
