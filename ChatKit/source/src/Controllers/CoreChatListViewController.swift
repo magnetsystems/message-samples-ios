@@ -84,7 +84,6 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
             self.canSearch = true
         }
         
-        registerCells(self.tableView)
         ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:nil, selector: "didReceiveMessage:")
         refreshControl?.addTarget(self, action: "refreshChannelDetail", forControlEvents: .ValueChanged)
         
@@ -201,13 +200,15 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         return hasChannel
     }
     
-    internal func registerCells(tableView: UITableView) { }
-    
     internal func reset() {
         self.detailResponses = []
         self.tableView.reloadData()
         self.currentDetailCount = 0
-        self.loadMore(self.searchBar?.text, offset: self.currentDetailCount)
+        var searchText = self.searchBar?.text
+        if searchText?.characters.count == 0 {
+            searchText = nil
+        }
+        self.loadMore(searchText, offset: self.currentDetailCount)
     }
     
     internal func shouldAppendChannel(channel : MMXChannel) -> Bool { return true }

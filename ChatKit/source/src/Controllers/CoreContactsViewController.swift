@@ -97,7 +97,6 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         
         initializeSearchBar()
         
-        tableView.reloadData()
         self.tableView.layer.masksToBounds = true
         if self.canSearch == nil {
             self.canSearch = true
@@ -108,7 +107,6 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
                 weakSelf.loadMore(weakSelf.searchBar?.text, offset: weakSelf.currentUserCount)
             }
         }
-        registerCells(self.tableView)
         self.automaticallyAdjustsScrollViewInsets = false
         self.tableView.contentInset = UIEdgeInsetsZero
     }
@@ -237,8 +235,6 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
     
     internal func numberOfFooters() -> Int { return 0 }
     
-    internal func registerCells(tableView: UITableView) { }
-    
     internal func shouldShowIndexTitles() -> Bool {
         return true
     }
@@ -259,7 +255,11 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         self.availableRecipients = []
         self.currentUserCount = 0
         self.tableView.reloadData()
-        self.loadMore(self.searchBar?.text, offset: self.currentUserCount)
+        var searchText = self.searchBar?.text
+        if searchText?.characters.count == 0 {
+            searchText = nil
+        }
+        self.loadMore(searchText, offset: self.currentUserCount)
     }
     
     internal func tableViewFooter(index : Int) -> UIView {

@@ -94,6 +94,7 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
             self.datasource = DefaultContactsPickerControllerDatasource()
         }
         
+        self.datasource?.mmxContactsControllerRegisterCells?(tableView)
         self.reset()
     }
     
@@ -103,7 +104,6 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
             self.selectedUsers = selectedUsers
         }
         self.view.tintColor = self.appearance.tintColor
-        loadMore(nil, offset: 0)
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -249,10 +249,6 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     override internal func onUserSelected(user: MMUser) {
         self.updateButtonItems()
         self.delegate?.mmxContactsControllerSelectedUser?(user)
-    }
-    
-    override internal func registerCells(tableView: UITableView) {
-        self.datasource?.mmxContactsControllerRegisterCells?(tableView)
     }
     
     override internal func shouldShowHeaderTitles() -> Bool {
