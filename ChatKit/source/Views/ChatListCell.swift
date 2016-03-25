@@ -76,7 +76,7 @@ public class ChatListCell: ChannelDetailBaseTVCell {
     //MARK: Overridden Properties
     
     
-    override var detailResponse : MMXChannelDetailResponse! {
+    override public var detailResponse : MMXChannelDetailResponse! {
         didSet {
             super.detailResponse = self.detailResponse
             
