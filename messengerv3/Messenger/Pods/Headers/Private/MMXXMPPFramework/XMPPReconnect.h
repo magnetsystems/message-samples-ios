@@ -1,0 +1,1 @@
+../../../MMXXMPPFramework/Extensions/Reconnect/XMPPReconnect.h

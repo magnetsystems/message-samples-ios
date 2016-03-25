@@ -1,0 +1,1 @@
+../../../MMX/Source/CoreMessaging/Query/MMXQuery_Private.h

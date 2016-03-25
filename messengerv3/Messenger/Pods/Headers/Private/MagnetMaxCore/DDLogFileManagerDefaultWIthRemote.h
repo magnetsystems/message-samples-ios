@@ -1,0 +1,1 @@
+../../../MagnetMaxCore/MagnetMax/Core/Internal/Logging/Remote/DDLogFileManagerDefaultWIthRemote.h
