@@ -16,8 +16,9 @@
 */
 
 import UIKit
+import ChatKit
 
-class EventsTableViewCell: UITableViewCell {
+class EventsTableViewCell: ChatListCell {
 
     @IBOutlet var eventImage : UIImageView?
     @IBOutlet var eventLabel : UILabel?

@@ -91,10 +91,14 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
                     cell.eventLabel?.text = channelDetails.channel.summary
                     cell.eventLabel?.textColor = UIColor.whiteColor()
                 }
+                cell.detailResponse = channelDetails
+                
                 return cell
             }
         } else if let summary = channelDetails.channel.summary where summary.containsString("Ask Magnet") {
             if let cell = tableView.dequeueReusableCellWithIdentifier("AskMagnetTableViewCell", forIndexPath: indexPath) as? AskMagnetTableViewCell {
+                cell.detailResponse = channelDetails
+                
                 return cell
             }
         }

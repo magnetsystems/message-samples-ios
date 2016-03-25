@@ -24,22 +24,6 @@ import ChatKit
 
 class ViewController: MMXChatListViewController {
     
-    //MARK: Overriden Variables
-    
-    override var datasource : ChatListControllerDatasource? {
-        set { }
-        get {
-            return _customDatasource
-        }
-    }
-    
-    override var delegate : ChatListControllerDelegate? {
-        set { }
-        get {
-            return _customDelegate
-        }
-    }
-    
     //MARK: Internal Variables
     
     
@@ -49,8 +33,6 @@ class ViewController: MMXChatListViewController {
     //MARK: Private Variables
     
     
-    private var _customDatasource = HomeListDatasource()
-    private var _customDelegate = HomeListDelegate()
     private var revealLoaded : Bool = false
     
     
@@ -71,6 +53,10 @@ class ViewController: MMXChatListViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.datasource = HomeListDatasource()
+        self.delegate = HomeListDelegate()
+        
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
     }
 }
