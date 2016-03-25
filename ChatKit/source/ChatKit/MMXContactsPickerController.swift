@@ -38,8 +38,14 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     public var barButtonCancel : UIBarButtonItem?
     public var barButtonNext : UIBarButtonItem?
     public weak var delegate : ContactsControllerDelegate?
-    public var datasource : ContactsControllerDatasource?
     
+    public var datasource : ContactsControllerDatasource? {
+        didSet {
+            if let datasource = self.datasource as? DefaultContactsPickerControllerDatasource {
+                datasource.controller = self
+            }
+        }
+    }
     
     //MARK: Init
     
@@ -72,9 +78,6 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         
         if self.datasource == nil {
             self.datasource = DefaultContactsPickerControllerDatasource()
-        }
-        if let dataSource = self.datasource as? DefaultContactsPickerControllerDatasource {
-            dataSource.controller = self
         }
         self.reset()
     }
