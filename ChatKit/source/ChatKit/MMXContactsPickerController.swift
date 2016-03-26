@@ -46,9 +46,16 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     public weak var delegate : ContactsControllerDelegate?
     
     public var datasource : ContactsControllerDatasource? {
+        willSet {
+            if let datasource = self.datasource as? DefaultContactsPickerControllerDatasource {
+                datasource.controller = nil
+            }
+        }
         didSet {
             if let datasource = self.datasource as? DefaultContactsPickerControllerDatasource {
                 datasource.controller = self
+                self.datasource?.mmxContactsControllerRegisterCells?(tableView)
+                reset()
             }
         }
     }
@@ -93,9 +100,6 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         if self.datasource == nil {
             self.datasource = DefaultContactsPickerControllerDatasource()
         }
-        
-        self.datasource?.mmxContactsControllerRegisterCells?(tableView)
-        self.reset()
     }
     
     override public func viewDidLoad() {

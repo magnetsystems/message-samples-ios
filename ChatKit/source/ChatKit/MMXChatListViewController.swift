@@ -39,9 +39,15 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     public var chooseContacts : Bool = true
     
     public var datasource : ChatListControllerDatasource? {
+        willSet {
+            if let datasource = self.datasource as? DefaultChatListControllerDatasource {
+                datasource.controller = nil
+            }
+        }
         didSet {
             if let datasource = self.datasource as? DefaultChatListControllerDatasource {
                 datasource.controller = self
+                self.reset()
             }
         }
     }
@@ -89,7 +95,6 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         }
         
         self.datasource?.mmxListRegisterCells?(tableView)
-        self.reset()
         self.canSearch = false
     }
     

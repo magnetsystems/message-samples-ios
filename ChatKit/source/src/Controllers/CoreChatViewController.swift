@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -39,7 +39,6 @@ public class CoreChatViewController: MMJSQViewController {
                 //  notifier = NavigationNotifier(viewController: self, exceptFor: channel)
                 ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
             }
-            loadMessages()
         }
     }
     
@@ -193,9 +192,9 @@ public class CoreChatViewController: MMJSQViewController {
     internal func onMessageSent(mmxMessage: MMXMessage) { }
     
     internal func reset() {
-        self.messages = []
         self.currentMessageCount = 0
-        self.loadMore(self.chat, offset: self.currentMessageCount)
+        self.messages = []
+        loadMore(self.chat, offset: self.currentMessageCount)
     }
     
     internal func saveLastTimeViewed() {
@@ -313,7 +312,7 @@ public class CoreChatViewController: MMJSQViewController {
         let messageContent = [
             Constants.ContentKey.Type: MessageType.Text.rawValue,
             Constants.ContentKey.Message: forcedString,
-        ]
+            ]
         
         button.userInteractionEnabled = false
         
@@ -325,10 +324,10 @@ public class CoreChatViewController: MMJSQViewController {
             }
             button.userInteractionEnabled = true
             self?.hideSpinner()
-            }) { error in
-                button.userInteractionEnabled = true
-                self.hideSpinner()
-                print(error)
+        }) { error in
+            button.userInteractionEnabled = true
+            self.hideSpinner()
+            print(error)
         }
         finishSendingMessageAnimated(true)
     }
@@ -358,9 +357,9 @@ public class CoreChatViewController: MMJSQViewController {
                     self?.onMessageSent(message)
                 }
                 self?.hideSpinner()
-                }) { error in
-                    self.hideSpinner()
-                    print(error)
+            }) { error in
+                self.hideSpinner()
+                print(error)
             }
             finishSendingMessageAnimated(true)
             
@@ -404,9 +403,9 @@ private extension CoreChatViewController {
                 }
                 self?.hideSpinner()
                 self?.finishSendingMessageAnimated(true)
-                }) { error in
-                    self?.hideSpinner()
-                    print("[ERROR]: \(error)")
+            }) { error in
+                self?.hideSpinner()
+                print("[ERROR]: \(error)")
             }
         }
     }
@@ -435,16 +434,10 @@ private extension CoreChatViewController {
             self.chat = channel
             self.onChannelCreated(channel)
             completion(error: nil)
-            }) { (error) -> Void in
-                completion(error: error)
-                print("[ERROR] \(error.localizedDescription)")
+        }) { (error) -> Void in
+            completion(error: error)
+            print("[ERROR] \(error.localizedDescription)")
         }
-    }
-    
-    private func loadMessages() {
-        self.currentMessageCount = 0
-        self.messages = []
-        loadMore(self.chat, offset: self.currentMessageCount)
     }
 }
 
