@@ -35,12 +35,19 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     
     //MARK: Public Variables
     
+    
     public var chooseContacts : Bool = true
     
     public var datasource : ChatListControllerDatasource? {
+        willSet {
+            if let datasource = self.datasource as? DefaultChatListControllerDatasource {
+                datasource.controller = nil
+            }
+        }
         didSet {
             if let datasource = self.datasource as? DefaultChatListControllerDatasource {
                 datasource.controller = self
+                self.reset()
             }
         }
     }
@@ -87,7 +94,7 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
             self.delegate = DefaultChatListControllerDelegate()
         }
         
-        self.reset()
+        self.datasource?.mmxListRegisterCells?(tableView)
         self.canSearch = false
     }
     
@@ -244,10 +251,6 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     
     override internal func onChannelDidSelect(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
         self.delegate?.mmxListDidSelectChannel(channel,channelDetails : channelDetails)
-    }
-    
-    override internal func registerCells(tableView : UITableView) {
-        self.datasource?.mmxListRegisterCells?(tableView)
     }
     
     override internal func sort(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {

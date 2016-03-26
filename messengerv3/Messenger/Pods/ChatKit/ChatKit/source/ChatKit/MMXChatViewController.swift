@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -43,9 +43,15 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     }
     
     public var datasource : ChatViewControllerDatasource? {
+        willSet {
+            if let datasource = self.datasource as? DefaultChatViewControllerDatasource {
+                datasource.controller = nil
+            }
+        }
         didSet {
             if let datasource = self.datasource as? DefaultChatViewControllerDatasource {
                 datasource.controller = self
+                reset()
             }
         }
     }
@@ -73,6 +79,7 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     public override var chat  : MMXChannel? {
         didSet {
             useNavigationBarNotifier = true
+            reset()
         }
     }
     
@@ -178,7 +185,7 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     private func newLoadingContext() {
         self.requestNumber++
     }
-
+    
     
     //MARK: Actions
     

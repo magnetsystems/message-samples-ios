@@ -49,7 +49,7 @@ class RearMenuViewController: UITableViewController {
         listController.chooseContacts = false
         let datasource = AskMagnetDatasource()
         datasource.controller = listController
-        
+        datasource.limit = 15
         let delegate = AskMagnetDelegate()
         delegate.controller = listController
         
