@@ -211,4 +211,8 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
             })
         })
     }
+    
+    override func mmxControllerSearchUpdatesContinuously() -> Bool {
+        return false
+    }
 }
