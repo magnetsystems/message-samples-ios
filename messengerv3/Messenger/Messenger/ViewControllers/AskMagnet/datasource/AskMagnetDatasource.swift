@@ -23,13 +23,13 @@ import ChatKit
 
 
 class AskMagnetDatasource : DefaultChatListControllerDatasource {
-
+    
     func mmxListShouldAppendNewChannel(channel: MMXChannel) -> Bool {
         return isAskMagnetChannel(channel)
     }
     
     func isAskMagnetChannel(channel : MMXChannel) -> Bool {
-       return channel.name.hasPrefix(kAskMagnetChannel) && channel.ownerUserID != MMUser.currentUser()?.userID
+        return channel.name.hasPrefix(kAskMagnetChannel) && channel.ownerUserID != MMUser.currentUser()?.userID
     }
     
     func mmxListCellForChannel(tableView: UITableView, channel: MMXChannel, channelDetails: MMXChannelDetailResponse, indexPath: NSIndexPath) -> UITableViewCell? {
@@ -45,14 +45,15 @@ class AskMagnetDatasource : DefaultChatListControllerDatasource {
         return cell
     }
     
+    func mmxListFilterChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
+        return channelDetails.filter({ $0.publishedItemCount > 0 })
+    }
+    
     func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
-        let filteredDetails = channelDetails.filter({ $0.publishedItemCount > 0 })
-        let sortedDetails = filteredDetails.sort({ (detail1, detail2) -> Bool in
+        return channelDetails.sort({ (detail1, detail2) -> Bool in
             let formatter = ChannelManager.sharedInstance.formatter
             return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
         })
-        
-        return sortedDetails
     }
     
     override func subscribedChannels(completion : ((channels : [MMXChannel]) -> Void)) {
