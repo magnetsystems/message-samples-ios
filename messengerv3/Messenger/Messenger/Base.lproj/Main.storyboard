@@ -4,6 +4,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--Reveal View Controller-->
@@ -96,7 +97,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="l4v-81-mth" style="IBUITableViewCellStyleDefault" id="kjb-GN-aWE">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="l4v-81-mth" detailTextLabel="dzv-3Z-Ppn" style="IBUITableViewCellStyleValue1" id="kjb-GN-aWE">
                                         <rect key="frame" x="0.0" y="155" width="600" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kjb-GN-aWE" id="MXB-c5-kZQ">
@@ -104,10 +105,17 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Support" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="l4v-81-mth">
-                                                    <rect key="frame" x="15" y="0.0" width="570" height="49.5"/>
+                                                    <rect key="frame" x="15" y="15" width="59" height="19.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dzv-3Z-Ppn">
+                                                    <rect key="frame" x="543.5" y="15" width="41.5" height="19.5"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -163,6 +171,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="newAskMagnetMessageLabel" destination="dzv-3Z-Ppn" id="rks-n3-iPi"/>
                         <outlet property="userAvatar" destination="elf-3M-g8l" id="xIM-gV-Ov3"/>
                         <outlet property="username" destination="3i2-ss-jBT" id="y2d-if-wxz"/>
                         <outlet property="version" destination="DLx-Kd-fwV" id="wVC-NM-4B5"/>
@@ -206,17 +215,28 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="beF-Ua-nQv">
-                        <barButtonItem key="leftBarButtonItem" id="4qC-4y-PEK">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="q6V-88-Qxs">
-                                <rect key="frame" x="20" y="7" width="133" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                <state key="normal" title="≣"/>
-                            </button>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem title="Item" id="4qC-4y-PEK">
+                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="q6V-88-Qxs">
+                                    <rect key="frame" x="20" y="-1" width="20" height="46"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                    <state key="normal" title="≣"/>
+                                </button>
+                            </barButtonItem>
+                            <barButtonItem style="plain" id="lo7-oF-c9c">
+                                <view key="customView" contentMode="scaleToFill" id="cIx-CF-2O5">
+                                    <rect key="frame" x="48" y="17" width="10" height="10"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </view>
+                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="menuButton" destination="q6V-88-Qxs" id="Boz-jh-BkB"/>
+                        <outlet property="newMessageIndicatorView" destination="cIx-CF-2O5" id="cyw-ap-g6f"/>
                         <outlet property="tableView" destination="kPb-iw-rdy" id="12o-SO-Udu"/>
                     </connections>
                 </viewController>

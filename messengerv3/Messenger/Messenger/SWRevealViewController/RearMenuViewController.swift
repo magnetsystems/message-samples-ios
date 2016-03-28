@@ -18,13 +18,52 @@
 import UIKit
 import ChatKit
 
-class RearMenuViewController: UITableViewController {
+protocol AskMagnetCounterDelegate : class {
+    func didUpdateAskMagnetCounter(counter : AskMagnetCounter)
+}
+
+class AskMagnetCounter : NSObject {
+    
+    static var sharedCounter = AskMagnetCounter()
+    
+    var newAskMagnetMessageCount : Int = 0
+    var notifyForNewAskMessages = true
+    weak var delegate : AskMagnetCounterDelegate?
+    
+    override init() {
+        super.init()
+        
+        ChannelManager.sharedInstance.addChannelMessageObserver(self, channel: nil, selector: #selector(AskMagnetCounter.didRecieveMessage(_:)))
+    }
+    
+    func isAskMagnet(channel : MMXChannel) -> Bool {
+        return notifyForNewAskMessages && channel.name.hasPrefix(kAskMagnetChannel)
+    }
+    
+    func increment() {
+        newAskMagnetMessageCount += 1
+        self.delegate?.didUpdateAskMagnetCounter(self)
+    }
+    
+    func reset() {
+        newAskMagnetMessageCount = 0
+        self.delegate?.didUpdateAskMagnetCounter(self)
+    }
+    
+    func didRecieveMessage(message : MMXMessage) {
+        if let channel = message.channel where isAskMagnet(channel) {
+            increment()
+        }
+    }
+}
+
+class RearMenuViewController: UITableViewController, AskMagnetCounterDelegate {
     
     
     //MARK: Public properties
     
     
-    //var notifier : SupportNotifier?
+    @IBOutlet weak var newAskMagnetMessageLabel: UILabel!
     @IBOutlet weak var userAvatar: UIImageView!
     @IBOutlet weak var username: UILabel!
     @IBOutlet weak var version: UILabel!
@@ -35,10 +74,15 @@ class RearMenuViewController: UITableViewController {
         
         userAvatar.layer.cornerRadius = userAvatar.frame.size.width / 2.0
         userAvatar.layer.masksToBounds = true
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        AskMagnetCounter.sharedCounter.delegate = self
+        updateAskMagnetCount()
+        
         if let user = MMUser.currentUser() {
             self.username.text = ChatKit.Utils.displayNameForUser(user)
         }
@@ -47,6 +91,26 @@ class RearMenuViewController: UITableViewController {
             ChatKit.Utils.loadImageWithUrl(url, toImageView: self.userAvatar, placeholderImage: UIImage(named: "user_default.png"), onlyShowAfterDownload: true)
         }
     }
+    
+    //MARK: Ask Magnet Notification management
+    
+    func didUpdateAskMagnetCounter(counter : AskMagnetCounter) {
+        updateAskMagnetCount()
+    }
+    
+    func updateAskMagnetCount() {
+        if AskMagnetCounter.sharedCounter.newAskMagnetMessageCount > 0 {
+            newAskMagnetMessageLabel.text = "\(AskMagnetCounter.sharedCounter.newAskMagnetMessageCount)"
+        } else {
+            newAskMagnetMessageLabel.text = ""
+        }
+    }
+    
+    func resetAskMagnetCount() {
+        AskMagnetCounter.sharedCounter.reset()
+    }
+    
+    //MARK: Tableview overrides
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
@@ -69,6 +133,9 @@ class RearMenuViewController: UITableViewController {
     }
     
     func showAskMagnet() {
+        AskMagnetCounter.sharedCounter.notifyForNewAskMessages = false
+        resetAskMagnetCount()
+        
         let listController = MMXChatListViewController()
         listController.chooseContacts = false
         let datasource = AskMagnetDatasource()

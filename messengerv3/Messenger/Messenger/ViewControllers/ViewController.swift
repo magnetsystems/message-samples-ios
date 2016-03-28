@@ -22,11 +22,12 @@ import ChatKit
 //MARK: custom chat list controller
 
 
-class ViewController: MMXChatListViewController {
+class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
     
     //MARK: Internal Variables
     
     
+    @IBOutlet var newMessageIndicatorView : UIView?
     @IBOutlet var menuButton : UIButton?
     
     
@@ -41,6 +42,10 @@ class ViewController: MMXChatListViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        AskMagnetCounter.sharedCounter.notifyForNewAskMessages = true
+        AskMagnetCounter.sharedCounter.delegate = self
+        updateAskMagnetDisplay()
         
         if !revealLoaded {
             revealLoaded = true
@@ -63,5 +68,22 @@ class ViewController: MMXChatListViewController {
         self.delegate = HomeListDelegate()
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+        if let width = self.newMessageIndicatorView?.frame.size.width {
+            self.newMessageIndicatorView?.layer.cornerRadius = width / 2.0
+            self.newMessageIndicatorView?.layer.masksToBounds = true
+        }
+    }
+    
+    
+    func didUpdateAskMagnetCounter(counter: AskMagnetCounter) {
+        updateAskMagnetDisplay()
+    }
+    
+    func updateAskMagnetDisplay() {
+        if AskMagnetCounter.sharedCounter.newAskMagnetMessageCount > 0 {
+           self.newMessageIndicatorView?.hidden = false
+        } else {
+           self.newMessageIndicatorView?.hidden = true
+        }
     }
 }
