@@ -49,6 +49,11 @@ class ViewController: MMXChatListViewController {
                 self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
             }
         }
+        
+        if let rightItem = navigationItem.rightBarButtonItem {
+            let newRightItem = UIBarButtonItem(image: UIImage(named: "new_message@2x.png"), style: .Plain, target: rightItem.target, action: rightItem.action)
+            navigationItem.rightBarButtonItem = newRightItem
+        }
     }
     
     override func viewDidLoad() {

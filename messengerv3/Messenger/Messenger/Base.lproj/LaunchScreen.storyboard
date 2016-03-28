@@ -18,17 +18,30 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="bFE-BL-NWJ">
-                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="bFE-BL-NWJ" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="38C-bE-XsQ"/>
+                            <constraint firstItem="bFE-BL-NWJ" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="52d-jt-a4Z"/>
                             <constraint firstAttribute="trailing" secondItem="bFE-BL-NWJ" secondAttribute="trailing" id="7ja-jd-y4Y"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="bFE-BL-NWJ" secondAttribute="bottom" id="L2r-ga-nc5"/>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="bFE-BL-NWJ" secondAttribute="bottom" id="TEr-Z1-1zm"/>
                             <constraint firstItem="bFE-BL-NWJ" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="TKN-Ku-7P9"/>
                             <constraint firstItem="bFE-BL-NWJ" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="dup-Vy-ueZ"/>
+                            <constraint firstAttribute="bottom" secondItem="bFE-BL-NWJ" secondAttribute="bottom" id="uki-DL-Wwb"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="38C-bE-XsQ"/>
+                                <exclude reference="TKN-Ku-7P9"/>
+                                <exclude reference="L2r-ga-nc5"/>
+                                <exclude reference="TEr-Z1-1zm"/>
+                            </mask>
+                        </variation>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
