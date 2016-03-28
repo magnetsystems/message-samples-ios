@@ -1,0 +1,1 @@
+../../../MMX/Source/Public/MMXChannel.h
