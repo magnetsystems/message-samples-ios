@@ -120,6 +120,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
                 self.currentDetailCount += mmxChannels.count
                 self.detailResponses.appendContentsOf(detailResponses)
                 self.detailResponses = self.sort(self.detailResponses)
+                self.detailResponses = self.filterChannels(self.detailResponses)
                 self.endDataLoad()
                 DDLogVerbose("[Retrieved] channel details succeeded")
                 }, failure: { error in
@@ -150,6 +151,10 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     }
     
     internal func didSelectUserAvatar(user : MMUser) { }
+    
+    internal func filterChannels(channelDetails : [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
+        return channelDetails
+    }
     
     internal func heightForFooter(index : Int) -> CGFloat {
         return 0.0

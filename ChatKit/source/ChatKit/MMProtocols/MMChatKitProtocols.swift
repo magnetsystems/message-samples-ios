@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -68,7 +68,7 @@ import MagnetMax
     
     optional func mmxContactsCellForUser(tableView : UITableView, user : MMUser, indexPath : NSIndexPath) -> UITableViewCell?
     optional func mmxContactsCellHeightForUser(user : MMUser, indexPath : NSIndexPath) -> CGFloat
-     optional func mmxContactsControllerImageForUser(imageView : UIImageView, user : MMUser)
+    optional func mmxContactsControllerImageForUser(imageView : UIImageView, user : MMUser)
     optional func mmxContactsDidCreateCell(cell : UITableViewCell) -> Void
     optional func mmxContactsControllerRegisterCells(tableView : UITableView)
     optional func mmxContactsControllerShowsSectionIndexTitles() -> Bool
@@ -98,10 +98,10 @@ import MagnetMax
 
 @objc public protocol ChatListControllerDatasource : ControllerDatasource, MMTableViewFooterDatasource {
     
-    
     optional func mmxListCellForChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell?
     optional func mmxListDidCreateCell(cell : UITableViewCell) -> Void
     optional func mmxListCellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat
+    optional func mmxListFilterChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse]
     optional func mmxListImageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse)
     optional func mmxListRegisterCells(tableView : UITableView)
     optional func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse]
