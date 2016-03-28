@@ -18,9 +18,4 @@
 import UIKit
 import ChatKit
 
-class AskMagnetDelegate : DefaultChatListControllerDelegate {
-    
-    override func mmxListCanLeaveChannel(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) -> Bool {
-        return false
-    }
-}
+class AskMagnetDelegate : DefaultChatListControllerDelegate { }
