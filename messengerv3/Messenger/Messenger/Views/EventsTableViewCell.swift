@@ -21,7 +21,8 @@ import ChatKit
 class EventsTableViewCell: ChatListCell {
 
     @IBOutlet var eventImage : UIImageView?
-    @IBOutlet var eventLabel : UILabel?
+    @IBOutlet var eventDescriptionLabel : UILabel?
+    @IBOutlet var eventSubtitleLabel : UILabel?
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -82,15 +82,15 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
     func mmxListCellForChannel(tableView: UITableView, channel: MMXChannel, channelDetails: MMXChannelDetailResponse, indexPath: NSIndexPath) -> UITableViewCell? {
         if channelDetails.channelName.hasPrefix("global_") {
             if let cell = tableView.dequeueReusableCellWithIdentifier("EventsTableViewCell", forIndexPath: indexPath) as? EventsTableViewCell {
+                cell.eventImage?.backgroundColor = UIColor.whiteColor()
+                cell.eventDescriptionLabel?.text = channelDetails.channel.summary
+                cell.eventImage?.image = nil
+                cell.eventSubtitleLabel?.text = "\(channelDetails.subscriberCount) subscribers"
+                
                 if let summary = channelDetails.channel.summary where summary.containsString("Week") {
                     cell.eventImage?.image = UIImage(named: "bg_img_1_2.png")
-                    cell.eventLabel?.text = ""
-                } else {
-                    cell.eventImage?.image = nil
-                    cell.eventImage?.backgroundColor = UIColor(red: 48/255.0, green: 195/255.0, blue: 114/255.0, alpha: 1.0)
-                    cell.eventLabel?.text = channelDetails.channel.summary
-                    cell.eventLabel?.textColor = UIColor.whiteColor()
                 }
+                
                 cell.detailResponse = channelDetails
                 
                 return cell

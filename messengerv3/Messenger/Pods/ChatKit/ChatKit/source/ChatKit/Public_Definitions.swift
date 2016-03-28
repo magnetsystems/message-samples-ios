@@ -12,6 +12,8 @@ public protocol Define_MMXChatListViewController : class {
     //MARK: Variables
     
     var canSearch : Bool?{get set}
+    var channelDetailsMessagesLimit : Int{get set}
+    var channelDetailsSubscribersLimit : Int{get set}
     var chooseContacts : Bool{get set}
     var datasource : ChatListControllerDatasource?{get set}
     var delegate : ChatListControllerDelegate?{get set}
