@@ -27,8 +27,8 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
     //MARK: Internal Variables
     
     
-    @IBOutlet var newMessageIndicatorView : UIView?
     @IBOutlet var menuButton : UIButton?
+    var menuAlertImageView : UIImageView?
     
     
     //MARK: Private Variables
@@ -68,9 +68,13 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
         self.delegate = HomeListDelegate()
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
-        if let width = self.newMessageIndicatorView?.frame.size.width {
-            self.newMessageIndicatorView?.layer.cornerRadius = width / 2.0
-            self.newMessageIndicatorView?.layer.masksToBounds = true
+        
+        if let width = self.menuButton?.bounds.size.width {
+            let size : CGFloat = 18.0
+            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
+            imageView.transform = CGAffineTransformMakeTranslation(CGFloat(width - size + 4.0), 4.0)
+            menuButton?.addSubview(imageView)
+            menuAlertImageView = imageView
         }
     }
     
@@ -81,9 +85,9 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
     
     func updateAskMagnetDisplay() {
         if AskMagnetCounter.sharedCounter.newAskMagnetMessageCount > 0 {
-           self.newMessageIndicatorView?.hidden = false
+            self.menuAlertImageView?.image = UIImage(named: "icon_alert")
         } else {
-           self.newMessageIndicatorView?.hidden = true
+            self.menuAlertImageView?.image = nil
         }
     }
 }

@@ -67,14 +67,14 @@ public class ChannelManager {
     }
     
     public func getLastMessageForChannel(channel: MMXChannel) -> String? {
-        let name = nameForChannel(channel)
+        let name = identifierForChannel(channel)
         
         return MMUser.currentUser()?.extras["\(name)_last_message_id"]
     }
     
     public func getLastViewTimeForChannel(channel: MMXChannel) -> NSDate? {
         
-        let name = nameForChannel(channel)
+        let name = identifierForChannel(channel)
         
         if let string = MMUser.currentUser()?.extras[name] {
             if let interval : NSTimeInterval = NSTimeInterval(string)  {
@@ -85,7 +85,7 @@ public class ChannelManager {
         return nil
     }
     
-    public func nameForChannel(channel: MMXChannel) -> String {
+    public func identifierForChannel(channel: MMXChannel) -> String {
         let key = channel.channelID
         
         return key
@@ -96,7 +96,7 @@ public class ChannelManager {
     }
     
     public func saveLastViewTimeForChannel(channel: MMXChannel, message : MMXMessage?, date : NSDate) {
-        let name = nameForChannel(channel)
+        let name = identifierForChannel(channel)
         
         if let user = MMUser.currentUser() {
             user.extras[name] = "\(date.timeIntervalSince1970)"
@@ -134,7 +134,7 @@ public class ChannelManager {
         let channel = mmxMessage.channel
         
         let observers : [ChannelObserver] = channelObservers.filter({
-            if $0.channel?.name.lowercaseString == channel?.name.lowercaseString || $0.channel == nil  {
+            if $0.channel == channel || $0.channel == nil  {
                 return true
             }
             
@@ -167,7 +167,7 @@ public class ChannelManager {
     
     private func removeChannelMessageObserver(object : AnyObject, channel : MMXChannel) {
         channelObservers = channelObservers.filter({
-            if ($0 !== object || $0.channel?.name != channel.name) && $0.object != nil {
+            if ($0 !== object || $0.channel != channel) && $0.object != nil {
                 return true
             }
             
