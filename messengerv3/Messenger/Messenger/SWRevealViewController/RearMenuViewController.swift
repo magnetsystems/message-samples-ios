@@ -74,7 +74,10 @@ class RearMenuViewController: UITableViewController, AskMagnetCounterDelegate {
         
         userAvatar.layer.cornerRadius = userAvatar.frame.size.width / 2.0
         userAvatar.layer.masksToBounds = true
-        
+        self.version.text = ""
+        if let version = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as? String {
+            self.version.text = "v\(version)"
+        }
     }
     
     override func viewWillAppear(animated: Bool) {

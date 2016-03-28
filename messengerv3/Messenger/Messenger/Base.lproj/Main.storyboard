@@ -55,14 +55,14 @@
                                                     </constraints>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_info.png" translatesAutoresizingMaskIntoConstraints="NO" id="fH6-cb-R8j">
-                                                    <rect key="frame" x="554" y="20" width="30" height="30"/>
+                                                    <rect key="frame" x="562" y="24" width="22" height="22"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="EXj-6b-JIg"/>
-                                                        <constraint firstAttribute="width" constant="30" id="eVT-0i-STB"/>
+                                                        <constraint firstAttribute="height" constant="22" id="EXj-6b-JIg"/>
+                                                        <constraint firstAttribute="width" constant="22" id="eVT-0i-STB"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3i2-ss-jBT">
-                                                    <rect key="frame" x="65" y="35.5" width="475" height="0.0"/>
+                                                    <rect key="frame" x="65" y="35.5" width="483" height="0.0"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
