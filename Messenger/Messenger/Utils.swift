@@ -149,7 +149,7 @@ class Utils: NSObject {
         }
         
         guard let imageUrl = url else {
-            print("no url content data")
+//            print("no url content data")
             objc_sync_enter(self.downloadObjects)
             self.downloadObjects.removeValueForKey("\(toImageView.hashValue)")
             objc_sync_exit(self.downloadObjects)
@@ -192,7 +192,7 @@ class Utils: NSObject {
             }
             }) { (operation, error) -> Void in
                 pushImageToImageView(placeholderImage, url: url)
-                print("No Image")
+//                print("No Image")
         }
         requestOperation.start()
     }

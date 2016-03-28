@@ -22,7 +22,6 @@
 #import "MMXClient_Private.h"
 #import "MMXChannel_Private.h"
 #import "MMXPubSubMessage_Private.h"
-#import "MMXDataModel.h"
 #import "MMXInternalMessageAdaptor_Private.h"
 #import "MMXUserID_Private.h"
 #import "MMXMessageOptions.h"
@@ -139,15 +138,10 @@ static int kATTACHMENTCONTEXT;
         msg.messageID = messageID;
         self.messageID = messageID;
         if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-            if ([MMUser currentUser]) {
-                [self saveForOfflineAsPubSub:msg];
-                return messageID;
-            } else {
-                if (failure) {
-                    failure([MMXMessage notNotLoggedInAndNoUserError]);
-                }
-                return nil;
+            if (failure) {
+                failure([MMXMessage notNotLoggedInAndNoUserError]);
             }
+            return nil;
         }
         // Handle attachments
         if (self.mutableAttachments.count > 0) {
@@ -213,15 +207,10 @@ static int kATTACHMENTCONTEXT;
         NSString *messageID = [[MMXClient sharedClient] generateMessageID];
         self.messageID = messageID;
         if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
-            if ([MMUser currentUser]) {
-                [self saveForOfflineAsInAppMessage];
-                return messageID;
-            } else {
-                if (failure) {
-                    failure([MMXMessage notNotLoggedInAndNoUserError]);
-                }
-                return nil;
+            if (failure) {
+                failure([MMXMessage notNotLoggedInAndNoUserError]);
             }
+            return nil;
         }
         NSError *error;
         [MMXMessage validateMessageRecipients:self.recipients content:self.messageContent error:&error];
@@ -373,23 +362,8 @@ static int kATTACHMENTCONTEXT;
     }
 }
 
-#pragma mark - Offline
-
-- (void)saveForOfflineAsPubSub:(MMXPubSubMessage *)message {
-	[[MMXDataModel sharedDataModel] addOutboxEntryWithPubSubMessage:message username:[MMUser currentUser].userName];
-}
-
-- (void)saveForOfflineAsInAppMessage {
-	MMXInternalMessageAdaptor *message = [MMXInternalMessageAdaptor new];
-	message.senderUserID = [MMXUserID userIDFromMMUser:self.sender];
-	message.messageID = self.messageID;
-	message.metaData = self.messageContent;
-	message.recipients = [self.recipients allObjects];
-	
-	[[MMXDataModel sharedDataModel] addOutboxEntryWithMessage:message options:[MMXMessageOptions new] username:[MMUser currentUser].userName];
-}
-
 #pragma mark - Errors
+
 + (NSError *)notNotLoggedInAndNoUserError {
 	NSError * error = [MMXClient errorWithTitle:@"Forbidden" message:@"You are not logged in and there is no current user." code:403];
 	return error;
@@ -431,6 +405,16 @@ static int kATTACHMENTCONTEXT;
 		return NO;
 	}
 	return YES;
+}
+
+#pragma mark - Equality
+
+- (BOOL)isEqual:(MMXMessage *)object {
+    return [self.messageID isEqualToString:object.messageID];
+}
+
+- (NSUInteger)hash {
+    return [self.messageID hash];
 }
 
 #pragma mark - Overriden getters
