@@ -32,6 +32,8 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
             updateSearchBar()
         }
     }
+    public var channelDetailsMessagesLimit : Int = 100
+    public var channelDetailsSubscribersLimit : Int = 10
     
     //searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
     //to hide set canSearch = false
@@ -178,7 +180,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
             if details.channel.channelID == channel.channelID {
                 hasChannel = true
                 let channelID = details.channel.channelID
-                MMXChannel.channelDetails([channel], numberOfMessages: 10, numberOfSubcribers: 10, success: { responses in
+                MMXChannel.channelDetails([channel], numberOfMessages: channelDetailsMessagesLimit, numberOfSubcribers: channelDetailsSubscribersLimit, success: { responses in
                     if let channelDetail = responses.first {
                         let oldChannelDetail = self.detailResponses[i]
                         if channelDetail.channel.channelID == channelID && oldChannelDetail.channel.channelID ==  channelID {
