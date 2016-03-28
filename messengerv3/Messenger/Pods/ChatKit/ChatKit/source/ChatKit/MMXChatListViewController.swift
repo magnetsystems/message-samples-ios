@@ -198,6 +198,14 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         self.delegate?.mmxAvatarDidClick?(user)
     }
     
+    override func filterChannels(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
+        if let filtered = self.datasource?.mmxListFilterChannelDetails {
+            return filtered(channelDetails)
+        } else {
+            return super.filterChannels(channelDetails)
+        }
+    }
+    
     override internal func imageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse) {
         if let imgForDetails = self.datasource?.mmxListImageForChannelDetails {
             imgForDetails(imageView, channelDetails: channelDetails)
