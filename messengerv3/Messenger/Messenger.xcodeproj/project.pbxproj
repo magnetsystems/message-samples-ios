@@ -12,6 +12,7 @@
 		8D090A111CA4AA9200FA82AE /* AskMagnetTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D090A0F1CA4AA9200FA82AE /* AskMagnetTableViewCell.xib */; };
 		8D090A151CA4ADD400FA82AE /* AskMagnetDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D090A141CA4ADD400FA82AE /* AskMagnetDatasource.swift */; };
 		8D090A181CA4B51800FA82AE /* AskMagnetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D090A171CA4B51800FA82AE /* AskMagnetDelegate.swift */; };
+		8D4A95101CA6137A00C99B7E /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A950F1CA6137A00C99B7E /* UserProfileViewController.swift */; };
 		8D701CD81CA46362004B98A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D701CD71CA46362004B98A1 /* AppDelegate.swift */; };
 		8D701CDD1CA46362004B98A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D701CDB1CA46362004B98A1 /* Main.storyboard */; };
 		8D701CDF1CA46362004B98A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D701CDE1CA46362004B98A1 /* Assets.xcassets */; };
@@ -78,6 +79,7 @@
 		8D090A0F1CA4AA9200FA82AE /* AskMagnetTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AskMagnetTableViewCell.xib; sourceTree = "<group>"; };
 		8D090A141CA4ADD400FA82AE /* AskMagnetDatasource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AskMagnetDatasource.swift; path = AskMagnet/datasource/AskMagnetDatasource.swift; sourceTree = "<group>"; };
 		8D090A171CA4B51800FA82AE /* AskMagnetDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AskMagnetDelegate.swift; path = AskMagnet/delegate/AskMagnetDelegate.swift; sourceTree = "<group>"; };
+		8D4A950F1CA6137A00C99B7E /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		8D701CD41CA46361004B98A1 /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D701CD71CA46362004B98A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D701CDC1CA46362004B98A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				8D701D551CA46B9F004B98A1 /* BaseViewController.swift */,
 				8D701D211CA463E0004B98A1 /* RegisterViewController.swift */,
 				8D701D221CA463E0004B98A1 /* SignInViewController.swift */,
+				8D4A950F1CA6137A00C99B7E /* UserProfileViewController.swift */,
 				8D701D231CA463E0004B98A1 /* ViewController.swift */,
 			);
 			path = ViewControllers;
@@ -594,6 +597,7 @@
 				8D701D611CA49ED5004B98A1 /* EventsTableViewCell.swift in Sources */,
 				8D701D4F1CA463E0004B98A1 /* RegisterViewController.swift in Sources */,
 				8D701D5D1CA49E65004B98A1 /* HomeListDatasource.swift in Sources */,
+				8D4A95101CA6137A00C99B7E /* UserProfileViewController.swift in Sources */,
 				8D701D511CA463E0004B98A1 /* ViewController.swift in Sources */,
 				8D090A181CA4B51800FA82AE /* AskMagnetDelegate.swift in Sources */,
 				8DA864BD1CA4BC2A00AE083B /* Utils.swift in Sources */,

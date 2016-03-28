@@ -30,6 +30,24 @@ class RearMenuViewController: UITableViewController {
     @IBOutlet weak var version: UILabel!
     
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        userAvatar.layer.cornerRadius = userAvatar.frame.size.width / 2.0
+        userAvatar.layer.masksToBounds = true
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if let user = MMUser.currentUser() {
+            self.username.text = ChatKit.Utils.displayNameForUser(user)
+        }
+        
+        if let url = MMUser.currentUser()?.avatarURL() {
+            ChatKit.Utils.loadImageWithUrl(url, toImageView: self.userAvatar, placeholderImage: UIImage(named: "user_default.png"), onlyShowAfterDownload: true)
+        }
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if indexPath.row == 1 {
@@ -41,6 +59,12 @@ class RearMenuViewController: UITableViewController {
             showAskMagnet()
         } else if indexPath.row == 3 {
             signOut()
+        } else {
+            let controller = self.storyboard?.instantiateViewControllerWithIdentifier(vc_id_UserProfile)
+            if let vC = controller, let nav = self.revealViewController().frontViewController as? UINavigationController {
+                nav.pushViewController(vC, animated: true)
+                self.revealViewController().setFrontViewPosition(.Left, animated: true)
+            }
         }
     }
     

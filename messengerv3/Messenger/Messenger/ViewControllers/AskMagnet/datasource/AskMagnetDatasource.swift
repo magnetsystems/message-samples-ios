@@ -32,6 +32,19 @@ class AskMagnetDatasource : DefaultChatListControllerDatasource {
        return channel.name.hasPrefix(kAskMagnetChannel) && channel.ownerUserID != MMUser.currentUser()?.userID
     }
     
+    func mmxListCellForChannel(tableView: UITableView, channel: MMXChannel, channelDetails: MMXChannelDetailResponse, indexPath: NSIndexPath) -> UITableViewCell? {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("ChatListCell", forIndexPath: indexPath) as! ChatListCell
+        cell.detailResponse = channelDetails
+        if let imageView = cell.avatarView {
+            self.mmxListImageForChannelDetails(imageView, channelDetails: channelDetails)
+        }
+        let subscribers : [MMUserProfile] = channelDetails.subscribers.filter({ $0.userId == channel.ownerUserID })
+        cell.lblSubscribers?.text = subscribers.first?.displayName
+        
+        return cell
+    }
+    
     func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
         let filteredDetails = channelDetails.filter({ $0.publishedItemCount > 0 })
         let sortedDetails = filteredDetails.sort({ (detail1, detail2) -> Bool in
