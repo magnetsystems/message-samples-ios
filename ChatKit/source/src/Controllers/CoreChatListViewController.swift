@@ -32,8 +32,8 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
             updateSearchBar()
         }
     }
-    public var channelDetailsMessagesLimit : Int = 100
-    public var channelDetailsSubscribersLimit : Int = 10
+    public var channelDetailsMessagesLimit : Int = 10
+    public var channelDetailsSubscribersLimit : Int = 50
     
     //searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
     //to hide set canSearch = false
@@ -116,7 +116,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         if mmxChannels.count > 0 {
             self.beginRefreshing()
             // Get all channels the current user is subscribed to
-            MMXChannel.channelDetails(mmxChannels, numberOfMessages: 10, numberOfSubcribers: 10, success: { detailResponses in
+            MMXChannel.channelDetails(mmxChannels, numberOfMessages: channelDetailsMessagesLimit, numberOfSubcribers: channelDetailsSubscribersLimit, success: { detailResponses in
                 self.currentDetailCount += mmxChannels.count
                 self.detailResponses.appendContentsOf(detailResponses)
                 self.detailResponses = self.sort(self.detailResponses)
