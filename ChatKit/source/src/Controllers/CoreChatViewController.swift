@@ -148,9 +148,7 @@ public class CoreChatViewController: MMJSQViewController {
                 if message.isMediaMessage() {
                     message.mediaCompletionBlock = { [weak self, weak message] () in
                         if let weakSelf = self, let weakMessage = message {
-                            if let index = weakSelf.messages.indexOf(weakMessage) {
-                                weakSelf.collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
-                            }
+                            weakSelf.collectionView.reloadData()
                         }
                     }
                 }
