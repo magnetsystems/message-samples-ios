@@ -59,9 +59,6 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
             let newRightItem = UIBarButtonItem(image: UIImage(named: "new_message@2x.png"), style: .Plain, target: rightItem.target, action: rightItem.action)
             navigationItem.rightBarButtonItem = newRightItem
         }
-        
-        self.searchBar?.placeholder = "Search messages by user"
-        self.canSearch = true
     }
     
     override func viewDidLoad() {

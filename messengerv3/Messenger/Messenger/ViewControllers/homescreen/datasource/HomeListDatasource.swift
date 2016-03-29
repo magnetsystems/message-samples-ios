@@ -78,7 +78,7 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
         }
         return 80.0
     }
-    
+
     func mmxListCellForChannel(tableView: UITableView, channel: MMXChannel, channelDetails: MMXChannelDetailResponse, indexPath: NSIndexPath) -> UITableViewCell? {
         if channelDetails.channelName.hasPrefix("global_") {
             if let cell = tableView.dequeueReusableCellWithIdentifier("EventsTableViewCell", forIndexPath: indexPath) as? EventsTableViewCell {
@@ -182,6 +182,8 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
     }
     
     override func mmxControllerLoadMore(searchText: String?, offset: Int) {
+        self.askMagnet = nil
+        self.eventChannels = []
         if offset == 0 {
             self.loadEventChannels()
             self.loadAskMagnetChannel()
