@@ -1,9 +1,7 @@
 //  MessengerUITests.swift
 //  MessengerUITests
-//
 //  Created by agordyman on 3/14/16.
 //  Copyright © 2016 Magnet Systems, Inc. All rights reserved.
-//
 
 import XCTest
 
@@ -13,18 +11,23 @@ class MessengerUITests: XCTestCase {
     let password = "Temp1234%"
     let passwordagain = "Temp1234%"
     let lName = "test"
+    let Group = "Group"
     
-    let userName = "test62@automation.gmail.com"
-    let fName = "AutomationTestUser62"
-    let fullName = "AutomationTestUser62 test"
+    let userName = "test5@automation.gmail.com"
+    let fName = "AutomationTestUser5"
+    let fullName = "AutomationTestUser5 test"
     
-    let userNameTwo = "test63@automation.gmail.com"
-    let fNameTwo = "AutomationTestUser63"
-    let fullNameTwo = "AutomationTestUser63 test"
+    let userNameTwo = "test6@automation.gmail.com"
+    let fNameTwo = "AutomationTestUser6"
+    let fullNameTwo = "AutomationTestUser6 test"
     
-    let userNameThree = "test64@automation.gmail.com"
-    let fNameThree = "AutomationTestUser64"
-    let fullNameThree = "AutomationTestUser64 test"
+    let userNameThree = "test7@automation.gmail.com"
+    let fNameThree = "AutomationTestUser7"
+    let fullNameThree = "AutomationTestUser7 test"
+    
+    let userNameFour = "test8@automation.gmail.com"
+    let fNameFour = "AutomationTestUser8"
+    let fullNameFour = "AutomationTestUser8 test"
     
     override func setUp() {
         super.setUp()
@@ -169,27 +172,72 @@ class MessengerUITests: XCTestCase {
         self.delay()
     }
     
-    //Help mark - Create 1-1 chat
-    func Create1_1chat(fullName:String!, fullNameTwo:String!){
+    //Help mark - Send a few photos
+    func SendAFewPhotos()
+    {
         let app = XCUIApplication()
-        let navBar = XCUIApplication().navigationBars[fullName]
-        let newMessage = navBar.buttons["new message"]
-        newMessage.tap()
-        
-        let tablesQuery = XCUIApplication().tables
-        tablesQuery.staticTexts[fullNameTwo].tap()
-        
-        let navBarTwo = XCUIApplication().navigationBars["New message"]
-        let buttonNext = navBarTwo.buttons["Next"]
-        XCTAssert(buttonNext.exists)
-        buttonNext.tap()
-        
         let element = app.otherElements.containingType(.NavigationBar, identifier:"SWRevealView").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.toolbars.childrenMatchingType(.Other).element
         element.childrenMatchingType(.TextView).element.tap()
         element.childrenMatchingType(.Other).elementBoundByIndex(0).childrenMatchingType(.Button).element.tap()
         app.sheets["Media Messages"].collectionViews.buttons["Photo Library"].tap()
         app.tables.buttons["Moments"].tap()
         app.collectionViews["PhotosGridView"].childrenMatchingType(.Cell).elementBoundByIndex(1).tap()
+        self.delay()
+        
+        let button = app.otherElements.containingType(.NavigationBar, identifier:"SWRevealView").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.toolbars.childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(0).childrenMatchingType(.Button).element
+        let photoLibraryButton = app.sheets["Media Messages"].collectionViews.buttons["Photo Library"]
+        button.tap()
+        photoLibraryButton.tap()
+        app.tables.buttons["Moments"].tap()
+        app.collectionViews["PhotosGridView"].childrenMatchingType(.Cell).elementBoundByIndex(2).tap()
+        self.delay()
+        
+        button.tap()
+        photoLibraryButton.tap()
+        app.navigationBars["Photos"].buttons["Cancel"].tap()
+        button.tap()
+        photoLibraryButton.tap()
+        app.tables.buttons["Moments"].tap()
+        app.collectionViews["PhotosGridView"].childrenMatchingType(.Cell).elementBoundByIndex(3).tap()
+        self.delay()
+    }
+    
+    //Help mark - check created channel between users
+    func CheckCreatedChannel(userNameTwo:String!, password:String!, fullName:String!)
+    {
+        /* login user2 */
+        let app = XCUIApplication()
+        self.login(userNameTwo, password: password)
+        
+        /* check created channel*/
+        self.delay()
+        self.delay()
+        
+        XCTAssert(app.tables.staticTexts[fullName].exists)
+        app.tables.staticTexts[fullName].tap()
+        
+        self.delay()
+    }
+    
+    //Help mark - Asserts
+    func Asserts(fNameTwo:String!, fullName:String!, fullNameTwo:String)
+    {
+        /* Check channel details */
+        let app = XCUIApplication()
+        let navBarDetail = app.navigationBars[fNameTwo]
+        let detailbutton = navBarDetail.buttons["Detail"]
+        
+        XCTAssert(navBarDetail.buttons["Back"].exists)
+        XCTAssert(detailbutton.exists)
+        XCTAssertEqual(navBarDetail.staticTexts[fNameTwo].label, fNameTwo)
+        detailbutton.tap()
+        
+        self.delay()
+        let tablesQueryTwo = XCUIApplication().tables
+        XCTAssert(app.navigationBars["Details"].exists)
+        //       XCTAssert(app.navigationBars["Details"].buttons[fNameTwo].exists)
+        XCTAssertEqual(tablesQueryTwo.staticTexts[fullName].label, fullName)
+        XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameTwo].label, fullNameTwo)
         self.delay()
     }
     
@@ -371,14 +419,20 @@ class MessengerUITests: XCTestCase {
         /* Register User2 */
         self.registration(userNameTwo, password: password, passwordagain: passwordagain, fName: fNameTwo, lName: lName)
         
-        /*LogOut*/
+        /* LogOut */
         self.logout_after_registration(fullNameTwo)
         
         /* Register User3 */
         self.registration(userNameThree, password: password, passwordagain: passwordagain, fName: fNameThree, lName: lName)
         
-        /*LogOut*/
+        /* LogOut */
         self.logout_after_registration(fullNameThree)
+        
+        /* Register User4 */
+        self.registration(userNameFour, password: password, passwordagain: passwordagain, fName: fNameFour, lName: lName)
+        
+        /* LogOut */
+        self.logout_after_registration(fullNameFour)
     }
     
     //Test14-15 Positive scenarios - Create a new 1-1 chat, check the channel details page
@@ -389,44 +443,24 @@ class MessengerUITests: XCTestCase {
         self.login(userName, password: password)
         
         /* Create a new 1-1 chat */
-        self.Create1_1chat(fullName, fullNameTwo: fullNameTwo)
+        let navBar = app.navigationBars[fullName]
+        let newMessage = navBar.buttons["new message"]
+        newMessage.tap()
         
-        /* senf a couple photos */
-        let button = app.otherElements.containingType(.NavigationBar, identifier:"SWRevealView").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.toolbars.childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(0).childrenMatchingType(.Button).element
-        let photoLibraryButton = app.sheets["Media Messages"].collectionViews.buttons["Photo Library"]
-        button.tap()
-        photoLibraryButton.tap()
-        app.tables.buttons["Moments"].tap()
-        app.collectionViews["PhotosGridView"].childrenMatchingType(.Cell).elementBoundByIndex(2).tap()
+        let tablesQuery = XCUIApplication().tables
+        tablesQuery.staticTexts[fullNameTwo].tap()
         
-        self.delay()
+        let navBarTwo = app.navigationBars["New message"]
+        let buttonNext = navBarTwo.buttons["Next"]
+        XCTAssert(buttonNext.exists)
+        buttonNext.tap()
         
-        button.tap()
-        photoLibraryButton.tap()
-        app.navigationBars["Photos"].buttons["Cancel"].tap()
-        button.tap()
-        photoLibraryButton.tap()
-        app.tables.buttons["Moments"].tap()
-        app.collectionViews["PhotosGridView"].childrenMatchingType(.Cell).elementBoundByIndex(3).tap()
-        
-        self.delay()
+        self.SendAFewPhotos()
         
         /* Check channel details */
-        let navBarDetail = app.navigationBars[fNameTwo]
-        let detailbutton = navBarDetail.buttons["Detail"]
-        XCTAssert(navBarDetail.buttons["Back"].exists)
-        XCTAssert(detailbutton.exists)
-        XCTAssertEqual(navBarDetail.staticTexts[fNameTwo].label, fNameTwo)
-        detailbutton.tap()
-        
-        self.delay()
-        let tablesQueryTwo = XCUIApplication().tables
-        XCTAssert(app.navigationBars["Details"].exists)
-        XCTAssert(app.navigationBars["Details"].buttons[fNameTwo].exists)
-        XCTAssertEqual(tablesQueryTwo.staticTexts[fullName].label, fullName)
-        XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameTwo].label, fullNameTwo)
+        let tablesQueryTwo = app.tables
+        self.Asserts(fNameTwo, fullName: fullName, fullNameTwo: fullNameTwo)
         XCTAssertEqual(tablesQueryTwo.staticTexts["+ Add Contact"].label, "+ Add Contact")
-        self.delay()
     }
     
     //Test16 Positive scenario - Search for existing chat by user
@@ -449,33 +483,12 @@ class MessengerUITests: XCTestCase {
     //Test17-18 Positive scenarios - check created channel between user1 & user2 and check channel details by user2
     func test17_18CheckCreatedChannelAndDetails()
     {
-        /* login user2 */
         let app = XCUIApplication()
-        self.login(userNameTwo, password: password)
-        
-        /* check created channel*/
-        self.delay()
-        self.delay()
-        
-        XCTAssert(app.tables.staticTexts[fullName].exists)
-        app.tables.staticTexts[fullName].tap()
-        
-        self.delay()
+        self.CheckCreatedChannel(userNameTwo, password: password, fullName: fullName)
         
         /* check channel details */
-        
-        let navbar = app.navigationBars[fName]
-        let detail = navbar.buttons["Detail"]
-        XCTAssertEqual(navbar.staticTexts[fName].label, fName)
-        detail.tap()
-        
-        XCTAssert(app.navigationBars["Details"].exists)
-        XCTAssert(app.navigationBars["Details"].buttons[fName].exists)
+        self.Asserts(fName, fullName: fullNameTwo, fullNameTwo: fullName)
         XCTAssert(app.navigationBars["Details"].buttons["Leave"].exists)
-        XCTAssertEqual(app.tables.staticTexts[fullNameTwo].label, fullNameTwo)
-        XCTAssertEqual(app.tables.staticTexts[fullName].label, fullName)
-        
-        self.delay()
     }
     
     //Test19 Positive scenario - user2 leaves the created chat by user1
@@ -543,51 +556,81 @@ class MessengerUITests: XCTestCase {
         XCTAssert(buttonNext.exists)
         buttonNext.tap()
         
-        /* send a few photos */
-        let element = app.otherElements.containingType(.NavigationBar, identifier:"SWRevealView").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.toolbars.childrenMatchingType(.Other).element
-        element.childrenMatchingType(.TextView).element.tap()
-        element.childrenMatchingType(.Other).elementBoundByIndex(0).childrenMatchingType(.Button).element.tap()
-        app.sheets["Media Messages"].collectionViews.buttons["Photo Library"].tap()
-        app.tables.buttons["Moments"].tap()
-        app.collectionViews["PhotosGridView"].childrenMatchingType(.Cell).elementBoundByIndex(1).tap()
-        self.delay()
-        
-        let button = app.otherElements.containingType(.NavigationBar, identifier:"SWRevealView").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.toolbars.childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(0).childrenMatchingType(.Button).element
-        let photoLibraryButton = app.sheets["Media Messages"].collectionViews.buttons["Photo Library"]
-        button.tap()
-        photoLibraryButton.tap()
-        app.tables.buttons["Moments"].tap()
-        app.collectionViews["PhotosGridView"].childrenMatchingType(.Cell).elementBoundByIndex(2).tap()
-        self.delay()
-        
-        button.tap()
-        photoLibraryButton.tap()
-        app.navigationBars["Photos"].buttons["Cancel"].tap()
-        button.tap()
-        photoLibraryButton.tap()
-        app.tables.buttons["Moments"].tap()
-        app.collectionViews["PhotosGridView"].childrenMatchingType(.Cell).elementBoundByIndex(3).tap()
-        self.delay()
+        self.SendAFewPhotos()
         
         /* Check channel details */
-        let navBarDetail = app.navigationBars["Group"]
-        let detailbutton = navBarDetail.buttons["Detail"]
-        XCTAssert(navBarDetail.buttons["Back"].exists)
-        XCTAssert(detailbutton.exists)
-        XCTAssertEqual(navBarDetail.staticTexts["Group"].label, "Group")
-        detailbutton.tap()
-        self.delay()
+        self.Asserts(Group, fullName: fullName, fullNameTwo: fullNameTwo)
         
-        let tablesQueryTwo = XCUIApplication().tables
-        XCTAssert(app.navigationBars["Details"].exists)
-        XCTAssert(app.navigationBars["Details"].buttons["Group"].exists)
-        XCTAssertEqual(tablesQueryTwo.staticTexts[fullName].label, fullName)
-        XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameTwo].label, fullNameTwo)
+        let tablesQueryTwo = app.tables
         XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameThree].label, fullNameThree)
         XCTAssertEqual(tablesQueryTwo.staticTexts["+ Add Contact"].label, "+ Add Contact")
         self.delay()
     }
+    
+    //Test23-24 Positive scenarios - check created multiple 1-2 chat and check channel details by user2
+    func test23_24CheckCreatedChannelAndDetailsUser2()
+    {
+        /* check created channel */
+        let app = XCUIApplication()
+        let tablesQueryTwo = app.tables
+        let UserTwoSees = fullName + ", " + fullNameThree
+        self.CheckCreatedChannel(userNameTwo, password: password, fullName: UserTwoSees)
+        
+        /* check channel details */
+        self.Asserts(Group, fullName: fullNameTwo, fullNameTwo: fullName)
+        XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameThree].label, fullNameThree)
+        XCTAssert(app.navigationBars["Details"].buttons["Leave"].exists)
+    }
+    
+    //Test24-25 Positive scenarios - check created multiple 1-2 chat and check channel details by user3
+    func test24_25CheckCreatedChannelAndDetailsUser3()
+    {
+        /* check created channel */
+        let app = XCUIApplication()
+        let tablesQueryTwo = app.tables
+        let UserThreeSees = fullName + ", " + fullNameTwo
+        self.CheckCreatedChannel(userNameThree, password: password, fullName: UserThreeSees)
+        
+        /* check channel details */
+        self.Asserts(Group, fullName: fullNameThree, fullNameTwo: fullName)
+        XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameThree].label, fullNameThree)
+        XCTAssert(app.navigationBars["Details"].buttons["Leave"].exists)
+    }
+    
+    //Test26-27 Positive scenarios - user1 (initiator) adds user4 to the created multiple 1-2 chat and check channel details (user4 should be successfully added and displayed)
+    func test26_27User1InitiatorAddsOneMoreUser()
+    {
+        /* user1 checks created channel and then adds user4*/
+        let app = XCUIApplication()
+        let UserOneSees = fullNameTwo + ", " + fullNameThree
+        self.CheckCreatedChannel(userName, password: password, fullName: UserOneSees)
+        
+        let navBarDetail = app.navigationBars[Group]
+        let detailbutton = navBarDetail.buttons["Detail"]
+        detailbutton.tap()
+        self.delay()
+        
+        let tablesQuery = XCUIApplication().tables
+        tablesQuery.staticTexts["+ Add Contact"].tap()
+        tablesQuery.staticTexts[fullNameFour].tap()
+        
+        let navBarTwo = app.navigationBars["Add a contact"]
+        let buttonNext = navBarTwo.buttons["Next"]
+        XCTAssert(buttonNext.exists)
+        buttonNext.tap()
+        
+        self.delay()
+        
+        /* Check channel details */
+        detailbutton.tap()
+        
+        self.delay()
+        XCTAssert(app.navigationBars["Details"].exists)
+        //        XCTAssert(app.navigationBars["Details"].buttons[fNameTwo].exists)
+        XCTAssertEqual(tablesQuery.staticTexts[fullName].label, fullName)
+        XCTAssertEqual(tablesQuery.staticTexts[fullNameTwo].label, fullNameTwo)
+        XCTAssertEqual(tablesQuery.staticTexts[fullNameFour].label, fullNameFour)
+        self.delay()
+    }
+    
 }
-
-
-
