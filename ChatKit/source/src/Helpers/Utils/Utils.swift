@@ -88,38 +88,35 @@ public class Utils: NSObject {
     //MARK: Image Loading
     
     
-    public static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?) {
-        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, completion: nil)
+    public static func loadImageWithUrl(url : NSURL, toImageView : UIImageView, placeholderImage:UIImage?) {
+        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, defaultImage: placeholderImage)
     }
     
-    public static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?,  onlyShowAfterDownload:Bool) {
-        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, onlyShowAfterDownload:onlyShowAfterDownload, completion: nil)
+    public static func loadImageWithUrl(url : NSURL, toImageView: UIImageView, placeholderImage:UIImage?,  defaultImage:UIImage?) {
+        imageWithUrl(url, toImageView: toImageView, placeholderImage : placeholderImage, defaultImage : defaultImage, completion : nil)
     }
     
-    public static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, completion : ((image : UIImage?)->Void)?) {
-        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage,  onlyShowAfterDownload: placeholderImage == nil, completion: completion)
+    public static func loadImageWithUrl(url : NSURL, completion : ((image : UIImage?)->Void)) {
+        imageWithUrl(url, toImageView: nil, placeholderImage : nil, defaultImage : nil, completion : completion)
     }
     
-    public static func loadImageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?,  onlyShowAfterDownload:Bool, completion : ((image : UIImage?)->Void)?) {
-        imageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage,  onlyShowAfterDownload: onlyShowAfterDownload, completion: completion)
+    public static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage : UIImage?) {
+        if let url = user.avatarURL() {
+            loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage)
+        }
     }
     
-    public static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage:UIImage?) {
-        
-        loadImageWithUrl(user.avatarURL(), toImageView: toImageView, placeholderImage: placeholderImage)
-    }
-    
-    public static func loadUserAvatarByUserID(userID : String, toImageView: UIImageView, placeholderImage:UIImage?) {
+    public static func loadUserAvatarByUserID(userID : String, toImageView : UIImageView, placeholderImage : UIImage?) {
         
         toImageView.image = placeholderImage
         
         MMUser.usersWithUserIDs([userID], success: { (users) -> Void in
             let user = users.first
-            if (user != nil) {
-                Utils.loadUserAvatar(user!, toImageView: toImageView, placeholderImage: placeholderImage)
+            if let u = user {
+                Utils.loadUserAvatar(u, toImageView: toImageView, placeholderImage: placeholderImage)
             }
         }) { (error) -> Void in
-            //print("error getting users \(error)")
+            DDLogError("[Failed to load user] - \(error.localizedDescription)")
         }
     }
     
@@ -217,91 +214,92 @@ public class Utils: NSObject {
     //MARK: Private Methods
     
     
-    private static func imageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, onlyShowAfterDownload:Bool, completion : ((image : UIImage?)->Void)?) {
+    private static func imageWithUrl(url : NSURL, toImageView: UIImageView?, placeholderImage : UIImage?, defaultImage : UIImage?, completion : ((image : UIImage?)->Void)?) {
+        var parentOperations : [UtilsImageOperation] = []
+        for operation in queue.operations {
+            if let imageOperation = operation as? UtilsImageOperation {
+                if imageOperation.imageView === toImageView {
+                    imageOperation.imageView = nil
+                } else if imageOperation.url?.path == url.path {
+                    parentOperations.append(imageOperation)
+                }
+            }
+        }
+        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
-            for operation in queue.operations {
-                if let imageOperation = operation as? UtilsImageOperation {
-                    if imageOperation.imageView === toImageView {
-                        imageOperation.cancel()
-                    }
-                }
-            }
             
-            guard let imageUrl = url else {
-                //print("no url content data")
-                if  !onlyShowAfterDownload {
-                    dispatch_sync(dispatch_get_main_queue(), {
-                        toImageView.image = placeholderImage
-                    })
-                }
+            if let image = UtilsImageCache.sharedCache.imageForUrl(url) {
                 dispatch_sync(dispatch_get_main_queue(), {
-                    completion?(image: nil)
-                })
-                return
-            }
-            
-            if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
-                dispatch_async(dispatch_get_main_queue(), {
-                    toImageView.image = image
+                    toImageView?.image = image
                     completion?(image: image)
+                    DDLogVerbose("[Utils] - loading image from cache - \(url.path)")
                 })
                 return
             }
             
-            if  !onlyShowAfterDownload {
-                dispatch_async(dispatch_get_main_queue(), {
-                    toImageView.image = placeholderImage
+            if  let placeHolder = placeholderImage, let imageView = toImageView {
+                dispatch_sync(dispatch_get_main_queue(), {
+                    imageView.image = placeHolder
+                    DDLogVerbose("[Utils] - adding placeholder - \(url.path)")
                 })
             }
             
             let imageOperation = UtilsImageOperation(with: { operation in
                 if let imageOperation = operation as? UtilsImageOperation {
                     
-                    if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            toImageView.image = image
+                    if let image = UtilsImageCache.sharedCache.imageForUrl(url) {
+                        dispatch_sync(dispatch_get_main_queue(), {
+                            imageOperation.imageView?.image = image
                             completion?(image: image)
+                            DDLogVerbose("[Utils] - loading image from cache in operation - \(url.path)")
                         })
+                        imageOperation.finish()
                         return
                     }
                     
                     var image  : UIImage?
-                    if  let imageData = NSData(contentsOfURL: imageUrl) {
+                    if  let imageData = NSData(contentsOfURL: url) {
                         image = UIImage(data: imageData)
                     }
+                    DDLogVerbose("[Utils] - downloaded image - \(url.path)")
                     
-                    let newImg = imageForImageView(imageOperation, image: image, placeholderImage: placeholderImage)
+                    let newImg = imageForImageView(imageOperation, image: image, defaultImage: defaultImage)
                     dispatch_sync(dispatch_get_main_queue(), {
                         completion?(image: newImg)
                     })
+                    DDLogVerbose("[Utils] - image loading complete - \(url.path)")
                     imageOperation.finish()
                 }
             })
             
             imageOperation.imageView = toImageView
             imageOperation.url = url
-            
+            for operation in parentOperations {
+                imageOperation.addDependency(operation)
+            }
             self.queue.addOperation(imageOperation)
         })
     }
     
-    private static func imageForImageView(operation : UtilsImageOperation, image : UIImage?, placeholderImage : UIImage? ) -> UIImage? {
-        if let url = operation.url, let img = image {
-            UtilsImageCache.sharedCache.setImage(img, forURL: url)
+    private static func imageForImageView(operation : UtilsImageOperation, image : UIImage?, defaultImage : UIImage? ) -> UIImage? {
+        
+        var downloadedImage : UIImage?
+        if let img = image {
+            downloadedImage = img
+            DDLogVerbose("[Utils] - using downloaded image - \(operation.url?.path)")
+            if let url = operation.url {
+                UtilsImageCache.sharedCache.setImage(img, forURL: url)
+                DDLogVerbose("[Utils] - set image in cache - \(operation.url?.path)")
+            }
+        } else {
+            downloadedImage = defaultImage
+            DDLogVerbose("[Utils] - using default image - \(operation.url?.path)")
+        }
+        if let imageView = operation.imageView {
+            imageView.image = downloadedImage
         }
         
-        if !operation.cancelled {
-            if let img = image {
-                dispatch_sync(dispatch_get_main_queue(), {
-                    operation.imageView?.image = img
-                })
-            } else {
-                dispatch_sync(dispatch_get_main_queue(), {
-                    operation.imageView?.image = placeholderImage
-                })
-            }
-        }
-        return operation.imageView?.image
+        return downloadedImage
     }
 }
 

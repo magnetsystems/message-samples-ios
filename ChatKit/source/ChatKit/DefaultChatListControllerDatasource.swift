@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -41,8 +41,8 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         MMXChannel.createWithName(id, summary: id, isPublic: false, publishPermissions: .Anyone, subscribers: Set(subscribers), success: { (channel) -> Void in
             self.controller?.reloadData()
             DDLogVerbose("[Channel Created] - (\(channel.name))")
-            }) { (error) -> Void in
-                DDLogError("[Error] - \(error.localizedDescription)")
+        }) { (error) -> Void in
+            DDLogError("[Error] - \(error.localizedDescription)")
         }
     }
     
@@ -51,9 +51,9 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
             self.channels = ch
             completion(channels: self.channels)
             DDLogVerbose("[Retireved] - Channels (\(self.channels.count))")
-            }) { error in
-                completion(channels: [])
-                DDLogError("[Error] - \(error.localizedDescription)")
+        }) { error in
+            completion(channels: [])
+            DDLogError("[Error] - \(error.localizedDescription)")
         }
     }
     
@@ -119,7 +119,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
                 tmpUser.userName = userProfile.displayName
                 tmpUser.userID = userProfile.userId
                 let defaultImage = Utils.noAvatarImageForUser(fName, lastName: lName)
-                Utils.loadImageWithUrl(tmpUser.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
+                Utils.loadUserAvatar(tmpUser, toImageView: imageView, placeholderImage: defaultImage)
             }
         }
     }

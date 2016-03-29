@@ -69,7 +69,7 @@ public class Message : NSObject, JSQMessageData {
             
             if let url = self.underlyingMessage.attachments?.first?.downloadURL {
                 
-                Utils.loadImageWithUrl(url, toImageView: UIImageView(), placeholderImage: nil, completion: { image in
+                Utils.loadImageWithUrl(url, completion: { image in
                     photoMediaItem.image = image
                     if self.mediaCompletionBlock != nil {
                         self.mediaCompletionBlock!()
