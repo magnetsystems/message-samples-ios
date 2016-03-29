@@ -218,80 +218,91 @@ public class Utils: NSObject {
     
     
     private static func imageWithUrl(url : NSURL?, toImageView: UIImageView, placeholderImage:UIImage?, onlyShowAfterDownload:Bool, completion : ((image : UIImage?)->Void)?) {
-        
-        for operation in queue.operations {
-            if let imageOperation = operation as? UtilsImageOperation {
-                if imageOperation.imageView === toImageView {
-                    imageOperation.cancel()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
+            for operation in queue.operations {
+                if let imageOperation = operation as? UtilsImageOperation {
+                    if imageOperation.imageView === toImageView {
+                        imageOperation.cancel()
+                    }
                 }
             }
-        }
-        
-        guard let imageUrl = url else {
-            //print("no url content data")
-            if  !onlyShowAfterDownload {
-                toImageView.image = placeholderImage
-            }
             
-            completion?(image: nil)
-            
-            return
-        }
-        
-        if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
-            toImageView.image = image
-            completion?(image: image)
-            return
-        }
-        
-        if  !onlyShowAfterDownload {
-            toImageView.image = placeholderImage
-        }
-        
-        let imageOperation = UtilsImageOperation(with: { operation in
-            if let imageOperation = operation as? UtilsImageOperation {
-                
-                if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        toImageView.image = image
-                        completion?(image: image)
+            guard let imageUrl = url else {
+                //print("no url content data")
+                if  !onlyShowAfterDownload {
+                    dispatch_sync(dispatch_get_main_queue(), {
+                        toImageView.image = placeholderImage
                     })
-                    return
                 }
-                
-                var image  : UIImage?
-                if  let imageData = NSData(contentsOfURL: imageUrl) {
-                    image = UIImage(data: imageData)
-                }
+                dispatch_sync(dispatch_get_main_queue(), {
+                    completion?(image: nil)
+                })
+                return
+            }
+            
+            if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
                 dispatch_async(dispatch_get_main_queue(), {
-                    let image = imageForImageView(imageOperation, image: image, placeholderImage: placeholderImage)
+                    toImageView.image = image
                     completion?(image: image)
                 })
-                imageOperation.finish()
+                return
             }
+            
+            if  !onlyShowAfterDownload {
+                dispatch_async(dispatch_get_main_queue(), {
+                    toImageView.image = placeholderImage
+                })
+            }
+            
+            let imageOperation = UtilsImageOperation(with: { operation in
+                if let imageOperation = operation as? UtilsImageOperation {
+                    
+                    if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            toImageView.image = image
+                            completion?(image: image)
+                        })
+                        return
+                    }
+                    
+                    var image  : UIImage?
+                    if  let imageData = NSData(contentsOfURL: imageUrl) {
+                        image = UIImage(data: imageData)
+                    }
+                    
+                    let newImg = imageForImageView(imageOperation, image: image, placeholderImage: placeholderImage)
+                    dispatch_sync(dispatch_get_main_queue(), {
+                        completion?(image: newImg)
+                    })
+                    imageOperation.finish()
+                }
+            })
+            
+            imageOperation.imageView = toImageView
+            imageOperation.url = url
+            
+            self.queue.addOperation(imageOperation)
         })
-        
-        imageOperation.imageView = toImageView
-        imageOperation.url = url
-        
-        self.queue.addOperation(imageOperation)
     }
     
-    static func imageForImageView(operation : UtilsImageOperation, image : UIImage?, placeholderImage : UIImage? ) -> UIImage? {
+    private static func imageForImageView(operation : UtilsImageOperation, image : UIImage?, placeholderImage : UIImage? ) -> UIImage? {
         if let url = operation.url, let img = image {
             UtilsImageCache.sharedCache.setImage(img, forURL: url)
         }
         
         if !operation.cancelled {
             if let img = image {
-                operation.imageView?.image = img
+                dispatch_sync(dispatch_get_main_queue(), {
+                    operation.imageView?.image = img
+                })
             } else {
-                operation.imageView?.image = placeholderImage
+                dispatch_sync(dispatch_get_main_queue(), {
+                    operation.imageView?.image = placeholderImage
+                })
             }
         }
         return operation.imageView?.image
     }
-    
 }
 
 extension Array {
