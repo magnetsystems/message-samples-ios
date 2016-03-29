@@ -118,10 +118,16 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
             // Get all channels the current user is subscribed to
             MMXChannel.channelDetails(mmxChannels, numberOfMessages: channelDetailsMessagesLimit, numberOfSubcribers: channelDetailsSubscribersLimit, success: { detailResponses in
                 self.currentDetailCount += mmxChannels.count
-                self.detailResponses.appendContentsOf(detailResponses)
-                self.detailResponses = self.filterChannels(self.detailResponses)
-                self.detailResponses = self.sort(self.detailResponses)
+                
+                var details = self.filterChannels(detailResponses)
+                details = self.sort(details)
+                self.detailResponses.appendContentsOf(details)
                 self.endDataLoad()
+                
+                if details.count == 0 && self.hasMore() {
+                    self.infiniteLoading.setNeedsUpdate()
+                }
+                
                 DDLogVerbose("[Retrieved] channel details succeeded")
                 }, failure: { error in
                     self.endDataLoad()
@@ -129,6 +135,10 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
             })
         } else {
             self.endDataLoad()
+            
+            if self.hasMore() {
+                self.infiniteLoading.setNeedsUpdate()
+            }
         }
     }
     
