@@ -67,15 +67,17 @@ public class Message : NSObject, JSQMessageData {
             photoMediaItem.appliesMediaViewMaskAsOutgoing = self.senderId() == MMUser.currentUser()?.userID
             photoMediaItem.image = nil
             
-            let attachment = self.underlyingMessage.attachments?.first
-            attachment?.downloadFileWithSuccess({ [weak self] fileURL in
-                photoMediaItem.image = UIImage(contentsOfFile: fileURL.path!)
-                if self?.mediaCompletionBlock != nil {
-                    self?.mediaCompletionBlock!()
-                    self?.mediaCompletionBlock = nil
-                }
-                self?.isDownloaded  = true
-                }, failure: nil)
+            if let url = self.underlyingMessage.attachments?.first?.downloadURL {
+                
+                Utils.loadImageWithUrl(url, toImageView: UIImageView(), placeholderImage: nil, completion: { image in
+                    photoMediaItem.image = image
+                    if self.mediaCompletionBlock != nil {
+                        self.mediaCompletionBlock!()
+                        self.mediaCompletionBlock = nil
+                    }
+                    self.isDownloaded  = true
+                })
+            }
             
             return photoMediaItem
             
