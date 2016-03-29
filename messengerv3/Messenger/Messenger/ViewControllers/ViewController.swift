@@ -64,6 +64,8 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.channelDetailsSubscribersLimit = 4
+        self.channelDetailsMessagesLimit = 1
         self.datasource = HomeListDatasource()
         self.delegate = HomeListDelegate()
         
