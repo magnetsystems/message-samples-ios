@@ -112,12 +112,12 @@ extension CoreChatViewController {
             cell.avatarImageView?.layer.masksToBounds = true
             cell.avatarImageView?.contentMode = UIViewContentMode.ScaleAspectFill
         }
-        //cell.avatarImageView!.image = avatar
+        
         if let layout = collectionView.collectionViewLayout as? JSQMessagesCollectionViewFlowLayout {
             cell.avatarImageView?.layer.cornerRadius = layout.incomingAvatarViewSize.width/2.0
         }
         if let user = message.underlyingMessage.sender {
-            Utils.loadUserAvatar(user, toImageView: cell.avatarImageView!, placeholderImage: Utils.noAvatarImageForUser(user))
+            Utils.loadUserAvatar(user, toImageView: cell.avatarImageView, placeholderImage: Utils.noAvatarImageForUser(user))
         }
         
         return cell
