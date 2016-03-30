@@ -228,7 +228,7 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
             fName = firstName
         }
         let defaultImage = Utils.noAvatarImageForUser(fName, lastName: lName)
-        Utils.loadImageWithUrl(user.avatarURL(), toImageView: imageView, placeholderImage:defaultImage)
+        Utils.loadUserAvatar(user, toImageView: imageView, placeholderImage:defaultImage)
     }
     
     internal func loadMore(searchText : String?, offset : Int) { }

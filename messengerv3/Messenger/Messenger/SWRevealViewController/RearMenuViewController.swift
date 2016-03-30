@@ -91,7 +91,7 @@ class RearMenuViewController: UITableViewController, AskMagnetCounterDelegate {
         }
         
         if let url = MMUser.currentUser()?.avatarURL() {
-            ChatKit.Utils.loadImageWithUrl(url, toImageView: self.userAvatar, placeholderImage: UIImage(named: "user_default.png"), onlyShowAfterDownload: true)
+            ChatKit.Utils.loadImageWithUrl(url, toImageView: self.userAvatar, placeholderImage: nil, defaultImage: UIImage(named: "user_default.png"))
         }
     }
     
