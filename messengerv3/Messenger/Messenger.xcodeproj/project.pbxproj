@@ -68,6 +68,7 @@
 		8D701D611CA49ED5004B98A1 /* EventsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D701D5F1CA49ED5004B98A1 /* EventsTableViewCell.swift */; };
 		8D701D621CA49ED5004B98A1 /* EventsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D701D601CA49ED5004B98A1 /* EventsTableViewCell.xib */; };
 		8DA864BD1CA4BC2A00AE083B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA864BC1CA4BC2A00AE083B /* Utils.swift */; };
+		8DB33E2B1CACB24000F389F7 /* ChatViewDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB33E2A1CACB24000F389F7 /* ChatViewDatasource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -138,6 +139,7 @@
 		8D701D5F1CA49ED5004B98A1 /* EventsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewCell.swift; sourceTree = "<group>"; };
 		8D701D601CA49ED5004B98A1 /* EventsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventsTableViewCell.xib; sourceTree = "<group>"; };
 		8DA864BC1CA4BC2A00AE083B /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		8DB33E2A1CACB24000F389F7 /* ChatViewDatasource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatViewDatasource.swift; path = ChatView/ChatViewDatasource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -348,6 +350,7 @@
 		8D701D201CA463E0004B98A1 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				8DB33E291CACB22300F389F7 /* ChatView */,
 				8D090A121CA4AD7F00FA82AE /* AskMagnet */,
 				8D701D571CA49DFA004B98A1 /* homescreen */,
 				8D701D551CA46B9F004B98A1 /* BaseViewController.swift */,
@@ -414,6 +417,14 @@
 				8D701D601CA49ED5004B98A1 /* EventsTableViewCell.xib */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		8DB33E291CACB22300F389F7 /* ChatView */ = {
+			isa = PBXGroup;
+			children = (
+				8DB33E2A1CACB24000F389F7 /* ChatViewDatasource.swift */,
+			);
+			name = ChatView;
 			sourceTree = "<group>";
 		};
 		BF40F257C305814BB6BCF378 /* Pods */ = {
@@ -599,6 +610,7 @@
 				8DA864BD1CA4BC2A00AE083B /* Utils.swift in Sources */,
 				8D701D261CA463E0004B98A1 /* Strings.swift in Sources */,
 				8D701D561CA46B9F004B98A1 /* BaseViewController.swift in Sources */,
+				8DB33E2B1CACB24000F389F7 /* ChatViewDatasource.swift in Sources */,
 				8D701D501CA463E0004B98A1 /* SignInViewController.swift in Sources */,
 				8D701D5B1CA49E53004B98A1 /* HomeListDelegate.swift in Sources */,
 				8D701D241CA463E0004B98A1 /* Constants.swift in Sources */,

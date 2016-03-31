@@ -38,19 +38,14 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
     
     func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
         
-        let details = channelDetails.sort({ (detail1, detail2) -> Bool in
-            let formatter = ChannelManager.sharedInstance.formatter
-            return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
-        })
-        
-        let eventChannels = details.filter({$0.channelName.hasPrefix("global_") && !$0.channelName.hasPrefix(kAskMagnetChannel)})
-        let askMagnetChannel = details.filter({$0.channelName.hasPrefix(kAskMagnetChannel)}).first
-        let otherChannels = details.filter({!$0.channelName.hasPrefix("global_") && !$0.channelName.hasPrefix(kAskMagnetChannel)})
+        let eventChannels = channelDetails.filter({$0.channelName.hasPrefix("global_") && !$0.channelName.hasPrefix(kAskMagnetChannel)})
+        let askMagnetChannel = channelDetails.filter({$0.channelName.hasPrefix(kAskMagnetChannel)}).first
+        let otherChannels = channelDetails.filter({!$0.channelName.hasPrefix("global_") && !$0.channelName.hasPrefix(kAskMagnetChannel)})
         
         var results : [MMXChannelDetailResponse] = []
         
         if eventChannels.count > 0 {
-            results.appendContentsOf(eventChannels)
+            results.appendContentsOf(sort(eventChannels))
         }
         
         if let askMagnet = askMagnetChannel {
@@ -58,10 +53,17 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
         }
         
         if otherChannels.count > 0 {
-            results.appendContentsOf(otherChannels)
+            results.appendContentsOf(sort(otherChannels))
         }
         
         return results
+    }
+    
+    func sort(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse]  {
+        return channelDetails.sort({ (detail1, detail2) -> Bool in
+            let formatter = ChannelManager.sharedInstance.formatter
+            return formatter.dateForStringTime(detail1.lastPublishedTime)?.timeIntervalSince1970 > formatter.dateForStringTime(detail2.lastPublishedTime)?.timeIntervalSince1970
+        })
     }
     
     override func mmxListRegisterCells(tableView: UITableView) {
@@ -78,7 +80,7 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
         }
         return 80.0
     }
-
+    
     func mmxListCellForChannel(tableView: UITableView, channel: MMXChannel, channelDetails: MMXChannelDetailResponse, indexPath: NSIndexPath) -> UITableViewCell? {
         if channelDetails.channelName.hasPrefix("global_") {
             if let cell = tableView.dequeueReusableCellWithIdentifier("EventsTableViewCell", forIndexPath: indexPath) as? EventsTableViewCell {
@@ -182,9 +184,9 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
     }
     
     override func mmxControllerLoadMore(searchText: String?, offset: Int) {
-        self.askMagnet = nil
-        self.eventChannels = []
         if offset == 0 {
+            self.askMagnet = nil
+            self.eventChannels = []
             self.loadEventChannels()
             self.loadAskMagnetChannel()
         }
@@ -197,8 +199,16 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
                     return
                 }
                 var offsetChannels : [MMXChannel] = []
-                if offset < channels.count {
-                    offsetChannels = Array(channels[offset..<min((offset + self.limit), channels.count)])
+                
+                var channelOffset = offset
+                if channelOffset > 0 {
+                    channelOffset -= self.eventChannels.count
+                    if self.askMagnet != nil {
+                        channelOffset -= 1
+                    }
+                }
+                if channelOffset < channels.count {
+                    offsetChannels = Array(channels[channelOffset..<min((channelOffset + self.limit), channels.count)])
                 } else {
                     self.hasMoreUsers = false
                 }

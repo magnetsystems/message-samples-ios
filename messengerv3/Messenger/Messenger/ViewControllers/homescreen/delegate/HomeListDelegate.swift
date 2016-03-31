@@ -24,4 +24,10 @@ class HomeListDelegate : DefaultChatListControllerDelegate {
     override func mmxListCanLeaveChannel(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) -> Bool {
         return !channel.name.hasPrefix("global_") && !channel.name.hasPrefix(kAskMagnetChannel)
     }
+    
+    override func mmxListWillShowChatController(chatController : MMXChatViewController) {
+        chatController.datasource = ChatViewDatasource()
+    }
 }
+
+
