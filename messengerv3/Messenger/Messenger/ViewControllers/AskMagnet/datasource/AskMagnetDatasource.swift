@@ -45,10 +45,6 @@ class AskMagnetDatasource : DefaultChatListControllerDatasource {
         return cell
     }
     
-    func mmxListFilterChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
-        return channelDetails.filter({ $0.publishedItemCount > 0 })
-    }
-    
     func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
         return channelDetails.sort({ (detail1, detail2) -> Bool in
             let formatter = ChannelManager.sharedInstance.formatter
@@ -58,7 +54,7 @@ class AskMagnetDatasource : DefaultChatListControllerDatasource {
     
     override func subscribedChannels(completion : ((channels : [MMXChannel]) -> Void)) {
         MMXChannel.subscribedChannelsWithSuccess({ ch in
-            let cV : [MMXChannel] = ch.filter({ return self.isAskMagnetChannel($0) })
+            let cV : [MMXChannel] = ch.filter({ return self.isAskMagnetChannel($0) && $0.numberOfMessages > 0})
             completion(channels: cV)
         }) { error in
             print(error)

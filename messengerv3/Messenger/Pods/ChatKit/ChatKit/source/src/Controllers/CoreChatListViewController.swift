@@ -120,8 +120,8 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
                 self.currentDetailCount += mmxChannels.count
                 
                 var details = self.filterChannels(detailResponses)
-                details = self.sort(details)
                 self.detailResponses.appendContentsOf(details)
+                self.detailResponses = self.sort(self.detailResponses)
                 self.endDataLoad()
                 
                 if details.count == 0 && self.hasMore() {

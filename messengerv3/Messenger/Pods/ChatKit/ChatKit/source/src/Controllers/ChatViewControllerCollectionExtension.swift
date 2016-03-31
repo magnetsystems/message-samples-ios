@@ -187,8 +187,8 @@ extension CoreChatViewController {
                     presentViewController(viewController, animated: true, completion: nil)
                 }
             case .Photo:
-                if let photoItem = message.media() as? JSQPhotoMediaItem {
-                    let photo = Photo(photo: photoItem.image)
+                if let image = message.fullsizedImage {
+                    let photo = Photo(photo: image)
                     let viewer = NYTPhotosViewController(photos: [photo])
                     presentViewController(viewer, animated: true, completion: nil)
                 }

@@ -211,11 +211,12 @@ public class CoreChatViewController: MMJSQViewController {
     internal func sort(messages : [Message]) -> [Message] {
         return messages.sort({
             if let date = $0.0.underlyingMessage.timestamp, let date1 = $0.1.underlyingMessage.timestamp {
-                return date.compare(date1) == .OrderedAscending
+                return date.timeIntervalSince1970 < date1.timeIntervalSince1970
             }
             return false
         })
     }
+    
     
     // MARK: - Notifications
     

@@ -37,6 +37,7 @@ class UtilsImageOperation : MMAsyncBlockOperation {
     
     var url : NSURL?
     weak var imageView : UIImageView?
+    var image : UIImage?
 }
 
 
@@ -56,6 +57,7 @@ public class UtilsImageCache : UtilsCache {
     
     
     public func setImage(image : UIImage, forURL : NSURL) {
+        
         let data = UIImagePNGRepresentation(image)
         var size = 0
         if let len = data?.length {
@@ -79,8 +81,7 @@ public class Utils: NSObject {
     private static var queue : NSOperationQueue = {
         let queue = NSOperationQueue()
         queue.underlyingQueue = dispatch_queue_create("operation - images", nil)
-        queue.maxConcurrentOperationCount = 10
-        
+        queue.maxConcurrentOperationCount = 100
         return queue
     }()
     
@@ -93,18 +94,38 @@ public class Utils: NSObject {
     }
     
     public static func loadImageWithUrl(url : NSURL, toImageView: UIImageView, placeholderImage :UIImage?,  defaultImage : UIImage?) {
-        imageWithUrl(url, toImageView: toImageView, placeholderImage : placeholderImage, defaultImage : defaultImage, completion : nil)
+        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage,defaultImage: defaultImage, aspectSize : nil)
     }
     
     public static func loadImageWithUrl(url : NSURL, completion : ((image : UIImage?)->Void)) {
-        imageWithUrl(url, toImageView: nil, placeholderImage : nil, defaultImage : nil, completion : completion)
+        loadImageWithUrl(url, completion: completion, aspectSize: nil)
     }
     
     public static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage : UIImage?) {
+        loadUserAvatar(user, toImageView: toImageView, placeholderImage: placeholderImage, aspectSize: nil)
+    }
+    
+    
+    //MARK: Image loading with size in view
+    
+    
+    public static func loadImageWithUrl(url : NSURL, toImageView : UIImageView, placeholderImage:UIImage?, aspectSize : CGSize?) {
+        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, defaultImage: placeholderImage)
+    }
+    
+    public static func loadImageWithUrl(url : NSURL, toImageView: UIImageView, placeholderImage :UIImage?,  defaultImage : UIImage?, aspectSize : CGSize?) {
+        imageWithUrl(url, toImageView: toImageView, placeholderImage : placeholderImage, defaultImage : defaultImage, completion : nil, aspectSize : aspectSize)
+    }
+    
+    public static func loadImageWithUrl(url : NSURL, completion : ((image : UIImage?)->Void), aspectSize : CGSize?) {
+        imageWithUrl(url, toImageView: nil, placeholderImage : nil, defaultImage : nil, completion : completion, aspectSize : aspectSize)
+    }
+    
+    public static func loadUserAvatar(user : MMUser, toImageView: UIImageView, placeholderImage : UIImage?, aspectSize : CGSize?) {
         if let url = user.avatarURL() {
-            loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage)
+            loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, aspectSize : aspectSize)
         } else {
-            toImageView.image = placeholderImage
+            imageWithUrl(nil, toImageView: toImageView, placeholderImage: placeholderImage, defaultImage: placeholderImage, completion: nil, aspectSize: nil)
         }
     }
     
@@ -202,82 +223,134 @@ public class Utils: NSObject {
     //MARK: Private Methods
     
     
-    private static func imageWithUrl(url : NSURL, toImageView: UIImageView?, placeholderImage : UIImage?, defaultImage : UIImage?, completion : ((image : UIImage?)->Void)?) {
-        var parentOperations : [UtilsImageOperation] = []
-        for operation in queue.operations {
-            if let imageOperation = operation as? UtilsImageOperation {
-                if  imageOperation.imageView != nil && imageOperation.imageView == toImageView {
-                    imageOperation.imageView = nil
-                    imageOperation.cancel()
-                } else if imageOperation.url?.path == url.path {
-                    parentOperations.append(imageOperation)
-                }
-            }
-        }
+    private static func aspectResizeImage(image : UIImage, size : CGSize) -> UIImage {
+        var resizedImage = image
+        let maxSize = CGSize(width: 50.0, height: 50.0)
+        let newSize = CGSize.aspectFit(image.size, boundingSize: maxSize)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        CGContextSetInterpolationQuality(UIGraphicsGetCurrentContext(), .High);
+        image.drawInRect(CGRect(origin: CGPointZero, size: newSize))
+        resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
         
-        if let image = UtilsImageCache.sharedCache.imageForUrl(url) {
-            //loading image from cache
-            toImageView?.image = image
-            completion?(image: image)
-            return
-        }
-        
-        if let placeHolder = placeholderImage, let imageView = toImageView {
-            //adding placeholder
-            imageView.image = placeHolder
-        }
-        
-        let imageOperation = UtilsImageOperation(with: { operation in
-            if let imageOperation = operation as? UtilsImageOperation {
-                
-                if let image = UtilsImageCache.sharedCache.imageForUrl(url) {
-                    //loading image from cache in operation
-                    dispatch_sync(dispatch_get_main_queue(), {
-                        imageOperation.imageView?.image = image
-                        completion?(image: image)
-                    })
-                    imageOperation.finish()
-                    return
-                }
-                
-                var image  : UIImage?
-                //download image
-                if  let imageData = NSData(contentsOfURL: url) {
-                    image = UIImage(data: imageData)
-                }
-                
-                let newImg = imageForImageView(imageOperation, image: image, defaultImage: defaultImage)
-                dispatch_sync(dispatch_get_main_queue(), {
-                    completion?(image: newImg)
-                })
-                
-                //image loading complete
-                imageOperation.finish()
-            }
-        })
-        
-        imageOperation.imageView = toImageView
-        imageOperation.url = url
-        for operation in parentOperations {
-            imageOperation.addDependency(operation)
-        }
-        self.queue.addOperation(imageOperation)
+        return resizedImage
     }
     
-    private static func imageForImageView(operation : UtilsImageOperation, image : UIImage?, defaultImage : UIImage? ) -> UIImage? {
+    private static func imageWithUrl(url : NSURL?, toImageView: UIImageView?, placeholderImage : UIImage?, defaultImage : UIImage?, completion : ((image : UIImage?)->Void)?, aspectSize : CGSize?) {
+        
+        var dependencies : [UtilsImageOperation] = []
+        for operation in queue.operations {
+            if let imageOperation = operation as? UtilsImageOperation {
+                if imageOperation.url?.path != url?.path && imageOperation.imageView != nil && imageOperation.imageView == toImageView {
+                    imageOperation.imageView = nil
+                    imageOperation.cancel()
+                } else if imageOperation.url?.path == url?.path {
+                    dependencies.append(imageOperation)
+                }
+            }
+        }
+        
+        if let imageUrl = url {
+            if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
+                var resizedImage = image
+                if let size = aspectSize {
+                    resizedImage = aspectResizeImage(image, size: size)
+                }
+                //loading image from cache
+                toImageView?.image = resizedImage
+                completion?(image: image)
+                return
+            }
+            
+            if let placeHolder = placeholderImage, let imageView = toImageView {
+                //adding placeholder
+                imageView.image = placeHolder
+            }
+            
+            let imageOperation = UtilsImageOperation(with: { operation in
+                
+                if let imageOperation = operation as? UtilsImageOperation {
+                    
+                    if let operations = imageOperation.dependencies as? [UtilsImageOperation] {
+                        for imOp in operations {
+                            if let image = imOp.image {
+                                var resizedImage = image
+                                if let size = aspectSize {
+                                    resizedImage = aspectResizeImage(image, size: size)
+                                }
+                                dispatch_sync(dispatch_get_main_queue(), {
+                                    imageOperation.imageView?.image = resizedImage
+                                    completion?(image: resizedImage)
+                                })
+                                imageOperation.finish()
+                                return
+                            }
+                        }
+                    }
+                    
+                    if let image = UtilsImageCache.sharedCache.imageForUrl(imageUrl) {
+                        var resizedImage = image
+                        if let size = aspectSize {
+                            resizedImage = aspectResizeImage(image, size: size)
+                        }
+                        //loading image from cache in operation
+                        dispatch_sync(dispatch_get_main_queue(), {
+                            imageOperation.imageView?.image = resizedImage
+                            completion?(image: resizedImage)
+                        })
+                        imageOperation.finish()
+                        return
+                    }
+                    
+                    var image  : UIImage?
+                    //download image
+                    if  let imageData = NSData(contentsOfURL: imageUrl) {
+                        image = UIImage(data: imageData)
+                    }
+                    
+                    imageOperation.image = image
+                    let newImg = imageFromOperation(imageOperation, defaultImage: defaultImage, aspectSize: aspectSize)
+                    dispatch_sync(dispatch_get_main_queue(), {
+                        completion?(image: newImg)
+                    })
+                    
+                    //image loading complete
+                    imageOperation.finish()
+                }
+            })
+            
+            imageOperation.imageView = toImageView
+            imageOperation.url = imageUrl
+            for operation in dependencies {
+                imageOperation.addDependency(operation)
+            }
+            self.queue.addOperation(imageOperation)
+        } else {
+            if let placeHolder = placeholderImage, let imageView = toImageView {
+                //adding placeholder
+                imageView.image = placeHolder
+            }
+        }
+    }
+    
+    private static func imageFromOperation(operation : UtilsImageOperation, defaultImage : UIImage?, aspectSize : CGSize?) -> UIImage? {
         
         var downloadedImage : UIImage?
-        if let img = image {
+        if let img = operation.image {
             //using downloaded image
             downloadedImage = img
             if let url = operation.url {
                 //set image in cache
                 UtilsImageCache.sharedCache.setImage(img, forURL: url)
             }
+            if let size = aspectSize, let resizeImage = downloadedImage {
+                downloadedImage = aspectResizeImage(resizeImage, size: size)
+            }
         } else {
             //using default image
             downloadedImage = defaultImage
         }
+        
         if let imageView = operation.imageView {
             dispatch_sync(dispatch_get_main_queue(), {
                 imageView.image = downloadedImage
@@ -285,6 +358,36 @@ public class Utils: NSObject {
         }
         
         return downloadedImage
+    }
+}
+
+extension CGSize {
+    static func aspectFit(aspectRatio : CGSize, var boundingSize: CGSize) -> CGSize {
+        let mW = boundingSize.width / aspectRatio.width;
+        let mH = boundingSize.height / aspectRatio.height;
+        
+        if( mH < mW ) {
+            boundingSize.width = boundingSize.height / aspectRatio.height * aspectRatio.width;
+        }
+        else if( mW < mH ) {
+            boundingSize.height = boundingSize.width / aspectRatio.width * aspectRatio.height;
+        }
+        
+        return boundingSize;
+    }
+    
+    static func aspectFill(aspectRatio :CGSize, var minimumSize: CGSize) -> CGSize {
+        let mW = minimumSize.width / aspectRatio.width;
+        let mH = minimumSize.height / aspectRatio.height;
+        
+        if( mH > mW ) {
+            minimumSize.width = minimumSize.height / aspectRatio.height * aspectRatio.width;
+        }
+        else if( mW > mH ) {
+            minimumSize.height = minimumSize.width / aspectRatio.width * aspectRatio.height;
+        }
+        
+        return minimumSize;
     }
 }
 
