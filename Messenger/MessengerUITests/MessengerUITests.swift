@@ -282,7 +282,7 @@ class MessengerUITests: XCTestCase {
         self.delay()
     }
     
-    /**********************************************Test01-Test37************************************************/
+    /**********************************************Test01-Test40************************************************/
     //Test1 Negative scenario - Login with invalid credentials
     func test01LoginWithInvalidCredentials()
     {
