@@ -32,16 +32,6 @@ public class CoreChatViewController: MMJSQViewController {
     //MARK: Public Properties
     
     
-    internal var chat : MMXChannel? {
-        didSet {
-            //Register for a notification to receive the message
-            if let channel = chat {
-                //  notifier = NavigationNotifier(viewController: self, exceptFor: channel)
-                ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
-            }
-        }
-    }
-    
     public var currentMessageCount = 0
     public var incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     public private(set) var infiniteLoading : InfiniteLoading = InfiniteLoading()
@@ -59,6 +49,16 @@ public class CoreChatViewController: MMJSQViewController {
     
     //MARK: Internal properties
     
+    
+    internal var chat : MMXChannel? {
+        didSet {
+            //Register for a notification to receive the message
+            if let channel = chat {
+                //  notifier = NavigationNotifier(viewController: self, exceptFor: channel)
+                ChannelManager.sharedInstance.addChannelMessageObserver(self, channel:channel, selector: "didReceiveMessage:")
+            }
+        }
+    }
     
     internal var activityIndicator : UIActivityIndicatorView?
     internal var avatars = Dictionary<String, UIImage>()
@@ -96,21 +96,19 @@ public class CoreChatViewController: MMJSQViewController {
         let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .Gray)
         activityIndicator.hidesWhenStopped = true
         let indicator = UIBarButtonItem(customView: activityIndicator)
-        var rightItems = navigationItem.rightBarButtonItems
-        rightItems?.append(indicator)
-        navigationItem.rightBarButtonItems = rightItems
+        navigationItem.rightBarButtonItems = [indicator]
         self.activityIndicator = activityIndicator
         
         senderId = user.userID
         senderDisplayName = user.firstName
         saveLastTimeViewed()
         
-        infiniteLoading.onUpdate({
+        infiniteLoading.onUpdate() {
             [weak self] in
             if let weakSelf = self {
                 weakSelf.loadMore(weakSelf.chat, offset: weakSelf.currentMessageCount)
             }
-            })
+        }
         
         // Indicate that you are ready to receive messages now!
         MMX.start()

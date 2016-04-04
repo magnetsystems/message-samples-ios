@@ -179,12 +179,16 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
             infiniteLoading.stopUpdating()
         } else {
             infiniteLoading.startUpdating()
+        }
+        
+        infiniteLoading.finishUpdating()
+        
+        if hasMore() {
             if users.count == 0 {
                 infiniteLoading.setNeedsUpdate()
             }
         }
         
-        infiniteLoading.finishUpdating()
         self.tableView.reloadData()
     }
     

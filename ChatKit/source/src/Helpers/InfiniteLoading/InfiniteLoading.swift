@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import Foundation
 
@@ -31,6 +31,7 @@ public class InfiniteLoading {
     
     private var isWaiting = false
     private var loadMoreBlocks : [(() -> Void)] = []
+    private var doneLoadingBlocks : [(() -> Void)] = []
     private let lock = NSLock()
     private var queue : dispatch_queue_t = dispatch_queue_create("infLD", nil)
     
@@ -48,8 +49,8 @@ public class InfiniteLoading {
             
             self.isWaiting = true
             dispatch_sync(dispatch_get_main_queue(), {
-                for loadMoreBlock in self.loadMoreBlocks {
-                    loadMoreBlock()
+                for block in self.loadMoreBlocks {
+                    block()
                 }
             })
             self.lock.unlock()
@@ -64,11 +65,24 @@ public class InfiniteLoading {
         })
     }
     
+    public func onDoneUpdating(doneLoading : (() -> Void)) {
+        dispatch_async(queue, {
+            self.lock.lock()
+            self.doneLoadingBlocks.append(doneLoading)
+            self.lock.unlock()
+        })
+    }
+    
     public func finishUpdating() {
         dispatch_async(queue, {
             self.lock.lock()
             self.isWaiting = false
             self.lock.unlock()
+            dispatch_sync(dispatch_get_main_queue(), {
+                for block in self.doneLoadingBlocks {
+                    block()
+                }
+            })
         })
     }
     
@@ -84,7 +98,7 @@ public class InfiniteLoading {
         dispatch_async(queue, {
             self.lock.lock()
             self.isFinished = true
-            self.isWaiting = false
+            self.finishUpdating()
             self.lock.unlock()
         })
     }
