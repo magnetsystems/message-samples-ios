@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:../source"
+      name = "source">
+      <Group
+         location = "group:src"
+         name = "src">
+         <Group
+            location = "group:Controllers"
+            name = "Controllers">
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/CoreChatListViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/CoreChatViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/CoreContactsViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ChatViewControllerChatViewControllerImagePickerExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ChatViewControllerCollectionExtension.swift">
+            </FileRef>
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Controllers/ChatKitViewControllerExtensions.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMTableViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:MMJSQViewController.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Helpers"
+            name = "Helpers">
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Helpers/ChatUIConstants.swift">
+            </FileRef>
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/src/Helpers/ChatUIStrings.swift">
+            </FileRef>
+            <Group
+               location = "group:DateFormatter"
+               name = "DateFormatter">
+               <FileRef
+                  location = "group:DateFormatter.swift">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:MapViewController"
+               name = "MapViewController">
+               <FileRef
+                  location = "group:MapViewController.swift">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:Notifiers"
+               name = "Notifiers">
+               <FileRef
+                  location = "group:NavigationNotifier.swift">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:Popup"
+               name = "Popup">
+               <FileRef
+                  location = "group:Popup.swift">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:Utils"
+               name = "Utils">
+               <FileRef
+                  location = "group:Utils.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:MMAsyncBlockOperation.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:UtilsCache.swift">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:VideoPlayer"
+               name = "VideoPlayer">
+               <FileRef
+                  location = "group:VideoPlayerViewController.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:VideoPlayerViewController.xib">
+               </FileRef>
+            </Group>
+            <Group
+               location = "container:"
+               name = "InfiniteLoading">
+               <FileRef
+                  location = "group:../source/src/Helpers/InfiniteLoading/InfiniteLoading.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
+            location = "group:JSQMessagesViewController"
+            name = "JSQMessagesViewController">
+            <Group
+               location = "group:JSQMessagesViewController"
+               name = "JSQMessagesViewController">
+               <Group
+                  location = "group:Assets"
+                  name = "Assets">
+                  <FileRef
+                     location = "group:JSQMessagesAssets.bundle">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:Categories"
+                  name = "Categories">
+                  <FileRef
+                     location = "group:JSQSystemSoundPlayer+JSQMessages.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQSystemSoundPlayer+JSQMessages.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:NSBundle+JSQMessages.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:NSBundle+JSQMessages.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:NSString+JSQMessages.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:NSString+JSQMessages.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UIColor+JSQMessages.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UIColor+JSQMessages.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UIDevice+JSQMessages.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UIDevice+JSQMessages.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UIImage+JSQMessages.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UIImage+JSQMessages.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UIView+JSQMessages.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UIView+JSQMessages.m">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:Controllers"
+                  name = "Controllers">
+                  <FileRef
+                     location = "group:JSQMessagesKeyboardController.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesKeyboardController.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesViewController.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesViewController.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesViewController.xib">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:Factories"
+                  name = "Factories">
+                  <FileRef
+                     location = "group:JSQMessagesAvatarImageFactory.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesAvatarImageFactory.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesBubbleImageFactory.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesBubbleImageFactory.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesMediaViewBubbleImageMasker.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesMediaViewBubbleImageMasker.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesTimestampFormatter.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesTimestampFormatter.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesToolbarButtonFactory.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesToolbarButtonFactory.m">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:JSQMessages.h">
+               </FileRef>
+               <Group
+                  location = "group:Layout"
+                  name = "Layout">
+                  <FileRef
+                     location = "group:JSQMessagesBubbleSizeCalculating.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesBubblesSizeCalculator.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesBubblesSizeCalculator.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewFlowLayout.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewFlowLayout.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewFlowLayoutInvalidationContext.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewFlowLayoutInvalidationContext.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewLayoutAttributes.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewLayoutAttributes.m">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:Model"
+                  name = "Model">
+                  <FileRef
+                     location = "group:JSQLocationMediaItem.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQLocationMediaItem.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMediaItem.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMediaItem.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessage.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessage.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessageAvatarImageDataSource.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessageBubbleImageDataSource.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessageData.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessageMediaData.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesAvatarImage.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesAvatarImage.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesBubbleImage.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesBubbleImage.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewDataSource.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewDelegateFlowLayout.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQPhotoMediaItem.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQPhotoMediaItem.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQVideoMediaItem.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQVideoMediaItem.m">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:Views"
+                  name = "Views">
+                  <FileRef
+                     location = "group:JSQMessagesCellTextView.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCellTextView.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionView.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionView.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewCell.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewCell.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewCellIncoming.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewCellIncoming.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewCellIncoming.xib">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewCellOutgoing.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewCellOutgoing.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesCollectionViewCellOutgoing.xib">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesComposerTextView.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesComposerTextView.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesInputToolbar.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesInputToolbar.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesLabel.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesLabel.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesLoadEarlierHeaderView.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesLoadEarlierHeaderView.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesLoadEarlierHeaderView.xib">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesMediaPlaceholderView.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesMediaPlaceholderView.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesToolbarContentView.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesToolbarContentView.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesToolbarContentView.xib">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesTypingIndicatorFooterView.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesTypingIndicatorFooterView.m">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQMessagesTypingIndicatorFooterView.xib">
+                  </FileRef>
+               </Group>
+            </Group>
+            <FileRef
+               location = "group:LICENSE">
+            </FileRef>
+            <FileRef
+               location = "group:README.md">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:JSQSystemSoundPlayer"
+            name = "JSQSystemSoundPlayer">
+            <Group
+               location = "group:JSQSystemSoundPlayer"
+               name = "JSQSystemSoundPlayer">
+               <Group
+                  location = "group:Classes"
+                  name = "Classes">
+                  <FileRef
+                     location = "group:JSQSystemSoundPlayer.h">
+                  </FileRef>
+                  <FileRef
+                     location = "group:JSQSystemSoundPlayer.m">
+                  </FileRef>
+               </Group>
+            </Group>
+            <FileRef
+               location = "group:LICENSE">
+            </FileRef>
+            <FileRef
+               location = "group:README.md">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Managers"
+            name = "Managers">
+            <FileRef
+               location = "group:ChannelManager.swift">
+            </FileRef>
+            <FileRef
+               location = "group:LocationManager.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Models"
+            name = "Models">
+            <FileRef
+               location = "group:Message.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Photo.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Timestamp.swift">
+            </FileRef>
+         </Group>
+      </Group>
+      <Group
+         location = "group:Views"
+         name = "Views">
+         <Group
+            location = "container:"
+            name = "images">
+            <FileRef
+               location = "group:../source/Views/images/user_group_clear_sm.png">
+            </FileRef>
+            <FileRef
+               location = "group:../source/Views/images/user_group_clear.png">
+            </FileRef>
+            <FileRef
+               location = "group:../source/Views/images/user_group.png">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:ChannelDetailBaseTVCell.swift">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/CoreContactsViewController.xib">
+         </FileRef>
+         <FileRef
+            location = "group:ContactsCell.swift">
+         </FileRef>
+         <FileRef
+            location = "group:ContactsCell.xib">
+         </FileRef>
+         <FileRef
+            location = "group:ContactsTableContainerView.swift">
+         </FileRef>
+         <FileRef
+            location = "group:ContactsView.swift">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/ContactsBubbleView.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MMViews.swift">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/CoreChatListViewController.xib">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/ChatListCell.swift">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/Views/ChatListCell.xib">
+         </FileRef>
+         <FileRef
+            location = "group:LoadingCell.xib">
+         </FileRef>
+         <FileRef
+            location = "group:LoadingCell.swift">
+         </FileRef>
+         <FileRef
+            location = "group:LoadingView.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MapViewController.xib">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "ChatKit">
+         <Group
+            location = "group:../source/ChatKit/MMProtocols"
+            name = "MMProtocols">
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMProtocols/MMChatKitProtocols.swift">
+            </FileRef>
+            <FileRef
+               location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/Public_Definitions.swift">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/ChatKit.h">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/DefaultChatListControllerDatasource.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/DefaultChatListControllerDelegate.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/DefaultChatViewControllerDatasource.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/DefaultChatViewControllerDelegate.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/DefaultContactsPickerControllerDatasource.swift">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMXChatListViewController.swift">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMXChatViewController.swift">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/source/ChatKit/MMXContactsPickerController.swift">
+         </FileRef>
+         <FileRef
+            location = "group:../source/ChatKit/SubscribersDatasource.swift">
+         </FileRef>
+      </Group>
+   </Group>
+   <FileRef
+      location = "group:/Users/lorenzo.stanton/message-samples-ios/ChatKit/ChatKit/ChatKitTest.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+</Workspace>

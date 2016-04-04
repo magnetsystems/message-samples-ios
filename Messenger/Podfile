@@ -1,8 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 #Private
-source 'https://github.com/magnetsystems/iOS-Distribution'
-#Public
-source 'https://github.com/magnetsystems/Specs'
+#source 'https://github.com/magnetsystems/iOS-Distribution'
 
 platform :ios, '8.0'
 use_frameworks!

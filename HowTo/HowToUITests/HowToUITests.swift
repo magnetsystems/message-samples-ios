@@ -10,11 +10,12 @@ import XCTest
 
 class HowToUITests: XCTestCase {
     
-    let kExpectationsTimeout : NSTimeInterval = 60
-    let userName = "kostya"
-    let password = "kostya"
+    let kExpectationsTimeout : NSTimeInterval = 20
+    let userName = "pchan"
+    let password = "test"
     let kPublicChannelTag = "public"
     let kPublicChannelName = "public"
+    
     
     override func setUp() {
         super.setUp()
@@ -36,69 +37,86 @@ class HowToUITests: XCTestCase {
     
     //MARK: - Tests
     
-    func testLoginWithValidCredentials() {
+    func DISABLED_test01LoginWithValidCredentials() {
         
+        //Dismiss system notification prompt
+        if (XCUIApplication().alerts["“HowTo” Would Like to Send You Notifications"].collectionViews.buttons["OK"].exists) {
+            XCUIApplication().alerts["“HowTo” Would Like to Send You Notifications"].collectionViews.buttons["OK"].tap()
+        }
+        
+        
+        print("test01LoginWithValidCredentials")
         enterCredentials(userName, password: password)
         let app = XCUIApplication()
         
-        let expactation = self.expectationWithDescription("Login timed out.")
+        let expectation = self.expectationWithDescription("Login timed out.")
         
         app.buttons["Login"].tap()
-        XCTAssert(app.activityIndicators.count == 1, "Should show activityIndicator")
+        //XCTAssert(app.activityIndicators.count == 1, "Should show activityIndicator")
 
         //Wait some time for login callback
-        let seconds : UInt64 = 20
+        let seconds : UInt64 = 5
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             
             XCTAssertFalse(app.buttons["Login"].exists, "If login success - button Login should not exist")
-            XCTAssert(app.navigationBars["Features"].exists, "next screen Features should be")
+            XCTAssert(app.navigationBars["Features"].exists, "Features screen is missing")
             // Check cells on next screen
             XCTAssert(app.tables.cells.staticTexts["Chat"].exists)
             XCTAssert(app.tables.cells.staticTexts["Publish/Subscribe"].exists)
             XCTAssert(app.tables.cells.staticTexts["User Management"].exists)
             XCTAssert(app.tables.cells.staticTexts["Push"].exists)
 
-            expactation.fulfill()
+            expectation.fulfill()
         })
         
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
     }
     
-    func testLoginWithNonValidCredentials() {
+    func test02LoginWithNonValidCredentials() {
+        print("test02LoginWithNonValidCredentials")
+        
+        //Dismiss system notification prompt
+        if (XCUIApplication().alerts["“HowTo” Would Like to Send You Notifications"].collectionViews.buttons["OK"].exists) {
+            XCUIApplication().alerts["“HowTo” Would Like to Send You Notifications"].collectionViews.buttons["OK"].tap()
+        }
         
         enterCredentials("wrong", password: "wrong")
         let app = XCUIApplication()
         
-        let expactation = self.expectationWithDescription("Login timed out.")
+        let expectation = self.expectationWithDescription("Login timed out.")
         
         app.buttons["Login"].tap()
         
         //Wait some time for login callback
-        let seconds : UInt64 = 10
+        let seconds : UInt64 = 5
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             // If login success - button Login should not exist
             XCTAssert(app.buttons["Login"].exists)
             XCTAssert(app.staticTexts["Invalid username or password"].exists)
             XCTAssertEqual(app.staticTexts["Invalid username or password"].label, "Invalid username or password")
-            expactation.fulfill()
+            expectation.fulfill()
         })
         
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
     }
     
-    func testRegisterSuccess() {
-        enterCredentials("user", password: "user")
+    func test03RegisterSuccess() {
+        print("test03RegisterSuccess")
+        enterCredentials(userName, password: password)
         
         let app = XCUIApplication()
+        sleep(1)
         app.buttons["Register"].tap()
 
         let registerExpectation = self.expectationWithDescription("Register timed out.")
         
-        XCTAssert(app.activityIndicators.count == 1, "Should show activityIndicator")
+        //XCTAssert(app.activityIndicators.count == 1, "Should show activityIndicator")
         
         //Wait some time for Register callback
-        let seconds : UInt64 = 20
+        let seconds : UInt64 = 5
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+//            app.alerts.collectionViews.buttons["OK"].tap()
+//            XCTAssert(app.alerts.count == 0, "Alert is dismised")
             
             XCTAssertFalse(app.buttons["Register"].exists, "If success - button Register should not exist")
             // Check cells on next screen
@@ -115,8 +133,8 @@ class HowToUITests: XCTestCase {
     
     // MARK: - Chat
     
-    func testChatSendMessage() {
-        
+    func test04ChatSendMessage() {
+        print("test04ChatSendMessage")
         let messageText = "hello everyone"
         let app = XCUIApplication()
         enterCredentials(userName, password: password)
@@ -127,15 +145,15 @@ class HowToUITests: XCTestCase {
         
         app.buttons["Login"].tap()
         
-        let loginExpactation = self.expectationWithDescription("Login expactation")
+        let loginExpectation = self.expectationWithDescription("Login expactation")
         
         //Wait some time for login callback
-        let seconds : UInt64 = 10
+        let seconds : UInt64 = 5
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            loginExpactation.fulfill()
+            loginExpectation.fulfill()
         })
         
-        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         
         app.tables.cells.staticTexts["Chat"].tap()
         
@@ -170,8 +188,7 @@ class HowToUITests: XCTestCase {
         
         app.buttons["Fetch all messages posted in the last 24 hours"].tap()
 
-        XCTAssert(app.activityIndicators.count == 1, "Should show activityIndicator")
-        
+        //XCTAssert(app.activityIndicators.count == 1, "Should show activityIndicator")
         let fetchMessageExpectation = self.expectationWithDescription("Fetch Message expectation")
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
@@ -182,14 +199,14 @@ class HowToUITests: XCTestCase {
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         
         // Go back
-        sendReceiveMessagesNavigationBar.buttons["Features"].tap()
+        sendReceiveMessagesNavigationBar.buttons["Back"].tap()
         XCTAssertFalse(sendReceiveMessagesNavigationBar.exists, "Should be dismissed")
     }
     
     // MARK: - Publish / Subscribe
     
-    func testCreatePublicChannel() {
-        
+    func test05CreatePublicChannel() {
+        print("test05CreatePublicChannel")
         let app = XCUIApplication()
         enterCredentials(userName, password: password)
         
@@ -199,10 +216,10 @@ class HowToUITests: XCTestCase {
         
         app.buttons["Login"].tap()
         
-        let loginExpactation = self.expectationWithDescription("Login expactation")
+        let loginExpectation = self.expectationWithDescription("Login expactation")
         
         //Wait some time for login callback
-        let seconds : UInt64 = 20
+        let seconds : UInt64 = 5
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             
             XCTAssertFalse(app.buttons["Login"].exists, "If login success - button Login should not exist")
@@ -212,7 +229,7 @@ class HowToUITests: XCTestCase {
             XCTAssert(app.tables.cells.staticTexts["User Management"].exists)
             XCTAssert(app.tables.cells.staticTexts["Push"].exists)
             
-            loginExpactation.fulfill()
+            loginExpectation.fulfill()
         })
         
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
@@ -255,102 +272,109 @@ class HowToUITests: XCTestCase {
         XCTAssert(app.alerts.count == 0, "Alert is dismised")
     }
     
-    func testPublishSubscribe() {
+    func test06PublishSubscribe_AllSubscribed() {
+        print("test06PublishSubscribe_AllSubscribed")
+        let seconds : UInt64 = 5
         let app = XCUIApplication()
-        enterCredentials(userName, password: password)
-        
-        /*
-        Login
-        */
-        
-        app.buttons["Login"].tap()
-        let loginExpactation = self.expectationWithDescription("Login expactation")
-        
-        //Wait some time for login callback
-        let seconds : UInt64 = 10
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            loginExpactation.fulfill()
-        })
-        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
-        
-        /*
-        Publish/Subscribe
-        Create public and private channels before
-        */
+        toPublishSubscribe()
         
         let tablesQuery = app.tables
-        tablesQuery.staticTexts["Publish/Subscribe"].tap()
-        XCTAssert(app.navigationBars["Publish / Subscribe"].exists)
         tablesQuery.staticTexts["Subscribed channels"].tap()
         XCTAssert(app.navigationBars["Subscribed channels"].exists)
         
-        let subscribedExpactation = self.expectationWithDescription("Subscribed channels expactation")
+        let subscribedExpectation = self.expectationWithDescription("Subscribed channels expectation")
+        
         //Wait some time for login callback
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             XCTAssert(app.tables.cells.count > 0, "Should see channels")
-            subscribedExpactation.fulfill()
+            subscribedExpectation.fulfill()
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+    }
+    
+    func test07PublishSubscribe_AllPublic() {
+        print("test07PublishSubscribe_AllPublic")
+        let seconds : UInt64 = 5
+        let app = XCUIApplication()
+        toPublishSubscribe()
         
-        
-        app.navigationBars["Subscribed channels"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
+        let tablesQuery = app.tables
         tablesQuery.staticTexts["All public channels"].tap()
         XCTAssert(app.navigationBars["All public channels"].exists)
         
-        let allPublicExpactation = self.expectationWithDescription("All public channels expactation")
+        let allPublicExpectation = self.expectationWithDescription("All public channels expectation")
         //Wait some time for callback
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             XCTAssert(app.tables.cells.count > 0, "Should see channels")
-            allPublicExpactation.fulfill()
+            tablesQuery.staticTexts["public "].tap()
+            let messageTextField = app.textFields["Message"]    //Send Message
+            messageTextField.tap()
+            messageTextField.typeText("Automated")
+            app.navigationBars["public"].buttons["Send"].tap()
+            sleep(5) //Wait for message to be sent and fetched
+            XCTAssert(app.tables.cells.count > 0, "Should see messages") //Validate fetch messages not empty
+            allPublicExpectation.fulfill()
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
-        
-        app.navigationBars["All public channels"].buttons["Publish / Subscribe"].tap()
-        tablesQuery.staticTexts["My private channels"].tap()
-        XCTAssert(app.navigationBars["My private channels"].exists)
-        
-        let myPrivateExpactation = self.expectationWithDescription("My private channels expactation")
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            XCTAssert(app.tables.cells.count > 0, "Should see channels")
-            myPrivateExpactation.fulfill()
-        })
-        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
-        
-        // Next - check one of the channels
-        
-        XCTAssert(app.tables.cells.staticTexts[userName].exists, "Private channel with your name should exist")
-        app.tables.cells.staticTexts[userName].tap()
-        XCTAssert(app.navigationBars[userName].exists, "Should show chat screen")
-        XCTAssert(app.tabBars.buttons["Subscribers"].exists)
-        XCTAssert(app.tabBars.buttons["Messages"].exists)
-        app.tabBars.buttons["Subscribers"].tap()
-        
-        XCTAssert(app.navigationBars["Subscribers"].exists, "Subscribers screen is not showing")
-        let subscribersNavigationBar = app.navigationBars["Subscribers"]
-        subscribersNavigationBar.buttons["Invite"].tap()
-        
-        XCTAssert(app.alerts["Invite user"].exists, "Should see alert")
-        let collectionViewsQuery = app.alerts["Invite user"].collectionViews
-        let userNameTextField = collectionViewsQuery.textFields["User name"]
-        XCTAssertEqual(userNameTextField.value as? String, userName, "Should be equal")
-        
-        collectionViewsQuery.buttons["Send"].tap()
-        XCTAssertFalse(app.alerts["Invite user"].exists, "Should hide alert")
-        
-        let inviteExpactation = self.expectationWithDescription("Invite expactation")
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            XCTAssert(app.alerts["Invite"].exists, "Should see invite alert")
-            inviteExpactation.fulfill()
-        })
-        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
-        
-        app.alerts["Invite"].collectionViews.buttons["Accept"].tap()
-        XCTAssertFalse(app.alerts["Invite"].exists, "Should hide alert")
-        subscribersNavigationBar.buttons["My private channels"].tap()
-        XCTAssert(app.navigationBars["My private channels"].exists)
     }
     
-    func testFindChannels() {
+    func test08PublishSubscribe_MyPrivate() {
+        print("test07PublishSubscribe_AllPublic")
+        let seconds : UInt64 = 5
+        let app = XCUIApplication()
+        toPublishSubscribe()
+        
+        let tablesQuery = app.tables
+        
+        tablesQuery.staticTexts["My private channels"].tap()
+        XCTAssert(app.navigationBars["My private channels"].exists)
+
+        let myPrivateExpectation = self.expectationWithDescription("My private channels expactation")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            XCTAssert(app.tables.cells.count > 0, "Should see channels")
+            tablesQuery.staticTexts[self.userName].tap()
+            let messageTextField = app.textFields["Message"]    //Send Message
+            messageTextField.tap()
+            messageTextField.typeText("Automated")
+            app.navigationBars[self.userName].buttons["Send"].tap()
+            sleep(5)
+            XCTAssert(app.tables.cells.count > 0, "Should see messages") //Validate fetch messages not empty
+            myPrivateExpectation.fulfill()
+        })
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+    }
+    
+    func test09PublishSubscribe_Subscribers() {
+        print("test09PublishSubscribe_Subscribers")
+        let seconds : UInt64 = 5
+        let app = XCUIApplication()
+        toPublishSubscribe()
+        
+        let tablesQuery = app.tables
+        tablesQuery.staticTexts["All public channels"].tap()
+        XCTAssert(app.navigationBars["All public channels"].exists)
+        
+        XCTAssert(app.tables.cells.count > 0, "Should see channels")
+        tablesQuery.staticTexts["public "].tap()
+        app.tabBars.buttons["Subscribers"].tap()
+        XCTAssert(app.navigationBars["Subscribers"].exists, "Subscribers screen is not showing")
+        //XCTAssertTrue(app.tables.staticTexts[self.userName].exists) //iPhone 5 and iPhone 6 have different back button label (First Name vs "Back")
+        
+        let inviteExpectation = self.expectationWithDescription("Invite expectation")
+        app.navigationBars["Subscribers"].buttons["Invite"].tap()
+        app.alerts["Invite user"].collectionViews.buttons["Send"].tap() //Confirm invite send
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            XCTAssert(app.alerts["Invite"].exists, "Should see invite alert")
+            app.alerts["Invite"].collectionViews.buttons["Accept"].tap()
+            XCTAssertFalse(app.alerts["Invite"].exists, "Should hide alert")
+            inviteExpectation.fulfill()
+        })
+
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+    }
+    
+    func test10FindChannels() {
+        print("test07FindChannels")
         let app = XCUIApplication()
         enterCredentials(userName, password: password)
         
@@ -359,13 +383,14 @@ class HowToUITests: XCTestCase {
         */
         
         app.buttons["Login"].tap()
-        let loginExpactation = self.expectationWithDescription("Login expactation")
+        let loginExpectation = self.expectationWithDescription("Login expactation")
         
         //Wait some time for login callback
-        let seconds : UInt64 = 10
+        let seconds : UInt64 = 5
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            loginExpactation.fulfill()
+            loginExpectation.fulfill()
         })
+        
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         
         let tablesQuery = app.tables
@@ -386,6 +411,7 @@ class HowToUITests: XCTestCase {
         let searchByNamePublicExpectation = self.expectationWithDescription("Search By Name Public expectation")
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             XCTAssert(app.tables.cells.count > 0, "No public channel")
+
             XCTAssert(app.tables.cells.staticTexts[self.kPublicChannelName].exists, "No public channel")
             searchByNamePublicExpectation.fulfill()
         })
@@ -411,7 +437,7 @@ class HowToUITests: XCTestCase {
         app.segmentedControls.buttons["Starting with"].tap()
         textField.tap()
         deleteKey.pressForDuration(2)
-        textField.typeText("k")
+        textField.typeText("p")
         searchButton.tap()
         let searchByStartingWithPrivateExpectation = self.expectationWithDescription("Search By Starting with Private expactation")
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
@@ -438,7 +464,8 @@ class HowToUITests: XCTestCase {
         app.segmentedControls.buttons["By tag"].tap()
         textField.typeText("ublic")
         searchButton.tap()
-        let searchByTagPublicExpectation = self.expectationWithDescription("Search By tag Public expactation")
+        
+        let searchByTagPublicExpectation = self.expectationWithDescription("Search By tag Public expectation")
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             XCTAssert(app.tables.cells.count > 0, "No public channel")
             XCTAssert(app.tables.cells.staticTexts[self.kPublicChannelName].exists, "No public channel")
@@ -446,35 +473,27 @@ class HowToUITests: XCTestCase {
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         
-        findChannelsNavigationBar.buttons["Publish / Subscribe"].tap()
+        //findChannelsNavigationBar.buttons["Back"].tap()
+        findChannelsNavigationBar.childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
         XCTAssert(app.navigationBars["Publish / Subscribe"].exists)
     }
     
     // MARK: - User management
     
-    func testRegisterNewUser() {
+    func test11RegisterNewUser() {
+        print("test11RegisterNewUser")
         let app = XCUIApplication()
-        let seconds : UInt64 = 10
-        enterCredentials(userName, password: password)
+        toUserManagement()
         
-        /* Login */
-        
-        app.buttons["Login"].tap()
-        let loginExpactation = self.expectationWithDescription("Login expactation")
-        //Wait some time for login callback
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            loginExpactation.fulfill()
-        })
-        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        let seconds : UInt64 = 5
         
         let tablesQuery = app.tables
-        tablesQuery.cells.staticTexts["User Management"].tap()
         tablesQuery.cells.staticTexts["Register"].tap()
         XCTAssert(app.navigationBars["Register a new User"].exists, "Should show Register screen")
         
         let usernameTextField = app.textFields["Username"]
         usernameTextField.tap()
-        usernameTextField.typeText("jane")
+        usernameTextField.typeText("jake")
         
         let passwordSecureTextField = app.secureTextFields["Password"]
         passwordSecureTextField.tap()
@@ -483,7 +502,7 @@ class HowToUITests: XCTestCase {
         /* Register */
         
         app.buttons["Register"].tap()
-        let registerExpectation = self.expectationWithDescription("Register expactation")
+        let registerExpectation = self.expectationWithDescription("Register expectation")
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             XCTAssert(app.alerts["User created successfully"].exists, "No visible alerts")
             registerExpectation.fulfill()
@@ -492,27 +511,20 @@ class HowToUITests: XCTestCase {
         
         app.alerts["User created successfully"].collectionViews.buttons["OK"].tap()
         XCTAssert(app.alerts.count == 0, "Alert hasn't disappeared")
-        app.navigationBars["Register a new User"].buttons["User Management"].tap()
+        //app.navigationBars["Register a new User"].buttons["Back"].tap()
+        app.navigationBars["Register a new User"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
         XCTAssert(app.navigationBars["User Management"].exists, "Should show User Management screen")
+        
+        //Need to Logout and login with new user account
     }
     
-    func testLogOut() {
+    func test12LogOut() {
+        print("test09LogOut")
         let app = XCUIApplication()
-        let seconds : UInt64 = 10
-        enterCredentials(userName, password: password)
-        
-        /* Login */
-        
-        app.buttons["Login"].tap()
-        let loginExpactation = self.expectationWithDescription("Login expactation")
-        //Wait some time for login callback
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            loginExpactation.fulfill()
-        })
-        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        toUserManagement()
+        let seconds : UInt64 = 5
         
         let tablesQuery = app.tables
-        tablesQuery.cells.staticTexts["User Management"].tap()
         tablesQuery.cells.staticTexts["Log Out"].tap()
         XCTAssert(app.staticTexts["You are logged in as \(userName)"].exists, "No current user label")
         XCTAssert(app.navigationBars["Log Out"].exists, "Not Log Out screen")
@@ -520,31 +532,22 @@ class HowToUITests: XCTestCase {
         /* Log Out */
         
         app.navigationBars["Log Out"].buttons["Log Out"].tap()
-        let loginOutExpactation = self.expectationWithDescription("Log Out expactation")
+        let loginOutExpectation = self.expectationWithDescription("Log Out expactation")
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
             XCTAssert(app.navigationBars["Welcome to Magnet Message!"].exists, "Not Login screen")
-            loginOutExpactation.fulfill()
+            loginOutExpectation.fulfill()
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
     }
     
-    func testSearchForUsers() {
+    func test13SearchForUsers() {
+        print("test10SearchForUsers")
         let app = XCUIApplication()
-        let seconds : UInt64 = 10
-        enterCredentials(userName, password: password)
-        
-        /* Login */
-        
-        app.buttons["Login"].tap()
-        let loginExpactation = self.expectationWithDescription("Login expactation")
-        //Wait some time for login callback
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            loginExpactation.fulfill()
-        })
-        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        toUserManagement()
+        //let tablesQuery = app.tables
+        let seconds : UInt64 = 5
         
         let tablesQuery = app.tables
-        tablesQuery.cells.staticTexts["User Management"].tap()
         tablesQuery.cells.staticTexts["Search for Users"].tap()
         XCTAssert(app.navigationBars["Search Users"].exists, "Not Search Users screen")
 
@@ -575,27 +578,18 @@ class HowToUITests: XCTestCase {
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         
-        searchUsersNavigationBar.buttons["User Management"].tap()
+        //searchUsersNavigationBar.buttons["Back"].tap()
+        searchUsersNavigationBar.childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
         XCTAssert(app.navigationBars["User Management"].exists, "Should show User Management screen")
     }
     
-    func testRetreiveUsers() {
+    func test14RetreiveUsers() {
+        print("test11RetreiveUsers")
         let app = XCUIApplication()
-        let seconds : UInt64 = 10
-        enterCredentials(userName, password: password)
-        
-        /* Login */
-        
-        app.buttons["Login"].tap()
-        let loginExpactation = self.expectationWithDescription("Login expactation")
-        //Wait some time for login callback
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            loginExpactation.fulfill()
-        })
-        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        toUserManagement()
+        let seconds : UInt64 = 5
         
         let tablesQuery = app.tables
-        tablesQuery.cells.staticTexts["User Management"].tap()
         tablesQuery.cells.staticTexts["Retrieve Users (by ID or userName)"].tap()
         app.segmentedControls.buttons["Retrieve by ID"].tap()
         
@@ -626,24 +620,26 @@ class HowToUITests: XCTestCase {
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         
-        retrieveUsersNavigationBar.buttons["User Management"].tap()
+        //retrieveUsersNavigationBar.buttons["Back"].tap()
+        retrieveUsersNavigationBar.childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
         XCTAssert(app.navigationBars["User Management"].exists, "Should show User Management screen")
     }
     
     // MARK: - Push
 
-    func testPush() {
+    func test15Push() {
+        print("test12Push")
         let app = XCUIApplication()
-        let seconds : UInt64 = 10
+        let seconds : UInt64 = 5
         enterCredentials(userName, password: password)
         
         /* Login */
         
         app.buttons["Login"].tap()
-        let loginExpactation = self.expectationWithDescription("Login expactation")
+        let loginExpectation = self.expectationWithDescription("Login expactation")
         //Wait some time for login callback
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
-            loginExpactation.fulfill()
+            loginExpectation.fulfill()
         })
         self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
         
@@ -667,11 +663,101 @@ class HowToUITests: XCTestCase {
     func enterCredentials(userName:String, password: String) {
         let app = XCUIApplication()
         let usernameTextField = app.textFields["Username"]
+        sleep(1)
         usernameTextField.tap()
         usernameTextField.typeText(userName)
         
         let passwordSecureTextField = app.secureTextFields["Password"]
         passwordSecureTextField.tap()
         passwordSecureTextField.typeText(password)
+    }
+    
+
+    func toPublishSubscribe() {
+        print("Navigate to PublishSubscribe")
+        let app = XCUIApplication()
+        enterCredentials(userName, password: password)
+        
+        /*
+        Login
+        */
+        
+        app.buttons["Login"].tap()
+        let loginExpectation = self.expectationWithDescription("Login expactation")
+        
+        //Wait some time for login callback
+        let seconds : UInt64 = 5
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            loginExpectation.fulfill()
+        })
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        
+        /*
+        Publish/Subscribe
+        */
+        
+        let tablesQuery = app.tables
+        tablesQuery.staticTexts["Publish/Subscribe"].tap()
+        XCTAssert(app.navigationBars["Publish / Subscribe"].exists)
+    }
+    
+    func toUserManagement() {
+        print("Navigate to UserManagement")
+        let app = XCUIApplication()
+        let seconds : UInt64 = 5
+        enterCredentials(userName, password: password)
+        
+        /* Login */
+        
+        app.buttons["Login"].tap()
+        let loginExpectation = self.expectationWithDescription("Login expactation")
+        //Wait some time for login callback
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            loginExpectation.fulfill()
+        })
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        
+        
+        //let tablesQuery = app.tables
+        app.tables.cells.staticTexts["User Management"].tap()
+        XCTAssert(app.tables.cells.staticTexts["Register"].exists)
+        XCTAssert(app.tables.cells.staticTexts["Log Out"].exists)
+        XCTAssert(app.tables.cells.staticTexts["Search for Users"].exists)
+        XCTAssert(app.tables.cells.staticTexts["Retrieve Users (by ID or userName)"].exists)
+    }
+    
+    func logOut() {
+        let app = XCUIApplication()
+        toUserManagement()
+        let seconds : UInt64 = 5
+        //        enterCredentials(userName, password: password)
+        //
+        //        /* Login */
+        //
+        //        app.buttons["Login"].tap()
+        //        let loginExpectation = self.expectationWithDescription("Login expactation")
+        //        //Wait some time for login callback
+        //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+        //            loginExpectation.fulfill()
+        //        })
+        //        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
+        //
+        //        let tablesQuery = app.tables
+        //        tablesQuery.cells.staticTexts["User Management"].tap()
+        
+        let tablesQuery = app.tables
+        tablesQuery.cells.staticTexts["Log Out"].tap()
+        XCTAssert(app.staticTexts["You are logged in as \(userName)"].exists, "No current user label")
+        XCTAssert(app.navigationBars["Log Out"].exists, "Not Log Out screen")
+        
+        /* Log Out */
+        
+        app.navigationBars["Log Out"].buttons["Log Out"].tap()
+        let loginOutExpectation = self.expectationWithDescription("Log Out expactation")
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), {
+            XCTAssert(app.navigationBars["Welcome to Magnet Message!"].exists, "Not Login screen")
+            loginOutExpectation.fulfill()
+        })
+        self.waitForExpectationsWithTimeout(kExpectationsTimeout, handler: nil)
     }
 }

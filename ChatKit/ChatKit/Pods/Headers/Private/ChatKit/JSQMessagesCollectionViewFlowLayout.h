@@ -1,0 +1,1 @@
+../../../../../source/src/JSQMessagesViewController/JSQMessagesViewController/Layout/JSQMessagesCollectionViewFlowLayout.h

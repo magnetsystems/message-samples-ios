@@ -185,7 +185,15 @@ class SupportViewController: UITableViewController {
                 guard let page = self?.page, pageSize = self?.dynamicType.pageSize else {
                     fatalError("page should be set here!")
                 }
-                let paginatedChannels = Array(channels[((page - 1) * pageSize)..<(min(page * pageSize, channels.count))])
+                
+                let offsetPage = ((page - 1) * pageSize)
+                let offsetPageBounds = min(page * pageSize, channels.count)
+                
+                guard offsetPage < offsetPageBounds else {
+                    return
+                }
+                
+                let paginatedChannels = Array(channels[offsetPage..<offsetPageBounds])
                 
                 let IDs = (paginatedChannels as NSArray).valueForKey("ownerUserID") as! [String]
                 MMUser.usersWithUserIDs(IDs, success: { [weak self] users in
