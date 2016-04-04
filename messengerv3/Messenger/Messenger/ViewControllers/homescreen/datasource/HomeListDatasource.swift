@@ -152,8 +152,14 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
                 self.eventChannels = []
                 
                 for  channel in channels {
-                    dispatch_group_enter(self.loadingGroup)
                     
+                    guard !channel.isSubscribed else {
+                        self.eventChannels.append(channel)
+                        continue
+                    }
+                    
+                    
+                    dispatch_group_enter(self.loadingGroup)
                     channel.subscribeWithSuccess({
                         
                         lock.lock()
@@ -207,7 +213,7 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
                         channelOffset -= 1
                     }
                 }
-                if channelOffset < channels.count {
+                if channelOffset < channels.count && channels.count > 0 {
                     offsetChannels = Array(channels[channelOffset..<min((channelOffset + self.limit), channels.count)])
                 } else {
                     self.hasMoreUsers = false
