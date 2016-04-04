@@ -399,7 +399,7 @@ public extension CoreChatListViewController {
     }
     
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if identifierForFooterSection(section) == "LOADING"  &&  !infiniteLoading.isFinished {
+        if identifierForFooterSection(section) == "LOADING" {
             let view = LoadingView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
             view.indicator?.startAnimating()
             return view
