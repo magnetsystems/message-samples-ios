@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -34,13 +34,26 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
     public var appearance = MagnetControllerAppearance()
     public var magnetNavigationBar : UINavigationBar?
     public var magnetNavigationItem : UINavigationItem?
+    public var didDismissCompletionBlock : ((viewController : MMViewController) -> Void)?
     
     
-    //Private Variables
+    //MARK: Private Variables
     
     
     private let navBarHeight : CGFloat = 54.0
     internal var didGenerateBars = false
+    
+    
+    //MARK: Private Methods
+    
+    
+    private func didDissmisViewController() {
+        {[weak self] in
+            if let weakSelf = self {
+                weakSelf.didDismissCompletionBlock?(viewController: weakSelf)
+            }
+            }()
+    }
     
     
     //MARK : Init
@@ -64,6 +77,7 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
         super.awakeFromNib()
         setupViewController()
     }
+    
     
     //MARK: Public Methods
     
@@ -112,13 +126,17 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
         } else  {
             self.dismissViewControllerAnimated(false, completion: nil)
         }
+        didDissmisViewController()
     }
     
     public func dismissAnimated() {
         if self.navigationController != nil {
             self.navigationController?.popViewControllerAnimated(true)
+            didDissmisViewController()
         } else  {
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismissViewControllerAnimated(true, completion: {
+                self.didDissmisViewController()
+            })
         }
     }
 }

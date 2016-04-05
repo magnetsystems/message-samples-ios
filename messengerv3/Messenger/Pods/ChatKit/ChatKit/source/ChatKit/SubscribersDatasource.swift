@@ -80,7 +80,9 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
             
             self.currentContactsPickerViewController = contacts
             
-            self.chatViewController?.navigationController?.pushViewController(contacts, animated: true)
+            if let nav = self.controller?.navigationController, let contactsVC = self.currentContactsPickerViewController {
+                nav.pushViewController(contactsVC, animated: true)
+            }
             sender.enabled = true
             DDLogVerbose("[Presenting Contacts]")
             }, failure: { error in
