@@ -20,7 +20,7 @@ import UIKit
 import CocoaLumberjack
 import MagnetMax
 
-public class DefaultChatViewControllerDelegate : ChatViewControllerDelegate {
+public class DefaultChatViewControllerDelegate : NSObject, ChatViewControllerDelegate {
     
     public weak var controller : MMXChatViewController?
     
