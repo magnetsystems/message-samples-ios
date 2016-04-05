@@ -17,6 +17,8 @@
 
 import UIKit
 
+let MMFooterHeightZero : CGFloat = 0.0001
+
 public class MMTableViewController: MMViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     

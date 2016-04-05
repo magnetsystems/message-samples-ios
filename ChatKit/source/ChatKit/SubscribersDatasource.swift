@@ -53,6 +53,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
                 return
             }
             
+            self.hasMoreUsers = num > Int32(users.count + offset)
             if let picker = self.controller {
                 //append users, reload data or insert data
                 picker.append(users)
