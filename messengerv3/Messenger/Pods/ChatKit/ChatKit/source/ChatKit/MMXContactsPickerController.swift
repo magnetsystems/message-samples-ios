@@ -168,6 +168,10 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         return self.requestNumber
     }
     
+    public func resetData() {
+        self.reset()
+    }
+    
     public func reloadData() {
         self.append([])
     }

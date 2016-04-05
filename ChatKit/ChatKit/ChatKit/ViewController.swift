@@ -88,7 +88,7 @@ class ViewController: UIViewController {
     }
     
     func showChatList() {
-        let c = MyChatListController()
+        let c = MMXChatListViewController()
         //let c : UIViewController! = self.storyboard?.instantiateViewControllerWithIdentifier("home")
         //c.delegate = self
         // c.contactsPickerDelegate = self

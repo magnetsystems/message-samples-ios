@@ -132,6 +132,10 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
         return self.requestNumber
     }
     
+    public func resetData() {
+        self.reset()
+    }
+    
     public func reloadData() {
         self.append([])
     }

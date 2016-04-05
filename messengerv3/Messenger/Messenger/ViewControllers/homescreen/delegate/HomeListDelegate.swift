@@ -27,6 +27,7 @@ class HomeListDelegate : DefaultChatListControllerDelegate {
     
     override func mmxListWillShowChatController(chatController : MMXChatViewController) {
         chatController.datasource = ChatViewDatasource()
+        chatController.delegate = ChatViewDelegate()
     }
 }
 

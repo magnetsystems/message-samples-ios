@@ -18,14 +18,13 @@
 import UIKit
 import ChatKit
 
-
 public class ChatViewDatasource : DefaultChatViewControllerDatasource {
     
-
+    
     //MARK: Public Methods
     
     
-   override public func mmxControllerLoadMore(channel : MMXChannel?, offset : Int) {
+    override public func mmxControllerLoadMore(channel : MMXChannel?, offset : Int) {
         guard let channel = controller?.chat else { return }
         
         //get request context
