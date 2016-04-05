@@ -219,6 +219,7 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
                     self.hasMoreUsers = false
                 }
                 
+                self.hasMoreUsers = channelOffset + self.limit < channels.count - 1
                 if offset == 0 {
                     offsetChannels.appendContentsOf(self.eventChannels)
                     if let askMagnet = self.askMagnet {
