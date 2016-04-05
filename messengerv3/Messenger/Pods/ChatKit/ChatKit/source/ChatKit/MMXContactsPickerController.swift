@@ -168,12 +168,12 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         return self.requestNumber
     }
     
-    public func resetData() {
-        self.reset()
-    }
-    
     public func reloadData() {
         self.append([])
+    }
+    
+    public func resetData() {
+        self.reset()
     }
     
     
@@ -192,6 +192,14 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     
     //MARK: - Core Method Overrides
     
+    
+    override func canSelectUser(user: MMUser) -> Bool {
+        if let selectUser = self.delegate?.mmxContactsCanSelectUser {
+            return selectUser(user)
+        }
+        
+        return super.canSelectUser(user)
+    }
     
     override internal func cellDidCreate(cell: UITableViewCell) {
         self.datasource?.mmxContactsDidCreateCell?(cell)

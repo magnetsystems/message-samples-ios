@@ -19,6 +19,45 @@ import UIKit
 import ChatKit
 
 
+extension ContactsControllerDelegate {
+    
+    public func mmxContactsCanSelectUser(user: MMUser) {
+        
+    }
+    
+    public func mmxAvatarDidClick(user: MMUser) {
+        
+    }
+    
+    
+    func confirmUnBlock(user : MMUser) {
+        let alert = UIAlertController(title: "Unblock User", message: "Are you sure you want to unblock \(ChatKit.Utils.displayNameForUser(user))?", preferredStyle: .Alert)
+        let button = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alert.addAction(button)
+        let buttonConfirm = UIAlertAction(title: "Ok", style: .Default, handler: { action in
+            
+            MMUser.unblockUsers(Set([user]), success: {
+                self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok")
+                }, failure: {error in
+                    self.showAlert("Could not unblock user please try again.", title:"Failed to Unblock", closeTitle: "Ok")
+            })
+            
+        })
+        alert.addAction(buttonConfirm)
+        let controller = UIApplication.sharedApplication().keyWindow?.rootViewController
+        controller?.presentViewController(alert, animated: false, completion: nil)
+    }
+    
+    func showAlert(message :String, title :String, closeTitle :String, handler:((UIAlertAction) -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let button = UIAlertAction(title: closeTitle, style: .Cancel, handler: handler)
+        alert.addAction(button)
+        let controller = UIApplication.sharedApplication().keyWindow?.rootViewController
+        controller?.presentViewController(alert, animated: false, completion: nil)
+    }
+}
+
+
 //MARK: custom chat list controller
 
 

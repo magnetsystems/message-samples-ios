@@ -168,12 +168,12 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         }
     }
     
-    public func resetData() {
-        self.reset()
-    }
-    
     public func reloadData() {
         self.append([])
+    }
+    
+    public func resetData() {
+        self.reset()
     }
     
     

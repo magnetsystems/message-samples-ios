@@ -38,6 +38,7 @@ import MagnetMax
 @objc public protocol ContactsControllerDelegate: class, MMXAvatarDelegate {
     
     
+    optional func mmxContactsCanSelectUser(user: MMUser) -> Bool
     optional func mmxContactsControllerDidFinish(with selectedUsers: [MMUser])
     optional func mmxContactsControllerSelectedUser(user: MMUser)
     optional func mmxContactsControllerUnSelectedUser(user: MMUser)

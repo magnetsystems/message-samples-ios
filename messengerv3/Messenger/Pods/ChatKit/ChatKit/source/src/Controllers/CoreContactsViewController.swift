@@ -193,6 +193,10 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         reloadFooters()
     }
     
+    internal func canSelectUser(user : MMUser) -> Bool{
+        return true
+    }
+    
     internal func cellDidCreate(cell : UITableViewCell) { }
     
     internal func cellForUser(user : MMUser, indexPath : NSIndexPath) -> UITableViewCell?{
@@ -460,6 +464,9 @@ public extension CoreContactsViewController {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let users = availableRecipients[indexPath.section].users
         if  let user = users[indexPath.row].user {
+            guard canSelectUser(user) else {
+                return
+            }
             addSelectedUser(user)
         }
         updateContactsView(selectedUsers)
