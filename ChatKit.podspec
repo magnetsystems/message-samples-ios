@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name               =  'ChatKit'
-  s.version            =  '1.2.0'
+  s.version            =  '1.3.0'
   s.license            =  { :type => 'Apache 2.0' }
   s.summary            =  'iOS framework for developing apps using the Magnet Message platform.'
   s.description        =  'Magnet Message is a powerful, open source mobile messaging framework enabling real-time user engagement for your mobile apps. Send relevant and targeted communications to customers or employees. Enhance your mobile app with actionable notifications, alerts, in-app events, two-way interactions and more. Get started and get coding in minutes!'
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'UI_Core' do |ss|
     ss.source_files = ['ChatKit/source/src/**/*.{h,m,swift}','ChatKit/source/Views/**/*.{h,m,swift}']
-    ss.dependency 'MagnetMax', '~> 2.5.3'
+    ss.dependency 'MagnetMax', '~> 2.5'
     ss.dependency 'NYTPhotoViewer' , '~> 1.1.0'
     ss.dependency 'DZVideoPlayerViewController'
     ss.dependency 'CocoaLumberjack/Swift'
@@ -29,8 +29,6 @@ Pod::Spec.new do |s|
 
   s.subspec 'Public' do |ss|
     ss.source_files = 'ChatKit/source/ChatKit/**/*.{h,m,swift}'
-    ss.dependency 'ChatKit/UI_Core', '1.2.0'
+    ss.dependency 'ChatKit/UI_Core', '1.3.0'
   end
 end
-
-
