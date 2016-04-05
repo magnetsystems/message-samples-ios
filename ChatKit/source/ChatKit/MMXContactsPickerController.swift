@@ -172,6 +172,10 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         self.append([])
     }
     
+    public func resetData() {
+        self.reset()
+    }
+    
     
     //MARK: Actions
     

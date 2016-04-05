@@ -172,6 +172,10 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         self.append([])
     }
     
+    public func resetData() {
+        self.reset()
+    }
+    
     
     //MARK: - Core Method Overrides
     
