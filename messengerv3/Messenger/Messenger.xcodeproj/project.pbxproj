@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E75E2AB1CB4223300E9BD18 /* MessengerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E75E2AA1CB4223300E9BD18 /* MessengerUITests.swift */; };
+		7E75E2B31CB4226500E9BD18 /* UIRefreshControlTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E75E2B21CB4226500E9BD18 /* UIRefreshControlTesting.swift */; };
+		7E75E2B41CB4226500E9BD18 /* UIRefreshControlTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E75E2B21CB4226500E9BD18 /* UIRefreshControlTesting.swift */; };
 		88A7D9243212C3959F5D7827 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81751918B9767AE134419C84 /* Pods.framework */; };
 		8D090A101CA4AA9200FA82AE /* AskMagnetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D090A0E1CA4AA9200FA82AE /* AskMagnetTableViewCell.swift */; };
 		8D090A111CA4AA9200FA82AE /* AskMagnetTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D090A0F1CA4AA9200FA82AE /* AskMagnetTableViewCell.xib */; };
@@ -71,9 +74,23 @@
 		8DB33E2B1CACB24000F389F7 /* ChatViewDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB33E2A1CACB24000F389F7 /* ChatViewDatasource.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7E75E2AD1CB4223300E9BD18 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8D701CCC1CA46361004B98A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D701CD31CA46361004B98A1;
+			remoteInfo = Messenger;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		1F1108F8D117C7D65F09F45A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		46C281D39B87F3BDE7F0E099 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		7E75E2A81CB4223300E9BD18 /* MessengerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessengerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E75E2AA1CB4223300E9BD18 /* MessengerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessengerUITests.swift; sourceTree = "<group>"; };
+		7E75E2AC1CB4223300E9BD18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7E75E2B21CB4226500E9BD18 /* UIRefreshControlTesting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIRefreshControlTesting.swift; sourceTree = "<group>"; };
 		81751918B9767AE134419C84 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D090A0E1CA4AA9200FA82AE /* AskMagnetTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AskMagnetTableViewCell.swift; sourceTree = "<group>"; };
 		8D090A0F1CA4AA9200FA82AE /* AskMagnetTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AskMagnetTableViewCell.xib; sourceTree = "<group>"; };
@@ -143,6 +160,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7E75E2A51CB4223300E9BD18 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D701CD11CA46361004B98A1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -160,6 +184,16 @@
 				81751918B9767AE134419C84 /* Pods.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7E75E2A91CB4223300E9BD18 /* MessengerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7E75E2AA1CB4223300E9BD18 /* MessengerUITests.swift */,
+				7E75E2AC1CB4223300E9BD18 /* Info.plist */,
+				7E75E2B21CB4226500E9BD18 /* UIRefreshControlTesting.swift */,
+			);
+			path = MessengerUITests;
 			sourceTree = "<group>";
 		};
 		8D090A121CA4AD7F00FA82AE /* AskMagnet */ = {
@@ -191,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				8D701CD61CA46362004B98A1 /* Messenger */,
+				7E75E2A91CB4223300E9BD18 /* MessengerUITests */,
 				8D701CD51CA46361004B98A1 /* Products */,
 				BF40F257C305814BB6BCF378 /* Pods */,
 				281E19DD8A6F85633925B7B9 /* Frameworks */,
@@ -201,6 +236,7 @@
 			isa = PBXGroup;
 			children = (
 				8D701CD41CA46361004B98A1 /* Messenger.app */,
+				7E75E2A81CB4223300E9BD18 /* MessengerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -439,6 +475,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7E75E2A71CB4223300E9BD18 /* MessengerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7E75E2B11CB4223300E9BD18 /* Build configuration list for PBXNativeTarget "MessengerUITests" */;
+			buildPhases = (
+				7E75E2A41CB4223300E9BD18 /* Sources */,
+				7E75E2A51CB4223300E9BD18 /* Frameworks */,
+				7E75E2A61CB4223300E9BD18 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7E75E2AE1CB4223300E9BD18 /* PBXTargetDependency */,
+			);
+			name = MessengerUITests;
+			productName = MessengerUITests;
+			productReference = 7E75E2A81CB4223300E9BD18 /* MessengerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		8D701CD31CA46361004B98A1 /* Messenger */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8D701CE61CA46362004B98A1 /* Build configuration list for PBXNativeTarget "Messenger" */;
@@ -469,6 +523,11 @@
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Lorenzo Stanton";
 				TargetAttributes = {
+					7E75E2A71CB4223300E9BD18 = {
+						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 4FMK6HARXW;
+						TestTargetID = 8D701CD31CA46361004B98A1;
+					};
 					8D701CD31CA46361004B98A1 = {
 						CreatedOnToolsVersion = 7.3;
 					};
@@ -488,11 +547,19 @@
 			projectRoot = "";
 			targets = (
 				8D701CD31CA46361004B98A1 /* Messenger */,
+				7E75E2A71CB4223300E9BD18 /* MessengerUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7E75E2A61CB4223300E9BD18 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D701CD21CA46361004B98A1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -593,6 +660,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7E75E2A41CB4223300E9BD18 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E75E2B41CB4226500E9BD18 /* UIRefreshControlTesting.swift in Sources */,
+				7E75E2AB1CB4223300E9BD18 /* MessengerUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D701CD01CA46361004B98A1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -613,6 +689,7 @@
 				8DB33E2B1CACB24000F389F7 /* ChatViewDatasource.swift in Sources */,
 				8D701D501CA463E0004B98A1 /* SignInViewController.swift in Sources */,
 				8D701D5B1CA49E53004B98A1 /* HomeListDelegate.swift in Sources */,
+				7E75E2B31CB4226500E9BD18 /* UIRefreshControlTesting.swift in Sources */,
 				8D701D241CA463E0004B98A1 /* Constants.swift in Sources */,
 				8D701D4D1CA463E0004B98A1 /* RearMenuViewController.swift in Sources */,
 				8D701D4E1CA463E0004B98A1 /* SWRevealViewController.m in Sources */,
@@ -620,6 +697,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7E75E2AE1CB4223300E9BD18 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8D701CD31CA46361004B98A1 /* Messenger */;
+			targetProxy = 7E75E2AD1CB4223300E9BD18 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		8D701CDB1CA46362004B98A1 /* Main.storyboard */ = {
@@ -641,6 +726,28 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		7E75E2AF1CB4223300E9BD18 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MessengerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Magnet.MessengerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Messenger;
+			};
+			name = Debug;
+		};
+		7E75E2B01CB4223300E9BD18 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MessengerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Magnet.MessengerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Messenger;
+			};
+			name = Release;
+		};
 		8D701CE41CA46362004B98A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -757,6 +864,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7E75E2B11CB4223300E9BD18 /* Build configuration list for PBXNativeTarget "MessengerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7E75E2AF1CB4223300E9BD18 /* Debug */,
+				7E75E2B01CB4223300E9BD18 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		8D701CCF1CA46361004B98A1 /* Build configuration list for PBXProject "Messenger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
