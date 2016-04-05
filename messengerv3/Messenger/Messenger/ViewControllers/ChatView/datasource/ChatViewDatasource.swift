@@ -20,6 +20,8 @@ import ChatKit
 
 public class ChatViewDatasource : DefaultChatViewControllerDatasource {
     
+    var numberOfMessagesWithoutTimeStamps : Int = 0
+    
     
     //MARK: Public Methods
     
@@ -32,7 +34,12 @@ public class ChatViewDatasource : DefaultChatViewControllerDatasource {
         
         self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
         
-        channel.messagesBetweenStartDate(NSDate.distantPast(), endDate: NSDate(), limit: Int32(limit), offset: Int32(offset), ascending: false, success: { [weak self] total , messages in
+        if offset == 0 {
+            numberOfMessagesWithoutTimeStamps = 0
+        }
+        
+        let messageOffset = numberOfMessagesWithoutTimeStamps + offset
+        channel.messagesBetweenStartDate(NSDate.distantPast(), endDate: NSDate(), limit: Int32(limit), offset: Int32(messageOffset), ascending: false, success: { [weak self] total , messages in
             
             if loadingContext != self?.controller?.loadingContext() {
                 return
@@ -41,6 +48,8 @@ public class ChatViewDatasource : DefaultChatViewControllerDatasource {
             for message in messages {
                 if message.timestamp != nil {
                     messagesWithTimestamps.append(message)
+                } else {
+                    self?.numberOfMessagesWithoutTimeStamps += 1
                 }
             }
             self?.hasMoreUsers = (offset + Int32(messages.count)) < total
