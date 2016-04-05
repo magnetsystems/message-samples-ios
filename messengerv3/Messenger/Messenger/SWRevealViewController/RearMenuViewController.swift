@@ -143,7 +143,7 @@ class RearMenuViewController: UITableViewController, AskMagnetCounterDelegate {
         listController.chooseContacts = false
         let datasource = AskMagnetDatasource()
         datasource.controller = listController
-        datasource.limit = 15
+        datasource.limit = 10
         let delegate = AskMagnetDelegate()
         delegate.controller = listController
         
