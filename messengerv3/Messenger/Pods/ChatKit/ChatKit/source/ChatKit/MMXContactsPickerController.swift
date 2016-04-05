@@ -181,10 +181,16 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     
     
     func cancelAction() {
-        self.dismiss()
+        self.dismissAnimated()
     }
     
     func nextAction() {
+        barButtonNext?.enabled = false
+        self.didDismissCompletionBlock = { (viewController : MMViewController) in
+            if let vc = viewController as? MMXContactsPickerController {
+                vc.barButtonNext?.enabled = true
+            }
+        }
         self.delegate?.mmxContactsControllerDidFinish?(with: self.selectedUsers)
         cancelAction()
     }

@@ -54,7 +54,8 @@ class AskMagnetDatasource : DefaultChatListControllerDatasource {
     
     override func subscribedChannels(completion : ((channels : [MMXChannel]) -> Void)) {
         MMXChannel.subscribedChannelsWithSuccess({ ch in
-            let cV : [MMXChannel] = ch.filter({ return self.isAskMagnetChannel($0) && $0.numberOfMessages > 0})
+            var cV : [MMXChannel] = ch.filter({ return self.isAskMagnetChannel($0) && $0.numberOfMessages > 0})
+            cV = self.sortChannelsByDate(cV)
             completion(channels: cV)
         }) { error in
             print(error)

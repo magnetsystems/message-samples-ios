@@ -181,7 +181,8 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
     
     override func subscribedChannels(completion : ((channels : [MMXChannel]) -> Void)) {
         MMXChannel.subscribedChannelsWithSuccess({ ch in
-            let cV = ch.filter({ return !$0.name.hasPrefix("global_") && !$0.name.hasPrefix(kAskMagnetChannel) && $0.numberOfMessages > 0})
+            var cV = ch.filter({ return !$0.name.hasPrefix("global_") && !$0.name.hasPrefix(kAskMagnetChannel) && $0.numberOfMessages > 0})
+            cV = self.sortChannelsByDate(cV)
             completion(channels: cV)
         }) { error in
             print(error)

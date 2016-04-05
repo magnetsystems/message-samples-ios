@@ -29,7 +29,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     public weak var controller : MMXChatListViewController?
     public var hasMoreUsers : Bool = true
     public private(set) var channels : [MMXChannel] = []
-    public var limit = 15
+    public var limit = 1
     
     
     // Public Functions
@@ -48,13 +48,19 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     public func subscribedChannels(completion : ((channels : [MMXChannel]) -> Void)) {
         MMXChannel.subscribedChannelsWithSuccess({ ch in
-            self.channels = ch
+            self.channels = self.sortChannelsByDate(ch)
             completion(channels: self.channels)
             DDLogVerbose("[Retireved] - Channels (\(self.channels.count))")
         }) { error in
             completion(channels: [])
             DDLogError("[Error] - \(error.localizedDescription)")
         }
+    }
+    
+    public func sortChannelsByDate(channels : [MMXChannel]) -> [MMXChannel] {
+        return channels.sort({ (channel1, channel2) -> Bool in
+            return channel1.lastTimeActive.timeIntervalSince1970 > channel2.lastTimeActive.timeIntervalSince1970
+        })
     }
     
     
