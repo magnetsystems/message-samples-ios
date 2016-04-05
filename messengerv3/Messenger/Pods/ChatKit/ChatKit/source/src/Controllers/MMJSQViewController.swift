@@ -28,10 +28,11 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
     public var magnetNavigationItem : UINavigationItem?
     
     
-    //MARK: PRivate Variables
+    //MARK: Private Variables
     
     
     private let navBarHeight : CGFloat = 54.0
+    internal var didGenerateBars = false
     
     
     //MARK : Init

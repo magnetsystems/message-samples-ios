@@ -40,6 +40,7 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
     
     
     private let navBarHeight : CGFloat = 54.0
+    internal var didGenerateBars = false
     
     
     //MARK : Init

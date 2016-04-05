@@ -173,9 +173,15 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     
     
     private func generateNavBars() {
-        if showDetails {
+        if showDetails && !didGenerateBars {
+            didGenerateBars = true
             let rightBtn = UIBarButtonItem.init(title: "Details", style: .Plain, target: self, action: "detailsAction")
-            self.navigationItem.rightBarButtonItem = rightBtn
+            if self.navigationItem.rightBarButtonItems != nil {
+                self.navigationItem.rightBarButtonItems?.insert(rightBtn, atIndex: 0)
+            } else {
+                self.navigationItem.rightBarButtonItems = [rightBtn]
+            }
+            
             if channel == nil {
                 self.navigationItem.rightBarButtonItem?.enabled = false
             }

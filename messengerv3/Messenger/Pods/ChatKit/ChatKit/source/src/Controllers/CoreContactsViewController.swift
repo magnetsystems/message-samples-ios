@@ -179,13 +179,18 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
             infiniteLoading.stopUpdating()
         } else {
             infiniteLoading.startUpdating()
+        }
+        
+        infiniteLoading.finishUpdating()
+        
+        if hasMore() {
             if users.count == 0 {
                 infiniteLoading.setNeedsUpdate()
             }
         }
         
-        infiniteLoading.finishUpdating()
         self.tableView.reloadData()
+        reloadFooters()
     }
     
     internal func cellDidCreate(cell : UITableViewCell) { }
@@ -422,7 +427,12 @@ public extension CoreContactsViewController {
     }
     
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if identifierForFooterSection(section) == "LOADING"  &&  !infiniteLoading.isFinished {
+        if identifierForFooterSection(section) == "LOADING" {
+            if infiniteLoading.isFinished {
+                let view = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: MMFooterHeightZero))
+                view.backgroundColor = UIColor.clearColor()
+                return view
+            }
             let view = LoadingView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
             view.indicator?.startAnimating()
             return view
@@ -444,7 +454,7 @@ public extension CoreContactsViewController {
             }
         }
         
-        return 0.0
+        return MMFooterHeightZero
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -565,6 +575,14 @@ private extension CoreContactsViewController {
             }
             searchBar.setShowsCancelButton(false, animated: true)
         }
+    }
+    
+    private func reloadFooters() {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
+            if self.isFooterSection(self.tableView.numberOfSections - 1) {
+                self.tableView.reloadSections(NSIndexSet(index : self.tableView.numberOfSections - 1), withRowAnimation: .None)
+            }
+        })
     }
     
     private func removeSelectedUser(selectedUser : MMUser) {

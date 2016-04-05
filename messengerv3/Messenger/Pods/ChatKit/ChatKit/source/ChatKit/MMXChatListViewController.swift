@@ -117,9 +117,14 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     
     
     private func generateNavBars() {
-        if chooseContacts {
+        if chooseContacts && !didGenerateBars {
+            didGenerateBars = true
             let rightBtn = UIBarButtonItem.init(barButtonSystemItem: .Add, target: self, action: "addContactAction")
-            navigationItem.rightBarButtonItem = rightBtn
+            if self.navigationItem.rightBarButtonItems != nil {
+                self.navigationItem.rightBarButtonItems?.append(rightBtn)
+            } else {
+                self.navigationItem.rightBarButtonItems = [rightBtn]
+            }
         }
     }
     

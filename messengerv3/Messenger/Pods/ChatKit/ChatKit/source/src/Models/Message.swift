@@ -72,15 +72,13 @@ public class Message : NSObject, JSQMessageData {
                 
                 Utils.loadImageWithUrl(url, completion: { image in
                     photoMediaItem.image = image
-                    Utils.loadImageWithUrl(url, completion: { image in
-                        self.fullsizedImage = image
-                    })
+                    self.fullsizedImage = image
                     if self.mediaCompletionBlock != nil {
                         self.mediaCompletionBlock!()
                         self.mediaCompletionBlock = nil
                     }
                     self.isDownloaded  = true
-                    },aspectSize: CGSize(width: 100, height: CGFloat.max))
+                })
             }
             
             return photoMediaItem

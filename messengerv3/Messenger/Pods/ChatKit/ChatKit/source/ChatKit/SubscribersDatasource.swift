@@ -53,6 +53,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
                 return
             }
             
+            self.hasMoreUsers = num > Int32(users.count + offset)
             if let picker = self.controller {
                 //append users, reload data or insert data
                 picker.append(users)
@@ -71,8 +72,8 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
         return false
     }
     
-    func addContacts() {
-        
+    func addContacts(sender : UIButton) {
+        sender.enabled = false
         self.channel?.subscribersWithLimit(1000, offset: 0, success: { (num, users) -> Void in
             let contacts = MMXContactsPickerController(ignoredUsers: users)
             contacts.delegate = self
@@ -80,8 +81,10 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
             self.currentContactsPickerViewController = contacts
             
             self.chatViewController?.navigationController?.pushViewController(contacts, animated: true)
+            sender.enabled = true
             DDLogVerbose("[Presenting Contacts]")
             }, failure: { error in
+                sender.enabled = true
                 DDLogError("[Error] - \(error.localizedDescription)")
         })
     }
@@ -107,7 +110,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
         button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
         button.setTitle("Add Contacts +", forState: .Normal)
         button.titleLabel?.textAlignment = .Center
-        button.addTarget(self, action: "addContacts", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: "addContacts:", forControlEvents: .TouchUpInside)
         
         return button
     }
