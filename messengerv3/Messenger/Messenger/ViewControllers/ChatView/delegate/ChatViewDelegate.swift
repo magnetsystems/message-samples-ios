@@ -21,6 +21,10 @@ import ChatKit
 public class ChatViewDelegate : DefaultChatViewControllerDelegate {
     
     override public func mmxAvatarDidClick(user: MMUser) {
+        guard user != MMUser.currentUser() else {
+            return
+        }
+        
         let alert = UIAlertController(title: "Options", message: "", preferredStyle: .ActionSheet)
         let button = UIAlertAction(title: "Close", style: .Cancel, handler: nil)
         alert.addAction(button)
