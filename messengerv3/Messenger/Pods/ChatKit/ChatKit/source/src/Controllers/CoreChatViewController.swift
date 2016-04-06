@@ -190,6 +190,7 @@ public class CoreChatViewController: MMJSQViewController {
     internal func reset() {
         self.currentMessageCount = 0
         self.messages = []
+        self.collectionView.reloadData()
         loadMore(self.chat, offset: self.currentMessageCount)
     }
     

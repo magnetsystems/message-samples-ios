@@ -88,7 +88,20 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     
     
     public weak var chatDetailsViewController : MMXContactsPickerController?
-    public weak var chatDetailsDataSource : SubscribersDatasource?
+    public weak var chatDetailsDataSource : SubscribersDatasource? {
+        didSet {
+            chatDetailsDataSource?.controller = chatDetailsViewController
+            chatDetailsDataSource?.channel = self.channel
+            chatDetailsDataSource?.chatViewController = self
+            
+            if let viewControllers  = self.navigationController?.viewControllers where viewControllers.count > 1  {
+                if let lastViewController = viewControllers[viewControllers.count - 2] as? MMXChatListViewController {
+                    chatDetailsDataSource?.chatListViewController = lastViewController
+                }
+            }
+            chatDetailsViewController?.datasource = self.chatDetailsDataSource
+        }
+    }
     
     
     //MARK: Init
@@ -200,22 +213,13 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     //MARK: Actions
     
     
-    func detailsAction() {
+    public func detailsAction() {
         
         if let currentUser = MMUser.currentUser() {
             let detailsViewController = MMXContactsPickerController(ignoredUsers: [currentUser])
             
             detailsViewController.barButtonNext = nil
             let subDatasource = SubscribersDatasource()
-            subDatasource.controller = detailsViewController
-            subDatasource.channel = self.channel
-            subDatasource.chatViewController = self
-            
-            if let viewControllers  = self.navigationController?.viewControllers where viewControllers.count > 1  {
-                if let lastViewController = viewControllers[viewControllers.count - 2] as? MMXChatListViewController {
-                    subDatasource.chatListViewController = lastViewController
-                }
-            }
             
             detailsViewController.tableView.allowsSelection = false
             detailsViewController.canSearch = false
@@ -223,8 +227,6 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
             
             self.chatDetailsViewController = detailsViewController
             self.chatDetailsDataSource = subDatasource
-            
-            detailsViewController.datasource = self.chatDetailsDataSource
             
             if let detailsVC = self.chatDetailsViewController {
                 self.navigationController?.pushViewController(detailsVC, animated: true)
