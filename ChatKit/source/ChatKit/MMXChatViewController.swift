@@ -136,10 +136,6 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
         self.append([])
     }
     
-    public func resetData() {
-        self.reset()
-    }
-    
     
     //MARK: Overrides
     
