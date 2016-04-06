@@ -38,6 +38,7 @@
 #import "MMXChannelSummaryRequest.h"
 #import "MMXSubscribeResponse.h"
 #import "MMXChannelLookupKey.h"
+#import "MMXWhitelistManager.h"
 
 @import MagnetMaxCore;
 
@@ -655,46 +656,63 @@
     }];
 }
 
-- (NSString *)inviteUser:(MMUser *)user
-                comments:(NSString *)comments
-                 success:(void (^)(MMXInvite *))success
-                 failure:(void (^)(NSError *))failure {
+- (void)inviteUser:(MMUser *)user
+          comments:(NSString *)comments
+           success:(void (^)(MMXInvite *))success
+           failure:(void (^)(NSError *))failure {
     if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
         if (failure) {
             failure([MagnetDelegate notLoggedInError]);
         }
-        return nil;
+        return;
     }
     if (nil == self.ownerUserID || [self.ownerUserID isEqualToString:@""]) {
         if (failure) {
             NSError * error = [MMXClient errorWithTitle:@"Invalid Channel Invite" message:@"It looks like you are trying to send an invite from an invalid channel. Please user the channelForName:isPublic:success:failure API to get the valid channel object." code:500];
             failure(error);
         }
-        return nil;
+        return;
     }
-    MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteMessageToUser:user forChannel:self.copy comments:comments];
-    NSString *messageID = [[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^(NSSet *invalidUsers){
-        if (invalidUsers.count == 1) {
+    
+    void (^invitationBlock)() = ^{
+        MMXInternalMessageAdaptor *msg = [MMXInternalMessageAdaptor inviteMessageToUser:user forChannel:self.copy comments:comments];
+        NSString *messageID = [[MagnetDelegate sharedDelegate] sendInternalMessageFormat:msg success:^(NSSet *invalidUsers){
+            if (invalidUsers.count == 1) {
+                if (failure) {
+                    NSError *error = [MMXClient errorWithTitle:@"Invalid User" message:@"The user you are trying to send a message to does not exist or does not have a valid device associated with them." code:500];
+                    failure(error);
+                }
+            } else {
+                if (success) {
+                    MMXInvite *invite = [MMXInvite new];
+                    invite.comments = comments;
+                    invite.channel = self.copy;
+                    invite.sender = [MMUser currentUser];
+                    invite.timestamp = [NSDate date];
+                    success(invite);
+                }
+            }
+        } failure:^(NSError *error) {
             if (failure) {
-                NSError *error = [MMXClient errorWithTitle:@"Invalid User" message:@"The user you are trying to send a message to does not exist or does not have a valid device associated with them." code:500];
                 failure(error);
             }
-        } else {
-            if (success) {
-                MMXInvite *invite = [MMXInvite new];
-                invite.comments = comments;
-                invite.channel = self.copy;
-                invite.sender = [MMUser currentUser];
-                invite.timestamp = [NSDate date];
-                success(invite);
+        }];
+    };
+    
+    if (!self.isPublic) {
+        [[MMXWhitelistManager sharedManager] addUsersToWhitelist:@[user] channel:self.copy completion:^(NSError *error) {
+            if (error != nil) {
+                if (failure) {
+                    failure(error);
+                }
+                return;
             }
-        }
-    } failure:^(NSError *error) {
-        if (failure) {
-            failure(error);
-        }
-    }];
-    return messageID;
+            invitationBlock();
+        }];
+    } else {
+        invitationBlock();
+    }
+    return;
 }
 
 #pragma mark - Channel Owner Methods

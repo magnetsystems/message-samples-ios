@@ -331,9 +331,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param success		Block with the MMXInvite object that was sent.
  *  @param failure		Block with an NSError with details about the call failure.
  *
- *  @return The messageID for the invite sent
+ *  @return void
  */
-- (NSString *)inviteUser:(MMUser *)user
+- (void)inviteUser:(MMUser *)user
                 comments:(nullable NSString *)comments
                  success:(nullable void (^)(MMXInvite *invite))success
                  failure:(nullable void (^)(NSError *error))failure;
