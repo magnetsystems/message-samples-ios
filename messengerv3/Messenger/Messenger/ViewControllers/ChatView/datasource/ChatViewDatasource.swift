@@ -21,7 +21,6 @@ import ChatKit
 public class ChatViewDatasource : DefaultChatViewControllerDatasource {
     
     var numberOfMessagesWithoutTimeStamps : Int = 0
-    var blockedUserManager = BlockedUserManager()
     
     
     //MARK: Public Methods
@@ -32,7 +31,7 @@ public class ChatViewDatasource : DefaultChatViewControllerDatasource {
         
         let loadingContext = self.controller?.loadingContext()
         
-        blockedUserManager.getBlockedUsers({ users in
+        BlockedUserManager.getBlockedUsers({ users in
             //get request context
             
             if loadingContext != self.controller?.loadingContext() {
@@ -53,7 +52,7 @@ public class ChatViewDatasource : DefaultChatViewControllerDatasource {
                 }
                 var messagesWithTimestamps : [MMXMessage] = []
                 for message in messages {
-                    if let sender = message.sender, let blockedUserManager = self?.blockedUserManager where message.timestamp != nil && !blockedUserManager.isUserBlocked(sender) {
+                    if message.timestamp != nil{
                         messagesWithTimestamps.append(message)
                     } else {
                         self?.numberOfMessagesWithoutTimeStamps += 1

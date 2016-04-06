@@ -73,6 +73,8 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
             let newRightItem = UIBarButtonItem(image: UIImage(named: "new_message@2x.png"), style: .Plain, target: rightItem.target, action: rightItem.action)
             navigationItem.rightBarButtonItem = newRightItem
         }
+        
+        BlockedUserManager.resetBlockedUsers()
     }
     
     override func viewDidLoad() {
@@ -94,41 +96,34 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
         }
     }
     
+    override func presentChatViewController(chatViewController: MMXChatViewController, users: [MMUser]) {
+        
+        guard let channel = chatViewController.channel else {
+            super.presentChatViewController(chatViewController, users: users)
+            
+            return
+        }
+        
+        let customChatViewController = ChatViewController(channel: channel)
+        super.presentChatViewController(customChatViewController, users: users)
+    }
     
     func mmxAvatarDidClick(user: MMUser) {
-        if let cV = currentContactsViewController as? ContactsViewController where cV.blockedUserManager.isUserBlocked(user) {
-            confirmUnBlock(user)
-        }
+            if BlockedUserManager.isUserBlocked(user) {
+                let confirmUnblock =  BlockedUserManager.confirmUnblock(user, completion: { unblocked in
+                    if unblocked {
+                        self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok")
+                        self.currentContactsViewController?.resetData()
+                    } else {
+                        self.showAlert("Could not unblock user please try again.", title:"Failed to Unblock", closeTitle: "Ok")
+                    }
+                })
+                self.presentViewController(confirmUnblock, animated: false, completion: nil)
+            }
     }
-    
-    
-    func confirmUnBlock(user : MMUser) {
-        let alert = UIAlertController(title: "Unblock User", message: "Are you sure you want to unblock \(ChatKit.Utils.displayNameForUser(user))?", preferredStyle: .Alert)
-        let button = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        alert.addAction(button)
-        let buttonConfirm = UIAlertAction(title: "Ok", style: .Default, handler: { action in
-            
-            MMUser.unblockUsers(Set([user]), success: {
-                self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok")
-                if let cV = self.currentContactsViewController as? ContactsViewController {
-                    cV.blockedUserManager.resetBlockedUsers()
-                }
-                self.currentContactsViewController?.resetData()
-                }, failure: {error in
-                    self.showAlert("Could not unblock user please try again.", title:"Failed to Unblock", closeTitle: "Ok")
-            })
-            
-        })
-        alert.addAction(buttonConfirm)
-        self.presentViewController(alert, animated: false, completion: nil)
-    }
-    
     
     func mmxContactsCanSelectUser(user: MMUser) -> Bool {
-        if let cV = currentContactsViewController as? ContactsViewController {
-            return !cV.blockedUserManager.isUserBlocked(user)
-        }
-        return true
+       return !BlockedUserManager.isUserBlocked(user)
     }
     
     func didUpdateAskMagnetCounter(counter: AskMagnetCounter) {

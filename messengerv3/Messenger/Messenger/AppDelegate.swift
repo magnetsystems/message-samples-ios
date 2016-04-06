@@ -47,7 +47,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MMXLogger.sharedLogger().level = .Error
         MMXLogger.sharedLogger().startLogging()
         
-        
         let settings = UIUserNotificationSettings(forTypes: [.Badge,.Alert,.Sound], categories: nil)
         application.registerUserNotificationSettings(settings);
         

@@ -29,38 +29,21 @@ public class ChatViewDelegate : DefaultChatViewControllerDelegate {
         let button = UIAlertAction(title: "Close", style: .Cancel, handler: nil)
         alert.addAction(button)
         let buttonBlock = UIAlertAction(title: "Block User", style: .Destructive, handler: { action in
-            self.confirmBlock(user)
+            let confirmationAlert = BlockedUserManager.confirmBlock(user, completion: { blocked in
+                if blocked {
+                    let confirmation = BlockedUserManager.msg("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been blocked.", title:"Blocked", closeTitle: "Ok", handler:  { action in
+                        self.controller?.dismiss()
+                    })
+                    self.controller?.presentViewController(confirmation, animated: false, completion: nil)
+                } else {
+                    let confirmation = BlockedUserManager.msg("Could not block user please try again.", title:"Failed to Block", closeTitle: "Ok")
+                    self.controller?.presentViewController(confirmation, animated: false, completion: nil)
+                }
+            })
+            self.controller?.presentViewController(confirmationAlert, animated: false, completion: nil)
         })
         alert.addAction(buttonBlock)
         self.controller?.presentViewController(alert, animated: false, completion: nil)
-    }
-    
-    func confirmBlock(user : MMUser) {
-        let alert = UIAlertController(title: "Block User", message: "Are you sure you want to block \(ChatKit.Utils.displayNameForUser(user))?", preferredStyle: .Alert)
-        let button = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        alert.addAction(button)
-        let buttonConfirm = UIAlertAction(title: "Ok", style: .Default, handler: { action in
-            
-            MMUser.blockUsers(Set([user]), success: {
-                
-                self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been blocked.", title:"Blocked", closeTitle: "Ok", handler:  { action in
-                    self.controller?.dismissAnimated()
-                })
-                
-                }, failure: {error in
-                    self.showAlert("Could not block user please try again.", title:"Failed to Block", closeTitle: "Ok")
-            })
-            
-        })
-        alert.addAction(buttonConfirm)
-        self.controller?.presentViewController(alert, animated: false, completion: nil)
-    }
-    
-    func showAlert(message :String, title :String, closeTitle :String, handler:((UIAlertAction) -> Void)? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        let button = UIAlertAction(title: closeTitle, style: .Cancel, handler: handler)
-        alert.addAction(button)
-        self.controller?.navigationController?.topViewController?.presentViewController(alert, animated: false, completion: nil)
     }
     
 }

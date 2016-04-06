@@ -18,29 +18,27 @@
 import UIKit
 import ChatKit
 
+let MMXBlockContactsCellAlpha : CGFloat = 0.6
+
 class ContactsViewControllerDatasource : DefaultContactsPickerControllerDatasource {
     
     override func mmxControllerLoadMore(searchText: String?, offset: Int) {
-        if let contactsViewController = self.controller as? ContactsViewController {
-            contactsViewController.blockedUserManager.getBlockedUsers({_ in
+            BlockedUserManager.getBlockedUsers({_ in
                 super.mmxControllerLoadMore(searchText, offset: offset)
                 }, failure: { _ in
                     super.mmxControllerLoadMore(searchText, offset: offset)
             })
-        } else {
-            super.mmxControllerLoadMore(searchText, offset: offset)
-        }
     }
     
     func mmxContactsDidCreateCell(cell: UITableViewCell) {
         var blocked = false
         
-        if let user = (cell as? ContactsCell)?.user, let cV = controller as? ContactsViewController {
-            blocked = cV.blockedUserManager.isUserBlocked(user)
+        if let user = (cell as? ContactsCell)?.user {
+            blocked = BlockedUserManager.isUserBlocked(user)
         }
         
         if blocked {
-            cell.contentView.alpha = 0.5
+            cell.contentView.alpha = MMXBlockContactsCellAlpha
         } else {
             cell.contentView.alpha = 1.0
         }
