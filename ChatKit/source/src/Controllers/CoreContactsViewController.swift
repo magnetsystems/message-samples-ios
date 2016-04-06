@@ -465,6 +465,7 @@ public extension CoreContactsViewController {
         let users = availableRecipients[indexPath.section].users
         if  let user = users[indexPath.row].user {
             guard canSelectUser(user) else {
+                self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
                 return
             }
             addSelectedUser(user)
