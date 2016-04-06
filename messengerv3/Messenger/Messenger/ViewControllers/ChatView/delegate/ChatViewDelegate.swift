@@ -38,11 +38,11 @@ public class ChatViewDelegate : DefaultChatViewControllerDelegate {
         let buttonConfirm = UIAlertAction(title: "Ok", style: .Default, handler: { action in
             
             MMUser.blockUsers(Set([user]), success: {
-                self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been blocked.", title:"Blocked", closeTitle: "Ok")
-                if let datasouce = self.controller?.datasource as? ChatViewDatasource {
-                    datasouce.blockedUserManager.resetBlockedUsers()
-                }
-                self.controller?.resetData()
+                
+                self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been blocked.", title:"Blocked", closeTitle: "Ok", handler:  { action in
+                    self.controller?.dismissAnimated()
+                })
+                
                 }, failure: {error in
                     self.showAlert("Could not block user please try again.", title:"Failed to Block", closeTitle: "Ok")
             })
@@ -56,7 +56,7 @@ public class ChatViewDelegate : DefaultChatViewControllerDelegate {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         let button = UIAlertAction(title: closeTitle, style: .Cancel, handler: handler)
         alert.addAction(button)
-        self.controller?.presentViewController(alert, animated: false, completion: nil)
+        self.controller?.navigationController?.topViewController?.presentViewController(alert, animated: false, completion: nil)
     }
     
 }
