@@ -21,6 +21,7 @@ import ChatKit
 public class ChatViewDatasource : DefaultChatViewControllerDatasource {
     
     var numberOfMessagesWithoutTimeStamps : Int = 0
+    var blockedUserManager = BlockedUserManager()
     
     
     //MARK: Public Methods
@@ -29,38 +30,47 @@ public class ChatViewDatasource : DefaultChatViewControllerDatasource {
     override public func mmxControllerLoadMore(channel : MMXChannel?, offset : Int) {
         guard let channel = controller?.chat else { return }
         
-        //get request context
-        let loadingContext = controller?.loadingContext()
+        let loadingContext = self.controller?.loadingContext()
         
-        self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
-        
-        if offset == 0 {
-            numberOfMessagesWithoutTimeStamps = 0
-        }
-        
-        let messageOffset = numberOfMessagesWithoutTimeStamps + offset
-        channel.messagesBetweenStartDate(NSDate.distantPast(), endDate: NSDate(), limit: Int32(limit), offset: Int32(messageOffset), ascending: false, success: { [weak self] total , messages in
+        blockedUserManager.getBlockedUsers({ users in
+            //get request context
             
-            if loadingContext != self?.controller?.loadingContext() {
+            if loadingContext != self.controller?.loadingContext() {
                 return
             }
-            var messagesWithTimestamps : [MMXMessage] = []
-            for message in messages {
-                if message.timestamp != nil {
-                    messagesWithTimestamps.append(message)
-                } else {
-                    self?.numberOfMessagesWithoutTimeStamps += 1
-                }
-            }
-            self?.hasMoreUsers = (offset + Int32(messages.count)) < total
             
-            self?.controller?.append(messagesWithTimestamps)
+            self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
+            
             if offset == 0 {
-                self?.controller?.scrollToBottomAnimated(false)
+                self.numberOfMessagesWithoutTimeStamps = 0
             }
-            DDLogVerbose("[Retrieved Messages] - (\(messages.count))")
+            
+            let messageOffset = self.numberOfMessagesWithoutTimeStamps + offset
+            channel.messagesBetweenStartDate(NSDate.distantPast(), endDate: NSDate(), limit: Int32(self.limit), offset: Int32(messageOffset), ascending: false, success: { [weak self] total , messages in
+                
+                if loadingContext != self?.controller?.loadingContext() {
+                    return
+                }
+                var messagesWithTimestamps : [MMXMessage] = []
+                for message in messages {
+                    if let sender = message.sender, let blockedUserManager = self?.blockedUserManager where message.timestamp != nil && !blockedUserManager.isUserBlocked(sender) {
+                        messagesWithTimestamps.append(message)
+                    } else {
+                        self?.numberOfMessagesWithoutTimeStamps += 1
+                    }
+                }
+                self?.hasMoreUsers = (offset + Int32(messages.count)) < total
+                
+                self?.controller?.append(messagesWithTimestamps)
+                if offset == 0 {
+                    self?.controller?.scrollToBottomAnimated(false)
+                }
+                DDLogVerbose("[Retrieved Messages] - (\(messages.count))")
+                }, failure: { error in
+                    DDLogError("[Error] - \(error.localizedDescription)")
+            })
             }, failure: { error in
-                DDLogError("[Error] - \(error.localizedDescription)")
+                //error
         })
     }
 }

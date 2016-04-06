@@ -70,6 +70,8 @@
 		8DA864BD1CA4BC2A00AE083B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA864BC1CA4BC2A00AE083B /* Utils.swift */; };
 		8DE494C11CB34B2A0049F0C5 /* ChatViewDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE494BE1CB34B2A0049F0C5 /* ChatViewDatasource.swift */; };
 		8DE494C21CB34B2A0049F0C5 /* ChatViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE494C01CB34B2A0049F0C5 /* ChatViewDelegate.swift */; };
+		8DEC54EE1CB4424F00B8AD71 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEC54ED1CB4424F00B8AD71 /* ContactsViewController.swift */; };
+		8DEC54F11CB449BA00B8AD71 /* ContactsViewControllerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEC54F01CB449BA00B8AD71 /* ContactsViewControllerDatasource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -142,6 +144,8 @@
 		8DA864BC1CA4BC2A00AE083B /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		8DE494BE1CB34B2A0049F0C5 /* ChatViewDatasource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewDatasource.swift; sourceTree = "<group>"; };
 		8DE494C01CB34B2A0049F0C5 /* ChatViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewDelegate.swift; sourceTree = "<group>"; };
+		8DEC54ED1CB4424F00B8AD71 /* ContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactsViewController.swift; path = ContactsViewController/ContactsViewController.swift; sourceTree = "<group>"; };
+		8DEC54F01CB449BA00B8AD71 /* ContactsViewControllerDatasource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactsViewControllerDatasource.swift; path = ContactsViewController/datasource/ContactsViewControllerDatasource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -352,6 +356,7 @@
 		8D701D201CA463E0004B98A1 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				8DEC54EC1CB4421500B8AD71 /* ContactsViewController */,
 				8DB33E291CACB22300F389F7 /* ChatView */,
 				8D090A121CA4AD7F00FA82AE /* AskMagnet */,
 				8D701D571CA49DFA004B98A1 /* homescreen */,
@@ -446,6 +451,23 @@
 			);
 			name = delegate;
 			path = ChatView/delegate;
+			sourceTree = "<group>";
+		};
+		8DEC54EC1CB4421500B8AD71 /* ContactsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8DEC54EF1CB4498500B8AD71 /* datasource */,
+				8DEC54ED1CB4424F00B8AD71 /* ContactsViewController.swift */,
+			);
+			name = ContactsViewController;
+			sourceTree = "<group>";
+		};
+		8DEC54EF1CB4498500B8AD71 /* datasource */ = {
+			isa = PBXGroup;
+			children = (
+				8DEC54F01CB449BA00B8AD71 /* ContactsViewControllerDatasource.swift */,
+			);
+			name = datasource;
 			sourceTree = "<group>";
 		};
 		BF40F257C305814BB6BCF378 /* Pods */ = {
@@ -619,6 +641,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D701CD81CA46362004B98A1 /* AppDelegate.swift in Sources */,
+				8DEC54F11CB449BA00B8AD71 /* ContactsViewControllerDatasource.swift in Sources */,
 				8D090A151CA4ADD400FA82AE /* AskMagnetDatasource.swift in Sources */,
 				8D090A101CA4AA9200FA82AE /* AskMagnetTableViewCell.swift in Sources */,
 				8DE494C21CB34B2A0049F0C5 /* ChatViewDelegate.swift in Sources */,
@@ -626,6 +649,7 @@
 				8D701D611CA49ED5004B98A1 /* EventsTableViewCell.swift in Sources */,
 				8D701D4F1CA463E0004B98A1 /* RegisterViewController.swift in Sources */,
 				8D701D5D1CA49E65004B98A1 /* HomeListDatasource.swift in Sources */,
+				8DEC54EE1CB4424F00B8AD71 /* ContactsViewController.swift in Sources */,
 				8D4A95101CA6137A00C99B7E /* UserProfileViewController.swift in Sources */,
 				8D701D511CA463E0004B98A1 /* ViewController.swift in Sources */,
 				8D090A181CA4B51800FA82AE /* AskMagnetDelegate.swift in Sources */,

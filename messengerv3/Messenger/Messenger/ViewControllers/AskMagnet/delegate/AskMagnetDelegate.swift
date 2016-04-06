@@ -18,4 +18,11 @@
 import UIKit
 import ChatKit
 
-class AskMagnetDelegate : DefaultChatListControllerDelegate { }
+class AskMagnetDelegate : DefaultChatListControllerDelegate {
+    
+    override func mmxListWillShowChatController(chatController : MMXChatViewController) {
+        chatController.datasource = ChatViewDatasource()
+        chatController.delegate = ChatViewDelegate()
+    }
+    
+}
