@@ -36,6 +36,11 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
     //MARK: custom overrides
     
     
+    func mmxListShouldAppendNewChannel(channel: MMXChannel) -> Bool {
+        return !channel.name.hasPrefix("global_") && !channel.name.hasPrefix(kAskMagnetChannel) && channel.numberOfMessages > 0
+    }
+    
+    
     func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
         
         let eventChannels = channelDetails.filter({$0.channelName.hasPrefix("global_") && !$0.channelName.hasPrefix(kAskMagnetChannel)})
@@ -130,6 +135,7 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
                         // We should never be here!
                         summary = "Ask Magnet for anonymous"
                     }
+                    print("Sumary \(summary)")
                     MMXChannel.createWithName(kAskMagnetChannel, summary: summary, isPublic: false, publishPermissions: .Subscribers, subscribers: Set(users), success: { channel in
                         self.askMagnet = channel
                         dispatch_group_leave(self.loadingGroup)
@@ -150,7 +156,7 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
             if channels.count > 0 {
                 let lock = NSLock()
                 self.eventChannels = []
-                
+                print("number of channels \(channels.count)")
                 for  channel in channels {
                     
                     guard !channel.isSubscribed else {
@@ -158,10 +164,9 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
                         continue
                     }
                     
-                    
                     dispatch_group_enter(self.loadingGroup)
                     channel.subscribeWithSuccess({
-                        
+                        print("Subscribed - \(channel.name)")
                         lock.lock()
                         self.eventChannels.append(channel)
                         lock.unlock()
@@ -183,10 +188,19 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
         MMXChannel.subscribedChannelsWithSuccess({ ch in
             var cV = ch.filter({ return !$0.name.hasPrefix("global_") && !$0.name.hasPrefix(kAskMagnetChannel) && $0.numberOfMessages > 0})
             cV = self.sortChannelsByDate(cV)
+            if let ask = self.askMagnet {
+                cV.insert(ask, atIndex: 0)
+            }
+            cV.insertContentsOf(self.eventChannels, at: 0)
             completion(channels: cV)
         }) { error in
             print(error)
-            completion(channels: self.eventChannels)
+            var array : [MMXChannel] = []
+            if let ask = self.askMagnet {
+                array.insert(ask, atIndex: 0)
+            }
+            array.insertContentsOf(self.eventChannels, at: 0)
+            completion(channels: array)
         }
     }
     
@@ -195,38 +209,32 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
             self.askMagnet = nil
             self.eventChannels = []
             self.loadEventChannels()
+            
+        }
+        if self.askMagnet == nil {
             self.loadAskMagnetChannel()
         }
+        
+        let loadingContext = self.controller?.loadingContext()
         dispatch_group_notify(loadingGroup, dispatch_get_main_queue(),{
+            if loadingContext != self.controller?.loadingContext() {
+                return
+            }
             self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
             //get request context
-            let loadingContext = self.controller?.loadingContext()
+            
             self.subscribedChannels({ channels in
                 if loadingContext != self.controller?.loadingContext() {
                     return
                 }
                 var offsetChannels : [MMXChannel] = []
                 
-                var channelOffset = offset
-                if channelOffset > 0 {
-                    channelOffset -= self.eventChannels.count
-                    if self.askMagnet != nil {
-                        channelOffset -= 1
-                    }
-                }
-                if channelOffset < channels.count && channels.count > 0 {
-                    offsetChannels = Array(channels[channelOffset..<min((channelOffset + self.limit), channels.count)])
-                } else {
-                    self.hasMoreUsers = false
+                if offset < channels.count && channels.count > 0 {
+                    offsetChannels = Array(channels[offset..<min((offset + self.limit), channels.count)])
                 }
                 
-                self.hasMoreUsers = channelOffset + self.limit < channels.count - 1
-                if offset == 0 {
-                    offsetChannels.appendContentsOf(self.eventChannels)
-                    if let askMagnet = self.askMagnet {
-                        offsetChannels.append(askMagnet)
-                    }
-                }
+                self.hasMoreUsers = offset + self.limit < channels.count - 1
+                
                 self.controller?.append(offsetChannels)
             })
         })
