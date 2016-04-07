@@ -82,7 +82,7 @@ public class NavigationNotifier: NotifierListener {
         super.init()
     }
     
-    init(viewController : UIViewController, exceptFor : MMXChannel?) {
+   public init(viewController : UIViewController, exceptFor : MMXChannel?) {
         
         channel = exceptFor
         let parent = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 20))
@@ -90,7 +90,7 @@ public class NavigationNotifier: NotifierListener {
         label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 20))
         label?.text = ""
         label?.font = UIFont.systemFontOfSize(14)
-        label?.textColor = UIColor.blackColor()
+        label?.textColor = viewController.view.tintColor
         if let lbl = label {
             parent.addSubview(lbl)
         }
@@ -144,7 +144,10 @@ public class NavigationNotifier: NotifierListener {
     func shouldNotifyFor(mmxMessage : MMXMessage) -> Bool {
         if let ch = mmxMessage.channel, let channel = self.channel where ch.name.lowercaseString != channel.name.lowercaseString {
             return true
+        } else if channel == nil {
+          return true
         }
+        
         return false
     }
     

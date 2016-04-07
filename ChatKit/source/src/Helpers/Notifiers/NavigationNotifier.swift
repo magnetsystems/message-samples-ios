@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -82,7 +82,7 @@ public class NavigationNotifier: NotifierListener {
         super.init()
     }
     
-    init(viewController : UIViewController, exceptFor : MMXChannel?) {
+    public init(viewController : UIViewController, exceptFor : MMXChannel?) {
         
         channel = exceptFor
         let parent = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 20))
@@ -90,7 +90,7 @@ public class NavigationNotifier: NotifierListener {
         label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 20))
         label?.text = ""
         label?.font = UIFont.systemFontOfSize(14)
-        label?.textColor = UIColor.blackColor()
+        label?.textColor = viewController.view.tintColor
         if let lbl = label {
             parent.addSubview(lbl)
         }
@@ -144,7 +144,10 @@ public class NavigationNotifier: NotifierListener {
     func shouldNotifyFor(mmxMessage : MMXMessage) -> Bool {
         if let ch = mmxMessage.channel, let channel = self.channel where ch.name.lowercaseString != channel.name.lowercaseString {
             return true
+        } else if channel == nil {
+            return true
         }
+        
         return false
     }
     

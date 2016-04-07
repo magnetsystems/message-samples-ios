@@ -20,9 +20,20 @@ import ChatKit
 
 class ContactsViewController: MMXContactsPickerController {
     
+    var notifier : NavigationNotifier?
+    override var barButtonCancel : UIBarButtonItem? {
+        set {
+            
+        }
+        get {
+            return nil
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.datasource = ContactsViewControllerDatasource()
+        self.view.tintColor = UIColor(red: 14.0/255.0, green: 122.0/255.0, blue: 254.0/255.0, alpha: 1.0)
+        self.notifier = NavigationNotifier(viewController: self, exceptFor : nil)
     }
-    
 }

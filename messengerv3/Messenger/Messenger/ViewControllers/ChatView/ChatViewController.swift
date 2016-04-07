@@ -42,27 +42,27 @@ class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
     }
     
     func mmxAvatarDidClick(user: MMUser) {
-            if BlockedUserManager.isUserBlocked(user) {
-                let confirmUnblock =  BlockedUserManager.confirmUnblock(user, completion: { unblocked in
-                    if unblocked {
-                        self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok", handler: { action in
-                            self.chatDetailsViewController?.dismiss()
-                            if let controllers = self.navigationController?.viewControllers {
-                                for controller in controllers {
-                                    if let _ = controller as? MMXChatListViewController {
-                                        self.navigationController?.popToViewController(controller, animated: false)
-                                        return
-                                    }
+        if BlockedUserManager.isUserBlocked(user) {
+            let confirmUnblock =  BlockedUserManager.confirmUnblock(user, completion: { unblocked in
+                if unblocked {
+                    self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok", handler: { action in
+                        self.chatDetailsViewController?.dismiss()
+                        if let controllers = self.navigationController?.viewControllers {
+                            for controller in controllers {
+                                if let _ = controller as? MMXChatListViewController {
+                                    self.navigationController?.popToViewController(controller, animated: false)
+                                    return
                                 }
                             }
-                            
-                            self.chatDetailsViewController?.resetData()
-                        })
-                    } else {
-                        self.showAlert("Could not unblock user please try again.", title:"Failed to Unblock", closeTitle: "Ok")
-                    }
-                })
-                self.presentViewController(confirmUnblock, animated: false, completion: nil)
+                        }
+                        
+                        self.chatDetailsViewController?.resetData()
+                    })
+                } else {
+                    self.showAlert("Could not unblock user please try again.", title:"Failed to Unblock", closeTitle: "Ok")
+                }
+            })
+            self.presentViewController(confirmUnblock, animated: false, completion: nil)
         }
     }
 }
