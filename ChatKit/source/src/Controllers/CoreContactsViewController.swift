@@ -193,6 +193,16 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         reloadFooters()
     }
     
+    public func clearData() {
+        self.availableRecipients = []
+        self.currentUserCount = 0
+        self.tableView.reloadData()
+    }
+    
+    
+    //MARK: Internal Methods
+
+    
     internal func canSelectUser(user : MMUser) -> Bool{
         return true
     }
@@ -260,10 +270,22 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
     
     internal func onUserDeselected(user : MMUser) { }
     
+    internal func prefersSoftReset() -> Bool {
+        return false
+    }
+    
     internal func reset() {
-        self.availableRecipients = []
+        clearData()
+        
+        var searchText = self.searchBar?.text
+        if searchText?.characters.count == 0 {
+            searchText = nil
+        }
+        self.loadMore(searchText, offset: self.currentUserCount)
+    }
+    
+    internal func softReset() {
         self.currentUserCount = 0
-        self.tableView.reloadData()
         var searchText = self.searchBar?.text
         if searchText?.characters.count == 0 {
             searchText = nil
@@ -610,8 +632,11 @@ private extension CoreContactsViewController {
         if let txt = text where txt.characters.count == 0 {
             text = nil
         }
-        self.reset()
-        loadMore(text, offset: 0)
+        if !prefersSoftReset() {
+            self.reset()
+        } else {
+            self.softReset()
+        }
     }
     
     private func updateContactsView(users : [MMUser]) {

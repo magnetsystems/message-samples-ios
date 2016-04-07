@@ -76,7 +76,6 @@ import MagnetMax
     optional func mmxContactsControllerShowsSectionsHeaders() -> Bool
     optional func mmxContactsControllerPreselectedUsers() -> [MMUser]
     
-    
 }
 
 
@@ -101,9 +100,11 @@ import MagnetMax
     
     optional func mmxListCellForChannel(tableView : UITableView, channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> UITableViewCell?
     optional func mmxListDidCreateCell(cell : UITableViewCell) -> Void
+    optional func mmxListDidLoadChannelDetails(channelDetails : [MMXChannelDetailResponse], offset : Int) -> Void
     optional func mmxListCellHeightForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, indexPath : NSIndexPath) -> CGFloat
     optional func mmxListFilterChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse]
     optional func mmxListImageForChannelDetails(imageView : UIImageView, channelDetails : MMXChannelDetailResponse)
+    optional func mmxListPrefersSoftResets() -> Bool
     optional func mmxListRegisterCells(tableView : UITableView)
     optional func mmxListSortChannelDetails(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse]
     optional func mmxListShouldAppendNewChannel(channel : MMXChannel) -> Bool

@@ -167,6 +167,14 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         }
     }
     
+    
+    //MARK: Reload methods
+    
+    
+    public override func clearData() {
+        super.clearData()
+    }
+    
     public func reloadData() {
         self.append([])
     }
@@ -241,6 +249,10 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         return 0.0
     }
     
+    override internal func loadedChannelDetails(offset: Int) {
+        self.datasource?.mmxListDidLoadChannelDetails?(self.detailResponses, offset: offset)
+    }
+    
     override internal func loadMore(searchText: String?, offset: Int) {
         newLoadingContext()
         if searchText != nil {
@@ -271,6 +283,14 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     
     override internal func onChannelDidSelect(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) {
         self.delegate?.mmxListDidSelectChannel(channel,channelDetails : channelDetails)
+    }
+    
+    override internal func prefersSoftReset() -> Bool {
+        if let shouldSoftReset = self.datasource?.mmxListPrefersSoftResets {
+            return shouldSoftReset()
+        }
+        
+        return super.prefersSoftReset()
     }
     
     override internal func sort(channelDetails: [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {

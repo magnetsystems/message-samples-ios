@@ -144,6 +144,14 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
         return self.requestNumber
     }
     
+    
+    //MARK: Reload methods
+    
+    
+    public override func clearData() {
+        super.clearData()
+    }
+    
     public func reloadData() {
         self.append([])
     }
