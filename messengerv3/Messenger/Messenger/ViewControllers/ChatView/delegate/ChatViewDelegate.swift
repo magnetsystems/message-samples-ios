@@ -40,7 +40,7 @@ public class ChatViewDelegate : DefaultChatViewControllerDelegate {
                             }
                         }
                         
-                        self.controller?.dismiss()
+                        self.controller?.resetData()
                     })
                     self.controller?.presentViewController(confirmation, animated: false, completion: nil)
                 } else {

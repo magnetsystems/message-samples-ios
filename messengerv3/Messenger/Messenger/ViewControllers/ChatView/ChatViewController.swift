@@ -20,6 +20,15 @@ import ChatKit
 
 class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.didBecomeActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func detailsAction() {
         
         if let currentUser = MMUser.currentUser() {
@@ -27,18 +36,20 @@ class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
             
             detailsViewController.barButtonNext = nil
             let subDatasource = ChatViewDetails()
-            
             detailsViewController.tableView.allowsSelection = false
             detailsViewController.canSearch = false
             detailsViewController.title = CKStrings.kStr_Subscribers
             detailsViewController.delegate = self
             self.chatDetailsViewController = detailsViewController
             self.chatDetailsDataSource = subDatasource
-            
             if let detailsVC = self.chatDetailsViewController {
                 self.navigationController?.pushViewController(detailsVC, animated: true)
             }
         }
+    }
+    
+    func didBecomeActive() {
+        self.resetData()
     }
     
     func mmxAvatarDidClick(user: MMUser) {
@@ -46,20 +57,8 @@ class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
             let confirmUnblock =  BlockedUserManager.confirmUnblock(user, completion: { unblocked in
                 if unblocked {
                     self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok", handler: { action in
-                        self.chatDetailsViewController?.dismiss()
-                        if let controllers = self.navigationController?.viewControllers {
-                            for controller in controllers {
-                                if let chatListController = controller as? MMXChatListViewController {
-                                    if let channel = self.channel {
-                                        chatListController.refreshDataForChannel(channel)
-                                    }
-                                    self.navigationController?.popToViewController(chatListController, animated: false)
-                                    return
-                                }
-                            }
-                        }
-                        
                         self.chatDetailsViewController?.resetData()
+                        self.resetData()
                     })
                 } else {
                     self.showAlert("Could not unblock user please try again.", title:"Failed to Unblock", closeTitle: "Ok")

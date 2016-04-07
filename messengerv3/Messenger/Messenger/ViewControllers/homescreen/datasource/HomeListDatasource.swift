@@ -156,7 +156,6 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
             if channels.count > 0 {
                 let lock = NSLock()
                 self.eventChannels = []
-                print("number of channels \(channels.count)")
                 for  channel in channels {
                     
                     guard !channel.isSubscribed else {

@@ -24,6 +24,28 @@ import ChatKit
 
 class AskMagnetDatasource : DefaultChatListControllerDatasource {
     
+    
+    //MARK: Refreshing
+    
+    
+    override init() {
+        super.init()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AskMagnetDatasource.didBecomeActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func didBecomeActive() {
+        self.controller?.resetData()
+        self.controller?.currentChatViewController?.resetData()
+    }
+    
+    
+    //MARK: Datasource
+    
+    
     func mmxListShouldAppendNewChannel(channel: MMXChannel) -> Bool {
         return isAskMagnetChannel(channel)
     }

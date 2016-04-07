@@ -94,6 +94,7 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
             menuButton?.addSubview(imageView)
             menuAlertImageView = imageView
         }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.didBecomeActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
     
     override func presentChatViewController(chatViewController: MMXChatViewController, users: [MMUser]) {
@@ -109,22 +110,22 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
     }
     
     func mmxAvatarDidClick(user: MMUser) {
-            if BlockedUserManager.isUserBlocked(user) {
-                let confirmUnblock =  BlockedUserManager.confirmUnblock(user, completion: { unblocked in
-                    if unblocked {
-                        self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok")
-                        self.currentContactsViewController?.resetData()
-                        self.resetData()
-                    } else {
-                        self.showAlert("Could not unblock user please try again.", title:"Failed to Unblock", closeTitle: "Ok")
-                    }
-                })
-                self.presentViewController(confirmUnblock, animated: false, completion: nil)
-            }
+        if BlockedUserManager.isUserBlocked(user) {
+            let confirmUnblock =  BlockedUserManager.confirmUnblock(user, completion: { unblocked in
+                if unblocked {
+                    self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok")
+                    self.currentContactsViewController?.resetData()
+                    self.resetData()
+                } else {
+                    self.showAlert("Could not unblock user please try again.", title:"Failed to Unblock", closeTitle: "Ok")
+                }
+            })
+            self.presentViewController(confirmUnblock, animated: false, completion: nil)
+        }
     }
     
     func mmxContactsCanSelectUser(user: MMUser) -> Bool {
-       return !BlockedUserManager.isUserBlocked(user)
+        return !BlockedUserManager.isUserBlocked(user)
     }
     
     func didUpdateAskMagnetCounter(counter: AskMagnetCounter) {
@@ -137,5 +138,17 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
         } else {
             self.menuAlertImageView?.image = nil
         }
+    }
+    
+    
+    //MARK: Refreshing
+    
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func didBecomeActive() {
+            self.resetData()
     }
 }

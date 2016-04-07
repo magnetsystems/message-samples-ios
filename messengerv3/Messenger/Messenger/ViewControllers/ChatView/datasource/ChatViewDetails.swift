@@ -67,11 +67,12 @@ class ChatViewDetails: SubscribersDatasource {
                                         if let channel = self.chatViewController?.channel {
                                             chatListController.refreshDataForChannel(channel)
                                         }
-                                        self.controller?.navigationController?.popToViewController(chatListController, animated: false)
                                         return
                                     }
                                 }
                             }
+                            self.currentContactsPickerViewController?.resetData()
+                            self.controller?.resetData()
                         })
                         self.controller?.presentViewController(confirmation, animated: false, completion: nil)
                     } else {
