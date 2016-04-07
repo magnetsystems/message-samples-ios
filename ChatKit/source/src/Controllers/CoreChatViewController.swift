@@ -222,6 +222,11 @@ public class CoreChatViewController: MMJSQViewController {
     
     
     @objc private func didReceiveMessage(mmxMessage: MMXMessage) {
+        
+        guard !self.mmxMessages.contains(mmxMessage) else {
+          return
+        }
+        
         //Show the typing indicator to be shown
         // Scroll to actually view the indicator
         scrollToBottomAnimated(true)
