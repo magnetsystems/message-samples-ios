@@ -372,6 +372,10 @@ public extension CoreChatListViewController {
         return canLeaveChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     
+    public func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        // iOS8 requires this method to enable editing
+    }
+    
     public func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         let detailResponse = detailsForIndexPath(indexPath)
         
