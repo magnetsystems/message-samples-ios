@@ -68,7 +68,6 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     public weak var currentContactsViewController : MMXContactsPickerController?
     
     
-    
     //MARK: Overrides
     
     
