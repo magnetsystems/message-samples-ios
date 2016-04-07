@@ -124,18 +124,22 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
     
     
     private func generateNavBars() {
-        if let btnCancel = barButtonCancel, let btnNext = barButtonNext where !didGenerateBars {
+        if !didGenerateBars {
             didGenerateBars = true
-            if self.navigationItem.rightBarButtonItems != nil {
-                self.navigationItem.rightBarButtonItems?.append(btnNext)
-            } else {
-                self.navigationItem.rightBarButtonItems = [btnNext]
+            if let btnCancel = barButtonCancel {
+                if self.navigationItem.leftBarButtonItems != nil {
+                    self.navigationItem.leftBarButtonItems?.append(btnCancel)
+                } else {
+                    self.navigationItem.leftBarButtonItems = [btnCancel]
+                }
             }
             
-            if self.navigationItem.leftBarButtonItems != nil {
-                self.navigationItem.leftBarButtonItems?.append(btnCancel)
-            } else {
-                self.navigationItem.leftBarButtonItems = [btnCancel]
+            if let btnNext = barButtonNext {
+                if self.navigationItem.rightBarButtonItems != nil {
+                    self.navigationItem.rightBarButtonItems?.append(btnNext)
+                } else {
+                    self.navigationItem.rightBarButtonItems = [btnNext]
+                }
             }
         }
     }

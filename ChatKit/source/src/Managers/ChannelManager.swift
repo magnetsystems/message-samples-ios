@@ -42,6 +42,7 @@ public class ChannelManager {
     
     //MARK: Public properties
     
+    
     public let formatter = DateFormatter()
     
     

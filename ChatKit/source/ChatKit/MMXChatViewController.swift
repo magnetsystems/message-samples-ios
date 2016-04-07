@@ -32,7 +32,6 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     private var requestNumber : Int = 0
     
     
-    
     //MARK: Public Variables
     
     
@@ -198,10 +197,10 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
             } else {
                 self.navigationItem.rightBarButtonItems = [rightBtn]
             }
-            
-            if channel == nil {
-                self.navigationItem.rightBarButtonItem?.enabled = false
-            }
+        }
+        
+        if channel == nil {
+            self.navigationItem.rightBarButtonItem?.enabled = false
         }
     }
     
