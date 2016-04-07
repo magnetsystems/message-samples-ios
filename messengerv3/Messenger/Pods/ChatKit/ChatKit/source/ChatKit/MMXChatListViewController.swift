@@ -175,6 +175,10 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
         self.reset()
     }
     
+    public func refreshDataForChannel(channel : MMXChannel) {
+        super.refreshChannel(channel)
+    }
+    
     
     //MARK: - Core Method Overrides
     
