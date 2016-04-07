@@ -34,6 +34,7 @@ public protocol Define_MMXChatListViewController : class {
     //MARK: Public Methods
     
     func append(mmxChannels: [MMXChannel])
+    func clearData()
     func loadingContext() -> Int
     func presentChatViewController(chatViewController : MMXChatViewController, users : [MMUser])
     func refreshDataForChannel(channel : MMXChannel)
@@ -69,6 +70,7 @@ public protocol Define_MMXContactsPickerController : class {
     //MARK: Public Methods
     
     func append(unfilteredUsers: [MMUser])
+    func clearData()
     func contacts() -> [[String : [MMUser]?]]
     func loadingContext() -> Int
     func reloadData()
@@ -106,6 +108,7 @@ public protocol Define_MMXChatViewController : class {
     
     //MARK: Public Methods
     
+    func clearData()
     func loadingContext() -> Int
     func reloadData()
     func resetData()

@@ -172,6 +172,14 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         return self.requestNumber
     }
     
+    
+    //MARK: Reload methods
+    
+    
+    public override func clearData() {
+        super.clearData()
+    }
+    
     public func reloadData() {
         self.append([])
     }

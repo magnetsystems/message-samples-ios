@@ -75,6 +75,12 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         return true
     }
     
+    public func mmxListDidLoadChannelDetails(channelDetails: [MMXChannelDetailResponse], offset: Int) {
+        if offset == 0 {
+            self.controller?.clearData()
+        }
+    }
+    
     public func mmxControllerLoadMore(searchText : String?, offset : Int) {
         
         self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
@@ -84,6 +90,9 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
             if loadingContext != self.controller?.loadingContext() {
                 return
             }
+            
+           
+            
             var offsetChannels : [MMXChannel] = []
             if offset < channels.count {
                 offsetChannels = Array(channels[offset..<min((offset + self.limit), channels.count)])
@@ -136,6 +145,10 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     public func mmxListCellHeightForMMXChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse, row : Int) -> CGFloat {
         return 80
+    }
+    
+    public func mmxListPrefersSoftResets() -> Bool {
+        return true
     }
     
     public func mmxListRegisterCells(tableView : UITableView) {

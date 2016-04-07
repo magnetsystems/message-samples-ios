@@ -166,6 +166,20 @@ public class CoreChatViewController: MMJSQViewController {
         }
     }
     
+    public func clearData() {
+        self.collectionView.collectionViewLayout.invalidateLayout()
+        self.currentMessageCount = 0
+        self.messages = []
+        let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
+        invailidationContext.invalidateFlowLayoutMessagesCache = true
+        self.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
+        self.collectionView.reloadData()
+    }
+    
+    
+    //MARK: Internal Methods
+    
+    
     internal func didSelectUserAvatar(user : MMUser) { }
     
     internal func hasMore() -> Bool { return false }
@@ -187,14 +201,12 @@ public class CoreChatViewController: MMJSQViewController {
     
     internal func onMessageSent(mmxMessage: MMXMessage) { }
     
+    internal func prefersSoftReset() -> Bool {
+        return false
+    }
+    
     internal func reset() {
-        self.collectionView.collectionViewLayout.invalidateLayout()
-        self.currentMessageCount = 0
-        self.messages = []
-        let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
-        invailidationContext.invalidateFlowLayoutMessagesCache = true
-        self.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
-        self.collectionView.reloadData()
+        clearData()
         loadMore(self.chat, offset: self.currentMessageCount)
     }
     
@@ -218,6 +230,11 @@ public class CoreChatViewController: MMJSQViewController {
             }
             return false
         })
+    }
+    
+    internal func softReset() {
+        self.currentMessageCount = 0
+        loadMore(self.chat, offset: self.currentMessageCount)
     }
     
     
