@@ -191,6 +191,7 @@ public class CoreChatViewController: MMJSQViewController {
         self.currentMessageCount = 0
         self.messages = []
         self.collectionView.reloadData()
+        self.collectionView.collectionViewLayout.invalidateLayout()
         loadMore(self.chat, offset: self.currentMessageCount)
     }
     
