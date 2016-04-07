@@ -108,4 +108,5 @@ public protocol Define_MMXChatViewController : class {
     
     func loadingContext() -> Int
     func reloadData()
+    func resetData()
 }
