@@ -63,8 +63,11 @@ class ChatViewDetails: SubscribersDatasource {
                         let confirmation = BlockedUserManager.msg("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok", handler:  { action in
                             if let controllers = self.controller?.navigationController?.viewControllers {
                                 for controller in controllers {
-                                    if let _ = controller as? MMXChatListViewController {
-                                        self.controller?.navigationController?.popToViewController(controller, animated: false)
+                                    if let chatListController = controller as? MMXChatListViewController {
+                                        if let channel = self.chatViewController?.channel {
+                                            chatListController.refreshDataForChannel(channel)
+                                        }
+                                        self.controller?.navigationController?.popToViewController(chatListController, animated: false)
                                         return
                                     }
                                 }

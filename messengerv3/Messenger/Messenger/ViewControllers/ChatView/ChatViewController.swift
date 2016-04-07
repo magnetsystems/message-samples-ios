@@ -49,8 +49,11 @@ class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
                         self.chatDetailsViewController?.dismiss()
                         if let controllers = self.navigationController?.viewControllers {
                             for controller in controllers {
-                                if let _ = controller as? MMXChatListViewController {
-                                    self.navigationController?.popToViewController(controller, animated: false)
+                                if let chatListController = controller as? MMXChatListViewController {
+                                    if let channel = self.channel {
+                                        chatListController.refreshDataForChannel(channel)
+                                    }
+                                    self.navigationController?.popToViewController(chatListController, animated: false)
                                     return
                                 }
                             }

@@ -32,6 +32,14 @@ public class ChatViewDelegate : DefaultChatViewControllerDelegate {
             let confirmationAlert = BlockedUserManager.confirmBlock(user, completion: { blocked in
                 if blocked {
                     let confirmation = BlockedUserManager.msg("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been blocked.", title:"Blocked", closeTitle: "Ok", handler:  { action in
+                        if let viewControllers = self.controller?.navigationController?.viewControllers where viewControllers.count > 1 {
+                            if let chatListController = viewControllers[viewControllers.count - 2] as? MMXChatListViewController {
+                                if let channel = self.controller?.channel {
+                                    chatListController.refreshDataForChannel(channel)
+                                }
+                            }
+                        }
+                        
                         self.controller?.dismiss()
                     })
                     self.controller?.presentViewController(confirmation, animated: false, completion: nil)
