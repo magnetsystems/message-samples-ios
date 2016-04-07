@@ -156,7 +156,7 @@ public class CoreChatViewController: MMJSQViewController {
             self.messages = self.sort(messages)
         }
         
-        collectionView?.reloadData()
+        self.collectionView?.reloadData()
         self.showLoadEarlierMessagesHeader = self.hasMore()
         self.infiniteLoading.finishUpdating()
         if !self.hasMore() {
@@ -188,10 +188,13 @@ public class CoreChatViewController: MMJSQViewController {
     internal func onMessageSent(mmxMessage: MMXMessage) { }
     
     internal func reset() {
+        self.collectionView.collectionViewLayout.invalidateLayout()
         self.currentMessageCount = 0
         self.messages = []
+        let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
+        invailidationContext.invalidateFlowLayoutMessagesCache = true
+        self.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
         self.collectionView.reloadData()
-        self.collectionView.collectionViewLayout.invalidateLayout()
         loadMore(self.chat, offset: self.currentMessageCount)
     }
     
