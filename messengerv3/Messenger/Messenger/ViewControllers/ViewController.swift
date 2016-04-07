@@ -113,11 +113,11 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
         if BlockedUserManager.isUserBlocked(user) {
             let confirmUnblock =  BlockedUserManager.confirmUnblock(user, completion: { unblocked in
                 if unblocked {
-                    self.showAlert("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been unblocked.", title:"Unblocked", closeTitle: "Ok")
+                    self.showAlert( kStr_UnblockSuceeded.stringByReplacingOccurrencesOfString(kStr_Escape_Value, withString: ChatKit.Utils.displayNameForUser(user)), title:kStr_UnblockUser, closeTitle: kStr_Ok)
                     self.currentContactsViewController?.resetData()
                     self.resetData()
                 } else {
-                    self.showAlert("Could not unblock user please try again.", title:"Failed to Unblock", closeTitle: "Ok")
+                    self.showAlert(kStr_UnblockFailed, title:kStr_Failed, closeTitle: kStr_Ok)
                 }
             })
             self.presentViewController(confirmUnblock, animated: false, completion: nil)

@@ -113,12 +113,12 @@ class BlockedUserManager : NSObject {
     }
     
     static func confirmBlock(user : MMUser, completion: ((blocked:Bool) -> Void), canceled : (() -> Void)? = nil) -> UIAlertController {
-        let alert = UIAlertController(title: "Block User", message: "Are you sure you want to block \(ChatKit.Utils.displayNameForUser(user))?", preferredStyle: .Alert)
-        let button = UIAlertAction(title: "Cancel", style: .Cancel, handler: { action in
+        let alert = UIAlertController(title: kStr_BlockUser, message: kStr_ConfirmBlock.stringByReplacingOccurrencesOfString(kStr_Escape_Value, withString: ChatKit.Utils.displayNameForUser(user)), preferredStyle: .Alert)
+        let button = UIAlertAction(title: kStr_No, style: .Cancel, handler: { action in
             canceled?()
         })
         alert.addAction(button)
-        let buttonConfirm = UIAlertAction(title: "Ok", style: .Default, handler: { action in
+        let buttonConfirm = UIAlertAction(title: kStr_Yes, style: .Default, handler: { action in
             
             BlockedUserManager.blockUser(user, completion : completion)
             
@@ -128,12 +128,12 @@ class BlockedUserManager : NSObject {
     }
     
     static func confirmUnblock(user : MMUser, completion: ((unblocked:Bool) -> Void), canceled : (() -> Void)? = nil) -> UIAlertController {
-        let alert = UIAlertController(title: "Unblock User", message: "Are you sure you want to unblock \(ChatKit.Utils.displayNameForUser(user))?", preferredStyle: .Alert)
-        let button = UIAlertAction(title: "Cancel", style: .Cancel, handler: { action in
+        let alert = UIAlertController(title: kStr_UnblockUser, message: kStr_ConfirmUnblock.stringByReplacingOccurrencesOfString(kStr_Escape_Value, withString: ChatKit.Utils.displayNameForUser(user)), preferredStyle: .Alert)
+        let button = UIAlertAction(title: kStr_No, style: .Cancel, handler: { action in
             canceled?()
         })
         alert.addAction(button)
-        let buttonConfirm = UIAlertAction(title: "Ok", style: .Default, handler: { action in
+        let buttonConfirm = UIAlertAction(title: kStr_Yes, style: .Default, handler: { action in
             
             BlockedUserManager.unblockUser(user, completion : completion)
         })

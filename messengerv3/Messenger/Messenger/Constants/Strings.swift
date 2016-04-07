@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import Foundation
 
@@ -24,14 +24,16 @@ func localizedString(string : String) ->String {
 
 let kStr_AttachmentFile = localizedString("Attachment file")
 let kStr_AddContact = localizedString("Add a contact")
+let kStr_Escape_Value = "####"
 
 
 let kStr_Cancel = localizedString("Cancel")
 let kStr_Close = localizedString("Close")
 let kStr_CouldntLogin = localizedString("Couldn't log in")
 let kStr_CouldntRegisterTitle = localizedString("Couldn't register")
+let kStr_Options = localizedString("Options")
 
-
+let kStr_Failed = localizedString("Failed")
 let kStr_Delete = localizedString("Delete")
 
 
@@ -82,7 +84,15 @@ let kStr_UsernameTitle = localizedString("Username taken")
 
 
 let kStr_Yes = localizedString("Yes")
+let kStr_Ok = localizedString("Ok")
 
 
+let kStr_BlockUser = localizedString("Block User")
+let kStr_UnblockUser = localizedString("Unblock User")
+let kStr_ConfirmBlock = localizedString("Are you sure you want to block \(kStr_Escape_Value)?")
+let kStr_ConfirmUnblock = localizedString("Are you sure you want to unblock \(kStr_Escape_Value)?")
 
-
+let kStr_BlockSuceeded = localizedString("\(kStr_Escape_Value) has been blocked.")
+let kStr_UnblockSuceeded = localizedString("\(kStr_Escape_Value) has been unblocked.")
+let kStr_BlockFailed = localizedString("Could not block user please try again.")
+let kStr_UnblockFailed = localizedString("Could not unblock user please try again.")

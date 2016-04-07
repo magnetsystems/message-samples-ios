@@ -25,13 +25,13 @@ public class ChatViewDelegate : DefaultChatViewControllerDelegate {
             return
         }
         
-        let alert = UIAlertController(title: "Options", message: "", preferredStyle: .ActionSheet)
-        let button = UIAlertAction(title: "Close", style: .Cancel, handler: nil)
+        let alert = UIAlertController(title: kStr_Options, message: "", preferredStyle: .ActionSheet)
+        let button = UIAlertAction(title: kStr_Close, style: .Cancel, handler: nil)
         alert.addAction(button)
-        let buttonBlock = UIAlertAction(title: "Block User", style: .Destructive, handler: { action in
+        let buttonBlock = UIAlertAction(title: kStr_BlockUser, style: .Destructive, handler: { action in
             let confirmationAlert = BlockedUserManager.confirmBlock(user, completion: { blocked in
                 if blocked {
-                    let confirmation = BlockedUserManager.msg("\(ChatKit.Utils.displayNameForUser(user).capitalizedString) has been blocked.", title:"Blocked", closeTitle: "Ok", handler:  { action in
+                    let confirmation = BlockedUserManager.msg(kStr_BlockSuceeded.stringByReplacingOccurrencesOfString(kStr_Escape_Value, withString: ChatKit.Utils.displayNameForUser(user)), title:kStr_BlockUser, closeTitle: kStr_Ok, handler:  { action in
                         if let viewControllers = self.controller?.navigationController?.viewControllers where viewControllers.count > 1 {
                             if let chatListController = viewControllers[viewControllers.count - 2] as? MMXChatListViewController {
                                 if let channel = self.controller?.channel {
@@ -44,7 +44,7 @@ public class ChatViewDelegate : DefaultChatViewControllerDelegate {
                     })
                     self.controller?.presentViewController(confirmation, animated: false, completion: nil)
                 } else {
-                    let confirmation = BlockedUserManager.msg("Could not block user please try again.", title:"Failed to Block", closeTitle: "Ok")
+                    let confirmation = BlockedUserManager.msg(kStr_BlockFailed, title:kStr_Failed, closeTitle: kStr_Ok)
                     self.controller?.presentViewController(confirmation, animated: false, completion: nil)
                 }
             })
