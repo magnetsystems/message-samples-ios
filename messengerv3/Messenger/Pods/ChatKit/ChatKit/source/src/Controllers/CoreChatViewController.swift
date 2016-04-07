@@ -289,6 +289,10 @@ public class CoreChatViewController: MMJSQViewController {
         
         sendLocationAction.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
         
+        LocationManager.sharedInstance.onAuthorizationUpdate = {[weak sendLocationAction] in
+            sendLocationAction?.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
+        }
+        
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
