@@ -34,7 +34,7 @@ public class DefaultContactsPickerControllerDatasource : NSObject, ContactsContr
     
     
     public var hasMoreUsers : Bool = true
-    public let limit = 30
+    public var limit = 30
     
     
     //MARK Public Methods
