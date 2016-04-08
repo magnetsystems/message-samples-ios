@@ -34,6 +34,8 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     }
     public var channelDetailsMessagesLimit : Int = 10
     public var channelDetailsSubscribersLimit : Int = 50
+    public var resetCounter = 0;
+    
     
     //searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
     //to hide set canSearch = false
@@ -114,10 +116,12 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     
     public func append(mmxChannels : [MMXChannel]) {
         if mmxChannels.count > 0 {
-            self.refreshControl?.beginRefreshing()
             // Get all channels the current user is subscribed to
+            let context = self.resetCounter
             MMXChannel.channelDetails(mmxChannels, numberOfMessages: channelDetailsMessagesLimit, numberOfSubcribers: channelDetailsSubscribersLimit, success: { detailResponses in
-                
+                if context != self.resetCounter {
+                    return
+                }
                 self.loadedChannelDetails(self.currentDetailCount)
                 let shouldStopRefreshControl = self.currentDetailCount == 0
                 
@@ -131,10 +135,10 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
                 if details.count == 0 && self.hasMore() {
                     self.infiniteLoading.setNeedsUpdate()
                 }
+                
                 self.refreshControl?.endRefreshing()
                 DDLogVerbose("[Retrieved] channel details succeeded")
                 }, failure: { error in
-                    self.refreshControl?.endRefreshing()
                     self.endDataLoad()
                     DDLogError("[Error] - retrieving channel details - \(error.localizedDescription)")
             })
@@ -236,6 +240,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     }
     
     internal func reset() {
+        resetCounter += 1
         self.currentDetailCount = 0
         if !prefersSoftReset() {
             clearData()
