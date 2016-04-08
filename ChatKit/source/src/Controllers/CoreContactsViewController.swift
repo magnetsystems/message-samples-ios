@@ -201,7 +201,7 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
     
     
     //MARK: Internal Methods
-
+    
     
     internal func canSelectUser(user : MMUser) -> Bool{
         return true
@@ -275,17 +275,10 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
     }
     
     internal func reset() {
-        clearData()
-        
-        var searchText = self.searchBar?.text
-        if searchText?.characters.count == 0 {
-            searchText = nil
-        }
-        self.loadMore(searchText, offset: self.currentUserCount)
-    }
-    
-    internal func softReset() {
         self.currentUserCount = 0
+        if !self.prefersSoftReset() {
+            clearData()
+        }
         var searchText = self.searchBar?.text
         if searchText?.characters.count == 0 {
             searchText = nil
@@ -632,11 +625,7 @@ private extension CoreContactsViewController {
         if let txt = text where txt.characters.count == 0 {
             text = nil
         }
-        if !prefersSoftReset() {
-            self.reset()
-        } else {
-            self.softReset()
-        }
+        self.reset()
     }
     
     private func updateContactsView(users : [MMUser]) {

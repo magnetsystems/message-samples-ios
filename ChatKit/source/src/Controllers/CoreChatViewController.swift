@@ -206,7 +206,10 @@ public class CoreChatViewController: MMJSQViewController {
     }
     
     internal func reset() {
-        clearData()
+        self.currentMessageCount = 0
+        if !prefersSoftReset() {
+            clearData()
+        }
         loadMore(self.chat, offset: self.currentMessageCount)
     }
     
@@ -230,11 +233,6 @@ public class CoreChatViewController: MMJSQViewController {
             }
             return false
         })
-    }
-    
-    internal func softReset() {
-        self.currentMessageCount = 0
-        loadMore(self.chat, offset: self.currentMessageCount)
     }
     
     

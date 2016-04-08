@@ -233,16 +233,10 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     }
     
     internal func reset() {
-        clearData()
-        var searchText = self.searchBar?.text
-        if searchText?.characters.count == 0 {
-            searchText = nil
-        }
-        self.loadMore(searchText, offset: self.currentDetailCount)
-    }
-    
-    internal func softReset() {
         self.currentDetailCount = 0
+        if !prefersSoftReset() {
+            clearData()
+        }
         var searchText = self.searchBar?.text
         if searchText?.characters.count == 0 {
             searchText = nil
@@ -284,11 +278,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     
     
     @IBAction func refreshChannelDetail() {
-        if !prefersSoftReset() {
-            reset()
-        } else {
-            softReset()
-        }
+        reset()
     }
     
     
@@ -537,11 +527,7 @@ private extension CoreChatListViewController {
         if let txt = text where txt.characters.count == 0 {
             text = nil
         }
-        if !prefersSoftReset() {
-            reset()
-        } else {
-            softReset()
-        }
+        reset()
     }
     
     private func updateSearchBar() {
