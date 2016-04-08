@@ -264,4 +264,12 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     override internal func onMessageSent(mmxMessage: MMXMessage) {
         self.delegate?.mmxChatDidSendMessage(mmxMessage)
     }
+    
+    override internal func prefersSoftReset() -> Bool {
+        if let shouldSoftReset = self.datasource?.mmxControllerPrefersSoftResets {
+            return shouldSoftReset()
+        }
+        
+        return super.prefersSoftReset()
+    }
 }

@@ -34,6 +34,8 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     }
     public var channelDetailsMessagesLimit : Int = 10
     public var channelDetailsSubscribersLimit : Int = 50
+    public var resetCounter = 0;
+    
     
     //searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
     //to hide set canSearch = false
@@ -114,11 +116,15 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     
     public func append(mmxChannels : [MMXChannel]) {
         if mmxChannels.count > 0 {
-            self.beginRefreshing()
             // Get all channels the current user is subscribed to
+            let context = self.resetCounter
             MMXChannel.channelDetails(mmxChannels, numberOfMessages: channelDetailsMessagesLimit, numberOfSubcribers: channelDetailsSubscribersLimit, success: { detailResponses in
-                self.refreshControl?.endRefreshing()
+                if context != self.resetCounter {
+                    return
+                }
                 self.loadedChannelDetails(self.currentDetailCount)
+                let shouldStopRefreshControl = self.currentDetailCount == 0
+                
                 self.currentDetailCount += mmxChannels.count
                 
                 var details = self.filterChannels(detailResponses)
@@ -130,6 +136,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
                     self.infiniteLoading.setNeedsUpdate()
                 }
                 
+                self.refreshControl?.endRefreshing()
                 DDLogVerbose("[Retrieved] channel details succeeded")
                 }, failure: { error in
                     self.endDataLoad()
@@ -233,16 +240,11 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     }
     
     internal func reset() {
-        clearData()
-        var searchText = self.searchBar?.text
-        if searchText?.characters.count == 0 {
-            searchText = nil
-        }
-        self.loadMore(searchText, offset: self.currentDetailCount)
-    }
-    
-    internal func softReset() {
+        resetCounter += 1
         self.currentDetailCount = 0
+        if !prefersSoftReset() {
+            clearData()
+        }
         var searchText = self.searchBar?.text
         if searchText?.characters.count == 0 {
             searchText = nil
@@ -284,11 +286,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     
     
     @IBAction func refreshChannelDetail() {
-        if !prefersSoftReset() {
-            reset()
-        } else {
-            softReset()
-        }
+        reset()
     }
     
     
@@ -466,10 +464,6 @@ private extension CoreChatListViewController {
     // MARK: - Private Methods
     
     
-    private func beginRefreshing() {
-        self.refreshControl?.beginRefreshing()
-    }
-    
     private func detailsForIndexPath(indexPath : NSIndexPath) -> MMXChannelDetailResponse {
         return  detailResponses[indexPath.row]
     }
@@ -494,7 +488,6 @@ private extension CoreChatListViewController {
     }
     
     private func endRefreshing() {
-        refreshControl?.endRefreshing()
         tableView.reloadData()
     }
     
@@ -537,11 +530,7 @@ private extension CoreChatListViewController {
         if let txt = text where txt.characters.count == 0 {
             text = nil
         }
-        if !prefersSoftReset() {
-            reset()
-        } else {
-            softReset()
-        }
+        reset()
     }
     
     private func updateSearchBar() {

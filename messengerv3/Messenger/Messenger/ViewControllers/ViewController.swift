@@ -75,6 +75,7 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
         }
         
         BlockedUserManager.resetBlockedUsers()
+        MMX.start()
     }
     
     override func viewDidLoad() {

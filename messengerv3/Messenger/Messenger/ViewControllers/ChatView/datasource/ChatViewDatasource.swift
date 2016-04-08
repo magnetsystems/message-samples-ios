@@ -25,6 +25,9 @@ public class ChatViewDatasource : DefaultChatViewControllerDatasource {
     
     //MARK: Public Methods
     
+    public func mmxControllerPrefersSoftResets() -> Bool {
+        return true
+    }
     
     override public func mmxControllerLoadMore(channel : MMXChannel?, offset : Int) {
         guard let channel = controller?.chat else { return }
@@ -42,6 +45,7 @@ public class ChatViewDatasource : DefaultChatViewControllerDatasource {
             
             if offset == 0 {
                 self.numberOfMessagesWithoutTimeStamps = 0
+                self.controller?.clearData()
             }
             
             let messageOffset = self.numberOfMessagesWithoutTimeStamps + offset

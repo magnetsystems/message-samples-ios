@@ -37,7 +37,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     public func createChat(from subscribers : [MMUser]) {
         let id = NSUUID().UUIDString
-        
+    
         MMXChannel.createWithName(id, summary: id, isPublic: false, publishPermissions: .Anyone, subscribers: Set(subscribers), success: { (channel) -> Void in
             self.controller?.reloadData()
             DDLogVerbose("[Channel Created] - (\(channel.name))")
@@ -147,7 +147,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         return 80
     }
     
-    public func mmxListPrefersSoftResets() -> Bool {
+    public func mmxControllerPrefersSoftResets() -> Bool {
         return true
     }
     
