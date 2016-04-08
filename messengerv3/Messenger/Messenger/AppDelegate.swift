@@ -18,7 +18,7 @@
 import UIKit
 
 import AFNetworking
-import MagnetMax
+import ChatKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let settings = UIUserNotificationSettings(forTypes: [.Badge,.Alert,.Sound], categories: nil)
         application.registerUserNotificationSettings(settings);
-        
+        UtilsImageCache.sharedCache.maxImageCacheSize = 1024 * 1024 * 40
         //        is user alread logged In ?
         setMainWindow(launchViewController())
         self.window?.makeKeyAndVisible()

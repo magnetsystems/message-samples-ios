@@ -61,7 +61,7 @@ public class UtilsImageCache : UtilsCache {
         let data = UIImagePNGRepresentation(image)
         var size = 0
         if let len = data?.length {
-            size = len
+            size = len / 8
         }
         
         self.setObject(image, forURL: forURL, cost:size)

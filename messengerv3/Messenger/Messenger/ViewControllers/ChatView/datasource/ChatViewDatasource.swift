@@ -56,7 +56,7 @@ public class ChatViewDatasource : DefaultChatViewControllerDatasource {
                 }
                 var messagesWithTimestamps : [MMXMessage] = []
                 for message in messages {
-                    if message.timestamp != nil{
+                    if message.timestamp != nil {
                         messagesWithTimestamps.append(message)
                     } else {
                         self?.numberOfMessagesWithoutTimeStamps += 1
