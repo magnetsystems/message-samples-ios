@@ -57,8 +57,13 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        if Utils.isMagnetEmployee() {
         AskMagnetCounter.sharedCounter.notifyForNewAskMessages = true
         AskMagnetCounter.sharedCounter.delegate = self
+        } else {
+            AskMagnetCounter.sharedCounter.notifyForNewAskMessages = false
+            AskMagnetCounter.sharedCounter.delegate = nil
+        }
         updateAskMagnetDisplay()
         
         if !revealLoaded {
