@@ -50,7 +50,8 @@ let kStr_FillEmailPass = localizedString("Please fill in email and password")
 
 
 let kStr_Group = localizedString("Group")
-
+let kStr_Forum = localizedString("Forum")
+let kStr_SupportTitle = "Ask Magnet"
 
 let kStr_Leave = localizedString("Leave")
 

@@ -26,6 +26,11 @@ class HomeListDelegate : DefaultChatListControllerDelegate {
     }
     
     override func mmxListWillShowChatController(chatController : MMXChatViewController) {
+        if let channel = chatController.channel where channel.name.hasPrefix("global_") {
+            chatController.title = kStr_Forum
+        }else if let channel = chatController.channel where channel.name.hasPrefix(kAskMagnetChannel) {
+            chatController.title = kStr_SupportTitle
+        }
         chatController.datasource = ChatViewDatasource()
         chatController.delegate = ChatViewDelegate()
     }
