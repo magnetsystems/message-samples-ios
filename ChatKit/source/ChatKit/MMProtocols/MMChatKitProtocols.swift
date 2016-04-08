@@ -55,6 +55,7 @@ import MagnetMax
     
     func mmxControllerHasMore() -> Bool
     func mmxControllerLoadMore(searchText : String?, offset : Int)
+    optional func mmxControllerPrefersSoftResets() -> Bool
     func mmxControllerSearchUpdatesContinuously() -> Bool
     
     
@@ -135,12 +136,12 @@ import MagnetMax
 //MARK: ChatViewControllerDelegate
 
 
-public protocol ChatViewControllerDatasource {
+@objc public protocol ChatViewControllerDatasource {
     
     
     func mmxControllerLoadMore(channel : MMXChannel?, offset : Int)
     func mmxControllerHasMore() -> Bool
-    
+    optional func mmxControllerPrefersSoftResets() -> Bool
     
 }
 

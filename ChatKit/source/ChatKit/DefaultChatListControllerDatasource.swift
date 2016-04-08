@@ -147,7 +147,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
         return 80
     }
     
-    public func mmxListPrefersSoftResets() -> Bool {
+    public func mmxControllerPrefersSoftResets() -> Bool {
         return true
     }
     

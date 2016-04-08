@@ -286,7 +286,7 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     }
     
     override internal func prefersSoftReset() -> Bool {
-        if let shouldSoftReset = self.datasource?.mmxListPrefersSoftResets {
+        if let shouldSoftReset = self.datasource?.mmxControllerPrefersSoftResets {
             return shouldSoftReset()
         }
         

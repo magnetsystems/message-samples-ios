@@ -295,6 +295,14 @@ public class MMXContactsPickerController: CoreContactsViewController, Define_MMX
         self.delegate?.mmxContactsControllerSelectedUser?(user)
     }
     
+    override internal func prefersSoftReset() -> Bool {
+        if let shouldSoftReset = self.datasource?.mmxControllerPrefersSoftResets {
+            return shouldSoftReset()
+        }
+        
+        return super.prefersSoftReset()
+    }
+    
     override internal func shouldShowHeaderTitles() -> Bool {
         if let pickerDatasource = self.datasource {
             if let shows = pickerDatasource.mmxContactsControllerShowsSectionsHeaders?() {

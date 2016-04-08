@@ -114,11 +114,13 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     
     public func append(mmxChannels : [MMXChannel]) {
         if mmxChannels.count > 0 {
-            self.beginRefreshing()
+            self.refreshControl?.beginRefreshing()
             // Get all channels the current user is subscribed to
             MMXChannel.channelDetails(mmxChannels, numberOfMessages: channelDetailsMessagesLimit, numberOfSubcribers: channelDetailsSubscribersLimit, success: { detailResponses in
-                self.refreshControl?.endRefreshing()
+                
                 self.loadedChannelDetails(self.currentDetailCount)
+                let shouldStopRefreshControl = self.currentDetailCount == 0
+                
                 self.currentDetailCount += mmxChannels.count
                 
                 var details = self.filterChannels(detailResponses)
@@ -129,9 +131,10 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
                 if details.count == 0 && self.hasMore() {
                     self.infiniteLoading.setNeedsUpdate()
                 }
-                
+                self.refreshControl?.endRefreshing()
                 DDLogVerbose("[Retrieved] channel details succeeded")
                 }, failure: { error in
+                    self.refreshControl?.endRefreshing()
                     self.endDataLoad()
                     DDLogError("[Error] - retrieving channel details - \(error.localizedDescription)")
             })
@@ -456,10 +459,6 @@ private extension CoreChatListViewController {
     // MARK: - Private Methods
     
     
-    private func beginRefreshing() {
-        self.refreshControl?.beginRefreshing()
-    }
-    
     private func detailsForIndexPath(indexPath : NSIndexPath) -> MMXChannelDetailResponse {
         return  detailResponses[indexPath.row]
     }
@@ -484,7 +483,6 @@ private extension CoreChatListViewController {
     }
     
     private func endRefreshing() {
-        refreshControl?.endRefreshing()
         tableView.reloadData()
     }
     
