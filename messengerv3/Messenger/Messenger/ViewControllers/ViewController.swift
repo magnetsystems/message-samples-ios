@@ -74,7 +74,6 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
             navigationItem.rightBarButtonItem = newRightItem
         }
         
-        BlockedUserManager.resetBlockedUsers()
         MMX.start()
     }
     

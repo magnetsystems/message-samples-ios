@@ -59,12 +59,7 @@ class BlockedUserManager : NSObject {
             if let failureBlock = failure {
                 failureBlocks.append(failureBlock)
             }
-            MMUser.blockedUsersWithSuccess({ users in
-                self.blockedUsers = users
-                self.successWith(users)
-                }, failure: {error in
-                    self.failureWith(error)
-            })
+            fetchBlockedUsers()
         } else {
             successBlocks.append(success)
             if let failureBlock = failure {
@@ -73,11 +68,19 @@ class BlockedUserManager : NSObject {
         }
     }
     
-    static func resetBlockedUsers() {
-        self.blockedUsers = nil
-        self.getBlockedUsers({_ in
-            //did Retrieve Blocked Users
-            }, failure:nil)
+    static func fetchBlockedUsers() {
+        MMUser.blockedUsersWithSuccess({ users in
+            if self.blockedUsers != nil {
+                self.blockedUsers?.appendContentsOf(users)
+            } else {
+                self.blockedUsers = users
+            }
+            if let usersBlocked = self.blockedUsers {
+                self.successWith(usersBlocked)
+            }
+            }, failure: {error in
+                self.failureWith(error)
+        })
     }
     
     static func isUserBlocked(user : MMUser) -> Bool {

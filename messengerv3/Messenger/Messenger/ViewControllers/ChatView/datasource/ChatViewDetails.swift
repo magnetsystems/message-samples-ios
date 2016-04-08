@@ -34,6 +34,21 @@ class ChatViewDetails: SubscribersDatasource {
         }
     }
     
+    override func mmxControllerLoadMore(searchText: String?, offset: Int) {
+        let context = self.controller?.loadingContext()
+        BlockedUserManager.getBlockedUsers({ _ in
+            guard context == self.controller?.loadingContext() else {
+                return
+            }
+            super.mmxControllerLoadMore(searchText, offset: 0)
+            }, failure: { _ in
+                guard context == self.controller?.loadingContext() else {
+                    return
+                }
+                super.mmxControllerLoadMore(searchText, offset: 0)
+        })
+    }
+    
     func mmxContactsDidCreateCell(cell: UITableViewCell) {
         var blocked = false
         

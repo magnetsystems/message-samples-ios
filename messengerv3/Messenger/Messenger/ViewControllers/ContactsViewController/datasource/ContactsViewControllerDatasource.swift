@@ -23,9 +23,16 @@ let MMXBlockContactsCellAlpha : CGFloat = 0.6
 class ContactsViewControllerDatasource : DefaultContactsPickerControllerDatasource {
     
     override func mmxControllerLoadMore(searchText: String?, offset: Int) {
+        let context = self.controller?.loadingContext()
             BlockedUserManager.getBlockedUsers({_ in
+                guard context == self.controller?.loadingContext() else {
+                    return
+                }
                 super.mmxControllerLoadMore(searchText, offset: offset)
                 }, failure: { _ in
+                    guard context == self.controller?.loadingContext() else {
+                        return
+                    }
                     super.mmxControllerLoadMore(searchText, offset: offset)
             })
     }
