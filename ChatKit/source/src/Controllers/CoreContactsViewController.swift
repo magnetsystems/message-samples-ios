@@ -78,6 +78,10 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
     //MARK: Overrides
     
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     public override init() {
         super.init(nibName: String(CoreContactsViewController.self), bundle: NSBundle(forClass: CoreContactsViewController.self))
         
@@ -109,6 +113,9 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         }
         self.automaticallyAdjustsScrollViewInsets = false
         self.tableView.contentInset = UIEdgeInsetsZero
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreContactsViewController.keyboardDidShow(_:)), name:UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(CoreContactsViewController.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
+        
     }
     
     override public func viewWillAppear(animated: Bool) {
@@ -121,6 +128,22 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         super.viewWillDisappear(animated)
         
         resignSearchBar()
+    }
+    
+    
+    //MARK: Notifications
+    
+    
+    func keyboardDidShow(notification : NSNotification) {
+        var info = notification.userInfo!
+        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        
+        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.size.height, right: 0)
+    }
+    
+    
+    func keyboardWillHide(notification : NSNotification) {
+        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     
