@@ -113,6 +113,10 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
         return nil
     }
     
+    override func mmxControllerPrefersSoftResets() -> Bool {
+        return true
+    }
+    
     func loadAskMagnetChannel() {
         
         guard !Utils.isMagnetEmployee() else {
