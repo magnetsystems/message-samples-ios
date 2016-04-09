@@ -316,12 +316,15 @@ public class CoreChatViewController: MMJSQViewController {
     }
     
     override public func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
+         button.userInteractionEnabled = false
         
         guard let channel = self.chat else {
             if let recipients = self.recipients where recipients.count > 0 {
                 createNewChatWithRecipients(recipients, completion: {error in
                     if error == nil {
                         self.didPressSendButton(button, withMessageText: text, senderId: senderId, senderDisplayName: senderDisplayName, date: date)
+                    } else {
+                         button.userInteractionEnabled = true
                     }
                 })
             }
@@ -334,8 +337,6 @@ public class CoreChatViewController: MMJSQViewController {
             Constants.ContentKey.Type: MessageType.Text.rawValue,
             Constants.ContentKey.Message: forcedString,
             ]
-        
-        button.userInteractionEnabled = false
         
         showSpinner()
         let mmxMessage = MMXMessage(toChannel: channel, messageContent: messageContent)
@@ -461,4 +462,3 @@ private extension CoreChatViewController {
         }
     }
 }
-
