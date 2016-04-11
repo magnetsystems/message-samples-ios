@@ -114,6 +114,7 @@ public class CoreChatViewController: MMJSQViewController {
         MMX.start()
         // Handling disconnection
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didDisconnect:", name: MMUserDidReceiveAuthenticationChallengeNotification, object: nil)
+        BackgroundMessageManager.sharedManager.setup()
     }
     
     override public func viewWillAppear(animated: Bool) {

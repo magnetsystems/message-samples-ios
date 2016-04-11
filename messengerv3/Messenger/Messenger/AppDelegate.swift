@@ -44,8 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let URLCache = NSURLCache(memoryCapacity: 4 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024, diskPath: nil)
         NSURLCache.setSharedURLCache(URLCache)
         
-//        MMXLogger.sharedLogger().level = .Off
-//        MMXLogger.sharedLogger().startLogging()
+        //        MMXLogger.sharedLogger().level = .Off
+        //        MMXLogger.sharedLogger().startLogging()
         
         let settings = UIUserNotificationSettings(forTypes: [.Badge,.Alert,.Sound], categories: nil)
         application.registerUserNotificationSettings(settings);

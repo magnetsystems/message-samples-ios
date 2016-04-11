@@ -99,7 +99,6 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
             menuButton?.addSubview(imageView)
             menuAlertImageView = imageView
         }
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.didBecomeActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
     
     override func presentChatViewController(chatViewController: MMXChatViewController, users: [MMUser]) {
@@ -143,17 +142,5 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
         } else {
             self.menuAlertImageView?.image = nil
         }
-    }
-    
-    
-    //MARK: Refreshing
-    
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
-    func didBecomeActive() {
-            self.resetData()
     }
 }

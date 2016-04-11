@@ -31,7 +31,7 @@ public class MMAsyncBlockOperation : MMAsynchronousOperation {
     //Mark: Overrides
     
     
-    init(with block : ((operation : MMAsynchronousOperation) -> Void)) {
+   public init(with block : ((operation : MMAsynchronousOperation) -> Void)) {
         self.block = block
         super.init()
     }

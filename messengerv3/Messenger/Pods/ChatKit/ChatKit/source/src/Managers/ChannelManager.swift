@@ -1,19 +1,19 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -50,6 +50,7 @@ public class ChannelManager {
     
     
     private var channelObservers : [ChannelObserver] = []
+    private var messageIds : [String] = []
     
     
     //MARK: - Public implementation
@@ -102,7 +103,7 @@ public class ChannelManager {
         if let user = MMUser.currentUser() {
             user.extras[name] = "\(date.timeIntervalSince1970)"
             if let msg = message {
-            user.extras["\(name)_last_message_id"] = msg.messageID
+                user.extras["\(name)_last_message_id"] = msg.messageID
             }
             
             let updateRequest = MMUpdateProfileRequest.init(user: user)
@@ -132,6 +133,12 @@ public class ChannelManager {
     @objc private func didReceiveMessage(notification: NSNotification) {
         let tmp : [NSObject : AnyObject] = notification.userInfo!
         let mmxMessage = tmp[MMXMessageKey] as! MMXMessage
+        
+        guard let messageID = mmxMessage.messageID where !messageIds.contains(messageID) else {
+            return
+        }
+        
+        messageIds.append(messageID)
         let channel = mmxMessage.channel
         
         let observers : [ChannelObserver] = channelObservers.filter({

@@ -20,13 +20,13 @@ import ChatKit
 
 class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.didBecomeActive), name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func detailsAction() {
@@ -46,10 +46,6 @@ class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
                 self.navigationController?.pushViewController(detailsVC, animated: true)
             }
         }
-    }
-    
-    func didBecomeActive() {
-        self.resetData()
     }
     
     func mmxAvatarDidClick(user: MMUser) {
