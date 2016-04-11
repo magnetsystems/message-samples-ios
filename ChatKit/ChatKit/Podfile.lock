@@ -12,12 +12,12 @@ PODS:
   - AFNetworking/Serialization (2.6.1)
   - AFOAuth2Manager (2.2.1):
     - AFNetworking/NSURLConnection (~> 2.2)
-  - ChatKit (1.3.0):
-    - ChatKit/Public (= 1.3.0)
-    - ChatKit/UI_Core (= 1.3.0)
-  - ChatKit/Public (1.3.0):
-    - ChatKit/UI_Core (= 1.3.0)
-  - ChatKit/UI_Core (1.3.0):
+  - ChatKit (1.3.4):
+    - ChatKit/Public (= 1.3.4)
+    - ChatKit/UI_Core (= 1.3.4)
+  - ChatKit/Public (1.3.4):
+    - ChatKit/UI_Core (~> 1.3.4)
+  - ChatKit/UI_Core (1.3.4):
     - CocoaLumberjack/Swift
     - DZVideoPlayerViewController
     - MagnetMax (~> 2.5.3)
@@ -47,7 +47,7 @@ PODS:
   - Mantle (3.0.0):
     - Mantle/extobjc (= 3.0.0)
   - Mantle/extobjc (3.0.0)
-  - MMX (2.5.2):
+  - MMX (2.5.3):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
     - MagnetMaxCore (~> 2.5)
@@ -102,7 +102,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
-  ChatKit: ab8cf87105eb6aa79de48fd54f5d588e0676d16d
+  ChatKit: cc6da868fcc686775bd1a238e79734ac86c27fd6
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
   DZVideoPlayerViewController: 4886c5016a632cbd94a85e6071806e4929c01653
@@ -110,7 +110,7 @@ SPEC CHECKSUMS:
   MagnetMax: aee543d50fae51b6fe126196f5c17924e2370c67
   MagnetMaxCore: e5c71a3665b531acb0639055d45c840682ef5885
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
-  MMX: 4189922d9d70cc254906626f35a80a6b4ca99c05
+  MMX: 8d57915b25321a2584f90b29c1f39ee47ed73d6c
   MMXXMPPFramework: 12ac458346387dc8a3fb157dc56db65e13be5a9b
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
 

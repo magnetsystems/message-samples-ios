@@ -115,7 +115,7 @@ public class CoreContactsViewController: MMTableViewController, UISearchBarDeleg
         self.tableView.contentInset = UIEdgeInsetsZero
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CoreContactsViewController.keyboardDidShow(_:)), name:UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(CoreContactsViewController.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
-        
+        BackgroundMessageManager.sharedManager.setup()
     }
     
     override public func viewWillAppear(animated: Bool) {
