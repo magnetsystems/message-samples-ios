@@ -13,21 +13,21 @@ class MessengerUITests: XCTestCase {
     let lName = "test"
     let Group = "Group"
     
-    let userName = "test001@automation.gmail.com"
-    let fName = "AutomationTestUser001"
-    let fullName = "AutomationTestUser001 test"
+    let userName = "test005@automation.gmail.com"
+    let fName = "AutomationTestUser005"
+    let fullName = "AutomationTestUser005 test"
     
-    let userNameTwo = "test002@automation.gmail.com"
-    let fNameTwo = "AutomationTestUser002"
-    let fullNameTwo = "AutomationTestUser002 test"
+    let userNameTwo = "test006@automation.gmail.com"
+    let fNameTwo = "AutomationTestUser006"
+    let fullNameTwo = "AutomationTestUser006 test"
     
-    let userNameThree = "test003@automation.gmail.com"
-    let fNameThree = "AutomationTestUser003"
-    let fullNameThree = "AutomationTestUser003 test"
+    let userNameThree = "test007@automation.gmail.com"
+    let fNameThree = "AutomationTestUser007"
+    let fullNameThree = "AutomationTestUser007 test"
     
-    let userNameFour = "test004@automation.gmail.com"
-    let fNameFour = "AutomationTestUser004"
-    let fullNameFour = "AutomationTestUser004 test"
+    let userNameFour = "test008@automation.gmail.com"
+    let fNameFour = "AutomationTestUser008"
+    let fullNameFour = "AutomationTestUser008 test"
     
     override func setUp() {
         super.setUp()
@@ -274,7 +274,20 @@ class MessengerUITests: XCTestCase {
         self.delay()
     }
     
-    /**********************************************Test01-Test40************************************************/
+    /**********************************************Test00-Test40************************************************/
+    //Test0 Negative scenario - Login with empty credentials
+    func test00LoginWithInvalidCredentials()
+    {
+        let app = XCUIApplication()
+        self.login("", password: "")
+        //a few checks, related to appeared error alert
+        XCTAssert(app.alerts["Please fill in email and password"].exists)
+        XCTAssert(app.staticTexts["Please fill in email and password"].exists)
+        XCTAssertEqual(app.alerts["Please fill in email and password"].childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(1).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).childrenMatchingType(.StaticText).matchingIdentifier("Please fill in email and password").elementBoundByIndex(0).label, "Please fill in email and password")
+        XCTAssertEqual(app.alerts["Please fill in email and password"].childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(1).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).childrenMatchingType(.StaticText).matchingIdentifier("Please fill in email and password").elementBoundByIndex(1).label, "Please fill in email and password")
+        app.collectionViews.buttons["Close"].tap()
+    }
+    
     //Test1 Negative scenario - Login with invalid credentials
     func test01LoginWithInvalidCredentials()
     {
