@@ -795,6 +795,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = MessengerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DTESTING";
 				PRODUCT_BUNDLE_IDENTIFIER = Magnet.MessengerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = Messenger;
@@ -806,6 +807,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = MessengerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DTESTING";
 				PRODUCT_BUNDLE_IDENTIFIER = Magnet.MessengerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = Messenger;
