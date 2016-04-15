@@ -13,21 +13,21 @@ class MessengerUITests: XCTestCase {
     let lName = "test"
     let Group = "Group"
     
-    let userName = "test001@magnet.com"
-    let fName = "TestUser001"
-    let fullName = "TestUser001 test"
+    let userName = "test01@magnet.com"
+    let fName = "TestUser01"
+    let fullName = "TestUser01 test"
     
-    let userNameTwo = "test002@magnet.com"
-    let fNameTwo = "TestUser002"
-    let fullNameTwo = "TestUser002 test"
+    let userNameTwo = "test02@magnet.com"
+    let fNameTwo = "TestUser02"
+    let fullNameTwo = "TestUser02 test"
     
-    let userNameThree = "test003@magnet.com"
-    let fNameThree = "TestUser003"
-    let fullNameThree = "TestUser003 test"
+    let userNameThree = "test03@magnet.com"
+    let fNameThree = "TestUser03"
+    let fullNameThree = "TestUser03 test"
     
-    let userNameFour = "test004@magnet.com"
-    let fNameFour = "TestUser004"
-    let fullNameFour = "TestUser004 test"
+    let userNameFour = "test04@magnet.com"
+    let fNameFour = "TestUser04"
+    let fullNameFour = "TestUser04 test"
     
     override func setUp() {
         super.setUp()
@@ -208,14 +208,14 @@ class MessengerUITests: XCTestCase {
         /* check created channel*/
         self.delay()
         self.delay()
-        XCTAssert(tablesQuery.cells.containingType(.StaticText, identifier:"Attachment file").staticTexts[fullNameTwo].exists)
+        XCTAssert(tablesQuery.cells.containingType(.StaticText, identifier:"Attachment location").staticTexts[fullNameTwo].exists)
         
-        tablesQuery.cells.containingType(.StaticText, identifier:"Attachment file").staticTexts[fullNameTwo].swipeLeft()
+        tablesQuery.cells.containingType(.StaticText, identifier:"Attachment location").staticTexts[fullNameTwo].swipeLeft()
         tablesQuery.cells.buttons["Leave"].tap()
         
         self.delay()
         /* check that user1 (owner) doesn't see channels that are no longer subscribed on home page */
-        XCTAssertFalse(tablesQuery.cells.containingType(.StaticText, identifier:"Attachment file").staticTexts[fullNameTwo].exists)
+        XCTAssertFalse(tablesQuery.cells.containingType(.StaticText, identifier:"Attachment location").staticTexts[fullNameTwo].exists)
     }
     
     //Help mark - Asserts, related to the chat navigation and channel details
@@ -241,7 +241,44 @@ class MessengerUITests: XCTestCase {
         self.delay()
     }
     
-    //Help mark - SentPhotosChecks
+    //Help mark - Send a text
+    func SendAText()
+    {
+        let app = XCUIApplication()
+        let sendButton = app.toolbars.buttons["Send"]
+        
+        /* send a text for creating 1-1 chat */
+        app.toolbars.childrenMatchingType(.Other).element.childrenMatchingType(.TextView).element.tap()
+        app.toolbars.childrenMatchingType(.Other).element.childrenMatchingType(.TextView).element.typeText("Test")
+        sendButton.tap()
+        self.delay()
+    }
+    
+    //Help mark - Check sent text
+    func SentTextCheck()
+    {
+        let app = XCUIApplication()
+        XCTAssert(app.collectionViews.cells.childrenMatchingType(.TextView).element.exists)
+        XCTAssertNotNil(app.collectionViews.cells.childrenMatchingType(.TextView).element)
+    }
+    
+    //Help mark - Send location
+    func SendLocation()
+    {
+        let app = XCUIApplication()
+        app.toolbars.childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(0).childrenMatchingType(.Button).element.tap()
+        app.sheets["Media Messages"].collectionViews.buttons["Send Location"].tap()
+        self.delay()
+    }
+    
+    //Help mark - Check sent location
+    func SentLocationCheck()
+    {
+        let app = XCUIApplication()
+        XCTAssertNotNil(app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element)
+    }
+    
+    //Help mark - Sent Photos Checks
     func SentPhotosChecks()
     {
         let app = XCUIApplication()
@@ -266,7 +303,7 @@ class MessengerUITests: XCTestCase {
         self.delay()
     }
     
-    /**********************************************Test01-Test34************************************************/
+    /**********************************************Test01-Test36************************************************/
     //Test1 Negative scenario - Login with empty credentials
     func test01LoginWithEmptyCredentials()
     {
@@ -400,6 +437,7 @@ class MessengerUITests: XCTestCase {
         self.delay()
         
         app.terminate()
+        self.delay()
         app.launch()
         self.delay()
         self.delay()
@@ -489,8 +527,38 @@ class MessengerUITests: XCTestCase {
         self.logout_after_registration(fullNameFour)
     }
     
-    //Test15-16 Positive scenarios - User1 (initiator) creates a new 1-1 chat and checks the channel details page
-    func test15_16CreateANew1to1Chat()
+    //Test15-16 Negative and Positive scenarios - Search for non exisitng and existing contacts
+    func test15_16SearchForNonExistingContact()
+    {
+        let app = XCUIApplication()
+        let navBar = app.navigationBars[fullName]
+        let newMessage = navBar.buttons["new message@2x"]
+        
+        /* login user1 */
+        self.login(userName, password: password)
+        newMessage.tap()
+        
+        /* search for non existing contact */
+        app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.SearchField).element.tap()
+        
+        app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.SearchField).element.typeText("NonExistingUser")
+        
+        self.delay()
+        XCTAssertFalse(app.tables.cells.staticTexts["NonExistingUser"].exists)
+        
+        /* search for existing contact */
+        app.searchFields.buttons["Clear text"].tap()
+        
+        app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.SearchField).element.tap()
+        
+        app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.SearchField).element.typeText(fNameTwo)
+        
+        self.delay()
+        XCTAssert(app.tables.cells.staticTexts[fullNameTwo].exists)
+    }
+    
+    //Test17-18 Positive scenarios - User1 (initiator) creates a new 1-1 chat and checks the channel details page
+    func test17_18CreateANew1to1Chat()
     {
         let app = XCUIApplication()
         let navBar = app.navigationBars[fullName]
@@ -510,42 +578,61 @@ class MessengerUITests: XCTestCase {
         XCTAssert(buttonNext.exists)
         buttonNext.tap()
         
-        /* send a few photos for creating 1-1 chat */
+        /* send a text for creating 1-1 chat */
+        self.SendAText()
+        
+        /* check sent text */
+        self.SentTextCheck()
+        
+        /* send a few photos for created 1-1 chat */
         self.SendAFewPhotos()
         
         /* check sent photos */
         self.SentPhotosChecks()
+        
+        /* send location for created 1-1 chat */
+        self.SendLocation()
+        
+        /* check sent location */
+        self.SentLocationCheck()
         
         /* check channel details using asserts function + additional check assert */
         self.Asserts(fullNameTwo, fullNameTwo:fullNameTwo)
         XCTAssert(tablesQuery.otherElements.buttons["Add Contacts +"].exists)
     }
     
-    //Test17-18 Positive scenarios - User2 (subscriber) checks 1-1 chat created by user1 and checks the channel details page
-    func test17_18CheckCreatedChannelAndDetails()
+    
+    //Test19-20 Positive scenarios - User2 (subscriber) checks 1-1 chat created by user1 and checks the channel details page
+    func test19_20CheckCreatedChannelAndDetails()
     {
         let app = XCUIApplication()
         
         /* user2 checks 1-1 chat which was created by user1 */
         self.CheckCreatedChannel(userNameTwo, password: password, fullName: fullName)
         
+        /* check sent text */
+        self.SentTextCheck()
+        
         /* check sent photos */
         self.SentPhotosChecks()
+        
+        /* check sent location */
+        XCTAssertNotNil(app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element)
         
         /* check channel details using assert function + additional check assert */
         self.Asserts(fullName, fullNameTwo:fullName)
         XCTAssertFalse(app.tables.otherElements.buttons["Add Contacts +"].exists)
     }
     
-    //Test19-20 Positive scenario - User2 (subscriber) leaves the 1-1 chat created by user1 and checks that he doesn't see channel that are no longer subscribed on home page
-    func test19_20User2LeavesTheChat()
+    //Test21-22 Positive scenario - User2 (subscriber) leaves the 1-1 chat created by user1 and checks that he doesn't see channel that are no longer subscribed on home page
+    func test21_22User2LeavesTheChat()
     {
         /* user2*/
         self.UserLeavesTheChat(userNameTwo, password: password, fullNameTwo: fullName)
     }
     
-    //Test21-22 Positive scenarios - User1 (initiator) creates a multiple 1-2 chat and checks the channel details page
-    func test21_22CreateAMultipleChat()
+    //Test23-24 Positive scenarios - User1 (initiator) creates a multiple 1-2 chat and checks the channel details page
+    func test23_24CreateAMultipleChat()
     {
         let app = XCUIApplication()
         let navBar = app.navigationBars[fullName]
@@ -565,11 +652,23 @@ class MessengerUITests: XCTestCase {
         XCTAssert(buttonNext.exists)
         buttonNext.tap()
         
-        /* send a few photos for creating multiple 1-2 chat */
+        /* send a text for creating 1-1 chat */
+        self.SendAText()
+        
+        /* check sent text */
+        self.SentTextCheck()
+        
+        /* send a few photos for created multiple 1-2 chat */
         self.SendAFewPhotos()
         
         /* check sent photos */
         self.SentPhotosChecks()
+        
+        /* send location for created 1-1 chat */
+        self.SendLocation()
+        
+        /* check sent location */
+        self.SentLocationCheck()
         
         /* check channel details using asserts function + additional checks assert */
         self.Asserts(Group, fullNameTwo:fullNameTwo)
@@ -578,14 +677,17 @@ class MessengerUITests: XCTestCase {
         self.delay()
     }
     
-    //Test23-24 Positive scenarios - User2 checks multiple 1-2 chat created by user1 and checks the chat details page
-    func test23_24CheckCreatedChannelAndDetailsUser2()
+    //Test25-26 Positive scenarios - User2 checks multiple 1-2 chat created by user1 and checks the chat details page
+    func test25_26CheckCreatedChannelAndDetailsUser2()
     {
         /* user2 checks created multiple 1-2 chat */
         let app = XCUIApplication()
         let tablesQueryTwo = app.tables
         let UserTwoSees = fullName + ", " + fullNameThree
         self.CheckCreatedChannel(userNameTwo, password: password, fullName: UserTwoSees)
+        
+        /* check sent text */
+        self.SentTextCheck()
         
         /* check sent photos */
         self.SentPhotosChecks()
@@ -596,14 +698,17 @@ class MessengerUITests: XCTestCase {
         XCTAssertFalse(tablesQueryTwo.otherElements.buttons["Add Contacts +"].exists)
     }
     
-    //Test25-26 Positive scenarios - User3 checks multiple 1-2 chat created by user1 and checks the chat details page
-    func test25_26CheckCreatedChannelAndDetailsUser3()
+    //Test27-28 Positive scenarios - User3 checks multiple 1-2 chat created by user1 and checks the chat details page
+    func test27_28CheckCreatedChannelAndDetailsUser3()
     {
         /* user3 checks created multiple 1-2 chat */
         let app = XCUIApplication()
         let tablesQueryTwo = app.tables
         let UserThreeSees = fullName + ", " + fullNameTwo
         self.CheckCreatedChannel(userNameThree, password: password, fullName: UserThreeSees)
+        
+        /* check sent text */
+        self.SentTextCheck()
         
         /* check sent photos */
         self.SentPhotosChecks()
@@ -614,8 +719,8 @@ class MessengerUITests: XCTestCase {
         XCTAssertFalse(tablesQueryTwo.otherElements.buttons["Add Contacts +"].exists)
     }
     
-    //Test27-28 Positive scenarios - User1 (initiator) adds user4 to the created multiple 1-2 chat and checks the chat details page (user4 should be successfully added and displayed)
-    func test27_28User1InitiatorAddsOneMoreUser()
+    //Test29-30 Positive scenarios - User1 (initiator) adds user4 to the created multiple 1-2 chat and checks the chat details page (user4 should be successfully added and displayed)
+    func test29_30User1InitiatorAddsOneMoreUser()
     {
         let app = XCUIApplication()
         let UserOneSees = fullNameTwo + ", " + fullNameThree
@@ -649,14 +754,17 @@ class MessengerUITests: XCTestCase {
         self.delay()
     }
     
-    //Test29-30 Positive scenarios - User4 checks updated multiple 1-3 chat created by user1 and checks the channel details page
-    func test29_30CheckCreatedChannelAndDetailsUser4()
+    //Test31-32 Positive scenarios - User4 checks updated multiple 1-3 chat created by user1 and checks the channel details page
+    func test31_32CheckCreatedChannelAndDetailsUser4()
     {
         /* user4 checks created multiple 1-3 chat */
         let app = XCUIApplication()
         let tablesQueryTwo = app.tables
         let UserFourSees = fullName + ", " + fullNameTwo + ", " + fullNameThree
         self.CheckCreatedChannel(userNameFour, password: password, fullName: UserFourSees)
+        
+        /* check sent text */
+        self.SentTextCheck()
         
         /* check sent photos */
         self.SentPhotosChecks()
@@ -668,192 +776,32 @@ class MessengerUITests: XCTestCase {
         XCTAssertFalse(tablesQueryTwo.otherElements.buttons["Add Contacts +"].exists)
     }
     
-    //Test31-32 Positive scenario - User1 (initiator) leaves the updated multiple 1-3 chat and checks that he doesn't see channel that are no longer subscribed on home page
-    func test31_32User1InitiatorLeavesTheChat()
+    //Test33-34 Positive scenarios - User1 (initiator) leaves the updated multiple 1-3 chat and checks that he doesn't see channel that are no longer subscribed on home page
+    func test33_34User1InitiatorLeavesTheChat()
     {
         /* user1 */
         let UserOneSees = fullNameTwo + ", " + fullNameThree + ", " + fullNameFour
         self.UserLeavesTheChat(userName, password: password, fullNameTwo: UserOneSees)
     }
     
-    //Test33 Positive scenario - User3 (subscriber) sends a few photos to the updated multiple 1-2 chat
-    func test33User3SendsAFewPhotos()
+    //Test35-36 Positive scenarios - User2 checks updated multiple 1-2 chat when user1 (initiator) left chat and checks the channel details page
+    func test35_36CheckCreatedChannelAndDetailsUser2()
     {
+        /* user4 checks created multiple 1-3 chat */
         let app = XCUIApplication()
-        //let UserThreeSees = fullName + ", " + fullNameTwo + ", " + fullNameFour
-        let UserThreeSees = fullNameTwo + ", " + fullNameFour
+        let tablesQueryTwo = app.tables
+        let UserTwoSees = fullNameThree + ", " + fullNameFour
+        self.CheckCreatedChannel(userNameTwo, password: password, fullName: UserTwoSees)
         
-        /* user3 sends a few photos */
-        self.CheckCreatedChannel(userNameThree, password: password, fullName: UserThreeSees)
-        self.delay()
-        self.SendAFewPhotos()
-        self.delay()
+        /* check sent text */
+        self.SentTextCheck()
         
         /* check sent photos */
-        XCTAssert(app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.exists)
-        XCTAssertNotNil(app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element)
+        self.SentPhotosChecks()
+        
+        /* user4 checks chat details */
+        self.Asserts(Group, fullNameTwo: fullNameThree)
+        XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameFour].label, fullNameFour)
+        XCTAssertFalse(tablesQueryTwo.otherElements.buttons["Add Contacts +"].exists)
     }
-    
-    //    //Test34 Positive scenario - User2 blockes user3
-    //    func test34User2BlocksUser3()
-    //    {
-    //        let app = XCUIApplication()
-    //        let UserTwoSees = fullNameThree + ", " + fullNameFour
-    //        //let UserTwoSees = fullName + ", " + fullNameThree + ", " + fullNameFour
-    //        //let block = app.collectionViews.childrenMatchingType(.Cell).elementBoundByIndex(7).childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(1).childrenMatchingType(.Image).element
-    //       // let alert = app.alerts["Block User"]
-    //
-    //        /* user2 blocks user3 */
-    //        self.CheckCreatedChannel(userNameTwo, password: password, fullName: UserTwoSees)
-    //        self.delay()
-    //      //  self.delay()
-    //      //  self.delay()
-    //      //  self.delay()
-    //
-    //      //  let element = app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.coordinateWithNormalizedOffset(CGVector(dx: 500.50, dy: 19.00))
-    //       // element.swipeLeft()
-    //        let element = app.coordinateWithNormalizedOffset(CGVector(dx: 20.50, dy: 346.50))
-    //        element.tap()
-    
-    //    //Test34 Positive scenario - User2 blockes user3
-    //    func test34User2BlocksUser3()
-    //    {
-    //
-    //        self.CheckCreatedChannel(userNameTwo, password: password, fullName: fullName)
-    //    let element = XCUIApplication().toolbars.childrenMatchingType(.Other).element
-    //    element.childrenMatchingType(.TextView).element.typeText("Test")
-    //        self.delay()
-    //    }
-    
-    // block.tap()
-    
-    
-    //        block.tap()
-    //        app.sheets["Additional Options"].buttons["Block User"].tap()
-    //        alert.staticTexts["Block User"].tap()
-    //        //alert checks
-    //        XCTAssert(alert.exists)
-    //        XCTAssertEqual(alert.staticTexts["Block User"].label, "Block User")
-    //        app.alerts["Block User"].collectionViews.buttons["No"].tap()
-    //
-    //        block.tap()
-    //        app.sheets["Additional Options"].buttons["Block User"].tap()
-    //        app.alerts["Block User"].collectionViews.buttons["Yes"].tap()
-    // self.delay()
-    
-    //    //Test35-36 Positive scenarios - User2 checks that he does not see messages from user3 and checks that user3 is present in the chat details
-    //    func test35_36User2ChecksHidenMessagesFromUser3()
-    //    {
-    //        let app = XCUIApplication()
-    //        let UserTwoSees = fullNameThree + ", " + fullNameFour
-    //        let photo = app.collectionViews.childrenMatchingType(.Cell).elementBoundByIndex(7).childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(1).childrenMatchingType(.Image).element
-    //        let navBarDetail = app.navigationBars[Group]
-    //        let detailbutton = navBarDetail.buttons["Detail"]
-    //        let tablesQueryTwo = app.tables
-    //
-    //        /* user2 checks that he does not see messages from user3 */
-    //        self.CheckCreatedChannel(userNameTwo, password: password, fullName: UserTwoSees)
-    //        self.delay()
-    //        self.delay()
-    //        //chat messages check
-    //        XCTAssertFalse(photo.exists)
-    //        self.delay()
-    //
-    //        /* user2 checks chat details */
-    //        //chat navigation bar checks
-    //        XCTAssert(navBarDetail.buttons["Back"].exists)
-    //        XCTAssert(detailbutton.exists)
-    //        XCTAssertEqual(navBarDetail.staticTexts[Group].label, Group)
-    //        detailbutton.tap()
-    //        self.delay()
-    //        //chat details checks
-    //        XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameTwo].label, fullNameTwo)
-    //        XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameThree].label, fullNameThree)
-    //        XCTAssertEqual(tablesQueryTwo.staticTexts[fullNameFour].label, fullNameFour)
-    //        self.delay()
-    //    }
-    //
-    //    //Test37 Positive scenario - Check that user3 is blocked by user2
-    //    func test37CheckThatUser3IsBlockedByUser2()
-    //    {
-    //        let app = XCUIApplication()
-    //        let blockedUser = fullNameThree + " [BLOCKED]"
-    //        let tablesQuery = app.tables
-    //
-    //        /* user2 checks that user3 is blocked */
-    //        self.ContactList(userNameTwo, fullNameThree: fullNameThree, fullNameTwo: fullNameTwo)
-    //        //blocked user check
-    //        XCTAssert(tablesQuery.staticTexts[blockedUser].exists)
-    //        self.delay()
-    //    }
-    //
-    //    //Test38 Positive scenario - User4 checks that he does see messages from user3 as per user4 hasn't blocked user3
-    //    func test38User4ChecksExistingMessagesFromUser3()
-    //    {
-    //        let app = XCUIApplication()
-    //        let UserFourSees = fullNameTwo + ", " + fullNameThree
-    //        let photo = app.collectionViews.childrenMatchingType(.Cell).elementBoundByIndex(7).childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(1).childrenMatchingType(.Image).element
-    //
-    //        /* user4 checks that he does see messages from user3 */
-    //        self.CheckCreatedChannel(userNameFour, password: password, fullName: UserFourSees)
-    //        self.delay()
-    //        self.delay()
-    //        self.delay()
-    //        //chat messages check
-    //        XCTAssert(photo.exists)
-    //        self.delay()
-    //    }
-    //
-    //    //Test39 Positive scenario - User2 unblocks user3
-    //    func test39User2UnblocksUser3()
-    //    {
-    //        let app = XCUIApplication()
-    //        let blockedUser = fullNameThree + " [BLOCKED]"
-    //        let tablesQuery = app.tables
-    //        let click = tablesQuery.staticTexts[blockedUser]
-    //        let unblockUser = app.sheets["Additional Options"].buttons["Unblock User"]
-    //
-    //        self.ContactList(userNameTwo, fullNameThree: fullNameThree, fullNameTwo: fullNameTwo)
-    //
-    //        /* user2 unblocks user3 */
-    //        click.tap()
-    //        app.sheets["Additional Options"].buttons["Cancel"].tap()
-    //        click.tap()
-    //        click.tap()
-    //        unblockUser.tap()
-    //        self.delay()
-    //
-    //        //alert checks
-    //        XCTAssert(app.alerts["Unblock User"].exists)
-    //        XCTAssertEqual(app.alerts["Unblock User"].staticTexts["Are you sure you want to unblock this user? You will start receiving messages from them."].label, "Are you sure you want to unblock this user? You will start receiving messages from them.")
-    //        app.alerts["Unblock User"].collectionViews.buttons["No"].tap()
-    //        click.tap()
-    //        click.tap()
-    //        unblockUser.tap()
-    //        self.delay()
-    //        app.alerts["Unblock User"].collectionViews.buttons["Yes"].tap()
-    //        self.delay()
-    //
-    //        /* user2 checks that user3 is unblocked */
-    //        XCTAssertFalse(tablesQuery.staticTexts[blockedUser].exists)
-    //        self.delay()
-    //    }
-    //
-    //    //Test40 Positive scenario - user2 checks that he does see appeared messages from user3
-    //    func test40User2ChecksAppearedMessagesFromUser3()
-    //    {
-    //        /* Check multiple 1-2 chat */
-    //        let app = XCUIApplication()
-    //        let UserTwoSees = fullNameThree + ", " + fullNameFour
-    //        let photo = app.collectionViews.childrenMatchingType(.Cell).elementBoundByIndex(7).childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(1).childrenMatchingType(.Image).element
-    //
-    //        /* User2 checks that he does not see messages from user3 */
-    //        self.CheckCreatedChannel(userNameTwo, password: password, fullName: UserTwoSees)
-    //        self.delay()
-    //        self.delay()
-    //        self.delay()
-    //        //chat messages check
-    //        XCTAssert(photo.exists)
-    //        self.delay()
-    //    }
 }
