@@ -443,6 +443,9 @@
             location = "group:Managers"
             name = "Managers">
             <FileRef
+               location = "group:BackgroundMessageManager.swift">
+            </FileRef>
+            <FileRef
                location = "group:ChannelManager.swift">
             </FileRef>
             <FileRef

@@ -7,7 +7,7 @@
 import Foundation
 import UIKit
 
-//#if TESTING
+#if TESTING
 
 extension UIRefreshControl {
     
@@ -47,4 +47,4 @@ extension UIRefreshControl {
     
 }
 
-//#endif
+#endif

@@ -97,6 +97,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
             }
         }
         self.resignOnBackgroundTouch()
+        BackgroundMessageManager.sharedManager.setup()
     }
     
     override public func viewWillAppear(animated: Bool) {

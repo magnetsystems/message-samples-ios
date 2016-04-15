@@ -63,6 +63,7 @@ static int kATTACHMENTCONTEXT;
 	} else {
 		msg.channel.isPublic = YES;
 	}
+	msg.senderDeviceID = pubSubMessage.senderDeviceID;
 	msg.sender = sender;
     
     // Handle attachments

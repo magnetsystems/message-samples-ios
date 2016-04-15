@@ -237,7 +237,6 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
                 }
                 
                 self.hasMoreUsers = offset + self.limit < channels.count - 1
-                
                 self.controller?.append(offsetChannels)
             })
         })

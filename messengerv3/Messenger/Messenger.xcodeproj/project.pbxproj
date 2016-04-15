@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7E14DB721CBC054200D41C69 /* MessengerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E14DB711CBC054200D41C69 /* MessengerUITests.swift */; };
-		7E14DB7A1CBC05A800D41C69 /* UIRefreshControlTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E14DB791CBC05A800D41C69 /* UIRefreshControlTesting.swift */; };
 		7E14DB7B1CBC05A800D41C69 /* UIRefreshControlTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E14DB791CBC05A800D41C69 /* UIRefreshControlTesting.swift */; };
 		88A7D9243212C3959F5D7827 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81751918B9767AE134419C84 /* Pods.framework */; };
 		8D090A101CA4AA9200FA82AE /* AskMagnetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D090A0E1CA4AA9200FA82AE /* AskMagnetTableViewCell.swift */; };
@@ -745,7 +744,6 @@
 				8D701D5D1CA49E65004B98A1 /* HomeListDatasource.swift in Sources */,
 				8DEC54F51CB5827000B8AD71 /* ChatViewController.swift in Sources */,
 				8DEC54EE1CB4424F00B8AD71 /* ContactsViewController.swift in Sources */,
-				7E14DB7A1CBC05A800D41C69 /* UIRefreshControlTesting.swift in Sources */,
 				8D4A95101CA6137A00C99B7E /* UserProfileViewController.swift in Sources */,
 				8D701D511CA463E0004B98A1 /* ViewController.swift in Sources */,
 				8D090A181CA4B51800FA82AE /* AskMagnetDelegate.swift in Sources */,
@@ -797,6 +795,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = MessengerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DTESTING";
 				PRODUCT_BUNDLE_IDENTIFIER = Magnet.MessengerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = Messenger;
@@ -808,6 +807,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = MessengerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DTESTING";
 				PRODUCT_BUNDLE_IDENTIFIER = Magnet.MessengerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_TARGET_NAME = Messenger;
@@ -939,6 +939,7 @@
 				7E14DB771CBC054200D41C69 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8D701CCF1CA46361004B98A1 /* Build configuration list for PBXProject "Messenger" */ = {
 			isa = XCConfigurationList;
