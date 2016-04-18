@@ -63,5 +63,27 @@ public class DefaultChatViewControllerDatasource : NSObject, ChatViewControllerD
     public func mmxControllerHasMore() -> Bool {
         return self.hasMoreUsers
     }
+    
+    
+    //MArk: Attachments
+    
+    public func mmxAttachmentTypes() -> [Int] {
+        return [AttachmentTypes.TakePhoto.rawValue, AttachmentTypes.PhotoLibrary.rawValue, AttachmentTypes.Location.rawValue, AttachmentTypes.Poll.rawValue]
+    }
+    
+    public func mmxDisplayNameForAttachmentType(attachmentType : Int) -> String {
+        if let type = AttachmentTypes(rawValue: attachmentType) {
+            switch type  {
+            case .TakePhoto:
+                return "Take Photo"
+            case .PhotoLibrary:
+                return "Photo Library"
+            case .Location:
+                return "Location"
+            case .Poll:
+                return "Poll"
+            }
+        }
+        return ""
+    }
 }
-

@@ -22,6 +22,13 @@ import MobileCoreServices
 import NYTPhotoViewer
 
 
+//Mark: AttachmentTypes
+
+
+@objc public enum AttachmentTypes : Int {
+    case TakePhoto, PhotoLibrary, Location, Poll
+}
+
 
 //MARK: ChatViewController
 
@@ -177,6 +184,47 @@ public class CoreChatViewController: MMJSQViewController {
         self.collectionView.reloadData()
     }
     
+    func handleAttachments(labels : [String], types : [AttachmentTypes]) {
+                let alertController = UIAlertController(title: CKStrings.kStr_MediaMessages, message: nil, preferredStyle: .ActionSheet)
+        
+        for type in types {
+            switch type {
+            case .TakePhoto:
+                let sendFromCamera = UIAlertAction(title: CKStrings.kStr_TakePhotoOrVideo, style: .Default) { (_) in
+                self.addMediaMessageFromCamera()
+            }
+            alertController.addAction(sendFromCamera)
+             
+            case .PhotoLibrary:
+            let sendFromLibrary = UIAlertAction(title: CKStrings.kStr_PhotoLib, style: .Default) { (_) in
+                self.addMediaMessageFromLibrary()
+            }
+            alertController.addAction(sendFromLibrary)
+                
+            case .Location:
+            let sendLocationAction = UIAlertAction(title: CKStrings.kStr_SendLoc, style: .Default) { (_) in
+                self.addLocationMediaMessage()
+            }
+            if LocationManager.sharedInstance.canLocationServicesBeEnabled() {
+                alertController.addAction(sendLocationAction)
+            }
+            sendLocationAction.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
+            
+            LocationManager.sharedInstance.onAuthorizationUpdate = {[weak sendLocationAction] in
+                sendLocationAction?.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
+            }
+            case .Poll:
+                let createPoll = UIAlertAction(title: CKStrings.kStr_CreatePoll, style: .Default) { (_) in
+                    self.createPoll()
+                }
+                alertController.addAction(createPoll)
+            }
+        }
+    
+        let cancelAction = UIAlertAction(title: CKStrings.kStr_Cancel, style: .Cancel) { (_) in }
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
     
     //MARK: Internal Methods
     
@@ -284,37 +332,9 @@ public class CoreChatViewController: MMJSQViewController {
     override public func didPressAccessoryButton(sender: UIButton!) {
         
         self.inputToolbar!.contentView!.textView?.resignFirstResponder()
-        
-        let alertController = UIAlertController(title: CKStrings.kStr_MediaMessages, message: nil, preferredStyle: .ActionSheet)
-        
-        let sendFromCamera = UIAlertAction(title: CKStrings.kStr_TakePhotoOrVideo, style: .Default) { (_) in
-            self.addMediaMessageFromCamera()
-        }
-        let sendFromLibrary = UIAlertAction(title: CKStrings.kStr_PhotoLib, style: .Default) { (_) in
-            self.addMediaMessageFromLibrary()
-        }
-        let sendLocationAction = UIAlertAction(title: CKStrings.kStr_SendLoc, style: .Default) { (_) in
-            self.addLocationMediaMessage()
-        }
-        let cancelAction = UIAlertAction(title: CKStrings.kStr_Cancel, style: .Cancel) { (_) in }
-        
-        alertController.addAction(sendFromCamera)
-        alertController.addAction(sendFromLibrary)
-        
-        if LocationManager.sharedInstance.canLocationServicesBeEnabled() {
-            alertController.addAction(sendLocationAction)
-        }
-        
-        alertController.addAction(cancelAction)
-        
-        sendLocationAction.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
-        
-        LocationManager.sharedInstance.onAuthorizationUpdate = {[weak sendLocationAction] in
-            sendLocationAction?.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
-        }
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
     }
+    
+    
     
     override public func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
          button.userInteractionEnabled = false
@@ -461,5 +481,9 @@ private extension CoreChatViewController {
             completion(error: error)
             print("[ERROR] \(error.localizedDescription)")
         }
+    }
+    
+    private func createPoll() {
+        
     }
 }

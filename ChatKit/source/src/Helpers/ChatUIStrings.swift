@@ -57,7 +57,8 @@ public static let kStr_PhotoLib = CKStrings.localizedString("Photo Library")
 
 public static let kStr_SendLoc = CKStrings.localizedString("Send Location")
 public static let kStr_TakePhotoOrVideo = CKStrings.localizedString("Take Photo")
-
+public static let kStr_CreatePoll = CKStrings.localizedString("Create a Poll")
+    
 public static let kStr_Yes = CKStrings.localizedString("Yes")
 }
 
