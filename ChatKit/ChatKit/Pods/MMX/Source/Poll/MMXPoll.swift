@@ -183,39 +183,13 @@ enum MMXPollErrorType : ErrorType {
     
     //MARK: Poll retrieval
     
-    static public func pollFromMMXPayload(payload : MMXPayload, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
-        if let pollIdentifier = payload as? MMXPollIdentifier {
-            self.pollWithID(pollIdentifier.pollID, success: success, failure: failure)
+    static public func pollFromMessage(message: MMXMessage, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
+        if let payload = message.payload as? MMXPayload, let channel = message.channel {
+            pollFromMMXPayload(payload, channel:channel, success: success, failure: failure)
         } else {
-            let error = MMXClient.errorWithTitle("Poll", message: "Incompatible Object Type", code: 500)
+            let error = MMXClient.errorWithTitle("Poll", message: "Incompatible Message", code: 500)
             failure?(error : error)
         }
-    }
-    
-    static public func pollWithID(pollID: String, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
-        let service = MMXSurveyService()
-        let call = service.getSurvey(pollID, success: {[weak service] survey in
-            let call = service?.getResults(survey.surveyId, success: { surveyResults in
-                let isPublic = !survey.surveyDefinition.notificationChannelId.containsString("#")
-                MMXChannel.channelForName(survey.surveyDefinition.notificationChannelId, isPublic: isPublic, success: { channel in
-                    do {
-                        let poll = try self.pollFromSurveyResults(surveyResults, channel: channel)
-                        success(poll)
-                    } catch {
-                        let error = MMXClient.errorWithTitle("Poll", message: "Error Parsing Poll", code: 400)
-                        failure?(error : error)
-                    }
-                    }, failure: { error in
-                        failure?(error : error)
-                })
-                }, failure: { error in
-                    failure?(error : error)
-            })
-            call?.executeInBackground(nil)
-            }, failure: { error in
-                failure?(error : error)
-        })
-        call.executeInBackground(nil)
     }
     
     //MARK Private Static Methods
@@ -326,6 +300,36 @@ enum MMXPollErrorType : ErrorType {
         poll.isPublished = true
         
         return poll
+    }
+    
+    static private func pollFromMMXPayload(payload : MMXPayload?, channel: MMXChannel, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
+        if let pollIdentifier = payload as? MMXPollIdentifier {
+            self.pollWithID(pollIdentifier.pollID, channel: channel, success: success, failure: failure)
+        } else {
+            let error = MMXClient.errorWithTitle("Poll", message: "Incompatible Object Type", code: 500)
+            failure?(error : error)
+        }
+    }
+    
+    static private func pollWithID(pollID: String, channel: MMXChannel, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
+        let service = MMXSurveyService()
+        let call = service.getSurvey(pollID, success: {[weak service] survey in
+            let call = service?.getResults(survey.surveyId, success: { surveyResults in
+                do {
+                    let poll = try self.pollFromSurveyResults(surveyResults, channel: channel)
+                    success(poll)
+                } catch {
+                    let error = MMXClient.errorWithTitle("Poll", message: "Error Parsing Poll", code: 400)
+                    failure?(error : error)
+                }
+                }, failure: { error in
+                    failure?(error : error)
+            })
+            call?.executeInBackground(nil)
+            }, failure: { error in
+                failure?(error : error)
+        })
+        call.executeInBackground(nil)
     }
 }
 

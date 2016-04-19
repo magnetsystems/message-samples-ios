@@ -18,6 +18,7 @@
 
 import NYTPhotoViewer
 
+
 extension CoreChatViewController {
     
     
@@ -94,8 +95,6 @@ extension CoreChatViewController {
         let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
         let message = messages[indexPath.item]
         
-        
-        
         if !message.isMediaMessage() {
             if message.senderId() == senderId {
                 cell.textView!.textColor = UIColor.whiteColor()
@@ -121,10 +120,6 @@ extension CoreChatViewController {
         if let user = message.underlyingMessage.sender {
             Utils.loadUserAvatar(user, toImageView: cell.avatarImageView, placeholderImage: Utils.noAvatarImageForUser(user))
         }
-        
-        var view = UIView.init(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        view.backgroundColor = UIColor.redColor()
-        cell.addSubview(view)
         return cell
     }
     

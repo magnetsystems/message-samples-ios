@@ -464,6 +464,9 @@
             <FileRef
                location = "group:Timestamp.swift">
             </FileRef>
+            <FileRef
+               location = "group:PollMediaItem.swift">
+            </FileRef>
          </Group>
       </Group>
       <Group
