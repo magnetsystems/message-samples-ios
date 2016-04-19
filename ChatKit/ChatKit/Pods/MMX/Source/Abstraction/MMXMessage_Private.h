@@ -20,29 +20,33 @@
 
 @interface MMXMessage ()
 
-@property(nonatomic, strong) MMAttachmentProgress *attachmentProgress;
+
+@property(nonatomic, strong, nullable) MMAttachmentProgress *attachmentProgress;
 
 @property (nonatomic, readwrite) MMXMessageType messageType;
 
-@property(nonatomic, readwrite) NSString *messageID;
+@property(nonatomic, readwrite, nullable) NSString *messageID;
 
-@property(nonatomic, readwrite) NSDate *timestamp;
+@property(nonatomic, readwrite, nullable) NSDate *timestamp;
 
-@property(nonatomic, readwrite) MMUser *sender;
+@property(nonatomic, readwrite, nullable) MMUser *sender;
 
-@property(nonatomic, copy) NSString *senderDeviceID;
+@property(nonatomic, copy, nullable) NSString *senderDeviceID;
 
-@property (nonatomic, readwrite) MMXChannel *channel;
+@property (nonatomic, readwrite, nullable) MMXChannel *channel;
 
-@property(nonatomic, readwrite) NSSet *recipients;
+@property(nonatomic, readwrite, nullable) NSSet *recipients;
 
-@property(nonatomic, readwrite) NSDictionary <NSString *, NSString *> *messageContent;
+@property(nonatomic, readwrite, nonnull) NSDictionary <NSString *, NSString *> *messageContent;
 
-@property(nonatomic, strong) NSMutableArray<MMAttachment *> *mutableAttachments;
+@property(nonatomic, strong, nullable) NSMutableArray<MMAttachment *> *mutableAttachments;
 
-@property(nonatomic, readwrite) NSArray<MMAttachment *> *attachments;
+@property(nonatomic, readwrite, nullable) NSArray<MMAttachment *> *attachments;
 
+@property (nonatomic, nullable) NSString *contentType;
+
+NS_ASSUME_NONNULL_BEGIN
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage
 								  sender:(MMUser *)sender;
-
+NS_ASSUME_NONNULL_END
 @end

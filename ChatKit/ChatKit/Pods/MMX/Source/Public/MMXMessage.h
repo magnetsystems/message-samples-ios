@@ -22,6 +22,8 @@
 @class MMUser;
 @class MMXChannel;
 
+@protocol MMXPayload;
+
 NS_ASSUME_NONNULL_BEGIN
 @interface MMXMessage : MMModel
 
@@ -148,6 +150,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param attachments The attachments to add to the message.
  */
 - (void)addAttachments:(NSArray <MMAttachment *> *)attachments;
+
+/**
+ *  Content Type of message.
+ */
+@property (nonatomic, readonly, nullable) NSString *contentType;
+
+/**
+ *  Message payload.
+ */
+@property (nonatomic, strong, nullable) MMModel<MMXPayload> *payload;
 
 NS_ASSUME_NONNULL_END
 @end

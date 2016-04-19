@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-        <key>BaseURL</key>
-        <string>https://messenger.magnet.com/mobile/api</string>
-        <key>ClientID</key>
-        <string>a87019f9-0dc1-4923-8e26-295ce5bd708a</string>
-        <key>ClientSecret</key>
-        <string>eV8QbQvRleI7TqIBse3ppGU8-B3XIvqdvKffooYu6BE</string>
-    </dict>
+<dict>
+	<key>BaseURL</key>
+	<string>https://messenger.magnet.com/mobile/api</string>
+	<key>ClientID</key>
+	<string>a87019f9-0dc1-4923-8e26-295ce5bd708a</string>
+	<key>ClientSecret</key>
+	<string>eV8QbQvRleI7TqIBse3ppGU8-B3XIvqdvKffooYu6BE</string>
+</dict>
 </plist>
