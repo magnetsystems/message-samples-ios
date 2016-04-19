@@ -94,6 +94,8 @@ extension CoreChatViewController {
         let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
         let message = messages[indexPath.item]
         
+        
+        
         if !message.isMediaMessage() {
             if message.senderId() == senderId {
                 cell.textView!.textColor = UIColor.whiteColor()
@@ -120,6 +122,9 @@ extension CoreChatViewController {
             Utils.loadUserAvatar(user, toImageView: cell.avatarImageView, placeholderImage: Utils.noAvatarImageForUser(user))
         }
         
+        var view = UIView.init(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        view.backgroundColor = UIColor.redColor()
+        cell.addSubview(view)
         return cell
     }
     
@@ -178,7 +183,6 @@ extension CoreChatViewController {
             self.inputToolbar!.contentView!.textView?.resignFirstResponder()
             
             switch message.type {
-            case .Text: break
             case .Location:
                 
                 if let locationItem = message.mediaContent as? JSQLocationMediaItem {
@@ -198,7 +202,7 @@ extension CoreChatViewController {
                     videoVC.attachment = attachment
                     presentViewController(videoVC, animated: true, completion: nil)
                 }
-            case .Unknown:
+            default:
                 break
             }
         }

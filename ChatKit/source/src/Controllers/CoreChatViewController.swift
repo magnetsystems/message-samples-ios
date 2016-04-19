@@ -289,7 +289,6 @@ public class CoreChatViewController: MMJSQViewController {
     
     
     @objc private func didReceiveMessage(mmxMessage: MMXMessage) {
-        //Show the typing indicator to be shown
         // Scroll to actually view the indicator
         scrollToBottomAnimated(true)
         
@@ -306,7 +305,7 @@ public class CoreChatViewController: MMJSQViewController {
             self.finishReceivingMessageAnimated(true)
         }
         
-        if  mmxMessage.sender != MMUser.currentUser() {
+        if  mmxMessage.sender != MMUser.currentUser() && mmxMessage.contentType != MMXPollAnswer.contentType {
             showTypingIndicator = true
             // Allow typing indicator to show
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(1.0 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
