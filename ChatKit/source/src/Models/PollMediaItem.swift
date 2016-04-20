@@ -16,6 +16,7 @@
  */
 
 import UIKit
+import MagnetMax
 
 public class PollMediaButton : UIButton {
     public var pollOption: MMXPollOption?
