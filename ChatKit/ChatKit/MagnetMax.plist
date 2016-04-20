@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>BaseURL</key>
-	<string>http://192.168.101.142:8443/api</string>
+	<string>http://10.0.0.190:8443/api</string>
 	<key>ClientID</key>
-	<string>e5c57f26-bc0d-42bb-8b7b-41897f03382c</string>
+	<string>0a7cba64-bc70-483a-982e-72339488844f</string>
 	<key>ClientSecret</key>
-	<string>UUwNxrtSHgGGaapfYnTApYsVl4Rp87M1S1yWOEgl4wo</string>
+	<string>teJDLxQxOd8gv2-eDGIi85RNvm0Renkjvg2dsvP_eYM</string>
 </dict>
 </plist>

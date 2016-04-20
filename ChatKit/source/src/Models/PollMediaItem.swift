@@ -41,6 +41,22 @@ public class PollMediaButton : UIButton {
     }
 }
 
+public class PollUpdateItem: JSQMediaItem {
+    var text : String?
+    override public func mediaView() -> UIView! {
+        let label = UILabel()
+        label.textColor = UIColor.darkGrayColor()
+        label.text = text
+        label.textAlignment = .Center
+        label.font = UIFont.systemFontOfSize(12)
+        return label
+    }
+    
+    override public func mediaViewDisplaySize() -> CGSize {
+        return CGSize(width: super.mediaViewDisplaySize().width, height: 40.0)
+    }
+}
+
 public class PollMediaItem: JSQMediaItem {
     
     

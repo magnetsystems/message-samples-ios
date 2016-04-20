@@ -95,6 +95,10 @@ extension CoreChatViewController {
         let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
         let message = messages[indexPath.item]
         
+        if message.type == .PollUpdate {
+            cell.avatarImageView.image = nil
+            return cell
+        }
         if !message.isMediaMessage() {
             if message.senderId() == senderId {
                 cell.textView!.textColor = UIColor.whiteColor()
