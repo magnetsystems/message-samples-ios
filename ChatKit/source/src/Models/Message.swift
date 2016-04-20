@@ -86,6 +86,15 @@ public class Message : NSObject, JSQMessageData {
             
             return videoMediaItem
             
+        case .PollIdentifier:
+            let mediaItem = PollMediaItem()
+            mediaItem.message = self.underlyingMessage
+            mediaItem.onUpdate = {
+                self.mediaCompletionBlock?()
+                self.isDownloaded  = true
+            }
+            
+            return mediaItem
         default:
             return nil
         }
@@ -124,7 +133,7 @@ public class Message : NSObject, JSQMessageData {
     }
     
     public func isMediaMessage() -> Bool {
-        return (type == .Location || type == .Video || type == .Photo )
+        return (type == .Location || type == .Video || type == .Photo || type == .PollIdentifier )
     }
     
     public func messageHash() -> UInt {
@@ -143,6 +152,18 @@ public class Message : NSObject, JSQMessageData {
     }
     
     public func text() -> String {
+        switch self.type {
+        case .PollUpdate:
+            if let user = underlyingMessage.sender {
+                let sender = Utils.displayNameForUser(user)
+                return "\(sender) voted on poll"
+            }
+            return ""
+            
+        default:
+            break
+        }
+        
         if let content = underlyingMessage.messageContent[Constants.ContentKey.Message] {
             return content as String
         }

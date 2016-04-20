@@ -25,9 +25,9 @@ import MagnetMaxCore
     
     public var extras : [String:String] = [:]
     
-    public private(set) var optionID: String = ""
+    public internal(set) var optionID: String = ""
     
-    public private(set) var pollID: String = ""
+    public internal(set) var pollID: String = ""
     
     public private(set) var text: String = ""
     
@@ -37,9 +37,7 @@ import MagnetMaxCore
         super.init()
     }
     
-    public init(pollID: String, optionID: String, text: String, count: Int64?) {
-        self.pollID = pollID
-        self.optionID = optionID
+    public init(text: String, count: Int64?) {
         self.text = text
         self.count = count ?? 0
         super.init()

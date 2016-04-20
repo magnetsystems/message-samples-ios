@@ -20,7 +20,7 @@ import MagnetMaxCore
 @objc public class MMXPollIdentifier: MMModel, MMXPayload {
     
     static public var contentType: String {
-        return "MMXPollIdentifier"
+        return "object/MMXPollIdentifier"
     }
     
     public private(set) var pollID: String = ""

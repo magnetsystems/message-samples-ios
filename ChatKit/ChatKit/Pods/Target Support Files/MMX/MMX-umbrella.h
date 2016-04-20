@@ -41,6 +41,7 @@
 #import "MMXQueryFilter.h"
 #import "MMXQueryFilter_Private.h"
 #import "MMXInternal_Private.h"
+#import "MMXMuteChannelPushRequest.h"
 #import "MMXOAuthPlatformAuthentication.h"
 #import "MMXSurvey.h"
 #import "MMXSurveyAnswer.h"

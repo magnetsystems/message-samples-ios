@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>BaseURL</key>
-	<string>https://messenger.magnet.com/mobile/api</string>
+	<string>http://192.168.101.142:8443/api</string>
 	<key>ClientID</key>
-	<string>a87019f9-0dc1-4923-8e26-295ce5bd708a</string>
+	<string>e5c57f26-bc0d-42bb-8b7b-41897f03382c</string>
 	<key>ClientSecret</key>
-	<string>eV8QbQvRleI7TqIBse3ppGU8-B3XIvqdvKffooYu6BE</string>
+	<string>UUwNxrtSHgGGaapfYnTApYsVl4Rp87M1S1yWOEgl4wo</string>
 </dict>
 </plist>

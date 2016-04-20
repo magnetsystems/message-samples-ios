@@ -39,6 +39,7 @@
 #import "MMXSubscribeResponse.h"
 #import "MMXChannelLookupKey.h"
 #import "MMXWhitelistManager.h"
+#import "MMXMuteChannelPushRequest.h"
 
 @import MagnetMaxCore;
 
@@ -317,6 +318,40 @@
     } failure:failure];
 }
 
+- (void)muteUntil:(nullable NSDate *)date
+          success:(nullable void (^)())success
+          failure:(nullable void (^)(NSError *error))failure {
+    
+    MMXMuteChannelPushRequest *channelPushRequest = [[MMXMuteChannelPushRequest alloc] init];
+    channelPushRequest.channelId = self.channelID;
+    channelPushRequest.untilDate = date;
+    
+    [self.pubSubService muteChannelPush:self.channelID body:channelPushRequest success:^{
+        if (success) {
+            success();
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+    
+}
+
+- (void)unMuteWithSuccess:(nullable void (^)())success
+                  failure:(nullable void (^)(NSError *error))failure {
+    
+    [self.pubSubService unmuteChannelPush:self.channelID success:^{
+        if (success) {
+            success();
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+
 - (void)tagsWithSuccess:(void (^)(NSSet <NSString *>*))success
                 failure:(void (^)(NSError *))failure {
     if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
@@ -405,8 +440,7 @@
     MMXChannel *channel = [MMXChannel channelWithName:name summary:summary isPublic:isPublic publishPermissions:publishPermissions];
     channel.ownerUserID = [MMUser currentUser].userID;
     channel.subscribers = [[subscribers valueForKey:@"userID"] allObjects];
-    MMXPubSubService *pubSubService = [[MMXPubSubService alloc] init];
-    MMCall *call = [pubSubService createChannel:channel success:^(MMXChannelResponse *response) {
+    MMCall *call = [channel.pubSubService createChannel:channel success:^(MMXChannelResponse *response) {
         NSMutableArray *subscribers = [channel.subscribers mutableCopy];
         [subscribers addObject:[MMUser currentUser].userID];
         channel.subscribers = subscribers;
@@ -736,12 +770,11 @@
         [currentUsers addObjectsFromArray:self.subscribers];
     }
     
-    MMXPubSubService *pubSubService = [[MMXPubSubService alloc] init];
     MMXChannel *channel = [[MMXChannel alloc] initWithDictionary:self.dictionaryValue error:nil];
     
     channel.subscribers = [subscribers valueForKey:@"userID"];
     
-    MMCall *call = [pubSubService addSubscribersToChannel:channel.name body:channel success:^(MMXAddSubscribersResponse *response) {
+    MMCall *call = [self.pubSubService addSubscribersToChannel:channel.name body:channel success:^(MMXAddSubscribersResponse *response) {
         
         for (MMUser *user in subscribers) {
             MMXSubscribeResponse *userResponse  = response.subscribeResponse[user.userID];
@@ -786,12 +819,11 @@
         [currentUsers addObjectsFromArray:self.subscribers];
     }
     
-    MMXPubSubService *pubSubService = [[MMXPubSubService alloc] init];
     MMXChannel *channel = [[MMXChannel alloc] initWithDictionary:self.dictionaryValue error:nil];
     
     channel.subscribers = [subscribers valueForKey:@"userID"];
     
-    MMCall *call = [pubSubService removeSubscribersFromChannel:channel.name body:channel success:^(MMXRemoveSubscribersResponse *response) {
+    MMCall *call = [self.pubSubService removeSubscribersFromChannel:channel.name body:channel success:^(MMXRemoveSubscribersResponse *response) {
         
         for (MMUser *user in subscribers) {
             MMXSubscribeResponse *userResponse  = response.subscribeResponse[user.userID];
@@ -872,7 +904,6 @@
         [channelRequestObjects addObject:channelRequestObject];
     }
     channelSummary.channelIds = channelRequestObjects;
-    
     MMXPubSubService *pubSubService = [[MMXPubSubService alloc] init];
     MMCall *call = [pubSubService getSummary:channelSummary
                                      success:^(NSArray<MMXChannelDetailResponse *>*response) {
@@ -916,6 +947,7 @@
         channel.ownerUserID = topic.topicCreator.username;
         channel.isPublic = !topic.inUserNameSpace;
         channel.creationDate = topic.creationDate;
+        channel.isMuted = topic.isMuted;
         [channelDict setObject:channel forKey:[MMXChannel channelKeyFromTopic:topic]];
     }
     for (MMXTopicSummary *sum in summaries) {
@@ -991,6 +1023,14 @@
 
 - (BOOL)isOwner {
     return [[MMUser currentUser].userID.lowercaseString isEqualToString:self.ownerUserID.lowercaseString];
+}
+
+- (MMXPubSubService *)pubSubService {
+    if (!_pubSubService) {
+        _pubSubService = [[MMXPubSubService alloc] init];
+    }
+    
+    return _pubSubService;
 }
 
 #pragma mark - Equality

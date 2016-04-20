@@ -37,6 +37,9 @@
             <FileRef
                location = "group:MMJSQViewController.swift">
             </FileRef>
+            <FileRef
+               location = "group:AddPollViewController.swift">
+            </FileRef>
          </Group>
          <Group
             location = "group:Helpers"
@@ -472,6 +475,9 @@
       <Group
          location = "group:Views"
          name = "Views">
+         <FileRef
+            location = "group:AddPollViewController.xib">
+         </FileRef>
          <Group
             location = "container:"
             name = "images">

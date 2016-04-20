@@ -27,7 +27,7 @@ func + <K, V> (left: Dictionary<K, V>, right: Dictionary<K, V>) -> Dictionary<K,
     
     //MARK: Public Variables
     
-    public static var contentType: String { return "MMXPollAnswer"}
+    public static var contentType: String { return "object/MMXPollAnswer"}
     public var result = [MMXPollOption]()
     
     //MARK: Overrides

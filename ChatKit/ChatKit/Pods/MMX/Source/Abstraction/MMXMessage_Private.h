@@ -43,8 +43,6 @@
 
 @property(nonatomic, readwrite, nullable) NSArray<MMAttachment *> *attachments;
 
-@property (nonatomic, nullable) NSString *contentType;
-
 NS_ASSUME_NONNULL_BEGIN
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage
 								  sender:(MMUser *)sender;

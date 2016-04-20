@@ -59,6 +59,11 @@
 @property (nonatomic, assign) MMXPublishPermissions publishPermissions;
 
 /**
+ * Is the topic muted?
+ */
+@property (nonatomic, assign) BOOL isMuted;
+
+/**
  *  Create a new topic.
  *
  *  @param name - The name of the new topic.
