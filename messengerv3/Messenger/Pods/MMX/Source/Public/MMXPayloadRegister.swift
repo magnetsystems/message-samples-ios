@@ -15,23 +15,17 @@
  * permissions and limitations under the License.
  */
 
-@import MagnetMaxCore;
-
-@protocol MMXServerSettingsServiceProtocol <NSObject>
-
-@optional
-/**
- 
- PUT /com.magnet.server/settings/user
- @param body style:BODY
- @return A 'MMXCall' object.
- */
-- (MMCall *)updateSettings:(NSDictionary *)body
-                   success:(void (^)(NSDictionary *response))success
-                   failure:(void (^)(NSError *error))failure;
-
-@end
-
-@interface MMXServerSettingsService : MMService<MMXServerSettingsServiceProtocol>
-
-@end
+@objc public class MMXPayloadRegister : NSObject {
+    internal static var contentType = [String : MMXPayload.Type]()
+    internal static var lock = NSLock()
+    
+    public static func classForContentType(contentType : String) -> MMXPayload.Type? {
+        return self.contentType[contentType]
+    }
+    
+    public static func registerClassForPayloads(rclass : MMXPayload.Type) {
+        lock.lock()
+        contentType[rclass.contentType] = rclass
+        lock.unlock()
+    }
+}

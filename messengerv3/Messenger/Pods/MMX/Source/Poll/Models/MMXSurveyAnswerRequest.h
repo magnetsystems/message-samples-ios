@@ -17,11 +17,15 @@
 
 @import MagnetMaxCore;
 
-@interface MMXAnswerType : MMModel
+@class MMXSurveyAnswer;
+
+@interface MMXSurveyAnswerRequest : MMModel
 
 
-@property (nonatomic, copy) NSString *answerTypeId;
+@property (nonatomic, strong) NSDate *completedOn;
 
-@property (nonatomic, copy) NSString *answerTypeDescription;
+@property (nonatomic, copy) NSArray *answers;
+
+@property (nonatomic, strong) NSDate *startedOn;
 
 @end

@@ -1,1 +1,0 @@
-../../../MMX/Source/Poll/Models/MMXSendMessageRequest.h

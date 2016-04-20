@@ -84,6 +84,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) BOOL isSubscribed;
 
+/**
+ * Is the channel muted?
+ */
+@property (nonatomic, readonly) BOOL isMuted;
+
 
 /**
  *  Method used to get existing channels.
@@ -393,6 +398,26 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setIconWithData:(nullable NSData *)data
             success:(nullable void (^)(NSURL *iconUrl))success
             failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ *  Disable push notifications for the channel
+ *
+ *  @param date           An optional date to mute notifications until
+ *  @param success		  A block object to be executed when the mute API call finishes successfully. This block has no return value and takes no arguments.
+ *  @param failure		  A block object to be executed when the mute API finishes with an error. This block has no return value and takes one argument: the error object.
+ */
+- (void)muteUntil:(nullable NSDate *)date
+          success:(nullable void (^)())success
+          failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ *  Re-enable push notifications for the channel
+ *
+ *  @param success		  A block object to be executed when the unMute API call finishes successfully. This block has no return value and takes no arguments.
+ *  @param failure		  A block object to be executed when the unMute API finishes with an error. This block has no return value and takes one argument: the error object.
+ */
+- (void)unMuteWithSuccess:(nullable void (^)())success
+                  failure:(nullable void (^)(NSError *error))failure;
 
 NS_ASSUME_NONNULL_END
 @end

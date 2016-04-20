@@ -27,3 +27,14 @@ class MMRoundedImageView : UIImageView {
         self.layer.masksToBounds = true
     }
 }
+
+class MMRoundedLabel : UILabel {
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let imageWidth = self.frame.width
+        self.layer.cornerRadius = imageWidth / 2.0
+        self.layer.masksToBounds = true
+    }
+}

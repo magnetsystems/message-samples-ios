@@ -106,7 +106,7 @@ public class ChatListCell: ChannelDetailBaseTVCell {
                     lblMessage?.text = CKStrings.kStr_AttachmentFile
                 case .Text:
                     lblMessage?.text = messageModel.text()
-                case .Unknown:
+                default:
                     if let text = content[Constants.ContentKey.Message] {
                         lblMessage?.text = text as String
                     } else {

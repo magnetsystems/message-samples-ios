@@ -15,12 +15,25 @@
  * permissions and limitations under the License.
  */
 
-@objc public protocol MMXPayload: class {
+import MagnetMaxCore
+
+func + <K, V> (left: Dictionary<K, V>, right: Dictionary<K, V>) -> Dictionary<K, V>  {
+    var l = left
+    for (k, v) in right { l.updateValue(v, forKey: k) }
+    return l
+}
+
+@objc public class MMXPollAnswer: MMModel, MMXPayload {
     
-//    init?(string description: String)
+    //MARK: Public Variables
     
-    static var contentType: String { get }
+    public static var contentType: String { return "object/MMXPollAnswer"}
+    public var result = [MMXPollOption]()
     
-//    func payloadDescription() -> String
+    //MARK: Overrides
+    
+    public override class func listAttributeTypes() -> [NSObject : AnyObject]! {
+        return super.listAttributeTypes() ?? [:] + ["result" as NSString : MMXPollOption.self]
+    }
     
 }

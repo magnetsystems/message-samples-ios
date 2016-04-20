@@ -15,8 +15,8 @@
  * permissions and limitations under the License.
  */
 
-#import "MMXSendMessageRequest.h"
-@implementation MMXSendMessageRequest
+#import "MMXMuteChannelPushRequest.h"
+@implementation MMXMuteChannelPushRequest
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{

@@ -25,10 +25,14 @@
 
 @property (nonatomic, strong) MMXSurveyDefinition *surveyDefinition;
 
-@property (nonatomic, copy) NSArray *owners;
+@property (nonatomic, copy) NSArray<NSString *>*resultViewers;
+
+@property (nonatomic, copy) NSArray<NSString *>*participants;
+
+@property (nonatomic, copy) NSArray<NSString *>*owners;
+
+@property (nonatomic, copy) NSDictionary<NSString *, NSString *> *metaData;
 
 @property (nonatomic, copy) NSString *name;
-
-@property (nonatomic, copy) NSDictionary *metaData;
 
 @end

@@ -17,16 +17,13 @@
 
 @import MagnetMaxCore;
 
-@interface MMXSendMessageRequest : MMModel
 
-@property (nonatomic, copy) NSDictionary *content;
 
-@property (nonatomic, copy) NSString *MMXxAppId;
+@interface MMXMuteChannelPushRequest : MMModel
 
-@property (nonatomic, copy) NSString *userId;
 
-@property (nonatomic, assign) BOOL receipt;
+@property (nonatomic, assign) NSDate *untilDate;
 
-@property (nonatomic, copy) NSString *deviceId;
+@property (nonatomic, copy) NSString *channelId;
 
 @end

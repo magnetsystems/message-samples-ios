@@ -15,8 +15,10 @@
  * permissions and limitations under the License.
  */
 
-#import "MMXCount.h"
-@implementation MMXCount
+#import "MMXSurveyAnswerRequest.h"
+#import "MMXSurveyAnswer.h"
+
+@implementation MMXSurveyAnswerRequest
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
@@ -29,6 +31,7 @@
 
 + (NSDictionary *)listAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"answers" : MMXSurveyAnswer.class,
     }];
     [dictionary addEntriesFromDictionary:[super listAttributeTypes]];
     return dictionary;

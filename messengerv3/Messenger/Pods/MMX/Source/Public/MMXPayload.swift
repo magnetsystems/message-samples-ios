@@ -15,14 +15,12 @@
  * permissions and limitations under the License.
  */
 
-@import MagnetMaxCore;
-
-@interface MMXSentList : MMModel
-
-@property (nonatomic, copy) NSString *recipientUserId;
-
-@property (nonatomic, copy) NSString *messageId;
-
-@property (nonatomic, copy) NSString *deviceId;
-
-@end
+@objc public protocol MMXPayload: class {
+    
+    //    init?(string description: String)
+    
+    static var contentType: String { get }
+    
+    //    func payloadDescription() -> String
+    
+}

@@ -19,10 +19,16 @@ import MagnetMaxCore
 
 @objc public class MMXPollIdentifier: MMModel, MMXPayload {
     
+    static public var contentType: String {
+        return "object/MMXPollIdentifier"
+    }
+    
     public private(set) var pollID: String = ""
     
-    static public var contentType: String {
-        return "MMXPollIdentifier"
+    //MARK: init
+    
+    public override init!() {
+        super.init()
     }
     
     public init(_ pollID: String) {
@@ -43,6 +49,10 @@ import MagnetMaxCore
 
 extension MMXPollIdentifier {
     
+    override public var hash: Int {
+        return pollID.hashValue
+    }
+    
     override public func isEqual(object: AnyObject?) -> Bool {
         if let rhs = object as? MMXPollIdentifier {
             return pollID == rhs.pollID
@@ -50,9 +60,5 @@ extension MMXPollIdentifier {
         
         return false
         
-    }
-    
-    override public var hash: Int {
-        return pollID.hashValue
     }
 }

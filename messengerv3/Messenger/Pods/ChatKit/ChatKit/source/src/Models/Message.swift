@@ -32,13 +32,7 @@ public class Message : NSObject, JSQMessageData {
             switch self.type {
             case .Text:
                 self.isDownloaded  = true
-            case .Location:
-                break
-            case .Photo:
-                break
-            case .Video:
-                break
-            case .Unknown:
+            default:
                 break
             }
         }
@@ -48,8 +42,6 @@ public class Message : NSObject, JSQMessageData {
     public lazy var mediaContent: JSQMessageMediaData? = {
         
         switch self.type {
-        case .Text:
-            return nil
         case .Location:
             let messageContent = self.underlyingMessage.messageContent
             let locationMediaItem = JSQLocationMediaItem()
@@ -94,14 +86,38 @@ public class Message : NSObject, JSQMessageData {
             
             return videoMediaItem
             
-        case .Unknown :
+        case .PollIdentifier:
+            let mediaItem = PollMediaItem()
+            mediaItem.message = self.underlyingMessage
+            mediaItem.onUpdate = {
+                self.mediaCompletionBlock?()
+                self.isDownloaded  = true
+            }
+            
+            return mediaItem
+        case .PollUpdate:
+            let mediaItem = PollUpdateItem()
+            if let user = self.underlyingMessage.sender {
+                let sender = Utils.displayNameForUser(user)
+                let text = "\(sender) voted!"
+                mediaItem.text = text
+            }
+            self.isDownloaded  = true
+            return mediaItem
+        default:
             return nil
         }
     }()
     
     public lazy var type: MessageType = {
-        if let type = self.underlyingMessage.messageContent["type"] {
-            return MessageType(rawValue: type) ?? .Text
+        if self.underlyingMessage.contentType == MMXPollIdentifier.contentType {
+            return .PollIdentifier
+        } else if self.underlyingMessage.contentType == MMXPollAnswer.contentType {
+            return .PollUpdate
+        } else {
+            if let type = self.underlyingMessage.messageContent["type"] {
+                return MessageType(rawValue: type) ?? .Text
+            }
         }
         return .Unknown
     }()
@@ -126,7 +142,7 @@ public class Message : NSObject, JSQMessageData {
     }
     
     public func isMediaMessage() -> Bool {
-        return (type != .Text && type != .Unknown)
+        return (type == .Location || type == .Video || type == .Photo || type == .PollIdentifier || type == .PollUpdate )
     }
     
     public func messageHash() -> UInt {
@@ -170,6 +186,8 @@ public enum MessageType: String, CustomStringConvertible {
     case Location = "location"
     case Photo = "photo"
     case Video = "video"
+    case PollIdentifier = "pollIdentifier"
+    case PollUpdate = "pollUpdate"
     case Unknown = "Unknown"
     
     public var description: String {
@@ -183,6 +201,10 @@ public enum MessageType: String, CustomStringConvertible {
             return "photo"
         case .Video:
             return "video"
+        case .PollIdentifier:
+            return "pollIdentifier"
+        case .PollUpdate:
+            return "pollUpdate"
         case .Unknown :
             return "Unknown"
         }

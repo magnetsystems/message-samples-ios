@@ -17,6 +17,7 @@
 
 #import "MMXChannel.h"
 @class MMXTopic;
+@class MMXPubSubService;
 
 @interface MMXChannel ()
 
@@ -30,6 +31,8 @@
 @property (nonatomic, readwrite) MMXPublishPermissions publishPermissions;
 @property (nonatomic, strong) NSArray <NSString *>* subscribers;
 @property (nonatomic, assign) BOOL privateChannel;
+@property (nonatomic, strong) MMXPubSubService *pubSubService;
+@property (nonatomic, readwrite) BOOL isMuted;
 
 - (MMXTopic *)asTopic;
 

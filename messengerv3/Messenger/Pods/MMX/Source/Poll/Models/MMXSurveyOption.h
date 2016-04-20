@@ -19,6 +19,7 @@
 
 @interface MMXSurveyOption : MMModel
 
+@property (nonatomic, copy) NSDictionary<NSString *, NSString *> *metaData;
 
 @property (nonatomic, copy) NSString *optionId;
 

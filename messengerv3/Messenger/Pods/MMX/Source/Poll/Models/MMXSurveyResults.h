@@ -18,12 +18,15 @@
 @import MagnetMaxCore;
 
 @class MMXSurvey;
+@class MMXSurveyAnswer;
 @class MMXSurveyChoiceResult;
 
 @interface MMXSurveyResults : MMModel
 
 
-@property (nonatomic, copy) NSArray *summary;
+@property (nonatomic, copy) NSArray <MMXSurveyChoiceResult *> *summary;
+
+@property (nonatomic, copy) NSArray <MMXSurveyAnswer *> *myAnswers;
 
 @property (nonatomic, strong) MMXSurvey *survey;
 
