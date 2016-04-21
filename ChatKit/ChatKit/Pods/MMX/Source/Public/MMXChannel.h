@@ -236,6 +236,27 @@ NS_ASSUME_NONNULL_BEGIN
                failure:(nullable void (^)(NSError *error))failure;
 
 /**
+ *  Method to create a new channel.
+ *
+ *  @param name					The name you want for the new channel must be unique. Cannot have spaces. The valid character set is alphanumeric plus period, dash and underscore. .-_
+ *  @param summary				The summary you want for the channel. (Used to give other users a better idea about the purpose of the channel).
+ *  @param isPublic				Set to YES if you want the channel to be discoverable by other users.
+ *  @param publishPermissions	Permissions level required to be able to post; Owner/Creator only, Subscribers, Anyone. Owner can always publish.
+ *  @param subscribers          The set of users to auto-subscribe.
+ *  @param pushConfigName       Optional push config name.
+ *  @param success				Block called if operation is successful.
+ *  @param failure				Block with an NSError with details about the call failure.
+ */
++ (void)createWithName:(NSString *)name
+               summary:(nullable NSString *)summary
+              isPublic:(BOOL)isPublic
+    publishPermissions:(MMXPublishPermissions)publishPermissions
+           subscribers:(nullable NSSet <MMUser *>*)subscribers
+        pushConfigName:(nullable NSString *)pushConfigName
+               success:(nullable void (^)(MMXChannel *channel))success
+               failure:(nullable void (^)(NSError *error))failure;
+
+/**
  *  Method to delete an existing new channel.
  *	Current user must be the owner of the channel to delete it.
  *

@@ -47,11 +47,18 @@ static int kATTACHMENTCONTEXT;
 };
 
 + (instancetype)messageToChannel:(MMXChannel *)channel
-                  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent {
+                  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent
+                  pushConfigName:(nullable NSString *)pushConfigName {
     MMXMessage *msg = [MMXMessage new];
     msg.channel = channel;
     msg.messageContent = messageContent;
+    msg.pushConfigName = pushConfigName;
     return msg;
+}
+
++ (instancetype)messageToChannel:(MMXChannel *)channel
+                  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent {
+   return [self messageToChannel:channel messageContent:messageContent pushConfigName:nil];
 }
 
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage

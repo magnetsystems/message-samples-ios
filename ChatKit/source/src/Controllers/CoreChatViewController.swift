@@ -343,7 +343,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
             return
         }
         
-        if let question = viewController.textQuestion?.text, let optionText = viewController.textOptions?.text, let channel = self.chat {
+        if let question = viewController.textQuestion?.text, let optionText = viewController.textOptions?.text {
             let pollOptions = optionText.componentsSeparatedByString(",")
             var cleanOptions = [String]()
             for option in pollOptions {
@@ -358,8 +358,8 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
                 multipleSelection = sw.on
             }
             if cleanOptions.count > 0 {
-                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, hideResultsFromOthers: false, endDate: nil, extras:  nil, multipleChoiceEnabled: multipleSelection)
-                poll.publish(channel: channel, success: { poll in
+                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, areResultsPublic: false, endDate: nil, extras:  nil, multipleChoiceEnabled: multipleSelection)
+                poll.publish(channel: chat, success: { poll in
                     print("Sent Poll")
                 }) { (error) in
                     print("Poll Error \(error.localizedDescription)")

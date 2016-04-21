@@ -332,6 +332,17 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     }
     
     func shouldAddPoll(viewController: AddPollViewController) {
+        guard let chat = self.chat else {
+            if let recipients = self.recipients where recipients.count > 0 {
+                createNewChatWithRecipients(recipients, completion: {error in
+                    if error == nil {
+                        self.shouldAddPoll(viewController)
+                    }
+                })
+            }
+            return
+        }
+        
         if let question = viewController.textQuestion?.text, let optionText = viewController.textOptions?.text, let channel = self.chat {
             let pollOptions = optionText.componentsSeparatedByString(",")
             var cleanOptions = [String]()

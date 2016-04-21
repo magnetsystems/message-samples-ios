@@ -24,6 +24,36 @@ enum MMXPollErrorType : ErrorType {
     case QuestionEmpty
 }
 
+extension Array where Element : Hashable {
+    func exclude(A:Array<Element>) -> Array<Element> {
+        var hash = [Int : Element]()
+        for val in self {
+            hash[val.hashValue] = val
+        }
+        var excluded = [Element]()
+        for val in A {
+            if let hashVal = hash[val.hashValue] {
+                excluded.append(hashVal)
+            }
+        }
+        return excluded
+    }
+    
+    func union(A:Array<Element>) -> Array<Element> {
+        var hash = [Int : Element]()
+        for val in self {
+            hash[val.hashValue] = val
+        }
+        var union = [Element]()
+        for val in A {
+            if let hashVal = hash[val.hashValue] {
+                union.append(hashVal)
+            }
+        }
+        return union
+    }
+}
+
 @objc public class MMXPoll: NSObject {
     
     //MARK: Public Properties
@@ -44,7 +74,7 @@ enum MMXPollErrorType : ErrorType {
     
     public let name: String
     
-    public let options: [MMXPollOption]
+    public var options: [MMXPollOption]
     
     public private(set) var ownerID: String?
     
@@ -58,41 +88,41 @@ enum MMXPollErrorType : ErrorType {
     
     //MARK: Init
     
-    public convenience init(name: String, question: String, options: [String], hideResultsFromOthers: Bool, endDate: NSDate? = nil, extras: [String:String]? = nil, multipleChoiceEnabled: Bool = false) {
+    public convenience init(name: String, question: String, options: [String], areResultsPublic: Bool, endDate: NSDate? = nil, extras: [String:String]? = nil, multipleChoiceEnabled: Bool = false) {
         
         var opts = [MMXPollOption]()
         for option in options {
             let mmxOption = MMXPollOption(text: option, count: 0)
             opts.append(mmxOption)
         }
-        self.init(name : name, question: question, mmxPollOptions: opts, hideResultsFromOthers: hideResultsFromOthers, endDate: endDate, extras: extras, multipleChoiceEnabled: multipleChoiceEnabled)
+        self.init(name : name, question: question, mmxPollOptions: opts, areResultsPublic: areResultsPublic, endDate: endDate, extras: extras, multipleChoiceEnabled: multipleChoiceEnabled)
     }
     
     //MARK: Creation
     
-    public static func createPoll(name : String, question: String, options: [String], hideResultsFromOthers: Bool, endDate: NSDate? = nil, extras : [String:String]? = nil, multipleChoiceEnabled : Bool = false) -> MMXPoll {
-        return MMXPoll(name: name, question: question, options: options, hideResultsFromOthers: hideResultsFromOthers, endDate: endDate, extras: extras, multipleChoiceEnabled: multipleChoiceEnabled)
+    public static func createPoll(name : String, question: String, options: [String], areResultsPublic: Bool, endDate: NSDate? = nil, extras : [String:String]? = nil, multipleChoiceEnabled : Bool = false) -> MMXPoll {
+        return MMXPoll(name: name, question: question, options: options, areResultsPublic: areResultsPublic, endDate: endDate, extras: extras, multipleChoiceEnabled: multipleChoiceEnabled)
     }
     
-    public static func createPoll(name : String, question: String, options: [String], hideResultsFromOthers: Bool, endDate: NSDate? = nil, extras : [String:String]? = nil) -> MMXPoll {
-        return MMXPoll(name: name, question: question, options: options, hideResultsFromOthers: hideResultsFromOthers, endDate: endDate, extras: extras)
+    public static func createPoll(name : String, question: String, options: [String], areResultsPublic: Bool, endDate: NSDate? = nil, extras : [String:String]? = nil) -> MMXPoll {
+        return MMXPoll(name: name, question: question, options: options, areResultsPublic: areResultsPublic, endDate: endDate, extras: extras)
     }
     
-    public static func createPoll(name : String, question: String, options: [String], hideResultsFromOthers: Bool, endDate: NSDate? = nil) -> MMXPoll {
-        return MMXPoll(name: name, question: question, options: options, hideResultsFromOthers: hideResultsFromOthers, endDate: endDate)
+    public static func createPoll(name : String, question: String, options: [String], areResultsPublic: Bool, endDate: NSDate? = nil) -> MMXPoll {
+        return MMXPoll(name: name, question: question, options: options, areResultsPublic: areResultsPublic, endDate: endDate)
     }
     
-    public static func createPoll(name : String, question: String, options: [String], hideResultsFromOthers: Bool) -> MMXPoll {
-        return MMXPoll(name: name, question: question, options: options, hideResultsFromOthers: hideResultsFromOthers)
+    public static func createPoll(name : String, question: String, options: [String], areResultsPublic: Bool) -> MMXPoll {
+        return MMXPoll(name: name, question: question, options: options, areResultsPublic: areResultsPublic)
     }
     
     //MARK: Private Init
     
-    private init(name : String, question: String, mmxPollOptions options: [MMXPollOption], hideResultsFromOthers: Bool, endDate: NSDate?, extras: [String:String]?, multipleChoiceEnabled: Bool) {
+    private init(name : String, question: String, mmxPollOptions options: [MMXPollOption], areResultsPublic: Bool, endDate: NSDate?, extras: [String:String]?, multipleChoiceEnabled: Bool) {
         self.question = question
         self.options = options
         self.name = name
-        self.areResultsPublic = hideResultsFromOthers
+        self.areResultsPublic = areResultsPublic
         self.endDate = endDate
         self.ownerID = MMUser.currentUser()?.userID
         self.extras = extras
@@ -120,6 +150,7 @@ enum MMXPollErrorType : ErrorType {
         }
         
         var answers = [MMXSurveyAnswer]()
+        var previousSelection = myVotes
         
         for opt in option {
             let answer = MMXSurveyAnswer()
@@ -133,10 +164,9 @@ enum MMXPollErrorType : ErrorType {
         surveyAnswerRequest.answers = answers
         let call = MMXSurveyService().submitSurveyAnswers(self.pollID, body: surveyAnswerRequest, success: {
             let msg = MMXMessage(toChannel: channel, messageContent: [:])
-            let result = MMXPollAnswer()
-            result.result = option
-            msg.payload = result;
-            
+            let result = MMXPollAnswer(self, selectedOptions: option, previousSelection: previousSelection)
+            msg.payload = result
+            self.myVotes = option
             if self.areResultsPublic {
                 success?(nil)
             } else {
@@ -156,6 +186,40 @@ enum MMXPollErrorType : ErrorType {
     
     public func mmxPayload() -> MMXPollIdentifier? {
         return self.pollID != nil ? MMXPollIdentifier(self.pollID!) : nil
+    }
+    
+    public func refreshResults(answer answer: MMXPollAnswer) {
+        if let previous = answer.previousSelection {
+            for option in self.options.union(previous) {
+                option.count -= 1
+            }
+        }
+        
+        for option in self.options.union(answer.currentSelection) {
+            option.count += 1
+        }
+    }
+    
+    public func refreshResults(completion completion:((poll : MMXPoll?) -> Void)) {
+        guard let pollID = self.pollID else {
+            completion(poll: nil)
+            return
+        }
+        MMXPoll.pollWithID(pollID, success: { (poll) in
+            var hashMap = [Int: MMXPollOption]()
+            for option in poll.options {
+                hashMap[option.hashValue] = option
+            }
+            for option in self.options {
+                option.count = hashMap[option.hashValue]?.count ?? 0
+            }
+            let comp = {[weak self] in
+                completion(poll: self)
+            }
+            comp()
+        }) { (error) in
+            completion(poll: nil)
+        }
     }
     
     //MARK: Public Static Methods
@@ -190,11 +254,36 @@ enum MMXPollErrorType : ErrorType {
     
     static public func pollFromMessage(message: MMXMessage, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
         if let payload = message.payload as? MMXPayload, let channel = message.channel {
-            pollFromMMXPayload(payload, channel:channel, success: success, failure: failure)
+            pollFromMMXPayload(payload, success: success, failure: failure)
         } else {
             let error = MMXClient.errorWithTitle("Poll", message: "Incompatible Message", code: 500)
             failure?(error : error)
         }
+    }
+    
+    static private func pollWithID(pollID: String, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
+        let service = MMXSurveyService()
+        let call = service.getSurvey(pollID, success: {[weak service] survey in
+            let call = service?.getResults(survey.surveyId, success: { surveyResults in
+                MMXChannel.channelForID(survey.surveyDefinition.notificationChannelId, success: { (channel) in
+                    do {
+                        let poll = try self.pollFromSurveyResults(surveyResults, channel: channel)
+                        success(poll)
+                    } catch {
+                        let error = MMXClient.errorWithTitle("Poll", message: "Error Parsing Poll", code: 400)
+                        failure?(error : error)
+                    }
+                    }, failure: { (error) in
+                        failure?(error : error)
+                })
+                }, failure: { error in
+                    failure?(error : error)
+            })
+            call?.executeInBackground(nil)
+            }, failure: { error in
+                failure?(error : error)
+        })
+        call.executeInBackground(nil)
     }
     
     //MARK Private Static Methods
@@ -207,7 +296,7 @@ enum MMXPollErrorType : ErrorType {
             return
         }
         
-        let survey = MMXPoll.generateSurvey(channel: channel, owner: user, name: self.name, question: self.question, options: self.options, hideResultsFromOthers: self.areResultsPublic, endDate: self.endDate, extras: self.extras, multipleChoiceEnabled: self.multipleChoiceEnabled)
+        let survey = MMXPoll.generateSurvey(channel: channel, owner: user, name: self.name, question: self.question, options: self.options, areResultsPublic: self.areResultsPublic, endDate: self.endDate, extras: self.extras, multipleChoiceEnabled: self.multipleChoiceEnabled)
         let call = MMXSurveyService().createSurvey(survey, success: { survey in
             let error = MMXClient.errorWithTitle("Poll", message: "Error Parsing Poll", code: 400)
             
@@ -224,7 +313,7 @@ enum MMXPollErrorType : ErrorType {
         call.executeInBackground(nil)
     }
     
-    private static func generateSurvey(channel channel: MMXChannel, owner: MMUser,name: String, question: String,  options: [MMXPollOption], hideResultsFromOthers: Bool, endDate: NSDate?, extras: [String : String]?, multipleChoiceEnabled: Bool) -> MMXSurvey {
+    private static func generateSurvey(channel channel: MMXChannel, owner: MMUser,name: String, question: String,  options: [MMXPollOption], areResultsPublic: Bool, endDate: NSDate?, extras: [String : String]?, multipleChoiceEnabled: Bool) -> MMXSurvey {
         let survey = MMXSurvey()
         survey.owners = [owner.userID]
         survey.name = name
@@ -233,7 +322,7 @@ enum MMXPollErrorType : ErrorType {
         surveyDefinition.startDate = NSDate()
         surveyDefinition.endDate = endDate
         surveyDefinition.type = .POLL
-        surveyDefinition.resultAccessModel = hideResultsFromOthers ? .PRIVATE : .PUBLIC
+        surveyDefinition.resultAccessModel = areResultsPublic ? .PUBLIC : .PRIVATE
         surveyDefinition.participantModel = .PUBLIC
         survey.surveyDefinition = surveyDefinition
         let surveyQuestion = MMXSurveyQuestion()
@@ -276,7 +365,7 @@ enum MMXPollErrorType : ErrorType {
             throw MMXPollErrorType.OptionsEmpty
         }
         
-        let hidesResults = survey.surveyDefinition.resultAccessModel == .PRIVATE
+        let resultsPulic = survey.surveyDefinition.resultAccessModel == .PUBLIC
         let endDate = survey.surveyDefinition.endDate
         
         var choiceMap = [String : MMXSurveyChoiceResult]()
@@ -298,7 +387,7 @@ enum MMXPollErrorType : ErrorType {
             pollOptions.append(pollOption)
         }
         
-        let poll = MMXPoll.init(name: name, question: question.text, mmxPollOptions: pollOptions, hideResultsFromOthers: hidesResults, endDate: endDate, extras: survey.metaData, multipleChoiceEnabled: question.type == .MULTI_CHOICE)
+        let poll = MMXPoll.init(name: name, question: question.text, mmxPollOptions: pollOptions, areResultsPublic: resultsPulic, endDate: endDate, extras: survey.metaData, multipleChoiceEnabled: question.type == .MULTI_CHOICE)
         poll.underlyingSurvey = survey
         poll.myVotes = myAnswers
         poll.ownerID = survey.owners.first
@@ -309,36 +398,15 @@ enum MMXPollErrorType : ErrorType {
         return poll
     }
     
-    static private func pollFromMMXPayload(payload : MMXPayload?, channel: MMXChannel, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
+    static private func pollFromMMXPayload(payload : MMXPayload?, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
         if let pollIdentifier = payload as? MMXPollIdentifier {
-            self.pollWithID(pollIdentifier.pollID, channel: channel, success: success, failure: failure)
-        } else if let pollID = (payload as? MMXPollAnswer)?.result.first?.pollID {
-            self.pollWithID(pollID, channel: channel, success: success, failure: failure)
+            self.pollWithID(pollIdentifier.pollID, success: success, failure: failure)
+        } else if let pollID = (payload as? MMXPollAnswer)?.pollID {
+            self.pollWithID(pollID, success: success, failure: failure)
         } else {
             let error = MMXClient.errorWithTitle("Poll", message: "Incompatible Object Type", code: 500)
             failure?(error : error)
         }
-    }
-    
-    static private func pollWithID(pollID: String, channel: MMXChannel, success: ((MMXPoll) -> Void), failure: ((error: NSError) -> Void)?) {
-        let service = MMXSurveyService()
-        let call = service.getSurvey(pollID, success: {[weak service] survey in
-            let call = service?.getResults(survey.surveyId, success: { surveyResults in
-                do {
-                    let poll = try self.pollFromSurveyResults(surveyResults, channel: channel)
-                    success(poll)
-                } catch {
-                    let error = MMXClient.errorWithTitle("Poll", message: "Error Parsing Poll", code: 400)
-                    failure?(error : error)
-                }
-                }, failure: { error in
-                    failure?(error : error)
-            })
-            call?.executeInBackground(nil)
-            }, failure: { error in
-                failure?(error : error)
-        })
-        call.executeInBackground(nil)
     }
 }
 

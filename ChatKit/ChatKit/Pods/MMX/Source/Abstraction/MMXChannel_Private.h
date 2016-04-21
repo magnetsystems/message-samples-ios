@@ -33,6 +33,10 @@
 @property (nonatomic, assign) BOOL privateChannel;
 @property (nonatomic, strong) MMXPubSubService *pubSubService;
 @property (nonatomic, readwrite) BOOL isMuted;
+/**
+ * The push config name. The push config can be defined on the server and controls behavior like push notification content, whether to send a push notification if the recipient is not online, etc
+ */
+@property (nonatomic, copy) NSString *pushConfigName;
 
 - (MMXTopic *)asTopic;
 
@@ -42,5 +46,5 @@
 			 publishPermissions:(MMXPublishPermissions)publishPermissions;
 
 + (NSArray *)channelsFromTopics:(NSArray *)topics summaries:(NSArray *)summaries subscriptions:(NSArray *)subscriptions;
-
++ (void)channelForID:(NSString *)channelID  success:(nullable void (^)(MMXChannel *channel))success failure:(nullable void (^)(NSError *error))failure;
 @end

@@ -73,9 +73,10 @@ class ViewController: UIViewController {
         
         let user = MMUser.init()
         user.password = "gogogo"
-        user.userName = "bob@bob.com"
-        user.firstName = "newUser"
-        user.lastName = "smith"
+        user.userName = "john"
+        user.firstName = "r"
+        user.lastName = "s"
+        
         user.register({ u in
             self.login(user)
             }, failure: { error in
@@ -105,16 +106,23 @@ class ViewController: UIViewController {
         MMUser.login(cred, rememberMe: false, success: {
             //            let url = NSURL.init(string: "https://clipartion.com/wp-content/uploads/2015/11/free-clipart-of-happy-person.png")
             //            MMUser.currentUser()?.setAvatarWithURL(url!, success: { url in
-            let u = MMUser.init()
-            u.userName = "gogo"
             //            let c = MagnetContactsPickerController()
             //            if let datasource = c.pickerDatasource as? DefaultContactsPickerControllerDatasource, let user = MMUser.currentUser() {
             //                datasource.preselectedUsers = [user]
             //            }
             // c.pickerDelegate = self
-            
+            //8a80803e5431d5a9015431d8b9f50002#TestChannel
+            MMXChannel.channelForID("8a80803e5431d5a9015431d8b9f50002#TestChannel", success: { ch in
+            print("channel")
+            }, failure: {error in
+            print("error \(error.localizedDescription)")
+            })
             self.showChatList()
-            
+//            MMXChannel.createWithName("TestChannel", summary: "", isPublic: false, publishPermissions: .Anyone, success: { (channel) in
+//                print(channel.channelID)
+//                }, failure: { (error) in
+//                    
+//            })
             //            c.canChooseContacts = true
             //  c.tableView.allowsSelection = false
             //c.title = "home"

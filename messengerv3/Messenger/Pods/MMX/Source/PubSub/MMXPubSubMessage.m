@@ -120,7 +120,7 @@
 	
 	MMUser *sender = [MMUser currentUser];
 	if (sender && sender.address) {
-		NSXMLElement *mmxMeta = [MMXInternalMessageAdaptor xmlFromRecipients:nil senderAddress:sender.address];
+		NSXMLElement *mmxMeta = [MMXInternalMessageAdaptor xmlFromRecipients:nil senderAddress:sender.address pushConfigName:self.pushConfigName];
 		[mmxElement addChild:mmxMeta];
 	}
 	
