@@ -297,7 +297,7 @@ public class PollMediaItem: JSQMediaItem {
     
     override public func mediaViewDisplaySize() -> CGSize {
         let _ = mediaView()
-        let height = viewHeight
+        let height = max(viewHeight, 100.0)
         return CGSize(width: super.mediaViewDisplaySize().width, height: height)
     }
 }
