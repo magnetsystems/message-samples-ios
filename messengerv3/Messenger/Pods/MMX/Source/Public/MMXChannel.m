@@ -326,7 +326,8 @@
     channelPushRequest.channelId = self.channelID;
     channelPushRequest.untilDate = date;
     
-    [self.pubSubService muteChannelPush:self.channelID body:channelPushRequest success:^{
+    MMCall *call = [self.pubSubService muteChannelPush:self.channelID body:channelPushRequest success:^{
+        self.isMuted = YES;
         if (success) {
             success();
         }
@@ -335,13 +336,16 @@
             failure(error);
         }
     }];
+    
+    [call executeInBackground:nil];
     
 }
 
 - (void)unMuteWithSuccess:(nullable void (^)())success
                   failure:(nullable void (^)(NSError *error))failure {
     
-    [self.pubSubService unmuteChannelPush:self.channelID success:^{
+    MMCall *call = [self.pubSubService unmuteChannelPush:self.channelID success:^{
+        self.isMuted = NO;
         if (success) {
             success();
         }
@@ -350,6 +354,8 @@
             failure(error);
         }
     }];
+    
+    [call executeInBackground:nil];
 }
 
 - (void)tagsWithSuccess:(void (^)(NSSet <NSString *>*))success
