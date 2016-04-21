@@ -92,7 +92,7 @@ static int kATTACHMENTCONTEXT;
     if (pubSubMessage.messageContent) {
         NSData *data = [pubSubMessage.messageContent dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *payloadContent = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-        Class contentClass = [MMXPayloadRegister classForContentType:payloadContent[@"mType"]];
+        Class contentClass = [MMXPayloadRegister classForContentType:pubSubMessage.mType];
         if (payloadContent && contentClass) {
             payload = [MTLJSONAdapter modelOfClass:contentClass fromJSONDictionary:payloadContent error:nil];
         }
@@ -153,13 +153,14 @@ static int kATTACHMENTCONTEXT;
         }
         return nil;
     }
+    NSString *mType = nil;
     if (self.channel) {
         NSString *messageID = [[MMXClient sharedClient] generateMessageID];
         NSString *payload;
         if (self.payload) {
+            mType = self.contentType;
             NSError *error;
             NSMutableDictionary *payloadDictionary = [MTLJSONAdapter JSONDictionaryFromModel:self.payload error:&error].mutableCopy;
-            payloadDictionary[@"mType"] = self.contentType;
             if (error) {
                 NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"Failed to parse MMModel." code:401];
                 if (failure) {
@@ -170,7 +171,6 @@ static int kATTACHMENTCONTEXT;
             
             error = nil;
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:payloadDictionary options:0 error:&error];
-            
             if (error) {
                 NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"Failed to parse JSON." code:401];
                 if (failure) {
@@ -185,6 +185,7 @@ static int kATTACHMENTCONTEXT;
         }
         
         MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self.channel asTopic] content:payload metaData:self.messageContent];
+        msg.mType = mType;
         msg.messageID = messageID;
         self.messageID = messageID;
         if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {

@@ -40,6 +40,7 @@
 	msg.metaData = message.metaData;
 	msg.timestamp = message.timestamp;
 	msg.senderUserID = message.senderUserID;
+    msg.mType = message.mType;
     return msg;
 }
 
@@ -73,7 +74,10 @@
 		NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
 		msg.metaData = [MMXMessageUtils extractMetaData:metaElements];
 		msg.topic = topic.copy;
-		
+		//mType
+        NSXMLNode* mtype = [payLoadElements[0] attributeForName:@"mtype"];
+        msg.mType = mtype ? [mtype stringValue] : nil;
+        
 		NSArray* mmxMetaElements = [mmxElement elementsForName:MXmmxMetaElement];
 		if (mmxMetaElements) {
 			NSDictionary *mmxMetaDict = [MMXInternalMessageAdaptor extractMMXMetaData:mmxMetaElements];
@@ -111,7 +115,7 @@
                   currentJID:(XMPPJID *)currentJID
 					  itemID:(NSString *)itemID {
     NSXMLElement *mmxElement = [[NSXMLElement alloc] initWithName:MXmmxElement xmlns:MXnsDataPayload];
-    NSXMLElement *payload = [MMXUtils contentToXML:self.messageContent type:@"TEXTMSG"];
+    NSXMLElement *payload = [MMXUtils contentToXML:self.messageContent type:self.mType ? self.mType : @"TEXTMSG"];
     [mmxElement addChild:payload];
     if (self.metaData) {
         NSXMLElement *meta = [MMXUtils metaDataToXML:self.metaData];
