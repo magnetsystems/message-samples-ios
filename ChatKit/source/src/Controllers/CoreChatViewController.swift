@@ -307,7 +307,9 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
                     let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
                     invailidationContext.invalidateFlowLayoutMessagesCache = true
                     self?.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
-                    self?.collectionView.reloadData()
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+                        self?.collectionView.reloadData()
+                    })
                 }
             }
             if mmxMessage.contentType != MMXPollAnswer.contentType {
