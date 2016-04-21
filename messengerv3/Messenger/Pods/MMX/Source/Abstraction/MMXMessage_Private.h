@@ -43,6 +43,13 @@
 
 @property(nonatomic, readwrite, nullable) NSArray<MMAttachment *> *attachments;
 
+@property (nonatomic, nullable) NSString *contentType;
+
+/**
+ * The push config name. The push config can be defined on the server and controls behavior like push notification content, whether to send a push notification if the recipient is not online, etc
+ */
+@property (nonatomic, copy, nullable) NSString *pushConfigName;
+
 NS_ASSUME_NONNULL_BEGIN
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage
 								  sender:(MMUser *)sender;

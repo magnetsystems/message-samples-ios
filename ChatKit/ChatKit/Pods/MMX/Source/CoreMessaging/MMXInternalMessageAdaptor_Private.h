@@ -56,6 +56,9 @@
 
 - (NSXMLElement *)contentToXML;
 - (NSXMLElement *)metaDataToXML;
++ (NSXMLElement *)xmlFromRecipients:(NSArray *)recipients
+                      senderAddress:(MMXInternalAddress *)address
+                     pushConfigName:(NSString *)pushConfigName;
 + (NSXMLElement *)xmlFromRecipients:(NSArray *)recipients senderAddress:(MMXInternalAddress *)address;
 
 + (NSString *)extractPayload:(NSArray *)payLoadElements;

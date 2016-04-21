@@ -20,8 +20,6 @@ import ChatKit
 
 class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }

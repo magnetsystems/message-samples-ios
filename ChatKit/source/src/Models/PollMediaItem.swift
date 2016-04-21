@@ -63,13 +63,13 @@ public class PollMediaItem: JSQMediaItem {
     //MARK: Public Variables
     
     
-    public var buttonBackgroundColor = UIColor(red: 97/255.0, green: 191/255.0, blue: 229/255.0, alpha: 1.0)
     public var buttonBorderColor = UIColor(red: 122/255.0, green: 202/255.0, blue: 229/255.0, alpha: 1.0)
     public var buttonBorderWidth: CGFloat = 2.0
     public var bottomConstraint: NSLayoutConstraint?
     public let buttonHeight: CGFloat = 44.0
+    public var darkColor = UIColor(red: 97/255.0, green: 191/255.0, blue: 229/255.0, alpha: 1.0)
     public let labelHeight: CGFloat = 25.0
-    public var buttonTextColor = UIColor(red: 215/255.0, green: 239/255.0, blue: 249/255.0, alpha: 1.0)
+    public var lightColor = UIColor(red: 215/255.0, green: 239/255.0, blue: 249/255.0, alpha: 1.0)
     public private(set) var channel : MMXChannel? {
         didSet {
             ChannelManager.sharedInstance.removeChannelMessageObserver(self)
@@ -88,6 +88,7 @@ public class PollMediaItem: JSQMediaItem {
     //Private Variables
     
     
+    private var buttons = [PollMediaButton]()
     private var cachedView: UIView?
     private var count = 1
     private var viewHeight:CGFloat = 0.0
@@ -107,15 +108,42 @@ public class PollMediaItem: JSQMediaItem {
     
     func didReceiveMessage(message : MMXMessage) {
         if message.contentType == MMXPollAnswer.contentType {
-            if let answer = message.payload as? MMXPollAnswer where answer.result.first?.pollID == poll?.pollID && poll?.pollID != nil {
-                retrievePoll()
+            if let answer = message.payload as? MMXPollAnswer where answer.pollID == poll?.pollID && poll?.pollID != nil {
+                self.poll?.refreshResults(answer: answer)
+                updatePoll()
             }
         }
     }
     
-    
     //MARK: Poll Loading
     
+    func updatePoll() {
+        for button in buttons {
+            if let option = button.pollOption {
+                button.rightLabel?.text = "\(option.count)"
+            }
+        }
+        updateButtons()
+    }
+    
+    func updateButtons() {
+        for button in self.buttons {
+      
+            if let myOptions = self.poll?.myVotes?.filter({$0 == button.pollOption}) where myOptions.count > 0 {
+                button.rightLabel?.backgroundColor = darkColor
+                button.rightLabel?.textColor = lightColor
+                
+                button.backgroundColor = lightColor
+                button.setTitleColor(darkColor, forState: .Normal)
+            } else {
+                button.rightLabel?.backgroundColor = lightColor
+                button.rightLabel?.textColor = darkColor
+                
+                button.backgroundColor = darkColor
+                button.setTitleColor(lightColor, forState: .Normal)
+            }
+        }
+    }
     
     func retrievePoll() {
         guard let message = self.message where !isRetrievingPoll else {
@@ -162,8 +190,6 @@ public class PollMediaItem: JSQMediaItem {
         let button = PollMediaButton(type: .System)
         button.setTitle(label, forState: .Normal)
         button.layer.cornerRadius = cornerRadius
-        button.backgroundColor = buttonBackgroundColor
-        button.setTitleColor(buttonTextColor, forState: .Normal)
         button.layer.borderColor = buttonBorderColor.CGColor
         button.layer.borderWidth = buttonBorderWidth
         button.titleLabel?.minimumScaleFactor = 0.5
@@ -174,10 +200,10 @@ public class PollMediaItem: JSQMediaItem {
     func addLabel(view : UIView, text : String) -> UILabel {
         let label = UILabel()
         label.text = text
-        label.textColor = buttonTextColor
         label.textAlignment = .Left
         label.minimumScaleFactor = 0.5
         label.lineBreakMode = .ByTruncatingMiddle
+        label.textColor = lightColor
         addView(view, subview: label, height: labelHeight, padding: padding)
         
         return label
@@ -243,6 +269,7 @@ public class PollMediaItem: JSQMediaItem {
         count = 1
         viewHeight = 0.0
         lastPadding = 0.0
+        self.buttons.removeAll()
         addLabel(view, text: poll.question)
         
         let border = UIView()
@@ -253,22 +280,16 @@ public class PollMediaItem: JSQMediaItem {
         for option in options {
             let button = addButton(view, label: option.text)
             let label = MMRoundedLabel()
-            label.backgroundColor = UIColor(red: 179/255.0, green: 219/255.0, blue: 242/255.0, alpha: 1.0)
-            label.textColor = UIColor(red: 58/255.0, green: 174/255.0, blue: 223/255.0, alpha: 1.0)
             label.text = "\(option.count)"
             label.textAlignment = .Center
-            button.rightLabel = label
+            if self.poll?.areResultsPublic == true || self.poll?.ownerID == MMUser.currentUser()?.userID && self.poll?.ownerID != nil {
+                button.rightLabel = label
+            }
             button.pollOption = option
             button.addTarget(self, action: #selector(PollMediaItem.didSelectButton(_:)), forControlEvents: .TouchUpInside)
-            if let myOptions = self.poll?.myVotes?.filter({$0 == option}) where myOptions.count > 0 {
-                let darkColor = label.backgroundColor
-                label.backgroundColor = label.textColor
-                label.textColor = darkColor
-                let btnDrkColor = button.backgroundColor
-                button.backgroundColor = button.titleColorForState(.Normal)
-                button.setTitleColor(btnDrkColor, forState: .Normal)
-            }
+            self.buttons.append(button)
         }
+        updateButtons()
         self.cachedView = view
         
         return view
