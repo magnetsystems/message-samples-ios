@@ -297,6 +297,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
             scrollToBottomAnimated(true)
         }
         let finishedMessageClosure : () -> Void = {
+            self.showTypingIndicator = false
             self.onMessageRecived(mmxMessage)
             let message = Message(message: mmxMessage)
             self.messages.append(message)
@@ -308,7 +309,11 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
                     self?.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
                     self?.collectionView.reloadData()
                 }
+            }
+            if mmxMessage.contentType != MMXPollAnswer.contentType {
                 self.finishReceivingMessageAnimated(true)
+            } else {
+                self.collectionView.reloadData()
             }
         }
         
@@ -358,7 +363,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
                 multipleSelection = sw.on
             }
             if cleanOptions.count > 0 {
-                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, areResultsPublic: false, endDate: nil, extras:  nil, multipleChoiceEnabled: multipleSelection)
+                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, areResultsPublic: true, endDate: nil, extras:  nil, multipleChoiceEnabled: multipleSelection)
                 poll.publish(channel: chat, success: { poll in
                     print("Sent Poll")
                 }) { (error) in

@@ -167,7 +167,7 @@ extension Array where Element : Hashable {
             let result = MMXPollAnswer(self, selectedOptions: option, previousSelection: previousSelection)
             msg.payload = result
             self.myVotes = option
-            if self.areResultsPublic {
+            if !self.areResultsPublic {
                 success?(nil)
             } else {
                 msg.sendWithSuccess({ [weak msg] users in
