@@ -1116,6 +1116,7 @@
                                  @"summary": @"description",
                                  @"publishPermissions": @"publishPermission",
                                  @"subscribers": @"subscribers",
+                                 @"pushConfigName": @"pushConfigName",
                                  };
     //    NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
     //    [attributeMappings addEntriesFromDictionary:dictionary];
