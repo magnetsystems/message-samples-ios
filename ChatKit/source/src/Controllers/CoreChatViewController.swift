@@ -51,7 +51,21 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     
     public var navigationBarNotifier : NavigationNotifier?
     public var outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.clearColor())
-    public internal(set) var recipients : [MMUser]?
+    public internal(set) var recipients : [MMUser]? {
+        didSet {
+            if self.recipients?.count > 0 {
+                MMXChannel.findChannelsBySubscribers(self.recipients!, matchType: .EXACT_MATCH, success: { channels in
+                    if channels.count == 1 {
+                        self.chat = channels.first
+                        self.clearData()
+                        self.reset()
+                    }
+                    }, failure: { error in
+                        
+                })
+            }
+        }
+    }
     
     
     //MARK: Internal properties

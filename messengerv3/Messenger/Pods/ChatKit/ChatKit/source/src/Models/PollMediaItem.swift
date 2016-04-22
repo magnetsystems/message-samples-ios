@@ -63,13 +63,14 @@ public class PollMediaItem: JSQMediaItem {
     //MARK: Public Variables
     
     
-    public var buttonBorderColor = UIColor(red: 118/255.0, green: 186/255.0, blue: 255/255.0, alpha: 1.0)
+    public var buttonBorderColor = UIColor.whiteColor()
     public var buttonBorderWidth: CGFloat = 2.0
     public var bottomConstraint: NSLayoutConstraint?
     public let buttonHeight: CGFloat = 44.0
-    public var darkColor = UIColor(red: 65/255.0, green: 116/255.0, blue: 168/255.0, alpha: 1.0)
+    public var darkColor = UIColor(red: 62/255.0, green: 154/255.0, blue: 252/255.0, alpha: 1.0)
     public let labelHeight: CGFloat = 25.0
-    public var lightColor = UIColor(red: 201/255.0, green: 228/255.0, blue: 255/255.0, alpha: 1.0)
+    public var lightColor = UIColor(red: 196/255.0, green: 217/255.0, blue: 248/255.0, alpha: 1.0)
+    public var hightLightColor = UIColor.whiteColor()
     public private(set) var channel : MMXChannel? {
         didSet {
             ChannelManager.sharedInstance.removeChannelMessageObserver(self)
@@ -80,7 +81,7 @@ public class PollMediaItem: JSQMediaItem {
     }
     public var cornerRadius: CGFloat = 10.0
     public let padding: CGFloat = 10.0
-    public var viewBackgroundColor = UIColor(red: 65/255.0, green: 116/255.0, blue: 168/255.0, alpha: 1.0)
+    public var viewBackgroundColor = UIColor(red: 3/255.0, green: 125/255.0, blue: 255/255.0, alpha: 1.0)
     public var onUpdate: (() -> Void)?
     public var poll : MMXPoll?
     
@@ -130,16 +131,16 @@ public class PollMediaItem: JSQMediaItem {
         for button in self.buttons {
             if let myOptions = self.poll?.myVotes?.filter({$0 == button.pollOption}) where myOptions.count > 0 {
                 button.rightLabel?.backgroundColor = darkColor
-                button.rightLabel?.textColor = lightColor
+                button.rightLabel?.textColor = hightLightColor
                 
                 button.backgroundColor = lightColor
-                button.setTitleColor(darkColor, forState: .Normal)
+                button.setTitleColor(hightLightColor, forState: .Normal)
             } else {
                 button.rightLabel?.backgroundColor = lightColor
-                button.rightLabel?.textColor = darkColor
+                button.rightLabel?.textColor = hightLightColor
                 
                 button.backgroundColor = darkColor
-                button.setTitleColor(lightColor, forState: .Normal)
+                button.setTitleColor(hightLightColor, forState: .Normal)
             }
         }
     }
@@ -214,7 +215,7 @@ public class PollMediaItem: JSQMediaItem {
         label.textAlignment = .Left
         label.minimumScaleFactor = 0.5
         label.lineBreakMode = .ByTruncatingMiddle
-        label.textColor = lightColor
+        label.textColor = hightLightColor
         addView(view, subview: label, height: labelHeight, padding: padding)
         
         return label
