@@ -51,9 +51,10 @@ class ContactsViewController: MMXContactsPickerController {
     
     func updateMuteStatus(isFirstTime: Bool = false) {
         if channel.isMuted {
-            barButtonNext = UIBarButtonItem(title: "Unmute", style: .Plain, target: self, action: #selector(ContactsViewController.unMuteAction))
+            
+            barButtonNext = UIBarButtonItem(image: UIImage(named:"speakerOff"), landscapeImagePhone: UIImage(named:"speakerOff"), style: .Plain, target: self, action: #selector(ContactsViewController.unMuteAction))
         } else {
-            barButtonNext = UIBarButtonItem(title: "Mute", style: .Plain, target: self, action: #selector(ContactsViewController.muteAction))
+            barButtonNext = UIBarButtonItem(image: UIImage(named:"speakerOn"), landscapeImagePhone: UIImage(named:"speakerOn"), style: .Plain, target: self, action: #selector(ContactsViewController.muteAction))
         }
         if !isFirstTime {
             navigationItem.rightBarButtonItems = [barButtonNext!]
