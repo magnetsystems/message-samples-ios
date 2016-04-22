@@ -62,6 +62,7 @@ public class ChatListCell: ChannelDetailBaseTVCell {
     
     @IBOutlet public private(set) weak var avatarView : UIImageView?
     @IBOutlet public private(set) weak var ivMessageIcon : UIImageView?
+    @IBOutlet public private(set) weak var ivRightIcon : UIImageView?
     @IBOutlet public private(set) weak var lblSubscribers : UILabel?
     @IBOutlet public private(set) weak var lblLastTime : UILabel?
     @IBOutlet public private(set) weak var lblMessage : UILabel?
