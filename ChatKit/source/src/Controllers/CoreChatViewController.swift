@@ -350,11 +350,10 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
             return
         }
         
-        if let question = viewController.textQuestion?.text, let optionText = viewController.textOptions?.text {
-            let pollOptions = optionText.componentsSeparatedByString(",")
+        if let question = viewController.textQuestion?.text {
             var cleanOptions = [String]()
-            for option in pollOptions {
-                let trimmed = option.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            for option in viewController.options {
+                let trimmed = option.value.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                 if trimmed.characters.count > 0 {
                     cleanOptions.append(trimmed)
                 }
@@ -364,8 +363,12 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
             if let sw = viewController.swMultipleSelections {
                 multipleSelection = sw.on
             }
+            var showResults = true
+            if let sw = viewController.swShowResults {
+                showResults = sw.on
+            }
             if cleanOptions.count > 0 {
-                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, hideResultsFromOthers: false, endDate: nil, extras:  nil, allowMultiChoice: multipleSelection)
+                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, hideResultsFromOthers: !showResults, endDate: nil, extras:  nil, allowMultiChoice: multipleSelection)
                 poll.publish(channel: chat, success: { poll in
                     print("Sent Poll")
                 }) { (error) in

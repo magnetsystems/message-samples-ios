@@ -536,6 +536,12 @@
          <FileRef
             location = "group:MapViewController.xib">
          </FileRef>
+         <FileRef
+            location = "group:PollOptionCellTableViewCell.swift">
+         </FileRef>
+         <FileRef
+            location = "group:PollOptionCellTableViewCell.xib">
+         </FileRef>
       </Group>
       <Group
          location = "container:"
