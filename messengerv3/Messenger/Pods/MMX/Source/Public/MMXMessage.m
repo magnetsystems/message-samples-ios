@@ -188,6 +188,7 @@ static int kATTACHMENTCONTEXT;
         msg.mType = mType;
         msg.messageID = messageID;
         self.messageID = messageID;
+        msg.pushConfigName = self.pushConfigName;
         if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
             if (failure) {
                 failure([MMXMessage notNotLoggedInAndNoUserError]);
