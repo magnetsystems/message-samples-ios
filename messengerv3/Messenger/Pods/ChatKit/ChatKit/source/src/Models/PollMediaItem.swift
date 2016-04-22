@@ -119,8 +119,8 @@ public class PollMediaItem: JSQMediaItem {
     
     func updatePoll() {
         for button in buttons {
-            if let option = button.pollOption {
-                button.rightLabel?.text = "\(option.count)"
+            if let count = button.pollOption?.count {
+                button.rightLabel?.text = "\(count.integerValue)"
             }
         }
         updateButtons()
@@ -128,7 +128,6 @@ public class PollMediaItem: JSQMediaItem {
     
     func updateButtons() {
         for button in self.buttons {
-            button.enabled = self.poll?.allowMultiChoice == true || self.poll?.myVotes == nil || self.poll!.myVotes!.count == 0
             if let myOptions = self.poll?.myVotes?.filter({$0 == button.pollOption}) where myOptions.count > 0 {
                 button.rightLabel?.backgroundColor = darkColor
                 button.rightLabel?.textColor = lightColor
@@ -174,11 +173,14 @@ public class PollMediaItem: JSQMediaItem {
                 options = options.filter({$0 != option})
             }
             button.enabled = false
+            self.cachedView?.userInteractionEnabled = false
             poll.choose(options: options, success: { (message) in
                 button.enabled = true
+                self.cachedView?.userInteractionEnabled = true
                 self.updateButtons()
                 }, failure: { (error) in
                     button.enabled = true
+                    self.cachedView?.userInteractionEnabled = true
                     self.updateButtons()
             })
         }
@@ -282,7 +284,6 @@ public class PollMediaItem: JSQMediaItem {
         for option in options {
             let button = addButton(view, label: option.text)
             let label = MMRoundedLabel()
-            label.text = "\(option.count)"
             label.textAlignment = .Center
             if self.poll?.hideResultsFromOthers == false || (self.poll?.ownerID == MMUser.currentUser()?.userID && self.poll?.ownerID != nil) {
                 button.rightLabel = label
@@ -291,7 +292,7 @@ public class PollMediaItem: JSQMediaItem {
             button.addTarget(self, action: #selector(PollMediaItem.didSelectButton(_:)), forControlEvents: .TouchUpInside)
             self.buttons.append(button)
         }
-        updateButtons()
+        updatePoll()
         self.cachedView = view
         
         return view
