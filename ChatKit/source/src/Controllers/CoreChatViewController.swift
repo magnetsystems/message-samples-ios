@@ -365,7 +365,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
                 multipleSelection = sw.on
             }
             if cleanOptions.count > 0 {
-                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, areResultsPublic: true, endDate: nil, extras:  nil, multipleChoiceEnabled: multipleSelection)
+                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, hideResultsFromOthers: false, endDate: nil, extras:  nil, allowMultiChoice: multipleSelection)
                 poll.publish(channel: chat, success: { poll in
                     print("Sent Poll")
                 }) { (error) in
