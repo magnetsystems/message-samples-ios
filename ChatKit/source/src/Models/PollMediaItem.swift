@@ -119,8 +119,8 @@ public class PollMediaItem: JSQMediaItem {
     
     func updatePoll() {
         for button in buttons {
-            if let option = button.pollOption {
-                button.rightLabel?.text = "\(option.count)"
+            if let count = button.pollOption?.count {
+                button.rightLabel?.text = "\(count.integerValue)"
             }
         }
         updateButtons()
@@ -284,7 +284,6 @@ public class PollMediaItem: JSQMediaItem {
         for option in options {
             let button = addButton(view, label: option.text)
             let label = MMRoundedLabel()
-            label.text = "\(option.count)"
             label.textAlignment = .Center
             if self.poll?.hideResultsFromOthers == false || (self.poll?.ownerID == MMUser.currentUser()?.userID && self.poll?.ownerID != nil) {
                 button.rightLabel = label
@@ -293,7 +292,7 @@ public class PollMediaItem: JSQMediaItem {
             button.addTarget(self, action: #selector(PollMediaItem.didSelectButton(_:)), forControlEvents: .TouchUpInside)
             self.buttons.append(button)
         }
-        updateButtons()
+        updatePoll()
         self.cachedView = view
         
         return view

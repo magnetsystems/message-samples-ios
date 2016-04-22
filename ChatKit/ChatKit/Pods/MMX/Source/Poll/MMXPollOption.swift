@@ -21,7 +21,7 @@ import MagnetMaxCore
     
     //Public Variables
     
-    public var count: Int64 = 0
+    public var count: NSNumber? = 0
     
     public var extras : [String:String] = [:]
     
@@ -37,9 +37,9 @@ import MagnetMaxCore
         super.init()
     }
     
-    public init(text: String, count: Int64?) {
+    public init(text: String, count: NSNumber?) {
         self.text = text
-        self.count = count ?? 0
+        self.count = count
         super.init()
     }
     

@@ -192,12 +192,16 @@ extension Array where Element : Hashable {
     public func refreshResults(answer answer: MMXPollAnswer) {
         if let previous = answer.previousSelection {
             for option in self.options.union(previous) {
-                option.count -= 1
+                if let count = option.count {
+                    option.count = count.integerValue - 1
+                }
             }
         }
         
         for option in self.options.union(answer.currentSelection) {
-            option.count += 1
+            if let count = option.count {
+                option.count = count.integerValue + 1
+            }
         }
         if answer.userID == MMUser.currentUser()?.userID {
             self.myVotes = answer.currentSelection
@@ -380,7 +384,7 @@ extension Array where Element : Hashable {
         var pollOptions: [MMXPollOption] = []
         var myAnswers : [MMXPollOption] = []
         for option in options {
-            let count : Int64? = choiceMap[option.optionId] != nil ? choiceMap[option.optionId]!.count : nil
+            let count : NSNumber? = choiceMap[option.optionId] != nil ? NSNumber(longLong: choiceMap[option.optionId]!.count) : nil
             let pollOption = MMXPollOption(text: option.value, count: count)
             pollOption.pollID = survey.surveyId
             pollOption.optionID = option.optionId
