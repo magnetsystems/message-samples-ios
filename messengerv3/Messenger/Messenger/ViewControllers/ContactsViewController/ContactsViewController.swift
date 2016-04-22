@@ -23,7 +23,6 @@ class ContactsViewController: MMXContactsPickerController {
     var channel: MMXChannel! {
         didSet {
             title = channel.name
-            updateMuteStatus(true)
         }
     }
     
@@ -47,42 +46,5 @@ class ContactsViewController: MMXContactsPickerController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.rightBarButtonItem?.enabled = true
-    }
-    
-    func updateMuteStatus(isFirstTime: Bool = false) {
-        if channel.isMuted {
-            
-            barButtonNext = UIBarButtonItem(image: UIImage(named:"speakerOff"), landscapeImagePhone: UIImage(named:"speakerOff"), style: .Plain, target: self, action: #selector(ContactsViewController.unMuteAction))
-        } else {
-            barButtonNext = UIBarButtonItem(image: UIImage(named:"speakerOn"), landscapeImagePhone: UIImage(named:"speakerOn"), style: .Plain, target: self, action: #selector(ContactsViewController.muteAction))
-        }
-        if !isFirstTime {
-            navigationItem.rightBarButtonItems = [barButtonNext!]
-        }
-    }
-    
-    // MARK: Mute/unmute actions
-    
-    func muteAction() {
-        let aYearFromNow = NSCalendar.currentCalendar().dateByAddingUnit(.Year, value: 1, toDate: NSDate(), options: .MatchNextTime)
-        barButtonNext?.enabled = false
-        channel.muteUntil(aYearFromNow, success: { [weak self] in
-            self?.barButtonNext?.enabled = true
-            self?.updateMuteStatus()
-        }, failure: { [weak self] error in
-            self?.barButtonNext?.enabled = true
-//            print(error.localizedDescription)
-        })
-    }
-    
-    func unMuteAction() {
-        barButtonNext?.enabled = false
-        channel.unMuteWithSuccess({ [weak self] in
-            self?.barButtonNext?.enabled = true
-            self?.updateMuteStatus()
-        }) { [weak self] error in
-            self?.barButtonNext?.enabled = true
-//            print(error.localizedDescription)
-        }
     }
 }

@@ -20,6 +20,7 @@ import ChatKit
 
 class ChatViewDetails: SubscribersDatasource {
     
+    var muteButton : UIButton?
     override var currentContactsPickerViewController: MMXContactsPickerController? {
         set {
             if let currentUser = MMUser.currentUser() {
@@ -32,6 +33,73 @@ class ChatViewDetails: SubscribersDatasource {
         get {
             return super.currentContactsPickerViewController
         }
+    }
+    
+    func updateMuteStatus() {
+        if let channel = self.chatViewController?.channel {
+            if channel.isMuted {
+                self.muteButton?.tag = 1
+                self.muteButton?.setTitle("Unmute Push Notifications", forState: .Normal)
+            } else {
+                self.muteButton?.tag = 0
+                self.muteButton?.setTitle("Mute Push Notifications", forState: .Normal)
+            }
+        }
+    }
+    
+    // MARK: Mute/unmute actions
+    
+    func handleMute(button : UIButton) {
+        if button.tag == 1 {
+            unMuteAction()
+        } else {
+            muteAction()
+        }
+    }
+    
+    func muteAction() {
+        if let channel = self.chatViewController?.channel {
+            let aYearFromNow = NSCalendar.currentCalendar().dateByAddingUnit(.Year, value: 1, toDate: NSDate(), options: .MatchNextTime)
+            self.muteButton?.enabled = false
+            channel.muteUntil(aYearFromNow, success: { [weak self] in
+                self?.updateMuteStatus()
+                self?.muteButton?.enabled = true
+                }, failure: { [weak self] error in
+                    self?.muteButton?.enabled = true
+                })
+        }
+    }
+    
+    func unMuteAction() {
+        if let channel = self.chatViewController?.channel {
+            self.muteButton?.enabled = false
+            channel.unMuteWithSuccess({ [weak self] in
+                self?.updateMuteStatus()
+                self?.muteButton?.enabled = true
+            }) { [weak self] error in
+                self?.muteButton?.enabled = true
+            }
+        }
+    }
+    
+    //MARK: Datasource
+    
+    override func mmxTableViewNumberOfFooters() -> Int {
+        return 1 + super.mmxTableViewNumberOfFooters()
+    }
+    
+    override func mmxTableViewFooter(index : Int) -> UIView {
+        if index == 0 {
+            return super.mmxTableViewFooter(index)
+        }
+        let button = UIButton(type: .Custom)
+        button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+        button.setTitle("Mute", forState: .Normal)
+        button.titleLabel?.textAlignment = .Center
+        button.addTarget(self, action: #selector(ChatViewDetails.handleMute(_:)), forControlEvents: .TouchUpInside)
+        self.muteButton = button
+        updateMuteStatus()
+        return button
     }
     
     override func mmxControllerLoadMore(searchText: String?, offset: Int) {
