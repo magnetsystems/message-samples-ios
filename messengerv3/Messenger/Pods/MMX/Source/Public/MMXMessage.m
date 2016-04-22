@@ -58,7 +58,7 @@ static int kATTACHMENTCONTEXT;
 
 + (instancetype)messageToChannel:(MMXChannel *)channel
                   messageContent:(NSDictionary <NSString *,NSString *>*)messageContent {
-   return [self messageToChannel:channel messageContent:messageContent pushConfigName:nil];
+    return [self messageToChannel:channel messageContent:messageContent pushConfigName:nil];
 }
 
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage

@@ -52,7 +52,7 @@ import MagnetMaxCore
     }
     
     public override class func attributeMappings() -> [NSObject : AnyObject]! {
-        return (super.attributeMappings() ?? [:]) + ["pollID" as NSString: "pollId"]
+        return (super.attributeMappings() ?? [:]) + ["pollID" as NSString: "pollId"] + ["optionID" as NSString: "optionId"]
     }
 }
 

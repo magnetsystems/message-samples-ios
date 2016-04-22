@@ -22,7 +22,7 @@
 @interface MMXMuteChannelPushRequest : MMModel
 
 
-@property (nonatomic, assign) NSDate *untilDate;
+@property (nonatomic, strong) NSDate *untilDate;
 
 @property (nonatomic, copy) NSString *channelId;
 

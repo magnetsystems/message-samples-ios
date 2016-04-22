@@ -63,13 +63,13 @@ public class PollMediaItem: JSQMediaItem {
     //MARK: Public Variables
     
     
-    public var buttonBorderColor = UIColor(red: 122/255.0, green: 202/255.0, blue: 229/255.0, alpha: 1.0)
+    public var buttonBorderColor = UIColor(red: 118/255.0, green: 186/255.0, blue: 255/255.0, alpha: 1.0)
     public var buttonBorderWidth: CGFloat = 2.0
     public var bottomConstraint: NSLayoutConstraint?
     public let buttonHeight: CGFloat = 44.0
-    public var darkColor = UIColor(red: 97/255.0, green: 191/255.0, blue: 229/255.0, alpha: 1.0)
+    public var darkColor = UIColor(red: 65/255.0, green: 116/255.0, blue: 168/255.0, alpha: 1.0)
     public let labelHeight: CGFloat = 25.0
-    public var lightColor = UIColor(red: 215/255.0, green: 239/255.0, blue: 249/255.0, alpha: 1.0)
+    public var lightColor = UIColor(red: 201/255.0, green: 228/255.0, blue: 255/255.0, alpha: 1.0)
     public private(set) var channel : MMXChannel? {
         didSet {
             ChannelManager.sharedInstance.removeChannelMessageObserver(self)
@@ -80,7 +80,7 @@ public class PollMediaItem: JSQMediaItem {
     }
     public var cornerRadius: CGFloat = 10.0
     public let padding: CGFloat = 10.0
-    public var viewBackgroundColor = UIColor(red: 58/255.0, green: 174/255.0, blue: 223/255.0, alpha: 1.0)
+    public var viewBackgroundColor = UIColor(red: 65/255.0, green: 116/255.0, blue: 168/255.0, alpha: 1.0)
     public var onUpdate: (() -> Void)?
     public var poll : MMXPoll?
     
@@ -164,7 +164,7 @@ public class PollMediaItem: JSQMediaItem {
     func didSelectButton(button: PollMediaButton) {
         if let option = button.pollOption, var options = self.poll?.myVotes, let poll = self.poll {
             if options.count == options.filter({$0 != option}).count {
-                if poll.multipleChoiceEnabled {
+                if poll.allowMultiChoice {
                     options.append(option)
                 } else {
                     options.removeAll()
@@ -282,7 +282,7 @@ public class PollMediaItem: JSQMediaItem {
             let label = MMRoundedLabel()
             label.text = "\(option.count)"
             label.textAlignment = .Center
-            if self.poll?.areResultsPublic == true || self.poll?.ownerID == MMUser.currentUser()?.userID && self.poll?.ownerID != nil {
+            if self.poll?.hideResultsFromOthers == false || (self.poll?.ownerID == MMUser.currentUser()?.userID && self.poll?.ownerID != nil) {
                 button.rightLabel = label
             }
             button.pollOption = option

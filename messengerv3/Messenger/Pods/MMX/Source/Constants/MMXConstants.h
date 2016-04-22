@@ -84,4 +84,9 @@ extern NSInteger const kMinPasswordLength;
 extern NSInteger const kMaxPasswordLength;
 extern NSUInteger const kMaxMessageSize;
 
+// Poll and Poll Answer configs
+extern NSString * const kQuestionKey;
+extern NSString * const kDefaultPollPushConfigNameKey;
+extern NSString * const kDefaultPollAnswerPushConfigNameKey;
+
 @end

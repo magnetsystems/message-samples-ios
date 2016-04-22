@@ -35,7 +35,7 @@
 - (MMXInternalMessageAdaptor *)asMMXMessage;
 
 - (XMPPIQ *)pubsubIQForAppID:(NSString *)appID
-				  currentJID:(XMPPJID *)currentJID
-					  itemID:(NSString *)itemID;
+                  currentJID:(XMPPJID *)currentJID
+                      itemID:(NSString *)itemID;
 
 @end
