@@ -20,6 +20,13 @@ import ChatKit
 
 class ContactsViewController: MMXContactsPickerController {
     
+    var channel: MMXChannel! {
+        didSet {
+            title = channel.name
+            updateMuteStatus(true)
+        }
+    }
+    
     var notifier : NavigationNotifier?
     override var barButtonCancel : UIBarButtonItem? {
         set {
@@ -35,5 +42,47 @@ class ContactsViewController: MMXContactsPickerController {
         self.datasource = ContactsViewControllerDatasource()
         self.view.tintColor = UIColor(red: 14.0/255.0, green: 122.0/255.0, blue: 254.0/255.0, alpha: 1.0)
         self.notifier = NavigationNotifier(viewController: self, exceptFor : nil)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.rightBarButtonItem?.enabled = true
+    }
+    
+    func updateMuteStatus(isFirstTime: Bool = false) {
+        if channel.isMuted {
+            
+            barButtonNext = UIBarButtonItem(image: UIImage(named:"speakerOff"), landscapeImagePhone: UIImage(named:"speakerOff"), style: .Plain, target: self, action: #selector(ContactsViewController.unMuteAction))
+        } else {
+            barButtonNext = UIBarButtonItem(image: UIImage(named:"speakerOn"), landscapeImagePhone: UIImage(named:"speakerOn"), style: .Plain, target: self, action: #selector(ContactsViewController.muteAction))
+        }
+        if !isFirstTime {
+            navigationItem.rightBarButtonItems = [barButtonNext!]
+        }
+    }
+    
+    // MARK: Mute/unmute actions
+    
+    func muteAction() {
+        let aYearFromNow = NSCalendar.currentCalendar().dateByAddingUnit(.Year, value: 1, toDate: NSDate(), options: .MatchNextTime)
+        barButtonNext?.enabled = false
+        channel.muteUntil(aYearFromNow, success: { [weak self] in
+            self?.barButtonNext?.enabled = true
+            self?.updateMuteStatus()
+        }, failure: { [weak self] error in
+            self?.barButtonNext?.enabled = true
+//            print(error.localizedDescription)
+        })
+    }
+    
+    func unMuteAction() {
+        barButtonNext?.enabled = false
+        channel.unMuteWithSuccess({ [weak self] in
+            self?.barButtonNext?.enabled = true
+            self?.updateMuteStatus()
+        }) { [weak self] error in
+            self?.barButtonNext?.enabled = true
+//            print(error.localizedDescription)
+        }
     }
 }

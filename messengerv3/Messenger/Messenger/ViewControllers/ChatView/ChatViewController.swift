@@ -31,12 +31,11 @@ class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
         
         if let currentUser = MMUser.currentUser() {
             let detailsViewController = ContactsViewController(ignoredUsers: [currentUser])
-            
-            detailsViewController.barButtonNext = nil
             let subDatasource = ChatViewDetails()
             detailsViewController.tableView.allowsSelection = false
             detailsViewController.canSearch = false
             detailsViewController.title = CKStrings.kStr_Subscribers
+            detailsViewController.channel = channel
             detailsViewController.delegate = self
             self.chatDetailsViewController = detailsViewController
             self.chatDetailsDataSource = subDatasource
