@@ -84,4 +84,9 @@ NSString * const kAddressUsernameKey = @"userId";
 NSString * const kAddressDeviceIDKey = @"devId";
 NSString * const kAddressDisplayNameKey = @"displayName";
 
+// Poll and Poll Answer configs
+NSString * const kQuestionKey = @"question";
+NSString * const kDefaultPollPushConfigNameKey = @"DefaultPollConfig";
+NSString * const kDefaultPollAnswerPushConfigNameKey = @"DefaultPollAnswerConfig";
+
 @end

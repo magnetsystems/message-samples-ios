@@ -152,13 +152,13 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
             let mappedMessages : [Message] = mmxMessages.map({
                 let message = Message(message: $0)
                 if message.isMediaMessage() {
-                    message.mediaCompletionBlock = { [weak self, weak message] () in
-                        if let weakSelf = self, let weakMessage = message {
-                            let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
-                            invailidationContext.invalidateFlowLayoutMessagesCache = true
-                            weakSelf.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
-                            weakSelf.collectionView.reloadData()
-                        }
+                    message.mediaCompletionBlock = {
+                        let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
+                        invailidationContext.invalidateFlowLayoutMessagesCache = true
+                        self.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+                            self.collectionView.reloadData()
+                        })
                     }
                 }
                 return message
@@ -307,7 +307,9 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
                     let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
                     invailidationContext.invalidateFlowLayoutMessagesCache = true
                     self?.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
-                    self?.collectionView.reloadData()
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+                        self?.collectionView.reloadData()
+                    })
                 }
             }
             if mmxMessage.contentType != MMXPollAnswer.contentType {
@@ -363,7 +365,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
                 multipleSelection = sw.on
             }
             if cleanOptions.count > 0 {
-                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, areResultsPublic: true, endDate: nil, extras:  nil, multipleChoiceEnabled: multipleSelection)
+                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, hideResultsFromOthers: false, endDate: nil, extras:  nil, allowMultiChoice: multipleSelection)
                 poll.publish(channel: chat, success: { poll in
                     print("Sent Poll")
                 }) { (error) in

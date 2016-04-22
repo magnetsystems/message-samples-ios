@@ -50,6 +50,10 @@ import MagnetMaxCore
     required public init!(coder: NSCoder!) {
         super.init(coder: coder)
     }
+    
+    public override class func attributeMappings() -> [NSObject : AnyObject]! {
+        return (super.attributeMappings() ?? [:]) + ["pollID" as NSString: "pollId"] + ["optionID" as NSString: "optionId"]
+    }
 }
 
 // MARK: MMXPollOption Equality

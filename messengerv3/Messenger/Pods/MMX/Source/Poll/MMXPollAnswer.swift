@@ -35,6 +35,7 @@ func + <K, V> (left: Dictionary<K, V>, right: Dictionary<K, V>) -> Dictionary<K,
     //Poll Options
     public var previousSelection: [MMXPollOption]?
     public var currentSelection = [MMXPollOption]()
+    public var userID: String = ""
     
     public override init!() {
         super.init()
@@ -60,8 +61,12 @@ func + <K, V> (left: Dictionary<K, V>, right: Dictionary<K, V>) -> Dictionary<K,
     
     //MARK: Overrides
     
+    public override class func attributeMappings() -> [NSObject : AnyObject]! {
+        return (super.attributeMappings() ?? [:]) + ["pollID" as NSString: "pollId", "userID" as NSString: "userId"]
+    }
+    
     public override class func listAttributeTypes() -> [NSObject : AnyObject]! {
-        return super.listAttributeTypes() ?? [:] + ["currentSelection" as NSString: MMXPollOption.self, "previousSelection" as NSString: MMXPollOption.self]
+        return (super.listAttributeTypes() ?? [:]) + ["currentSelection" as NSString: MMXPollOption.self, "previousSelection" as NSString: MMXPollOption.self]
     }
     
 }
