@@ -176,8 +176,15 @@ public class PollMediaItem: JSQMediaItem {
             self.cachedView?.userInteractionEnabled = false
             poll.choose(options: options, success: { (message) in
                 button.enabled = true
-                self.cachedView?.userInteractionEnabled = true
                 self.updateButtons()
+                if poll.ownerID != nil && poll.ownerID == MMUser.currentUser()?.userID && poll.hideResultsFromOthers {
+                    poll.refreshResults(completion: { poll in
+                        self.updatePoll()
+                        self.cachedView?.userInteractionEnabled = true
+                    })
+                } else {
+                    self.cachedView?.userInteractionEnabled = true
+                }
                 }, failure: { (error) in
                     button.enabled = true
                     self.cachedView?.userInteractionEnabled = true
