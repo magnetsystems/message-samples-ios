@@ -150,7 +150,7 @@ extension Array where Element : Hashable {
         }
         
         var answers = [MMXSurveyAnswer]()
-        var previousSelection = myVotes
+        let previousSelection = myVotes
         
         for opt in option {
             let answer = MMXSurveyAnswer()
@@ -165,6 +165,7 @@ extension Array where Element : Hashable {
         let call = MMXSurveyService().submitSurveyAnswers(self.pollID, body: surveyAnswerRequest, success: {
             let msg = MMXMessage(toChannel: channel, messageContent: [kQuestionKey: self.question], pushConfigName: kDefaultPollAnswerPushConfigNameKey)
             let result = MMXPollAnswer(self, selectedOptions: option, previousSelection: previousSelection)
+            result.userID = MMUser.currentUser()?.userID ?? ""
             msg.payload = result
             self.myVotes = option
             if self.hideResultsFromOthers {
@@ -197,6 +198,9 @@ extension Array where Element : Hashable {
         
         for option in self.options.union(answer.currentSelection) {
             option.count += 1
+        }
+        if answer.userID == MMUser.currentUser()?.userID {
+            self.myVotes = answer.currentSelection
         }
     }
     
