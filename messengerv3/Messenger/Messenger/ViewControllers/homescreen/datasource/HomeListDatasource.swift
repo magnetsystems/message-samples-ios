@@ -113,6 +113,18 @@ class HomeListDatasource : DefaultChatListControllerDatasource {
         return nil
     }
     
+    func mmxListDidCreateCell(cell : UITableViewCell) -> Void {
+        if let listCell = cell as? ChatListCell {
+            if let channel = listCell.detailResponse.channel {
+                if (channel.isMuted) {
+                   listCell.ivRightIcon?.image = UIImage(named: "speakerOff")
+                } else {
+                   listCell.ivRightIcon?.image = nil
+                }
+            }
+        }
+    }
+    
     override func mmxControllerPrefersSoftResets() -> Bool {
         return true
     }
