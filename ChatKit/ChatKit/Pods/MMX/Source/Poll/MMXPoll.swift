@@ -150,7 +150,7 @@ extension Array where Element : Hashable {
         }
         
         var answers = [MMXSurveyAnswer]()
-        var previousSelection = myVotes
+        let previousSelection = myVotes
         
         for opt in option {
             let answer = MMXSurveyAnswer()
@@ -163,8 +163,9 @@ extension Array where Element : Hashable {
         let surveyAnswerRequest = MMXSurveyAnswerRequest()
         surveyAnswerRequest.answers = answers
         let call = MMXSurveyService().submitSurveyAnswers(self.pollID, body: surveyAnswerRequest, success: {
-            let msg = MMXMessage(toChannel: channel, messageContent: [:])
+            let msg = MMXMessage(toChannel: channel, messageContent: [kQuestionKey: self.question], pushConfigName: kDefaultPollAnswerPushConfigNameKey)
             let result = MMXPollAnswer(self, selectedOptions: option, previousSelection: previousSelection)
+            result.userID = MMUser.currentUser()?.userID ?? ""
             msg.payload = result
             self.myVotes = option
             if self.hideResultsFromOthers {
@@ -198,6 +199,9 @@ extension Array where Element : Hashable {
         for option in self.options.union(answer.currentSelection) {
             option.count += 1
         }
+        if answer.userID == MMUser.currentUser()?.userID {
+            self.myVotes = answer.currentSelection
+        }
     }
     
     public func refreshResults(completion completion:((poll : MMXPoll?) -> Void)) {
@@ -225,7 +229,7 @@ extension Array where Element : Hashable {
     //MARK: Public Static Methods
     //MARK: Publish
     public func publish(channel channel: MMXChannel,success: ((MMXMessage) -> Void)?, failure: ((error: NSError) -> Void)?) {
-        let msg = MMXMessage(toChannel: channel, messageContent: [:])
+        let msg = MMXMessage(toChannel: channel, messageContent: [kQuestionKey: question], pushConfigName: kDefaultPollPushConfigNameKey)
         publish(message: msg, success: success, failure: failure)
     }
     

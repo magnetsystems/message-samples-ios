@@ -128,7 +128,7 @@ public class PollMediaItem: JSQMediaItem {
     
     func updateButtons() {
         for button in self.buttons {
-      
+            button.enabled = self.poll?.allowMultiChoice == true || self.poll?.myVotes == nil || self.poll!.myVotes!.count == 0
             if let myOptions = self.poll?.myVotes?.filter({$0 == button.pollOption}) where myOptions.count > 0 {
                 button.rightLabel?.backgroundColor = darkColor
                 button.rightLabel?.textColor = lightColor
@@ -173,11 +173,13 @@ public class PollMediaItem: JSQMediaItem {
             } else {
                 options = options.filter({$0 != option})
             }
-            
+            button.enabled = false
             poll.choose(options: options, success: { (message) in
-                
+                button.enabled = true
+                self.updateButtons()
                 }, failure: { (error) in
-                    
+                    button.enabled = true
+                    self.updateButtons()
             })
         }
     }
