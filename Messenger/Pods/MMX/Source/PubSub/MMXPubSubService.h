@@ -24,6 +24,7 @@
 @class MMXAddSubscribersResponse;
 @class MMXRemoveSubscribersResponse;
 @class MMXChannel;
+@class MMXMuteChannelPushRequest;
 
 @protocol MMXPubSubServiceProtocol <NSObject>
 
@@ -86,6 +87,29 @@
                                     body:(MMXChannel *)body
                                  success:(void (^)(MMXRemoveSubscribersResponse *response))success
                                  failure:(void (^)(NSError *error))failure;
+
+/**
+ 
+ POST /com.magnet.server/channel/{channelId}/push/mute
+ @param channelId style:PATH
+ @param body style:BODY
+ @return A 'MMCall' object.
+ */
+- (MMCall *)muteChannelPush:(NSString *)channelId
+                       body:(MMXMuteChannelPushRequest *)body
+                    success:(void (^)())success
+                    failure:(void (^)(NSError *error))failure;
+
+/**
+ 
+ POST /com.magnet.server/channel/{channelId}/push/unmute
+ @param channelId style:PATH
+ @return A 'MMCall' object.
+ */
+- (MMCall *)unmuteChannelPush:(NSString *)channelId
+                      success:(void (^)())success
+                      failure:(void (^)(NSError *error))failure;
+
 
 @end
 

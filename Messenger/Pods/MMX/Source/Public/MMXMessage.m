@@ -30,6 +30,7 @@
 #import "MMXConstants.h"
 #import "MMUser+Addressable.h"
 #import  "MMXNotificationConstants.h"
+#import <MMX/MMX-Swift.h>
 
 @import MagnetMaxCore;
 
@@ -38,32 +39,40 @@
 static int kATTACHMENTCONTEXT;
 
 + (instancetype)messageToRecipients:(NSSet <MMUser *>*)recipients
-					 messageContent:(NSDictionary <NSString *,NSString *>*)messageContent {
-	MMXMessage *msg = [MMXMessage new];
-	msg.recipients = recipients;
-	msg.messageContent = messageContent;
-	return msg;
+                     messageContent:(NSDictionary <NSString *,NSString *>*)messageContent {
+    MMXMessage *msg = [MMXMessage new];
+    msg.recipients = recipients;
+    msg.messageContent = messageContent;
+    return msg;
 };
 
 + (instancetype)messageToChannel:(MMXChannel *)channel
-				  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent {
-	MMXMessage *msg = [MMXMessage new];
-	msg.channel = channel;
-	msg.messageContent = messageContent;
-	return msg;
+                  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent
+                  pushConfigName:(nullable NSString *)pushConfigName {
+    MMXMessage *msg = [MMXMessage new];
+    msg.channel = channel;
+    msg.messageContent = messageContent;
+    msg.pushConfigName = pushConfigName;
+    return msg;
+}
+
++ (instancetype)messageToChannel:(MMXChannel *)channel
+                  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent {
+    return [self messageToChannel:channel messageContent:messageContent pushConfigName:nil];
 }
 
 + (instancetype)messageFromPubSubMessage:(MMXPubSubMessage *)pubSubMessage
-								  sender:(MMUser *)sender {
-	MMXMessage *msg = [MMXMessage new];
-	msg.channel = [MMXChannel channelWithName:pubSubMessage.topic.topicName summary:pubSubMessage.topic.topicDescription isPublic:pubSubMessage.topic.inUserNameSpace publishPermissions:pubSubMessage.topic.publishPermissions];
-	if (pubSubMessage.topic.inUserNameSpace) {
-		msg.channel.isPublic = NO;
-		msg.channel.ownerUserID = pubSubMessage.topic.nameSpace;
-	} else {
-		msg.channel.isPublic = YES;
-	}
-	msg.sender = sender;
+                                  sender:(MMUser *)sender {
+    MMXMessage *msg = [MMXMessage new];
+    msg.channel = [MMXChannel channelWithName:pubSubMessage.topic.topicName summary:pubSubMessage.topic.topicDescription isPublic:pubSubMessage.topic.inUserNameSpace publishPermissions:pubSubMessage.topic.publishPermissions];
+    if (pubSubMessage.topic.inUserNameSpace) {
+        msg.channel.isPublic = NO;
+        msg.channel.ownerUserID = pubSubMessage.topic.nameSpace;
+    } else {
+        msg.channel.isPublic = YES;
+    }
+    msg.senderDeviceID = pubSubMessage.senderDeviceID;
+    msg.sender = sender;
     
     // Handle attachments
     NSMutableDictionary *metaData = pubSubMessage.metaData.mutableCopy;
@@ -78,6 +87,17 @@ static int kATTACHMENTCONTEXT;
         }
         [metaData removeObjectForKey:@"_attachments"];
     }
+    
+    MMModel<MMXPayload>*payload;
+    if (pubSubMessage.messageContent) {
+        NSData *data = [pubSubMessage.messageContent dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *payloadContent = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+        Class contentClass = [MMXPayloadRegister classForContentType:pubSubMessage.mType];
+        if (payloadContent && contentClass) {
+            payload = [MTLJSONAdapter modelOfClass:contentClass fromJSONDictionary:payloadContent error:nil];
+        }
+    }
+    
     pubSubMessage.metaData = metaData;
     
     if (receivedAttachments.count > 0) {
@@ -88,11 +108,12 @@ static int kATTACHMENTCONTEXT;
         msg.attachments = attachments;
     }
     
-	msg.messageID = pubSubMessage.messageID;
-	msg.messageContent = pubSubMessage.metaData;
-	msg.timestamp = pubSubMessage.timestamp;
-	msg.messageType = MMXMessageTypeChannel;
-	return msg;
+    msg.messageID = pubSubMessage.messageID;
+    msg.messageContent = pubSubMessage.metaData;
+    msg.timestamp = pubSubMessage.timestamp;
+    msg.messageType = MMXMessageTypeChannel;
+    msg.payload = payload;
+    return msg;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
@@ -132,11 +153,42 @@ static int kATTACHMENTCONTEXT;
         }
         return nil;
     }
+    NSString *mType = nil;
     if (self.channel) {
         NSString *messageID = [[MMXClient sharedClient] generateMessageID];
-        MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self.channel asTopic] content:nil metaData:self.messageContent];
+        NSString *payload;
+        if (self.payload) {
+            mType = self.contentType;
+            NSError *error;
+            NSMutableDictionary *payloadDictionary = [MTLJSONAdapter JSONDictionaryFromModel:self.payload error:&error].mutableCopy;
+            if (error) {
+                NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"Failed to parse MMModel." code:401];
+                if (failure) {
+                    failure(error);
+                }
+                return nil;
+            }
+            
+            error = nil;
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:payloadDictionary options:0 error:&error];
+            if (error) {
+                NSError * error = [MMXClient errorWithTitle:@"Not Valid" message:@"Failed to parse JSON." code:401];
+                if (failure) {
+                    failure(error);
+                }
+                return nil;
+            }
+            
+            payload = [[NSString alloc] initWithBytes:[jsonData bytes] length:[jsonData length] encoding:NSUTF8StringEncoding];
+            NSMutableDictionary *dict = self.messageContent.mutableCopy;
+            self.messageContent = dict.copy;
+        }
+        
+        MMXPubSubMessage *msg = [MMXPubSubMessage pubSubMessageToTopic:[self.channel asTopic] content:payload metaData:self.messageContent];
+        msg.mType = mType;
         msg.messageID = messageID;
         self.messageID = messageID;
+        msg.pushConfigName = self.pushConfigName;
         if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
             if (failure) {
                 failure([MMXMessage notNotLoggedInAndNoUserError]);
@@ -219,7 +271,7 @@ static int kATTACHMENTCONTEXT;
                 failure(error);
             }
         } else {
-
+            
             // Handle attachments
             if (self.mutableAttachments.count > 0) {
                 NSDictionary *metaData = @{
@@ -296,59 +348,59 @@ static int kATTACHMENTCONTEXT;
 }
 
 - (NSString *)replyWithContent:(NSDictionary <NSString *,NSString *>*)content
-					   success:(void (^)(NSSet <NSString *>*invalidUsers))success
-					   failure:(void (^)(NSError *))failure {
-	NSSet *recipients = [NSSet setWithObject:self.sender];
-	NSError *error;
-	[MMXMessage validateMessageRecipients:recipients content:self.messageContent error:&error];
-	if (error) {
-		if (failure) {
-			failure(error);
-		}
-		return nil;
-	}
-	
-	MMXMessage *msg = [MMXMessage messageToRecipients:recipients messageContent:content];
-	NSString * messageID = [msg sendWithSuccess:^(NSSet *invalidUsers) {
-		if (success) {
-			success(invalidUsers);
-		}
-	} failure:^(NSError *error) {
-		if (failure) {
-			failure(error);
-		}
-	}];
-	return messageID;
+                       success:(void (^)(NSSet <NSString *>*invalidUsers))success
+                       failure:(void (^)(NSError *))failure {
+    NSSet *recipients = [NSSet setWithObject:self.sender];
+    NSError *error;
+    [MMXMessage validateMessageRecipients:recipients content:self.messageContent error:&error];
+    if (error) {
+        if (failure) {
+            failure(error);
+        }
+        return nil;
+    }
+    
+    MMXMessage *msg = [MMXMessage messageToRecipients:recipients messageContent:content];
+    NSString * messageID = [msg sendWithSuccess:^(NSSet *invalidUsers) {
+        if (success) {
+            success(invalidUsers);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+    return messageID;
 }
 
 - (NSString *)replyAllWithContent:(NSDictionary <NSString *,NSString *>*)content
-						  success:(void (^)(NSSet <NSString *>*invalidUsers))success
-						  failure:(void (^)(NSError *))failure {
-	NSMutableSet *newSet = [NSMutableSet setWithSet:self.recipients];
-	[newSet addObject:self.sender];
-	MMUser *currentUser = [MMUser currentUser];
-	if (currentUser) {
-		[newSet removeObject:currentUser];
-	}
-	NSError *error;
-	[MMXMessage validateMessageRecipients:newSet content:self.messageContent error:&error];
-	if (error) {
-		if (failure) {
-			failure(error);
-		}
-		return nil;
-	}
-	MMXMessage *msg = [MMXMessage messageToRecipients:newSet messageContent:content];
-	NSString * messageID = [msg sendWithSuccess:^(NSSet *invalidUsers) {
-		if (success) {
-			success(invalidUsers);
-		}
-	} failure:^(NSError *error) {
-		if (failure) {
-			failure(error);
-		}
-	}];
-	return messageID;
+                          success:(void (^)(NSSet <NSString *>*invalidUsers))success
+                          failure:(void (^)(NSError *))failure {
+    NSMutableSet *newSet = [NSMutableSet setWithSet:self.recipients];
+    [newSet addObject:self.sender];
+    MMUser *currentUser = [MMUser currentUser];
+    if (currentUser) {
+        [newSet removeObject:currentUser];
+    }
+    NSError *error;
+    [MMXMessage validateMessageRecipients:newSet content:self.messageContent error:&error];
+    if (error) {
+        if (failure) {
+            failure(error);
+        }
+        return nil;
+    }
+    MMXMessage *msg = [MMXMessage messageToRecipients:newSet messageContent:content];
+    NSString * messageID = [msg sendWithSuccess:^(NSSet *invalidUsers) {
+        if (success) {
+            success(invalidUsers);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+    return messageID;
 }
 
 - (void)addAttachment:(MMAttachment *)attachment {
@@ -365,46 +417,46 @@ static int kATTACHMENTCONTEXT;
 #pragma mark - Errors
 
 + (NSError *)notNotLoggedInAndNoUserError {
-	NSError * error = [MMXClient errorWithTitle:@"Forbidden" message:@"You are not logged in and there is no current user." code:403];
-	return error;
+    NSError * error = [MMXClient errorWithTitle:@"Forbidden" message:@"You are not logged in and there is no current user." code:403];
+    return error;
 }
 
 
 #pragma mark - Helpers
 - (NSArray *)replyAllArray {
-	NSMutableArray *recipients = [NSMutableArray arrayWithCapacity:self.recipients.count + 1];
-	[recipients addObject:self.sender];
-	[recipients addObjectsFromArray:[self.recipients allObjects]];
-	return recipients.copy;
+    NSMutableArray *recipients = [NSMutableArray arrayWithCapacity:self.recipients.count + 1];
+    [recipients addObject:self.sender];
+    [recipients addObjectsFromArray:[self.recipients allObjects]];
+    return recipients.copy;
 }
 
 - (void)sendDeliveryConfirmation {
-	[[MMXClient sharedClient] sendDeliveryConfirmationForAddress:self.sender.address messageID:self.messageID toDeviceID:self.senderDeviceID];
+    [[MMXClient sharedClient] sendDeliveryConfirmationForAddress:self.sender.address messageID:self.messageID toDeviceID:self.senderDeviceID];
 }
 
 + (BOOL)validateMessageRecipients:(NSSet *)recipients content:(NSDictionary *)content error:(NSError **)error {
-	if (recipients == nil || recipients.count < 1) {
-		*error = [MMXClient errorWithTitle:@"Recipients not set" message:@"Recipients cannot be nil" code:401];
-		return NO;
-	} else {
-		for (MMUser *user in recipients) {
-			if (user.userID == nil || [user.userID isEqualToString:@""]) {
-				*error = [MMXClient errorWithTitle:@"Invalid Recipients" message:@"One or more recipients are not valid because their userID is nil" code:401];
-				return NO;
-			}
-		}
-
-	}
-	
-	if (![MMXMessageUtils isValidMetaData:content]) {
-		*error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
-		return NO;
-	}
-	if ([MMXMessageUtils sizeOfMessageContent:nil metaData:content] > kMaxMessageSize) {
-		*error = [MMXClient errorWithTitle:@"Message too large" message:@"Message content exceeds the max size of 200KB" code:401];
-		return NO;
-	}
-	return YES;
+    if (recipients == nil || recipients.count < 1) {
+        *error = [MMXClient errorWithTitle:@"Recipients not set" message:@"Recipients cannot be nil" code:401];
+        return NO;
+    } else {
+        for (MMUser *user in recipients) {
+            if (user.userID == nil || [user.userID isEqualToString:@""]) {
+                *error = [MMXClient errorWithTitle:@"Invalid Recipients" message:@"One or more recipients are not valid because their userID is nil" code:401];
+                return NO;
+            }
+        }
+        
+    }
+    
+    if (![MMXMessageUtils isValidMetaData:content]) {
+        *error = [MMXClient errorWithTitle:@"Not Valid" message:@"All values must be strings." code:401];
+        return NO;
+    }
+    if ([MMXMessageUtils sizeOfMessageContent:nil metaData:content] > kMaxMessageSize) {
+        *error = [MMXClient errorWithTitle:@"Message too large" message:@"Message content exceeds the max size of 200KB" code:401];
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark - Equality
@@ -417,7 +469,12 @@ static int kATTACHMENTCONTEXT;
     return [self.messageID hash];
 }
 
+
 #pragma mark - Overriden getters
+
+- (NSString *)contentType {
+    return [self.payload.class contentType];
+}
 
 - (NSMutableArray *)mutableAttachments {
     if (!_mutableAttachments) {

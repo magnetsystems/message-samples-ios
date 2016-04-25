@@ -61,6 +61,7 @@ import MMX
     */
     static public func configure(configuration: MMConfiguration) {
         registerObservers()
+        registerMMXPayloadClasses()
         MMCoreConfiguration.currentConfiguration = configuration
         let client = MMClient()
         client.timeoutInterval = 5
@@ -91,6 +92,12 @@ import MMX
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenReceived:", name: MMServiceAdapterDidReceiveHATTokenNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenInvalidated:", name: MMServiceAdapterDidInvalidateHATTokenNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userTokenExpired:", name: MMServiceAdapterDidReceiveAuthenticationChallengeNotification, object: nil)
+    }
+    
+    /// Registers MMXPayloads for MMXPayloads in MMXMessage.
+    static private func registerMMXPayloadClasses() {
+        MMXPayloadRegister.registerClassForPayloads(MMXPollIdentifier.self)
+        MMXPayloadRegister.registerClassForPayloads(MMXPollAnswer.self)
     }
     
     /**
