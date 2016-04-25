@@ -47,7 +47,7 @@ public class UtilsImageCache : UtilsCache {
     //Mark: Public variables
     
     
-    public var maxImageCacheSize : Int = 4194304 //2^22 = 4mb
+    public var maxImageCacheSize : Int = 4194304
     
     
     public static var sharedCache : UtilsImageCache = {
@@ -61,7 +61,7 @@ public class UtilsImageCache : UtilsCache {
         let data = UIImagePNGRepresentation(image)
         var size = 0
         if let len = data?.length {
-            size = len / 8
+            size = len
         }
         
         self.setObject(image, forURL: forURL, cost:size)
@@ -110,7 +110,7 @@ public class Utils: NSObject {
     
     
     public static func loadImageWithUrl(url : NSURL, toImageView : UIImageView, placeholderImage:UIImage?, aspectSize : CGSize?) {
-        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, defaultImage: placeholderImage)
+        loadImageWithUrl(url, toImageView: toImageView, placeholderImage: placeholderImage, defaultImage: placeholderImage, aspectSize : aspectSize)
     }
     
     public static func loadImageWithUrl(url : NSURL, toImageView: UIImageView, placeholderImage :UIImage?,  defaultImage : UIImage?, aspectSize : CGSize?) {

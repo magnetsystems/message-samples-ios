@@ -37,7 +37,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
     
     public func createChat(from subscribers : [MMUser]) {
         let id = NSUUID().UUIDString
-    
+        
         MMXChannel.createWithName(id, summary: id, isPublic: false, publishPermissions: .Anyone, subscribers: Set(subscribers), success: { (channel) -> Void in
             self.controller?.reloadData()
             DDLogVerbose("[Channel Created] - (\(channel.name))")
@@ -91,7 +91,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
                 return
             }
             
-           
+            
             
             var offsetChannels : [MMXChannel] = []
             if offset < channels.count {
@@ -134,7 +134,7 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
                 tmpUser.userName = userProfile.displayName
                 tmpUser.userID = userProfile.userId
                 let defaultImage = Utils.noAvatarImageForUser(fName, lastName: lName)
-                Utils.loadUserAvatar(tmpUser, toImageView: imageView, placeholderImage: defaultImage)
+                Utils.loadUserAvatar(tmpUser, toImageView: imageView, placeholderImage: defaultImage, aspectSize: CGSize(width: 50, height: 50))
             }
         }
     }
