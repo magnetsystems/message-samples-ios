@@ -58,8 +58,8 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
         super.viewWillAppear(animated)
         
         if Utils.isMagnetEmployee() {
-        AskMagnetCounter.sharedCounter.notifyForNewAskMessages = true
-        AskMagnetCounter.sharedCounter.delegate = self
+            AskMagnetCounter.sharedCounter.notifyForNewAskMessages = true
+            AskMagnetCounter.sharedCounter.delegate = self
         } else {
             AskMagnetCounter.sharedCounter.notifyForNewAskMessages = false
             AskMagnetCounter.sharedCounter.delegate = nil
@@ -104,8 +104,19 @@ class ViewController: MMXChatListViewController, AskMagnetCounterDelegate {
     override func presentChatViewController(chatViewController: MMXChatViewController, users: [MMUser]) {
         
         guard let channel = chatViewController.channel else {
-            super.presentChatViewController(chatViewController, users: users)
-            
+            let customChatViewController = ChatViewController(recipients : users)
+            if users.count > 0 {
+                MMXChannel.findChannelsBySubscribers(users, matchType: .EXACT_MATCH, success: { channels in
+                    if channels.count == 1 {
+                        customChatViewController.chat = channels.first
+                    }
+                    super.presentChatViewController(customChatViewController, users: users)
+                    }, failure: { error in
+                        super.presentChatViewController(customChatViewController, users: users)
+                })
+            } else {
+                super.presentChatViewController(customChatViewController, users: users)
+            }
             return
         }
         
