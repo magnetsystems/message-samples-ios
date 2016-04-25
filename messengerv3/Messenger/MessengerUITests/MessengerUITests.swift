@@ -495,10 +495,12 @@ class MessengerUITests: XCTestCase {
         XCTAssert(app.navigationBars["Ask Magnet"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).exists)
         app.navigationBars["Ask Magnet"].buttons["Details"].tap()
         self.delay()
-        XCTAssertEqual(app.navigationBars["In Group"].staticTexts["In Group"].label, "In Group")
-        XCTAssert(app.tables.otherElements.buttons["Add Contacts +"].exists)
         
-        app.navigationBars["In Group"].buttons["Back"].tap()
+        XCTAssertEqual(app.navigationBars["askMagnet"].staticTexts["askMagnet"].label, "askMagnet")
+        XCTAssert(app.tables.otherElements.buttons["Mute Push Notifications"].exists)
+        XCTAssert(app.tables.otherElements.buttons["Add Contacts +"].exists)
+
+        app.navigationBars["askMagnet"].buttons["Ask Magnet"].tap()
         app.navigationBars["Ask Magnet"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
         self.delay()
         XCTAssertFalse(app.navigationBars["Ask Magnet"].buttons["Details"].exists)
