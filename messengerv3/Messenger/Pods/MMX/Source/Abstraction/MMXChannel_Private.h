@@ -33,6 +33,7 @@
 @property (nonatomic, assign) BOOL privateChannel;
 @property (nonatomic, strong) MMXPubSubService *pubSubService;
 @property (nonatomic, readwrite) BOOL isMuted;
+@property (nonatomic, readwrite) NSDate *mutedUntil;
 /**
  * The push config name. The push config can be defined on the server and controls behavior like push notification content, whether to send a push notification if the recipient is not online, etc
  */

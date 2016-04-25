@@ -90,16 +90,16 @@ class ChatViewDetails: SubscribersDatasource {
     
     override func mmxTableViewFooter(index : Int) -> UIView {
         if index == 0 {
-            return super.mmxTableViewFooter(index)
+            let button = UIButton(type: .Custom)
+            button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+            button.setTitle("Mute", forState: .Normal)
+            button.titleLabel?.textAlignment = .Center
+            button.addTarget(self, action: #selector(ChatViewDetails.handleMute(_:)), forControlEvents: .TouchUpInside)
+            self.muteButton = button
+            updateMuteStatus()
+            return button
         }
-        let button = UIButton(type: .Custom)
-        button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
-        button.setTitle("Mute", forState: .Normal)
-        button.titleLabel?.textAlignment = .Center
-        button.addTarget(self, action: #selector(ChatViewDetails.handleMute(_:)), forControlEvents: .TouchUpInside)
-        self.muteButton = button
-        updateMuteStatus()
-        return button
+        return super.mmxTableViewFooter(index)
     }
     
     override func mmxControllerLoadMore(searchText: String?, offset: Int) {

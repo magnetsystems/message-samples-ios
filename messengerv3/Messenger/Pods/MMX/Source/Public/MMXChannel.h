@@ -89,6 +89,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) BOOL isMuted;
 
+/**
+ * If the channel is muted (isMuted = YES), until what date is the channel muted?
+ */
+@property (nonatomic, readonly) NSDate *mutedUntil;
 
 /**
  *  Method used to get existing channels.

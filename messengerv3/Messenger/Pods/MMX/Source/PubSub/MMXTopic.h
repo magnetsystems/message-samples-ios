@@ -64,6 +64,11 @@
 @property (nonatomic, assign) BOOL isMuted;
 
 /**
+ * If the topic is muted (isMuted = YES), until what date is the topic muted?
+ */
+@property (nonatomic, strong) NSDate *mutedUntil;
+
+/**
  *  Create a new topic.
  *
  *  @param name - The name of the new topic.
