@@ -34,8 +34,8 @@ class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
             let subDatasource = ChatViewDetails()
             detailsViewController.tableView.allowsSelection = false
             detailsViewController.canSearch = false
+            detailsViewController.barButtonNext = nil
             detailsViewController.title = CKStrings.kStr_Subscribers
-            detailsViewController.channel = channel
             detailsViewController.delegate = self
             self.chatDetailsViewController = detailsViewController
             self.chatDetailsDataSource = subDatasource

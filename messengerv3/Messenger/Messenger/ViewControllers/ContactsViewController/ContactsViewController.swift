@@ -20,12 +20,6 @@ import ChatKit
 
 class ContactsViewController: MMXContactsPickerController {
     
-    var channel: MMXChannel! {
-        didSet {
-            title = channel.name
-        }
-    }
-    
     var notifier : NavigationNotifier?
     override var barButtonCancel : UIBarButtonItem? {
         set {
@@ -41,10 +35,5 @@ class ContactsViewController: MMXContactsPickerController {
         self.datasource = ContactsViewControllerDatasource()
         self.view.tintColor = UIColor(red: 14.0/255.0, green: 122.0/255.0, blue: 254.0/255.0, alpha: 1.0)
         self.notifier = NavigationNotifier(viewController: self, exceptFor : nil)
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationItem.rightBarButtonItem?.enabled = true
     }
 }
