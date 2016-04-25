@@ -47,5 +47,5 @@
 			 publishPermissions:(MMXPublishPermissions)publishPermissions;
 
 + (NSArray *)channelsFromTopics:(NSArray *)topics summaries:(NSArray *)summaries subscriptions:(NSArray *)subscriptions;
-+ (void)channelForID:(NSString *)channelID  success:(nullable void (^)(MMXChannel *channel))success failure:(nullable void (^)(NSError *error))failure;
++ (void)channelForID:(NSString *)channelID  success:(void (^)(MMXChannel *channel))success failure:(void (^)(NSError *error))failure;
 @end
