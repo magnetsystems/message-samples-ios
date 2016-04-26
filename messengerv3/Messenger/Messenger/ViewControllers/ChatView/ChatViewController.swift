@@ -20,6 +20,8 @@ import ChatKit
 
 class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -31,10 +33,11 @@ class ChatViewController: MMXChatViewController, ContactsControllerDelegate {
         
         if let currentUser = MMUser.currentUser() {
             let detailsViewController = ContactsViewController(ignoredUsers: [currentUser])
+            
+            detailsViewController.barButtonNext = nil
             let subDatasource = ChatViewDetails()
             detailsViewController.tableView.allowsSelection = false
             detailsViewController.canSearch = false
-            detailsViewController.barButtonNext = nil
             detailsViewController.title = CKStrings.kStr_Subscribers
             detailsViewController.delegate = self
             self.chatDetailsViewController = detailsViewController

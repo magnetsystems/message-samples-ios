@@ -20,30 +20,20 @@
 @class MMXSurvey;
 @class MMXSurveyAnswer;
 @class MMXSurveyResults;
-@class MMXSurveyResponse;
-@class MMXSurveyAnswerRequest;
+
 
 @protocol MMXSurveyServiceProtocol <NSObject>
 
 @optional
 /**
  
- GET /com.magnet.server/surveys/survey/{surveyId}/poll/results
- @param surveyId style:PATH
- @return A 'MMCall' object.
- */
-- (MMCall *)getResults:(NSString *)surveyId
-               success:(void (^)(MMXSurveyResults *response))success
-               failure:(void (^)(NSError *error))failure;
-/**
- 
- PUT /com.magnet.server/surveys/answers/{surveyId}
+ POST /com.magnet.server/surveys/answers/{surveyId}
  @param surveyId style:PATH
  @param body style:BODY
  @return A 'MMCall' object.
  */
 - (MMCall *)submitSurveyAnswers:(NSString *)surveyId
-                           body:(MMXSurveyAnswerRequest *)body
+                           body:(MMXSurveyAnswer *)answers
                         success:(void (^)())success
                         failure:(void (^)(NSError *error))failure;
 /**
@@ -53,8 +43,17 @@
  @return A 'MMCall' object.
  */
 - (MMCall *)getSurveyAnswers:(NSString *)surveyId
-                     success:(void (^)(NSArray<MMXSurveyResponse *>*response))success
+                     success:(void (^)(NSArray *response))success
                      failure:(void (^)(NSError *error))failure;
+/**
+ 
+ GET /com.magnet.server/surveys/survey/{surveyId}/poll/results
+ @param surveyId style:PATH
+ @return A 'MMCall' object.
+ */
+- (MMCall *)getResults:(NSString *)surveyId
+               success:(void (^)(MMXSurveyResults *response))success
+               failure:(void (^)(NSError *error))failure;
 /**
  
  PUT /com.magnet.server/surveys/survey/{surveyId}

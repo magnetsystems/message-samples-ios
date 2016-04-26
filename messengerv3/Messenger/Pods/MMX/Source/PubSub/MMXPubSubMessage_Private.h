@@ -28,14 +28,13 @@
 @property (nonatomic, readwrite) NSDate *timestamp;
 @property (nonatomic, readwrite) MMXTopic * topic;
 @property (nonatomic, readwrite) MMXUserID *senderUserID;
-@property (nonatomic, readwrite) NSString *mType;
 
 + (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message;
 + (NSArray *)pubSubMessagesFromXMPPMessage:(XMPPMessage *)xmppMessage;
 - (MMXInternalMessageAdaptor *)asMMXMessage;
 
 - (XMPPIQ *)pubsubIQForAppID:(NSString *)appID
-                  currentJID:(XMPPJID *)currentJID
-                      itemID:(NSString *)itemID;
+				  currentJID:(XMPPJID *)currentJID
+					  itemID:(NSString *)itemID;
 
 @end

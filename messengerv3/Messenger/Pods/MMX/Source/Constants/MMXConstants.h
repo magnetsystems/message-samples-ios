@@ -73,7 +73,6 @@ extern NSInteger  const MXDevUnregSuccess;
 extern NSString * const kMMXXMPPProtocol;
 
 extern NSString * const kAddressFromKey;
-extern NSString * const kPushConfigNameKey;
 extern NSString * const kAddressUsernameKey;
 extern NSString * const kAddressDeviceIDKey;
 extern NSString * const kAddressDisplayNameKey;
@@ -83,10 +82,5 @@ extern NSInteger const kMaxUsernameLength;
 extern NSInteger const kMinPasswordLength;
 extern NSInteger const kMaxPasswordLength;
 extern NSUInteger const kMaxMessageSize;
-
-// Poll and Poll Answer configs
-extern NSString * const kQuestionKey;
-extern NSString * const kDefaultPollPushConfigNameKey;
-extern NSString * const kDefaultPollAnswerPushConfigNameKey;
 
 @end

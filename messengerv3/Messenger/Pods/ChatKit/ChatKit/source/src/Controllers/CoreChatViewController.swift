@@ -22,18 +22,11 @@ import MobileCoreServices
 import NYTPhotoViewer
 
 
-//Mark: AttachmentTypes
-
-
-@objc public enum AttachmentTypes : Int {
-    case TakePhoto, PhotoLibrary, Location, Poll
-}
-
 
 //MARK: ChatViewController
 
 
-public class CoreChatViewController: MMJSQViewController, AddPollViewControllerDelegate {
+public class CoreChatViewController: MMJSQViewController {
     
     
     //MARK: Public Properties
@@ -50,7 +43,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     }
     
     public var navigationBarNotifier : NavigationNotifier?
-    public var outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.clearColor())
+    public var outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
     public internal(set) var recipients : [MMUser]?
     
     
@@ -152,13 +145,10 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
             let mappedMessages : [Message] = mmxMessages.map({
                 let message = Message(message: $0)
                 if message.isMediaMessage() {
-                    message.mediaCompletionBlock = {
-                        let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
-                        invailidationContext.invalidateFlowLayoutMessagesCache = true
-                        self.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
-                            self.collectionView.reloadData()
-                        })
+                    message.mediaCompletionBlock = { [weak self, weak message] () in
+                        if let weakSelf = self, let weakMessage = message {
+                            weakSelf.collectionView.reloadData()
+                        }
                     }
                 }
                 return message
@@ -187,47 +177,6 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
         self.collectionView.reloadData()
     }
     
-    func handleAttachments(labels : [String], types : [AttachmentTypes]) {
-        let alertController = UIAlertController(title: CKStrings.kStr_MediaMessages, message: nil, preferredStyle: .ActionSheet)
-        
-        for type in types {
-            switch type {
-            case .TakePhoto:
-                let sendFromCamera = UIAlertAction(title: CKStrings.kStr_TakePhotoOrVideo, style: .Default) { (_) in
-                    self.addMediaMessageFromCamera()
-                }
-                alertController.addAction(sendFromCamera)
-                
-            case .PhotoLibrary:
-                let sendFromLibrary = UIAlertAction(title: CKStrings.kStr_PhotoLib, style: .Default) { (_) in
-                    self.addMediaMessageFromLibrary()
-                }
-                alertController.addAction(sendFromLibrary)
-                
-            case .Location:
-                let sendLocationAction = UIAlertAction(title: CKStrings.kStr_SendLoc, style: .Default) { (_) in
-                    self.addLocationMediaMessage()
-                }
-                if LocationManager.sharedInstance.canLocationServicesBeEnabled() {
-                    alertController.addAction(sendLocationAction)
-                }
-                sendLocationAction.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
-                
-                LocationManager.sharedInstance.onAuthorizationUpdate = {[weak sendLocationAction] in
-                    sendLocationAction?.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
-                }
-            case .Poll:
-                let createPoll = UIAlertAction(title: CKStrings.kStr_CreatePoll, style: .Default) { (_) in
-                    self.createPoll()
-                }
-                alertController.addAction(createPoll)
-            }
-        }
-        
-        let cancelAction = UIAlertAction(title: CKStrings.kStr_Cancel, style: .Cancel) { (_) in }
-        alertController.addAction(cancelAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
-    }
     
     //MARK: Internal Methods
     
@@ -292,34 +241,24 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     
     
     @objc private func didReceiveMessage(mmxMessage: MMXMessage) {
+        //Show the typing indicator to be shown
         // Scroll to actually view the indicator
-        if mmxMessage.contentType != MMXPollAnswer.contentType {
-            scrollToBottomAnimated(true)
-        }
+        scrollToBottomAnimated(true)
+        
         let finishedMessageClosure : () -> Void = {
-            self.showTypingIndicator = false
             self.onMessageRecived(mmxMessage)
             let message = Message(message: mmxMessage)
             self.messages.append(message)
             JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
-            if message.isMediaMessage() && mmxMessage.contentType != MMXPollAnswer.contentType {
-                message.mediaCompletionBlock = { [weak self] in
-                    let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
-                    invailidationContext.invalidateFlowLayoutMessagesCache = true
-                    self?.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
-                        self?.collectionView.reloadData()
-                    })
-                }
+            
+            if message.isMediaMessage() {
+                message.mediaCompletionBlock = { [weak self] in self?.collectionView?.reloadData() }
             }
-            if mmxMessage.contentType != MMXPollAnswer.contentType {
-                self.finishReceivingMessageAnimated(true)
-            } else {
-                self.collectionView.reloadData()
-            }
+            
+            self.finishReceivingMessageAnimated(true)
         }
         
-        if  mmxMessage.sender != MMUser.currentUser() && mmxMessage.contentType != MMXPollAnswer.contentType {
+        if  mmxMessage.sender != MMUser.currentUser() {
             showTypingIndicator = true
             // Allow typing indicator to show
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(1.0 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {() in
@@ -338,46 +277,6 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
         MMX.stop()
     }
     
-    func shouldAddPoll(viewController: AddPollViewController) {
-        guard let chat = self.chat else {
-            if let recipients = self.recipients where recipients.count > 0 {
-                createNewChatWithRecipients(recipients, completion: {error in
-                    if error == nil {
-                        self.shouldAddPoll(viewController)
-                    }
-                })
-            }
-            return
-        }
-        
-        if let question = viewController.textQuestion?.text {
-            var cleanOptions = [String]()
-            for option in viewController.options {
-                let trimmed = option.value.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-                if trimmed.characters.count > 0 {
-                    cleanOptions.append(trimmed)
-                }
-            }
-            var multipleSelection = false
-            
-            if let sw = viewController.swMultipleSelections {
-                multipleSelection = sw.on
-            }
-            var showResults = true
-            if let sw = viewController.swShowResults {
-                showResults = sw.on
-            }
-            if cleanOptions.count > 0 {
-                let poll = MMXPoll(name: "ChatKitPoll", question:question , options: cleanOptions, hideResultsFromOthers: !showResults, endDate: nil, extras:  nil, allowMultiChoice: multipleSelection)
-                poll.publish(channel: chat, success: { poll in
-                    print("Sent Poll")
-                }) { (error) in
-                    print("Poll Error \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-    
     
     //MARK: Actions
     
@@ -385,12 +284,40 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     override public func didPressAccessoryButton(sender: UIButton!) {
         
         self.inputToolbar!.contentView!.textView?.resignFirstResponder()
+        
+        let alertController = UIAlertController(title: CKStrings.kStr_MediaMessages, message: nil, preferredStyle: .ActionSheet)
+        
+        let sendFromCamera = UIAlertAction(title: CKStrings.kStr_TakePhotoOrVideo, style: .Default) { (_) in
+            self.addMediaMessageFromCamera()
+        }
+        let sendFromLibrary = UIAlertAction(title: CKStrings.kStr_PhotoLib, style: .Default) { (_) in
+            self.addMediaMessageFromLibrary()
+        }
+        let sendLocationAction = UIAlertAction(title: CKStrings.kStr_SendLoc, style: .Default) { (_) in
+            self.addLocationMediaMessage()
+        }
+        let cancelAction = UIAlertAction(title: CKStrings.kStr_Cancel, style: .Cancel) { (_) in }
+        
+        alertController.addAction(sendFromCamera)
+        alertController.addAction(sendFromLibrary)
+        
+        if LocationManager.sharedInstance.canLocationServicesBeEnabled() {
+            alertController.addAction(sendLocationAction)
+        }
+        
+        alertController.addAction(cancelAction)
+        
+        sendLocationAction.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
+        
+        LocationManager.sharedInstance.onAuthorizationUpdate = {[weak sendLocationAction] in
+            sendLocationAction?.enabled = LocationManager.sharedInstance.isLocationServicesEnabled()
+        }
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    
-    
     override public func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
-        button.userInteractionEnabled = false
+         button.userInteractionEnabled = false
         
         guard let channel = self.chat else {
             if let recipients = self.recipients where recipients.count > 0 {
@@ -398,7 +325,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
                     if error == nil {
                         self.didPressSendButton(button, withMessageText: text, senderId: senderId, senderDisplayName: senderDisplayName, date: date)
                     } else {
-                        button.userInteractionEnabled = true
+                         button.userInteractionEnabled = true
                     }
                 })
             }
@@ -534,11 +461,5 @@ private extension CoreChatViewController {
             completion(error: error)
             print("[ERROR] \(error.localizedDescription)")
         }
-    }
-    
-    private func createPoll() {
-        let addPoll = AddPollViewController()
-        addPoll.delegate = self
-        self.navigationController?.pushViewController(addPoll, animated: true)
     }
 }

@@ -22,30 +22,8 @@ class MMRoundedImageView : UIImageView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let width = self.frame.width
-        self.layer.cornerRadius = width / 2.0
-        self.layer.masksToBounds = true
-    }
-}
-
-class MMRoundedLabel : UILabel {
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let width = self.frame.width
-        self.layer.cornerRadius = width / 2.0
-        self.layer.masksToBounds = true
-    }
-}
-
-class MMRoundedButton : UIButton {
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let width = self.frame.width
-        self.layer.cornerRadius = width / 2.0
+        let imageWidth = self.frame.width
+        self.layer.cornerRadius = imageWidth / 2.0
         self.layer.masksToBounds = true
     }
 }

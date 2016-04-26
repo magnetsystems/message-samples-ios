@@ -62,7 +62,6 @@ public class ChatListCell: ChannelDetailBaseTVCell {
     
     @IBOutlet public private(set) weak var avatarView : UIImageView?
     @IBOutlet public private(set) weak var ivMessageIcon : UIImageView?
-    @IBOutlet public private(set) weak var ivRightIcon : UIImageView?
     @IBOutlet public private(set) weak var lblSubscribers : UILabel?
     @IBOutlet public private(set) weak var lblLastTime : UILabel?
     @IBOutlet public private(set) weak var lblMessage : UILabel?
@@ -107,7 +106,7 @@ public class ChatListCell: ChannelDetailBaseTVCell {
                     lblMessage?.text = CKStrings.kStr_AttachmentFile
                 case .Text:
                     lblMessage?.text = messageModel.text()
-                default:
+                case .Unknown:
                     if let text = content[Constants.ContentKey.Message] {
                         lblMessage?.text = text as String
                     } else {

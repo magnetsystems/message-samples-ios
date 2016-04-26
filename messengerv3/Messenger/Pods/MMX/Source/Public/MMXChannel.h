@@ -84,15 +84,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) BOOL isSubscribed;
 
-/**
- * Is the channel muted?
- */
-@property (nonatomic, readonly) BOOL isMuted;
-
-/**
- * If the channel is muted (isMuted = YES), until what date is the channel muted?
- */
-@property (nonatomic, readonly) NSDate *mutedUntil;
 
 /**
  *  Method used to get existing channels.
@@ -236,27 +227,6 @@ NS_ASSUME_NONNULL_BEGIN
               isPublic:(BOOL)isPublic
     publishPermissions:(MMXPublishPermissions)publishPermissions
            subscribers:(nullable NSSet <MMUser *>*)subscribers
-               success:(nullable void (^)(MMXChannel *channel))success
-               failure:(nullable void (^)(NSError *error))failure;
-
-/**
- *  Method to create a new channel.
- *
- *  @param name					The name you want for the new channel must be unique. Cannot have spaces. The valid character set is alphanumeric plus period, dash and underscore. .-_
- *  @param summary				The summary you want for the channel. (Used to give other users a better idea about the purpose of the channel).
- *  @param isPublic				Set to YES if you want the channel to be discoverable by other users.
- *  @param publishPermissions	Permissions level required to be able to post; Owner/Creator only, Subscribers, Anyone. Owner can always publish.
- *  @param subscribers          The set of users to auto-subscribe.
- *  @param pushConfigName       Optional push config name.
- *  @param success				Block called if operation is successful.
- *  @param failure				Block with an NSError with details about the call failure.
- */
-+ (void)createWithName:(NSString *)name
-               summary:(nullable NSString *)summary
-              isPublic:(BOOL)isPublic
-    publishPermissions:(MMXPublishPermissions)publishPermissions
-           subscribers:(nullable NSSet <MMUser *>*)subscribers
-        pushConfigName:(nullable NSString *)pushConfigName
                success:(nullable void (^)(MMXChannel *channel))success
                failure:(nullable void (^)(NSError *error))failure;
 
@@ -423,26 +393,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setIconWithData:(nullable NSData *)data
             success:(nullable void (^)(NSURL *iconUrl))success
             failure:(nullable void (^)(NSError *error))failure;
-
-/**
- *  Disable push notifications for the channel
- *
- *  @param date           An optional date to mute notifications until
- *  @param success		  A block object to be executed when the mute API call finishes successfully. This block has no return value and takes no arguments.
- *  @param failure		  A block object to be executed when the mute API finishes with an error. This block has no return value and takes one argument: the error object.
- */
-- (void)muteUntil:(nullable NSDate *)date
-          success:(nullable void (^)())success
-          failure:(nullable void (^)(NSError *error))failure;
-
-/**
- *  Re-enable push notifications for the channel
- *
- *  @param success		  A block object to be executed when the unMute API call finishes successfully. This block has no return value and takes no arguments.
- *  @param failure		  A block object to be executed when the unMute API finishes with an error. This block has no return value and takes one argument: the error object.
- */
-- (void)unMuteWithSuccess:(nullable void (^)())success
-                  failure:(nullable void (^)(NSError *error))failure;
 
 NS_ASSUME_NONNULL_END
 @end

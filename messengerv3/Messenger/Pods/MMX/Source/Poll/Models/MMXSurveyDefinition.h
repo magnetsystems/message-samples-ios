@@ -23,17 +23,18 @@
 
 @interface MMXSurveyDefinition : MMModel
 
-@property (nonatomic, strong) NSDate *startDate;
+
+@property (nonatomic, assign) NSDate *startDate;
 
 @property (nonatomic, assign) MMXSurveyParticipantModel  participantModel;
 
-@property (nonatomic, copy) NSArray<MMXSurveyQuestion *> *questions;
+@property (nonatomic, copy) NSArray *questions;
 
-@property (nonatomic, strong) NSDate *endDate;
+@property (nonatomic, assign) NSDate *endDate;
 
-@property (nonatomic, assign) MMXSurveyParticipantModel resultAccessModel;
+@property (nonatomic, assign) MMXSurveyParticipantModel  resultAccessModel;
 
-@property (nonatomic, assign) MMXSurveyType type;
+@property (nonatomic, assign) MMXSurveyType  type;
 
 @property (nonatomic, copy) NSString *notificationChannelId;
 

@@ -96,19 +96,6 @@ NS_ASSUME_NONNULL_BEGIN
 				  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent;
 
 /**
- *  Initializer for creating a new MMXMessage object
- *
- *  @param recipients     Set of unique recipients to send the message to
- *  @param messageContent NSDictionary of content to send. Must contain only objects that are JSON serializable.
- *  @param pushConfigName Optional push config name.
- *
- *  @return New MMXMessage
- */
-+ (instancetype)messageToChannel:(MMXChannel *)channel
-                  messageContent:(NSDictionary <NSString *,NSString *>*)messageContent
-                  pushConfigName:(nullable NSString *)pushConfigName;
-
-/**
  *  Method to send the message
  *
  *  @param success - Block with the NSSet of usernames for any users that were not valid.

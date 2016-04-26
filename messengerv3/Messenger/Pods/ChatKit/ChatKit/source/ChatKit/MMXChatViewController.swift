@@ -243,22 +243,6 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     
     //MARK: - Core Method Overrides
     
-    override public func didPressAccessoryButton(sender: UIButton!) {
-        super.didPressAccessoryButton(sender)
-        
-        if let rawTypes = self.datasource?.mmxAttachmentTypes?() {
-            var labels = [String]()
-            var types = [AttachmentTypes]()
-            for rawType in rawTypes {
-                if let type = AttachmentTypes(rawValue: rawType) {
-                    let label = self.datasource!.mmxDisplayNameForAttachmentType!(rawType)
-                    labels.append(label)
-                    types.append(type)
-                }
-            }
-            handleAttachments(labels, types: types)
-        }
-    }
     
     override internal func didSelectUserAvatar(user: MMUser) {
         self.delegate?.mmxAvatarDidClick?(user)

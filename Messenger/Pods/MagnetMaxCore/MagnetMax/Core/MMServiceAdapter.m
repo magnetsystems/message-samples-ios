@@ -772,20 +772,16 @@ NSString *const kMMConfigurationKey = @"kMMConfigurationKey";
 }
 
 - (NSString *)CATTokenIdentifier {
-    return [NSString stringWithFormat:@"%@.%@.%@.%@", [self appID],[self clientID], [self deviceID], MMCATTokenIdentifier];
+    return [NSString stringWithFormat:@"%@.%@.%@", [self appID], [self clientID], MMCATTokenIdentifier];
 }
 
 - (NSString *)HATTokenIdentifier {
-    return [NSString stringWithFormat:@"%@.%@.%@", [self appID], [self deviceID], MMHATTokenIdentifier];
+    return [NSString stringWithFormat:@"%@.%@.%@", [self appID], [self clientID], MMHATTokenIdentifier];
 }
 
 - (NSString *)appID {
     NSString *appID = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     return appID;
-}
-
-- (NSString *)deviceID {
-    return [[UIDevice currentDevice] identifierForVendor].UUIDString;
 }
 
 @end

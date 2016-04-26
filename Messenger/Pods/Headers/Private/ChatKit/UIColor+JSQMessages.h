@@ -1,0 +1,1 @@
+../../../ChatKit/ChatKit/source/src/JSQMessagesViewController/JSQMessagesViewController/Categories/UIColor+JSQMessages.h

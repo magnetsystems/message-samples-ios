@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="47" id="ggg-og-ap0" customClass="PollOptionCellTableViewCell" customModule="ChatKit" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="315" height="47"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ggg-og-ap0" id="Vsd-3m-ijL">
+                <rect key="frame" x="0.0" y="0.0" width="315" height="46.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VTb-hL-5lM" customClass="MMRoundedButton" customModule="ChatKit" customModuleProvider="target">
+                        <rect key="frame" x="8" y="10.5" width="25" height="25"/>
+                        <color key="backgroundColor" red="1" green="0.040183829109999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="G3i-zk-bFE"/>
+                            <constraint firstAttribute="width" constant="25" id="MsQ-Ma-23g"/>
+                        </constraints>
+                        <state key="normal" title="✖︎">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="action:" destination="ggg-og-ap0" eventType="touchUpInside" id="UNr-Rd-54T"/>
+                        </connections>
+                    </button>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Option Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qQX-Ps-0o7">
+                        <rect key="frame" x="41" y="8" width="266" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="Ms3-98-74Z"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Ms3-98-74Z"/>
+                            </mask>
+                        </variation>
+                        <connections>
+                            <outlet property="delegate" destination="ggg-og-ap0" id="H1a-gp-3tX"/>
+                        </connections>
+                    </textField>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="qQX-Ps-0o7" secondAttribute="bottom" id="ZvW-Ga-wQh"/>
+                    <constraint firstItem="qQX-Ps-0o7" firstAttribute="top" secondItem="Vsd-3m-ijL" secondAttribute="topMargin" id="aGV-Kc-N1Y"/>
+                    <constraint firstItem="qQX-Ps-0o7" firstAttribute="centerY" secondItem="Vsd-3m-ijL" secondAttribute="centerY" id="bod-0p-bYo"/>
+                    <constraint firstItem="qQX-Ps-0o7" firstAttribute="trailing" secondItem="Vsd-3m-ijL" secondAttribute="trailingMargin" id="d40-bn-AS4"/>
+                    <constraint firstItem="VTb-hL-5lM" firstAttribute="leading" secondItem="Vsd-3m-ijL" secondAttribute="leadingMargin" id="qkd-TY-y2E"/>
+                    <constraint firstItem="qQX-Ps-0o7" firstAttribute="centerY" secondItem="VTb-hL-5lM" secondAttribute="centerY" id="txX-I1-skJ"/>
+                    <constraint firstItem="qQX-Ps-0o7" firstAttribute="leading" secondItem="VTb-hL-5lM" secondAttribute="trailing" constant="8" id="vzA-nm-5zo"/>
+                </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="bod-0p-bYo"/>
+                    </mask>
+                </variation>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="deleteButton" destination="VTb-hL-5lM" id="eoD-yF-oeA"/>
+                <outlet property="textField" destination="qQX-Ps-0o7" id="PIY-wr-KAr"/>
+            </connections>
+            <point key="canvasLocation" x="172.5" y="335.5"/>
+        </tableViewCell>
+    </objects>
+</document>

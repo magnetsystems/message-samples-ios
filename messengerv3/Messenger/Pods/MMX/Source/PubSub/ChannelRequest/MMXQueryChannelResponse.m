@@ -18,7 +18,7 @@
 #import "MMXQueryChannelResponse.h"
 #import "MMXChannelResponse.h"
 #import "MMXChannelInfo.h"
-#import "MMXChannel_Private.h"
+#import "MMXChannel.h"
 
 @implementation MMXQueryChannelResponse
 
@@ -78,8 +78,6 @@
             dictionaryToUse = channelDictionary;
         }
         MMXChannel *ch = [[MMXChannel alloc] initWithDictionary:dictionaryToUse error:nil];
-        ch.isMuted = channelInfo.isMuted;
-        ch.mutedUntil = channelInfo.mutedUntil;
         if (ch)
             [channels addObject:ch];
     }

@@ -269,7 +269,7 @@ typedef NS_ENUM(NSInteger, MMXPrivacyOperationType){
 
 - (void)blockedUsersWithSuccess:(nullable void (^)(NSArray <MMUser *>*users))success
                         failure:(nullable void (^)(NSError *error))failure {
-    if (!self.retrievePrivacyListOperation.isFinished) {
+    if (self.retrievePrivacyListOperation && !self.retrievePrivacyListOperation.isFinished) {
         __weak __typeof__(self) weakSelf = self;
         self.retrievePrivacyListOperation.completionBlock = ^{
             [weakSelf executeBlockedUsersWithSuccess:success failure:failure];

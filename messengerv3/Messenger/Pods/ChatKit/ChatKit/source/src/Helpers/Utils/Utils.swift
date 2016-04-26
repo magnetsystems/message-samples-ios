@@ -362,34 +362,32 @@ public class Utils: NSObject {
 }
 
 extension CGSize {
-    static func aspectFit(aspectRatio : CGSize, boundingSize: CGSize) -> CGSize {
-        var size = boundingSize
-        let mW = size.width / aspectRatio.width;
-        let mH = size.height / aspectRatio.height;
+    static func aspectFit(aspectRatio : CGSize, var boundingSize: CGSize) -> CGSize {
+        let mW = boundingSize.width / aspectRatio.width;
+        let mH = boundingSize.height / aspectRatio.height;
         
         if( mH < mW ) {
-            size.width = size.height / aspectRatio.height * aspectRatio.width;
+            boundingSize.width = boundingSize.height / aspectRatio.height * aspectRatio.width;
         }
         else if( mW < mH ) {
-            size.height = size.width / aspectRatio.width * aspectRatio.height;
+            boundingSize.height = boundingSize.width / aspectRatio.width * aspectRatio.height;
         }
         
-        return size;
+        return boundingSize;
     }
     
-    static func aspectFill(aspectRatio :CGSize, minimumSize: CGSize) -> CGSize {
-        var size = minimumSize
-        let mW = size.width / aspectRatio.width;
-        let mH = size.height / aspectRatio.height;
+    static func aspectFill(aspectRatio :CGSize, var minimumSize: CGSize) -> CGSize {
+        let mW = minimumSize.width / aspectRatio.width;
+        let mH = minimumSize.height / aspectRatio.height;
         
         if( mH > mW ) {
-            size.width = size.height / aspectRatio.height * aspectRatio.width;
+            minimumSize.width = minimumSize.height / aspectRatio.height * aspectRatio.width;
         }
         else if( mW > mH ) {
-            size.height = size.width / aspectRatio.width * aspectRatio.height;
+            minimumSize.height = minimumSize.width / aspectRatio.width * aspectRatio.height;
         }
         
-        return size;
+        return minimumSize;
     }
 }
 

@@ -95,7 +95,7 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
     //MARK: MMTableViewFooterDatasource
     
     
-    public func mmxTableViewNumberOfFooters() -> Int {
+    func mmxTableViewNumberOfFooters() -> Int {
         guard let channel = self.channel where channel.ownerUserID == MMUser.currentUser()?.userID else {
             return 0
         }
@@ -103,11 +103,11 @@ public class SubscribersDatasource : DefaultContactsPickerControllerDatasource, 
         return 1
     }
     
-    public func mmxTableViewFooterHeight(index: Int) -> CGFloat {
+    func mmxTableViewFooterHeight(index: Int) -> CGFloat {
         return 50.0
     }
     
-    public func mmxTableViewFooter(index : Int) -> UIView {
+    func mmxTableViewFooter(index : Int) -> UIView {
         let button = UIButton(type: .Custom)
         button.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
         button.setTitle("Add Contacts +", forState: .Normal)

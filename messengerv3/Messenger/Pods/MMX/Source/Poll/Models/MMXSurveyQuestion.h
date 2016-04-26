@@ -18,18 +18,22 @@
 @import MagnetMaxCore;
 #import "MMXSurveyQuestionType.h"
 
+@class MMXAnswerType;
 @class MMXSurveyOption;
 
 @interface MMXSurveyQuestion : MMModel
+
 
 @property (nonatomic, copy) NSString *text;
 
 @property (nonatomic, copy) NSString *questionId;
 
-@property (nonatomic, copy) NSArray<MMXSurveyOption *> *choices;
+@property (nonatomic, copy) NSArray *choices;
+
+@property (nonatomic, strong) MMXAnswerType *answerType;
 
 @property (nonatomic, assign) int displayOrder;
 
-@property (nonatomic, assign) MMXSurveyQuestionType type;
+@property (nonatomic, assign) MMXSurveyQuestionType  type;
 
 @end

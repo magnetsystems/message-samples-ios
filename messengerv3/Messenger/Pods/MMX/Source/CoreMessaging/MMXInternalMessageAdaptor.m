@@ -354,55 +354,42 @@ static  NSString *const MESSAGE_ATTRIBUE_STAMP = @"stamp";
     return nil;
 }
 
-+ (NSXMLElement *)xmlFromRecipients:(NSArray *)recipients
-                      senderAddress:(MMXInternalAddress *)address
-                     pushConfigName:(NSString *)pushConfigName {
-    
-    if ((recipients == nil || recipients.count < 1) && address == nil) {
-        return nil;
-    }
-    NSXMLElement *metaDataElement = [[NSXMLElement alloc] initWithName:MXmmxMetaElement];
-    
-    NSMutableDictionary *mmxMetaDict = [NSMutableDictionary dictionary];
-    if (recipients.count >= 1) {
-        NSMutableArray *recipientArray = @[].mutableCopy;
-        for (id<MMXAddressable> recipient in recipients) {
-            MMXInternalAddress *recipAddress = recipient.address;
-            if (recipAddress) {
-                [recipientArray addObject:[recipAddress asDictionary]];
-            }
-        }
-        [mmxMetaDict setObject:recipientArray forKey:@"To"];
-    }
-    if (address) {
++ (NSXMLElement *)xmlFromRecipients:(NSArray *)recipients senderAddress:(MMXInternalAddress *)address {
+	if ((recipients == nil || recipients.count < 1) && address == nil) {
+		return nil;
+	}
+	NSXMLElement *metaDataElement = [[NSXMLElement alloc] initWithName:@"mmxmeta"];
+	
+	NSMutableDictionary *mmxMetaDict = [NSMutableDictionary dictionary];
+	if (recipients.count >= 1) {
+		NSMutableArray *recipientArray = @[].mutableCopy;
+		for (id<MMXAddressable> recipient in recipients) {
+			MMXInternalAddress *recipAddress = recipient.address;
+			if (recipAddress) {
+				[recipientArray addObject:[recipAddress asDictionary]];
+			}
+		}
+		[mmxMetaDict setObject:recipientArray forKey:@"To"];
+	}
+	if (address) {
         // FIXME: Find a better way to propogate the deviceID to this point!
         address.deviceID = [[MMXClient sharedClient] deviceID];
-        [mmxMetaDict setObject:[address asDictionary] forKey:kAddressFromKey];
-    }
-    if (pushConfigName) {
-        mmxMetaDict[kPushConfigNameKey] = pushConfigName;
-    }
-    
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mmxMetaDict
-                                                       options:kNilOptions
-                                                         error:&error];
-    NSString *json = [[NSString alloc] initWithData:jsonData
-                                           encoding:NSUTF8StringEncoding];
-    
-    [metaDataElement setStringValue:json];
-    
-    if (error == nil) {
-        return metaDataElement;
-    }
-    return nil;
-    
-}
-
-+ (NSXMLElement *)xmlFromRecipients:(NSArray *)recipients senderAddress:(MMXInternalAddress *)address {
-    
-    return [self xmlFromRecipients:recipients senderAddress:address pushConfigName:nil];
-    
+		[mmxMetaDict setObject:[address asDictionary] forKey:kAddressFromKey];
+	}
+	
+	NSError *error;
+	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mmxMetaDict
+													   options:kNilOptions
+														 error:&error];
+	NSString *json = [[NSString alloc] initWithData:jsonData
+										   encoding:NSUTF8StringEncoding];
+	
+	[metaDataElement setStringValue:json];
+	
+	if (error == nil) {
+		return metaDataElement;
+	}
+	return nil;
 }
 
 +(NSXMLNode*)buildAttributeNodeWith:(NSString *)name

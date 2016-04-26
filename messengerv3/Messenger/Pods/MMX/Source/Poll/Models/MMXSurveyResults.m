@@ -17,46 +17,44 @@
 
 #import "MMXSurveyResults.h"
 #import "MMXSurvey.h"
-#import "MMXSurveyAnswer.h"
 #import "MMXSurveyChoiceResult.h"
 
 @implementation MMXSurveyResults
 
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
-                                 };
+    };
     NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
     [attributeMappings addEntriesFromDictionary:dictionary];
-    
+
     return attributeMappings;
 }
 
 + (NSDictionary *)listAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                                      @"myAnswers" : MMXSurveyAnswer.class,
-                                                                                      @"summary" : MMXSurveyChoiceResult.class,
-                                                                                      }];
+        @"summary" : MMXSurveyChoiceResult.class,
+    }];
     [dictionary addEntriesFromDictionary:[super listAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)mapAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                                      }];
+    }];
     [dictionary addEntriesFromDictionary:[super mapAttributeTypes]];
     return dictionary;
 }
 
 + (NSDictionary *)enumAttributeTypes {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                                      }];
+    }];
     [dictionary addEntriesFromDictionary:[super enumAttributeTypes]];
     return dictionary;
 }
 
 + (NSArray *)charAttributes {
     NSMutableArray *array = [NSMutableArray arrayWithArray:@[
-                                                             ]];
+    ]];
     [array addObjectsFromArray:[super charAttributes]];
     return array;
 }

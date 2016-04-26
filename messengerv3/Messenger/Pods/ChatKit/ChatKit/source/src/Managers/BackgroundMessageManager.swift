@@ -75,9 +75,8 @@ import MagnetMax
                 }
                 var notificationMessages = Set<MMXMessage>()
                 for msg in messages {
-                    var nMSG = MMXMessage()
                     msg.channel = channel
-                    notificationMessages.insert(nMSG)
+                    notificationMessages.insert(msg)
                 }
                 if total > Int32(messages.count) {
                     let comp : ((messages : Set<MMXMessage>) -> Void) = { messages in
@@ -107,7 +106,7 @@ import MagnetMax
                     for channel in channels {
                         let operation = MMAsyncBlockOperation(with: { operation in
                             self.fetchMessagesSinceAppBecameInactive(0, channel: channel, operation: operation, completion: { messages in
-                                let sortedMessages = messages.sort({self.date($0.0.timestamp).timeIntervalSince1970 < self.date($0.1.timestamp).timeIntervalSince1970})
+                                let sortedMessages = messages.sort({$0.0.timestamp?.timeIntervalSince1970 < $0.1.timestamp?.timeIntervalSince1970})
                                 for msg in sortedMessages {
                                     dispatch_sync(dispatch_get_main_queue()) {
                                         NSNotificationCenter.defaultCenter().postNotificationName(MMXDidReceiveMessageNotification, object: nil, userInfo: [MMXMessageKey:msg])
@@ -124,10 +123,6 @@ import MagnetMax
                 })
             self.queue.addOperation(operation)
         }
-    }
-    
-    private func date(date: NSDate?) -> NSDate {
-        return date ?? NSDate()
     }
     
     @objc private func stop() {

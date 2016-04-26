@@ -23,15 +23,15 @@
 @interface MMXSurveyResponse : MMModel
 
 
-@property (nonatomic, copy) NSDate *completedOn;
+@property (nonatomic, assign) NSDate *completedOn;
 
 @property (nonatomic, copy) NSString *responseId;
 
-@property (nonatomic, copy) NSDate *startedOn;
+@property (nonatomic, assign) NSDate *startedOn;
 
 @property (nonatomic, copy) NSString *userId;
 
-@property (nonatomic, copy) NSArray<MMXSurveyAnswer *> *answers;
+@property (nonatomic, copy) NSArray *answers;
 
 @property (nonatomic, strong) MMXSurveyDefinition *survey;
 

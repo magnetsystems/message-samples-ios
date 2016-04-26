@@ -16,6 +16,7 @@
  */
 
 #import "MMXSurveyQuestion.h"
+#import "MMXAnswerType.h"
 #import "MMXSurveyOption.h"
 
 @implementation MMXSurveyQuestion

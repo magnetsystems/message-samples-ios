@@ -21,8 +21,6 @@
 + (NSDictionary *)attributeMappings {
     NSDictionary *dictionary = @{
         @"channelInfoDescription" : @"description",
-        @"isMuted": @"pushMutedByUser",
-        @"mutedUntil": @"pushMutedUntil",
     };
     NSMutableDictionary *attributeMappings = [[super attributeMappings] mutableCopy];
     [attributeMappings addEntriesFromDictionary:dictionary];

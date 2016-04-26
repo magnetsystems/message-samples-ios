@@ -34,96 +34,100 @@
 
 + (instancetype)initWithMessage:(MMXInternalMessageAdaptor *)message {
     MMXPubSubMessage * msg = [[MMXPubSubMessage alloc] init];
-	msg.messageID = message.messageID;
-	msg.messageContent = message.messageContent;
-	msg.topic = message.topic;
-	msg.metaData = message.metaData;
-	msg.timestamp = message.timestamp;
-	msg.senderUserID = message.senderUserID;
+    msg.messageID = message.messageID;
+    msg.messageContent = message.messageContent;
+    msg.topic = message.topic;
+    msg.metaData = message.metaData;
+    msg.timestamp = message.timestamp;
+    msg.senderUserID = message.senderUserID;
+    msg.mType = message.mType;
     return msg;
 }
 
 + (instancetype)pubSubMessageToTopic:(MMXTopic *)topic content:(NSString *)content metaData:(NSDictionary *)metaData {
-	MMXPubSubMessage * msg = [[MMXPubSubMessage alloc] init];
+    MMXPubSubMessage * msg = [[MMXPubSubMessage alloc] init];
     msg.topic = topic;
-	msg.metaData = metaData;
-	msg.messageContent = content;
+    msg.metaData = metaData;
+    msg.messageContent = content;
     return msg;
 }
 
 + (NSArray *)pubSubMessagesFromXMPPMessage:(XMPPMessage *)xmppMessage {
-	NSMutableArray * messageArray = @[].mutableCopy;
-	
-	NSXMLElement *eventElement = [xmppMessage elementForName:@"event"];
-	NSXMLElement *itemsElement = [eventElement elementForName:@"items"];
-	MMXTopic *topic = [self topicFromXMPPMessage:xmppMessage];
-	for (NSXMLElement *itemElement in [itemsElement elementsForName:@"item"]) {
-		MMXPubSubMessage *msg = [[MMXPubSubMessage alloc] init];
-		msg.messageID = [[itemElement attributeForName:@"id"] stringValue];
-		NSXMLElement *mmxElement = [itemElement elementForName:MXmmxElement xmlns:MXnsDataPayload];
-		
-		//payload
-		NSArray* payLoadElements = [mmxElement elementsForName:MXpayloadElement];
-		msg.messageContent = [MMXMessageUtils extractPayload:payLoadElements];
-		NSXMLNode* timestamp = [[mmxElement elementForName:MXpayloadElement] attributeForName:@"stamp"];
-		if ([timestamp stringValue] && ![[timestamp stringValue] isEqualToString:@""]) {
-			msg.timestamp = [MMXUtils dateFromiso8601Format:[timestamp stringValue]];
-		}
-		//meta
-		NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
-		msg.metaData = [MMXMessageUtils extractMetaData:metaElements];
-		msg.topic = topic.copy;
-		
-		NSArray* mmxMetaElements = [mmxElement elementsForName:MXmmxMetaElement];
-		if (mmxMetaElements) {
-			NSDictionary *mmxMetaDict = [MMXInternalMessageAdaptor extractMMXMetaData:mmxMetaElements];
-			MMXUserID *senderID = [MMXInternalMessageAdaptor extractSenderFromMMXMetaDict:mmxMetaDict];
-			if (senderID) {
-				msg.senderUserID = senderID;
-			}
+    NSMutableArray * messageArray = @[].mutableCopy;
+    
+    NSXMLElement *eventElement = [xmppMessage elementForName:@"event"];
+    NSXMLElement *itemsElement = [eventElement elementForName:@"items"];
+    MMXTopic *topic = [self topicFromXMPPMessage:xmppMessage];
+    for (NSXMLElement *itemElement in [itemsElement elementsForName:@"item"]) {
+        MMXPubSubMessage *msg = [[MMXPubSubMessage alloc] init];
+        msg.messageID = [[itemElement attributeForName:@"id"] stringValue];
+        NSXMLElement *mmxElement = [itemElement elementForName:MXmmxElement xmlns:MXnsDataPayload];
+        
+        //payload
+        NSArray* payLoadElements = [mmxElement elementsForName:MXpayloadElement];
+        msg.messageContent = [MMXMessageUtils extractPayload:payLoadElements];
+        NSXMLNode* timestamp = [[mmxElement elementForName:MXpayloadElement] attributeForName:@"stamp"];
+        if ([timestamp stringValue] && ![[timestamp stringValue] isEqualToString:@""]) {
+            msg.timestamp = [MMXUtils dateFromiso8601Format:[timestamp stringValue]];
+        }
+        //meta
+        NSArray* metaElements = [mmxElement elementsForName:MXmetaElement];
+        msg.metaData = [MMXMessageUtils extractMetaData:metaElements];
+        msg.topic = topic.copy;
+        //mType
+        NSXMLNode* mtype = [payLoadElements[0] attributeForName:@"mtype"];
+        msg.mType = mtype ? [mtype stringValue] : nil;
+        
+        NSArray* mmxMetaElements = [mmxElement elementsForName:MXmmxMetaElement];
+        if (mmxMetaElements) {
+            NSDictionary *mmxMetaDict = [MMXInternalMessageAdaptor extractMMXMetaData:mmxMetaElements];
+            MMXUserID *senderID = [MMXInternalMessageAdaptor extractSenderFromMMXMetaDict:mmxMetaDict];
+            if (senderID) {
+                msg.senderUserID = senderID;
+            }
             msg.senderDeviceID = mmxMetaDict[kAddressFromKey][kAddressDeviceIDKey];
-		}
-		[messageArray addObject:msg];
-	}
-	return messageArray.copy;
+        }
+        [messageArray addObject:msg];
+    }
+    return messageArray.copy;
 }
 
 - (MMXInternalMessageAdaptor *)asMMXMessage {
-	MMXInternalMessageAdaptor * message = [[MMXInternalMessageAdaptor alloc] init];
-	message.messageID = self.messageID;
-	message.messageContent = self.messageContent;
-	message.topic = self.topic;
-	message.metaData = self.metaData;
-	message.timestamp = self.timestamp;
-	return message;
+    MMXInternalMessageAdaptor * message = [[MMXInternalMessageAdaptor alloc] init];
+    message.messageID = self.messageID;
+    message.messageContent = self.messageContent;
+    message.topic = self.topic;
+    message.metaData = self.metaData;
+    message.timestamp = self.timestamp;
+    return message;
 }
 
 + (MMXTopic *)topicFromXMPPMessage:(XMPPMessage *)xmppMessage {
-	NSXMLElement *eventElement = [xmppMessage elementForName:@"event"];
-	NSXMLElement *itemsElement = [eventElement elementForName:@"items"];
-	NSXMLNode* node = [itemsElement attributeForName:@"node"];
-	MMXTopic * topic = [MMXTopic topicFromNode:[node stringValue]];
-	//Topic
-	return topic;
+    NSXMLElement *eventElement = [xmppMessage elementForName:@"event"];
+    NSXMLElement *itemsElement = [eventElement elementForName:@"items"];
+    NSXMLNode* node = [itemsElement attributeForName:@"node"];
+    MMXTopic * topic = [MMXTopic topicFromNode:[node stringValue]];
+    //Topic
+    return topic;
 }
 
 - (XMPPIQ *)pubsubIQForAppID:(NSString *)appID
                   currentJID:(XMPPJID *)currentJID
-					  itemID:(NSString *)itemID {
+                      itemID:(NSString *)itemID {
     NSXMLElement *mmxElement = [[NSXMLElement alloc] initWithName:MXmmxElement xmlns:MXnsDataPayload];
-    NSXMLElement *payload = [MMXUtils contentToXML:self.messageContent type:@"TEXTMSG"];
+    NSXMLElement *payload = [MMXUtils contentToXML:self.messageContent type:self.mType ? self.mType : @"TEXTMSG"];
     [mmxElement addChild:payload];
     if (self.metaData) {
         NSXMLElement *meta = [MMXUtils metaDataToXML:self.metaData];
         [mmxElement addChild:meta];
     }
-	
-	MMUser *sender = [MMUser currentUser];
-	if (sender && sender.address) {
-		NSXMLElement *mmxMeta = [MMXInternalMessageAdaptor xmlFromRecipients:nil senderAddress:sender.address];
-		[mmxElement addChild:mmxMeta];
-	}
-	
+    
+    MMUser *sender = [MMUser currentUser];
+    if (sender && sender.address) {
+        NSXMLElement *mmxMeta = [MMXInternalMessageAdaptor xmlFromRecipients:nil senderAddress:sender.address pushConfigName:self.pushConfigName];
+        [mmxElement addChild:mmxMeta];
+    }
+    
     NSXMLElement *itemElement = [[NSXMLElement alloc] initWithName:@"item"];
     [itemElement addAttributeWithName:@"id" stringValue:itemID];
     [itemElement addChild:mmxElement];
@@ -137,11 +141,11 @@
     [publishElement addChild:itemElement];
     NSXMLElement *pubsubElement = [[NSXMLElement alloc] initWithName:@"pubsub" xmlns:@"http://jabber.org/protocol/pubsub"];
     [pubsubElement addChild:publishElement];
-
+    
     XMPPIQ *postIQ = [[XMPPIQ alloc] initWithType:@"set" child:pubsubElement];
     [postIQ addAttributeWithName:@"from" stringValue: [currentJID full]];
     [postIQ addAttributeWithName:@"id" stringValue:self.messageID];
-
+    
     [postIQ addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"pubsub.%@",[currentJID domain]]];
     return postIQ;
 }

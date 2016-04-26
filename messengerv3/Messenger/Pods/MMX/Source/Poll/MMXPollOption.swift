@@ -17,29 +17,30 @@
 
 import MagnetMaxCore
 
-@objc public class MMXPollOption: MMModel {
+@objc public class MMXPollOption: MMModel, MMXPayload {
     
-    //Public Variables
+    static public var contentType: String {
+        return "MMXPollOption"
+    }
     
-    public var count: NSNumber? = 0
-    
-    public var extras : [String:String] = [:]
-    
-    public internal(set) var optionID: String = ""
-    
-    public internal(set) var pollID: String = ""
+    public private(set) var pollID: String = ""
     
     public private(set) var text: String = ""
     
-    //MARK: init
+    public private(set) var count: Int?
     
-    public override init!() {
-        super.init()
-    }
+    // TODO: Should we expose this?
     
-    public init(text: String, count: NSNumber?) {
+    public private(set) var voters: [MMUser]?
+    
+    private private(set) var optionID: String = ""
+    
+    public init(pollID: String, optionID: String, text: String, count: Int?, voters: [MMUser]?) {
+        self.pollID = pollID
+        self.optionID = optionID
         self.text = text
         self.count = count
+        self.voters = voters
         super.init()
     }
     
@@ -49,10 +50,6 @@ import MagnetMaxCore
     
     required public init!(coder: NSCoder!) {
         super.init(coder: coder)
-    }
-    
-    public override class func attributeMappings() -> [NSObject : AnyObject]! {
-        return (super.attributeMappings() ?? [:]) + ["pollID" as NSString: "pollId"] + ["optionID" as NSString: "optionId"]
     }
 }
 

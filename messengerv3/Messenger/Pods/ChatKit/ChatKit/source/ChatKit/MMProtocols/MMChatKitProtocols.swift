@@ -137,13 +137,11 @@ import MagnetMax
 
 @objc public protocol ChatViewControllerDatasource {
     
+    
     func mmxControllerLoadMore(channel : MMXChannel?, offset : Int)
     func mmxControllerHasMore() -> Bool
     optional func mmxControllerPrefersSoftResets() -> Bool
     
-    //Attachments
-    optional func mmxAttachmentTypes() -> [Int]
-    optional func mmxDisplayNameForAttachmentType(attachmentType : Int) -> String
 }
 
 

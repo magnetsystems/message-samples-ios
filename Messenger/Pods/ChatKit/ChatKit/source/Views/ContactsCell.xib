@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="ContactsCell" customModule="ChatKit" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BOz-Pj-7Qw">
+                        <rect key="frame" x="0.0" y="0.0" width="45" height="43.5"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fyL-9P-Vse">
+                                <rect key="frame" x="8" y="8" width="29" height="27.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="fyL-9P-Vse" secondAttribute="height" multiplier="46:43" id="40O-GW-GC4"/>
+                                    <constraint firstAttribute="height" constant="29" id="CQQ-qD-hUI"/>
+                                    <constraint firstAttribute="height" constant="27.5" id="TCx-tx-Idf"/>
+                                    <constraint firstAttribute="width" constant="29" id="hmk-Mz-Jol"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="40O-GW-GC4"/>
+                                        <exclude reference="CQQ-qD-hUI"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="fyL-9P-Vse" firstAttribute="top" secondItem="BOz-Pj-7Qw" secondAttribute="top" constant="8" id="3I5-CS-EDF"/>
+                            <constraint firstAttribute="bottom" secondItem="fyL-9P-Vse" secondAttribute="bottom" constant="8" id="5K2-Hr-vQ4"/>
+                            <constraint firstItem="fyL-9P-Vse" firstAttribute="centerY" secondItem="BOz-Pj-7Qw" secondAttribute="centerY" id="Aea-N2-XiA"/>
+                            <constraint firstAttribute="trailing" secondItem="fyL-9P-Vse" secondAttribute="trailing" constant="8" id="DY5-HN-WwN"/>
+                            <constraint firstItem="fyL-9P-Vse" firstAttribute="leading" secondItem="BOz-Pj-7Qw" secondAttribute="leading" constant="8" id="Pue-6i-zS9"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="3I5-CS-EDF"/>
+                                <exclude reference="5K2-Hr-vQ4"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2f2-ck-3jf">
+                        <rect key="frame" x="45" y="8" width="267" height="27.5"/>
+                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="BOz-Pj-7Qw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="0Sz-oo-Ce6"/>
+                    <constraint firstItem="2f2-ck-3jf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="Eq6-Um-iaQ"/>
+                    <constraint firstItem="BOz-Pj-7Qw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="QDz-HA-7vl"/>
+                    <constraint firstItem="2f2-ck-3jf" firstAttribute="leading" secondItem="BOz-Pj-7Qw" secondAttribute="trailing" id="R9l-jL-VQC"/>
+                    <constraint firstAttribute="trailing" secondItem="2f2-ck-3jf" secondAttribute="trailing" constant="8" id="aDb-gA-Kws"/>
+                    <constraint firstAttribute="bottom" secondItem="2f2-ck-3jf" secondAttribute="bottom" constant="8" id="dsN-vQ-YPn"/>
+                    <constraint firstAttribute="bottom" secondItem="BOz-Pj-7Qw" secondAttribute="bottom" id="nRU-ky-PDa"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="avatar" destination="fyL-9P-Vse" id="5rB-vJ-OZA"/>
+                <outlet property="userName" destination="2f2-ck-3jf" id="WOO-0p-PI8"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

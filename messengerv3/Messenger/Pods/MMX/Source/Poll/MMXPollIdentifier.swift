@@ -19,16 +19,10 @@ import MagnetMaxCore
 
 @objc public class MMXPollIdentifier: MMModel, MMXPayload {
     
-    static public var contentType: String {
-        return "object/MMXPollIdentifier"
-    }
-    
     public private(set) var pollID: String = ""
     
-    //MARK: init
-    
-    public override init!() {
-        super.init()
+    static public var contentType: String {
+        return "MMXPollIdentifier"
     }
     
     public init(_ pollID: String) {
@@ -43,19 +37,11 @@ import MagnetMaxCore
     required public init!(coder: NSCoder!) {
         super.init(coder: coder)
     }
-    
-    public override class func attributeMappings() -> [NSObject : AnyObject]! {
-        return (super.attributeMappings() ?? [:]) + ["pollID" as NSString: "pollId"]
-    }
 }
 
 // MARK: MMXPollIdentifier Equality
 
 extension MMXPollIdentifier {
-    
-    override public var hash: Int {
-        return pollID.hashValue
-    }
     
     override public func isEqual(object: AnyObject?) -> Bool {
         if let rhs = object as? MMXPollIdentifier {
@@ -64,5 +50,9 @@ extension MMXPollIdentifier {
         
         return false
         
+    }
+    
+    override public var hash: Int {
+        return pollID.hashValue
     }
 }

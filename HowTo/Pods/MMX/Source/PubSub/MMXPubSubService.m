@@ -24,6 +24,7 @@
 #import "MMXChannelResponse.h"
 #import "MMXRemoveSubscribersResponse.h"
 #import "MMXAddSubscribersResponse.h"
+#import "MMXMuteChannelPushRequest.h"
 
 @implementation MMXPubSubService
 
@@ -186,6 +187,57 @@
         removeSubscribersFromChannelBodySuccessFailure.returnTypeClass = MMXRemoveSubscribersResponse.class;
         serviceMetaData[NSStringFromSelector(removeSubscribersFromChannelBodySuccessFailure.selector)] = removeSubscribersFromChannelBodySuccessFailure;
         
+        
+        // schema for service method muteChannelPush:body:success:failure:
+        MMServiceMethod *muteChannelPushBodySuccessFailure = [[MMServiceMethod alloc] init];
+        muteChannelPushBodySuccessFailure.clazz = [self class];
+        muteChannelPushBodySuccessFailure.selector = @selector(muteChannelPush:body:success:failure:);
+        muteChannelPushBodySuccessFailure.path = @"com.magnet.server/channel/{channelId}/push/mute";
+        muteChannelPushBodySuccessFailure.requestMethod = MMRequestMethodPOST;
+        muteChannelPushBodySuccessFailure.consumes = [NSSet setWithObjects:@"application/json", nil];
+        muteChannelPushBodySuccessFailure.produces = [NSSet setWithObjects:@"application/json", nil];
+        
+        NSMutableArray *muteChannelPushBodySuccessFailureParams = [NSMutableArray array];
+        MMServiceMethodParameter *muteChannelPushBodySuccessFailureParam0 = [[MMServiceMethodParameter alloc] init];
+        muteChannelPushBodySuccessFailureParam0.name = @"channelId";
+        muteChannelPushBodySuccessFailureParam0.requestParameterType = MMServiceMethodParameterTypePath;
+        muteChannelPushBodySuccessFailureParam0.type = MMServiceIOTypeString;
+        muteChannelPushBodySuccessFailureParam0.isOptional = NO;
+        [muteChannelPushBodySuccessFailureParams addObject:muteChannelPushBodySuccessFailureParam0];
+        
+        MMServiceMethodParameter *muteChannelPushBodySuccessFailureParam1 = [[MMServiceMethodParameter alloc] init];
+        muteChannelPushBodySuccessFailureParam1.name = @"body";
+        muteChannelPushBodySuccessFailureParam1.requestParameterType = MMServiceMethodParameterTypeBody;
+        muteChannelPushBodySuccessFailureParam1.type = MMServiceIOTypeMagnetNode;
+        muteChannelPushBodySuccessFailureParam1.typeClass = MMXMuteChannelPushRequest.class;
+        muteChannelPushBodySuccessFailureParam1.isOptional = NO;
+        [muteChannelPushBodySuccessFailureParams addObject:muteChannelPushBodySuccessFailureParam1];
+        
+        muteChannelPushBodySuccessFailure.parameters = muteChannelPushBodySuccessFailureParams;
+        muteChannelPushBodySuccessFailure.returnType = MMServiceIOTypeVoid;
+        serviceMetaData[NSStringFromSelector(muteChannelPushBodySuccessFailure.selector)] = muteChannelPushBodySuccessFailure;
+        
+        
+        // schema for service method unmuteChannelPush:success:failure:
+        MMServiceMethod *unmuteChannelPushSuccessFailure = [[MMServiceMethod alloc] init];
+        unmuteChannelPushSuccessFailure.clazz = [self class];
+        unmuteChannelPushSuccessFailure.selector = @selector(unmuteChannelPush:success:failure:);
+        unmuteChannelPushSuccessFailure.path = @"com.magnet.server/channel/{channelId}/push/unmute";
+        unmuteChannelPushSuccessFailure.requestMethod = MMRequestMethodPOST;
+        unmuteChannelPushSuccessFailure.consumes = [NSSet setWithObjects:@"application/json", nil];
+        unmuteChannelPushSuccessFailure.produces = [NSSet setWithObjects:@"application/json", nil];
+        
+        NSMutableArray *unmuteChannelPushSuccessFailureParams = [NSMutableArray array];
+        MMServiceMethodParameter *unmuteChannelPushSuccessFailureParam0 = [[MMServiceMethodParameter alloc] init];
+        unmuteChannelPushSuccessFailureParam0.name = @"channelId";
+        unmuteChannelPushSuccessFailureParam0.requestParameterType = MMServiceMethodParameterTypePath;
+        unmuteChannelPushSuccessFailureParam0.type = MMServiceIOTypeString;
+        unmuteChannelPushSuccessFailureParam0.isOptional = NO;
+        [unmuteChannelPushSuccessFailureParams addObject:unmuteChannelPushSuccessFailureParam0];
+        
+        unmuteChannelPushSuccessFailure.parameters = unmuteChannelPushSuccessFailureParams;
+        unmuteChannelPushSuccessFailure.returnType = MMServiceIOTypeVoid;
+        serviceMetaData[NSStringFromSelector(unmuteChannelPushSuccessFailure.selector)] = unmuteChannelPushSuccessFailure;
         
         __metaData = serviceMetaData;
     });
