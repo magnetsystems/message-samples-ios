@@ -161,6 +161,12 @@ public class PollMediaItem: JSQMediaItem {
         })
     }
     
+    func refreshPoll(button: PollMediaButton) {
+       self.poll?.refreshResults(completion: { (poll) in
+        self.updatePoll()
+       })
+    }
+    
     func didSelectButton(button: PollMediaButton) {
         if let option = button.pollOption, var options = self.poll?.myVotes, let poll = self.poll {
             if options.count == options.filter({$0 != option}).count {
@@ -220,7 +226,7 @@ public class PollMediaItem: JSQMediaItem {
         
         return label
     }
-    
+
     func addView(superview : UIView, subview : UIView, height : CGFloat, padding: CGFloat) {
         subview.tag = count
         var leftView = superview
@@ -282,7 +288,34 @@ public class PollMediaItem: JSQMediaItem {
         viewHeight = 0.0
         lastPadding = 0.0
         self.buttons.removeAll()
-        addLabel(view, text: poll.question)
+        let topView = UIView()
+        let questionLabel = UILabel()
+        questionLabel.text = poll.question
+        questionLabel.textAlignment = .Left
+        questionLabel.minimumScaleFactor = 0.5
+        questionLabel.adjustsFontSizeToFitWidth = true
+        questionLabel.lineBreakMode = .ByTruncatingTail
+        questionLabel.textColor = hightLightColor
+        questionLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let nameLabel = UILabel()
+        nameLabel.text = "\(poll.name):"
+        nameLabel.textAlignment = .Left
+        nameLabel.font = UIFont.boldSystemFontOfSize(14.0)
+        nameLabel.minimumScaleFactor = 0.5
+        nameLabel.lineBreakMode = .ByTruncatingTail
+        nameLabel.textColor = hightLightColor
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.adjustsFontSizeToFitWidth = true
+        
+        topView.addSubview(questionLabel)
+        topView.addSubview(nameLabel)
+        
+        let constraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|[name]-[question]|", options: [.AlignAllBaseline, .AlignAllTop], metrics: nil, views: ["question": questionLabel,"name": nameLabel])
+        let vConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[name]|", options: .AlignAllBaseline, metrics: nil, views: ["name": nameLabel])
+        topView.addConstraints(constraints)
+        topView.addConstraints(vConstraints)
+        addView(view, subview: topView, height: 30, padding: 8)
         
         let border = UIView()
         border .backgroundColor = UIColor.whiteColor()
@@ -299,6 +332,14 @@ public class PollMediaItem: JSQMediaItem {
             button.pollOption = option
             button.addTarget(self, action: #selector(PollMediaItem.didSelectButton(_:)), forControlEvents: .TouchUpInside)
             self.buttons.append(button)
+        }
+        
+        if poll.hideResultsFromOthers && self.poll?.ownerID == MMUser.currentUser()?.userID && self.poll?.ownerID != nil {
+        let refreshButton = addButton(view, label: "↻")
+        refreshButton.layer.borderWidth = 0
+        refreshButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        refreshButton.titleLabel?.font = UIFont.boldSystemFontOfSize(25.0)
+        refreshButton.addTarget(self, action: #selector(PollMediaItem.refreshPoll(_:)), forControlEvents: .TouchUpInside)
         }
         updatePoll()
         self.cachedView = view
