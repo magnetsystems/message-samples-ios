@@ -297,6 +297,7 @@ public class PollMediaItem: JSQMediaItem {
         questionLabel.lineBreakMode = .ByTruncatingTail
         questionLabel.textColor = hightLightColor
         questionLabel.translatesAutoresizingMaskIntoConstraints = false
+        questionLabel.setContentCompressionResistancePriority(999, forAxis: .Horizontal)
         
         let nameLabel = UILabel()
         nameLabel.text = "\(poll.name):"
@@ -307,12 +308,14 @@ public class PollMediaItem: JSQMediaItem {
         nameLabel.textColor = hightLightColor
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.setContentHuggingPriority(999, forAxis: .Horizontal)
         
         topView.addSubview(questionLabel)
         topView.addSubview(nameLabel)
         
         let constraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|[name]-[question]|", options: [.AlignAllBaseline, .AlignAllTop], metrics: nil, views: ["question": questionLabel,"name": nameLabel])
         let vConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[name]|", options: .AlignAllBaseline, metrics: nil, views: ["name": nameLabel])
+        
         topView.addConstraints(constraints)
         topView.addConstraints(vConstraints)
         addView(view, subview: topView, height: 30, padding: 8)
