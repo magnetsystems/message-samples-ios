@@ -79,8 +79,14 @@ NSUInteger const kMaxMessageSize = 2 * 100 * 1024;
 NSString * const kMMXXMPPProtocol = @"xmpp";
 
 NSString * const kAddressFromKey = @"From";
+NSString * const kPushConfigNameKey = @"Push-Config-Name";
 NSString * const kAddressUsernameKey = @"userId";
 NSString * const kAddressDeviceIDKey = @"devId";
 NSString * const kAddressDisplayNameKey = @"displayName";
+
+// Poll and Poll Answer configs
+NSString * const kQuestionKey = @"question";
+NSString * const kDefaultPollPushConfigNameKey = @"DefaultPollConfig";
+NSString * const kDefaultPollAnswerPushConfigNameKey = @"DefaultPollAnswerConfig";
 
 @end

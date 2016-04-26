@@ -67,6 +67,10 @@
     topic.isCollection = [topicDict[@"isCollection"] boolValue];
     topic.topicDescription = topicDict[@"description"];
 	topic.publishPermissions = [MMXTopic publishPermissionsFromString:topicDict[@"publisherType"]];
+    topic.isMuted = [topicDict[@"isPushMutedByUser"] boolValue];
+    if (topic.isMuted && topicDict[@"pushMutedUntil"]) {
+        topic.mutedUntil = [[MMValueTransformer dateTransformer] transformedValue:topicDict[@"pushMutedUntil"]];
+    }
     return topic;
 }
 
