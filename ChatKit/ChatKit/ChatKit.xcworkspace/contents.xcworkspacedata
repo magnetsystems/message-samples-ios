@@ -37,6 +37,9 @@
             <FileRef
                location = "group:MMJSQViewController.swift">
             </FileRef>
+            <FileRef
+               location = "group:AddPollViewController.swift">
+            </FileRef>
          </Group>
          <Group
             location = "group:Helpers"
@@ -464,11 +467,17 @@
             <FileRef
                location = "group:Timestamp.swift">
             </FileRef>
+            <FileRef
+               location = "group:PollMediaItem.swift">
+            </FileRef>
          </Group>
       </Group>
       <Group
          location = "group:Views"
          name = "Views">
+         <FileRef
+            location = "group:AddPollViewController.xib">
+         </FileRef>
          <Group
             location = "container:"
             name = "images">
@@ -526,6 +535,12 @@
          </FileRef>
          <FileRef
             location = "group:MapViewController.xib">
+         </FileRef>
+         <FileRef
+            location = "group:PollOptionCellTableViewCell.swift">
+         </FileRef>
+         <FileRef
+            location = "group:PollOptionCellTableViewCell.xib">
          </FileRef>
       </Group>
       <Group

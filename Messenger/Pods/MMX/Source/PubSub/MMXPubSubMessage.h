@@ -58,6 +58,11 @@
 @property (nonatomic, strong, readonly) MMXTopic * topic;
 
 /**
+ *  The push config name.
+ */
+@property (nonatomic, copy) NSString *pushConfigName;
+
+/**
  *  Create a PubSub message to post
  *
  *  @param topic    - The MMXTopic object of the topic you want to post to.

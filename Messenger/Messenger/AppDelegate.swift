@@ -1,29 +1,28 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+import UIKit
 
 import AFNetworking
-import Crashlytics
-import Fabric
-import MagnetMax
-import UIKit
+import ChatKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     
     //MARK: Public properties
     
@@ -36,24 +35,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        // Override point for customization after application launch.
+        
+        let configurationFile = NSBundle.mainBundle().pathForResource("MagnetMax", ofType: "plist")
+        let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)
+        MagnetMax.configure(configuration!)
         
         let URLCache = NSURLCache(memoryCapacity: 4 * 1024 * 1024, diskCapacity: 100 * 1024 * 1024, diskPath: nil)
         NSURLCache.setSharedURLCache(URLCache)
         
-        MMXLogger.sharedLogger().level = .Verbose
-        MMXLogger.sharedLogger().startLogging()
-        
-        // Initialize MagnetMax
-        let configurationFile = NSBundle.mainBundle().pathForResource("MagnetMax", ofType: "plist")
-        let configuration = MMPropertyListConfiguration(contentsOfFile: configurationFile!)
-        MagnetMax.configure(configuration!)
-       // MagnetMax.configureWithBaseURL("http://localhost:8443/api/", clientID: "0936cd71-1112-4013-92f8-855ade8a7c83", clientSecret: "xdlUYIpwsdDuO3nKSQ6lGy_TVvDdv7YFli0-YYI1E_8")
-        
+        //        MMXLogger.sharedLogger().level = .Off
+        //        MMXLogger.sharedLogger().startLogging()
         
         let settings = UIUserNotificationSettings(forTypes: [.Badge,.Alert,.Sound], categories: nil)
         application.registerUserNotificationSettings(settings);
-        
-//        is user alread logged In ?
+        UtilsImageCache.sharedCache.maxImageCacheSize = 1024 * 1024 * 40
+        //        is user alread logged In ?
         setMainWindow(launchViewController())
         self.window?.makeKeyAndVisible()
         
@@ -77,14 +74,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             setMainWindow(rootViewController())
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionEnded", name: MMXUserDidLogOutNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.sessionEnded), name: MMXUserDidLogOutNotification, object: nil)
         AFNetworkReachabilityManager.sharedManager().setReachabilityStatusChangeBlock { (status) -> Void in
             if status == .NotReachable {
-             NSNotificationCenter.defaultCenter().postNotificationName(kNotificationNetworkOffline, object: self)
+                NSNotificationCenter.defaultCenter().postNotificationName(kNotificationNetworkOffline, object: self)
             }
         }
         AFNetworkReachabilityManager.sharedManager().startMonitoring()
-        Fabric.with([Crashlytics.self])
+        
         return true
     }
     
@@ -118,16 +115,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func setMainWindow(viewController : UIViewController) {
         if self.window == nil {
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window?.backgroundColor = UIColor.whiteColor()
+            self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+            self.window?.backgroundColor = UIColor.whiteColor()
         }
         self.window?.rootViewController = viewController
         self.baseViewController = viewController
     }
-    
-
-    //Mark: AppleDelegate
-    
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -137,6 +130,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        MMX.stop()
     }
     
     func applicationWillEnterForeground(application: UIApplication) {
@@ -145,6 +139,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        MMX.start()
     }
     
     func applicationWillTerminate(application: UIApplication) {
@@ -174,6 +169,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             MMXRemoteNotification.acknowledgeRemoteNotification(userInfo, completion: nil)
         }
     }
-    
 }
 

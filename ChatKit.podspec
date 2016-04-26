@@ -6,8 +6,8 @@ Pod::Spec.new do |s|
   s.description        =  'Magnet Message is a powerful, open source mobile messaging framework enabling real-time user engagement for your mobile apps. Send relevant and targeted communications to customers or employees. Enhance your mobile app with actionable notifications, alerts, in-app events, two-way interactions and more. Get started and get coding in minutes!'
   s.homepage           =  'https://www.magnet.com/developer/magnet-message/'
   s.author             =  { 'Magnet Systems, Inc.' => 'support@magnet.com' }
-  #s.source             =  { :git => 'https://github.com/magnetsystems/message-samples-ios.git', :branch => "ChatKit" }
-  s.source             =  { :git => 'https://github.com/magnetsystems/message-samples-ios.git', :tag => "tag-chatkit-#{s.version}" }
+  s.source             =  { :git => 'https://github.com/magnetsystems/message-samples-ios.git', :branch => "develop" }
+  #s.source             =  { :git => 'https://github.com/magnetsystems/message-samples-ios.git', :tag => "tag-chatkit-#{s.version}" }
   s.platform = :ios, '8.0'
   s.requires_arc = true
 
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'UI_Core' do |ss|
     ss.source_files = ['ChatKit/source/src/**/*.{h,m,swift}','ChatKit/source/Views/**/*.{h,m,swift}']
-    ss.dependency 'MagnetMax', '~> 2.5.3'
+    ss.dependency 'MagnetMax', '~> 2.7.0'
     ss.dependency 'NYTPhotoViewer' , '~> 1.1.0'
     ss.dependency 'DZVideoPlayerViewController'
     ss.dependency 'CocoaLumberjack/Swift'

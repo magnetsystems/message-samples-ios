@@ -1,0 +1,1 @@
+../../../ChatKit/ChatKit/source/src/JSQMessagesViewController/JSQMessagesViewController/JSQMessages.h

@@ -12,6 +12,16 @@ PODS:
   - AFNetworking/Serialization (2.6.1)
   - AFOAuth2Manager (2.2.1):
     - AFNetworking/NSURLConnection (~> 2.2)
+  - ChatKit (1.3.4):
+    - ChatKit/Public (= 1.3.4)
+    - ChatKit/UI_Core (= 1.3.4)
+  - ChatKit/Public (1.3.4):
+    - ChatKit/UI_Core (~> 1.3.4)
+  - ChatKit/UI_Core (1.3.4):
+    - CocoaLumberjack/Swift
+    - DZVideoPlayerViewController
+    - MagnetMax (~> 2.7.0)
+    - NYTPhotoViewer (~> 1.1.0)
   - CocoaAsyncSocket (7.4.1)
   - CocoaLumberjack (2.2.0):
     - CocoaLumberjack/Default (= 2.2.0)
@@ -21,18 +31,14 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (2.2.0):
     - CocoaLumberjack/Default
-  - Crashlytics (3.7.0):
-    - Fabric (~> 1.6.3)
+  - CocoaLumberjack/Swift (2.2.0):
+    - CocoaLumberjack/Extensions
   - DZVideoPlayerViewController (0.4.0)
-  - Fabric (1.6.7)
   - FLAnimatedImage (1.0.12)
-  - JSQMessagesViewController (7.2.0):
-    - JSQSystemSoundPlayer (~> 2.0.1)
-  - JSQSystemSoundPlayer (2.0.1)
-  - MagnetMax (2.5.2):
-    - MagnetMaxCore (~> 2.5)
-    - MMX (~> 2.5)
-  - MagnetMaxCore (2.5.2):
+  - MagnetMax (2.7.0):
+    - MagnetMaxCore (~> 2.7)
+    - MMX (~> 2.7)
+  - MagnetMaxCore (2.7.0):
     - AFNetworking/NSURLConnection (= 2.6.1)
     - AFNetworking/NSURLSession (= 2.6.1)
     - AFOAuth2Manager (= 2.2.1)
@@ -41,10 +47,10 @@ PODS:
   - Mantle (3.0.0):
     - Mantle/extobjc (= 3.0.0)
   - Mantle/extobjc (3.0.0)
-  - MMX (2.5.2):
+  - MMX (2.7.0):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.5)
+    - MagnetMaxCore (~> 2.7)
     - MMXXMPPFramework (~> 3.6)
   - MMXXMPPFramework (3.6.15):
     - MMXXMPPFramework/Core (= 3.6.15)
@@ -78,41 +84,30 @@ PODS:
   - MMXXMPPFramework/XEP-0203 (3.6.15):
     - MMXXMPPFramework/Core
     - MMXXMPPFramework/XEP-0082
-  - NYTPhotoViewer (1.0.1):
-    - NYTPhotoViewer/AnimatedGifSupport (= 1.0.1)
-    - NYTPhotoViewer/Core (= 1.0.1)
-  - NYTPhotoViewer/AnimatedGifSupport (1.0.1):
+  - NYTPhotoViewer (1.1.0):
+    - NYTPhotoViewer/AnimatedGifSupport (= 1.1.0)
+    - NYTPhotoViewer/Core (= 1.1.0)
+  - NYTPhotoViewer/AnimatedGifSupport (1.1.0):
     - FLAnimatedImage (~> 1.0.8)
     - NYTPhotoViewer/Core
-  - NYTPhotoViewer/Core (1.0.1)
-  - UIScrollView-InfiniteScroll (0.7.3)
+  - NYTPhotoViewer/Core (1.1.0)
 
 DEPENDENCIES:
-  - Crashlytics
-  - DZVideoPlayerViewController
-  - Fabric
-  - JSQMessagesViewController
-  - MagnetMax (~> 2.5)
-  - NYTPhotoViewer (~> 1.0.0)
-  - UIScrollView-InfiniteScroll
+  - ChatKit (~> 1.3.4)
 
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
+  ChatKit: 526fa28f9c3a6942e896ac583897deed4f6648da
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
-  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
   DZVideoPlayerViewController: 4886c5016a632cbd94a85e6071806e4929c01653
-  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
-  JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  MagnetMax: 27fb5f7f3cb6ba50c29b721b2bd82302eeec69f8
-  MagnetMaxCore: e5c71a3665b531acb0639055d45c840682ef5885
+  MagnetMax: a6440136417552b04074ce1abe8d4cb12b20f81a
+  MagnetMaxCore: 5c7a1fb052d60fb13e41914a3fe4999996e89c6b
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
-  MMX: 4189922d9d70cc254906626f35a80a6b4ca99c05
+  MMX: c6f811376230e0b65e905db44cadfc9cfcd9143b
   MMXXMPPFramework: 12ac458346387dc8a3fb157dc56db65e13be5a9b
-  NYTPhotoViewer: 98e0a54a9d28e4a980fc4b611fd5e419ca89ad74
-  UIScrollView-InfiniteScroll: b6c7d6d155dca7f9c5dd43813ecffeb301b3d50c
+  NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
 
 COCOAPODS: 0.39.0

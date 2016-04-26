@@ -1,0 +1,1 @@
+../../../ChatKit/ChatKit/source/ChatKit/ChatKit.h

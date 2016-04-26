@@ -50,4 +50,8 @@
 
 @property (nonatomic, assign) BOOL persistent;
 
+@property (nonatomic, assign) BOOL isMuted;
+
+@property (nonatomic, readwrite) NSDate *mutedUntil;
+
 @end
