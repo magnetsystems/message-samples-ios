@@ -24,6 +24,7 @@ class AddPollViewController: MMTableViewController, PollOptionCellDelegate {
     @IBOutlet var swMultipleSelections : UISwitch?
     @IBOutlet var swShowResults : UISwitch?
     @IBOutlet var textQuestion: UITextField?
+    @IBOutlet var textName: UITextField?
     @IBOutlet var textStatus: UILabel?
     
     override init() {
@@ -53,8 +54,11 @@ class AddPollViewController: MMTableViewController, PollOptionCellDelegate {
     
     func save() {
         self.textStatus?.text = ""
-        if (self.textQuestion?.text?.characters.count ?? 0) == 0 {
-            textStatus?.text = "Please enter a question."
+        if (textName?.text?.characters.count ?? 0) == 0 {
+            textStatus?.text = "Please enter a poll name."
+            return
+        } else if (self.textQuestion?.text?.characters.count ?? 0) == 0 {
+            textStatus?.text = "Please enter a poll question."
             return
         } else if self.options.count == 0 || self.options.first?.value.characters.count == 0 {
             textStatus?.text = "Please add options."

@@ -13,21 +13,21 @@ class MessengerUITests: XCTestCase {
     let lName = "test"
     let Group = "Group"
     
-    let userName = "test01@magnet.com"
-    let fName = "TestUser01"
-    let fullName = "TestUser01 test"
+    let userName = "test05@magnet.com"
+    let fName = "TestUser05"
+    let fullName = "TestUser05 test"
     
-    let userNameTwo = "test02@magnet.com"
-    let fNameTwo = "TestUser02"
-    let fullNameTwo = "TestUser02 test"
+    let userNameTwo = "test06@magnet.com"
+    let fNameTwo = "TestUser06"
+    let fullNameTwo = "TestUser06 test"
     
-    let userNameThree = "test03@magnet.com"
-    let fNameThree = "TestUser03"
-    let fullNameThree = "TestUser03 test"
+    let userNameThree = "test07@magnet.com"
+    let fNameThree = "TestUser07"
+    let fullNameThree = "TestUser07 test"
     
-    let userNameFour = "test04@magnet.com"
-    let fNameFour = "TestUser04"
-    let fullNameFour = "TestUser04 test"
+    let userNameFour = "test08@magnet.com"
+    let fNameFour = "TestUser08"
+    let fullNameFour = "TestUser08 test"
     
     override func setUp() {
         super.setUp()
@@ -495,12 +495,10 @@ class MessengerUITests: XCTestCase {
         XCTAssert(app.navigationBars["Ask Magnet"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).exists)
         app.navigationBars["Ask Magnet"].buttons["Details"].tap()
         self.delay()
-        
-        XCTAssertEqual(app.navigationBars["askMagnet"].staticTexts["askMagnet"].label, "askMagnet")
-        XCTAssert(app.tables.otherElements.buttons["Mute Push Notifications"].exists)
+        XCTAssertEqual(app.navigationBars["In Group"].staticTexts["In Group"].label, "In Group")
         XCTAssert(app.tables.otherElements.buttons["Add Contacts +"].exists)
-
-        app.navigationBars["askMagnet"].buttons["Ask Magnet"].tap()
+        
+        app.navigationBars["In Group"].buttons["Back"].tap()
         app.navigationBars["Ask Magnet"].childrenMatchingType(.Button).matchingIdentifier("Back").elementBoundByIndex(0).tap()
         self.delay()
         XCTAssertFalse(app.navigationBars["Ask Magnet"].buttons["Details"].exists)
