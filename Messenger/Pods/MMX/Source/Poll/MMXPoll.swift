@@ -24,36 +24,6 @@ enum MMXPollErrorType : ErrorType {
     case QuestionEmpty
 }
 
-extension Array where Element : Hashable {
-    func exclude(A:Array<Element>) -> Array<Element> {
-        var hash = [Int : Element]()
-        for val in self {
-            hash[val.hashValue] = val
-        }
-        var excluded = [Element]()
-        for val in A {
-            if let hashVal = hash[val.hashValue] {
-                excluded.append(hashVal)
-            }
-        }
-        return excluded
-    }
-    
-    func union(A:Array<Element>) -> Array<Element> {
-        var hash = [Int : Element]()
-        for val in self {
-            hash[val.hashValue] = val
-        }
-        var union = [Element]()
-        for val in A {
-            if let hashVal = hash[val.hashValue] {
-                union.append(hashVal)
-            }
-        }
-        return union
-    }
-}
-
 @objc public class MMXPoll: NSObject {
     
     //MARK: Public Properties
@@ -165,6 +135,7 @@ extension Array where Element : Hashable {
         let call = MMXSurveyService().submitSurveyAnswers(self.pollID, body: surveyAnswerRequest, success: {
             let msg = MMXMessage(toChannel: channel, messageContent: [kQuestionKey: self.question], pushConfigName: kDefaultPollAnswerPushConfigNameKey)
             let result = MMXPollAnswer(self, selectedOptions: option, previousSelection: previousSelection)
+            result.senderDeviceID = MMDevice.currentDevice().deviceID
             result.userID = MMUser.currentUser()?.userID ?? ""
             msg.payload = result
             self.myVotes = option
@@ -191,19 +162,21 @@ extension Array where Element : Hashable {
     
     public func refreshResults(answer answer: MMXPollAnswer) {
         if let previous = answer.previousSelection {
-            for option in self.options.union(previous) {
+            for option in Set(self.options).intersect(previous) {
                 if let count = option.count {
                     option.count = count.integerValue - 1
+                    print("v")
                 }
             }
         }
         
-        for option in self.options.union(answer.currentSelection) {
+        for option in Set(self.options).intersect(answer.currentSelection) {
             if let count = option.count {
                 option.count = count.integerValue + 1
+                print("^")
             }
         }
-        if answer.userID == MMUser.currentUser()?.userID {
+        if answer.userID == MMUser.currentUser()?.userID && MMDevice.currentDevice().deviceID != answer.senderDeviceID && answer.senderDeviceID != nil {
             self.myVotes = answer.currentSelection
         }
     }
