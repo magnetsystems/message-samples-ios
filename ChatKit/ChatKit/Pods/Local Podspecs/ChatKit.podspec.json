@@ -1,6 +1,6 @@
 {
   "name": "ChatKit",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "license": {
     "type": "Apache 2.0"
   },
@@ -45,7 +45,7 @@
       ],
       "dependencies": {
         "MagnetMax": [
-          "~> 2.7.0"
+          "~> 2.8.0"
         ],
         "NYTPhotoViewer": [
           "~> 1.1.0"
@@ -63,7 +63,7 @@
       "source_files": "ChatKit/source/ChatKit/**/*.{h,m,swift}",
       "dependencies": {
         "ChatKit/UI_Core": [
-          "~> 1.3.4"
+          "~> 1.3.5"
         ]
       }
     }

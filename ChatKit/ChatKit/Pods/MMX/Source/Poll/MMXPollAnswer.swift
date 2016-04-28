@@ -32,10 +32,12 @@ func + <K, V> (left: Dictionary<K, V>, right: Dictionary<K, V>) -> Dictionary<K,
     public var pollID: String = ""
     public var name: String = ""
     public var question : String = ""
+    public var senderDeviceID: String?
+    public var userID: String = ""
+    
     //Poll Options
     public var previousSelection: [MMXPollOption]?
     public var currentSelection = [MMXPollOption]()
-    public var userID: String = ""
     
     public override init!() {
         super.init()

@@ -356,11 +356,15 @@
           failure:(nullable void (^)(NSError *error))failure {
     
     MMXMuteChannelPushRequest *channelPushRequest = [[MMXMuteChannelPushRequest alloc] init];
-    channelPushRequest.channelId = self.channelID;
+    NSString *channelID = self.channelID.lowercaseString;
+    channelPushRequest.channelId = channelID;
     channelPushRequest.untilDate = date;
     
-    MMCall *call = [self.pubSubService muteChannelPush:self.channelID body:channelPushRequest success:^{
+    MMCall *call = [self.pubSubService muteChannelPush:channelID body:channelPushRequest success:^{
         self.isMuted = YES;
+        if (date) {
+            self.mutedUntil = date;
+        }
         if (success) {
             success();
         }
@@ -377,7 +381,7 @@
 - (void)unMuteWithSuccess:(nullable void (^)())success
                   failure:(nullable void (^)(NSError *error))failure {
     
-    MMCall *call = [self.pubSubService unmuteChannelPush:self.channelID success:^{
+    MMCall *call = [self.pubSubService unmuteChannelPush:self.channelID.lowercaseString success:^{
         self.isMuted = NO;
         if (success) {
             success();
@@ -985,6 +989,7 @@
         channel.isPublic = !topic.inUserNameSpace;
         channel.creationDate = topic.creationDate;
         channel.isMuted = topic.isMuted;
+        channel.mutedUntil = topic.mutedUntil;
         [channelDict setObject:channel forKey:[MMXChannel channelKeyFromTopic:topic]];
     }
     for (MMXTopicSummary *sum in summaries) {
