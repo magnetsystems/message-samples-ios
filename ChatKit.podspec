@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name               =  'ChatKit'
-  s.version            =  '1.3.4'
+  s.version            =  '1.3.5'
   s.license            =  { :type => 'Apache 2.0' }
   s.summary            =  'iOS framework for developing apps using the Magnet Message platform.'
   s.description        =  'Magnet Message is a powerful, open source mobile messaging framework enabling real-time user engagement for your mobile apps. Send relevant and targeted communications to customers or employees. Enhance your mobile app with actionable notifications, alerts, in-app events, two-way interactions and more. Get started and get coding in minutes!'
@@ -14,14 +14,14 @@ Pod::Spec.new do |s|
   s.resources = ['ChatKit/source/**/*.{xib,storyboard,bundle,png}']
 
   
-
+<iq type="get" id="7F8DB9E9-50D2-437B-B45B-CCDADE1F45A0"><mmx xmlns="com.magnet:pubsub" command="searchTopic" ctype="application/json">{"topicName":{"match":"EXACT","value":"TestChannel"},"tags":null,"operator":"AND","type":"personal","limit":-1}</mmx></iq>
   s.frameworks = 'QuartzCore', 'CoreGraphics', 'CoreLocation', 'MapKit', 'UIKit', 'Foundation', 'AudioToolbox'
 
   s.xcconfig       =  { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2', 'OTHER_LDFLAGS' => '-ObjC', 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES','ENABLE_BITCODE' => 'NO'}
 
   s.subspec 'UI_Core' do |ss|
     ss.source_files = ['ChatKit/source/src/**/*.{h,m,swift}','ChatKit/source/Views/**/*.{h,m,swift}']
-    ss.dependency 'MagnetMax', '~> 2.7.0'
+    ss.dependency 'MagnetMax', '~> 2.8.0'
     ss.dependency 'NYTPhotoViewer' , '~> 1.1.0'
     ss.dependency 'DZVideoPlayerViewController'
     ss.dependency 'CocoaLumberjack/Swift'
@@ -29,6 +29,6 @@ Pod::Spec.new do |s|
 
   s.subspec 'Public' do |ss|
     ss.source_files = 'ChatKit/source/ChatKit/**/*.{h,m,swift}'
-    ss.dependency 'ChatKit/UI_Core', '~> 1.3.4'
+    ss.dependency 'ChatKit/UI_Core', '~> 1.3.5'
   end
 end
