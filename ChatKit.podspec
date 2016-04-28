@@ -12,9 +12,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.resources = ['ChatKit/source/**/*.{xib,storyboard,bundle,png}']
-
-  
-<iq type="get" id="7F8DB9E9-50D2-437B-B45B-CCDADE1F45A0"><mmx xmlns="com.magnet:pubsub" command="searchTopic" ctype="application/json">{"topicName":{"match":"EXACT","value":"TestChannel"},"tags":null,"operator":"AND","type":"personal","limit":-1}</mmx></iq>
   s.frameworks = 'QuartzCore', 'CoreGraphics', 'CoreLocation', 'MapKit', 'UIKit', 'Foundation', 'AudioToolbox'
 
   s.xcconfig       =  { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2', 'OTHER_LDFLAGS' => '-ObjC', 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES','ENABLE_BITCODE' => 'NO'}
