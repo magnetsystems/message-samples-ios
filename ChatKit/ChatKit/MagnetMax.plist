@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>BaseURL</key>
-	<string>http://192.168.101.142:8443/api</string>
+	<string>https://sandy.magnet.com/mobile/api</string>
 	<key>ClientID</key>
-	<string>0a7cba64-bc70-483a-982e-72339488844f</string>
+	<string>eeb431af-efe4-4495-9451-5ed00af96b35</string>
 	<key>ClientSecret</key>
-	<string>teJDLxQxOd8gv2-eDGIi85RNvm0Renkjvg2dsvP_eYM</string>
+	<string>XAV7M0o3jP3G6PXX3_nn2iaBX5Ehryd0LtXEGK73MhM</string>
 </dict>
 </plist>

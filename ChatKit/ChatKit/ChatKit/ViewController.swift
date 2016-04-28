@@ -112,11 +112,11 @@ class ViewController: UIViewController {
             //            }
             // c.pickerDelegate = self
             //8a80803e5431d5a9015431d8b9f50002#TestChannel
-            MMXChannel.channelForID("8a80803e5431d5a9015431d8b9f50002#TestChannel", success: { ch in
-            print("channel")
-            }, failure: {error in
-            print("error \(error.localizedDescription)")
-            })
+//            MMXChannel.channelForID("8a80803e5431d5a9015431d8b9f50002#TestChannel", success: { ch in
+//            print("channel")
+//            }, failure: {error in
+//            print("error \(error.localizedDescription)")
+//            })
             self.showChatList()
 //            MMXChannel.createWithName("TestChannel", summary: "", isPublic: false, publishPermissions: .Anyone, success: { (channel) in
 //                print(channel.channelID)
