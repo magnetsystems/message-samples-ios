@@ -5,5 +5,5 @@ source 'https://github.com/magnetsystems/Specs.git'
 inhibit_all_warnings!
 
 use_frameworks!
-pod 'ChatKit', '~> 1.3.4'
+pod 'ChatKit', '~> 1.3.5'
 

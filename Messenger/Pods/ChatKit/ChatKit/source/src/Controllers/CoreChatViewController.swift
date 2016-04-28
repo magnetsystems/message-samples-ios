@@ -78,7 +78,6 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     
     
     deinit {
-        // Save the last channel show
         ChannelManager.sharedInstance.removeChannelMessageObserver(self)
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -152,12 +151,10 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
             let mappedMessages : [Message] = mmxMessages.map({
                 let message = Message(message: $0)
                 if message.isMediaMessage() {
-                    message.mediaCompletionBlock = {
-                        let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
-                        invailidationContext.invalidateFlowLayoutMessagesCache = true
-                        self.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
+                    message.mediaCompletionBlock = {[weak self] in
+                        message.setDataChanged()
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
-                            self.collectionView.reloadData()
+                            self?.collectionView.reloadData()
                         })
                     }
                 }
@@ -304,9 +301,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
             JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
             if message.isMediaMessage() && mmxMessage.contentType != MMXPollAnswer.contentType {
                 message.mediaCompletionBlock = { [weak self] in
-                    let invailidationContext = JSQMessagesCollectionViewFlowLayoutInvalidationContext()
-                    invailidationContext.invalidateFlowLayoutMessagesCache = true
-                    self?.collectionView.collectionViewLayout.invalidateLayoutWithContext(invailidationContext)
+                    message.setDataChanged()
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (Int64)(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
                         self?.collectionView.reloadData()
                     })

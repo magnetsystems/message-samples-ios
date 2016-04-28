@@ -21,6 +21,9 @@ import MMX
 
 public class Message : NSObject, JSQMessageData {
     
+    //MARK: Private properties
+    
+    private var dataChangeHash = 0
     
     //MARK: Public properties
     
@@ -133,6 +136,11 @@ public class Message : NSObject, JSQMessageData {
     
     //MARK: - Public implementation
     
+    
+    public func setDataChanged() {
+        dataChangeHash += 1
+    }
+    
     public func date() -> NSDate! {
         if let date = underlyingMessage.timestamp {
             return date
@@ -146,7 +154,7 @@ public class Message : NSObject, JSQMessageData {
     }
     
     public func messageHash() -> UInt {
-        return UInt(abs(underlyingMessage.messageID!.hash))
+        return UInt(abs((underlyingMessage.messageID! + "\(dataChangeHash)").hash))
     }
     
     public func senderId() -> String! {

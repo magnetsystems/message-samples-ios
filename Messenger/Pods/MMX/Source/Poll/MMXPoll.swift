@@ -17,41 +17,15 @@
 
 import MagnetMaxCore
 
+private class MMXPollRefreshOperation: MMAsyncBlockOperation {
+    
+}
+
 enum MMXPollErrorType : ErrorType {
     case IdEmpty
     case NameEmpty
     case OptionsEmpty
     case QuestionEmpty
-}
-
-extension Array where Element : Hashable {
-    func exclude(A:Array<Element>) -> Array<Element> {
-        var hash = [Int : Element]()
-        for val in self {
-            hash[val.hashValue] = val
-        }
-        var excluded = [Element]()
-        for val in A {
-            if let hashVal = hash[val.hashValue] {
-                excluded.append(hashVal)
-            }
-        }
-        return excluded
-    }
-    
-    func union(A:Array<Element>) -> Array<Element> {
-        var hash = [Int : Element]()
-        for val in self {
-            hash[val.hashValue] = val
-        }
-        var union = [Element]()
-        for val in A {
-            if let hashVal = hash[val.hashValue] {
-                union.append(hashVal)
-            }
-        }
-        return union
-    }
 }
 
 @objc public class MMXPoll: NSObject {
@@ -81,6 +55,12 @@ extension Array where Element : Hashable {
     public private(set) var pollID: String?
     
     public let question: String
+    
+    private var queue: NSOperationQueue = {
+        let queue = NSOperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
     
     //MARK: Private Properties
     
@@ -136,7 +116,6 @@ extension Array where Element : Hashable {
     }
     
     public func choose(options option: [MMXPollOption], success: ((MMXMessage?) -> Void)?, failure: ((error: NSError) -> Void)?) {
-        
         guard let channel = self.channel else {
             assert(false, "Poll not related to a channel, please submit poll first.")
             
@@ -148,41 +127,48 @@ extension Array where Element : Hashable {
             
             return
         }
-        
-        var answers = [MMXSurveyAnswer]()
-        let previousSelection = myVotes
-        
-        for opt in option {
-            let answer = MMXSurveyAnswer()
-            answer.selectedOptionId = opt.optionID
-            answer.text = opt.text
-            answer.questionId = self.underlyingSurvey?.surveyDefinition.questions.first?.questionId
-            answers.append(answer)
-        }
-        
-        let surveyAnswerRequest = MMXSurveyAnswerRequest()
-        surveyAnswerRequest.answers = answers
-        let call = MMXSurveyService().submitSurveyAnswers(self.pollID, body: surveyAnswerRequest, success: {
-            let msg = MMXMessage(toChannel: channel, messageContent: [kQuestionKey: self.question], pushConfigName: kDefaultPollAnswerPushConfigNameKey)
-            let result = MMXPollAnswer(self, selectedOptions: option, previousSelection: previousSelection)
-            result.userID = MMUser.currentUser()?.userID ?? ""
-            msg.payload = result
-            self.myVotes = option
-            if self.hideResultsFromOthers {
-                success?(nil)
-            } else {
-                msg.sendWithSuccess({ [weak msg] users in
-                    if let weakMessage = msg {
-                        success?(weakMessage)
-                    }
-                    }, failure: { error in
-                        failure?(error: error)
-                })
+        let operation = MMAsyncBlockOperation(with: { operation in
+            var answers = [MMXSurveyAnswer]()
+            let previousSelection = self.myVotes
+            
+            for opt in option {
+                let answer = MMXSurveyAnswer()
+                answer.selectedOptionId = opt.optionID
+                answer.text = opt.text
+                answer.questionId = self.underlyingSurvey?.surveyDefinition.questions.first?.questionId
+                answers.append(answer)
             }
-            }, failure: { error in
-                failure?(error: error)
+            
+            let surveyAnswerRequest = MMXSurveyAnswerRequest()
+            surveyAnswerRequest.answers = answers
+            let call = MMXSurveyService().submitSurveyAnswers(self.pollID, body: surveyAnswerRequest, success: {
+                let msg = MMXMessage(toChannel: channel, messageContent: [kQuestionKey: self.question], pushConfigName: kDefaultPollAnswerPushConfigNameKey)
+                let result = MMXPollAnswer(self, selectedOptions: option, previousSelection: previousSelection)
+                result.senderDeviceID = MMDevice.currentDevice().deviceID
+                result.userID = MMUser.currentUser()?.userID ?? ""
+                msg.payload = result
+                self.myVotes = option
+                if self.hideResultsFromOthers {
+                    success?(nil)
+                    operation.finish()
+                } else {
+                    msg.sendWithSuccess({ [weak msg] users in
+                        if let weakMessage = msg {
+                            success?(weakMessage)
+                        }
+                        operation.finish()
+                        }, failure: { error in
+                            failure?(error: error)
+                            operation.finish()
+                    })
+                }
+                }, failure: { error in
+                    failure?(error: error)
+                    operation.finish()
+            })
+            call.executeInBackground(nil)
         })
-        call.executeInBackground(nil)
+        queue.addOperation(operation)
     }
     
     public func mmxPayload() -> MMXPollIdentifier? {
@@ -191,19 +177,21 @@ extension Array where Element : Hashable {
     
     public func refreshResults(answer answer: MMXPollAnswer) {
         if let previous = answer.previousSelection {
-            for option in self.options.union(previous) {
+            for option in Set(self.options).intersect(previous) {
                 if let count = option.count {
                     option.count = count.integerValue - 1
+                    print("v")
                 }
             }
         }
         
-        for option in self.options.union(answer.currentSelection) {
+        for option in Set(self.options).intersect(answer.currentSelection) {
             if let count = option.count {
                 option.count = count.integerValue + 1
+                print("^")
             }
         }
-        if answer.userID == MMUser.currentUser()?.userID {
+        if answer.userID == MMUser.currentUser()?.userID && MMDevice.currentDevice().deviceID != answer.senderDeviceID && answer.senderDeviceID != nil {
             self.myVotes = answer.currentSelection
         }
     }
@@ -213,21 +201,34 @@ extension Array where Element : Hashable {
             completion(poll: nil)
             return
         }
-        MMXPoll.pollWithID(pollID, success: { (poll) in
-            var hashMap = [Int: MMXPollOption]()
-            for option in poll.options {
-                hashMap[option.hashValue] = option
+        
+        for operation in queue.operations {
+            if operation is MMXPollRefreshOperation {
+                operation.cancel()
             }
-            for option in self.options {
-                option.count = hashMap[option.hashValue]?.count ?? 0
-            }
-            let comp = {[weak self] in
-                completion(poll: self)
-            }
-            comp()
-        }) { (error) in
-            completion(poll: nil)
         }
+        let operation = MMXPollRefreshOperation(with: { operation in
+            MMXPoll.pollWithID(pollID, success: { (poll) in
+                if !operation.cancelled {
+                    var hashMap = [Int: MMXPollOption]()
+                    for option in poll.options {
+                        hashMap[option.hashValue] = option
+                    }
+                    for option in self.options {
+                        option.count = hashMap[option.hashValue]?.count ?? 0
+                    }
+                }
+                let comp = {[weak self] in
+                    completion(poll: self)
+                }
+                comp()
+                operation.finish()
+            }) { (error) in
+                completion(poll: nil)
+                operation.finish()
+            }
+        })
+        queue.addOperation(operation)
     }
     
     //MARK: Public Static Methods

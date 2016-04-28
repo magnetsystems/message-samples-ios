@@ -20,7 +20,7 @@ import MMX
 
 public class PollMediaButton : UIButton {
     public var pollOption: MMXPollOption?
-    
+    public var count = 0
     public var rightLabel: UILabel? {
         didSet {
             oldValue?.removeFromSuperview()
@@ -71,6 +71,9 @@ public class PollMediaItem: JSQMediaItem {
     public let labelHeight: CGFloat = 25.0
     public var lightColor = UIColor(red: 196/255.0, green: 217/255.0, blue: 248/255.0, alpha: 1.0)
     public var hightLightColor = UIColor.whiteColor()
+    public lazy var width: CGFloat = {
+        return self.defaultDisplaySize()
+    }()
     public private(set) var channel : MMXChannel? {
         didSet {
             ChannelManager.sharedInstance.removeChannelMessageObserver(self)
@@ -104,14 +107,24 @@ public class PollMediaItem: JSQMediaItem {
     private var isRetrievingPoll = false
     
     
+    //MARK: Init
+    
+    
+    deinit {
+        ChannelManager.sharedInstance.removeChannelMessageObserver(self)
+    }
+    
+    
     //MARK: Nofication
     
     
     func didReceiveMessage(message : MMXMessage) {
         if message.contentType == MMXPollAnswer.contentType {
             if let answer = message.payload as? MMXPollAnswer where answer.pollID == poll?.pollID && poll?.pollID != nil {
-                self.poll?.refreshResults(answer: answer)
-                updatePoll()
+                if answer.senderDeviceID != MMDevice.currentDevice().deviceID {
+                    self.poll?.refreshResults(answer: answer)
+                    updatePoll()
+                }
             }
         }
     }
@@ -121,7 +134,7 @@ public class PollMediaItem: JSQMediaItem {
     func updatePoll() {
         for button in buttons {
             if let count = button.pollOption?.count {
-                button.rightLabel?.text = "\(count.integerValue)"
+                button.count = count.integerValue
             }
         }
         updateButtons()
@@ -129,6 +142,7 @@ public class PollMediaItem: JSQMediaItem {
     
     func updateButtons() {
         for button in self.buttons {
+            button.rightLabel?.text = "\(button.count)"
             if let myOptions = self.poll?.myVotes?.filter({$0 == button.pollOption}) where myOptions.count > 0 {
                 button.rightLabel?.backgroundColor = darkColor
                 button.rightLabel?.textColor = hightLightColor
@@ -162,9 +176,9 @@ public class PollMediaItem: JSQMediaItem {
     }
     
     func refreshPoll(button: PollMediaButton) {
-       self.poll?.refreshResults(completion: { (poll) in
-        self.updatePoll()
-       })
+        self.poll?.refreshResults(completion: { (poll) in
+            self.updatePoll()
+        })
     }
     
     func didSelectButton(button: PollMediaButton) {
@@ -179,11 +193,12 @@ public class PollMediaItem: JSQMediaItem {
             } else {
                 options = options.filter({$0 != option})
             }
-            button.enabled = false
             self.cachedView?.userInteractionEnabled = false
             poll.choose(options: options, success: { (message) in
-                button.enabled = true
-                self.updateButtons()
+                if let answer = message?.payload as? MMXPollAnswer {
+                    self.poll?.refreshResults(answer: answer)
+                    self.updatePoll()
+                }
                 if poll.ownerID != nil && poll.ownerID == MMUser.currentUser()?.userID && poll.hideResultsFromOthers {
                     poll.refreshResults(completion: { poll in
                         self.updatePoll()
@@ -193,9 +208,7 @@ public class PollMediaItem: JSQMediaItem {
                     self.cachedView?.userInteractionEnabled = true
                 }
                 }, failure: { (error) in
-                    button.enabled = true
                     self.cachedView?.userInteractionEnabled = true
-                    self.updateButtons()
             })
         }
     }
@@ -226,7 +239,7 @@ public class PollMediaItem: JSQMediaItem {
         
         return label
     }
-
+    
     func addView(superview : UIView, subview : UIView, height : CGFloat, padding: CGFloat) {
         subview.tag = count
         var leftView = superview
@@ -263,13 +276,13 @@ public class PollMediaItem: JSQMediaItem {
         count += 1
     }
     
-    func optionsForDisplay() -> [MMXPollOption] {
-        return self.poll?.options ?? []
-    }
-    
     override public func clearCachedMediaViews() {
         super.clearCachedMediaViews()
         self.cachedView = nil
+    }
+    
+    func defaultDisplaySize() -> CGFloat {
+        return super.mediaViewDisplaySize().width
     }
     
     override public func mediaView() -> UIView! {
@@ -280,10 +293,13 @@ public class PollMediaItem: JSQMediaItem {
         let view = UIView()
         view.backgroundColor = viewBackgroundColor
         view.layer.cornerRadius = cornerRadius
-        
         guard let poll = self.poll else {
+            let activityView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+            activityView.startAnimating()
+            addView(view, subview: activityView, height: 30, padding: 30)
             return view
         }
+        
         count = 1
         viewHeight = 0.0
         lastPadding = 0.0
@@ -337,11 +353,11 @@ public class PollMediaItem: JSQMediaItem {
         }
         
         if poll.hideResultsFromOthers && self.poll?.ownerID == MMUser.currentUser()?.userID && self.poll?.ownerID != nil {
-        let refreshButton = addButton(view, label: "↻")
-        refreshButton.layer.borderWidth = 0
-        refreshButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        refreshButton.titleLabel?.font = UIFont.boldSystemFontOfSize(25.0)
-        refreshButton.addTarget(self, action: #selector(PollMediaItem.refreshPoll(_:)), forControlEvents: .TouchUpInside)
+            let refreshButton = addButton(view, label: "↻")
+            refreshButton.layer.borderWidth = 0
+            refreshButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            refreshButton.titleLabel?.font = UIFont.boldSystemFontOfSize(25.0)
+            refreshButton.addTarget(self, action: #selector(PollMediaItem.refreshPoll(_:)), forControlEvents: .TouchUpInside)
         }
         updatePoll()
         self.cachedView = view
@@ -351,7 +367,11 @@ public class PollMediaItem: JSQMediaItem {
     
     override public func mediaViewDisplaySize() -> CGSize {
         let _ = mediaView()
-        let height = max(viewHeight, 100.0)
-        return CGSize(width: super.mediaViewDisplaySize().width, height: height)
+        let height = max(viewHeight, 10.0)
+        return CGSize(width: width, height: height)
+    }
+    
+    func optionsForDisplay() -> [MMXPollOption] {
+        return self.poll?.options ?? []
     }
 }

@@ -17,8 +17,6 @@
 
 import Foundation
 
-import MagnetMax
-
 public class MMAsyncBlockOperation : MMAsynchronousOperation {
     
     

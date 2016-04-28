@@ -12,15 +12,15 @@ PODS:
   - AFNetworking/Serialization (2.6.1)
   - AFOAuth2Manager (2.2.1):
     - AFNetworking/NSURLConnection (~> 2.2)
-  - ChatKit (1.3.4):
-    - ChatKit/Public (= 1.3.4)
-    - ChatKit/UI_Core (= 1.3.4)
-  - ChatKit/Public (1.3.4):
-    - ChatKit/UI_Core (~> 1.3.4)
-  - ChatKit/UI_Core (1.3.4):
+  - ChatKit (1.3.5):
+    - ChatKit/Public (= 1.3.5)
+    - ChatKit/UI_Core (= 1.3.5)
+  - ChatKit/Public (1.3.5):
+    - ChatKit/UI_Core (~> 1.3.5)
+  - ChatKit/UI_Core (1.3.5):
     - CocoaLumberjack/Swift
     - DZVideoPlayerViewController
-    - MagnetMax (~> 2.7.0)
+    - MagnetMax (~> 2.8.0)
     - NYTPhotoViewer (~> 1.1.0)
   - CocoaAsyncSocket (7.4.1)
   - CocoaLumberjack (2.2.0):
@@ -35,10 +35,10 @@ PODS:
     - CocoaLumberjack/Extensions
   - DZVideoPlayerViewController (0.4.0)
   - FLAnimatedImage (1.0.12)
-  - MagnetMax (2.7.0):
-    - MagnetMaxCore (~> 2.7)
-    - MMX (~> 2.7)
-  - MagnetMaxCore (2.7.0):
+  - MagnetMax (2.8.0):
+    - MagnetMaxCore (~> 2.8)
+    - MMX (~> 2.8)
+  - MagnetMaxCore (2.8.0):
     - AFNetworking/NSURLConnection (= 2.6.1)
     - AFNetworking/NSURLSession (= 2.6.1)
     - AFOAuth2Manager (= 2.2.1)
@@ -47,10 +47,10 @@ PODS:
   - Mantle (3.0.0):
     - Mantle/extobjc (= 3.0.0)
   - Mantle/extobjc (3.0.0)
-  - MMX (2.7.0):
+  - MMX (2.8.0):
     - CocoaAsyncSocket (= 7.4.1)
     - CocoaLumberjack (~> 2.2)
-    - MagnetMaxCore (~> 2.7)
+    - MagnetMaxCore (~> 2.8)
     - MMXXMPPFramework (~> 3.6)
   - MMXXMPPFramework (3.6.15):
     - MMXXMPPFramework/Core (= 3.6.15)
@@ -93,20 +93,20 @@ PODS:
   - NYTPhotoViewer/Core (1.1.0)
 
 DEPENDENCIES:
-  - ChatKit (~> 1.3.4)
+  - ChatKit (~> 1.3.5)
 
 SPEC CHECKSUMS:
   AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   AFOAuth2Manager: 9efc94eb158fbfca13e685c22d91721c7a64fc8c
-  ChatKit: 526fa28f9c3a6942e896ac583897deed4f6648da
+  ChatKit: 6ecead27a974f44c95627f1c9bd8f0521d53517e
   CocoaAsyncSocket: 7cbf214b27f8e7f7574db6a3fd96352ffaed433d
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
   DZVideoPlayerViewController: 4886c5016a632cbd94a85e6071806e4929c01653
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  MagnetMax: a6440136417552b04074ce1abe8d4cb12b20f81a
-  MagnetMaxCore: 5c7a1fb052d60fb13e41914a3fe4999996e89c6b
+  MagnetMax: ebf925d46219c4da6774236e2bea4e7256343936
+  MagnetMaxCore: ddb9cfc96bd47c13cd42d80fc3d5c8230e5356de
   Mantle: 3a019674ccd330eebf877e6cb81092b48483c36e
-  MMX: c6f811376230e0b65e905db44cadfc9cfcd9143b
+  MMX: f40b2dd757999641e09df5a8301aa44e01eeec72
   MMXXMPPFramework: 12ac458346387dc8a3fb157dc56db65e13be5a9b
   NYTPhotoViewer: e80e8767f3780d2df37c6f72cbab15d6c7232911
 
