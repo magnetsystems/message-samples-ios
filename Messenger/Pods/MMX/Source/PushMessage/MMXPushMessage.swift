@@ -19,6 +19,96 @@
 import MagnetMaxCore
 import UIKit
 
+struct LoggedInCondition: OperationCondition {
+    static let name = "LoggedInCondition"
+    static let isMutuallyExclusive = false
+    
+    func dependencyForOperation(operation: Operation) -> NSOperation? {
+        return nil
+    }
+    
+    func evaluateForOperation(operation: Operation, completion: OperationConditionResult -> Void) {
+        
+        if MMXClient.sharedClient().connectionStatus == .Authenticated {
+            completion(.Satisfied)
+        } else {
+            let error = NSError(code: .ConditionFailed, userInfo: [
+                OperationConditionKey: self.dynamicType.name,
+                ])
+            
+            completion(.Failed(error))
+        }
+    }
+    
+}
+
+extension MMXChannel {
+    public class func subscriptionsWithSuccess(success: (([MMXChannel]) -> Void)?, failure: ((NSError) -> Void)?) -> NSOperation? {
+        var groupOperation = GroupOperation(operations: [])
+        
+        groupOperation.addCondition(LoggedInCondition())
+        
+        var _subscriptions: [MMXTopicSubscription] = []
+        let listSubscriptionsOperation = BlockOperation { continuation in
+            MMXClient.sharedClient().pubsubManager.listSubscriptionsWithSuccess({ subscriptions in
+                _subscriptions = subscriptions
+                continuation()
+            }, failure: { error in
+                groupOperation.aggregateError(error)
+                continuation()
+            })
+        }
+        
+        var _topics: [MMXTopic] = []
+        let topicsFromTopicSubscriptionsOperation = BlockOperation { continuation in
+            guard _subscriptions.count > 0 else {
+                continuation()
+                return
+            }
+            MMXClient.sharedClient().pubsubManager.topicsFromTopicSubscriptions(_subscriptions, success: { topics in
+                _topics = topics
+                continuation()
+            }, failure: { error in
+                groupOperation.aggregateError(error)
+                continuation()
+            })
+        }
+        topicsFromTopicSubscriptionsOperation.addDependency(listSubscriptionsOperation)
+        
+        var _channels: [MMXChannel] = []
+        let summaryOfTopicsOperation = BlockOperation { continuation in
+            guard _subscriptions.count > 0 && _topics.count > 0 else {
+                continuation()
+                return
+            }
+            MMXClient.sharedClient().pubsubManager.summaryOfTopics(_topics, since: nil, until: nil, success: { summaries in
+                _channels = MMXChannel.channelsFromTopics(_topics, summaries: summaries, subscriptions: _subscriptions)
+                continuation()
+            }, failure: { error in
+                groupOperation.aggregateError(error)
+                continuation()
+            })
+        }
+        summaryOfTopicsOperation.addDependency(topicsFromTopicSubscriptionsOperation)
+        
+        groupOperation.addOperations([listSubscriptionsOperation, topicsFromTopicSubscriptionsOperation, summaryOfTopicsOperation])
+        
+        let groupOperationObserver = BlockObserver(startHandler: nil, produceHandler: nil) { operation, errors in
+            if errors.count > 0 {
+                failure?(errors.last!)
+            } else {
+                success?(_channels)
+            }
+        }
+        
+        groupOperation.addObserver(groupOperationObserver)
+        
+       // OperationQueue().addOperation(groupOperation)
+        
+        return groupOperation
+    }
+}
+
 
 @objc public class MMXPushMessage : NSObject {
     

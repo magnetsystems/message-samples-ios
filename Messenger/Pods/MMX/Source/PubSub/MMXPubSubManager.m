@@ -377,7 +377,7 @@
 	return topicIQ;
 }
 
-- (void)listSubscriptionsWithSuccess:(void (^)(NSArray *))success
+- (void)listSubscriptionsWithSuccess:(void (^)(NSArray <MMXTopicSubscription *> * subscriptions))success
                              failure:(void (^)(NSError *))failure {
     
     if (![self hasActiveConnection]) {
@@ -925,7 +925,7 @@
 }
 
 - (void)topicsFromTopicSubscriptions:(NSArray *)topics
-                             success:(void (^)(NSArray *))success
+                             success:(void (^)(NSArray <MMXTopic *>*))success
                              failure:(void (^)(NSError *))failure {
     
     [[MMXLogger sharedLogger] verbose:@"MMXPubSubManager summaryOfTopics. topics = %@", topics];
@@ -1012,7 +1012,7 @@
 - (void)summaryOfTopics:(NSArray *)topics
 				  since:(NSDate *)since
 				  until:(NSDate *)until
-                success:(void (^)(NSArray *))success
+                success:(void (^)(NSArray <MMXTopicSummary *>* summaries))success
                 failure:(void (^)(NSError *))failure {
     
 	[[MMXLogger sharedLogger] verbose:@"MMXPubSubManager summaryOfTopics. topics = %@", topics];

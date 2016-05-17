@@ -562,36 +562,132 @@
     }];
 }
 
-+ (void)subscribedChannelsWithSuccess:(void (^)(NSArray <MMXChannel *>*))success
-                              failure:(void (^)(NSError *))failure {
++ (nullable NSOperation *)subscribedChannelsWithSuccess:(nullable void (^)(NSArray <MMXChannel *>*channels))success
+                                                failure:(nullable void (^)(NSError *error))failure {
+    
     if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
         if (failure) {
             failure([MagnetDelegate notLoggedInError]);
         }
-        return;
+        return nil;
     }
-    [[MMXClient sharedClient].pubsubManager listSubscriptionsWithSuccess:^(NSArray *subscriptions) {
-        [[MMXClient sharedClient].pubsubManager topicsFromTopicSubscriptions:subscriptions success:^(NSArray * topics) {
-            [[MMXClient sharedClient].pubsubManager summaryOfTopics:topics since:nil until:nil success:^(NSArray *summaries) {
-                NSArray *channelArray = [MMXChannel channelsFromTopics:topics summaries:summaries subscriptions:subscriptions];
-                if (success) {
-                    success(channelArray);
-                }
-            } failure:^(NSError *error) {
-                if (failure) {
-                    failure(error);
-                }
-            }];
+    
+    GroupOperation *groupOperation = [[GroupOperation alloc] initWithOperations:@[]];
+    
+    __block NSArray *_subscriptions;
+    BlockOperation *listSubscriptionsOperation = [[BlockOperation alloc] initWithBlock:^(void (^ _Nonnull continuation)(void)) {
+        [[MMXClient sharedClient].pubsubManager listSubscriptionsWithSuccess:^(NSArray <MMXTopicSubscription *> *subscriptions) {
+            _subscriptions = subscriptions;
+            if (continuation) {
+                continuation();
+            }
         } failure:^(NSError *error) {
-            if (failure) {
-                failure(error);
+            [groupOperation aggregateError:error];
+            if (continuation) {
+                continuation();
             }
         }];
-    } failure:^(NSError *error) {
-        if (failure) {
-            failure(error);
+    }];
+    
+
+    __block NSArray *_topics;
+    BlockOperation *topicsFromTopicSubscriptionsOperation = [[BlockOperation alloc] initWithBlock:^(void (^ _Nonnull continuation)(void)) {
+        if (_subscriptions.count > 0) {
+            [[MMXClient sharedClient].pubsubManager topicsFromTopicSubscriptions:_subscriptions success:^(NSArray * topics) {
+                _topics = topics;
+                if (continuation) {
+                    continuation();
+                }
+            } failure:^(NSError *error) {
+                [groupOperation aggregateError:error];
+                if (continuation) {
+                    continuation();
+                }
+            }];
+        } else {
+            if (continuation) {
+                continuation();
+            }
         }
     }];
+    [topicsFromTopicSubscriptionsOperation addDependency:listSubscriptionsOperation];
+    
+    __block NSArray <MMXChannel *> *_channels;
+    BlockOperation *summaryOfTopicsOperation = [[BlockOperation alloc] initWithBlock:^(void (^ _Nonnull continuation)(void)) {
+        if (_topics.count > 0) {
+            [[MMXClient sharedClient].pubsubManager summaryOfTopics:_topics since:nil until:nil success:^(NSArray *summaries) {
+                NSArray *channelArray = [MMXChannel channelsFromTopics:_topics summaries:summaries subscriptions:_subscriptions];
+                _channels = channelArray;
+                if (continuation) {
+                    continuation();
+                }
+            } failure:^(NSError *error) {
+                [groupOperation aggregateError:error];
+                if (continuation) {
+                    continuation();
+                }
+            }];
+        } else {
+            if (continuation) {
+                continuation();
+            }
+        }
+    }];
+    [summaryOfTopicsOperation addDependency:topicsFromTopicSubscriptionsOperation];
+                                                
+    [groupOperation addOperations:@[listSubscriptionsOperation, topicsFromTopicSubscriptionsOperation, summaryOfTopicsOperation]];
+    
+    BlockObserver *groupOperationObserver = [[BlockObserver alloc] initWithStartHandler:nil produceHandler:nil finishHandler:^(Operation * _Nonnull operation, NSArray<NSError *> * _Nonnull errors) {
+        if (errors && errors.count > 0) {
+            if (failure) {
+                failure(errors.lastObject);
+            }
+        } else {
+            if (success) {
+                success(_channels);
+            }
+        }
+    }];
+    [groupOperation addObserver:groupOperationObserver];
+    
+    OperationQueue *operationQueue = [[OperationQueue alloc] init];
+    [operationQueue addOperation:groupOperation];
+    
+    return groupOperation;
+    
+//    // Ensure that the user is logged in
+//    if ([MMXClient sharedClient].connectionStatus != MMXConnectionStatusAuthenticated) {
+//        if (failure) {
+//            failure([MagnetDelegate notLoggedInError]);
+//        }
+//        return;
+//    }
+//    // API call # 1
+//    [[MMXClient sharedClient].pubsubManager listSubscriptionsWithSuccess:^(NSArray *subscriptions) {
+//        // API call # 2
+//        [[MMXClient sharedClient].pubsubManager topicsFromTopicSubscriptions:subscriptions success:^(NSArray * topics) {
+//            // API call # 3
+//            [[MMXClient sharedClient].pubsubManager summaryOfTopics:topics since:nil until:nil success:^(NSArray *summaries) {
+//                NSArray *channelArray = [MMXChannel channelsFromTopics:topics summaries:summaries subscriptions:subscriptions];
+//                if (success) {
+//                    NSLog(@"channelArray = %@", channelArray);
+//                    success(channelArray);
+//                }
+//            } failure:^(NSError *error) {
+//                if (failure) {
+//                    failure(error);
+//                }
+//            }];
+//        } failure:^(NSError *error) {
+//            if (failure) {
+//                failure(error);
+//            }
+//        }];
+//    } failure:^(NSError *error) {
+//        if (failure) {
+//            failure(error);
+//        }
+//    }];
 }
 
 - (void)subscribersWithLimit:(int)limit
@@ -981,7 +1077,7 @@
     return topics.copy;
 }
 
-+ (NSArray *)channelsFromTopics:(NSArray *)topics summaries:(NSArray *)summaries subscriptions:(NSArray *)subscriptions {
++ (NSArray <MMXChannel *> *)channelsFromTopics:(NSArray <MMXTopic *> *)topics summaries:(NSArray <MMXTopicSummary *> *)summaries subscriptions:(NSArray <MMXTopicSubscription *> *)subscriptions {
     NSMutableDictionary *channelDict = [NSMutableDictionary dictionaryWithCapacity:topics.count];
     for (MMXTopic *topic in topics) {
         MMXChannel *channel = [MMXChannel channelWithName:topic.topicName summary:topic.topicDescription isPublic:!topic.inUserNameSpace publishPermissions:topic.publishPermissions];

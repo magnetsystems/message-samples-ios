@@ -14,7 +14,7 @@ import Foundation
     extended readiness requirements, as well as notify many interested parties
     about interesting operation state changes
 */
-public class Operation: NSOperation {
+@objc public class Operation: NSOperation {
     
     // use the KVO mechanism to indicate that changes to "state" affect other properties as well
     class func keyPathsForValuesAffectingIsReady() -> Set<NSObject> {
@@ -199,7 +199,7 @@ public class Operation: NSOperation {
     
     private(set) var observers = [OperationObserver]()
     
-    func addObserver(observer: OperationObserver) {
+    public func addObserver(observer: OperationObserver) {
         assert(state < .Executing, "Cannot modify observers after execution has begun.")
         
         observers.append(observer)

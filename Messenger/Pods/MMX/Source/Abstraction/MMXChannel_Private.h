@@ -18,6 +18,8 @@
 #import "MMXChannel.h"
 @class MMXTopic;
 @class MMXPubSubService;
+@class MMXTopicSummary;
+@class MMXTopicSubscription;
 
 @interface MMXChannel ()
 
@@ -46,6 +48,6 @@
 					   isPublic:(BOOL)isPublic
 			 publishPermissions:(MMXPublishPermissions)publishPermissions;
 
-+ (NSArray *)channelsFromTopics:(NSArray *)topics summaries:(NSArray *)summaries subscriptions:(NSArray *)subscriptions;
++ (NSArray <MMXChannel *> *)channelsFromTopics:(NSArray <MMXTopic *> *)topics summaries:(NSArray <MMXTopicSummary *> *)summaries subscriptions:(NSArray <MMXTopicSubscription *> *)subscriptions;
 + (void)channelForID:(NSString *)channelID  success:(void (^)(MMXChannel *channel))success failure:(void (^)(NSError *error))failure;
 @end

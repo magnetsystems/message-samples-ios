@@ -295,8 +295,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param success Block with a NSArray of channels
  *  @param failure - Block with an NSError with details about the call failure.
  */
-+ (void)subscribedChannelsWithSuccess:(nullable void (^)(NSArray <MMXChannel *>*channels))success
-                              failure:(nullable void (^)(NSError *error))failure;
++ (nullable NSOperation *)subscribedChannelsWithSuccess:(nullable void (^)(NSArray <MMXChannel *>*channels))success
+                                                failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  Get the subscribers for a channel

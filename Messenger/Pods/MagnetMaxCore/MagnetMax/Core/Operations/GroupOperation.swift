@@ -28,11 +28,11 @@ public class GroupOperation: Operation {
 
     private var aggregatedErrors = [NSError]()
     
-    convenience init(operations: NSOperation...) {
+    public convenience init(operations: NSOperation...) {
         self.init(operations: operations)
     }
     
-    init(operations: [NSOperation]) {
+    public init(operations: [NSOperation]) {
         super.init()
         
         internalQueue.suspended = true
@@ -54,8 +54,14 @@ public class GroupOperation: Operation {
         internalQueue.addOperation(finishingOperation)
     }
     
-    func addOperation(operation: NSOperation) {
+    public func addOperation(operation: NSOperation) {
         internalQueue.addOperation(operation)
+    }
+    
+    public func addOperations(operations: [NSOperation]) {
+        for operation in operations {
+            internalQueue.addOperation(operation)
+        }
     }
     
     /**
@@ -63,7 +69,7 @@ public class GroupOperation: Operation {
         Errors aggregated through this method will be included in the final array
         of errors reported to observers and to the `finished(_:)` method.
     */
-    final func aggregateError(error: NSError) {
+    public final func aggregateError(error: NSError) {
         aggregatedErrors.append(error)
     }
     

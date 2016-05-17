@@ -25,6 +25,7 @@
 @class MMXEndpoint;
 @class MMXPubSubFetchRequest;
 @class CLLocation;
+@class MMXTopicSummary;
 
 /**
  *  MMXPubSubManager is the primary class interacting with MMXTopic and MMXPubSubMessage.
@@ -98,7 +99,7 @@
 - (void)summaryOfTopics:(NSArray *)topics
 				  since:(NSDate *)since
 				  until:(NSDate *)until
-                success:(void (^)(NSArray * summaries))success
+                success:(void (^)(NSArray <MMXTopicSummary *>* summaries))success
                 failure:(void (^)(NSError * error))failure;
 
 #pragma mark - Get Posts
@@ -174,7 +175,7 @@
  *  @param success  - Block with a NSArray of the MMXTopicSubscriptions. See MMXTopicSubscription.h The IDs can be used to unsubscribe.
  *  @param failure  - Block with an NSError with details about the call failure.
  */
-- (void)listSubscriptionsWithSuccess:(void (^)(NSArray * subscriptions))success
+- (void)listSubscriptionsWithSuccess:(void (^)(NSArray <MMXTopicSubscription *> * subscriptions))success
                              failure:(void (^)(NSError * error))failure;
 
 /**

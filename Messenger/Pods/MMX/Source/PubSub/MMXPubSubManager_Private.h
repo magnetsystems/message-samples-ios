@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, MMXTopicType){
                       failure:(void (^)(NSError * error))failure;
 
 - (void)topicsFromTopicSubscriptions:(NSArray *)topics
-							 success:(void (^)(NSArray *))success
+							 success:(void (^)(NSArray <MMXTopic *>*))success
 							 failure:(void (^)(NSError *))failure;
 
 - (void)topicsFromTopicDictionaries:(NSArray <NSDictionary *>*)topics
