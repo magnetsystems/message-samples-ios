@@ -129,7 +129,7 @@ public class Message : NSObject, JSQMessageData {
     //MARK: init
     
     
-    public init(message: MMXMessage) {
+    required public init(message: MMXMessage) {
         self.underlyingMessage = message
     }
     

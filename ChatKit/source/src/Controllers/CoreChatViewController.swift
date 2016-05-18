@@ -38,7 +38,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     
     //MARK: Public Properties
     
-    
+    //general
     public var currentMessageCount = 0
     public var incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
     public private(set) var infiniteLoading : InfiniteLoading = InfiniteLoading()
@@ -87,7 +87,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
         
         var newMessages:[Message] = []
         for message in messages {
-            newMessages.append(Message(message: message.underlyingMessage))
+            newMessages.append(self.messageClass().init(message: message.underlyingMessage))
         }
         messages = newMessages
     }
@@ -149,7 +149,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
         if mmxMessages.count > 0 {
             currentMessageCount += mmxMessages.count
             let mappedMessages : [Message] = mmxMessages.map({
-                let message = Message(message: $0)
+                let message = self.messageClass().init(message: $0)
                 if message.isMediaMessage() {
                     message.mediaCompletionBlock = {[weak self] in
                         message.setDataChanged()
@@ -244,6 +244,10 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     
     internal func loadMore(channel : MMXChannel?, offset: Int) { }
     
+    internal func messageClass() -> Message.Type {
+        return Message.self
+    }
+    
     internal func onChannelCreated(mmxChannel: MMXChannel) { }
     
     internal func onMessageRecived(mmxMessage: MMXMessage) { }
@@ -296,7 +300,7 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
         let finishedMessageClosure : () -> Void = {
             self.showTypingIndicator = false
             self.onMessageRecived(mmxMessage)
-            let message = Message(message: mmxMessage)
+            let message = self.messageClass().init(message: mmxMessage)
             self.messages.append(message)
             JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
             if message.isMediaMessage() && mmxMessage.contentType != MMXPollAnswer.contentType {

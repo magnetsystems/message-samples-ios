@@ -34,7 +34,6 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     }
     public var channelDetailsMessagesLimit : Int = 10
     public var channelDetailsSubscribersLimit : Int = 50
-    public var resetCounter = 0;
     
     
     //searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
@@ -48,7 +47,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     internal var currentDetailCount = 0
     internal var detailResponses : [MMXChannelDetailResponse] = []
     weak internal var generatedSearchBar : UISearchBar?
-    
+    private var resetCounter = 0
     
     //MARK: Overrides
     

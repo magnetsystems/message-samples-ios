@@ -34,7 +34,10 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     
     //MARK: Public Variables
     
+    //message handler
+    public static var classForMessages: Message.Type =  Message.self
     
+    //general
     public var channel : MMXChannel? {
         get {
             return chat
@@ -266,6 +269,10 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
     
     override internal func loadMore(channel : MMXChannel?, offset: Int) {
         self.datasource?.mmxControllerLoadMore(channel, offset: offset)
+    }
+    
+    override internal func messageClass() -> Message.Type {
+         return MMXChatViewController.classForMessages
     }
     
     override internal func onChannelCreated(mmxChannel: MMXChannel) {
