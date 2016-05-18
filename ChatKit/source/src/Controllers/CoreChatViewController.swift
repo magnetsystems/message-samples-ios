@@ -70,7 +70,6 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     internal var activityIndicator : UIActivityIndicatorView?
     internal var avatars = Dictionary<String, UIImage>()
     internal var avatarsDownloading = Dictionary<String, MMUser>()
-    internal var canLeaveChat = false
     internal var messages = [Message]()
     
     

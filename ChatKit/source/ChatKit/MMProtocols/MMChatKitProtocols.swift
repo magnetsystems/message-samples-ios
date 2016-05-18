@@ -120,9 +120,9 @@ import MagnetMax
     
     
     func mmxListDidSelectChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
-    func mmxListCanLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
+    func mmxListCanEditChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool
     
-    
+    optional func mmxListChannelEditActions(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> [UITableViewRowAction]?
     optional func mmxListDidLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse)
     optional func mmxListWillShowChatController(chatController : MMXChatViewController)
     optional func mmxListChannelForSubscribers(subscribers : [MMUser]) -> MMXChannel?

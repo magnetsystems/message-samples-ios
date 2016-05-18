@@ -191,12 +191,20 @@ public class MMXChatListViewController: CoreChatListViewController, ContactsCont
     //MARK: - Core Method Overrides
     
     
-    override internal func canLeaveChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
-        if let canLeave = self.delegate?.mmxListCanLeaveChannel(channel, channelDetails : channelDetails) {
-            return canLeave
+    override internal func canEditChannel(channel: MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+        if let canEdit = self.delegate?.mmxListCanEditChannel(channel, channelDetails : channelDetails) {
+            return canEdit
         }
         
-        return true
+        return false
+    }
+    
+    override internal func editActionsForChannel(channel: MMXChannel, channelDetails: MMXChannelDetailResponse) -> [UITableViewRowAction]? {
+        if let editActions = self.delegate?.mmxListChannelEditActions?(channel, channelDetails: channelDetails) {
+            return editActions
+        }
+        
+        return []
     }
     
     override internal func cellDidCreate(cell: UITableViewCell) {

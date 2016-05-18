@@ -158,13 +158,67 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         self.currentDetailCount = 0
     }
     
+    public func deleteChannel(channel: MMXChannel) {
+        guard channel.ownerUserID == MMUser.currentUser()?.userID else {
+            return
+        }
+        
+        channel.deleteWithSuccess({[weak self] in
+            if let weakSelf = self {
+                var ind: Int?
+                var details: MMXChannelDetailResponse?
+                for i in 0..<weakSelf.detailResponses.count {
+                    if channel == weakSelf.detailResponses[i].channel {
+                        ind = i
+                        details = weakSelf.detailResponses[i]
+                        break
+                    }
+                }
+                
+                if let index = ind, let detailResponse  = details {
+                    weakSelf.detailResponses.removeAtIndex(index)
+                    weakSelf.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Fade)
+                    weakSelf.onChannelDidLeave(detailResponse.channel, channelDetails : detailResponse)
+                    weakSelf.endRefreshing()
+                }
+            }
+            }, failure: { error in
+                print(error)
+        })
+    }
+    
+    public func leaveChannel(channel: MMXChannel) {
+        channel.unSubscribeWithSuccess({[weak self] _ in
+            if let weakSelf = self {
+                var ind: Int?
+                var details: MMXChannelDetailResponse?
+                for i in 0..<weakSelf.detailResponses.count {
+                    if channel == weakSelf.detailResponses[i].channel {
+                        ind = i
+                        details = weakSelf.detailResponses[i]
+                        break
+                    }
+                }
+                
+                if let index = ind, let detailResponse  = details {
+                    weakSelf.detailResponses.removeAtIndex(index)
+                    weakSelf.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Fade)
+                    weakSelf.onChannelDidLeave(detailResponse.channel, channelDetails : detailResponse)
+                    weakSelf.endRefreshing()
+                }
+            }
+            }, failure: { error in
+                print(error)
+        })
+    }
+    
     
     //MARK: Internal Methods
     
     
     internal func cellDidCreate(cell : UITableViewCell) { }
     
-    internal func canLeaveChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
+    internal func canEditChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> Bool {
         return true
     }
     
@@ -177,6 +231,10 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     }
     
     internal func didSelectUserAvatar(user : MMUser) { }
+    
+    internal func editActionsForChannel(channel : MMXChannel, channelDetails : MMXChannelDetailResponse) -> [UITableViewRowAction]? {
+        return nil
+    }
     
     internal func filterChannels(channelDetails : [MMXChannelDetailResponse]) -> [MMXChannelDetailResponse] {
         return channelDetails
@@ -392,7 +450,7 @@ public extension CoreChatListViewController {
     }
     
     public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return canLeaveChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
+        return canEditChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     
     public func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -401,21 +459,7 @@ public extension CoreChatListViewController {
     
     public func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         let detailResponse = detailsForIndexPath(indexPath)
-        
-        let leave = UITableViewRowAction(style: .Normal, title: CKStrings.kStr_Leave) { [weak self] action, index in
-            if let chat = detailResponse.channel {
-                chat.unSubscribeWithSuccess({ _ in
-                    self?.detailResponses.removeAtIndex(index.row)
-                    tableView.deleteRowsAtIndexPaths([index], withRowAnimation: .Fade)
-                    self?.onChannelDidLeave(detailResponse.channel, channelDetails : detailResponse)
-                    self?.endRefreshing()
-                    }, failure: { error in
-                        print(error)
-                })
-            }
-        }
-        leave.backgroundColor = UIColor.orangeColor()
-        return [leave]
+        return editActionsForChannel(detailResponse.channel, channelDetails: detailResponse)
     }
     
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
