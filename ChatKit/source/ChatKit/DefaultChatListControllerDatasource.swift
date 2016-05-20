@@ -91,8 +91,6 @@ public class DefaultChatListControllerDatasource : NSObject, ChatListControllerD
                 return
             }
             
-            
-            
             var offsetChannels : [MMXChannel] = []
             if offset < channels.count {
                 offsetChannels = Array(channels[offset..<min((offset + self.limit), channels.count)])

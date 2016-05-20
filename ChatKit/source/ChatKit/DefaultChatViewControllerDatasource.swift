@@ -42,7 +42,7 @@ public class DefaultChatViewControllerDatasource : NSObject, ChatViewControllerD
         
         self.hasMoreUsers = offset == 0 ? true : self.hasMoreUsers
         
-        channel.messagesBetweenStartDate(NSDate.distantPast(), endDate: NSDate(), limit: Int32(limit), offset: Int32(offset), ascending: false, success: { [weak self] total , messages in
+        channel.messagesBetweenStartDate(nil, endDate: nil, limit: Int32(limit), offset: Int32(offset), ascending: false, success: { [weak self] total , messages in
             
             if loadingContext != self?.controller?.loadingContext() {
                 return

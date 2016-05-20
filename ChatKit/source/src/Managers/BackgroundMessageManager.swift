@@ -67,7 +67,7 @@ import MagnetMax
     
     
     private func fetchMessagesSinceAppBecameInactive(offset : Int, channel : MMXChannel, operation :  MMAsynchronousOperation, completion : ((messages : Set<MMXMessage>) -> Void)) {
-        channel.messagesBetweenStartDate(self.lastDate, endDate: NSDate(), limit: 10, offset: Int32(offset), ascending: true, success: {
+        channel.messagesBetweenStartDate(self.lastDate, endDate: nil, limit: 10, offset: Int32(offset), ascending: true, success: {
             total , messages in
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
                 guard !operation.cancelled && !operation.finished else {

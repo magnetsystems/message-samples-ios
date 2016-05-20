@@ -26,18 +26,20 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     
     //MARK: Public Variables
     
-    
+    /// Specifies weather channel search is enabled
     public var canSearch : Bool? {
         didSet {
             updateSearchBar()
         }
     }
+    /// A limit of messages to preload for each channel when fetching details
     public var channelDetailsMessagesLimit : Int = 10
+    /// A limit of subscribers(userInfo objects) to preload for each channel when fetching details
     public var channelDetailsSubscribersLimit : Int = 50
     
     
-    //searchBar will be auto generated and inserted into the tableview header if not connected to an outlet
-    //to hide set canSearch = false
+    /// SearchBar will be auto generated and inserted into the tableview header if not connected to an outlet
+    /// To hide set canSearch = false
     @IBOutlet public var searchBar : UISearchBar?
     
     
@@ -49,6 +51,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     weak internal var generatedSearchBar : UISearchBar?
     private var resetCounter = 0
     
+    
     //MARK: Overrides
     
     
@@ -56,14 +59,19 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    /// Public Initializer
     public override init() {
         super.init(nibName: String(CoreChatListViewController.self), bundle: NSBundle(forClass: CoreChatListViewController.self))
     }
     
+    /** Public Initializer
+     parmeter coder: a coder
+     */
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
+    /// viewDidLoad
     override public func viewDidLoad() {
         super.viewDidLoad()
         
@@ -99,11 +107,13 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         BackgroundMessageManager.sharedManager.setup()
     }
     
+    /// viewWillAppear
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
     
+    /// viewWillDisappear
     override public func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -114,6 +124,13 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     // MARK: Public Methods
     
     
+    /**
+     Requests channel details and appends channel details to list
+     
+     - parameter mmxChannels : Channels to be appended
+     
+     - returns: Void
+     */
     public func append(mmxChannels : [MMXChannel]) {
         if mmxChannels.count > 0 {
             // Get all channels the current user is subscribed to
@@ -152,12 +169,24 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         }
     }
     
+    /**
+     Clears data and removes all elements from UI
+     
+     - returns: Void
+     */
     public func clearData() {
         self.detailResponses = []
         self.tableView.reloadData()
         self.currentDetailCount = 0
     }
     
+    /**
+     Deletes a channel and removes the channel from the UI
+     
+     - parameter channel : Channel to be deleted
+     
+     - returns: Void
+     */
     public func deleteChannel(channel: MMXChannel) {
         guard channel.ownerUserID == MMUser.currentUser()?.userID else {
             return
@@ -187,6 +216,13 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         })
     }
     
+    /**
+     Leaves a channel and removes the channel from the UI
+     
+     - parameter channel : Channel to leave
+     
+     - returns: Void
+     */
     public func leaveChannel(channel: MMXChannel) {
         channel.unSubscribeWithSuccess({[weak self] _ in
             if let weakSelf = self {
@@ -356,7 +392,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     }
     
     
-    // MARK: - UISearchResultsUpdating
+    // MARK: - UISearchBarDelegate
     
     
     public func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
@@ -406,7 +442,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
 public extension CoreChatListViewController {
     
     
-    // MARK: - Table view data source
+    // MARK: - Table view data source and delegate
     
     
     public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
