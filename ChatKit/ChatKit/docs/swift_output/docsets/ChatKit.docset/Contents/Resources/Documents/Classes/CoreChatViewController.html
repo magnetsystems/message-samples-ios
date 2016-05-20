@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CoreChatViewController Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/CoreChatViewController" class="dashAnchor"></a>
+    <a title="CoreChatViewController Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">ChatKit Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/magnetsystems/message-samples-ios"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">ChatKit Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        CoreChatViewController Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/BackgroundMessageManager.html">BackgroundMessageManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/CKStrings.html">CKStrings</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ChannelDetailBaseTVCell.html">ChannelDetailBaseTVCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ChannelManager.html">ChannelManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ChatListCell.html">ChatListCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ContactsBubbleView.html">ContactsBubbleView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ContactsCell.html">ContactsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ContactsTableContainerView.html">ContactsTableContainerView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/CoreChatListViewController.html">CoreChatListViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/CoreChatViewController.html">CoreChatViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/CoreContactsViewController.html">CoreContactsViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DateFormatter.html">DateFormatter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DefaultChatListControllerDatasource.html">DefaultChatListControllerDatasource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DefaultChatListControllerDelegate.html">DefaultChatListControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DefaultChatViewControllerDatasource.html">DefaultChatViewControllerDatasource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DefaultChatViewControllerDelegate.html">DefaultChatViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DefaultContactsPickerControllerDatasource.html">DefaultContactsPickerControllerDatasource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/InfiniteLoading.html">InfiniteLoading</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LoadingView.html">LoadingView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/LocationManager.html">LocationManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MMJSQViewController.html">MMJSQViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MMTableViewController.html">MMTableViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MMViewController.html">MMViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MMXChatListViewController.html">MMXChatListViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MMXChatViewController.html">MMXChatViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MMXContactsPickerController.html">MMXContactsPickerController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MagnetControllerAppearance.html">MagnetControllerAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MapViewController.html">MapViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/NavigationNotifier.html">NavigationNotifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C7ChatKit16NotifierListener">NotifierListener</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PollMediaButton.html">PollMediaButton</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PollMediaItem.html">PollMediaItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PollUpdateItem.html">PollUpdateItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Popup.html">Popup</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SubscribersDatasource.html">SubscribersDatasource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Timestamp.html">Timestamp</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C7ChatKit15UserLetterGroup">UserLetterGroup</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C7ChatKit9UserModel">UserModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Utils.html">Utils</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UtilsCache.html">UtilsCache</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UtilsImageCache.html">UtilsImageCache</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/VideoPlayerViewController.html">VideoPlayerViewController</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/AttachmentTypes.html">AttachmentTypes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/MessageType.html">MessageType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/UIViewController.html">UIViewController</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/ChatListControllerDatasource.html">ChatListControllerDatasource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ChatListControllerDelegate.html">ChatListControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ChatViewControllerDatasource.html">ChatViewControllerDatasource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ChatViewControllerDelegate.html">ChatViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ContactsControllerDatasource.html">ContactsControllerDatasource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ContactsControllerDelegate.html">ContactsControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ControllerDatasource.html">ControllerDatasource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Define_MMXChatListViewController.html">Define_MMXChatListViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Define_MMXChatViewController.html">Define_MMXChatViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Define_MMXContactsPickerController.html">Define_MMXContactsPickerController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MMTableViewFooterDatasource.html">MMTableViewFooterDatasource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MMViewControllerProtocol.html">MMViewControllerProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MMXAvatarDelegate.html">MMXAvatarDelegate</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>CoreChatViewController</h1>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Public%20Properties"></a>
+                <a name="//apple_ref/swift/Section/Public Properties" class="dashAnchor"></a>
+                <a href="#/Public%20Properties">
+                  <h3 class="section-name">Public Properties</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7ChatKit22CoreChatViewController19currentMessageCountSi"></a>
+                    <a name="//apple_ref/swift/Property/currentMessageCount" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7ChatKit22CoreChatViewController19currentMessageCountSi">currentMessageCount</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7ChatKit22CoreChatViewController23incomingBubbleImageViewGSQCSo22JSQMessagesBubbleImage_"></a>
+                    <a name="//apple_ref/swift/Property/incomingBubbleImageView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7ChatKit22CoreChatViewController23incomingBubbleImageViewGSQCSo22JSQMessagesBubbleImage_">incomingBubbleImageView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7ChatKit22CoreChatViewController15infiniteLoadingCS_15InfiniteLoading"></a>
+                    <a name="//apple_ref/swift/Property/infiniteLoading" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7ChatKit22CoreChatViewController15infiniteLoadingCS_15InfiniteLoading">infiniteLoading</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7ChatKit22CoreChatViewController11mmxMessagesGSaCSo10MMXMessage_"></a>
+                    <a name="//apple_ref/swift/Property/mmxMessages" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7ChatKit22CoreChatViewController11mmxMessagesGSaCSo10MMXMessage_">mmxMessages</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7ChatKit22CoreChatViewController21navigationBarNotifierGSqCS_18NavigationNotifier_"></a>
+                    <a name="//apple_ref/swift/Property/navigationBarNotifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7ChatKit22CoreChatViewController21navigationBarNotifierGSqCS_18NavigationNotifier_">navigationBarNotifier</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7ChatKit22CoreChatViewController23outgoingBubbleImageViewGSQCSo22JSQMessagesBubbleImage_"></a>
+                    <a name="//apple_ref/swift/Property/outgoingBubbleImageView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7ChatKit22CoreChatViewController23outgoingBubbleImageViewGSQCSo22JSQMessagesBubbleImage_">outgoingBubbleImageView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC7ChatKit22CoreChatViewController10recipientsGSqGSaCSo6MMUser__"></a>
+                    <a name="//apple_ref/swift/Property/recipients" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC7ChatKit22CoreChatViewController10recipientsGSqGSaCSo6MMUser__">recipients</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/overrides"></a>
+                <a name="//apple_ref/swift/Section/overrides" class="dashAnchor"></a>
+                <a href="#/overrides">
+                  <h3 class="section-name">overrides</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController23didReceiveMemoryWarningFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/didReceiveMemoryWarning()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController23didReceiveMemoryWarningFT_T_">didReceiveMemoryWarning()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController11viewDidLoadFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/viewDidLoad()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController11viewDidLoadFT_T_">viewDidLoad()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14viewWillAppearFSbT_"></a>
+                    <a name="//apple_ref/swift/Method/viewWillAppear(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14viewWillAppearFSbT_">viewWillAppear(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController17viewWillDisappearFSbT_"></a>
+                    <a name="//apple_ref/swift/Method/viewWillDisappear(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController17viewWillDisappearFSbT_">viewWillDisappear(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Public%20methods"></a>
+                <a name="//apple_ref/swift/Section/Public methods" class="dashAnchor"></a>
+                <a href="#/Public%20methods">
+                  <h3 class="section-name">Public methods</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController6appendFGSaCSo10MMXMessage_T_"></a>
+                    <a name="//apple_ref/swift/Method/append(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController6appendFGSaCSo10MMXMessage_T_">append(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController9clearDataFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/clearData()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController9clearDataFT_T_">clearData()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Actions"></a>
+                <a name="//apple_ref/swift/Section/Actions" class="dashAnchor"></a>
+                <a href="#/Actions">
+                  <h3 class="section-name">Actions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController23didPressAccessoryButtonFGSQCSo8UIButton_T_"></a>
+                    <a name="//apple_ref/swift/Method/didPressAccessoryButton(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController23didPressAccessoryButtonFGSQCSo8UIButton_T_">didPressAccessoryButton(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController18didPressSendButtonFTGSQCSo8UIButton_15withMessageTextGSQSS_8senderIdGSQSS_17senderDisplayNameGSQSS_4dateGSQCSo6NSDate__T_"></a>
+                    <a name="//apple_ref/swift/Method/didPressSendButton(_:withMessageText:senderId:senderDisplayName:date:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController18didPressSendButtonFTGSQCSo8UIButton_15withMessageTextGSQSS_8senderIdGSQSS_17senderDisplayNameGSQSS_4dateGSQCSo6NSDate__T_">didPressSendButton(_:withMessageText:senderId:senderDisplayName:date:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/UIImagePickerControllerDelegate"></a>
+                <a name="//apple_ref/swift/Section/UIImagePickerControllerDelegate" class="dashAnchor"></a>
+                <a href="#/UIImagePickerControllerDelegate">
+                  <h3 class="section-name">UIImagePickerControllerDelegate</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController21imagePickerControllerFTCSo23UIImagePickerController29didFinishPickingMediaWithInfoGVs10DictionarySSPs9AnyObject___T_"></a>
+                    <a name="//apple_ref/swift/Method/imagePickerController(_:didFinishPickingMediaWithInfo:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController21imagePickerControllerFTCSo23UIImagePickerController29didFinishPickingMediaWithInfoGVs10DictionarySSPs9AnyObject___T_">imagePickerController(_:didFinishPickingMediaWithInfo:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController30imagePickerControllerDidCancelFCSo23UIImagePickerControllerT_"></a>
+                    <a name="//apple_ref/swift/Method/imagePickerControllerDidCancel(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController30imagePickerControllerDidCancelFCSo23UIImagePickerControllerT_">imagePickerControllerDidCancel(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/overridden%20JSQMessagesViewController%20methods"></a>
+                <a name="//apple_ref/swift/Section/overridden JSQMessagesViewController methods" class="dashAnchor"></a>
+                <a href="#/overridden%20JSQMessagesViewController%20methods">
+                  <h3 class="section-name">overridden JSQMessagesViewController methods</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_6headerGSQCSo32JSQMessagesLoadEarlierHeaderView_31didTapLoadEarlierMessagesButtonGSQCSo8UIButton__T_"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:header:didTapLoadEarlierMessagesButton:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_6headerGSQCSo32JSQMessagesLoadEarlierHeaderView_31didTapLoadEarlierMessagesButtonGSQCSo8UIButton__T_">collectionView(_:header:didTapLoadEarlierMessagesButton:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_29messageDataForItemAtIndexPathGSQCSo11NSIndexPath__GSQPSo14JSQMessageData__"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:messageDataForItemAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_29messageDataForItemAtIndexPathGSQCSo11NSIndexPath__GSQPSo14JSQMessageData__">collectionView(_:messageDataForItemAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_27didDeleteMessageAtIndexPathGSQCSo11NSIndexPath__T_"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:didDeleteMessageAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_27didDeleteMessageAtIndexPathGSQCSo11NSIndexPath__T_">collectionView(_:didDeleteMessageAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_40messageBubbleImageDataForItemAtIndexPathGSQCSo11NSIndexPath__GSQPSo31JSQMessageBubbleImageDataSource__"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:messageBubbleImageDataForItemAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_40messageBubbleImageDataForItemAtIndexPathGSQCSo11NSIndexPath__GSQPSo31JSQMessageBubbleImageDataSource__">collectionView(_:messageBubbleImageDataForItemAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_33avatarImageDataForItemAtIndexPathGSQCSo11NSIndexPath__GSQPSo31JSQMessageAvatarImageDataSource__"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:avatarImageDataForItemAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_33avatarImageDataForItemAtIndexPathGSQCSo11NSIndexPath__GSQPSo31JSQMessageAvatarImageDataSource__">collectionView(_:avatarImageDataForItemAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_40attributedTextForCellTopLabelAtIndexPathGSQCSo11NSIndexPath__GSQCSo18NSAttributedString_"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:attributedTextForCellTopLabelAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_40attributedTextForCellTopLabelAtIndexPathGSQCSo11NSIndexPath__GSQCSo18NSAttributedString_">collectionView(_:attributedTextForCellTopLabelAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_49attributedTextForMessageBubbleTopLabelAtIndexPathGSQCSo11NSIndexPath__GSQCSo18NSAttributedString_"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:attributedTextForMessageBubbleTopLabelAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_49attributedTextForMessageBubbleTopLabelAtIndexPathGSQCSo11NSIndexPath__GSQCSo18NSAttributedString_">collectionView(_:attributedTextForMessageBubbleTopLabelAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_43attributedTextForCellBottomLabelAtIndexPathGSQCSo11NSIndexPath__GSQCSo18NSAttributedString_"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:attributedTextForCellBottomLabelAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_43attributedTextForCellBottomLabelAtIndexPathGSQCSo11NSIndexPath__GSQCSo18NSAttributedString_">collectionView(_:attributedTextForCellBottomLabelAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/UICollectionView%20DataSource"></a>
+                <a name="//apple_ref/swift/Section/UICollectionView DataSource" class="dashAnchor"></a>
+                <a href="#/UICollectionView%20DataSource">
+                  <h3 class="section-name">UICollectionView DataSource</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTCSo16UICollectionView22numberOfItemsInSectionSi_Si"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:numberOfItemsInSection:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTCSo16UICollectionView22numberOfItemsInSectionSi_Si">collectionView(_:numberOfItemsInSection:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTCSo16UICollectionView22cellForItemAtIndexPathCSo11NSIndexPath_CSo20UICollectionViewCell"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:cellForItemAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTCSo16UICollectionView22cellForItemAtIndexPathCSo11NSIndexPath_CSo20UICollectionViewCell">collectionView(_:cellForItemAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/JSQMessagesCollectionViewDelegateFlowLayout%20methods"></a>
+                <a name="//apple_ref/swift/Section/JSQMessagesCollectionViewDelegateFlowLayout methods" class="dashAnchor"></a>
+                <a href="#/JSQMessagesCollectionViewDelegateFlowLayout%20methods">
+                  <h3 class="section-name">JSQMessagesCollectionViewDelegateFlowLayout methods</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_6layoutGSQCSo35JSQMessagesCollectionViewFlowLayout_32heightForCellTopLabelAtIndexPathGSQCSo11NSIndexPath__V12CoreGraphics7CGFloat"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:layout:heightForCellTopLabelAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_6layoutGSQCSo35JSQMessagesCollectionViewFlowLayout_32heightForCellTopLabelAtIndexPathGSQCSo11NSIndexPath__V12CoreGraphics7CGFloat">collectionView(_:layout:heightForCellTopLabelAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_6layoutGSQCSo35JSQMessagesCollectionViewFlowLayout_41heightForMessageBubbleTopLabelAtIndexPathGSQCSo11NSIndexPath__V12CoreGraphics7CGFloat"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:layout:heightForMessageBubbleTopLabelAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_6layoutGSQCSo35JSQMessagesCollectionViewFlowLayout_41heightForMessageBubbleTopLabelAtIndexPathGSQCSo11NSIndexPath__V12CoreGraphics7CGFloat">collectionView(_:layout:heightForMessageBubbleTopLabelAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_6layoutGSQCSo35JSQMessagesCollectionViewFlowLayout_35heightForCellBottomLabelAtIndexPathGSQCSo11NSIndexPath__V12CoreGraphics7CGFloat"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:layout:heightForCellBottomLabelAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_6layoutGSQCSo35JSQMessagesCollectionViewFlowLayout_35heightForCellBottomLabelAtIndexPathGSQCSo11NSIndexPath__V12CoreGraphics7CGFloat">collectionView(_:layout:heightForCellBottomLabelAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_21didTapAvatarImageViewGSQCSo11UIImageView_11atIndexPathGSQCSo11NSIndexPath__T_"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:didTapAvatarImageView:atIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_21didTapAvatarImageViewGSQCSo11UIImageView_11atIndexPathGSQCSo11NSIndexPath__T_">collectionView(_:didTapAvatarImageView:atIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_30didTapMessageBubbleAtIndexPathGSQCSo11NSIndexPath__T_"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:didTapMessageBubbleAtIndexPath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_30didTapMessageBubbleAtIndexPathGSQCSo11NSIndexPath__T_">collectionView(_:didTapMessageBubbleAtIndexPath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_21didTapCellAtIndexPathGSQCSo11NSIndexPath_13touchLocationVSC7CGPoint_T_"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:didTapCellAtIndexPath:touchLocation:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC7ChatKit22CoreChatViewController14collectionViewFTGSQCSo25JSQMessagesCollectionView_21didTapCellAtIndexPathGSQCSo11NSIndexPath_13touchLocationVSC7CGPoint_T_">collectionView(_:didTapCellAtIndexPath:touchLocation:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://magnet.com" target="_blank" rel="external">Magnet</a>. All rights reserved. (Last updated: 2016-05-19)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
