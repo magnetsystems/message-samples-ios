@@ -161,7 +161,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
             })
         } else {
             self.endDataLoad()
-            
+            self.refreshControl?.endRefreshing()
             if self.hasMore() {
                 self.infiniteLoading.setNeedsUpdate()
             }
