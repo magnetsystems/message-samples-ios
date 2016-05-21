@@ -18,6 +18,64 @@
 import CocoaLumberjack
 import MagnetMax
 
+class TCPConnectionOperation: MMAsynchronousOperation {
+    //MARK: Private variables
+    
+    lazy public private(set) var connectionStatus:MMXConnectionStatus = MMXClient.sharedClient().connectionStatus
+    private var context = UInt8()
+    
+    
+    static func connectionStatusKey() -> String {
+        return "connectionStatus"
+    }
+    
+    //MARK: Init
+    
+    deinit {
+        do {
+            try MMXClient.sharedClient().removeObserver(self, forKeyPath: TCPConnectionOperation.connectionStatusKey())
+        } catch  { }
+    }
+    
+    //MARK: Notifications
+    
+    func register() {
+        connectionStatus = MMXClient.sharedClient().connectionStatus
+        MMXClient.sharedClient().addObserver(self, forKeyPath: TCPConnectionOperation.connectionStatusKey(), options: .New, context: &context)
+    }
+    
+    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if context == &self.context && keyPath == TCPConnectionOperation.connectionStatusKey() {
+            if let raw = change?[NSKeyValueChangeNewKey] as? Int {
+                if let status = MMXConnectionStatus(rawValue: raw) {
+                    connectionStatus = status
+                    if status  == .Authenticated {
+                        print("Authenticated connection!")
+                        finishSuccessfully()
+                    }
+                }
+            }
+        } else {
+            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+        }
+    }
+    
+    //MARK: Execution
+    
+    public override func execute() {
+        if MMXClient.sharedClient().connectionStatus == .Authenticated {
+            finishSuccessfully()
+        } else {
+            print("No authenticated TCP connection, will wait...")
+            register()
+        }
+    }
+    
+    func finishSuccessfully() {
+        finish()
+    }
+}
+
 @objc public class BackgroundMessageManager: NSObject {
     
     
@@ -75,9 +133,8 @@ import MagnetMax
                 }
                 var notificationMessages = Set<MMXMessage>()
                 for msg in messages {
-                    var nMSG = MMXMessage()
                     msg.channel = channel
-                    notificationMessages.insert(nMSG)
+                    notificationMessages.insert(msg)
                 }
                 if total > Int32(messages.count) {
                     let comp : ((messages : Set<MMXMessage>) -> Void) = { messages in
@@ -122,6 +179,9 @@ import MagnetMax
                         operation.finish()
                 })
                 })
+            let connection = TCPConnectionOperation()
+            self.queue.addOperation(connection)
+            operation.addDependency(connection)
             self.queue.addOperation(operation)
         }
     }

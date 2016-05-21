@@ -292,6 +292,9 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
     
     
     @objc private func didReceiveMessage(mmxMessage: MMXMessage) {
+        guard !Set(mmxMessages).contains(mmxMessage) else {
+            return
+        }
         // Scroll to actually view the indicator
         if mmxMessage.contentType != MMXPollAnswer.contentType {
             scrollToBottomAnimated(true)
