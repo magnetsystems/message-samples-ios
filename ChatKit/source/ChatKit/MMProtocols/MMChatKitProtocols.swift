@@ -140,7 +140,7 @@ import MagnetMax
     func mmxControllerLoadMore(channel : MMXChannel?, offset : Int)
     func mmxControllerHasMore() -> Bool
     optional func mmxControllerPrefersSoftResets() -> Bool
-    
+    optional func mmxChatViewImageForUser(imageView : UIImageView, user : MMUser)
     //Attachments
     optional func mmxAttachmentTypes() -> [Int]
     optional func mmxDisplayNameForAttachmentType(attachmentType : Int) -> String

@@ -241,6 +241,10 @@ public class CoreChatViewController: MMJSQViewController, AddPollViewControllerD
         }
     }
     
+    internal func imageForUser(imageView : UIImageView, user : MMUser) {
+        Utils.loadUserAvatar(user, toImageView: imageView, placeholderImage: Utils.noAvatarImageForUser(user))
+    }
+    
     internal func loadMore(channel : MMXChannel?, offset: Int) { }
     
     internal func messageClass() -> Message.Type {

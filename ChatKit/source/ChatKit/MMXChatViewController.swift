@@ -267,12 +267,20 @@ public class MMXChatViewController: CoreChatViewController, Define_MMXChatViewCo
         self.delegate?.mmxAvatarDidClick?(user)
     }
     
+    override internal func imageForUser(imageView: UIImageView, user: MMUser) {
+        if let imageForUser = datasource?.mmxChatViewImageForUser {
+            imageForUser(imageView, user: user)
+        } else {
+            super.imageForUser(imageView, user: user)
+        }
+    }
+    
     override internal func loadMore(channel : MMXChannel?, offset: Int) {
         self.datasource?.mmxControllerLoadMore(channel, offset: offset)
     }
     
     override internal func messageClass() -> Message.Type {
-         return MMXChatViewController.classForMessages
+        return MMXChatViewController.classForMessages
     }
     
     override internal func onChannelCreated(mmxChannel: MMXChannel) {
