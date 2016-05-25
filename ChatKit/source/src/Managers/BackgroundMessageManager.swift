@@ -23,8 +23,7 @@ class TCPConnectionOperation: MMAsynchronousOperation {
     
     lazy public private(set) var connectionStatus:MMXConnectionStatus = MMXClient.sharedClient().connectionStatus
     private var context = UInt8()
-    
-    
+    private var isObservingKeys = false
     static func connectionStatusKey() -> String {
         return "connectionStatus"
     }
@@ -32,16 +31,21 @@ class TCPConnectionOperation: MMAsynchronousOperation {
     //MARK: Init
     
     deinit {
-        do {
-            try MMXClient.sharedClient().removeObserver(self, forKeyPath: TCPConnectionOperation.connectionStatusKey())
-        } catch  { }
+        if isObservingKeys {
+            MMXClient.sharedClient().removeObserver(self, forKeyPath: TCPConnectionOperation.connectionStatusKey())
+        }
     }
     
     //MARK: Notifications
     
     func register() {
         connectionStatus = MMXClient.sharedClient().connectionStatus
-        MMXClient.sharedClient().addObserver(self, forKeyPath: TCPConnectionOperation.connectionStatusKey(), options: .New, context: &context)
+        objc_sync_enter(self)
+        if !isObservingKeys {
+            isObservingKeys = true
+            MMXClient.sharedClient().addObserver(self, forKeyPath: TCPConnectionOperation.connectionStatusKey(), options: .New, context: &context)
+        }
+        objc_sync_exit(self)
     }
     
     public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
