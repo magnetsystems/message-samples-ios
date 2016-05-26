@@ -23,7 +23,7 @@ protocol ContactsBubbleViewDelegate : class {
     func didSelectBubbleViewAvatar(view : ContactsBubbleView)
 }
 
-public class ContactsBubbleView : UIView, UIGestureRecognizerDelegate {
+class ContactsBubbleView : UIView, UIGestureRecognizerDelegate {
     
     
     //MARK: Public Variables
@@ -90,7 +90,7 @@ public class ContactsBubbleView : UIView, UIGestureRecognizerDelegate {
     //MARK: Action
     
     
-    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }

@@ -47,9 +47,6 @@
                 <a href="../Classes/ChatListCell.html">ChatListCell</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/ContactsBubbleView.html">ContactsBubbleView</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/ContactsCell.html">ContactsCell</a>
               </li>
               <li class="nav-group-task">
@@ -86,9 +83,6 @@
                 <a href="../Classes/InfiniteLoading.html">InfiniteLoading</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/LoadingView.html">LoadingView</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/LocationManager.html">LocationManager</a>
               </li>
               <li class="nav-group-task">
@@ -113,9 +107,6 @@
                 <a href="../Classes/MagnetControllerAppearance.html">MagnetControllerAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/MapViewController.html">MapViewController</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/Message.html">Message</a>
               </li>
               <li class="nav-group-task">
@@ -134,19 +125,7 @@
                 <a href="../Classes/PollUpdateItem.html">PollUpdateItem</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Popup.html">Popup</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/SubscribersDatasource.html">SubscribersDatasource</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Timestamp.html">Timestamp</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes.html#/s:C7ChatKit15UserLetterGroup">UserLetterGroup</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes.html#/s:C7ChatKit9UserModel">UserModel</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Utils.html">Utils</a>
@@ -156,9 +135,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/UtilsImageCache.html">UtilsImageCache</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/VideoPlayerViewController.html">VideoPlayerViewController</a>
               </li>
             </ul>
           </li>
@@ -231,7 +207,13 @@
         <section>
           <section class="section">
             <h1>InfiniteLoading</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">InfiniteLoading</span></code></pre>
+
+                </div>
+              </div>
+            <p>This class handles Infinite Loading. It allows you to easily listen and trigger loading events</p>
 
           </section>
           <section class="section task-group-section">
@@ -257,8 +239,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>is true when finished loading all data</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isFinished</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -287,7 +277,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This method should be called to trigger update if needed. If an update is in progress this will not trigger another one. Only one update can be triggered at a time. If <code><a href="../Classes/InfiniteLoading.html#/s:vC7ChatKit15InfiniteLoading10isFinishedSb">isFinished</a></code> = true, there is no more data to be loaded so an event will also not trigger in this case.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setNeedsUpdate</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -306,7 +309,42 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>registers for onUpdate events</p>
+
+<p><em>note: You must call <code>finishUpdating</code> after you recieve your data and would like to start recieving onUpdate events again</em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">onUpdate</span><span class="p">(</span><span class="nv">loadMore</span> <span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>loadMore</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>a block to be executed when more data is need. You can register multiple blocks.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -325,7 +363,40 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>registers for Updating completed events</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">onDoneUpdating</span><span class="p">(</span><span class="nv">doneLoading</span> <span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>doneLoading</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>a block to be executed when <code>InfiniteLoading</code> object has completed updating (i.e ).</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -344,7 +415,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Signals update has been completed</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">finishUpdating</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -363,7 +447,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Enables <code>Infiniteloading</code> to begin when triggered</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startUpdating</span> <span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -382,7 +479,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Disables <code>Infiniteloading</code> from being triggered (i.e <em>No more data to load</em>)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">stopUpdating</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -393,7 +503,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://magnet.com" target="_blank" rel="external">Magnet</a>. All rights reserved. (Last updated: 2016-05-19)</p>
+          <p>&copy; 2016 <a class="link" href="https://magnet.com" target="_blank" rel="external">Magnet</a>. All rights reserved. (Last updated: 2016-05-25)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

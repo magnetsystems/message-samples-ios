@@ -17,23 +17,38 @@
 
 import UIKit
 
+/**
+ Protocol MMViewControllers conform to specifing various functionality useful for displaying, dismissing and setting up view controllers
+ */
+
 public protocol MMViewControllerProtocol : class {
+    /// The appearence class the controller should use
     var appearance : MagnetControllerAppearance { get }
+    /// Sets the navigation bar for an MMViewController
     func setMagnetNavBar(leftItems leftItems:[UIBarButtonItem]?, rightItems:[UIBarButtonItem]?, title : String?)
+    /// sets up point for the view controller
     func setupViewController()
+    /// dismisses the view controller without animation
     func dismiss()
+    /// dismisses the view controller with animation
     func dismissAnimated()
 }
 
+/**
+ This class is the base class chatkit uses to Implement ViewControllers
+ */
 public class MMViewController: UIViewController, MMViewControllerProtocol {
     
     
     //MARK: Public Variables
     
-    
+    /// - see MMViewControllerProtocol
     public var appearance = MagnetControllerAppearance()
+    /// navigationbar
     public var magnetNavigationBar : UINavigationBar?
+    /// navigationItems
     public var magnetNavigationItem : UINavigationItem?
+    /// called when viewController dismissed
     public var didDismissCompletionBlock : ((viewController : MMViewController) -> Void)?
     
     
@@ -59,20 +74,24 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
     //MARK : Init
     
     
+    /// Init
     public init() {
         super.init(nibName: nil, bundle: nil)
         setupViewController()
     }
     
+    /// Init
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
+    /// Init
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setupViewController()
     }
     
+    /// awakeFromNib
     public override func awakeFromNib() {
         super.awakeFromNib()
         setupViewController()
@@ -82,6 +101,15 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
     //MARK: Public Methods
     
     
+    /**
+     sets up the navigations bar
+     
+     - parameter leftItems: [UIBarButtonItems]? to be added to the left side of the navigation bar
+     - parameter rightItems: [UIBarButtonItems]? to be added to the right side of the navigation bar
+     - parameter title: the title to be displayed on the navigation bar
+     
+     - returns: Void
+     */
     public func setMagnetNavBar(leftItems leftItems:[UIBarButtonItem]?, rightItems:[UIBarButtonItem]?, title : String?) {
         var willHide = false
         if leftItems == nil && rightItems == nil && title == nil  {
@@ -107,6 +135,11 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
         self.magnetNavigationItem?.title = title
     }
     
+    /**
+     sets up viewController called after viewDidLoad
+     
+     - returns: Void
+     */
     public func setupViewController() {
         if let _ = self.view { }
         
@@ -120,6 +153,11 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
         magnetNavigationBar?.hidden = true
     }
     
+    /**
+     Dissmisses without animation
+     
+     - returns: Void
+     */
     public func dismiss() {
         if self.navigationController != nil {
             self.navigationController?.popViewControllerAnimated(false)
@@ -129,6 +167,11 @@ public class MMViewController: UIViewController, MMViewControllerProtocol {
         didDissmisViewController()
     }
     
+    /**
+     Dissmisses with animation
+     
+     - returns: Void
+     */
     public func dismissAnimated() {
         if self.navigationController != nil {
             self.navigationController?.popViewControllerAnimated(true)

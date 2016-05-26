@@ -80,13 +80,17 @@ class TCPConnectionOperation: MMAsynchronousOperation {
     }
 }
 
-@objc public class BackgroundMessageManager: NSObject {
+/**
+ This class handles and retrieves message sent while the app is in the background
+ */
+ @objc public class BackgroundMessageManager: NSObject {
     
     
     //MARK: Public Methods
     
-    
+    /// Shared instance
     public static var sharedManager = BackgroundMessageManager()
+    /// Is enabled
     public var isEnabled = true
     
     
@@ -119,10 +123,10 @@ class TCPConnectionOperation: MMAsynchronousOperation {
     }
     
     
-    //MARK: Internal Methods
+    //MARK: Public Methods
     
-    
-    internal func setup() { }
+    /// Call to Setup and initialize background manager `BackgroundMessageManager.sharedManager.setup()`
+    public func setup() { }
     
     
     //MARK: Private Methods
@@ -157,7 +161,7 @@ class TCPConnectionOperation: MMAsynchronousOperation {
     }
     
     @objc private func start() {
-        if lastDate.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
+        if lastDate.timeIntervalSince1970 < NSDate().timeIntervalSince1970 && isEnabled {
             DDLogVerbose("[BackgroundMessageManager] - wake")
             let operation = MMAsyncBlockOperation(with: { [weak queue] operation in
                 MMXChannel.subscribedChannelsWithSuccess({ channels in

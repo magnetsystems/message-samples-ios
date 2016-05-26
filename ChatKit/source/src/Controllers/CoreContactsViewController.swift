@@ -22,7 +22,7 @@ import MagnetMax
 //MARK: UserLetterGroup
 
 
-public class UserLetterGroup : NSObject {
+class UserLetterGroup : NSObject {
     var letter : Character  = "0"
     var users : [UserModel] = []
 }
@@ -31,7 +31,7 @@ public class UserLetterGroup : NSObject {
 //MARK: UserModel
 
 
-public class UserModel : NSObject {
+class UserModel : NSObject {
     var user : MMUser?
 }
 

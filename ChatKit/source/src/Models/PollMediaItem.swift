@@ -18,9 +18,13 @@
 import UIKit
 import MMX
 
+/// Poll Media Button
 public class PollMediaButton : UIButton {
+    /// Poll option for Media Button
     public var pollOption: MMXPollOption?
+    /// Current Count for poll Option
     public var count = 0
+    /// Right Label for button item
     public var rightLabel: UILabel? {
         didSet {
             oldValue?.removeFromSuperview()
@@ -41,8 +45,12 @@ public class PollMediaButton : UIButton {
     }
 }
 
+/// Poll Update Item - *When a user recieves a `MMXPollAnswer` object*
 public class PollUpdateItem: JSQMediaItem {
+    /// Text
     var text : String?
+    
+    /// Media View to display
     override public func mediaView() -> UIView! {
         let label = UILabel()
         label.textColor = UIColor.darkGrayColor()
@@ -52,28 +60,40 @@ public class PollUpdateItem: JSQMediaItem {
         return label
     }
     
+    /// Media View size
     override public func mediaViewDisplaySize() -> CGSize {
         return CGSize(width: super.mediaViewDisplaySize().width, height: 40.0)
     }
 }
 
+/**
+ Poll Ui display object - `JSQMediaItem`
+ */
 public class PollMediaItem: JSQMediaItem {
     
     
     //MARK: Public Variables
     
-    
+   
+    /// Border Color for buttons
     public var buttonBorderColor = UIColor.whiteColor()
+    /// Border width for butttons
     public var buttonBorderWidth: CGFloat = 2.0
-    public var bottomConstraint: NSLayoutConstraint?
+    /// Default button height
     public let buttonHeight: CGFloat = 44.0
+    /// Poll darkColor/ Background color
     public var darkColor = UIColor(red: 62/255.0, green: 154/255.0, blue: 252/255.0, alpha: 1.0)
+    /// Default label height
     public let labelHeight: CGFloat = 25.0
+    /// Poll light Color/ forground color
     public var lightColor = UIColor(red: 196/255.0, green: 217/255.0, blue: 248/255.0, alpha: 1.0)
+    /// Poll hightlight color
     public var hightLightColor = UIColor.whiteColor()
+    /// Poll item default width
     public lazy var width: CGFloat = {
         return self.defaultDisplaySize()
     }()
+    /// Channel containing poll
     public private(set) var channel : MMXChannel? {
         didSet {
             ChannelManager.sharedInstance.removeChannelMessageObserver(self)
@@ -82,16 +102,22 @@ public class PollMediaItem: JSQMediaItem {
             }
         }
     }
+    /// Default corner redius for poll Item
     public var cornerRadius: CGFloat = 10.0
+    /// Padding for poll item elements (i.e. buttons, labels... etc)
     public let padding: CGFloat = 10.0
+    /// poll items background color
     public var viewBackgroundColor = UIColor(red: 3/255.0, green: 125/255.0, blue: 255/255.0, alpha: 1.0)
+    /// on poll updated call back
     public var onUpdate: (() -> Void)?
+    /// underlying poll
     public var poll : MMXPoll?
     
     
     //Private Variables
     
     
+    private var bottomConstraint: NSLayoutConstraint?
     private var buttons = [PollMediaButton]()
     private var cachedView: UIView?
     private var count = 1
@@ -276,6 +302,7 @@ public class PollMediaItem: JSQMediaItem {
         count += 1
     }
     
+    /// clear cached underlying view
     override public func clearCachedMediaViews() {
         super.clearCachedMediaViews()
         self.cachedView = nil
@@ -285,6 +312,7 @@ public class PollMediaItem: JSQMediaItem {
         return super.mediaViewDisplaySize().width
     }
     
+    /// Underlying Media view
     override public func mediaView() -> UIView! {
         guard self.cachedView == nil else {
             return self.cachedView!
@@ -365,6 +393,7 @@ public class PollMediaItem: JSQMediaItem {
         return view
     }
     
+    /// Media view display size
     override public func mediaViewDisplaySize() -> CGSize {
         let _ = mediaView()
         let height = max(viewHeight, 10.0)

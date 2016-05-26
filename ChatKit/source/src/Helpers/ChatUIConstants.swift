@@ -16,7 +16,7 @@
 */
 
 import Foundation
-
+/// Constants for ChatKit
 struct Constants {
     
     struct ContentKey {
@@ -25,5 +25,4 @@ struct Constants {
         static let Message = "message"
         static let Type = "type"
     }
-    
 }

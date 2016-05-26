@@ -17,10 +17,10 @@
 
 import UIKit
 
-public class LoadingView : UIView {
+class LoadingView : UIView {
     
     
-    public internal(set) var indicator : UIActivityIndicatorView?
+    internal(set) var indicator : UIActivityIndicatorView?
     
     
     override init(frame: CGRect) {
@@ -33,7 +33,7 @@ public class LoadingView : UIView {
         self.indicator = indicator
     }
     
-    required public init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

@@ -1,27 +1,27 @@
 /*
-* Copyright (c) 2016 Magnet Systems, Inc.
-* All rights reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License"); you
-* may not use this file except in compliance with the License. You
-* may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-* implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+ * Copyright (c) 2016 Magnet Systems, Inc.
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you
+ * may not use this file except in compliance with the License. You
+ * may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 import DZVideoPlayerViewController
 import MagnetMax
 
-public class VideoPlayerViewController: UIViewController, DZVideoPlayerViewControllerDelegate {
+class VideoPlayerViewController: UIViewController, DZVideoPlayerViewControllerDelegate {
     
     
-    //MARK: Public properties
+    //MARK: properties
     
     
     var attachment: MMAttachment!
@@ -29,28 +29,28 @@ public class VideoPlayerViewController: UIViewController, DZVideoPlayerViewContr
     private var hideStatusBar = true
     @IBOutlet weak var videoContainerView: DZVideoPlayerViewControllerContainerView!
     var videoPlayerViewController: DZVideoPlayerViewController!
-   
+    
     
     //MARK: Overrides
-
-   
-    public init() {
+    
+    
+    init() {
         super.init(nibName: String(VideoPlayerViewController.self), bundle: NSBundle(forClass: VideoPlayerViewController.self))
     }
     
-    required public init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-   public override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
+    override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
         return .None
     }
     
-   public override func prefersStatusBarHidden() -> Bool {
+    override func prefersStatusBarHidden() -> Bool {
         return hideStatusBar
     }
     
-   public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         //Show player
@@ -74,7 +74,7 @@ public class VideoPlayerViewController: UIViewController, DZVideoPlayerViewContr
         }
     }
     
-   public override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         // Show Status Bar
         hideStatusBar = false
@@ -85,11 +85,11 @@ public class VideoPlayerViewController: UIViewController, DZVideoPlayerViewContr
         }
     }
     
-
-    //MARK: Public Methods
+    
+    //MARK: Methods
     
     
-    public func startPlay() {
+    func startPlay() {
         self.videoPlayerViewController.activityIndicatorView?.stopAnimating()
         self.videoPlayerViewController.videoURL = fileURL
         self.videoPlayerViewController.prepareAndPlayAutomatically(true)
@@ -99,12 +99,12 @@ public class VideoPlayerViewController: UIViewController, DZVideoPlayerViewContr
     //MARK: - DZVideoPlayerViewControllerDelegate
     
     
-    public func playerDoneButtonTouched() {
+    func playerDoneButtonTouched() {
         self.videoContainerView.videoPlayerViewController.stop()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    public func playerFailedToLoadAssetWithError(error: NSError!) {
+    func playerFailedToLoadAssetWithError(error: NSError!) {
         showAlert(error.localizedDescription, title: "Error", closeTitle: "Close") { [weak self] _ in
             self?.dismissViewControllerAnimated(true, completion: nil)
         }

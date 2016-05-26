@@ -17,6 +17,7 @@
 
 import Foundation
 
+/// String values for ChatKit UI
 public class CKStrings {
     
 public class func localizedString(string : String) ->String {

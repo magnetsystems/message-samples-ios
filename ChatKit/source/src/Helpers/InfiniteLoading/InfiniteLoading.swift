@@ -17,12 +17,16 @@
 
 import Foundation
 
+
+/**
+ This class handles Infinite Loading. It allows you to easily listen and trigger loading events
+ */
 public class InfiniteLoading {
     
     
     //MARK: Public Variables
     
-    
+    /// is true when finished loading all data
     public private(set) var isFinished : Bool = false
     
     
@@ -39,6 +43,11 @@ public class InfiniteLoading {
     //MARK: Public Methods
     
     
+    /**
+     This method should be called to trigger update if needed. If an update is in progress this will not trigger another one. Only one update can be triggered at a time. If `isFinished` = true, there is no more data to be loaded so an event will also not trigger in this case.
+     
+     - returns: Void
+     */
     public func setNeedsUpdate() {
         dispatch_async(queue, {
             self.lock.lock()
@@ -57,6 +66,15 @@ public class InfiniteLoading {
         })
     }
     
+    /**
+     registers for onUpdate events
+     
+     - parameter loadMore: a block to be executed when more data is need. You can register multiple blocks.
+     
+     *note: You must call `finishUpdating` after you recieve your data and would like to start recieving onUpdate events again*
+     
+     - returns: Void
+     */
     public func onUpdate(loadMore : (() -> Void)) {
         dispatch_async(queue, {
             self.lock.lock()
@@ -65,6 +83,13 @@ public class InfiniteLoading {
         })
     }
     
+    /**
+     registers for Updating completed events
+     
+     - parameter doneLoading: a block to be executed when `InfiniteLoading` object has completed updating (i.e *finishUpdating called*).
+     
+     - returns: Void
+     */
     public func onDoneUpdating(doneLoading : (() -> Void)) {
         dispatch_async(queue, {
             self.lock.lock()
@@ -73,6 +98,11 @@ public class InfiniteLoading {
         })
     }
     
+    /**
+     Signals update has been completed
+     
+     - returns: Void
+     */
     public func finishUpdating() {
         dispatch_async(queue, {
             self.lock.lock()
@@ -86,6 +116,11 @@ public class InfiniteLoading {
         })
     }
     
+    /**
+     Enables `Infiniteloading` to begin when triggered
+     
+     - returns: Void
+     */
     public func startUpdating () {
         dispatch_async(queue, {
             self.lock.lock()
@@ -94,6 +129,11 @@ public class InfiniteLoading {
         })
     }
     
+    /**
+     Disables `Infiniteloading` from being triggered (i.e *No more data to load*)
+     
+     - returns: Void
+     */
     public func stopUpdating() {
         dispatch_async(queue, {
             self.lock.lock()

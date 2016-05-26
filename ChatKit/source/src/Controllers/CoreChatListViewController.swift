@@ -20,11 +20,16 @@ import UIKit
 import CocoaLumberjack
 import MagnetMax
 
-
+/**
+ This class is the superclass for `MMXChatViewController`s
+ 
+ - see `MMXChatViewController`
+ */
 public class CoreChatListViewController: MMTableViewController, UISearchBarDelegate, ChatListCellDelegate {
     
     
     //MARK: Public Variables
+    
     
     /// Specifies weather channel search is enabled
     public var canSearch : Bool? {
@@ -394,16 +399,18 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
     
     // MARK: - UISearchBarDelegate
     
-    
+    ///UISearchBarDelegate
     public func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
     }
     
+    ///UISearchBarDelegate
     public func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         searchBar.setShowsCancelButton(false, animated: true)
     }
     
+    ///UISearchBarDelegate
     public func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.characters.count == 0 {
             self.search("")
@@ -415,6 +422,7 @@ public class CoreChatListViewController: MMTableViewController, UISearchBarDeleg
         }
     }
     
+    ///UISearchBarDelegate
     public func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         searchBar.setShowsCancelButton(false, animated: true)
@@ -445,7 +453,7 @@ public extension CoreChatListViewController {
     // MARK: - Table view data source and delegate
     
     
-    public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         self.footers = ["LOADING"]
         for var i = 0; i < self.numberOfFooters(); i++ {
             self.footers.insert( "USER_DEFINED", atIndex: 0)
@@ -454,6 +462,7 @@ public extension CoreChatListViewController {
         return 1 + self.footers.count
     }
     
+    ///UITableviewDatasource
     override public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFooterSection(section) {
             return 0
@@ -461,6 +470,7 @@ public extension CoreChatListViewController {
         return detailResponses.count
     }
     
+    ///UITableviewDatasource
     override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         if (isWithinLoadingBoundary()) {
@@ -485,24 +495,24 @@ public extension CoreChatListViewController {
         return cell
     }
     
-    public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return canEditChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     
-    public func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         // iOS8 requires this method to enable editing
     }
     
-    public func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         let detailResponse = detailsForIndexPath(indexPath)
         return editActionsForChannel(detailResponse.channel, channelDetails: detailResponse)
     }
     
-    public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return cellHeightForChannel(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath), indexPath : indexPath)
     }
     
-    public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         onChannelDidSelect(detailsForIndexPath(indexPath).channel, channelDetails : detailsForIndexPath(indexPath))
     }
     

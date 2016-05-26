@@ -31,18 +31,22 @@ class ChannelObserver {
 }
 
 
+/**
+ 
+ A class to manage channels and listen for channel specific messages
+ */
 public class ChannelManager {
     
     
     //MARK: Static properties
     
-    
+    /// Shared instance
     public static let sharedInstance = ChannelManager()
     
     
     //MARK: Public properties
     
-    
+    /// Date formatter
     public let formatter = DateFormatter()
     
     
@@ -55,7 +59,15 @@ public class ChannelManager {
     
     //MARK: - Public implementation
     
-    
+    /**
+     Become observer for channel messages.
+     
+     - parameter target: Anyobject that wants to observe message events
+     - parameter channel: The channel that observer is interested in receiving messages from. *nil = All channels*
+     - parameter selector: a selector to be called in case of event.
+     
+     -returns: Void
+     */
     public func addChannelMessageObserver(target : AnyObject, channel : MMXChannel?, selector : Selector) {
         if let ch = channel {
             removeChannelMessageObserver(target, channel: ch)
@@ -68,13 +80,13 @@ public class ChannelManager {
         channelObservers.append(observer)
     }
     
-    public func getLastMessageForChannel(channel: MMXChannel) -> String? {
+    internal func getLastMessageForChannel(channel: MMXChannel) -> String? {
         let name = identifierForChannel(channel)
         
         return MMUser.currentUser()?.extras["\(name)_last_message_id"]
     }
     
-    public func getLastViewTimeForChannel(channel: MMXChannel) -> NSDate? {
+    internal func getLastViewTimeForChannel(channel: MMXChannel) -> NSDate? {
         
         let name = identifierForChannel(channel)
         
@@ -87,17 +99,17 @@ public class ChannelManager {
         return nil
     }
     
-    public func identifierForChannel(channel: MMXChannel) -> String {
+    internal func identifierForChannel(channel: MMXChannel) -> String {
         let key = channel.channelID
         
         return key
     }
     
-    public func saveLastViewTimeForChannel(channel: MMXChannel, date : NSDate) {
+    internal func saveLastViewTimeForChannel(channel: MMXChannel, date : NSDate) {
         saveLastViewTimeForChannel(channel, message: nil, date: date)
     }
     
-    public func saveLastViewTimeForChannel(channel: MMXChannel, message : MMXMessage?, date : NSDate) {
+    internal func saveLastViewTimeForChannel(channel: MMXChannel, message : MMXMessage?, date : NSDate) {
         let name = identifierForChannel(channel)
         
         if let user = MMUser.currentUser() {
@@ -115,6 +127,12 @@ public class ChannelManager {
         }
     }
     
+    /**
+     Removes Observer
+     
+     - parameter object: object to be remvoed as observer. *safe to call if object not actually an observer*
+     - return: Void
+     **/
     public func removeChannelMessageObserver(object : AnyObject) {
         
         channelObservers = channelObservers.filter({

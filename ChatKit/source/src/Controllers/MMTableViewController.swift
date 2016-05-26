@@ -19,28 +19,38 @@ import UIKit
 
 let MMFooterHeightZero : CGFloat = 0.0001
 
+/**
+ This class is the base class chatkit uses to Implement TableViews 
+ */
 public class MMTableViewController: MMViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     
     //Mark: Public Methods
     
     
+    ///UIRefreshControl for refreshing the tableview
     public var refreshControl : UIRefreshControl? = UIRefreshControl()
+    ///Infinite loading handler: this objects triggers events when more data is needed to be loaded (i.e. onUpdate({}), onDoneUpdating({}) )
     public private(set) var infiniteLoading : InfiniteLoading = InfiniteLoading()
+    /// The number of pages to load ahead (i.e. numberOfPagesToLoadAhead = 3, if there are less than three screens worth of data load more)
     public var numberOfPagesToLoadAhead = 3
+    /// Footers for the tableview
     public internal(set) var footers : [String] = []
+    /// Background color for cells
     public var cellBackgroundColor : UIColor = UIColor.clearColor()
     
     
     //MARK: Outlets
     
     
+    /// Underlying TableView
     @IBOutlet public var tableView : UITableView!
     
     
     //MARK: Overrides
     
     
+    /// viewDidLoad
     override public func viewDidLoad() {
         super.viewDidLoad()
         
@@ -88,6 +98,7 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         return tableView.contentOffset.y > (tableView.contentSize.height - (tableView.frame.size.height * CGFloat(numberOfPagesToLoadAhead)))
     }
     
+    /// ViewController setup called after viewDidLoad
     public override func setupViewController() {
         super.setupViewController()
         
@@ -95,12 +106,16 @@ public class MMTableViewController: MMViewController, UITableViewDelegate, UITab
         tableView.dataSource = self
     }
     
-    //MARK: UITableViewDelegatye
+    
+    //MARK: UITableViewDatasource
     
     
+    ///UITableViewDatasource
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 0
     }
+    
+    ///UITableViewDatasource
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         return UITableViewCell()
     }

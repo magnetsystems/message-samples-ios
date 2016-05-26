@@ -19,17 +19,26 @@ import UIKit
 
 import MMX
 
+/**
+ The MessageData object for `MMXChatViewController`/`JSQMessagesViewController`
+ */
 public class Message : NSObject, JSQMessageData {
+    
     
     //MARK: Private properties
     
+    
     private var dataChangeHash = 0
+    
     
     //MARK: Public properties
     
     
+    /// has data been downloaded for this data object (i.e images, videos... etc)
     public private(set) var isDownloaded : Bool = false
+    /// completion block to be called when media has been downloaded
     public var mediaCompletionBlock: JSQLocationMediaItemCompletionBlock?
+    /// the actual MMXMessage the Message object is using
     public private(set) var underlyingMessage: MMXMessage {
         didSet {
             switch self.type {
@@ -40,8 +49,9 @@ public class Message : NSObject, JSQMessageData {
             }
         }
     }
-    
+    /// higher resolution image
     public var fullsizedImage : UIImage?
+    /// Media content based on `underlyingMessage`
     public lazy var mediaContent: JSQMessageMediaData? = {
         
         switch self.type {
@@ -111,7 +121,10 @@ public class Message : NSObject, JSQMessageData {
             return nil
         }
     }()
-    
+    /**
+     Message Type based on `underlyingMessage`
+     - see: MessageType
+     */
     public lazy var type: MessageType = {
         if self.underlyingMessage.contentType == MMXPollIdentifier.contentType {
             return .PollIdentifier
@@ -129,6 +142,7 @@ public class Message : NSObject, JSQMessageData {
     //MARK: init
     
     
+    /// Init
     required public init(message: MMXMessage) {
         self.underlyingMessage = message
     }
@@ -137,10 +151,12 @@ public class Message : NSObject, JSQMessageData {
     //MARK: - Public implementation
     
     
+    /// changes the Message object hash for caching purposes
     public func setDataChanged() {
         dataChangeHash += 1
     }
     
+    /// Data of `underlyingMessage` if available if not Data right now
     public func date() -> NSDate! {
         if let date = underlyingMessage.timestamp {
             return date
@@ -149,18 +165,22 @@ public class Message : NSObject, JSQMessageData {
         return NSDate()
     }
     
+    /// Is the message object a media message
     public func isMediaMessage() -> Bool {
         return (type == .Location || type == .Video || type == .Photo || type == .PollIdentifier || type == .PollUpdate )
     }
     
+    /// current hash of the Message object
     public func messageHash() -> UInt {
         return UInt(abs((underlyingMessage.messageID! + "\(dataChangeHash)").hash))
     }
     
+    /// MMUser Id based on `underlyingMessage`
     public func senderId() -> String! {
         return underlyingMessage.sender?.userID ?? ""
     }
     
+    /// MMUser display name based on `underlyingMessage`
     public func senderDisplayName() -> String! {
         if let sender = underlyingMessage.sender {
             return (sender.firstName != nil && sender.lastName != nil) ? "\(sender.firstName) \(sender.lastName)" : sender.userName
@@ -168,6 +188,7 @@ public class Message : NSObject, JSQMessageData {
         return ""
     }
     
+    /// Text based on `underlyingMessage` if available if not returns empty string ""
     public func text() -> String {
         if let content = underlyingMessage.messageContent[Constants.ContentKey.Message] {
             return content as String
@@ -175,6 +196,7 @@ public class Message : NSObject, JSQMessageData {
         return ""
     }
     
+    /// media content for message if available
     public func media() -> JSQMessageMediaData? {
         return mediaContent
     }
@@ -183,21 +205,34 @@ public class Message : NSObject, JSQMessageData {
     //MARK: Overrides
     
     
+    /// Description
     public override var description: String {
         return "senderId is \(senderId()), messageContent is \(underlyingMessage.messageContent)"
     }
     
 }
 
+/**
+ MessageType for `Message` object
+ - see: `Message`
+ */
 public enum MessageType: String, CustomStringConvertible {
+    /// Text
     case Text = "text"
+    /// Location
     case Location = "location"
+    /// Image
     case Photo = "photo"
+    /// Video
     case Video = "video"
+    /// Poll ID
     case PollIdentifier = "pollIdentifier"
+    /// Poll Answer Update
     case PollUpdate = "pollUpdate"
+    /// Default
     case Unknown = "Unknown"
     
+    /// String description of `MessageType`
     public var description: String {
         
         switch self {

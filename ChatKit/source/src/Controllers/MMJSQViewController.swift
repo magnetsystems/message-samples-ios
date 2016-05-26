@@ -17,14 +17,22 @@
 
 import UIKit
 
+/**
+ This class is the base class chatkit uses to Implement JSQMessagesViewControllers
+ 
+ - conformsTo `MMViewControllerProtocol`
+ - see `JSQMessagesViewController`
+ */
 public class MMJSQViewController: JSQMessagesViewController, MMViewControllerProtocol {
     
     
     //MARK: Public Variables
     
-    
+    /// - see MMViewControllerProtocol
     public var appearance = MagnetControllerAppearance()
+    /// navigationbar
     public var magnetNavigationBar : UINavigationBar?
+    /// navigationItem
     public var magnetNavigationItem : UINavigationItem?
     
     
@@ -38,15 +46,18 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
     //MARK : Init
     
     
+    /// Init
     public init() {
         super.init(nibName: nil, bundle: nil)
         setupViewController()
     }
     
+    /// Init
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
+    /// Init
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setupViewController()
@@ -56,11 +67,21 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
     //MARK: Public Methods
     
     
+    /// awakeFromNib
     public override func awakeFromNib() {
         super.awakeFromNib()
         setupViewController()
     }
     
+    /**
+     sets up the navigations bar
+     
+     - parameter leftItems: [UIBarButtonItems]? to be added to the left side of the navigation bar
+     - parameter rightItems: [UIBarButtonItems]? to be added to the right side of the navigation bar
+     - parameter title: the title to be displayed on the navigation bar
+     
+     - returns: Void
+     */
     public func setMagnetNavBar(leftItems leftItems:[UIBarButtonItem]?, rightItems:[UIBarButtonItem]?, title : String?) {
         var willHide = false
         if leftItems == nil && rightItems == nil && title == nil  {
@@ -84,6 +105,11 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
         self.magnetNavigationItem?.title = title
     }
     
+    /**
+     sets up viewController called after viewDidLoad
+     
+     - returns: Void
+     */
     public func setupViewController() {
         let nav = UINavigationBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.navBarHeight))
         nav.autoresizingMask = .FlexibleWidth
@@ -95,6 +121,11 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
         magnetNavigationBar?.hidden = true
     }
     
+    /**
+     Dissmisses without animation
+     
+     - returns: Void
+     */
     public func dismiss() {
         if self.navigationController != nil {
             self.navigationController?.popViewControllerAnimated(false)
@@ -103,6 +134,11 @@ public class MMJSQViewController: JSQMessagesViewController, MMViewControllerPro
         }
     }
     
+    /**
+     Dissmisses with animation
+     
+     - returns: Void
+     */
     public func dismissAnimated() {
         if self.navigationController != nil {
             self.navigationController?.popViewControllerAnimated(true)

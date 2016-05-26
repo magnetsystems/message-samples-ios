@@ -47,9 +47,6 @@
                 <a href="../Classes/ChatListCell.html">ChatListCell</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/ContactsBubbleView.html">ContactsBubbleView</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/ContactsCell.html">ContactsCell</a>
               </li>
               <li class="nav-group-task">
@@ -86,9 +83,6 @@
                 <a href="../Classes/InfiniteLoading.html">InfiniteLoading</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/LoadingView.html">LoadingView</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/LocationManager.html">LocationManager</a>
               </li>
               <li class="nav-group-task">
@@ -113,9 +107,6 @@
                 <a href="../Classes/MagnetControllerAppearance.html">MagnetControllerAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/MapViewController.html">MapViewController</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/Message.html">Message</a>
               </li>
               <li class="nav-group-task">
@@ -134,19 +125,7 @@
                 <a href="../Classes/PollUpdateItem.html">PollUpdateItem</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Popup.html">Popup</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/SubscribersDatasource.html">SubscribersDatasource</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Timestamp.html">Timestamp</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes.html#/s:C7ChatKit15UserLetterGroup">UserLetterGroup</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes.html#/s:C7ChatKit9UserModel">UserModel</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Utils.html">Utils</a>
@@ -156,9 +135,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/UtilsImageCache.html">UtilsImageCache</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/VideoPlayerViewController.html">VideoPlayerViewController</a>
               </li>
             </ul>
           </li>
@@ -231,7 +207,13 @@
         <section>
           <section class="section">
             <h1>Message</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Message</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">JSQMessageData</span></code></pre>
+
+                </div>
+              </div>
+            <p>The MessageData object for <code>MMXChatViewController</code>/<code>JSQMessagesViewController</code></p>
 
           </section>
           <section class="section task-group-section">
@@ -257,8 +239,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>has data been downloaded for this data object (i.e images, videos&hellip; etc)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isDownloaded</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -276,8 +266,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>completion block to be called when media has been downloaded</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">mediaCompletionBlock</span><span class="p">:</span> <span class="kt">JSQLocationMediaItemCompletionBlock</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -295,8 +293,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>the actual MMXMessage the Message object is using</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">underlyingMessage</span><span class="p">:</span> <span class="kt">MMXMessage</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -314,8 +320,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>higher resolution image</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fullsizedImage</span> <span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -333,8 +347,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Media content based on <code><a href="../Classes/Message.html#/s:vC7ChatKit7Message17underlyingMessageCSo10MMXMessage">underlyingMessage</a></code></p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">mediaContent</span><span class="p">:</span> <span class="kt">JSQMessageMediaData</span><span class="p">?</span> <span class="o">=</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -352,8 +374,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Message Type based on <code><a href="../Classes/Message.html#/s:vC7ChatKit7Message17underlyingMessageCSo10MMXMessage">underlyingMessage</a></code>
+- see: MessageType</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">MessageType</span> <span class="o">=</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -382,8 +413,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Init</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">required</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">message</span><span class="p">:</span> <span class="kt">MMXMessage</span><span class="p">)</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -412,8 +451,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>changes the Message object hash for caching purposes</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setDataChanged</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -431,8 +478,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Data of <code><a href="../Classes/Message.html#/s:vC7ChatKit7Message17underlyingMessageCSo10MMXMessage">underlyingMessage</a></code> if available if not Data right now</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">date</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">NSDate</span><span class="o">!</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -450,8 +505,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Is the message object a media message</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">isMediaMessage</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -469,8 +532,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>current hash of the Message object</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">messageHash</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">UInt</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -488,8 +559,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>MMUser Id based on <code><a href="../Classes/Message.html#/s:vC7ChatKit7Message17underlyingMessageCSo10MMXMessage">underlyingMessage</a></code></p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">senderId</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -507,8 +586,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>MMUser display name based on <code><a href="../Classes/Message.html#/s:vC7ChatKit7Message17underlyingMessageCSo10MMXMessage">underlyingMessage</a></code></p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">senderDisplayName</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -526,8 +613,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Text based on <code><a href="../Classes/Message.html#/s:vC7ChatKit7Message17underlyingMessageCSo10MMXMessage">underlyingMessage</a></code> if available if not returns empty string &ldquo;&rdquo;</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">text</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -545,8 +640,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>media content for message if available</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">media</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">JSQMessageMediaData</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -575,8 +678,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Description</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -586,7 +697,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://magnet.com" target="_blank" rel="external">Magnet</a>. All rights reserved. (Last updated: 2016-05-19)</p>
+          <p>&copy; 2016 <a class="link" href="https://magnet.com" target="_blank" rel="external">Magnet</a>. All rights reserved. (Last updated: 2016-05-25)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

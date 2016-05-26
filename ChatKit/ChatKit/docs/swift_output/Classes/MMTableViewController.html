@@ -47,9 +47,6 @@
                 <a href="../Classes/ChatListCell.html">ChatListCell</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/ContactsBubbleView.html">ContactsBubbleView</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/ContactsCell.html">ContactsCell</a>
               </li>
               <li class="nav-group-task">
@@ -86,9 +83,6 @@
                 <a href="../Classes/InfiniteLoading.html">InfiniteLoading</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/LoadingView.html">LoadingView</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/LocationManager.html">LocationManager</a>
               </li>
               <li class="nav-group-task">
@@ -113,9 +107,6 @@
                 <a href="../Classes/MagnetControllerAppearance.html">MagnetControllerAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/MapViewController.html">MapViewController</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/Message.html">Message</a>
               </li>
               <li class="nav-group-task">
@@ -134,19 +125,7 @@
                 <a href="../Classes/PollUpdateItem.html">PollUpdateItem</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Popup.html">Popup</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/SubscribersDatasource.html">SubscribersDatasource</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Timestamp.html">Timestamp</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes.html#/s:C7ChatKit15UserLetterGroup">UserLetterGroup</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes.html#/s:C7ChatKit9UserModel">UserModel</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Utils.html">Utils</a>
@@ -156,9 +135,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/UtilsImageCache.html">UtilsImageCache</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/VideoPlayerViewController.html">VideoPlayerViewController</a>
               </li>
             </ul>
           </li>
@@ -231,7 +207,13 @@
         <section>
           <section class="section">
             <h1>MMTableViewController</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MMTableViewController</span><span class="p">:</span> <span class="kt">MMViewController</span><span class="p">,</span> <span class="kt">UITableViewDelegate</span><span class="p">,</span> <span class="kt">UITableViewDataSource</span><span class="p">,</span> <span class="kt">UIScrollViewDelegate</span></code></pre>
+
+                </div>
+              </div>
+            <p>This class is the base class chatkit uses to Implement TableViews</p>
 
           </section>
           <section class="section task-group-section">
@@ -250,8 +232,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>UIRefreshControl for refreshing the tableview</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">refreshControl</span> <span class="p">:</span> <span class="kt">UIRefreshControl</span><span class="p">?</span> <span class="o">=</span> <span class="kt">UIRefreshControl</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -269,8 +259,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Infinite loading handler: this objects triggers events when more data is needed to be loaded (i.e. onUpdate({}), onDoneUpdating({}) )</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">infiniteLoading</span> <span class="p">:</span> <span class="kt">InfiniteLoading</span> <span class="o">=</span> <span class="kt">InfiniteLoading</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -288,8 +286,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The number of pages to load ahead (i.e. numberOfPagesToLoadAhead = 3, if there are less than three screens worth of data load more)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">numberOfPagesToLoadAhead</span> <span class="o">=</span> <span class="mi">3</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -307,8 +313,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Footers for the tableview</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">footers</span> <span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -326,8 +340,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Background color for cells</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">cellBackgroundColor</span> <span class="p">:</span> <span class="kt">UIColor</span> <span class="o">=</span> <span class="kt">UIColor</span><span class="o">.</span><span class="nf">clearColor</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -356,8 +378,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Underlying TableView</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">@IBOutlet</span> <span class="kd">public</span> <span class="k">var</span> <span class="nv">tableView</span> <span class="p">:</span> <span class="kt">UITableView</span><span class="o">!</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -386,8 +416,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>viewDidLoad</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">override</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -405,8 +443,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>ViewController setup called after viewDidLoad</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">setupViewController</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -415,10 +461,10 @@
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/UITableViewDelegatye"></a>
-                <a name="//apple_ref/swift/Section/UITableViewDelegatye" class="dashAnchor"></a>
-                <a href="#/UITableViewDelegatye">
-                  <h3 class="section-name">UITableViewDelegatye</h3>
+                <a name="/UITableViewDatasource"></a>
+                <a name="//apple_ref/swift/Section/UITableViewDatasource" class="dashAnchor"></a>
+                <a href="#/UITableViewDatasource">
+                  <h3 class="section-name">UITableViewDatasource</h3>
                 </a>
               </div>
               <ul>
@@ -435,8 +481,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>UITableViewDatasource</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">numberOfRowsInSection</span> <span class="nv">section</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -454,8 +508,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>UITableViewDatasource</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAtIndexPath</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">NSIndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -465,7 +527,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://magnet.com" target="_blank" rel="external">Magnet</a>. All rights reserved. (Last updated: 2016-05-19)</p>
+          <p>&copy; 2016 <a class="link" href="https://magnet.com" target="_blank" rel="external">Magnet</a>. All rights reserved. (Last updated: 2016-05-25)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

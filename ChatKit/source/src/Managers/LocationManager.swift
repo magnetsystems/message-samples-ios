@@ -17,19 +17,23 @@
 
 import CoreLocation
 import UIKit
-
+/**
+ This class handles location data
+ */
 public class LocationManager: NSObject, CLLocationManagerDelegate {
     
     
     //MARK: Static properties
     
     
+    /// Shared Instance
     public static let sharedInstance = LocationManager()
     
     
     //MARK: Public properties
     
     
+    /// Call back for authorization
     public var onAuthorizationUpdate : (() -> Void)?
     
     
@@ -50,6 +54,11 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
     }
     
+    /**
+     Specifies if an app has location privilages enabled via info.plst
+     
+     - returns: Void
+     */
     public func canLocationServicesBeEnabled() -> Bool {
         var myDict: NSDictionary?
         if let path = NSBundle.mainBundle().pathForResource("Info", ofType: "plist") {
@@ -62,9 +71,14 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         return false
     }
     
+    /**
+     Specifies if user has allowed location services
+     
+     - returns: Void
+     */
     public func isLocationServicesEnabled() -> Bool {
         
-        if CLLocationManager.locationServicesEnabled() {
+        if CLLocationManager.locationServicesEnabled() && canLocationServicesBeEnabled() {
             switch(CLLocationManager.authorizationStatus()) {
             case .NotDetermined, .Restricted, .Denied:
                 return false
@@ -76,9 +90,15 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         return false
     }
     
+    
     //MARK: - Public implementation
     
     
+    /**
+     Retrieves location
+     - parameter handler: ((CLLocation) -> Void)?
+     - returns: Void
+     */
     public func getLocation(handler: ((CLLocation) -> Void)?) {
         if handler != nil {
             locationHandler = handler
@@ -86,15 +106,18 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
+    /// CLLocationManagerDelegate
     public func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         self.onAuthorizationUpdate?()
     }
     
+    /// CLLocationManagerDelegate
     public func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         locationManager.stopUpdatingLocation()
         print("\(error.localizedFailureReason, error.localizedDescription)")
     }
     
+    /// CLLocationManagerDelegate
     public func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = manager.location {
             if locationHandler != nil {
